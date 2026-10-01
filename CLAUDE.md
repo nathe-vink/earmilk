@@ -13,7 +13,8 @@ Read `README.md` first. It is the handoff and the brief. The canvas it links to 
 | Path | What |
 |---|---|
 | `spec/geometry.md` | The README's numbers expanded into one coordinate frame, with derived values and as-drawn details from the canvas. A model is built from this file. |
-| `spec/colorways.json` | The five flavors, birch, drivers and ground as machine-readable hex. |
+| `spec/colorways.json` | The five flavors, birch, drivers and ground as machine-readable hex, plus the print layout (which flavours carry the lid colour, the band, the optional stand and panel). The model reads its default look from here. |
+| `explore/` | Design questions rendered as options, one dated section per question in its README. Not shots. |
 | `copy/label.md` | The printed Nutrition Facts copy and the shorter engraved version on the back window. |
 | `copy/hero.md` | Every other line of copy on the canvas, by surface. |
 | `prompts/shot-NN-vN.md` | One brief per shot, versioned. A version is frozen once a render has been made from it; changes go in vN+1. |

@@ -16,12 +16,23 @@ Voice: dairy deadpan. The spec sheet is an FDA-style Nutrition Facts panel. One 
 ## Decisions already made (do not reopen)
 
 - Tweeter lives in the gable, facing forward, set back in a **concave** bowl. Not square, not angled up, not sunk vertically.
-- Gable and fin are the **same color as the body** (the lid covers them). Bare birch shows in exactly two places: the back window and the bowl's exploded/section views.
+- Gable and fin are the **same color as the body** (the lid covers them). Bare birch shows in exactly two places: the back window and the bowl's exploded/section views. *Amended 2026-10-01: on the white-board flavours (Whole, 2%, Skim) the lid is printed in the flavour's print colour; Chocolate and Oat stay one colour, lid included.*
 - **No tuning concept.** No cap, no tuning plates, no swappable tweeter modules. Flavor = colorway only.
 - Nutrition Facts are **engraved** on the birch back window, above the port, with the binding posts below. The printed label frame is a separate deliverable (the label artboard), not printed on the sleeve.
 - The sleeve's back panel is a frame around the birch window.
 - Sleeve options are the five flavors; "Dairy / Kraft / Night" no longer exist as names.
 - Pint (desk-size, six to a crate, crate = amp + charger) is **parked**. Render it only in the mixed-crate shot; do not design its electronics.
+
+### Amendments, 2026-10-01
+
+Made after the first render and critic rounds, from the explorations in `explore/`. They stand with the Decisions above.
+
+- **Lids.** Whole, 2% and Skim carry the lid (gable and fin) in the flavour's print colour. Chocolate and Oat stay one colour.
+- **Band.** A printed band of the print colour, 110 mm tall, wraps the base of the sleeve (front and sides; on the back only the frame below the window). The wordmark sits in the band, reversed in the board colour, on the front and the right side. Nothing is printed under the gable.
+- **Stand, optional.** A painted block in the print colour, 390 × 390 × 110, with a 6 mm reveal under the carton. It takes the band's job and its wordmark; a sleeve used on a stand is printed without the band. It does not swap with the sleeve. The speaker stays passive; if a version ever went active, the stand is where controls would live.
+- **Owner's panel, optional.** A print-to-order "Have you heard me?" panel on the right side above the band, 300 × 330 mm, in the print colour: headline, a halftone portrait, four rows the owner fills in. Not on the default sleeve.
+- **Dropped.** Print rings around the drivers and whole-side colour fields.
+- Prices stay open: add `[STAND PRICE]` to the list.
 
 ## Geometry (mm)
 
@@ -37,6 +48,8 @@ Floorstander — square plan, gable-top.
 
 Pint — 100 × 100 plan, body 200, gable 35, fin 12. Single full-range ø ~68 at 95; tiny bowl at the top. Crate 340 × 250 × 130, 2 × 3.
 
+Stand (optional accessory, amended 2026-10-01) — 390 × 390 × 110 painted block, 6 mm reveal. With the stand: overall 1,171; tweeter axis 1,019.5.
+
 ## Target specs (label copy — marked as targets, not measured)
 
 Sensitivity 91 dB (2.83 V / 1 m) · 32 Hz–20 kHz ±3 dB · 8 Ω · 40–250 W · crossover 350 Hz and 2.2 kHz · 36 kg each · 1,055 mm.
@@ -44,7 +57,7 @@ Footnote stays: "Contains no milk. Not a significant source of Bluetooth."
 
 ## Colorways (flavors)
 
-White board unless noted. Print = wordmark on front and side. Throat = bowl interior, light at the mouth → dark at the throat.
+White board unless noted. Print = wordmark on front and side. Throat = bowl interior, light at the mouth → dark at the throat. *Amended 2026-10-01: print = the lid on the white flavours, a 110 mm base band, and the wordmark in the band on the front and the right side; see Amendments.*
 
 | Flavor | Board | Print | Throat (mouth → throat) |
 |---|---|---|---|
@@ -87,7 +100,7 @@ Before any render or edit, re-read the Geometry and Decisions sections. If a cha
 
 ## Open questions (do not assume answers)
 
-- Price points for the pair, a sleeve set, and the crate. Leave as `[PAIR PRICE]`, `[SLEEVE PRICE]`, `[CRATE PRICE]`.
+- Price points for the pair, a sleeve set, and the crate. Leave as `[PAIR PRICE]`, `[SLEEVE PRICE]`, `[CRATE PRICE]`, and since the amendments `[STAND PRICE]`.
 - Driver selection and port tuning. The 32 Hz target assumes ~85–90 L net for the woofer; confirm before quoting it as more than a target.
 - Whether the bowl works as a waveguide. The test is physical: one carved gable, one candidate tweeter, on/off-axis measurements vs. a flat baffle. Renders do not settle this.
 - Board stock for the sleeve and whether the lock survives repeated swaps.

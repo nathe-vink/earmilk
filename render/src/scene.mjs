@@ -74,7 +74,7 @@ const ROOMS = {
     scene.add(floorMesh(THREE, ctx.tex, { size: 10, planks: { base: '#b8905f', dark: '#ab8456', light: '#c2996a' } }));
     const back = wallMesh(THREE, { w: 10, h: 2.7, color: 0xebe6dc }); back.position.set(0, 1.35, -2.5); scene.add(back);
     skirting(THREE, scene, { w: 10, z: -2.5 });
-    windowWall(THREE, scene, { x: -3, color: 0xe8e3d9, win: { z0: 1.6, z1: 3.0, sill: 0.8, head: 2.3 } });
+    windowWall(THREE, scene, { x: -3.5, color: 0xe8e3d9, win: { z0: 1.6, z1: 3.0, sill: 0.8, head: 2.3 } });
     sun(THREE, scene, { color: 0xffd8ac, intensity: 4.2, position: [-7, 2.6, 5.5], target: [0.3, 0.3, -0.3], bounds: 4.5 });
     fillRect(THREE, scene, { color: 0xfff0dc, intensity: 2.5, position: [-2.95, 1.55, 2.3], lookAt: [0, 1.0, 2.3] });
     bounce(THREE, scene, { sky: 0xe8e4dc, ground: 0xb8905f, intensity: 0.35 });
@@ -131,10 +131,10 @@ const ROOMS = {
   desk(THREE, addons, ctx, scene, o) {
     scene.environmentIntensity = 0.4;
     scene.background = new THREE.Color(0xeeeae2);
-    const top = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.03, 0.8), new THREE.MeshStandardMaterial({ map: ctx.tex.planks({ base: '#cdb48c', dark: '#c6ac83', light: '#d3bb95' }), roughness: 0.35 }));
-    top.material.map = top.material.map.clone(); top.material.map.repeat.set(2.5, 1.1); top.material.map.needsUpdate = true;
-    top.position.set(0, 0.72 - 0.015, 0); top.receiveShadow = top.castShadow = true; scene.add(top);
-    const back = wallMesh(THREE, { w: 6, h: 2.7, color: 0xf1eee8 }); back.position.set(0, 1.35, -0.42); scene.add(back);
+    const top = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.03, 1.3), new THREE.MeshStandardMaterial({ map: ctx.tex.planks({ base: '#cdb48c', dark: '#c6ac83', light: '#d3bb95' }), roughness: 0.35 }));
+    top.material.map = top.material.map.clone(); top.material.map.repeat.set(3.9, 1.8); top.material.map.needsUpdate = true;
+    top.position.set(0, 0.72 - 0.015, 0.1); top.receiveShadow = top.castShadow = true; scene.add(top);
+    const back = wallMesh(THREE, { w: 8, h: 2.7, color: 0xf1eee8 }); back.position.set(0, 1.35, -0.55); scene.add(back);
     sun(THREE, scene, { color: 0xfff1dc, intensity: 3.0, position: [-3, 3.4, 2.0], target: [0, 0.75, 0], bounds: 1.5, mapSize: 4096 });
     fillRect(THREE, scene, { color: 0xffffff, intensity: 2.5, w: 1.5, h: 1.5, position: [-1.6, 1.4, 0.6], lookAt: [0, 0.8, 0] });
     bounce(THREE, scene, { sky: 0xf1eee8, ground: 0xcdb48c, intensity: 0.3 });

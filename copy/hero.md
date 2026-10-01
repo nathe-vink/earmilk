@@ -4,7 +4,7 @@ Everything on the canvas that is not the label, transcribed from the artboards. 
 
 ## Wordmark
 
-earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it.
+earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it. Since the 2026-10-01 amendments it sits in the base band, reversed in the board colour, on the front and the right side; nothing is printed under the gable.
 
 ## Hero (Main artboard)
 
@@ -53,3 +53,16 @@ earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it.
 ## Label
 
 See `copy/label.md`.
+
+## Owner's panel (optional, print to order)
+
+On the right side above the band. Placeholder copy from the exploration; the headline is the one proposed, the rows and the footer are not approved.
+
+- Headline: HAVE YOU HEARD ME?
+- Portrait: the owner's photo, printed as a halftone. The renders use a generated silhouette.
+- Rows: Name · [YOUR NAME]; Heard since · [DATE]; Last heard · [YOUR ROOM]; If heard, call · [YOUR NUMBER]
+- Footer: Printed to order. Any flavor, any face. / [YOUR LINE]
+
+## Stand (optional)
+
+- Price line: Stand, [STAND PRICE]

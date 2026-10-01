@@ -2,7 +2,7 @@
 export const SIZE = [1800, 1200];
 
 const C2 = { position: [1.7, 1.2, 2.7], lookAt: [0.05, 0.55, 0], focal: 50 };
-const C7 = { position: [2.0, 1.3, 3.1], lookAt: [0.15, 0.9, 0], focal: 36 };
+const C7 = { position: [2.0, 1.05, 3.1], lookAt: [0.15, 0.9, 0], focal: 36 };
 const FLAVORS = ['whole', 'two-percent', 'skim', 'chocolate', 'oat'];
 const OLD_SLEEVE = { flavor: 'whole', position: [0, 0, 0], state: { cabinet: false, tubeOffset: [1000, 0, -550], tubeRotY: 0.5, lidOffset: [780, -860, -350], lidRotY: 0.6 } };
 
@@ -15,7 +15,7 @@ export const shots = [
     { suffix: 'b', room: 'oldRoom', speakers: [{ flavor: 'oat', position: [0, 0, 0] }], camera: C2 },
   ] },
   { id: 'shot-03', frames: [
-    { suffix: '', room: 'studio', roomOptions: { key: 'rake', env: 0.45, fill: 0.25 }, ao: { radius: 0.05, scale: 1.4 }, speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: { position: [0.3, 1.0, 0.9], lookAt: [-0.03, 0.885, 0.09], focal: 85 } },
+    { suffix: '', room: 'studio', roomOptions: { key: 'rake', env: 0.45, fill: 0.25 }, ao: { radius: 0.05, scale: 1.4 }, speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: { position: [0.42, 1.0, 0.86], lookAt: [-0.03, 0.885, 0.09], focal: 85 } },
   ] },
   { id: 'shot-04', frames: [
     { suffix: '', room: 'studio', roomOptions: { key: 'back', env: 0.6, groundRoughness: 0.8 }, speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: { position: [0, 0.62, -4.2], lookAt: [0, 0.5, 0], focal: 70 } },
@@ -35,7 +35,7 @@ export const shots = [
 
 // Explorations: not shots. Rendered with `node render.mjs --list explore` into explore/<date>/.
 const LINEUP = { position: [0, 1.4, 7.4], lookAt: [0, 0.5, 0], focal: 100 };
-const lineup = (style) => ({ room: 'studio', roomOptions: { key: 'even', env: 0.5 }, speakers: FLAVORS.map((f, i) => ({ flavor: f, position: [(i - 2) * 0.52, 0, 0], state: { look: { style } } })), camera: LINEUP });
+const lineup = (style) => ({ room: 'studio', roomOptions: { key: 'even', env: 0.5 }, speakers: FLAVORS.map((f, i) => ({ flavor: f, position: [(i - 2) * 0.52, 0, 0], state: { look: { style, lid: style === 'cap' ? 'print' : 'board', band: style === 'band' ? 'print' : null, wordmark: 'gable' } } })), camera: LINEUP });
 const PANEL_A = { rows: [['Name', '[YOUR NAME]'], ['Heard since', '[DATE]'], ['Last heard', '[YOUR ROOM]'], ['If heard, call', '[YOUR NUMBER]']] };
 const PANEL_B = { rows: [['Name', "[A FRIEND'S NAME]"], ['Heard since', '[DATE]'], ['Last heard', 'Side B, loud'], ['If heard, call', '[THEIR NUMBER]']] };
 export const explore = [
@@ -44,9 +44,9 @@ export const explore = [
   { id: 'color-band', ...lineup('band') },
   { id: 'color-rings', ...lineup('rings') },
   { id: 'color-side', ...lineup('side') },
-  { id: 'decal-side', room: 'studio', roomOptions: { key: 'even', env: 0.5 }, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { look: { style: 'cap', panel: PANEL_A } } }], camera: { position: [1.75, 0.95, 1.35], lookAt: [0.05, 0.5, 0], focal: 70 } },
-  { id: 'decal-side-chocolate', room: 'studio', roomOptions: { key: 'even', env: 0.5 }, speakers: [{ flavor: 'chocolate', position: [0, 0, 0], state: { look: { style: 'cap', panel: PANEL_B } } }], camera: { position: [1.75, 0.95, 1.35], lookAt: [0.05, 0.5, 0], focal: 70 } },
-  { id: 'decal-pair', room: 'hero', speakers: [{ flavor: 'whole', position: [-1, 0, 0], state: { look: { style: 'cap', panel: PANEL_A } } }, { flavor: 'whole', position: [1, 0, 0], state: { look: { style: 'cap', panel: PANEL_B } } }], camera: { position: [2.4, 1.2, 3.9], lookAt: [0.25, 0.55, 0], focal: 50 } },
+  { id: 'decal-side', room: 'studio', roomOptions: { key: 'even', env: 0.5 }, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { look: { style: 'cap', lid: 'print', band: null, wordmark: 'gable', panel: PANEL_A } } }], camera: { position: [1.75, 0.95, 1.35], lookAt: [0.05, 0.5, 0], focal: 70 } },
+  { id: 'decal-side-chocolate', room: 'studio', roomOptions: { key: 'even', env: 0.5 }, speakers: [{ flavor: 'chocolate', position: [0, 0, 0], state: { look: { style: 'cap', lid: 'print', band: null, wordmark: 'gable', panel: PANEL_B } } }], camera: { position: [1.75, 0.95, 1.35], lookAt: [0.05, 0.5, 0], focal: 70 } },
+  { id: 'decal-pair', room: 'hero', speakers: [{ flavor: 'whole', position: [-1, 0, 0], state: { look: { style: 'cap', lid: 'print', band: null, wordmark: 'gable', panel: PANEL_A } } }, { flavor: 'whole', position: [1, 0, 0], state: { look: { style: 'cap', lid: 'print', band: null, wordmark: 'gable', panel: PANEL_B } } }], camera: { position: [2.4, 1.2, 3.9], lookAt: [0.25, 0.55, 0], focal: 50 } },
 ];
 
 // Second round of the colour exploration: lids on the white cartons only, the band as print or as a stand, wordmark in the band.

@@ -90,7 +90,7 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
   const st = { sleeve: true, lid: true, cabinet: true, lidLift: 0, tubeLift: 0, lidOffset: [0, 0, 0], lidRotY: 0, tubeOffset: [0, 0, 0], tubeRotY: 0, ...state };
   // look: { lid: 'board'|'print', band: null|'print'|'stand', wordmark: 'gable'|'band', panel: null|{...}, knob: false, style }.
   // style is the first exploration's shorthand: 'cap' = lid print, 'band' = printed band, 'rings', 'side'.
-  const look = { style: 'wordmark', lid: 'board', band: null, wordmark: 'gable', panel: null, knob: false, ...(state.look || {}) };
+  const look = { style: 'wordmark', lid: flavor.lid || 'board', band: 'print', wordmark: 'band', panel: null, knob: false, ...(state.look || {}) };
   if (look.style === 'cap') look.lid = 'print';
   if (look.style === 'band' && !look.band) look.band = 'print';
   const standH = look.band === 'stand' ? 110 * kk : 0;

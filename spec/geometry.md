@@ -108,14 +108,26 @@ Black paper cones. No grilles. The sleeve's die-cuts equal the frame diameters (
 | Fold creases | at the gable: the lid's folds at the ridge and along the front and back top edges, and the fin's fold. They should be visible in a render. |
 | Dimension note (assumption) | The render model keeps the cabinet and block at the spec numbers and puts the board outside them, so the sleeved speaker is 393 wide and deep. Whether 390 is the cabinet or the outer dimension is decided when the board stock is chosen; at any shot scale the difference does not show. |
 
-### Print on the sleeve (as drawn, Sleeves and Hero artboards)
+### Print on the sleeve (locked 2026-10-01; the as-drawn placement it replaces is kept below for the record)
 
 | | |
 |---|---|
-| Front wordmark | "earmilk", Archivo Black, lowercase, about 47 mm type size, centred on the front panel, baseline 43 below the tube's top edge (`z ≈ 817`), so it sits above the mid. |
-| Side wordmark | about 64 mm type size, baseline 94 below the tube's top edge (`z ≈ 766`), starting 35 from the front edge and reading front to back. Drawn on the right side only; whether the left side also carries it is not drawn. |
-| Tracking | tight, about −0.035 em |
-| Colour | the flavor's print colour. Nothing else is printed on the sleeve: no flavor word, no label. |
+| Lid | On the white-board flavours (Whole, 2%, Skim) the lid, gable and fin, is printed in the flavour's print colour. Chocolate and Oat stay one colour, lid included. |
+| Band | A band of the print colour, 110 tall from the floor line, around the front and both sides. On the back it covers only the sleeve frame below the window, `z` 0 → 40. |
+| Wordmark | "earmilk", Archivo Black, 52 mm type size, reversed in the board colour, centred in the band: on the front at `x = 195`, and on the right side centred on the depth, reading front to back. Nothing is printed under the gable. Tracking −0.035 em. |
+| Owner's panel (optional, print to order) | Right side, above the band: 300 wide × 330 tall, centred on the depth, `z` 295 → 625, in the print colour. Headline, a halftone portrait, four rows the owner fills in. Copy in `copy/hero.md`. |
+
+As drawn before the amendment (Sleeves and Hero artboards): front wordmark about 47 mm with its baseline 43 below the tube's top edge; side wordmark about 64 mm, baseline 94 below the top edge, starting 35 from the front edge.
+
+### Stand (optional accessory)
+
+| | |
+|---|---|
+| Block | 390 × 390 × 110, painted in the flavour's print colour, 2 mm edge radius |
+| Reveal | a 6 mm dark recess, 366 × 366, between the stand and the carton, so the two read as separate pieces |
+| Wordmark | on the stand's front and right side as in the band; a sleeve used on a stand is printed without the band, so the wordmark does not double |
+| Heights with the stand (derived) | carton bottom at 116; overall 1,171; tweeter axis 1,019.5; woofer centre 406; mid centre 806 |
+| Not swappable | the stand stays one colour; the sleeve still swaps |
 
 ## Pint (parked: render it only in the mixed-crate shot, do not design its electronics)
 
@@ -137,4 +149,5 @@ Black paper cones. No grilles. The sleeve's die-cuts equal the frame diameters (
 - Throat ø 66 centred at (195, 170, 903.5); dome apex about 8 forward of it.
 - Woofer ø 310 at `z = 290`; mid ø 170 at `z = 690`; both on `x = 195`, `y = 0`.
 - Back window 338 × 758; engraved panel 266 × 240 with its top at 770; port ø 100 at 405; post plate 128 × 64 at 144.
+- Lid colour by flavour and the 110 band with the wordmark in it, as `spec/colorways.json` says.
 - The same numbers in every shot. Drift is a failure.

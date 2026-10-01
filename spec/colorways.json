@@ -1,67 +1,159 @@
 {
-  "$comment": "earmilk colorways. Source: the README's Colorways table and the Flavors artboard on the canvas. Hex, sRGB. 'order' is the lineup order. Values under 'asDrawn' are read off the canvas illustrations and are reference only.",
-  "order": ["whole", "two-percent", "skim", "chocolate", "oat"],
+  "$comment": "earmilk colorways. Source: the README's Colorways table and Amendments, and the Flavors artboard on the canvas. Hex, sRGB. 'order' is the lineup order. 'lid' is 'print' where the lid is printed in the print colour and 'board' where it stays the body colour. The band is always the print colour with the wordmark in the board colour. Values under 'asDrawn' are read off the canvas illustrations and are reference only.",
+  "order": [
+    "whole",
+    "two-percent",
+    "skim",
+    "chocolate",
+    "oat"
+  ],
   "flavors": {
     "whole": {
       "name": "Whole",
       "board": "#FFFFFF",
       "boardNote": "white board",
       "print": "#C62828",
-      "throat": { "mouth": "#C62828", "throat": "#8E1B1B" },
-      "swatchCaption": "Red on white."
+      "throat": {
+        "mouth": "#C62828",
+        "throat": "#8E1B1B"
+      },
+      "swatchCaption": "Red on white.",
+      "lid": "print",
+      "band": {
+        "fill": "#C62828",
+        "text": "#FFFFFF"
+      }
     },
     "two-percent": {
       "name": "2%",
       "board": "#FFFFFF",
       "boardNote": "white board",
       "print": "#1F4FCF",
-      "throat": { "mouth": "#1F4FCF", "throat": "#153792" },
-      "swatchCaption": "Blue on white."
+      "throat": {
+        "mouth": "#1F4FCF",
+        "throat": "#153792"
+      },
+      "swatchCaption": "Blue on white.",
+      "lid": "print",
+      "band": {
+        "fill": "#1F4FCF",
+        "text": "#FFFFFF"
+      }
     },
     "skim": {
       "name": "Skim",
       "board": "#FFFFFF",
       "boardNote": "white board",
       "print": "#6FA5DC",
-      "throat": { "mouth": "#8FBBE8", "throat": "#4F86BF" },
-      "swatchCaption": "Light blue on white."
+      "throat": {
+        "mouth": "#8FBBE8",
+        "throat": "#4F86BF"
+      },
+      "swatchCaption": "Light blue on white.",
+      "lid": "print",
+      "band": {
+        "fill": "#6FA5DC",
+        "text": "#FFFFFF"
+      }
     },
     "chocolate": {
       "name": "Chocolate",
       "board": "#5E3A1F",
       "boardNote": "whole board printed brown",
       "print": "#F1E3CC",
-      "throat": { "mouth": "#E2CBA3", "throat": "#A97E4F" },
-      "swatchCaption": "Brown board, cream print."
+      "throat": {
+        "mouth": "#E2CBA3",
+        "throat": "#A97E4F"
+      },
+      "swatchCaption": "Brown board, cream print.",
+      "lid": "board",
+      "band": {
+        "fill": "#F1E3CC",
+        "text": "#5E3A1F"
+      }
     },
     "oat": {
       "name": "Oat",
       "board": "#D9BC92",
       "boardNote": "unbleached board",
       "print": "#2B2118",
-      "throat": { "mouth": "#8E6A3E", "throat": "#5C4224" },
-      "swatchCaption": "Unbleached board, brown print."
+      "throat": {
+        "mouth": "#8E6A3E",
+        "throat": "#5C4224"
+      },
+      "swatchCaption": "Unbleached board, brown print.",
+      "lid": "board",
+      "band": {
+        "fill": "#2B2118",
+        "text": "#D9BC92"
+      }
     }
   },
-  "birch": { "face": "#EAD8B0", "side": "#D4BE95", "engraving": "#6B5232" },
+  "birch": {
+    "face": "#EAD8B0",
+    "side": "#D4BE95",
+    "engraving": "#6B5232"
+  },
   "ground": "#F8F7F4",
   "drivers": {
     "cone": "black paper",
-    "asDrawn": { "frame": "#1F1F1F", "cone": "#070707", "dustCap": "#2C2C2C" }
+    "asDrawn": {
+      "frame": "#1F1F1F",
+      "cone": "#070707",
+      "dustCap": "#2C2C2C"
+    }
   },
   "back": {
-    "asDrawn": { "postPlate": "#1B1B1B", "postPositive": "#C62828", "postNegative": "#2E2E2E", "portBore": "#090909", "portFlange": "#2C2C2C" }
+    "asDrawn": {
+      "postPlate": "#1B1B1B",
+      "postPositive": "#C62828",
+      "postNegative": "#2E2E2E",
+      "portBore": "#090909",
+      "portFlange": "#2C2C2C"
+    }
   },
   "type": {
     "display": "Archivo Black",
     "text": "Archivo",
-    "wordmark": { "text": "earmilk", "case": "lower", "trackingEm": -0.035 }
+    "wordmark": {
+      "text": "earmilk",
+      "case": "lower",
+      "trackingEm": -0.035
+    }
   },
   "rules": [
-    "Gable and fin are the same color as the body; the lid covers them.",
+    "Whole, 2% and Skim carry the lid in the print colour; Chocolate and Oat stay one colour, lid included.",
+    "A 110 mm band of the print colour wraps the base; the wordmark sits in it, reversed in the board colour, front and right side. Nothing is printed under the gable.",
     "Bare birch shows only at the back window and in the bowl's exploded or section views.",
     "The throat is painted, light at the mouth to dark at the throat.",
-    "Print is the wordmark on the front and the side. No flavor word, no label on the sleeve.",
     "Flavor is the colorway only. One voicing."
-  ]
+  ],
+  "print": {
+    "band": {
+      "heightMm": 110,
+      "wordmarkSizeMm": 52,
+      "faces": "front and both sides; on the back only the frame below the window"
+    },
+    "wordmark": "in the band, reversed in the board colour, centred on the front and on the right side",
+    "gable": "nothing printed"
+  },
+  "stand": {
+    "optional": true,
+    "plan": [
+      390,
+      390
+    ],
+    "heightMm": 110,
+    "revealMm": 6,
+    "finish": "painted, print colour",
+    "wordmark": "on the stand, front and right side; the sleeve is then printed without the band"
+  },
+  "panel": {
+    "optional": true,
+    "printToOrder": true,
+    "widthMm": 300,
+    "heightMm": 330,
+    "ink": "print colour",
+    "headline": "HAVE YOU HEARD ME?"
+  }
 }
