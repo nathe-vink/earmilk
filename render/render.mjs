@@ -10,7 +10,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
-import { shots, SIZE } from './src/shots.mjs';
+import { shots, explore, SIZE } from './src/shots.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.resolve(here, '..');
@@ -44,18 +44,20 @@ if (initError) { console.error(initError); process.exit(1); }
 
 const date = args.date || new Date().toISOString().slice(0, 10);
 const v = args.v || '1';
-const outDir = args.out || path.join(repo, 'renders', date);
+const isExplore = args.list === 'explore';
+const outDir = args.out || path.join(repo, isExplore ? 'explore' : 'renders', date);
 fs.mkdirSync(outDir, { recursive: true });
 const only = args.only ? args.only.split(',').map(s => s.trim().padStart(2, '0')) : null;
 
-for (const shot of shots) {
-  const nn = shot.id.slice(5);
+const list = isExplore ? explore.map(e => ({ id: e.id, frames: [e] })) : shots;
+for (const shot of list) {
+  const nn = isExplore ? shot.id : shot.id.slice(5);
   if (only && !only.includes(nn)) continue;
   for (const frame of shot.frames) {
     const t0 = Date.now();
     const cfg = { ...frame, size };
     const url = await page.evaluate(c => window.earmilk.renderShot(c), cfg);
-    const file = path.join(outDir, `${shot.id}-v${v}${frame.suffix || ''}.png`);
+    const file = path.join(outDir, isExplore ? `${shot.id}.png` : `${shot.id}-v${v}${frame.suffix || ''}.png`);
     fs.writeFileSync(file, Buffer.from(url.split(',')[1], 'base64'));
     if (scale !== 1) execFileSync('convert', [file, '-filter', 'Lanczos', '-resize', `${SIZE[0]}x${SIZE[1]}`, file]);
     console.log(`${path.relative(repo, file)}  ${((Date.now() - t0) / 1000).toFixed(1)}s`);

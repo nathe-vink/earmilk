@@ -156,5 +156,52 @@ export function makeTextures(THREE) {
     });
   }
 
-  return { wordmark, engravedLabel, gradient, birch, planks, radialShadow, endGrain, canvasTexture };
+  // The "Have you heard me?" side panel: headline, a halftone portrait placeholder, and rows the owner chooses.
+  function heardPanel({ headline = 'HAVE YOU HEARD ME?', rows = [['NAME', '[YOUR NAME]'], ['HEARD SINCE', '[DATE]'], ['LAST HEARD', '[YOUR ROOM]'], ['IF HEARD, CALL', '[YOUR NUMBER]']], ink = '#000000', W = 300, H = 330, pxPerMm = 4, seed = 5 } = {}) {
+    return memo(`heard|${headline}|${JSON.stringify(rows)}|${ink}|${W}|${H}`, () => {
+      const c = document.createElement('canvas'); c.width = W * pxPerMm; c.height = H * pxPerMm;
+      const ctx = c.getContext('2d'); const mm = v => v * pxPerMm; const r = rand(seed);
+      ctx.fillStyle = ink; ctx.strokeStyle = ink; ctx.textBaseline = 'alphabetic';
+      ctx.lineWidth = mm(3); ctx.strokeRect(mm(1.5), mm(1.5), mm(W - 3), mm(H - 3));
+      const fit = (text, family, weight, maxSize, maxW) => { let size = maxSize; for (;;) { ctx.font = `${weight} ${mm(size)}px "${family}"`; if (ctx.measureText(text).width <= maxW || size < 4) return; size *= 0.97; } };
+      ctx.letterSpacing = '0px';
+      fit(headline, 'Archivo Black', '400', 30, mm(W - 28));
+      ctx.textAlign = 'center'; ctx.fillText(headline, mm(W / 2), mm(40)); ctx.textAlign = 'left';
+      ctx.fillRect(mm(14), mm(49), mm(W - 28), mm(2.2));
+      // Portrait placeholder: a halftone bust, lit from the upper left.
+      const px0 = 14, py0 = 62, pw = 125, ph = 152;
+      ctx.lineWidth = mm(1.5); ctx.strokeRect(mm(px0), mm(py0), mm(pw), mm(ph));
+      const cx = px0 + pw / 2, headY = py0 + 52, headR = 30, shY = py0 + ph + 8, shRx = 62, shRy = 52;
+      const inside = (x, y) => {
+        if (y > py0 + ph - 1 || x < px0 + 1 || x > px0 + pw - 1) return false;
+        const h = ((x - cx) ** 2) / (headR ** 2) + ((y - headY) ** 2) / ((headR * 1.12) ** 2) <= 1;
+        const neck = Math.abs(x - cx) < 11 && y > headY && y < shY;
+        const sh = ((x - cx) ** 2) / (shRx ** 2) + ((y - shY) ** 2) / (shRy ** 2) <= 1 && y > headY + 20;
+        return h || neck || sh;
+      };
+      const pitch = 4.2;
+      for (let y = py0 + 3; y < py0 + ph - 2; y += pitch) for (let x = px0 + 3; x < px0 + pw - 2; x += pitch) {
+        if (!inside(x, y)) continue;
+        const lx = (x - (cx - 22)), ly = (y - (headY - 26));
+        const shade = Math.max(0.12, Math.min(1, 0.25 + Math.hypot(lx, ly) / 95 + (r() - 0.5) * 0.12));
+        ctx.beginPath(); ctx.arc(mm(x), mm(y), mm(pitch * 0.5 * shade), 0, Math.PI * 2); ctx.fill();
+      }
+      // Rows: label over value, stacked on the right.
+      const rx0 = px0 + pw + 14, rw = W - 14 - rx0;
+      rows.slice(0, 4).forEach(([k, v], i) => {
+        const y = py0 + 16 + i * 36;
+        ctx.font = `700 ${mm(8.5)}px "Archivo"`; ctx.letterSpacing = `${mm(0.6)}px`; ctx.fillText(String(k).toUpperCase(), mm(rx0), mm(y));
+        ctx.letterSpacing = '0px';
+        fit(String(v), 'Archivo', '400', 12.5, mm(rw)); ctx.fillText(String(v), mm(rx0), mm(y + 15));
+        ctx.fillRect(mm(rx0), mm(y + 20), mm(rw), mm(0.8));
+      });
+      // Footer rule and a line of small type.
+      ctx.fillRect(mm(14), mm(H - 56), mm(W - 28), mm(2.2));
+      ctx.font = `400 ${mm(9)}px "Archivo"`; ctx.fillText('Printed to order. Any flavor, any face.', mm(14), mm(H - 36));
+      ctx.font = `400 ${mm(9)}px "Archivo"`; ctx.fillText('[YOUR LINE]', mm(14), mm(H - 20));
+      return { texture: canvasTexture(c), widthMm: W, heightMm: H };
+    });
+  }
+
+  return { wordmark, engravedLabel, gradient, birch, planks, radialShadow, endGrain, heardPanel, canvasTexture };
 }

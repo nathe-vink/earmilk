@@ -47,8 +47,10 @@ export function makeMaterials(THREE, tex, flavor) {
   const birch = new M.MeshStandardMaterial({ map: tex.birch(), roughness: 0.6, metalness: 0, side: M.DoubleSide });
   const bowl = new M.MeshPhysicalMaterial({ map: tex.gradient(flavor.throat.mouth, flavor.throat.throat), roughness: 0.4, metalness: 0, clearcoat: 0.3, clearcoatRoughness: 0.45, side: M.DoubleSide });
   const decal = (t) => new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.7, metalness: 0, clearcoat: 0.15, clearcoatRoughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false });
+  const boardPrint = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.55, metalness: 0, clearcoat: 0.3, clearcoatRoughness: 0.4, sheen: 0.15, sheenRoughness: 0.9, sheenColor: new M.Color(0xffffff), side: M.DoubleSide });
+  const printArea = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.58, metalness: 0, clearcoat: 0.25, clearcoatRoughness: 0.45, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
   return {
-    board, birch, bowl, decal,
+    board, birch, bowl, decal, boardPrint, printArea,
     cone: new M.MeshStandardMaterial({ color: 0x202020, roughness: 0.55 }),
     frame: new M.MeshStandardMaterial({ color: 0x1e1e1e, roughness: 0.4, metalness: 0.55 }),
     surround: new M.MeshPhysicalMaterial({ color: 0x141414, roughness: 0.3, clearcoat: 0.5, clearcoatRoughness: 0.3 }),
@@ -84,6 +86,8 @@ function crease(THREE, mats, len, thick) {
 export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = {} }) {
   const S = specFor(kind);
   const st = { sleeve: true, lid: true, cabinet: true, lidLift: 0, tubeLift: 0, lidOffset: [0, 0, 0], lidRotY: 0, tubeOffset: [0, 0, 0], tubeRotY: 0, ...state };
+  // look.style: 'wordmark' (the spec) | 'cap' | 'band' | 'rings' | 'side'; look.panel: the owner's side panel, or null.
+  const look = { style: 'wordmark', panel: null, ...(state.look || {}) };
   const mats = ctx.materials(flavor);
   const d = derived(S);
   const half = S.plan / 2, L = d.slope, dy = d.dirY, dz = d.dirZ, ridgeZ = d.ridgeZ;
@@ -209,25 +213,48 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
   }
   if (st.tubeOffset[1] === 0 && (st.tubeOffset[0] !== 0 || st.tubeOffset[2] !== 0)) tube.add(contactShadow(THREE, mats, S.plan, S.plan, 0.5));
 
+  // Exploration looks: flavour colour as a base band, rings around the drivers, or whole side panels.
+  const area = (w, h) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mats.printArea); m.receiveShadow = true; m.renderOrder = 1; return m; };
+  if (look.style === 'band') {
+    const bh = 110 * kk;
+    const f = area(S.plan, bh); f.position.set(0, bh / 2, half + bd + 0.25); tube.add(f);
+    const bb = area(S.plan, Math.min(bh, S.back ? S.back.window.z0 : bh)); bb.rotation.y = Math.PI; bb.position.set(0, bb.geometry.parameters.height / 2, -half - bd - 0.25); tube.add(bb);
+    for (const sx of [-1, 1]) { const m = area(S.plan, bh); m.rotation.y = sx * Math.PI / 2; m.position.set(sx * (half + bd + 0.25), bh / 2, 0); tube.add(m); }
+  }
+  if (look.style === 'rings') {
+    for (const dr of S.drivers) { const R = dr.frame / 2; const m = new THREE.Mesh(new THREE.RingGeometry(R + 3 * kk, R + 30 * kk, 96), mats.printArea); m.position.set(0, dr.z, half + bd + 0.25); m.renderOrder = 1; tube.add(m); }
+  }
+  if (look.style === 'side') {
+    for (const sx of [-1, 1]) { const m = area(S.plan, S.body); m.rotation.y = sx * Math.PI / 2; m.position.set(sx * (half + bd + 0.25), S.body / 2, 0); tube.add(m); }
+  }
+  const sideInk = look.style === 'side' ? flavor.board : flavor.print;
+
   // Print: the wordmark on the front, above the mid, and larger on the right side reading front to back.
   const fw = ctx.tex.wordmark({ sizeMm: P.front.size, color: flavor.print, trackingEm: P.trackingEm });
   const front = mesh(new THREE.PlaneGeometry(fw.widthMm, fw.heightMm), mats.decal(fw.texture), false);
   front.position.set(0, S.body - P.front.baselineBelowTop + 0.35 * P.front.size, half + bd + 0.3); tube.add(front);
-  const sw = ctx.tex.wordmark({ sizeMm: P.side.size, color: flavor.print, trackingEm: P.trackingEm });
+  const sw = ctx.tex.wordmark({ sizeMm: P.side.size, color: sideInk, trackingEm: P.trackingEm });
   const side = mesh(new THREE.PlaneGeometry(sw.widthMm, sw.heightMm), mats.decal(sw.texture), false);
   side.rotation.y = Math.PI / 2;
   side.position.set(half + bd + 0.3, S.body - P.side.baselineBelowTop + 0.35 * P.side.size, half - P.side.fromFront - sw.widthMm / 2); tube.add(side);
+  // The owner's panel on the right side, below the wordmark.
+  if (look.panel) {
+    const hp = ctx.tex.heardPanel({ ...look.panel, ink: sideInk, W: 300 * kk, H: 330 * kk });
+    const pm = mesh(new THREE.PlaneGeometry(hp.widthMm, hp.heightMm), mats.decal(hp.texture), false);
+    pm.rotation.y = Math.PI / 2; pm.position.set(half + bd + 0.35, 460 * kk, 0); tube.add(pm);
+  }
 
   if (!st.lid) return g;
   // Lid: boards over the gable and the fin, die-cut at the mouth, with fold lines at the ridge and the bottom edge and crimp lines on the fin.
   const lid = new THREE.Group();
   lid.position.set(st.lidOffset[0], st.lidOffset[1] + st.lidLift, st.lidOffset[2]); lid.rotation.y = st.lidRotY; g.add(lid);
-  lid.add(mesh(slab(THREE, slopeWithMouth(), bd).applyMatrix4(frontBasis), mats.board));
-  lid.add(mesh(slab(THREE, slopeRect(), bd, 4).applyMatrix4(backBasis), mats.board));
-  lid.add(mesh(slab(THREE, endTri(), bd, 4).applyMatrix4(rightBasis), mats.board));
-  lid.add(mesh(slab(THREE, endTri(), bd, 4).applyMatrix4(leftBasis), mats.board));
+  const lidMat = look.style === 'cap' ? mats.boardPrint : mats.board;
+  lid.add(mesh(slab(THREE, slopeWithMouth(), bd).applyMatrix4(frontBasis), lidMat));
+  lid.add(mesh(slab(THREE, slopeRect(), bd, 4).applyMatrix4(backBasis), lidMat));
+  lid.add(mesh(slab(THREE, endTri(), bd, 4).applyMatrix4(rightBasis), lidMat));
+  lid.add(mesh(slab(THREE, endTri(), bd, 4).applyMatrix4(leftBasis), lidMat));
   const coverH = S.fin.height + bd + 2;
-  lid.add(mesh(new addons.RoundedBoxGeometry(S.plan + 2 * bd, coverH, S.fin.thick + 2 * bd, 2, Math.min(1.0, bd * 0.66)).translate(0, ridgeZ - 2 + coverH / 2, 0), mats.board));
+  lid.add(mesh(new addons.RoundedBoxGeometry(S.plan + 2 * bd, coverH, S.fin.thick + 2 * bd, 2, Math.min(1.0, bd * 0.66)).translate(0, ridgeZ - 2 + coverH / 2, 0), lidMat));
   for (const basis of [frontBasis, backBasis]) {
     for (const v of [ct, L - ct]) { const c = crease(THREE, mats, S.plan, ct); c.position.set(0, v, cn); c.applyMatrix4(basis); lid.add(c); }
   }
