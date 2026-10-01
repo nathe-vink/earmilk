@@ -106,7 +106,7 @@ Black paper cones. No grilles. The sleeve's die-cuts equal the frame diameters (
 | Lock | both pieces lock at the back seam. Where on the back the seam sits is not drawn. |
 | Board | heavy carton board / SBS, target 1.2–1.5 mm. Open test: whether it holds a crisp fold at this size. |
 | Fold creases | at the gable: the lid's folds at the ridge and along the front and back top edges, and the fin's fold. They should be visible in a render. |
-| Dimension note (assumption) | 390 is treated as the outer dimension of the sleeved speaker. The cabinet is 390 less two board thicknesses once the stock is chosen; at this scale the difference does not show in a render. |
+| Dimension note (assumption) | The render model keeps the cabinet and block at the spec numbers and puts the board outside them, so the sleeved speaker is 393 wide and deep. Whether 390 is the cabinet or the outer dimension is decided when the board stock is chosen; at any shot scale the difference does not show. |
 
 ### Print on the sleeve (as drawn, Sleeves and Hero artboards)
 

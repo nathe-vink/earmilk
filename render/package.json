@@ -1,0 +1,14 @@
+{
+  "name": "earmilk-render",
+  "private": true,
+  "type": "module",
+  "description": "Builds the earmilk carton speaker from spec/geometry.md as a Three.js model and renders the shot list through headless Chromium.",
+  "scripts": {
+    "check": "node src/check-spec.mjs",
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "^1.50.0",
+    "three": "^0.170.0"
+  }
+}

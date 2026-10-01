@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>earmilk render</title>
+<style>
+@font-face { font-family: "Archivo Black"; src: url(./fonts/ArchivoBlack-Regular.woff) format("woff"); font-weight: 400; }
+@font-face { font-family: "Archivo"; src: url(./fonts/Archivo-Regular.woff) format("woff"); font-weight: 400; }
+@font-face { font-family: "Archivo"; src: url(./fonts/Archivo-Bold.woff) format("woff"); font-weight: 700; }
+body { margin: 0; background: #222; }
+canvas { display: block; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./node_modules/three/build/three.module.js", "three/addons/": "./node_modules/three/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="c" width="1800" height="1200"></canvas>
+<script type="module" src="./src/app.mjs"></script>
+</body>
+</html>
