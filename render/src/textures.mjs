@@ -143,5 +143,18 @@ export function makeTextures(THREE) {
     });
   }
 
-  return { wordmark, engravedLabel, gradient, birch, planks, radialShadow, canvasTexture };
+  // End grain for the cut edges of crate boards: tight dark arcs on a tan base.
+  function endGrain() {
+    return memo('endGrain', () => {
+      const c = document.createElement('canvas'); c.width = 512; c.height = 512;
+      const ctx = c.getContext('2d'); const r = rand(21);
+      ctx.fillStyle = '#c9ad82'; ctx.fillRect(0, 0, 512, 512);
+      ctx.strokeStyle = '#8f7149';
+      for (let i = 0; i < 90; i++) { ctx.globalAlpha = 0.25 + r() * 0.4; ctx.lineWidth = 1 + r() * 2; ctx.beginPath(); ctx.arc(256 + (r() - 0.5) * 80, 700, 180 + i * 5.5 + r() * 3, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke(); }
+      ctx.globalAlpha = 1;
+      return canvasTexture(c, { repeat: [1, 1] });
+    });
+  }
+
+  return { wordmark, engravedLabel, gradient, birch, planks, radialShadow, endGrain, canvasTexture };
 }
