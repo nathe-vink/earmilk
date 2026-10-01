@@ -120,7 +120,7 @@ export function makeTextures(THREE) {
           ctx.fillStyle = mix < 0.22 ? dark : mix < 0.44 ? light : base;
           ctx.fillRect(x, y, pw, len);
           ctx.globalAlpha = 0.1;
-          for (let k = 0; k < 14; k++) { ctx.fillStyle = r() > 0.5 ? dark : light; ctx.fillRect(x + r() * pw, y, 1 + r() * 2, len); }
+          for (let k = 0; k < 40; k++) { ctx.fillStyle = r() > 0.5 ? dark : light; const gx = x + r() * pw; ctx.beginPath(); for (let yy = y; yy < y + len; yy += 24) ctx.lineTo(gx + Math.sin(yy * 0.01 + k) * 1.5, yy); ctx.lineWidth = 0.6 + r() * 1.6; ctx.strokeStyle = ctx.fillStyle; ctx.stroke(); }
           ctx.globalAlpha = 1;
           ctx.fillStyle = 'rgba(0,0,0,0.22)'; ctx.fillRect(x, y + len - 2, pw, 2);
           y += len;
@@ -131,5 +131,17 @@ export function makeTextures(THREE) {
     });
   }
 
-  return { wordmark, engravedLabel, gradient, birch, planks, canvasTexture };
+  // Radial falloff for contact shadows: white at the centre to black at the edge (used as an alphaMap).
+  function radialShadow() {
+    return memo('radialShadow', () => {
+      const c = document.createElement('canvas'); c.width = 256; c.height = 256;
+      const ctx = c.getContext('2d');
+      const g = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+      g.addColorStop(0, '#ffffff'); g.addColorStop(0.35, '#b0b0b0'); g.addColorStop(0.7, '#303030'); g.addColorStop(1, '#000000');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 256, 256);
+      return canvasTexture(c, { srgb: false });
+    });
+  }
+
+  return { wordmark, engravedLabel, gradient, birch, planks, radialShadow, canvasTexture };
 }
