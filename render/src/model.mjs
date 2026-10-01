@@ -49,8 +49,9 @@ export function makeMaterials(THREE, tex, flavor) {
   const decal = (t) => new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.7, metalness: 0, clearcoat: 0.15, clearcoatRoughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false });
   const boardPrint = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.55, metalness: 0, clearcoat: 0.3, clearcoatRoughness: 0.4, sheen: 0.15, sheenRoughness: 0.9, sheenColor: new M.Color(0xffffff), side: M.DoubleSide });
   const printArea = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.58, metalness: 0, clearcoat: 0.25, clearcoatRoughness: 0.45, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+  const standPaint = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.5, metalness: 0, clearcoat: 0.2, clearcoatRoughness: 0.5 });
   return {
-    board, birch, bowl, decal, boardPrint, printArea,
+    board, birch, bowl, decal, boardPrint, printArea, standPaint,
     cone: new M.MeshStandardMaterial({ color: 0x202020, roughness: 0.55 }),
     frame: new M.MeshStandardMaterial({ color: 0x1e1e1e, roughness: 0.4, metalness: 0.55 }),
     surround: new M.MeshPhysicalMaterial({ color: 0x141414, roughness: 0.3, clearcoat: 0.5, clearcoatRoughness: 0.3 }),
@@ -85,15 +86,20 @@ function crease(THREE, mats, len, thick) {
 // state: { sleeve, lid, cabinet, lidLift, tubeLift, lidOffset [x,y,z], lidRotY, tubeOffset [x,y,z], tubeRotY } in mm and radians.
 export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = {} }) {
   const S = specFor(kind);
+  const kk = S.plan / 390;
   const st = { sleeve: true, lid: true, cabinet: true, lidLift: 0, tubeLift: 0, lidOffset: [0, 0, 0], lidRotY: 0, tubeOffset: [0, 0, 0], tubeRotY: 0, ...state };
-  // look.style: 'wordmark' (the spec) | 'cap' | 'band' | 'rings' | 'side'; look.panel: the owner's side panel, or null.
-  const look = { style: 'wordmark', panel: null, ...(state.look || {}) };
+  // look: { lid: 'board'|'print', band: null|'print'|'stand', wordmark: 'gable'|'band', panel: null|{...}, knob: false, style }.
+  // style is the first exploration's shorthand: 'cap' = lid print, 'band' = printed band, 'rings', 'side'.
+  const look = { style: 'wordmark', lid: 'board', band: null, wordmark: 'gable', panel: null, knob: false, ...(state.look || {}) };
+  if (look.style === 'cap') look.lid = 'print';
+  if (look.style === 'band' && !look.band) look.band = 'print';
+  const standH = look.band === 'stand' ? 110 * kk : 0;
+  const rise = standH ? standH + 6 * kk : 0;
   const mats = ctx.materials(flavor);
   const d = derived(S);
   const half = S.plan / 2, L = d.slope, dy = d.dirY, dz = d.dirZ, ridgeZ = d.ridgeZ;
   const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
   const mesh = (geom, mat, shadow = true) => { const m = new THREE.Mesh(geom, mat); m.castShadow = shadow; m.receiveShadow = shadow; return m; };
-  const kk = S.plan / 390;
 
   const frontBasis = new THREE.Matrix4().makeBasis(V3(1, 0, 0), V3(0, dz, -dy), V3(0, dy, dz)).setPosition(V3(0, S.body, half));
   const backBasis = new THREE.Matrix4().makeBasis(V3(-1, 0, 0), V3(0, dz, dy), V3(0, dy, -dz)).setPosition(V3(0, S.body, -half));
@@ -108,10 +114,26 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
   const g = new THREE.Group();
   g.name = `speaker-${kind}-${flavor.name}`;
   if (st.cabinet) g.add(contactShadow(THREE, mats, S.plan, S.plan, 0.55));
+  const body = new THREE.Group(); body.position.y = rise; g.add(body);
+  // Optional stand: a painted block in the print colour under the carton, with a dark reveal between them.
+  if (standH) {
+    const stand = mesh(new addons.RoundedBoxGeometry(S.plan, standH, S.plan, 2, 2 * kk).translate(0, standH / 2, 0), mats.standPaint); g.add(stand);
+    const reveal = mesh(new THREE.BoxGeometry(S.plan - 24 * kk, 6 * kk, S.plan - 24 * kk).translate(0, standH + 3 * kk, 0), mats.dark); g.add(reveal);
+    if (look.wordmark === 'band') {
+      const bw = ctx.tex.wordmark({ sizeMm: 52 * kk, color: flavor.board, trackingEm: S.print.trackingEm });
+      const f = mesh(new THREE.PlaneGeometry(bw.widthMm, bw.heightMm), mats.decal(bw.texture), false); f.position.set(0, standH / 2 + 0.35 * 52 * kk - 0.65 * 52 * kk + bw.heightMm / 2, half + 0.3); g.add(f);
+      const sd = mesh(new THREE.PlaneGeometry(bw.widthMm, bw.heightMm), mats.decal(bw.texture), false); sd.rotation.y = Math.PI / 2; sd.position.set(half + 0.3, f.position.y, 0); g.add(sd);
+    }
+    if (look.knob) {
+      const kr = 14 * kk;
+      const knob = mesh(new THREE.CylinderGeometry(kr, kr, 10 * kk, 48), mats.frame); knob.rotation.x = Math.PI / 2; knob.position.set(140 * kk, standH / 2, half + 5 * kk); g.add(knob);
+      const tick = mesh(new THREE.BoxGeometry(1.6 * kk, kr * 0.6, 0.6 * kk), mats.board); tick.position.set(140 * kk, standH / 2 + kr * 0.6, half + 10.4 * kk); g.add(tick);
+    }
+  }
 
   if (st.cabinet) {
     // Cabinet: a real box of birch panels (baffle with driver cut-outs, back with the port hole, sides, top, bottom), the carved block, the fin.
-    const cab = new THREE.Group(); g.add(cab);
+    const cab = new THREE.Group(); body.add(cab);
     const wall = S.wall;
     const baffle = rectShape(THREE, -half, 0, half, S.body);
     for (const dr of S.drivers) baffle.holes.push(circleHole(THREE, 0, dr.z, dr.frame / 2 * 0.86));
@@ -198,7 +220,7 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
 
   // Tube: four boards around the body; the front is die-cut for the drivers, the back is a frame around the window.
   const tube = new THREE.Group();
-  tube.position.set(st.tubeOffset[0], st.tubeOffset[1] + st.tubeLift, st.tubeOffset[2]); tube.rotation.y = st.tubeRotY; g.add(tube);
+  tube.position.set(st.tubeOffset[0], st.tubeOffset[1] + st.tubeLift, st.tubeOffset[2]); tube.rotation.y = st.tubeRotY; body.add(tube);
   const frontShape = rectShape(THREE, -half, 0, half, S.body);
   for (const dr of S.drivers) frontShape.holes.push(circleHole(THREE, 0, dr.z, dr.frame / 2));
   tube.add(mesh(slab(THREE, frontShape, bd).translate(0, 0, half), mats.board));
@@ -215,7 +237,7 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
 
   // Exploration looks: flavour colour as a base band, rings around the drivers, or whole side panels.
   const area = (w, h) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mats.printArea); m.receiveShadow = true; m.renderOrder = 1; return m; };
-  if (look.style === 'band') {
+  if (look.band === 'print') {
     const bh = 110 * kk;
     const f = area(S.plan, bh); f.position.set(0, bh / 2, half + bd + 0.25); tube.add(f);
     const bb = area(S.plan, Math.min(bh, S.back ? S.back.window.z0 : bh)); bb.rotation.y = Math.PI; bb.position.set(0, bb.geometry.parameters.height / 2, -half - bd - 0.25); tube.add(bb);
@@ -229,14 +251,22 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
   }
   const sideInk = look.style === 'side' ? flavor.board : flavor.print;
 
-  // Print: the wordmark on the front, above the mid, and larger on the right side reading front to back.
-  const fw = ctx.tex.wordmark({ sizeMm: P.front.size, color: flavor.print, trackingEm: P.trackingEm });
-  const front = mesh(new THREE.PlaneGeometry(fw.widthMm, fw.heightMm), mats.decal(fw.texture), false);
-  front.position.set(0, S.body - P.front.baselineBelowTop + 0.35 * P.front.size, half + bd + 0.3); tube.add(front);
-  const sw = ctx.tex.wordmark({ sizeMm: P.side.size, color: sideInk, trackingEm: P.trackingEm });
-  const side = mesh(new THREE.PlaneGeometry(sw.widthMm, sw.heightMm), mats.decal(sw.texture), false);
-  side.rotation.y = Math.PI / 2;
-  side.position.set(half + bd + 0.3, S.body - P.side.baselineBelowTop + 0.35 * P.side.size, half - P.side.fromFront - sw.widthMm / 2); tube.add(side);
+  if (look.wordmark === 'band' && look.band === 'print') {
+    // The wordmark sits in the printed band, reversed in the board colour, centred on the front and on the right side.
+    const bw = ctx.tex.wordmark({ sizeMm: 52 * kk, color: flavor.board, trackingEm: P.trackingEm });
+    const cy = 55 * kk - 0.65 * 52 * kk + bw.heightMm / 2;
+    const f = mesh(new THREE.PlaneGeometry(bw.widthMm, bw.heightMm), mats.decal(bw.texture), false); f.position.set(0, cy, half + bd + 0.35); tube.add(f);
+    const sd = mesh(new THREE.PlaneGeometry(bw.widthMm, bw.heightMm), mats.decal(bw.texture), false); sd.rotation.y = Math.PI / 2; sd.position.set(half + bd + 0.35, cy, 0); tube.add(sd);
+  } else if (look.wordmark === 'gable' || look.band !== 'stand') {
+    // Print as specified: the wordmark on the front, above the mid, and larger on the right side reading front to back.
+    const fw = ctx.tex.wordmark({ sizeMm: P.front.size, color: flavor.print, trackingEm: P.trackingEm });
+    const front = mesh(new THREE.PlaneGeometry(fw.widthMm, fw.heightMm), mats.decal(fw.texture), false);
+    front.position.set(0, S.body - P.front.baselineBelowTop + 0.35 * P.front.size, half + bd + 0.3); tube.add(front);
+    const sw = ctx.tex.wordmark({ sizeMm: P.side.size, color: sideInk, trackingEm: P.trackingEm });
+    const side = mesh(new THREE.PlaneGeometry(sw.widthMm, sw.heightMm), mats.decal(sw.texture), false);
+    side.rotation.y = Math.PI / 2;
+    side.position.set(half + bd + 0.3, S.body - P.side.baselineBelowTop + 0.35 * P.side.size, half - P.side.fromFront - sw.widthMm / 2); tube.add(side);
+  }
   // The owner's panel on the right side, below the wordmark.
   if (look.panel) {
     const hp = ctx.tex.heardPanel({ ...look.panel, ink: sideInk, W: 300 * kk, H: 330 * kk });
@@ -247,8 +277,8 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
   if (!st.lid) return g;
   // Lid: boards over the gable and the fin, die-cut at the mouth, with fold lines at the ridge and the bottom edge and crimp lines on the fin.
   const lid = new THREE.Group();
-  lid.position.set(st.lidOffset[0], st.lidOffset[1] + st.lidLift, st.lidOffset[2]); lid.rotation.y = st.lidRotY; g.add(lid);
-  const lidMat = look.style === 'cap' ? mats.boardPrint : mats.board;
+  lid.position.set(st.lidOffset[0], st.lidOffset[1] + st.lidLift, st.lidOffset[2]); lid.rotation.y = st.lidRotY; body.add(lid);
+  const lidMat = look.lid === 'print' ? mats.boardPrint : mats.board;
   lid.add(mesh(slab(THREE, slopeWithMouth(), bd).applyMatrix4(frontBasis), lidMat));
   lid.add(mesh(slab(THREE, slopeRect(), bd, 4).applyMatrix4(backBasis), lidMat));
   lid.add(mesh(slab(THREE, endTri(), bd, 4).applyMatrix4(rightBasis), lidMat));
