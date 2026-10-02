@@ -40,7 +40,7 @@ earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it.
 
 ## Back
 
-- Bare birch where the sleeve opens. Nutrition Facts engraved above the port, binding posts below. *(draft 2026-10-02: "Bare birch on the back. The wordmark and the Nutrition Facts engraved above the port, binding posts below.")*
+- Bare birch where the sleeve opens. Nutrition Facts engraved above the port, binding posts below. *(draft 2026-10-02: "A bare birch panel on the back carries the Nutrition Facts, engraved. The wordmark is engraved above it; the port and the posts sit on the finish below.")*
 - The sleeve's back panel is a frame; it locks around the window, so the wood is what ages. *(draft 2026-10-02: "The finish stops at the panel, so the wood is what ages.")*
 
 ## Pint crate (parked)

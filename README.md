@@ -44,6 +44,8 @@ Made on the v4 and v5 renders. They stand with the Decisions above and replace t
 - **Dropped.** The owner's panel. Other milk-themed marks that are not about the owner are explored in `explore/2026-10-02/` and are proposals, not spec.
 - **Shots.** 07 (sleeve swap) is retired. 02 (two rooms) loses the swap that was its point; it is rendered meanwhile with the same Whole in both rooms and needs a new brief. In 03 the fold of the lid's die-cut becomes the finish's edge at the mouth; in 04 the sleeve frame becomes the finished back around the birch panel.
 - Prices: `[PAIR PRICE]` and `[CRATE PRICE]` stay open. `[SLEEVE PRICE]` and `[STAND PRICE]` are gone.
+- **Back panel, contained** *(later the same day)*. The bare birch field is the Nutrition Facts panel plus a 26 mm margin all round: `x` 36 → 354, `z` 504 → 796. The port, the binding posts and the engraved wordmark sit on the finish outside it; the wordmark is engraved through the lacquer and ink-filled in the panel's brown, baseline at `z` 812; the post plate moves up to `z` 150 so it clears the plinth's shadow line. The full-height field (`x` 26 → 364, `z` 140 → 830, the same 26 margin at the sides and above the plinth) is kept as an option; both are rendered in `explore/2026-10-02/r4-*`.
+- **Shot 02, rebriefed.** The two rooms are the same pair in two homes, years apart: a bright first apartment, then a darker older house. The point is no longer the swap but that the speaker outlives its rooms, the finish fixed and the birch back ageing with the house.
 
 ## Geometry (mm)
 
@@ -94,9 +96,9 @@ Photoreal, physically plausible materials: matte printed board with visible fold
 
 Shot list, in priority order:
 1. **Hero pair in a room.** Whole, late-afternoon window light, a chair or sofa arm in frame for scale, speakers ~2 m apart, 3/4 view, camera at 1.2 m with a ~50 mm look.
-2. **Two rooms, years apart.** The same floor spot and the same speaker, once in Whole in a bright apartment, once in Oat in a darker, older room. This is the sleeve argument; it must read as one object that changed its skin. *Amended 2026-10-02: no sleeve, so no skin change; rendered with the same Whole in both rooms until the shot is rebriefed.*
+2. **Two rooms, years apart.** The same floor spot and the same speaker, once in Whole in a bright apartment, once in Oat in a darker, older room. This is the sleeve argument; it must read as one object that changed its skin. *Amended 2026-10-02: no sleeve, so no skin change. Rebriefed: the same pair in two homes, years apart, a bright first apartment and then a darker older house; the point is that the speaker outlives its rooms.*
 3. **Bowl close-up.** Front 3/4 at gable height, the throat and the dome in focus, the fold of the lid's die-cut visible at the mouth edge. *Amended 2026-10-02: the mouth edge is the finish's edge on the carved gable.*
-4. **Back.** Straight-on, engraved label legible, port and posts, the sleeve frame around the birch. *Amended 2026-10-02: the finished back around the birch panel, the engraved wordmark above the label.*
+4. **Back.** Straight-on, engraved label legible, port and posts, the sleeve frame around the birch. *Amended 2026-10-02: the finished back with the bare birch field around the Facts panel only, the wordmark engraved above it, the port and posts on the finish below.*
 5. **Five flavors lineup.** Flat ground, equal spacing, in flavor order.
 6. **Mixed crate** on a desk, six pints, five flavors.
 7. **Sleeve swap**, three frames: lid off, tube sliding, new flavor on. *Retired 2026-10-02: no sleeve.*

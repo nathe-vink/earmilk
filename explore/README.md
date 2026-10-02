@@ -60,3 +60,14 @@ Direction: no sleeve, the colour a finish on the birch, the band and the stand o
 | `r3-all.png` | OPEN OTHER SIDE, the date stamp, the roundel and the volume line together, from high and to the right, to see how much is too much. | As above. |
 
 Not rendered on purpose: anything with a name, a face, a date the owner fills in, or a phone number.
+
+## 2026-10-02, round 4: the shape of the bare birch field on the back
+
+Asked: must the birch fill the whole back, or only hold the Nutrition Facts, with the port, the posts and the wordmark outside it? Both, straight on and from the rear quarter. The contained field is the default from v9; the full field stays an option with its bottom lifted so the margin above the plinth matches the sides.
+
+    cd render && node render.mjs --list explore4 --scale 2
+
+| File | What |
+|---|---|
+| `r4-back-label-straight.png`, `r4-back-label-quarter.png` | The field is the Facts panel plus a 26 mm margin; the wordmark engraved on the finish above it, the port and the posts on the finish below. |
+| `r4-back-full-straight.png`, `r4-back-full-quarter.png` | The field from 140 above the floor to 30 below the top, 26 in from the sides; everything inside it. |

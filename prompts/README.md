@@ -5,7 +5,7 @@ One file per shot, versioned: `prompts/shot-NN-vN.md`. A version is frozen once 
 | NN | Shot | Flavor(s) | Frames |
 |---|---|---|---|
 | 01 | Hero pair in a room | Whole | 1 |
-| 02 | Two rooms, years apart | Whole, then Oat; since v6 Whole in both, pending a rebrief | 2 |
+| 02 | Two rooms, years apart | Whole in both: the same pair in two homes, a bright first apartment and a darker older house (rebriefed 2026-10-02) | 2 |
 | 03 | Bowl close-up | Whole | 1 |
 | 04 | Back, straight on | Whole | 1 |
 | 05 | Five flavors lineup | all five, in order | 1 |

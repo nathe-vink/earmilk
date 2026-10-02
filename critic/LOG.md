@@ -86,3 +86,7 @@ Carries for the next camera pass, all small: toe the hero pair toward the lens a
 One change from v7: the plate is gone and the wordmark is cast metal letters standing on the plinth. Scores 4, 5, 4, 4, 5, 4. No critic remarked on the lettering as a problem; one read it as debossed grey type, which is the pale studio environment reflected in polished metal rather than the letters themselves. Three rounds on this look have now said the same things on every shot, so the cap is reached: the remaining asks are one light the whole frame obeys, contact occlusion, edge highlights, surface tooth and bounce, all of which wait for the photoreal pass.
 
 Still cheap and still open, for the next camera pass: toe the hero pair in on a longer lens from lower; remove the window mullion so no bar crosses the hero face in the two rooms, and brief that shot anew; a close-up crop that clears both the top lip and the mid's flange; the back camera lower so the seam leaves the Facts rule; the crate camera lower and the end-grain fringe on its base board fixed; a brighter environment behind the camera so the chrome letters read as chrome.
+
+## v9 of the back: no critic round
+
+v9 renders the contained birch field (the Facts panel plus a 26 mm margin, the wordmark engraved on the finish above, the port and posts on the finish below) as the new default, with the full field kept as an option; both are in `explore/2026-10-02/r4-*`. A spec choice for the owner rather than a render iteration, and the cap for this look is reached, so no round was run.

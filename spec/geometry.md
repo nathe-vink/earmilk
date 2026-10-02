@@ -90,12 +90,12 @@ Black paper cones. No grilles. The sleeve's die-cuts equal the frame diameters (
 
 | | |
 |---|---|
-| Birch window (bare, inside the sleeve frame) | `x` 26 → 364, `z` 40 → 798, so 338 × 758. *Amended 2026-10-02: a bare birch panel inset in the finished back, `x` 26 → 364, `z` 113 → 830 (338 × 717), so the plinth sits below it and the engraved wordmark fits above the Facts panel.* |
+| Birch window (bare, inside the sleeve frame) | `x` 26 → 364, `z` 40 → 798, so 338 × 758. *Amended 2026-10-02: a bare birch field in the finished back. Default, contained: the Facts panel plus a 26 margin all round, `x` 36 → 354, `z` 504 → 796 (318 × 292); the port, the posts and the engraved wordmark sit on the finish outside it. Option, full: `x` 26 → 364, `z` 140 → 830 (338 × 690), the same 26 margin at the sides and above the plinth's shadow line.* |
 | Sleeve frame margins (derived) | 26 each side, 40 at the bottom, 62 at the top. *2026-10-02: 26 each side, the plinth and its shadow line below, 30 at the top.* |
-| Engraved wordmark (amended 2026-10-02) | "earmilk", Archivo Black, 36 mm type size, centred on `x = 195`, baseline at `z = 788`, engraved like the panel. |
+| Engraved wordmark (amended 2026-10-02) | "earmilk", Archivo Black, 36 mm type size, centred on `x = 195`. With the contained field: on the finish above it, baseline at `z = 812`, engraved through the lacquer and ink-filled in the panel's brown. With the full field: inside it, baseline at `z = 788`. |
 | Engraved Nutrition Facts panel | 266 × 240 with its top at `z = 770`: `x` 62 → 328, `z` 530 → 770. Copy and proportions in `copy/label.md`, engraved version. |
 | Port | round, ø ~100, centre (195, 390, 405): `z` 355 → 455. As drawn: a 92 bore in a 112 flange. |
-| Binding post plate | 128 × 64, centre `z = 144`: `x` 131 → 259, `z` 112 → 176. As drawn: dark plate, two posts ø 24 at ±32 from the centre; seen from behind, red on the left, black on the right. |
+| Binding post plate | 128 × 64, centre `z = 144`: `x` 131 → 259, `z` 112 → 176. As drawn: dark plate, two posts ø 24 at ±32 from the centre; seen from behind, red on the left, black on the right. *Amended 2026-10-02: centre `z = 150` (`z` 118 → 182) so the plate clears the plinth's shadow line; inside the full field, centre `z = 185`.* |
 | Vertical gaps (derived) | 75 between the panel's bottom and the port's top; 179 between the port's bottom and the plate's top. |
 
 ### Sleeve

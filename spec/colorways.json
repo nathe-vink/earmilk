@@ -142,8 +142,15 @@
   },
   "backWordmark": {
     "typeSizeMm": 36,
-    "baselineZMm": 788,
+    "baselineZMm": 812,
+    "baselineZMmFullField": 788,
     "engraved": true,
+    "inkFilled": true,
     "ink": "#6B5232"
+  },
+  "backPanel": {
+    "default": "label",
+    "label": "the Facts panel plus a 26 mm margin: x 36 to 354, z 504 to 796; port, posts and wordmark on the finish outside it",
+    "full": "x 26 to 364, z 140 to 830"
   }
 }

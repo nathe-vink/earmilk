@@ -43,6 +43,18 @@ export const explore3 = [
   { id: 'r3-all', ...marked(['open-other-side', 'best-before', 'grade-a', 'volume'], { position: [2.1, 1.5, 1.6], lookAt: [0.05, 0.6, 0], focal: 50 }) },
 ];
 
+// Fourth exploration, 2026-10-02: the shape of the bare birch field on the back. 'label' holds the Facts panel with a 26 mm margin and leaves
+// the port, the posts and the engraved wordmark on the finish; 'full' runs from above the plinth to 30 below the top, same margins at the sides.
+const BACK_STRAIGHT = { position: [0, 0.62, -4.2], lookAt: [0, 0.5, 0], focal: 70 };
+const BACK_QUARTER = { position: [-2.2, 1.3, -2.6], lookAt: [0.05, 0.5, 0], focal: 55 };
+const backOpt = (backPanel, camera) => ({ room: 'studio', roomOptions: { key: 'back', env: 0.6, groundRoughness: 0.8 }, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { backPanel } }], camera });
+export const explore4 = [
+  { id: 'r4-back-label-straight', ...backOpt('label', BACK_STRAIGHT) },
+  { id: 'r4-back-full-straight', ...backOpt('full', BACK_STRAIGHT) },
+  { id: 'r4-back-label-quarter', ...backOpt('label', BACK_QUARTER) },
+  { id: 'r4-back-full-quarter', ...backOpt('full', BACK_QUARTER) },
+];
+
 // Retired 2026-10-02 with the sleeve: the three-frame swap. Kept so `--list retired` can still render it in the sleeve look.
 const SLEEVE = { look: { mode: 'sleeve' } };
 export const retired = [

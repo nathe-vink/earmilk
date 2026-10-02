@@ -108,6 +108,9 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
   const standH = look.band === 'stand' ? 110 * kk : 0;
   const rise = standH ? standH + 6 * kk : 0;
   const mats = ctx.materials(flavor);
+  const backPanel = S.back ? (st.backPanel || S.back.panel) : null;
+  const backField = S.back ? (backPanel === 'full' ? S.back.window : { x0: 195 - S.back.label.w / 2 - S.back.labelMargin, x1: 195 + S.back.label.w / 2 + S.back.labelMargin, z0: S.back.label.top - S.back.label.h - S.back.labelMargin, z1: S.back.label.top + S.back.labelMargin }) : null;
+  const postsZ = S.back ? (backPanel === 'full' ? S.back.posts.zFull : S.back.posts.z) : 0;
   const d = derived(S);
   const half = S.plan / 2, L = d.slope, dy = d.dirY, dz = d.dirZ, ridgeZ = d.ridgeZ;
   const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -220,11 +223,11 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       const flange = mesh(new THREE.CylinderGeometry(B.port.flange / 2, B.port.flange / 2, 3, 64), mats.portFlange); flange.rotation.x = Math.PI / 2; flange.position.set(0, B.port.z, -half - 1.5); cab.add(flange);
       const bore = mesh(new THREE.CylinderGeometry(B.port.bore / 2, B.port.bore / 2, 100, 64, 1, true), mats.dark); bore.rotation.x = Math.PI / 2; bore.position.set(0, B.port.z, -half + 45); cab.add(bore);
       const boreEnd = mesh(new THREE.CircleGeometry(B.port.bore / 2, 64), mats.dark); boreEnd.rotation.y = Math.PI; boreEnd.position.set(0, B.port.z, -half + 90); cab.add(boreEnd);
-      const plate = mesh(new addons.RoundedBoxGeometry(B.posts.w, B.posts.h, 5, 2, 1.5), mats.plate); plate.position.set(0, B.posts.z, -half - 2.5 - 0.3); cab.add(plate);
+      const plate = mesh(new addons.RoundedBoxGeometry(B.posts.w, B.posts.h, 5, 2, 1.5), mats.plate); plate.position.set(0, postsZ, -half - 2.5 - 0.3); cab.add(plate);
       for (const [x, mat] of [[B.posts.spacing / 2, mats.postRed], [-B.posts.spacing / 2, mats.postBlack]]) {
-        const post = mesh(new THREE.CylinderGeometry(B.posts.postD / 2, B.posts.postD / 2 * 0.85, 16, 48), mat); post.rotation.x = Math.PI / 2; post.position.set(x, B.posts.z, -half - 5.3 - 8); cab.add(post);
-        const collar = mesh(new THREE.CylinderGeometry(B.posts.postD / 2 * 0.55, B.posts.postD / 2 * 0.55, 4, 32), mats.screw); collar.rotation.x = Math.PI / 2; collar.position.set(x, B.posts.z, -half - 5.3 - 16 - 2); cab.add(collar);
-        const hole = mesh(new THREE.CircleGeometry(4.5, 32), mats.dark); hole.rotation.y = Math.PI; hole.position.set(x, B.posts.z, -half - 5.3 - 20.2); cab.add(hole);
+        const post = mesh(new THREE.CylinderGeometry(B.posts.postD / 2, B.posts.postD / 2 * 0.85, 16, 48), mat); post.rotation.x = Math.PI / 2; post.position.set(x, postsZ, -half - 5.3 - 8); cab.add(post);
+        const collar = mesh(new THREE.CylinderGeometry(B.posts.postD / 2 * 0.55, B.posts.postD / 2 * 0.55, 4, 32), mats.screw); collar.rotation.x = Math.PI / 2; collar.position.set(x, postsZ, -half - 5.3 - 16 - 2); cab.add(collar);
+        const hole = mesh(new THREE.CircleGeometry(4.5, 32), mats.dark); hole.rotation.y = Math.PI; hole.position.set(x, postsZ, -half - 5.3 - 20.2); cab.add(hole);
       }
     }
   }
@@ -241,8 +244,11 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     for (const dr of S.drivers) frontShape.holes.push(circleHole(THREE, 0, dr.z, dr.frame / 2));
     skin.add(mesh(slab(THREE, frontShape, bd).translate(0, 0, half), mats.finishBody));
     const backShape = rectShape(THREE, -half, 0, half, S.body);
-    if (S.back) { const w = S.back.window; const hole = new THREE.Path(); hole.moveTo(w.x0 - half, w.z0); hole.lineTo(w.x0 - half, w.z1); hole.lineTo(w.x1 - half, w.z1); hole.lineTo(w.x1 - half, w.z0); hole.closePath(); backShape.holes.push(hole); }
-    skin.add(mesh(slab(THREE, backShape, bd, 4).translate(0, 0, -half - bd), mats.finishBody));
+    if (S.back) {
+      const w = backField; const hole = new THREE.Path(); hole.moveTo(w.x0 - half, w.z0); hole.lineTo(w.x0 - half, w.z1); hole.lineTo(w.x1 - half, w.z1); hole.lineTo(w.x1 - half, w.z0); hole.closePath(); backShape.holes.push(hole);
+      if (S.back.port.z + S.back.port.bore / 2 > w.z1 || S.back.port.z - S.back.port.bore / 2 < w.z0) backShape.holes.push(circleHole(THREE, 0, S.back.port.z, S.back.port.bore / 2 + 1));
+    }
+    skin.add(mesh(slab(THREE, backShape, bd, 64).translate(0, 0, -half - bd), mats.finishBody));
     for (const sx of [-1, 1]) skin.add(mesh(new addons.RoundedBoxGeometry(bd, S.body, S.plan, 2, Math.min(0.5, bd * 0.33)).translate(sx * (half + bd / 2), S.body / 2, 0), mats.finishBody));
 
     // Plinth: the bottom 110 on all four sides in the accent colour, flush, with a 3 mm shadow line where it meets the body.
@@ -270,7 +276,8 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     if (S.back && FS.backWordmark) {
       const ew = ctx.tex.wordmark({ sizeMm: FS.backWordmark.size * kk, color: '#6B5232', trackingEm: P.trackingEm });
       const e = mesh(new THREE.PlaneGeometry(ew.widthMm, ew.heightMm), mats.decal(ew.texture), false);
-      e.rotation.y = Math.PI; e.position.set(0, FS.backWordmark.baseline * kk + 0.35 * FS.backWordmark.size * kk, -half - 0.3); skin.add(e);
+      const baseline = backPanel === 'full' ? FS.backWordmark.baselineFull : FS.backWordmark.baseline;
+      e.rotation.y = Math.PI; e.position.set(0, baseline * kk + 0.35 * FS.backWordmark.size * kk, backPanel === 'full' ? -half - 0.3 : -half - bd - 0.3); skin.add(e);
     }
 
     // Gable and fin: the same shells as the lid, in the accent or the body colour, with no creases or crimp lines.
