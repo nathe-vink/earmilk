@@ -31,8 +31,8 @@ export const shots = [
 ];
 
 // Third exploration, 2026-10-02: common milk-carton marks on the finished cabinet, none about the owner. Proposals, not spec.
-const MARK_CAM = { position: [1.9, 1.0, 1.7], lookAt: [0.05, 0.55, 0], focal: 55 };
-const BACK_CAM = { position: [-1.5, 1.75, -1.9], lookAt: [0.05, 0.75, 0], focal: 55 };
+const MARK_CAM = { position: [2.2, 1.15, 2.0], lookAt: [0.05, 0.5, 0], focal: 50 };
+const BACK_CAM = { position: [-1.7, 1.9, -2.1], lookAt: [0.05, 0.58, 0], focal: 50 };
 const marked = (marks, camera = MARK_CAM, room = { key: 'even', env: 0.5 }) => ({ room: 'studio', roomOptions: room, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { look: { marks } } }], camera });
 export const explore3 = [
   { id: 'r3-open-other-side', ...marked(['open-other-side'], BACK_CAM, { key: 'back', env: 0.6 }) },

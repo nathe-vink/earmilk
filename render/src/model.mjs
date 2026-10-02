@@ -55,13 +55,14 @@ export function makeMaterials(THREE, tex, flavor) {
   const finishAccent = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.38, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.2, side: M.DoubleSide });
   const finishAccentArea = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.38, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.2, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
   const shadowLine = new M.MeshStandardMaterial({ color: 0x141210, roughness: 0.95, metalness: 0, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
-  const badgePlate = new M.MeshStandardMaterial({ color: 0xcfccc5, roughness: 0.42, metalness: 1.0, envMapIntensity: 2.2 });
+  const badgePlate = new M.MeshStandardMaterial({ color: 0xd8d5ce, roughness: 0.28, metalness: 1.0, envMapIntensity: 2.4 });
+  const badgeField = new M.MeshStandardMaterial({ color: 0x1d1c1b, roughness: 0.55, metalness: 0.6, envMapIntensity: 1.2 });
   const badgeLetters = (t) => new M.MeshStandardMaterial({ color: 0xffffff, roughness: 0.12, metalness: 1.0, envMapIntensity: 3.2, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const badgeShade = (t) => new M.MeshBasicMaterial({ color: 0x000000, alphaMap: t, transparent: true, opacity: 0.7, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const mark = (t) => new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.5, metalness: 0, clearcoat: 0.4, clearcoatRoughness: 0.25, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false });
   return {
     board, birch, bowl, decal, boardPrint, printArea, standPaint,
-    finishBody, finishAccent, finishAccentArea, shadowLine, badgePlate, badgeLetters, badgeShade, mark,
+    finishBody, finishAccent, finishAccentArea, shadowLine, badgePlate, badgeField, badgeLetters, badgeShade, mark,
     cone: new M.MeshStandardMaterial({ color: 0x202020, roughness: 0.55 }),
     frame: new M.MeshStandardMaterial({ color: 0x1e1e1e, roughness: 0.4, metalness: 0.55 }),
     surround: new M.MeshPhysicalMaterial({ color: 0x141414, roughness: 0.3, clearcoat: 0.5, clearcoatRoughness: 0.3 }),
@@ -256,9 +257,12 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     const Bz = FS.badge, bw = Bz.w * kk, bh = Bz.h * kk, bt = Bz.t * kk;
     const badge = new THREE.Group(); badge.position.set(0, Bz.z * kk, off); skin.add(badge);
     const plate = mesh(new addons.RoundedBoxGeometry(bw, bh, bt, 3, Bz.r * kk), mats.badgePlate); plate.position.z = bt / 2; badge.add(plate);
+    // A dark field inset in the chrome rim, the way the cast badge on an espresso machine reads: bright letters on a dark ground.
+    const fieldT = 0.6 * kk, rim = 4 * kk;
+    const field = mesh(new addons.RoundedBoxGeometry(bw - 2 * rim, bh - 2 * rim, fieldT, 2, Math.max(0.5, (Bz.r - 2) * kk)), mats.badgeField); field.position.z = bt + fieldT / 2; badge.add(field);
     const wm = ctx.tex.wordmark({ sizeMm: Bz.type * kk, color: '#FFFFFF', trackingEm: P.trackingEm });
-    const shade = new THREE.Mesh(new THREE.PlaneGeometry(wm.widthMm, wm.heightMm), mats.badgeShade(wm.texture)); shade.position.set(-0.9 * kk, -1.3 * kk, bt + 0.05); shade.renderOrder = 2; badge.add(shade);
-    const letters = new THREE.Mesh(new THREE.PlaneGeometry(wm.widthMm, wm.heightMm), mats.badgeLetters(wm.texture)); letters.position.z = bt + Bz.relief * kk; letters.renderOrder = 3; letters.castShadow = true; badge.add(letters);
+    const shade = new THREE.Mesh(new THREE.PlaneGeometry(wm.widthMm, wm.heightMm), mats.badgeShade(wm.texture)); shade.position.set(-0.9 * kk, -1.3 * kk, bt + fieldT + 0.05); shade.renderOrder = 2; badge.add(shade);
+    const letters = new THREE.Mesh(new THREE.PlaneGeometry(wm.widthMm, wm.heightMm), mats.badgeLetters(wm.texture)); letters.position.z = bt + fieldT + Bz.relief * kk; letters.renderOrder = 3; letters.castShadow = true; badge.add(letters);
 
     // Back: the wordmark engraved in the birch panel above the Nutrition Facts (floorstander only).
     if (S.back && FS.backWordmark) {
@@ -275,7 +279,7 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     for (const id of look.marks || []) {
       if (id === 'open-other-side') {
         // On the back slope, the way the spout instruction sits on a carton: caps with an arrow, in the gable's other colour.
-        const t = ctx.tex.label({ text: 'OPEN OTHER SIDE', sizeMm: 34 * kk, color: inkOnGable, weight: 700, arrow: true });
+        const t = ctx.tex.label({ text: 'OPEN OTHER SIDE', sizeMm: 27 * kk, color: inkOnGable, weight: 700, arrow: true });
         const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.geometry.translate(0, L / 2, bd + 0.35); m.geometry.applyMatrix4(backBasis); skin.add(m);
       }
       if (id === 'best-before') {
