@@ -18,7 +18,7 @@ earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it.
 
 ## Flavors
 
-- Flavor is the colorway. Same speaker, different carton: the print and the throat take the color, and Chocolate and Oat take the whole board.
+- Flavor is the colorway. Same speaker, different carton: the print, the lid and the throat take the color, and Chocolate and Oat take the whole board. *(amended on the canvas 2026-10-02, with the locked look)*
 - Whole: Red on white.
 - 2%: Blue on white.
 - Skim: Light blue on white.
@@ -27,7 +27,7 @@ earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it.
 
 ## Sleeves
 
-- The cabinet is birch: a body and a carved gable. The sleeve is two pieces of heavy printed board: a tube that slides up over the body, and a lid, die-cut at the mouth, that drops over the gable. Both lock at the back seam.
+- The cabinet is birch: a body and a carved gable. The sleeve is two pieces of heavy printed board: a tube that slides up over the body, and a lid, die-cut at the mouth, that drops over the gable. Both lock at the back seam. The wordmark sits in a band at the foot; on the white cartons the lid takes the flavor’s color. *(last sentence added on the canvas 2026-10-02)*
 - Rooms change. Swap the sleeve in ten minutes and the speaker changes with them. Any flavor, shipped flat.
 - Price line: Sleeves, [SLEEVE PRICE] a set
 

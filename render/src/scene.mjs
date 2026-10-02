@@ -69,16 +69,16 @@ function chair(THREE, scene, { position, rotationY = 0, color = 0x8a6a46 }) {
 const ROOMS = {
   // Living room, late-afternoon sun through a window on the front-left; a chair by the back wall for scale.
   hero(THREE, addons, ctx, scene, o) {
-    scene.environmentIntensity = 0.22;
+    scene.environmentIntensity = 0.18;
     scene.background = new THREE.Color(0xe6e1d6);
     scene.add(floorMesh(THREE, ctx.tex, { size: 10, planks: { base: '#b8905f', dark: '#ab8456', light: '#c2996a' } }));
     const back = wallMesh(THREE, { w: 10, h: 2.7, color: 0xebe6dc }); back.position.set(0, 1.35, -2.5); scene.add(back);
     skirting(THREE, scene, { w: 10, z: -2.5 });
     windowWall(THREE, scene, { x: -3.5, color: 0xe8e3d9, win: { z0: 1.6, z1: 3.0, sill: 0.8, head: 2.3 } });
-    sun(THREE, scene, { color: 0xffd8ac, intensity: 4.2, position: [-7, 2.6, 5.5], target: [0.3, 0.3, -0.3], bounds: 4.5 });
-    fillRect(THREE, scene, { color: 0xfff0dc, intensity: 2.5, position: [-2.95, 1.55, 2.3], lookAt: [0, 1.0, 2.3] });
-    bounce(THREE, scene, { sky: 0xe8e4dc, ground: 0xb8905f, intensity: 0.35 });
-    chair(THREE, scene, { position: [-2.6, 0, -0.9], rotationY: 0.45 });
+    sun(THREE, scene, { color: 0xffd8ac, intensity: 5.2, position: [-7, 2.6, 5.5], target: [0.3, 0.3, -0.3], bounds: 4.5 });
+    fillRect(THREE, scene, { color: 0xfff0dc, intensity: 1.3, position: [-2.95, 1.55, 2.3], lookAt: [0, 1.0, 2.3] });
+    bounce(THREE, scene, { sky: 0xe8e4dc, ground: 0xb8905f, intensity: 0.28 });
+    chair(THREE, scene, { position: [-2.9, 0, -1.0], rotationY: 0.45 });
     return { exposure: 1.0 };
   },
   // Bright apartment: white walls, cool daylight from the front-left, pale floor, a pale chair.
@@ -103,7 +103,7 @@ const ROOMS = {
     const back = wallMesh(THREE, { w: 10, h: 2.9, color: 0x7a7362, roughness: 1 }); back.position.set(0, 1.45, -2.0); scene.add(back);
     skirting(THREE, scene, { w: 10, z: -2.0, color: 0x8c8470, h: 0.14 });
     windowWall(THREE, scene, { x: -2.6, color: 0x7a7362, sky: 0xffe2b8, mullion: 0x9a8f78, win: { z0: 1.6, z1: 2.8, sill: 0.95, head: 2.1 } });
-    sun(THREE, scene, { color: 0xffc080, intensity: 2.4, position: [-7, 2.2, 5.5], target: [0.2, 0.3, -0.2], bounds: 4.5 });
+    sun(THREE, scene, { color: 0xffc080, intensity: 2.4, position: [-7, 3.2, 4.6], target: [0.2, 0.3, -0.2], bounds: 4.5 });
     fillRect(THREE, scene, { color: 0xffd9a8, intensity: 1.6, w: 1.0, h: 1.1, position: [-2.55, 1.5, 2.2], lookAt: [0, 1.0, 2.2] });
     bounce(THREE, scene, { sky: 0x8fa0bb, ground: 0x5a4330, intensity: 0.3 });
     const lamp = new THREE.PointLight(0xffb469, 10, 0, 2); lamp.position.set(1.7, 1.5, 1.3); scene.add(lamp);

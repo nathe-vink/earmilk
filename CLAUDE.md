@@ -34,10 +34,10 @@ Read `README.md` first. It is the handoff and the brief. The canvas it links to 
 ## Critic protocol
 
 - Runs after each render batch, never in the context that made the render. Spawn a fresh subagent and give it only the image(s) and the text of `critic/PROMPT.md`. It must not see `README.md`, the prompt files, the spec, or this file.
-- At most three rounds per shot. Log every round in `critic/LOG.md` before starting the next.
+- At most three rounds per shot per look: a change to the printed look (as on 2026-10-01) restarts the count, because the critic is judging a different object. Log every round in `critic/LOG.md` before starting the next.
 - A critic note that would change geometry or a Decision is not a critic fix. It is a spec change: stop and ask.
 
 ## Commits
 
 - Commit a render together with the prompt version that produced it and its critic log row.
-- The canvas is edited on the canvas, not here. If the canvas and this repo disagree, say so and ask which is right; do not silently update either.
+- The canvas is edited on the canvas, not here. If the canvas and this repo disagree, say so and ask which is right; do not silently update either. The canvas carries the 2026-10-01 locked look since its version 9 (lids, band, no wordmark under the gable); the `[STAND PRICE]` line and the stand itself are not drawn on it yet.

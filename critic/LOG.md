@@ -46,3 +46,7 @@ What needs the photoreal pass: everything about surface and light. The frames in
 A fourth round because the look changed (printed lids on the white flavours, the band with the wordmark, nothing under the gable); the three-round cap counts per look. Scores held at 3 to 5. The new print was accepted without comment in every shot: no critic flagged the band, the lid colour or the wordmark position, which is the result that mattered for this round. The asks are the ones from rounds 2 and 3 (one committed light, paperboard, bounce, penumbra), which the real-time renderer does not do.
 
 Cheap carries for v5, all camera or placement: hero fill down so the sun's shadows read; night key rotated off the hero face; close-up bowl with a soft terminator and the top lip out of frame; lineup from further back on a longer lens; crate camera higher and closer so the woofers stop reading as wheels, planks with the wall; the Whole lid moved clear of the standing tube in the swap's third frame.
+
+## Round 5: not run
+
+v5 carried the round 4 camera and placement fixes (hero fill down, night key raised, close-up terminator softened, lineup on a longer lens, crate camera higher, swap lid moved). Before the critic ran, the direction changed on 2026-10-02: no sleeve, the colour a fixed finish, the band and the stand one built-in plinth, the wordmark a badge on the front and engraved on the back, no owner's panel. The critic resumes on v6, the first render of that look.

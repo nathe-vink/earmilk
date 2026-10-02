@@ -161,7 +161,9 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       const r = radial(th);
       target.set(m.x * (1 - t) + T.x * t + r.x * amp, m.y * (1 - t) + T.y * t + r.y * amp, m.z * (1 - t) + T.z * t + r.z * amp);
     }, 128, 48);
-    cab.add(mesh(bowlGeom, mats.bowl));
+    const bowlMesh = mesh(bowlGeom, mats.bowl);
+    if (st.bowlShadow === false) bowlMesh.receiveShadow = false; // close-up: the lip's hard shadow-map edge read as a kink, so the bowl shades by its normals alone
+    cab.add(bowlMesh);
     const seal = mesh(new THREE.CircleGeometry(throatR + 1, 64), S.tweeter ? mats.dark : mats.throatSeal); seal.position.set(0, axisY, throatZ - 0.6); cab.add(seal);
 
     // Tweeter at the throat (floorstander only): faceplate, dome with its apex 8 mm forward, a soft ring.
