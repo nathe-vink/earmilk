@@ -13,12 +13,17 @@ export const FS = {
   tweeter: { faceplateY: 170, z: 903.5, faceplate: 62, faceplateThick: 6, apexForward: 8, bodyDepth: 38, bodyHeight: 60 },
   bowl: { mouthWidth: 211, mouthLength: 118, mouthCenterS: 79, throat: 66 },
   back: {
-    window: { x0: 26, x1: 364, z0: 40, z1: 798 },
+    // 2026-10-02: no sleeve. The bare birch panel sits above the plinth and runs higher so the engraved wordmark fits above the label (was z 40 to 798).
+    window: { x0: 26, x1: 364, z0: 113, z1: 830 },
     label: { w: 266, h: 240, top: 770 },
     port: { d: 100, z: 405, flange: 112, bore: 92 },
     posts: { w: 128, h: 64, z: 144, postD: 24, spacing: 64 },
   },
   sleeve: { board: 1.5 },
+  // 2026-10-02: no sleeve. The colour is a finish on the birch; the skin keeps the sleeve's outer dimensions.
+  plinth: { height: 110, shadowLine: 3 },
+  badge: { w: 180, h: 56, t: 2, r: 4, type: 30, relief: 1.5, z: 55 },
+  backWordmark: { size: 36, baseline: 788 },
   // As drawn on the Sleeves and Hero artboards.
   print: {
     front: { size: 47, baselineBelowTop: 43 },

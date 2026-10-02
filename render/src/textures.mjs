@@ -15,6 +15,81 @@ export function makeTextures(THREE) {
 
   function memo(key, fn) { if (!cache.has(key)) cache.set(key, fn()); return cache.get(key); }
 
+  // A single line of text as a transparent decal, any weight, optional arrow after it (exploration marks).
+  function label({ text, sizeMm, color, weight = 700, family = 'Archivo', trackingEm = 0.04, pxPerMm = 8, arrow = false }) {
+    return memo(`lb|${text}|${sizeMm}|${color}|${weight}|${family}|${trackingEm}|${arrow}`, () => {
+      const fontPx = sizeMm * pxPerMm;
+      const c = document.createElement('canvas');
+      let ctx = c.getContext('2d');
+      const font = `${weight} ${fontPx}px "${family}"`;
+      ctx.font = font; ctx.letterSpacing = `${trackingEm * fontPx}px`;
+      const tw = ctx.measureText(text).width;
+      const arrowW = arrow ? fontPx * 1.6 : 0;
+      c.width = Math.ceil(tw + arrowW + fontPx * 0.2); c.height = Math.ceil(fontPx * 1.3);
+      ctx = c.getContext('2d');
+      ctx.font = font; ctx.letterSpacing = `${trackingEm * fontPx}px`; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = color;
+      ctx.fillText(text, fontPx * 0.1, fontPx * 1.0);
+      if (arrow) {
+        const x0 = fontPx * 0.1 + tw + fontPx * 0.35, y = fontPx * 0.64, h = fontPx * 0.5;
+        ctx.fillRect(x0, y - h * 0.18, fontPx * 0.7, h * 0.36);
+        ctx.beginPath(); ctx.moveTo(x0 + fontPx * 0.7, y - h * 0.5); ctx.lineTo(x0 + fontPx * 1.2, y); ctx.lineTo(x0 + fontPx * 0.7, y + h * 0.5); ctx.closePath(); ctx.fill();
+      }
+      return { texture: canvasTexture(c), widthMm: c.width / pxPerMm, heightMm: c.height / pxPerMm };
+    });
+  }
+
+  // Inkjet date-stamp lettering: the text rasterised, then shown only as a grid of dots.
+  function dotText({ text, sizeMm, color, pxPerMm = 8, pitchMm = null }) {
+    return memo(`dt|${text}|${sizeMm}|${color}`, () => {
+      const fontPx = sizeMm * pxPerMm;
+      const src = document.createElement('canvas');
+      let ctx = src.getContext('2d');
+      const font = `700 ${fontPx}px "Archivo"`;
+      ctx.font = font; ctx.letterSpacing = `${0.08 * fontPx}px`;
+      const w = Math.ceil(ctx.measureText(text).width + fontPx * 0.2);
+      src.width = w; src.height = Math.ceil(fontPx * 1.3);
+      ctx = src.getContext('2d'); ctx.font = font; ctx.letterSpacing = `${0.08 * fontPx}px`; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#000';
+      ctx.fillText(text, fontPx * 0.1, fontPx * 1.0);
+      const data = ctx.getImageData(0, 0, src.width, src.height).data;
+      const c = document.createElement('canvas'); c.width = src.width; c.height = src.height;
+      const out = c.getContext('2d'); out.fillStyle = color;
+      const pitch = (pitchMm || sizeMm / 7) * pxPerMm, r = pitch * 0.34;
+      for (let y = pitch / 2; y < c.height; y += pitch) for (let x = pitch / 2; x < c.width; x += pitch) {
+        const i = (Math.floor(y) * src.width + Math.floor(x)) * 4 + 3;
+        if (data[i] > 90) { out.beginPath(); out.arc(x, y, r, 0, Math.PI * 2); out.fill(); }
+      }
+      return { texture: canvasTexture(c), widthMm: c.width / pxPerMm, heightMm: c.height / pxPerMm };
+    });
+  }
+
+  // A stamped roundel: two rings, text around the top and the bottom, a letter in the middle.
+  function roundel({ top, bottom, diameterMm, color, pxPerMm = 6 }) {
+    return memo(`rd|${top}|${bottom}|${diameterMm}|${color}`, () => {
+      const D = diameterMm * pxPerMm, R = D / 2;
+      const c = document.createElement('canvas'); c.width = c.height = Math.ceil(D);
+      const ctx = c.getContext('2d');
+      ctx.strokeStyle = color; ctx.fillStyle = color;
+      ctx.lineWidth = D * 0.025; ctx.beginPath(); ctx.arc(R, R, R - D * 0.02, 0, Math.PI * 2); ctx.stroke();
+      ctx.lineWidth = D * 0.012; ctx.beginPath(); ctx.arc(R, R, R - D * 0.19, 0, Math.PI * 2); ctx.stroke();
+      const ring = (text, fontPx, radius, startAngle, flip) => {
+        ctx.font = `700 ${fontPx}px "Archivo"`; ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
+        const widths = [...text].map(ch => ctx.measureText(ch).width + fontPx * 0.12);
+        const total = widths.reduce((a, b) => a + b, 0);
+        let a = startAngle - (flip ? -1 : 1) * (total / radius) / 2;
+        [...text].forEach((ch, i) => {
+          const da = (widths[i] / radius) * (flip ? -1 : 1);
+          const mid = a + da / 2;
+          ctx.save(); ctx.translate(R + radius * Math.cos(mid), R + radius * Math.sin(mid)); ctx.rotate(mid + (flip ? -Math.PI / 2 : Math.PI / 2)); ctx.fillText(ch, 0, 0); ctx.restore();
+          a += da;
+        });
+      };
+      ring(top, D * 0.16, R - D * 0.105, -Math.PI / 2, false);
+      ring(bottom, D * 0.072, R - D * 0.105, Math.PI / 2, true);
+      ctx.font = `900 ${D * 0.3}px "Archivo Black"`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('A', R, R + D * 0.02);
+      return { texture: canvasTexture(c), widthMm: diameterMm, heightMm: diameterMm };
+    });
+  }
+
   // The wordmark as a transparent decal. Returns the texture and its size in mm, with the baseline 1.0 em from the top.
   function wordmark({ text = 'earmilk', sizeMm, color, trackingEm = -0.035, pxPerMm = 8 }) {
     return memo(`wm|${text}|${sizeMm}|${color}|${trackingEm}`, () => {
@@ -203,5 +278,5 @@ export function makeTextures(THREE) {
     });
   }
 
-  return { wordmark, engravedLabel, gradient, birch, planks, radialShadow, endGrain, heardPanel, canvasTexture };
+  return { wordmark, engravedLabel, gradient, birch, planks, radialShadow, endGrain, heardPanel, canvasTexture, label, dotText, roundel };
 }

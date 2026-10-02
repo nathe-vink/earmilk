@@ -10,7 +10,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
-import { shots, explore, explore2, SIZE } from './src/shots.mjs';
+import { shots, explore, explore2, explore3, retired, SIZE } from './src/shots.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.resolve(here, '..');
@@ -44,12 +44,13 @@ if (initError) { console.error(initError); process.exit(1); }
 
 const date = args.date || new Date().toISOString().slice(0, 10);
 const v = args.v || '1';
-const isExplore = args.list === 'explore' || args.list === 'explore2';
+const isExplore = args.list === 'explore' || args.list === 'explore2' || args.list === 'explore3';
+const isRetired = args.list === 'retired';
 const outDir = args.out || path.join(repo, isExplore ? 'explore' : 'renders', date);
 fs.mkdirSync(outDir, { recursive: true });
 const only = args.only ? args.only.split(',').map(s => s.trim().padStart(2, '0')) : null;
 
-const list = isExplore ? (args.list === 'explore2' ? explore2 : explore).map(e => ({ id: e.id, frames: [e] })) : shots;
+const list = isExplore ? ({ explore, explore2, explore3 })[args.list].map(e => ({ id: e.id, frames: [e] })) : isRetired ? retired : shots;
 for (const shot of list) {
   const nn = isExplore ? shot.id : shot.id.slice(5);
   if (only && !only.includes(nn)) continue;

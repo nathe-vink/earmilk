@@ -40,4 +40,4 @@ Read `README.md` first. It is the handoff and the brief. The canvas it links to 
 ## Commits
 
 - Commit a render together with the prompt version that produced it and its critic log row.
-- The canvas is edited on the canvas, not here. If the canvas and this repo disagree, say so and ask which is right; do not silently update either. The canvas carries the 2026-10-01 locked look since its version 9 (lids, band, no wordmark under the gable); the `[STAND PRICE]` line and the stand itself are not drawn on it yet.
+- The canvas is edited on the canvas, not here. If the canvas and this repo disagree, say so and ask which is right; do not silently update either. The canvas carries the 2026-10-02 direction since its version 10: no sleeve, the colour a finish, the plinth, the badge, the engraved back wordmark, the Sleeves board redrawn as Finish, and the Facts row changed to Finish. Its copy changes are drafts (marked in `copy/hero.md`) until the owner approves them.

@@ -50,8 +50,18 @@ export function makeMaterials(THREE, tex, flavor) {
   const boardPrint = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.55, metalness: 0, clearcoat: 0.3, clearcoatRoughness: 0.4, sheen: 0.15, sheenRoughness: 0.9, sheenColor: new M.Color(0xffffff), side: M.DoubleSide });
   const printArea = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.58, metalness: 0, clearcoat: 0.25, clearcoatRoughness: 0.45, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
   const standPaint = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.5, metalness: 0, clearcoat: 0.2, clearcoatRoughness: 0.5 });
+  // 2026-10-02, no sleeve: a satin lacquer on the birch, in the body colour and the accent colour; a dark shadow line; a cast metal badge.
+  const finishBody = new M.MeshPhysicalMaterial({ color: flavor.board, roughness: 0.38, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.2, side: M.DoubleSide });
+  const finishAccent = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.38, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.2, side: M.DoubleSide });
+  const finishAccentArea = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.38, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.2, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+  const shadowLine = new M.MeshStandardMaterial({ color: 0x141210, roughness: 0.95, metalness: 0, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+  const badgePlate = new M.MeshStandardMaterial({ color: 0xcfccc5, roughness: 0.42, metalness: 1.0, envMapIntensity: 2.2 });
+  const badgeLetters = (t) => new M.MeshStandardMaterial({ color: 0xffffff, roughness: 0.12, metalness: 1.0, envMapIntensity: 3.2, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  const badgeShade = (t) => new M.MeshBasicMaterial({ color: 0x000000, alphaMap: t, transparent: true, opacity: 0.7, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  const mark = (t) => new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.5, metalness: 0, clearcoat: 0.4, clearcoatRoughness: 0.25, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false });
   return {
     board, birch, bowl, decal, boardPrint, printArea, standPaint,
+    finishBody, finishAccent, finishAccentArea, shadowLine, badgePlate, badgeLetters, badgeShade, mark,
     cone: new M.MeshStandardMaterial({ color: 0x202020, roughness: 0.55 }),
     frame: new M.MeshStandardMaterial({ color: 0x1e1e1e, roughness: 0.4, metalness: 0.55 }),
     surround: new M.MeshPhysicalMaterial({ color: 0x141414, roughness: 0.3, clearcoat: 0.5, clearcoatRoughness: 0.3 }),
@@ -90,7 +100,8 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
   const st = { sleeve: true, lid: true, cabinet: true, lidLift: 0, tubeLift: 0, lidOffset: [0, 0, 0], lidRotY: 0, tubeOffset: [0, 0, 0], tubeRotY: 0, ...state };
   // look: { lid: 'board'|'print', band: null|'print'|'stand', wordmark: 'gable'|'band', panel: null|{...}, knob: false, style }.
   // style is the first exploration's shorthand: 'cap' = lid print, 'band' = printed band, 'rings', 'side'.
-  const look = { style: 'wordmark', lid: flavor.lid || 'board', band: 'print', wordmark: 'band', panel: null, knob: false, ...(state.look || {}) };
+  // mode: 'finish' (2026-10-02 on: no sleeve, the colour a finish on the birch, plinth, badge) or 'sleeve' (the printed sleeve, kept for the dated explorations).
+  const look = { mode: 'finish', style: 'wordmark', lid: flavor.lid || 'board', band: 'print', wordmark: 'band', panel: null, knob: false, ...(state.look || {}) };
   if (look.style === 'cap') look.lid = 'print';
   if (look.style === 'band' && !look.band) look.band = 'print';
   const standH = look.band === 'stand' ? 110 * kk : 0;
@@ -219,6 +230,82 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
 
   if (!st.sleeve) return g;
   const P = S.print, bd = S.board, ct = 1.2 * kk, cn = bd + 0.3;
+
+  if (look.mode === 'finish') {
+    // No sleeve. The same outer skin, as a satin finish on the birch: the body colour, the gable and fin in the accent colour where
+    // the flavour says so, a built-in plinth in the accent colour with a shadow line above it, a cast metal badge on the plinth's
+    // front, and the wordmark engraved on the bare birch panel at the back. Nothing on the sides, nothing under the gable.
+    const skin = new THREE.Group(); body.add(skin);
+    const frontShape = rectShape(THREE, -half, 0, half, S.body);
+    for (const dr of S.drivers) frontShape.holes.push(circleHole(THREE, 0, dr.z, dr.frame / 2));
+    skin.add(mesh(slab(THREE, frontShape, bd).translate(0, 0, half), mats.finishBody));
+    const backShape = rectShape(THREE, -half, 0, half, S.body);
+    if (S.back) { const w = S.back.window; const hole = new THREE.Path(); hole.moveTo(w.x0 - half, w.z0); hole.lineTo(w.x0 - half, w.z1); hole.lineTo(w.x1 - half, w.z1); hole.lineTo(w.x1 - half, w.z0); hole.closePath(); backShape.holes.push(hole); }
+    skin.add(mesh(slab(THREE, backShape, bd, 4).translate(0, 0, -half - bd), mats.finishBody));
+    for (const sx of [-1, 1]) skin.add(mesh(new addons.RoundedBoxGeometry(bd, S.body, S.plan, 2, Math.min(0.5, bd * 0.33)).translate(sx * (half + bd / 2), S.body / 2, 0), mats.finishBody));
+
+    // Plinth: the bottom 110 on all four sides in the accent colour, flush, with a 3 mm shadow line where it meets the body.
+    const ph = FS.plinth.height * kk, sl = FS.plinth.shadowLine * kk, off = half + bd + 0.3;
+    const face = (w, h, mat) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat); m.receiveShadow = true; m.renderOrder = 1; return m; };
+    for (const [x, z, ry] of [[0, off, 0], [0, -off, Math.PI], [off, 0, Math.PI / 2], [-off, 0, -Math.PI / 2]]) {
+      const p = face(S.plan + 2 * bd, ph, mats.finishAccentArea); p.rotation.y = ry; p.position.set(x, ph / 2, z); skin.add(p);
+      const l = face(S.plan + 2 * bd, sl, mats.shadowLine); l.rotation.y = ry; l.position.set(x, ph + sl / 2, z); skin.add(l);
+    }
+
+    // Badge: a cast metal plate centred on the plinth's front, the wordmark in relief (polished letters over a satin field).
+    const Bz = FS.badge, bw = Bz.w * kk, bh = Bz.h * kk, bt = Bz.t * kk;
+    const badge = new THREE.Group(); badge.position.set(0, Bz.z * kk, off); skin.add(badge);
+    const plate = mesh(new addons.RoundedBoxGeometry(bw, bh, bt, 3, Bz.r * kk), mats.badgePlate); plate.position.z = bt / 2; badge.add(plate);
+    const wm = ctx.tex.wordmark({ sizeMm: Bz.type * kk, color: '#FFFFFF', trackingEm: P.trackingEm });
+    const shade = new THREE.Mesh(new THREE.PlaneGeometry(wm.widthMm, wm.heightMm), mats.badgeShade(wm.texture)); shade.position.set(-0.9 * kk, -1.3 * kk, bt + 0.05); shade.renderOrder = 2; badge.add(shade);
+    const letters = new THREE.Mesh(new THREE.PlaneGeometry(wm.widthMm, wm.heightMm), mats.badgeLetters(wm.texture)); letters.position.z = bt + Bz.relief * kk; letters.renderOrder = 3; letters.castShadow = true; badge.add(letters);
+
+    // Back: the wordmark engraved in the birch panel above the Nutrition Facts (floorstander only).
+    if (S.back && FS.backWordmark) {
+      const ew = ctx.tex.wordmark({ sizeMm: FS.backWordmark.size * kk, color: '#6B5232', trackingEm: P.trackingEm });
+      const e = mesh(new THREE.PlaneGeometry(ew.widthMm, ew.heightMm), mats.decal(ew.texture), false);
+      e.rotation.y = Math.PI; e.position.set(0, FS.backWordmark.baseline * kk + 0.35 * FS.backWordmark.size * kk, -half - 0.3); skin.add(e);
+    }
+
+    // Gable and fin: the same shells as the lid, in the accent or the body colour, with no creases or crimp lines.
+    const gableMat = look.lid === 'print' ? mats.finishAccent : mats.finishBody;
+    // Exploration marks (explore/2026-10-02): common milk-carton print, none of it about the owner. Not spec.
+    const inkOnGable = look.lid === 'print' ? flavor.board : flavor.print;
+    const decalMesh = (t, w, h) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mats.mark(t)); m.renderOrder = 3; return m; };
+    for (const id of look.marks || []) {
+      if (id === 'open-other-side') {
+        // On the back slope, the way the spout instruction sits on a carton: caps with an arrow, in the gable's other colour.
+        const t = ctx.tex.label({ text: 'OPEN OTHER SIDE', sizeMm: 34 * kk, color: inkOnGable, weight: 700, arrow: true });
+        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.geometry.translate(0, L / 2, bd + 0.35); m.geometry.applyMatrix4(backBasis); skin.add(m);
+      }
+      if (id === 'best-before') {
+        // An inkjet date stamp on the fin's front, dot matrix.
+        const t = ctx.tex.dotText({ text: 'BEST BEFORE  NEVER', sizeMm: 18 * kk, color: '#1a1a1a' });
+        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.position.set(0, ridgeZ + S.fin.height / 2, S.fin.thick / 2 + bd + 0.35); skin.add(m);
+      }
+      if (id === 'grade-a') {
+        // A stamped roundel on the right side, upper third, in the accent colour.
+        const t = ctx.tex.roundel({ top: 'GRADE A', bottom: 'PASTEURIZED · HOMOGENIZED', diameterMm: 130 * kk, color: flavor.print });
+        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.rotation.y = Math.PI / 2; m.position.set(half + bd + 0.35, 680 * kk, 0); skin.add(m);
+      }
+      if (id === 'shake-well') {
+        const t = ctx.tex.label({ text: 'SHAKE WELL', sizeMm: 30 * kk, color: flavor.print, weight: 700 });
+        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.rotation.y = Math.PI / 2; m.position.set(half + bd + 0.35, 790 * kk, 0); skin.add(m);
+      }
+      if (id === 'volume') {
+        // The carton's own line, under the badge: the gross internal volume from spec/check-spec.
+        const t = ctx.tex.label({ text: '103 L (27 GAL)', sizeMm: 12 * kk, color: flavor.board, weight: 700 });
+        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.position.set(0, 14 * kk, off + 0.1); skin.add(m);
+      }
+    }
+    skin.add(mesh(slab(THREE, slopeWithMouth(), bd).applyMatrix4(frontBasis), gableMat));
+    skin.add(mesh(slab(THREE, slopeRect(), bd, 4).applyMatrix4(backBasis), gableMat));
+    skin.add(mesh(slab(THREE, endTri(), bd, 4).applyMatrix4(rightBasis), gableMat));
+    skin.add(mesh(slab(THREE, endTri(), bd, 4).applyMatrix4(leftBasis), gableMat));
+    const coverH = S.fin.height + bd + 2;
+    skin.add(mesh(new addons.RoundedBoxGeometry(S.plan + 2 * bd, coverH, S.fin.thick + 2 * bd, 2, Math.min(1.0, bd * 0.66)).translate(0, ridgeZ - 2 + coverH / 2, 0), gableMat));
+    return g;
+  }
 
   // Tube: four boards around the body; the front is die-cut for the drivers, the back is a frame around the window.
   const tube = new THREE.Group();

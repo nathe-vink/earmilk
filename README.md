@@ -8,7 +8,7 @@ Canvas (source of truth for layout, copy and proportions): https://claude.ai/art
 
 - A serious passive three-way that is, unmistakably, a half gallon of milk — and a cabinet that outlives its skin.
 - The treble fires forward from the throat of a concave bowl carved into the front gable panel. The bowl is the waveguide.
-- The cabinet is birch; the carton is a two-piece sleeve of heavy printed board (tube + lid). Swap the sleeve, keep the speaker.
+- The cabinet is birch; the carton is a two-piece sleeve of heavy printed board (tube + lid). Swap the sleeve, keep the speaker. *Amended 2026-10-02: no sleeve. The carton is the cabinet, finished in the flavour's colours; the colour is fixed per speaker. See Amendments, 2026-10-02.*
 - Flavor is the colorway. Five flavors. One voicing.
 
 Voice: dairy deadpan. The spec sheet is an FDA-style Nutrition Facts panel. One joke per surface, maximum.
@@ -16,11 +16,11 @@ Voice: dairy deadpan. The spec sheet is an FDA-style Nutrition Facts panel. One 
 ## Decisions already made (do not reopen)
 
 - Tweeter lives in the gable, facing forward, set back in a **concave** bowl. Not square, not angled up, not sunk vertically.
-- Gable and fin are the **same color as the body** (the lid covers them). Bare birch shows in exactly two places: the back window and the bowl's exploded/section views. *Amended 2026-10-01: on the white-board flavours (Whole, 2%, Skim) the lid is printed in the flavour's print colour; Chocolate and Oat stay one colour, lid included.*
+- Gable and fin are the **same color as the body** (the lid covers them). Bare birch shows in exactly two places: the back window and the bowl's exploded/section views. *Amended 2026-10-01: on the white-board flavours (Whole, 2%, Skim) the lid is printed in the flavour's print colour; Chocolate and Oat stay one colour, lid included.* *Amended 2026-10-02: the same colours, now as a finish on the birch gable itself; the bare birch places are the back panel and the section views.*
 - **No tuning concept.** No cap, no tuning plates, no swappable tweeter modules. Flavor = colorway only.
 - Nutrition Facts are **engraved** on the birch back window, above the port, with the binding posts below. The printed label frame is a separate deliverable (the label artboard), not printed on the sleeve.
-- The sleeve's back panel is a frame around the birch window.
-- Sleeve options are the five flavors; "Dairy / Kraft / Night" no longer exist as names.
+- The sleeve's back panel is a frame around the birch window. *Amended 2026-10-02: no sleeve; the birch panel stays, inset in the finished back, and carries the engraved wordmark above the Nutrition Facts.*
+- Sleeve options are the five flavors; "Dairy / Kraft / Night" no longer exist as names. *Amended 2026-10-02: the five flavours are finishes, chosen once.*
 - Pint (desk-size, six to a crate, crate = amp + charger) is **parked**. Render it only in the mixed-crate shot; do not design its electronics.
 
 ### Amendments, 2026-10-01
@@ -34,6 +34,17 @@ Made after the first render and critic rounds, from the explorations in `explore
 - **Dropped.** Print rings around the drivers and whole-side colour fields.
 - Prices stay open: add `[STAND PRICE]` to the list.
 
+### Amendments, 2026-10-02
+
+Made on the v4 and v5 renders. They stand with the Decisions above and replace the 2026-10-01 amendments where the two disagree.
+
+- **No sleeve.** The carton is the cabinet. The colourway is a finish on the birch: the body in the board colour, the gable and fin in the accent colour on Whole, 2% and Skim, Chocolate and Oat one colour all over. The colour is fixed per speaker, so every edge and bevel takes it. Nothing swaps. `[SLEEVE PRICE]`, the board-stock question and the sleeve-swap shot go away.
+- **Plinth.** The band and the stand are one thing: a built-in plinth, the bottom 110 mm of the cabinet on all four sides, in the accent colour, inside the 1,055 overall height, with a 3 mm shadow line where it meets the body. (The shadow line, and the plinth sitting inside the height rather than under it, are this repo's reading; say so if either is wrong.)
+- **Wordmark.** On the front only, as a badge: a cast metal plate with the wordmark in relief, so it has texture the way the badge on a La Marzocco machine does, centred on the plinth's front. On the back, engraved in the birch above the Nutrition Facts panel. Nowhere else: not on the sides, not under the gable.
+- **Dropped.** The owner's panel. Other milk-themed marks that are not about the owner are explored in `explore/2026-10-02/` and are proposals, not spec.
+- **Shots.** 07 (sleeve swap) is retired. 02 (two rooms) loses the swap that was its point; it is rendered meanwhile with the same Whole in both rooms and needs a new brief. In 03 the fold of the lid's die-cut becomes the finish's edge at the mouth; in 04 the sleeve frame becomes the finished back around the birch panel.
+- Prices: `[PAIR PRICE]` and `[CRATE PRICE]` stay open. `[SLEEVE PRICE]` and `[STAND PRICE]` are gone.
+
 ## Geometry (mm)
 
 Floorstander — square plan, gable-top.
@@ -44,11 +55,13 @@ Floorstander — square plan, gable-top.
 - Tweeter: 1 in dome with a small faceplate (≤ 62 mm). Faceplate plane is 170 back from the front face; dome center height 903.5.
 - Bowl: mouth is an ellipse on the front slope panel, 211 wide × 118 long along the slope, centered 79 up the 246 slope (from 20 to 138). Throat ø 66 around the faceplate at the 170 setback. Surface is a smooth loft from mouth ellipse to throat circle — no flats, no edges. As drawn the lower lip holds the pattern to ~12° below the tweeter axis and the upper lip to ~37° above. Deeper bowl = narrower; wider mouth = wider.
 - Back (bare birch window inside the sleeve frame): window x 26→364, z 40→798. Engraved Nutrition Facts panel 266 wide × 240 tall, top at z 770. Round port ø ~100 centered at z 405. Binding posts on a 128 × 64 plate centered at z 144.
-- Sleeve: tube 390 × 390 × 860 (open top and bottom, die-cut for woofer and mid, back panel is a frame), plus a lid covering gable + fin, die-cut at the bowl mouth. Both lock at the back seam. Board: heavy carton board / SBS, target ~1.2–1.5 mm; whether it holds a crisp fold at this size is an open test.
+- Sleeve: tube 390 × 390 × 860 (open top and bottom, die-cut for woofer and mid, back panel is a frame), plus a lid covering gable + fin, die-cut at the bowl mouth. Both lock at the back seam. Board: heavy carton board / SBS, target ~1.2–1.5 mm; whether it holds a crisp fold at this size is an open test. *Amended 2026-10-02: no sleeve. The outer dimensions stay; the skin is the finish.*
 
 Pint — 100 × 100 plan, body 200, gable 35, fin 12. Single full-range ø ~68 at 95; tiny bowl at the top. Crate 340 × 250 × 130, 2 × 3.
 
-Stand (optional accessory, amended 2026-10-01) — 390 × 390 × 110 painted block, 6 mm reveal. With the stand: overall 1,171; tweeter axis 1,019.5.
+Stand (optional accessory, amended 2026-10-01) — 390 × 390 × 110 painted block, 6 mm reveal. With the stand: overall 1,171; tweeter axis 1,019.5. *Amended 2026-10-02: replaced by the built-in plinth, z 0 → 110 of the cabinet, accent colour, 3 mm shadow line at z 110 → 113; overall height stays 1,055.*
+
+Badge (amended 2026-10-02) — cast metal plate 180 × 56 × 2, 4 mm corner radius, centred on the plinth's front at z 55; wordmark in relief, 30 mm type size, 1.5 mm proud. Back wordmark engraved in the birch panel, 36 mm type size, baseline at z 788, centred; the birch panel now runs z 113 → 830 so it has room (x 26 → 364 as before).
 
 ## Target specs (label copy — marked as targets, not measured)
 
@@ -57,7 +70,7 @@ Footnote stays: "Contains no milk. Not a significant source of Bluetooth."
 
 ## Colorways (flavors)
 
-White board unless noted. Print = wordmark on front and side. Throat = bowl interior, light at the mouth → dark at the throat. *Amended 2026-10-01: print = the lid on the white flavours, a 110 mm base band, and the wordmark in the band on the front and the right side; see Amendments.*
+White board unless noted. Print = wordmark on front and side. Throat = bowl interior, light at the mouth → dark at the throat. *Amended 2026-10-01: print = the lid on the white flavours, a 110 mm base band, and the wordmark in the band on the front and the right side; see Amendments.* *Amended 2026-10-02: "board" is the body finish and "print" is the accent finish (gable and fin on the white flavours, the plinth on all five); the wordmark is the badge and the back engraving, not print.*
 
 | Flavor | Board | Print | Throat (mouth → throat) |
 |---|---|---|---|
@@ -81,12 +94,12 @@ Photoreal, physically plausible materials: matte printed board with visible fold
 
 Shot list, in priority order:
 1. **Hero pair in a room.** Whole, late-afternoon window light, a chair or sofa arm in frame for scale, speakers ~2 m apart, 3/4 view, camera at 1.2 m with a ~50 mm look.
-2. **Two rooms, years apart.** The same floor spot and the same speaker, once in Whole in a bright apartment, once in Oat in a darker, older room. This is the sleeve argument; it must read as one object that changed its skin.
-3. **Bowl close-up.** Front 3/4 at gable height, the throat and the dome in focus, the fold of the lid's die-cut visible at the mouth edge.
-4. **Back.** Straight-on, engraved label legible, port and posts, the sleeve frame around the birch.
+2. **Two rooms, years apart.** The same floor spot and the same speaker, once in Whole in a bright apartment, once in Oat in a darker, older room. This is the sleeve argument; it must read as one object that changed its skin. *Amended 2026-10-02: no sleeve, so no skin change; rendered with the same Whole in both rooms until the shot is rebriefed.*
+3. **Bowl close-up.** Front 3/4 at gable height, the throat and the dome in focus, the fold of the lid's die-cut visible at the mouth edge. *Amended 2026-10-02: the mouth edge is the finish's edge on the carved gable.*
+4. **Back.** Straight-on, engraved label legible, port and posts, the sleeve frame around the birch. *Amended 2026-10-02: the finished back around the birch panel, the engraved wordmark above the label.*
 5. **Five flavors lineup.** Flat ground, equal spacing, in flavor order.
 6. **Mixed crate** on a desk, six pints, five flavors.
-7. **Sleeve swap**, three frames: lid off, tube sliding, new flavor on.
+7. **Sleeve swap**, three frames: lid off, tube sliding, new flavor on. *Retired 2026-10-02: no sleeve.*
 
 Keep every render's dimensions consistent; drift in the carton's proportions between shots is a failure.
 
@@ -100,10 +113,10 @@ Before any render or edit, re-read the Geometry and Decisions sections. If a cha
 
 ## Open questions (do not assume answers)
 
-- Price points for the pair, a sleeve set, and the crate. Leave as `[PAIR PRICE]`, `[SLEEVE PRICE]`, `[CRATE PRICE]`, and since the amendments `[STAND PRICE]`.
+- Price points for the pair, a sleeve set, and the crate. Leave as `[PAIR PRICE]`, `[SLEEVE PRICE]`, `[CRATE PRICE]`, and since the amendments `[STAND PRICE]`. *Amended 2026-10-02: `[PAIR PRICE]` and `[CRATE PRICE]` only.*
 - Driver selection and port tuning. The 32 Hz target assumes ~85–90 L net for the woofer; confirm before quoting it as more than a target.
 - Whether the bowl works as a waveguide. The test is physical: one carved gable, one candidate tweeter, on/off-axis measurements vs. a flat baffle. Renders do not settle this.
-- Board stock for the sleeve and whether the lock survives repeated swaps.
+- Board stock for the sleeve and whether the lock survives repeated swaps. *Gone 2026-10-02 with the sleeve. In its place: the finish system (lacquer, paint or laminate over the birch) and the badge's metal are open.*
 
 ## Suggested layout
 

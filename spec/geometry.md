@@ -90,8 +90,9 @@ Black paper cones. No grilles. The sleeve's die-cuts equal the frame diameters (
 
 | | |
 |---|---|
-| Birch window (bare, inside the sleeve frame) | `x` 26 → 364, `z` 40 → 798, so 338 × 758 |
-| Sleeve frame margins (derived) | 26 each side, 40 at the bottom, 62 at the top |
+| Birch window (bare, inside the sleeve frame) | `x` 26 → 364, `z` 40 → 798, so 338 × 758. *Amended 2026-10-02: a bare birch panel inset in the finished back, `x` 26 → 364, `z` 113 → 830 (338 × 717), so the plinth sits below it and the engraved wordmark fits above the Facts panel.* |
+| Sleeve frame margins (derived) | 26 each side, 40 at the bottom, 62 at the top. *2026-10-02: 26 each side, the plinth and its shadow line below, 30 at the top.* |
+| Engraved wordmark (amended 2026-10-02) | "earmilk", Archivo Black, 36 mm type size, centred on `x = 195`, baseline at `z = 788`, engraved like the panel. |
 | Engraved Nutrition Facts panel | 266 × 240 with its top at `z = 770`: `x` 62 → 328, `z` 530 → 770. Copy and proportions in `copy/label.md`, engraved version. |
 | Port | round, ø ~100, centre (195, 390, 405): `z` 355 → 455. As drawn: a 92 bore in a 112 flange. |
 | Binding post plate | 128 × 64, centre `z = 144`: `x` 131 → 259, `z` 112 → 176. As drawn: dark plate, two posts ø 24 at ±32 from the centre; seen from behind, red on the left, black on the right. |
@@ -108,7 +109,21 @@ Black paper cones. No grilles. The sleeve's die-cuts equal the frame diameters (
 | Fold creases | at the gable: the lid's folds at the ridge and along the front and back top edges, and the fin's fold. They should be visible in a render. |
 | Dimension note (assumption) | The render model keeps the cabinet and block at the spec numbers and puts the board outside them, so the sleeved speaker is 393 wide and deep. Whether 390 is the cabinet or the outer dimension is decided when the board stock is chosen; at any shot scale the difference does not show. |
 
-### Print on the sleeve (locked 2026-10-01; the as-drawn placement it replaces is kept below for the record)
+### Finish and plinth (2026-10-02; replaces the print and the stand below)
+
+No sleeve. The outer dimensions stay as above; the skin is a finish on the birch.
+
+| | |
+|---|---|
+| Body | finished in the flavour's board colour, `z` 113 → 860 on the body and the whole gable on Chocolate and Oat |
+| Gable and fin | finished in the accent (print) colour on Whole, 2% and Skim; body colour on Chocolate and Oat |
+| Plinth | the bottom 110 of the cabinet, all four sides, in the accent colour, flush with the body; overall height stays 1,055 |
+| Shadow line | 3 mm, `z` 110 → 113, a dark groove where the plinth meets the body (this repo's reading of "built in") |
+| Badge | cast metal plate 180 × 56 × 2, corner radius 4, centred on the plinth's front: `x` 105 → 285, `z` 27 → 83; the wordmark in relief, 30 mm type size, 1.5 proud, centred; brushed field, polished letters |
+| Wordmark elsewhere | engraved on the back panel (above); nowhere else |
+| Edges | every edge and bevel takes the colour of its face, which a sleeve could not do |
+
+### Print on the sleeve (locked 2026-10-01; superseded 2026-10-02, kept for the record; the as-drawn placement it replaced is below it)
 
 | | |
 |---|---|
@@ -119,7 +134,7 @@ Black paper cones. No grilles. The sleeve's die-cuts equal the frame diameters (
 
 As drawn before the amendment (Sleeves and Hero artboards): front wordmark about 47 mm with its baseline 43 below the tube's top edge; side wordmark about 64 mm, baseline 94 below the top edge, starting 35 from the front edge.
 
-### Stand (optional accessory)
+### Stand (optional accessory; superseded 2026-10-02 by the built-in plinth above, kept for the record)
 
 | | |
 |---|---|
@@ -148,6 +163,6 @@ As drawn before the amendment (Sleeves and Hero artboards): front wordmark about
 - Mouth: lower lip at `s = 20`, upper lip at `s = 138`, 211 wide at `s = 79`.
 - Throat ø 66 centred at (195, 170, 903.5); dome apex about 8 forward of it.
 - Woofer ø 310 at `z = 290`; mid ø 170 at `z = 690`; both on `x = 195`, `y = 0`.
-- Back window 338 × 758; engraved panel 266 × 240 with its top at 770; port ø 100 at 405; post plate 128 × 64 at 144.
-- Lid colour by flavour and the 110 band with the wordmark in it, as `spec/colorways.json` says.
+- Back window 338 × 758; engraved panel 266 × 240 with its top at 770; port ø 100 at 405; post plate 128 × 64 at 144. *2026-10-02: the birch panel is 338 × 717 (`z` 113 → 830), the engraved wordmark's baseline at 788; the rest unchanged.*
+- Lid colour by flavour and the 110 band with the wordmark in it, as `spec/colorways.json` says. *2026-10-02: the gable colour by flavour, the 110 plinth with the badge on its front, the engraved wordmark on the back, and nothing on the sides.*
 - The same numbers in every shot. Drift is a failure.

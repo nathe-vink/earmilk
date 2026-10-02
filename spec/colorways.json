@@ -1,5 +1,5 @@
 {
-  "$comment": "earmilk colorways. Source: the README's Colorways table and Amendments, and the Flavors artboard on the canvas. Hex, sRGB. 'order' is the lineup order. 'lid' is 'print' where the lid is printed in the print colour and 'board' where it stays the body colour. The band is always the print colour with the wordmark in the board colour. Values under 'asDrawn' are read off the canvas illustrations and are reference only.",
+  "$comment": "earmilk colorways. Source: the README's Colorways table and Amendments, and the Flavors artboard on the canvas. Hex, sRGB. 'order' is the lineup order. Since 2026-10-02 there is no sleeve: 'board' is the body finish and 'print' the accent finish. 'lid' is 'print' where the gable and fin take the accent colour and 'board' where they stay the body colour. 'plinth' is the built-in 110 mm base in the accent colour; 'badge' is the metal wordmark on its front. Values under 'asDrawn' are read off the canvas illustrations and are reference only.",
   "order": [
     "whole",
     "two-percent",
@@ -11,7 +11,7 @@
     "whole": {
       "name": "Whole",
       "board": "#FFFFFF",
-      "boardNote": "white board",
+      "boardNote": "white finish",
       "print": "#C62828",
       "throat": {
         "mouth": "#C62828",
@@ -19,15 +19,14 @@
       },
       "swatchCaption": "Red on white.",
       "lid": "print",
-      "band": {
-        "fill": "#C62828",
-        "text": "#FFFFFF"
+      "plinth": {
+        "fill": "#C62828"
       }
     },
     "two-percent": {
       "name": "2%",
       "board": "#FFFFFF",
-      "boardNote": "white board",
+      "boardNote": "white finish",
       "print": "#1F4FCF",
       "throat": {
         "mouth": "#1F4FCF",
@@ -35,15 +34,14 @@
       },
       "swatchCaption": "Blue on white.",
       "lid": "print",
-      "band": {
-        "fill": "#1F4FCF",
-        "text": "#FFFFFF"
+      "plinth": {
+        "fill": "#1F4FCF"
       }
     },
     "skim": {
       "name": "Skim",
       "board": "#FFFFFF",
-      "boardNote": "white board",
+      "boardNote": "white finish",
       "print": "#6FA5DC",
       "throat": {
         "mouth": "#8FBBE8",
@@ -51,15 +49,14 @@
       },
       "swatchCaption": "Light blue on white.",
       "lid": "print",
-      "band": {
-        "fill": "#6FA5DC",
-        "text": "#FFFFFF"
+      "plinth": {
+        "fill": "#6FA5DC"
       }
     },
     "chocolate": {
       "name": "Chocolate",
       "board": "#5E3A1F",
-      "boardNote": "whole board printed brown",
+      "boardNote": "brown finish all over",
       "print": "#F1E3CC",
       "throat": {
         "mouth": "#E2CBA3",
@@ -67,15 +64,14 @@
       },
       "swatchCaption": "Brown board, cream print.",
       "lid": "board",
-      "band": {
-        "fill": "#F1E3CC",
-        "text": "#5E3A1F"
+      "plinth": {
+        "fill": "#F1E3CC"
       }
     },
     "oat": {
       "name": "Oat",
       "board": "#D9BC92",
-      "boardNote": "unbleached board",
+      "boardNote": "unbleached-board colour, all over",
       "print": "#2B2118",
       "throat": {
         "mouth": "#8E6A3E",
@@ -83,9 +79,8 @@
       },
       "swatchCaption": "Unbleached board, brown print.",
       "lid": "board",
-      "band": {
-        "fill": "#2B2118",
-        "text": "#D9BC92"
+      "plinth": {
+        "fill": "#2B2118"
       }
     }
   },
@@ -122,38 +117,36 @@
     }
   },
   "rules": [
-    "Whole, 2% and Skim carry the lid in the print colour; Chocolate and Oat stay one colour, lid included.",
-    "A 110 mm band of the print colour wraps the base; the wordmark sits in it, reversed in the board colour, front and right side. Nothing is printed under the gable.",
-    "Bare birch shows only at the back window and in the bowl's exploded or section views.",
+    "No sleeve: the colours are a finish on the birch cabinet, fixed per speaker.",
+    "Whole, 2% and Skim carry the gable and fin in the accent colour; Chocolate and Oat stay one colour, gable included.",
+    "The bottom 110 mm is a built-in plinth in the accent colour on all four sides, with a 3 mm shadow line above it.",
+    "The wordmark is a metal badge with the wordmark in relief, centred on the plinth's front, and an engraving on the back panel above the Nutrition Facts. Nothing on the sides, nothing under the gable.",
+    "Bare birch shows only on the back panel and in the bowl's exploded or section views.",
     "The throat is painted, light at the mouth to dark at the throat.",
     "Flavor is the colorway only. One voicing."
   ],
-  "print": {
-    "band": {
-      "heightMm": 110,
-      "wordmarkSizeMm": 52,
-      "faces": "front and both sides; on the back only the frame below the window"
-    },
-    "wordmark": "in the band, reversed in the board colour, centred on the front and on the right side",
-    "gable": "nothing printed"
-  },
-  "stand": {
-    "optional": true,
-    "plan": [
-      390,
-      390
-    ],
+  "plinth": {
     "heightMm": 110,
-    "revealMm": 6,
-    "finish": "painted, print colour",
-    "wordmark": "on the stand, front and right side; the sleeve is then printed without the band"
+    "shadowLineMm": 3,
+    "finish": "accent colour, all four sides, flush with the body",
+    "builtIn": true
   },
-  "panel": {
-    "optional": true,
-    "printToOrder": true,
-    "widthMm": 300,
-    "heightMm": 330,
-    "ink": "print colour",
-    "headline": "HAVE YOU HEARD ME?"
+  "badge": {
+    "plateMm": [
+      180,
+      56,
+      2
+    ],
+    "cornerRadiusMm": 4,
+    "typeSizeMm": 30,
+    "reliefMm": 1.5,
+    "metal": "cast, brushed field, polished letters; the alloy is open",
+    "centreZMm": 55
+  },
+  "backWordmark": {
+    "typeSizeMm": 36,
+    "baselineZMm": 788,
+    "engraved": true,
+    "ink": "#6B5232"
   }
 }

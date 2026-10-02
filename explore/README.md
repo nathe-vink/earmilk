@@ -43,3 +43,20 @@ Direction after round 1: coloured lids, but the darker cartons stay solid; the b
 | `r2-stand-close.png` | The stand close: the reveal is what makes it read as a separate block. | As above. |
 | `r2-pair-band-panels.png` | The hero pair with lids, printed band and the owner's panel on each. | As above, plus the panel. |
 | `r2-whatif-knob-on-stand.png` | A what-if only: one knob on the stand's front. The floorstander is passive by Decision and has no controls; if it ever went active, the stand is where they would live. | Not proposed. |
+
+## 2026-10-02, round 3: milk-carton marks that are not about the owner
+
+Direction: no sleeve, the colour a finish on the birch, the band and the stand one built-in plinth, the wordmark a badge on the front and an engraving on the back, the owner's panel dropped. Asked for: other common milk-themed marks, as long as they are not about the owner. These are proposals, not spec; none of them is on the model by default.
+
+    cd render && node render.mjs --list explore3 --scale 2
+
+| File | What | Where it would live |
+|---|---|---|
+| `r3-open-other-side.png` | OPEN OTHER SIDE with the arrow, the line every gable-top carries on the slope that is not the spout. Here it points at the bowl. In the gable's other colour (white on Whole's red). | The back slope of the gable. Seen from behind and above, so a room shot would only catch it on the far speaker. |
+| `r3-best-before.png` | BEST BEFORE  NEVER as an inkjet date stamp, dot matrix, black. | The front face of the fin, where the date goes on a carton. |
+| `r3-grade-a.png` | A stamped roundel: GRADE A over PASTEURIZED · HOMOGENIZED, a big A in the middle, in the accent colour. | The right side, upper third, 130 mm across. The only one of these that puts anything on a side. |
+| `r3-shake-well.png` | SHAKE WELL in caps, in the accent colour. | The right side, near the top. |
+| `r3-volume.png` | 103 L (27 GAL), the cabinet's gross internal volume from `render/src/check-spec.mjs`, set small under the badge the way the net-contents line sits at the foot of a carton. | The plinth's front, under the badge. |
+| `r3-all.png` | OPEN OTHER SIDE, the date stamp, the roundel and the volume line together, from high and to the right, to see how much is too much. | As above. |
+
+Not rendered on purpose: anything with a name, a face, a date the owner fills in, or a phone number.

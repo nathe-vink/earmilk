@@ -1,0 +1,35 @@
+# Shot 03 · Bowl close-up · v6
+
+v6: the 2026-10-02 direction. The gable is finished birch, not a die-cut lid: the mouth edge is the finish's edge on the carved bowl, no crease above it. Camera and light as v5.
+v5: after critic round 4. The bowl no longer receives the key's shadow map, so the lip's hard terminator (read as a kink) becomes the smooth falloff of the loft; camera tilted down a hair so the top lip leaves the frame and more of the white body shows below.
+v4: the locked look from the 2026-10-01 amendments: lids in the print colour on Whole, 2% and Skim, a printed 110 mm base band carrying the wordmark on the front and the right side, nothing printed under the gable. The stand and the owner's panel are optional and not in this shot. Camera note from critic round 3: the camera offset a few degrees so the faceplate shows its edge.
+v3: after critic round 2. Key steeper and more frontal so the slope reads brighter than the front; occlusion pass; glossier board so the edge and faces separate; the side wordmark sliver cropped out; 2x supersampling. The ground stays #F8F7F4 by spec.
+v2: after critic round 1. One key from above-left with the environment as the white card; the faceplate made reflective so it is not a void; camera pulled back so the wordmark baseline and the top edge clear the frame.
+v1: first brief, from the README shot list.
+
+**Proves:** the bowl is a real carved waveguide with a tweeter at its throat, and the lid is die-cut board, not paint.
+
+## Scene
+- One speaker, **Whole**. The bowl interior carries the Whole throat gradient, #C62828 at the mouth to #8E1B1B at the throat.
+- Studio or window light that rakes across the slope so the bowl's concavity reads.
+
+## Camera
+- Front three-quarter at gable height, roughly `z` 900 to 1000 mm, close enough that the mouth fills much of the frame.
+- Focus on the throat and the dome. Shallow depth of field is fine; the dome must be sharp.
+
+## Must show
+- The smooth loft from the mouth ellipse to the throat circle: no flats, no edges.
+- The painted gradient, light at the mouth, dark at the throat.
+- The faceplate ring at the throat and the dome, 170 mm back.
+- The fold of the lid's die-cut at the mouth edge: the board's cut edge and its thickness, the lid's crease above, the board sitting on the birch.
+
+## Must not
+- Anything in the list in `prompts/README.md`.
+- Show bare birch beyond the cut edge of the board at the mouth.
+
+## Text-to-image form
+Constant block, then: Close up on the top of one of them, white board with the red print, three-quarter from the front at the height of the gable, looking into the elliptical opening on the slope: a smooth concave painted bowl, red at its rim shading to a deep dark red at the throat, where a small one-inch dome tweeter sits in a round faceplate, 170 mm back. The opening's edge shows the cut thickness of the printed board and the fold of the lid above it. Shallow depth of field, the dome sharp. Photoreal, matte board, no grille.
+
+## Acceptance
+- The bowl reads as concave and smooth, and the tweeter reads as set back inside it, facing forward.
+- The die-cut edge reads as board, with thickness.

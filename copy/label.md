@@ -2,7 +2,7 @@
 
 Two versions exist and they differ on purpose.
 
-- The **printed label** is the label artboard on the canvas ("Nutrition Facts"). It is a separate deliverable and is not printed on the sleeve.
+- The **printed label** is the label artboard on the canvas ("Nutrition Facts"). It is a separate deliverable and is not printed on the speaker.
 - The **engraved panel** is the shorter version cut into the birch back window, above the port, 266 × 240 mm.
 
 Both follow the FDA Nutrition Facts proportions: heavy title, a 10 px rule, 1 px row rules, bold labels, right-aligned values. Archivo Black for the title and the headline figure, Archivo for everything else. All figures are targets, not measurements; the asterisk and its footnote stay.
@@ -32,7 +32,7 @@ Both follow the FDA Nutrition Facts proportions: heavy title, a 10 px rule, 1 px
 | **Tweeter** | 1 in dome, 170 mm back in a carved waveguide |
 | **Crossover** | 350 Hz and 2.2 kHz |
 | **Cabinet** | 18 mm Baltic birch, braced |
-| **Sleeve** | Carton board, replaceable, five flavors |
+| **Sleeve** | Carton board, replaceable, five flavors |  *(2026-10-02: row becomes **Finish** · Lacquered birch, five flavors; a draft until the Facts artboard says so)* 
 | **Height** | 1,055 mm |
 | **Weight** | 36 kg each |
 
