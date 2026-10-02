@@ -71,3 +71,17 @@ Asked: must the birch fill the whole back, or only hold the Nutrition Facts, wit
 |---|---|
 | `r4-back-label-straight.png`, `r4-back-label-quarter.png` | The field is the Facts panel plus a 26 mm margin; the wordmark engraved on the finish above it, the port and the posts on the finish below. |
 | `r4-back-full-straight.png`, `r4-back-full-quarter.png` | The field from 140 above the floor to 30 below the top, 26 in from the sides; everything inside it. |
+
+## 2026-10-02, round 5: the back as decided, and three more marks
+
+OPEN OTHER SIDE (back slope) and SHAKE WELL (by the port) are spec now; the Facts are an engraved bronze plate; the back wordmark is cast letters like the front. The first two frames show that. The rest are new proposals, none about the owner.
+
+    cd render && node render.mjs --list explore5 --scale 2
+
+| File | What | Where it would live |
+|---|---|---|
+| `r5-back-quarter.png`, `r5-back-close.png` | The back as decided: bronze plate, cast letters, SHAKE WELL under the port, OPEN OTHER SIDE on the slope. | Spec. |
+| `r5-keep-room-temperature.png` | KEEP AT ROOM TEMPERATURE, the storage line, true of a speaker. | Right side, under the gable, accent colour. |
+| `r5-return-for-deposit.png` | RETURN FOR DEPOSIT, small, reversed in the body colour. | The plinth's right side. |
+| `r5-barcode.png` | A barcode whose digits are the spec's own numbers (390, 860, 1055, 103). | Right side, low, where a carton carries it. |
+| `r5-all-new.png` | The three together with the two spec marks. | As above. |

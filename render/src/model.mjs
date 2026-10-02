@@ -59,10 +59,11 @@ export function makeMaterials(THREE, tex, flavor) {
   const badgeLetters = (t) => new M.MeshStandardMaterial({ color: 0xffffff, roughness: 0.12, metalness: 1.0, envMapIntensity: 3.2, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const badgeSide = (t) => new M.MeshStandardMaterial({ color: 0x9a9792, roughness: 0.5, metalness: 1.0, envMapIntensity: 1.6, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const badgeShade = (t) => new M.MeshBasicMaterial({ color: 0x000000, alphaMap: t, transparent: true, opacity: 0.7, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  const bronze = new M.MeshStandardMaterial({ color: 0xb8894c, roughness: 0.5, metalness: 0.55, envMapIntensity: 1.8 }); // satin, patinated bronze: part diffuse so the key lights it and the dark engraving reads
   const mark = (t) => new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.5, metalness: 0, clearcoat: 0.4, clearcoatRoughness: 0.25, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false });
   return {
     board, birch, bowl, decal, boardPrint, printArea, standPaint,
-    finishBody, finishAccent, finishAccentArea, shadowLine, badgeLetters, badgeSide, badgeShade, mark,
+    finishBody, finishAccent, finishAccentArea, shadowLine, badgeLetters, badgeSide, badgeShade, mark, bronze,
     cone: new M.MeshStandardMaterial({ color: 0x202020, roughness: 0.55 }),
     frame: new M.MeshStandardMaterial({ color: 0x1e1e1e, roughness: 0.4, metalness: 0.55 }),
     surround: new M.MeshPhysicalMaterial({ color: 0x141414, roughness: 0.3, clearcoat: 0.5, clearcoatRoughness: 0.3 }),
@@ -110,6 +111,7 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
   const mats = ctx.materials(flavor);
   const backPanel = S.back ? (st.backPanel || S.back.panel) : null;
   const backField = S.back ? (backPanel === 'full' ? S.back.window : { x0: 195 - S.back.label.w / 2 - S.back.labelMargin, x1: 195 + S.back.label.w / 2 + S.back.labelMargin, z0: S.back.label.top - S.back.label.h - S.back.labelMargin, z1: S.back.label.top + S.back.labelMargin }) : null;
+  const bronze = backPanel === 'bronze';
   const postsZ = S.back ? (backPanel === 'full' ? S.back.posts.zFull : S.back.posts.z) : 0;
   const d = derived(S);
   const half = S.plan / 2, L = d.slope, dy = d.dirY, dz = d.dirZ, ridgeZ = d.ridgeZ;
@@ -217,9 +219,17 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     // Back of the cabinet: engraved label, port, binding posts (floorstander only).
     if (S.back) {
       const B = S.back;
-      const lab = ctx.tex.engravedLabel();
+      let labelZ = -half - 0.3;
+      if (bronze && look.mode === 'finish') {
+        // An engraved bronze plate on the finish: the Facts cut into it and dark with patina.
+        const pw = backField.x1 - backField.x0, ph = backField.z1 - backField.z0, pt = B.plate.thick, proud = B.plate.proud, bd0 = S.board;
+        const plate = mesh(new addons.RoundedBoxGeometry(pw, ph, pt, 3, B.plate.cornerR), mats.bronze);
+        plate.position.set(0, (backField.z0 + backField.z1) / 2, -half - bd0 - proud + pt / 2); cab.add(plate);
+        labelZ = -half - bd0 - proud - 0.3;
+      }
+      const lab = ctx.tex.engravedLabel(bronze ? { color: B.plate.patina } : {});
       const labelMesh = mesh(new THREE.PlaneGeometry(lab.widthMm, lab.heightMm), mats.decal(lab.texture), false);
-      labelMesh.rotation.y = Math.PI; labelMesh.position.set(0, B.label.top - lab.heightMm / 2, -half - 0.3); cab.add(labelMesh);
+      labelMesh.rotation.y = Math.PI; labelMesh.position.set(0, B.label.top - lab.heightMm / 2, labelZ); cab.add(labelMesh);
       const flange = mesh(new THREE.CylinderGeometry(B.port.flange / 2, B.port.flange / 2, 3, 64), mats.portFlange); flange.rotation.x = Math.PI / 2; flange.position.set(0, B.port.z, -half - 1.5); cab.add(flange);
       const bore = mesh(new THREE.CylinderGeometry(B.port.bore / 2, B.port.bore / 2, 100, 64, 1, true), mats.dark); bore.rotation.x = Math.PI / 2; bore.position.set(0, B.port.z, -half + 45); cab.add(bore);
       const boreEnd = mesh(new THREE.CircleGeometry(B.port.bore / 2, 64), mats.dark); boreEnd.rotation.y = Math.PI; boreEnd.position.set(0, B.port.z, -half + 90); cab.add(boreEnd);
@@ -245,7 +255,8 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     skin.add(mesh(slab(THREE, frontShape, bd).translate(0, 0, half), mats.finishBody));
     const backShape = rectShape(THREE, -half, 0, half, S.body);
     if (S.back) {
-      const w = backField; const hole = new THREE.Path(); hole.moveTo(w.x0 - half, w.z0); hole.lineTo(w.x0 - half, w.z1); hole.lineTo(w.x1 - half, w.z1); hole.lineTo(w.x1 - half, w.z0); hole.closePath(); backShape.holes.push(hole);
+      const w = backField;
+      if (!bronze) { const hole = new THREE.Path(); hole.moveTo(w.x0 - half, w.z0); hole.lineTo(w.x0 - half, w.z1); hole.lineTo(w.x1 - half, w.z1); hole.lineTo(w.x1 - half, w.z0); hole.closePath(); backShape.holes.push(hole); }
       if (S.back.port.z + S.back.port.bore / 2 > w.z1 || S.back.port.z - S.back.port.bore / 2 < w.z0) backShape.holes.push(circleHole(THREE, 0, S.back.port.z, S.back.port.bore / 2 + 1));
     }
     skin.add(mesh(slab(THREE, backShape, bd, 64).translate(0, 0, -half - bd), mats.finishBody));
@@ -261,23 +272,25 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
 
     // Wordmark: cast metal letters standing on the plinth's front, no plate, the way the lettering sits on a La Marzocco machine.
     // The letter mask is stacked through the relief depth (darker satin sides) under a polished face, over a contact shadow on the lacquer.
-    const Bz = FS.badge, relief = Bz.relief * kk;
+    const Bz = FS.badge, relief = Bz.relief * kk, steps = 4;
     const badge = new THREE.Group(); badge.position.set(0, Bz.z * kk, off); skin.add(badge);
     const wm = ctx.tex.wordmark({ sizeMm: Bz.type * kk, color: '#FFFFFF', trackingEm: P.trackingEm });
     const plane = () => new THREE.PlaneGeometry(wm.widthMm, wm.heightMm);
     const shade = new THREE.Mesh(plane(), mats.badgeShade(wm.texture)); shade.position.set(0.9 * kk, -1.5 * kk, 0.05); shade.renderOrder = 2; badge.add(shade);
-    const steps = 4;
     for (let i = 1; i <= steps; i++) {
       const side = new THREE.Mesh(plane(), mats.badgeSide(wm.texture)); side.position.z = relief * i / (steps + 1); side.renderOrder = 2 + i; badge.add(side);
     }
     const letters = new THREE.Mesh(plane(), mats.badgeLetters(wm.texture)); letters.position.z = relief; letters.renderOrder = 3 + steps; letters.castShadow = true; badge.add(letters);
 
-    // Back: the wordmark engraved in the birch panel above the Nutrition Facts (floorstander only).
-    if (S.back && FS.backWordmark) {
-      const ew = ctx.tex.wordmark({ sizeMm: FS.backWordmark.size * kk, color: '#6B5232', trackingEm: P.trackingEm });
-      const e = mesh(new THREE.PlaneGeometry(ew.widthMm, ew.heightMm), mats.decal(ew.texture), false);
-      const baseline = backPanel === 'full' ? FS.backWordmark.baselineFull : FS.backWordmark.baseline;
-      e.rotation.y = Math.PI; e.position.set(0, baseline * kk + 0.35 * FS.backWordmark.size * kk, backPanel === 'full' ? -half - 0.3 : -half - bd - 0.3); skin.add(e);
+    // Back: the wordmark as the same cast letters as the front, above the plate (floorstander only).
+    if (S.back && FS.backBadge) {
+      const Bb = FS.backBadge, reliefB = Bb.relief * kk;
+      const back = new THREE.Group(); back.position.set(0, (backPanel === 'full' ? Bb.zFull : Bb.z) * kk, backPanel === 'full' ? -half - 0.3 : -half - bd - 0.3); back.rotation.y = Math.PI; skin.add(back);
+      const wmb = ctx.tex.wordmark({ sizeMm: Bb.type * kk, color: '#FFFFFF', trackingEm: P.trackingEm });
+      const planeB = () => new THREE.PlaneGeometry(wmb.widthMm, wmb.heightMm);
+      const shadeB = new THREE.Mesh(planeB(), mats.badgeShade(wmb.texture)); shadeB.position.set(0.9 * kk, -1.5 * kk, 0.05); shadeB.renderOrder = 2; back.add(shadeB);
+      for (let i = 1; i <= steps; i++) { const side = new THREE.Mesh(planeB(), mats.badgeSide(wmb.texture)); side.position.z = reliefB * i / (steps + 1); side.renderOrder = 2 + i; back.add(side); }
+      const lettersB = new THREE.Mesh(planeB(), mats.badgeLetters(wmb.texture)); lettersB.position.z = reliefB; lettersB.renderOrder = 3 + steps; lettersB.castShadow = true; back.add(lettersB);
     }
 
     // Gable and fin: the same shells as the lid, in the accent or the body colour, with no creases or crimp lines.
@@ -285,10 +298,11 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     // Exploration marks (explore/2026-10-02): common milk-carton print, none of it about the owner. Not spec.
     const inkOnGable = look.lid === 'print' ? flavor.board : flavor.print;
     const decalMesh = (t, w, h) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mats.mark(t)); m.renderOrder = 3; return m; };
-    for (const id of look.marks || []) {
+    const marks = look.marks || (S.kind === 'fs' ? FS.marks : []);
+    for (const id of marks) {
       if (id === 'open-other-side') {
         // On the back slope, the way the spout instruction sits on a carton: caps with an arrow, in the gable's other colour.
-        const t = ctx.tex.label({ text: 'OPEN OTHER SIDE', sizeMm: 27 * kk, color: inkOnGable, weight: 700, arrow: true });
+        const t = ctx.tex.label({ text: 'OPEN OTHER SIDE', sizeMm: FS.markSpec.openOtherSide.type * kk, color: inkOnGable, weight: 700, arrow: true });
         const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.geometry.translate(0, L / 2, bd + 0.35); m.geometry.applyMatrix4(backBasis); skin.add(m);
       }
       if (id === 'best-before') {
@@ -302,8 +316,24 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
         const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.rotation.y = Math.PI / 2; m.position.set(half + bd + 0.35, 680 * kk, 0); skin.add(m);
       }
       if (id === 'shake-well') {
-        const t = ctx.tex.label({ text: 'SHAKE WELL', sizeMm: 30 * kk, color: flavor.print, weight: 700 });
-        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.rotation.y = Math.PI / 2; m.position.set(half + bd + 0.35, 790 * kk, 0); skin.add(m);
+        // On the back, under the port, in the accent colour: spec since 2026-10-02.
+        const t = ctx.tex.label({ text: 'SHAKE WELL', sizeMm: FS.markSpec.shakeWell.type * kk, color: flavor.print, weight: 700 });
+        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.rotation.y = Math.PI; m.position.set(0, FS.markSpec.shakeWell.z * kk, -half - bd - 0.35); skin.add(m);
+      }
+      if (id === 'keep-room-temperature') {
+        // Proposal: the storage line, true of a speaker, on the right side under the gable.
+        const t = ctx.tex.label({ text: 'KEEP AT ROOM TEMPERATURE', sizeMm: 22 * kk, color: flavor.print, weight: 700 });
+        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.rotation.y = Math.PI / 2; m.position.set(half + bd + 0.35, 815 * kk, 0); skin.add(m);
+      }
+      if (id === 'return-for-deposit') {
+        // Proposal: the deposit line on the plinth's right side, reversed in the body colour.
+        const t = ctx.tex.label({ text: 'RETURN FOR DEPOSIT', sizeMm: 18 * kk, color: flavor.board, weight: 700 });
+        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.rotation.y = Math.PI / 2; m.position.set(half + bd + 0.35, 55 * kk, 0); skin.add(m);
+      }
+      if (id === 'barcode') {
+        // Proposal: a barcode on the right side above the plinth, where a carton carries it; the digits are the spec's own numbers.
+        const t = ctx.tex.barcode({ digits: '0 390 860 1055 103', widthMm: 120 * kk, heightMm: 60 * kk, color: '#1a1a1a' });
+        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.rotation.y = Math.PI / 2; m.position.set(half + bd + 0.35, 180 * kk, -60 * kk); skin.add(m);
       }
       if (id === 'volume') {
         // The carton's own line, under the badge: the gross internal volume from spec/check-spec.

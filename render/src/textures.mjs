@@ -62,6 +62,31 @@ export function makeTextures(THREE) {
     });
   }
 
+  // A barcode as a decal: bars from the digits, the digits set below (proposal mark).
+  function barcode({ digits, widthMm, heightMm, color, pxPerMm = 8 }) {
+    return memo(`bc|${digits}|${widthMm}|${heightMm}|${color}`, () => {
+      const c = document.createElement('canvas'); c.width = Math.ceil(widthMm * pxPerMm); c.height = Math.ceil(heightMm * pxPerMm);
+      const ctx = c.getContext('2d'); ctx.fillStyle = color;
+      const textPx = heightMm * pxPerMm * 0.2, barsH = c.height - textPx * 1.3;
+      const code = digits.replace(/\s/g, '');
+      let x = c.width * 0.04; const unit = (c.width * 0.92) / (code.length * 7 + 11);
+      const guard = () => { ctx.fillRect(x, 0, unit, barsH + textPx * 0.5); x += unit * 2; ctx.fillRect(x, 0, unit, barsH + textPx * 0.5); x += unit * 2; };
+      guard();
+      for (const ch of code) {
+        const n = ch.charCodeAt(0);
+        const widths = [1 + (n % 3), 1 + ((n >> 2) % 2), 1 + ((n >> 1) % 3)];
+        const gaps = [1 + ((n >> 3) % 2), 1 + (n % 2)];
+        ctx.fillRect(x, 0, widths[0] * unit, barsH); x += (widths[0] + gaps[0]) * unit;
+        ctx.fillRect(x, 0, widths[1] * unit, barsH); x += (widths[1] + gaps[1]) * unit;
+        ctx.fillRect(x, 0, widths[2] * unit, barsH); x += (widths[2] + 1) * unit;
+      }
+      guard();
+      ctx.font = `500 ${textPx}px "Archivo"`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+      ctx.fillText(digits, c.width / 2, c.height - textPx * 0.15);
+      return { texture: canvasTexture(c), widthMm, heightMm };
+    });
+  }
+
   // A stamped roundel: two rings, text around the top and the bottom, a letter in the middle.
   function roundel({ top, bottom, diameterMm, color, pxPerMm = 6 }) {
     return memo(`rd|${top}|${bottom}|${diameterMm}|${color}`, () => {
@@ -278,5 +303,5 @@ export function makeTextures(THREE) {
     });
   }
 
-  return { wordmark, engravedLabel, gradient, birch, planks, radialShadow, endGrain, heardPanel, canvasTexture, label, dotText, roundel };
+  return { wordmark, engravedLabel, gradient, birch, planks, radialShadow, endGrain, heardPanel, canvasTexture, label, dotText, roundel, barcode };
 }

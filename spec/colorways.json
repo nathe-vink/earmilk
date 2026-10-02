@@ -123,7 +123,8 @@
     "The wordmark is cast metal lettering standing on the plinth's front, no plate, and an engraving on the back panel above the Nutrition Facts. Nothing on the sides, nothing under the gable.",
     "Bare birch shows only on the back panel and in the bowl's exploded or section views.",
     "The throat is painted, light at the mouth to dark at the throat.",
-    "Flavor is the colorway only. One voicing."
+    "Flavor is the colorway only. One voicing.",
+    "Two printed marks are spec: OPEN OTHER SIDE on the back slope and SHAKE WELL by the port. Nothing else is printed."
   ],
   "plinth": {
     "heightMm": 110,
@@ -140,17 +141,28 @@
     "centreZMm": 55,
     "metal": "the alloy is open"
   },
-  "backWordmark": {
-    "typeSizeMm": 36,
-    "baselineZMm": 812,
-    "baselineZMmFullField": 788,
-    "engraved": true,
-    "inkFilled": true,
-    "ink": "#6B5232"
-  },
   "backPanel": {
-    "default": "label",
-    "label": "the Facts panel plus a 26 mm margin: x 36 to 354, z 504 to 796; port, posts and wordmark on the finish outside it",
-    "full": "x 26 to 364, z 140 to 830"
+    "default": "bronze",
+    "bronze": "an engraved bronze plate, the Facts panel plus a 26 mm margin (x 36 to 354, z 504 to 796), 3 mm thick, 1.5 mm proud; port, posts and the cast letters on the finish outside it",
+    "label": "the same extent as a bare birch field (option)",
+    "full": "a bare birch field x 26 to 364, z 140 to 830 (option)"
+  },
+  "backBadge": {
+    "type": "cast metal letters, as the front",
+    "typeSizeMm": 44,
+    "reliefMm": 2.5,
+    "centreZMm": 826
+  },
+  "marks": {
+    "openOtherSide": {
+      "where": "back slope of the gable, centred",
+      "typeSizeMm": 27,
+      "ink": "the gable's other colour: board on the white flavours, accent on Chocolate and Oat"
+    },
+    "shakeWell": {
+      "where": "back, centred at z 300, under the port",
+      "typeSizeMm": 26,
+      "ink": "accent"
+    }
   }
 }

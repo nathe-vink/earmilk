@@ -16,9 +16,11 @@ export const FS = {
     // 2026-10-02: no sleeve. Two shapes for the bare birch field on the finished back:
     //  'label' (default): the Facts panel plus a 26 margin all round; the port, the posts and the engraved wordmark sit on the finish outside it.
     //  'full': the field from above the plinth to 30 below the body's top, with the same 26 margin at the sides and above the plinth (was z 40 to 798 inside the sleeve frame).
-    panel: 'label',
+    //  'bronze' (default from v10): the same extent as 'label', but as an engraved bronze plate on the finish, the Facts cut into it.
+    panel: 'bronze',
     window: { x0: 26, x1: 364, z0: 140, z1: 830 },
     labelMargin: 26,
+    plate: { thick: 3, proud: 1.5, cornerR: 3, patina: '#2B2016' },
     label: { w: 266, h: 240, top: 770 },
     port: { d: 100, z: 405, flange: 112, bore: 92 },
     posts: { w: 128, h: 64, z: 150, zFull: 185, postD: 24, spacing: 64 }, // 150 clears the plinth's shadow line (was 144); 185 sits inside the full field
@@ -27,7 +29,10 @@ export const FS = {
   // 2026-10-02: no sleeve. The colour is a finish on the birch; the skin keeps the sleeve's outer dimensions.
   plinth: { height: 110, shadowLine: 3 },
   badge: { type: 44, relief: 2.5, z: 55 }, // cast metal letters, no plate: the wordmark itself in relief on the plinth's front
-  backWordmark: { size: 36, baseline: 812, baselineFull: 788 }, // on the finish above the label field, or inside the full field
+  backBadge: { type: 44, relief: 2.5, z: 826, zFull: 800 }, // cast metal letters like the front, centred above the plate (or inside the full birch field)
+  // Marks that are spec since 2026-10-02: the gable's instruction on the back slope, and the carton's other line by the port.
+  marks: ['open-other-side', 'shake-well'],
+  markSpec: { openOtherSide: { type: 27 }, shakeWell: { type: 26, z: 300 } },
   // As drawn on the Sleeves and Hero artboards.
   print: {
     front: { size: 47, baselineBelowTop: 43 },

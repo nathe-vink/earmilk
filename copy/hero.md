@@ -40,8 +40,8 @@ earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it.
 
 ## Back
 
-- Bare birch where the sleeve opens. Nutrition Facts engraved above the port, binding posts below. *(draft 2026-10-02: "A bare birch panel on the back carries the Nutrition Facts, engraved. The wordmark is engraved above it; the port and the posts sit on the finish below.")*
-- The sleeve's back panel is a frame; it locks around the window, so the wood is what ages. *(draft 2026-10-02: "The finish stops at the panel, so the wood is what ages.")*
+- Bare birch where the sleeve opens. Nutrition Facts engraved above the port, binding posts below. *(draft 2026-10-02: "An engraved bronze plate carries the Nutrition Facts. The wordmark is cast metal above it; the port and the posts sit on the finish below, with SHAKE WELL where a carton would say so.")*
+- The sleeve's back panel is a frame; it locks around the window, so the wood is what ages. *(draft 2026-10-02: "The finish stops at the plate, so the bronze is what ages.")*
 
 ## Pint crate (parked)
 
@@ -64,3 +64,8 @@ On the right side above the band. Placeholder copy from the exploration; the hea
 - Footer: Printed to order. Any flavor, any face. / [YOUR LINE]
 
 ## Stand (merged into the plinth 2026-10-02; no price line)
+
+## Marks (spec since 2026-10-02)
+
+- OPEN OTHER SIDE, with the arrow, on the back slope of the gable. It points at the bowl.
+- SHAKE WELL, on the back under the port.

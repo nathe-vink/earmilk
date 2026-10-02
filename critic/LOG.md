@@ -90,3 +90,7 @@ Still cheap and still open, for the next camera pass: toe the hero pair in on a 
 ## v9 of the back: no critic round
 
 v9 renders the contained birch field (the Facts panel plus a 26 mm margin, the wordmark engraved on the finish above, the port and posts on the finish below) as the new default, with the full field kept as an option; both are in `explore/2026-10-02/r4-*`. A spec choice for the owner rather than a render iteration, and the cap for this look is reached, so no round was run.
+
+## v10 of the back: no critic round
+
+v10 renders the back as decided on 2026-10-02: an engraved bronze plate for the Facts, the wordmark as cast letters like the front, SHAKE WELL under the port and OPEN OTHER SIDE on the back slope. Spec choices, and the cap for this look is reached, so no round was run.
