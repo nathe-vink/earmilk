@@ -40,7 +40,7 @@ Made on the v4 and v5 renders. They stand with the Decisions above and replace t
 
 - **No sleeve.** The carton is the cabinet. The colourway is a finish on the birch: the body in the board colour, the gable and fin in the accent colour on Whole, 2% and Skim, Chocolate and Oat one colour all over. The colour is fixed per speaker, so every edge and bevel takes it. Nothing swaps. `[SLEEVE PRICE]`, the board-stock question and the sleeve-swap shot go away.
 - **Plinth.** The band and the stand are one thing: a built-in plinth, the bottom 110 mm of the cabinet on all four sides, in the accent colour, inside the 1,055 overall height, with a 3 mm shadow line where it meets the body. (The shadow line, and the plinth sitting inside the height rather than under it, are this repo's reading; say so if either is wrong.)
-- **Wordmark.** On the front only, as a badge: a cast metal plate with the wordmark in relief, so it has texture the way the badge on a La Marzocco machine does, centred on the plinth's front. On the back, engraved in the birch above the Nutrition Facts panel. Nowhere else: not on the sides, not under the gable.
+- **Wordmark.** On the front only, as cast metal letters: the wordmark itself standing in relief on the plinth's front, no plate behind it, the way the lettering sits on a La Marzocco machine. On the back, engraved in the birch above the Nutrition Facts panel. Nowhere else: not on the sides, not under the gable. *(A plate version was rendered first and withdrawn the same day.)*
 - **Dropped.** The owner's panel. Other milk-themed marks that are not about the owner are explored in `explore/2026-10-02/` and are proposals, not spec.
 - **Shots.** 07 (sleeve swap) is retired. 02 (two rooms) loses the swap that was its point; it is rendered meanwhile with the same Whole in both rooms and needs a new brief. In 03 the fold of the lid's die-cut becomes the finish's edge at the mouth; in 04 the sleeve frame becomes the finished back around the birch panel.
 - Prices: `[PAIR PRICE]` and `[CRATE PRICE]` stay open. `[SLEEVE PRICE]` and `[STAND PRICE]` are gone.
@@ -61,7 +61,7 @@ Pint — 100 × 100 plan, body 200, gable 35, fin 12. Single full-range ø ~68 a
 
 Stand (optional accessory, amended 2026-10-01) — 390 × 390 × 110 painted block, 6 mm reveal. With the stand: overall 1,171; tweeter axis 1,019.5. *Amended 2026-10-02: replaced by the built-in plinth, z 0 → 110 of the cabinet, accent colour, 3 mm shadow line at z 110 → 113; overall height stays 1,055.*
 
-Badge (amended 2026-10-02) — cast metal plate 180 × 56 × 2, 4 mm corner radius, centred on the plinth's front at z 55; wordmark in relief, 30 mm type size, 1.5 mm proud. Back wordmark engraved in the birch panel, 36 mm type size, baseline at z 788, centred; the birch panel now runs z 113 → 830 so it has room (x 26 → 364 as before).
+Wordmark on the plinth (amended 2026-10-02) — cast metal letters, no plate: Archivo Black at 44 mm type size, 2.5 mm proud, centred on the plinth's front at z 55. Back wordmark engraved in the birch panel, 36 mm type size, baseline at z 788, centred; the birch panel now runs z 113 → 830 so it has room (x 26 → 364 as before).
 
 ## Target specs (label copy — marked as targets, not measured)
 

@@ -4,7 +4,7 @@ Everything on the canvas that is not the label, transcribed from the artboards. 
 
 ## Wordmark
 
-earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it. Since the 2026-10-02 amendments it is a cast metal badge, the wordmark in relief, centred on the plinth's front, and an engraving on the birch back panel above the Nutrition Facts. Nowhere else.
+earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it. Since the 2026-10-02 amendments it is cast metal letters standing on the plinth's front, no plate, and an engraving on the birch back panel above the Nutrition Facts. Nowhere else.
 
 ## Hero (Main artboard)
 
@@ -28,7 +28,7 @@ earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it.
 ## Finish (the Sleeves artboard, redrawn 2026-10-02; all of it is draft copy)
 
 - The cabinet is birch: a body and a carved gable, finished in the flavor's colors. The gable takes the accent on the white flavors; the bottom 110 mm is a plinth in the accent, built in, so the stand and the band are the same thing.
-- The wordmark is a cast metal badge on the plinth, lettering in relief. On the back it is engraved in the birch, above the Nutrition Facts.
+- The wordmark is cast metal lettering on the plinth, standing proud, no plate. On the back it is engraved in the birch, above the Nutrition Facts.
 - Retired with the sleeve: "The cabinet is birch: a body and a carved gable. The sleeve is two pieces of heavy printed board: a tube that slides up over the body, and a lid, die-cut at the mouth, that drops over the gable. Both lock at the back seam." / "Rooms change. Swap the sleeve in ten minutes and the speaker changes with them. Any flavor, shipped flat." / "Sleeves, [SLEEVE PRICE] a set".
 
 ## Section (the bowl)

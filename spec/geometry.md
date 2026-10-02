@@ -119,7 +119,7 @@ No sleeve. The outer dimensions stay as above; the skin is a finish on the birch
 | Gable and fin | finished in the accent (print) colour on Whole, 2% and Skim; body colour on Chocolate and Oat |
 | Plinth | the bottom 110 of the cabinet, all four sides, in the accent colour, flush with the body; overall height stays 1,055 |
 | Shadow line | 3 mm, `z` 110 → 113, a dark groove where the plinth meets the body (this repo's reading of "built in") |
-| Badge | cast metal plate 180 × 56 × 2, corner radius 4, centred on the plinth's front: `x` 105 → 285, `z` 27 → 83; the wordmark in relief, 30 mm type size, 1.5 proud, centred; brushed field, polished letters |
+| Wordmark on the plinth | cast metal letters, the wordmark itself with no plate behind it, the way the lettering stands on a La Marzocco machine: Archivo Black, 44 mm type size, 2.5 proud, polished faces and satin sides, centred on the plinth's front at `z` 55 (about 155 wide). *The 2026-10-02 plate (180 × 56) lasted one render and is withdrawn.* |
 | Wordmark elsewhere | engraved on the back panel (above); nowhere else |
 | Edges | every edge and bevel takes the colour of its face, which a sleeve could not do |
 

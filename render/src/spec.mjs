@@ -22,7 +22,7 @@ export const FS = {
   sleeve: { board: 1.5 },
   // 2026-10-02: no sleeve. The colour is a finish on the birch; the skin keeps the sleeve's outer dimensions.
   plinth: { height: 110, shadowLine: 3 },
-  badge: { w: 180, h: 56, t: 2, r: 4, type: 30, relief: 1.5, z: 55 },
+  badge: { type: 44, relief: 2.5, z: 55 }, // cast metal letters, no plate: the wordmark itself in relief on the plinth's front
   backWordmark: { size: 36, baseline: 788 },
   // As drawn on the Sleeves and Hero artboards.
   print: {
