@@ -138,33 +138,33 @@ export function makeTextures(THREE) {
   // The engraved Nutrition Facts panel, 266 x 240 mm plus the footnote that sits below the frame (copy/label.md).
   function engravedLabel({ color = '#6B5232', pxPerMm = 4 } = {}) {
     return memo(`label|${color}`, () => {
-      const W = 266, H = 262;
+      const W = 266, H = 260; // 14 mm padding on every side, the footnote inside the border (2026-10-02)
       const c = document.createElement('canvas');
       c.width = W * pxPerMm; c.height = H * pxPerMm;
       const ctx = c.getContext('2d');
       const mm = v => v * pxPerMm;
       ctx.fillStyle = color; ctx.strokeStyle = color;
       ctx.lineWidth = mm(1.2);
-      ctx.strokeRect(mm(0.6), mm(0.6), mm(W - 1.2), mm(240 - 1.2));
+      ctx.strokeRect(mm(0.6), mm(0.6), mm(W - 1.2), mm(H - 1.2));
       const x0 = mm(14), x1 = mm(W - 14);
       const rule = (y, thick) => ctx.fillRect(x0, mm(y - thick / 2), x1 - x0, mm(thick));
       const fit = (text, font, maxW) => { let size = font.size; for (;;) { ctx.font = `${font.weight || ''} ${size}px "${font.family}"`.trim(); if (ctx.measureText(text).width <= maxW || size < 4) return; size *= 0.97; } };
       ctx.textBaseline = 'alphabetic';
       ctx.letterSpacing = `${-0.02 * mm(34)}px`;
       fit('Nutrition Facts', { size: mm(34), family: 'Archivo Black' }, x1 - x0);
-      ctx.fillText('Nutrition Facts', x0, mm(44));
+      ctx.fillText('Nutrition Facts', x0, mm(38));
       ctx.letterSpacing = '0px';
-      rule(54, 1.4); rule(78, 7.6);
+      rule(48, 1.4); rule(72, 7.6);
       const rows = [['Sensitivity', '91 dB'], ['Frequency response', '32 Hz to 20 kHz'], ['Impedance', '8 ohm'], ['Woofer', '12 in'], ['Midrange', '6.5 in'], ['Tweeter', '1 in']];
       rows.forEach(([k, v], i) => {
-        const base = 104 + 22 * i;
+        const base = 98 + 22 * i;
         ctx.font = `700 ${mm(12)}px "Archivo"`; ctx.textAlign = 'left'; ctx.fillText(k, x0, mm(base));
         ctx.font = `400 ${mm(12)}px "Archivo"`; ctx.textAlign = 'right'; ctx.fillText(v, x1, mm(base));
-        rule(111 + 22 * i, 1.4);
+        rule(105 + 22 * i, 1.4);
       });
       ctx.textAlign = 'left';
-      rule(232, 7.6);
-      ctx.font = `400 ${mm(11)}px "Archivo"`; ctx.fillText('Contains no milk.', x0, mm(254));
+      rule(226, 7.6);
+      ctx.font = `400 ${mm(11)}px "Archivo"`; ctx.fillText('Contains no milk.', x0, mm(244));
       return { texture: canvasTexture(c), widthMm: W, heightMm: H };
     });
   }

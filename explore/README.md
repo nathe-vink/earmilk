@@ -74,7 +74,7 @@ Asked: must the birch fill the whole back, or only hold the Nutrition Facts, wit
 
 ## 2026-10-02, round 5: the back as decided, and three more marks
 
-OPEN OTHER SIDE (back slope) and SHAKE WELL (by the port) are spec now; the Facts are an engraved bronze plate; the back wordmark is cast letters like the front. The first two frames show that. The rest are new proposals, none about the owner.
+OPEN OTHER SIDE (back slope) and SHAKE WELL (first by the port, then moved onto the plinth's back) are spec now; the Facts are an engraved bronze plate; the back wordmark is cast letters like the front. The first two frames show that. The rest were proposals, none about the owner; all three were dropped the same day.
 
     cd render && node render.mjs --list explore5 --scale 2
 

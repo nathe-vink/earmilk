@@ -94,3 +94,7 @@ v9 renders the contained birch field (the Facts panel plus a 26 mm margin, the w
 ## v10 of the back: no critic round
 
 v10 renders the back as decided on 2026-10-02: an engraved bronze plate for the Facts, the wordmark as cast letters like the front, SHAKE WELL under the port and OPEN OTHER SIDE on the back slope. Spec choices, and the cap for this look is reached, so no round was run.
+
+## v11: the camera carries applied, no critic round
+
+v11 applies the small notes the three rounds on the finish look agreed on: the hero pair toed in from a lower, longer camera; the window mullion gone from both rooms; the close-up aimed to clear the top lip and the mid's flange; the crate camera lower and its base board's end-grain fringe fixed. It also carries the owner's calls: SHAKE WELL on the plinth's back, and the Facts border enclosing its footnote with even padding. The cap for this look is reached, so no round was run; the next critic round waits for the photoreal pass or a new look.

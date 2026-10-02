@@ -9,7 +9,8 @@ const OLD_SLEEVE = { flavor: 'whole', position: [0, 0, 0], state: { cabinet: fal
 
 export const shots = [
   { id: 'shot-01', frames: [
-    { suffix: '', room: 'hero', speakers: [{ flavor: 'whole', position: [-1, 0, 0] }, { flavor: 'whole', position: [1, 0, 0] }], camera: { position: [2.4, 1.2, 3.9], lookAt: [0.25, 0.55, 0], focal: 50 } },
+    // v11: the pair toed in toward the listening spot, the camera lower on a longer lens so the two read as a pair.
+    { suffix: '', room: 'hero', speakers: [{ flavor: 'whole', position: [-1, 0, 0], rotationY: 0.2 }, { flavor: 'whole', position: [1, 0, 0], rotationY: -0.2 }], camera: { position: [2.3, 1.0, 4.4], lookAt: [0.0, 0.55, 0], focal: 60 } },
   ] },
   { id: 'shot-02', frames: [
     { suffix: 'a', room: 'apartmentBright', speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: C2 },
@@ -17,7 +18,7 @@ export const shots = [
     { suffix: 'b', room: 'oldRoom', speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: C2 },
   ] },
   { id: 'shot-03', frames: [
-    { suffix: '', room: 'studio', roomOptions: { key: 'rake', env: 0.45, fill: 0.25 }, ao: { radius: 0.05, scale: 1.4 }, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { bowlShadow: false } }], camera: { position: [0.42, 1.0, 0.86], lookAt: [-0.03, 0.875, 0.09], focal: 85 } },
+    { suffix: '', room: 'studio', roomOptions: { key: 'rake', env: 0.45, fill: 0.25 }, ao: { radius: 0.05, scale: 1.4 }, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { bowlShadow: false } }], camera: { position: [0.44, 1.01, 0.9], lookAt: [-0.03, 0.882, 0.09], focal: 95 } },
   ] },
   { id: 'shot-04', frames: [
     { suffix: '', room: 'studio', roomOptions: { key: 'back', env: 0.6, groundRoughness: 0.8 }, speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: { position: [0, 0.62, -4.2], lookAt: [0, 0.5, 0], focal: 70 } },
@@ -26,7 +27,7 @@ export const shots = [
     { suffix: '', room: 'studio', roomOptions: { key: 'even', env: 0.5 }, speakers: FLAVORS.map((f, i) => ({ flavor: f, position: [(i - 2) * 0.52, 0, 0] })), camera: { position: [0, 1.3, 11.5], lookAt: [0, 0.5, 0], focal: 140 } },
   ] },
   { id: 'shot-06', frames: [
-    { suffix: '', room: 'desk', ao: { radius: 0.04, scale: 1.4 }, speakers: [], crate: { position: [0, 0.72, 0], flavors: ['whole', 'two-percent', 'skim', 'chocolate', 'oat', 'whole'] }, camera: { position: [0.6, 1.5, 1.25], lookAt: [0, 0.8, 0], focal: 60 } },
+    { suffix: '', room: 'desk', ao: { radius: 0.04, scale: 1.4 }, speakers: [], crate: { position: [0, 0.72, 0], flavors: ['whole', 'two-percent', 'skim', 'chocolate', 'oat', 'whole'] }, camera: { position: [0.6, 1.32, 1.35], lookAt: [0, 0.78, 0], focal: 60 } },
   ] },
 ];
 

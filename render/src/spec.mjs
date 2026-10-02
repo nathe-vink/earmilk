@@ -21,7 +21,7 @@ export const FS = {
     window: { x0: 26, x1: 364, z0: 140, z1: 830 },
     labelMargin: 26,
     plate: { thick: 3, proud: 1.5, cornerR: 3, patina: '#2B2016' },
-    label: { w: 266, h: 240, top: 770 },
+    label: { w: 266, h: 260, top: 770 }, // 260 since 2026-10-02: the footnote sits inside the border with the same 14 mm padding as the sides
     port: { d: 100, z: 405, flange: 112, bore: 92 },
     posts: { w: 128, h: 64, z: 150, zFull: 185, postD: 24, spacing: 64 }, // 150 clears the plinth's shadow line (was 144); 185 sits inside the full field
   },
@@ -32,7 +32,7 @@ export const FS = {
   backBadge: { type: 44, relief: 2.5, z: 826, zFull: 800 }, // cast metal letters like the front, centred above the plate (or inside the full birch field)
   // Marks that are spec since 2026-10-02: the gable's instruction on the back slope, and the carton's other line by the port.
   marks: ['open-other-side', 'shake-well'],
-  markSpec: { openOtherSide: { type: 27 }, shakeWell: { type: 26, z: 300 } },
+  markSpec: { openOtherSide: { type: 27 }, shakeWell: { type: 26, z: 55, on: 'plinth' } }, // SHAKE WELL on the plinth's back face, reversed in the body colour
   // As drawn on the Sleeves and Hero artboards.
   print: {
     front: { size: 47, baselineBelowTop: 43 },

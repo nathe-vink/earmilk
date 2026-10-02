@@ -46,9 +46,11 @@ function windowWall(THREE, scene, { x, zRange = [-2.5, 4.5], h = 2.7, color, win
   add(z1 - win.z1, h, (win.z1 + z1) / 2, h / 2);
   add(win.z1 - win.z0, win.sill, (win.z0 + win.z1) / 2, win.sill / 2);
   add(win.z1 - win.z0, h - win.head, (win.z0 + win.z1) / 2, (win.head + h) / 2);
-  const mm = new THREE.MeshStandardMaterial({ color: mullion, roughness: 0.6 });
-  const v = new THREE.Mesh(new THREE.BoxGeometry(0.05, win.head - win.sill, 0.04), mm); v.position.set(x, (win.sill + win.head) / 2, (win.z0 + win.z1) / 2); v.castShadow = true; scene.add(v);
-  const hz = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.04, win.z1 - win.z0), mm); hz.position.set(x, (win.sill + win.head) / 2, (win.z0 + win.z1) / 2); hz.castShadow = true; scene.add(hz);
+  if (mullion !== null) {
+    const mm = new THREE.MeshStandardMaterial({ color: mullion, roughness: 0.6 });
+    const v = new THREE.Mesh(new THREE.BoxGeometry(0.05, win.head - win.sill, 0.04), mm); v.position.set(x, (win.sill + win.head) / 2, (win.z0 + win.z1) / 2); v.castShadow = true; scene.add(v);
+    const hz = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.04, win.z1 - win.z0), mm); hz.position.set(x, (win.sill + win.head) / 2, (win.z0 + win.z1) / 2); hz.castShadow = true; scene.add(hz);
+  }
   const skyM = new THREE.Mesh(new THREE.PlaneGeometry(6, 5), new THREE.MeshBasicMaterial({ color: sky }));
   skyM.position.set(x + 0.6 * Math.sign(x), 2, (win.z0 + win.z1) / 2); skyM.rotation.y = Math.sign(x) > 0 ? -Math.PI / 2 : Math.PI / 2; scene.add(skyM);
 }
@@ -88,7 +90,7 @@ const ROOMS = {
     scene.add(floorMesh(THREE, ctx.tex, { size: 10, planks: { base: '#d8ccb2', dark: '#cfc2a7', light: '#dfd4bc' }, roughness: 0.32 }));
     const back = wallMesh(THREE, { w: 10, h: 2.7, color: 0xf4f2ee }); back.position.set(0, 1.35, -2.0); scene.add(back);
     skirting(THREE, scene, { w: 10, z: -2.0, color: 0xfaf9f6 });
-    windowWall(THREE, scene, { x: -2.6, color: 0xf4f2ee, sky: 0xf6fbff, win: { z0: 1.4, z1: 3.2, sill: 0.7, head: 2.4 } });
+    windowWall(THREE, scene, { x: -2.6, color: 0xf4f2ee, sky: 0xf6fbff, mullion: null, win: { z0: 1.4, z1: 3.2, sill: 0.7, head: 2.4 } });
     sun(THREE, scene, { color: 0xffffff, intensity: 3.4, position: [-7, 4.5, 5.5], target: [0.2, 0.3, -0.3], bounds: 4.5 });
     fillRect(THREE, scene, { color: 0xeef4ff, intensity: 5, w: 1.8, h: 1.7, position: [-2.55, 1.55, 2.3], lookAt: [0, 1.0, 2.3] });
     bounce(THREE, scene, { sky: 0xf4f2ee, ground: 0xd8ccb2, intensity: 0.4 });
@@ -102,7 +104,7 @@ const ROOMS = {
     scene.add(floorMesh(THREE, ctx.tex, { size: 10, planks: { base: '#5a4330', dark: '#4f3a29', light: '#634a35' }, roughness: 0.4 }));
     const back = wallMesh(THREE, { w: 10, h: 2.9, color: 0x7a7362, roughness: 1 }); back.position.set(0, 1.45, -2.0); scene.add(back);
     skirting(THREE, scene, { w: 10, z: -2.0, color: 0x8c8470, h: 0.14 });
-    windowWall(THREE, scene, { x: -2.6, color: 0x7a7362, sky: 0xffe2b8, mullion: 0x9a8f78, win: { z0: 1.6, z1: 2.8, sill: 0.95, head: 2.1 } });
+    windowWall(THREE, scene, { x: -2.6, color: 0x7a7362, sky: 0xffe2b8, mullion: null, win: { z0: 1.6, z1: 2.8, sill: 0.95, head: 2.1 } });
     sun(THREE, scene, { color: 0xffc080, intensity: 2.4, position: [-7, 3.2, 4.6], target: [0.2, 0.3, -0.2], bounds: 4.5 });
     fillRect(THREE, scene, { color: 0xffd9a8, intensity: 1.6, w: 1.0, h: 1.1, position: [-2.55, 1.5, 2.2], lookAt: [0, 1.0, 2.2] });
     bounce(THREE, scene, { sky: 0x8fa0bb, ground: 0x5a4330, intensity: 0.3 });
@@ -148,6 +150,7 @@ export function buildScene(THREE, addons, ctx, cfg) {
   const roomOut = ROOMS[cfg.room](THREE, addons, ctx, scene, cfg.roomOptions || {});
   for (const sp of cfg.speakers || []) {
     const g = buildSpeaker(THREE, addons, ctx, { kind: sp.kind || 'fs', flavor: ctx.flavor(sp.flavor), state: sp.state || {} });
+    if (sp.rotationY) g.rotation.y = sp.rotationY; // toe-in, radians, positive turns the front toward +x
     g.scale.setScalar(0.001);
     g.position.set(...sp.position);
     g.rotation.y = sp.rotationY || 0;

@@ -143,7 +143,7 @@
   },
   "backPanel": {
     "default": "bronze",
-    "bronze": "an engraved bronze plate, the Facts panel plus a 26 mm margin (x 36 to 354, z 504 to 796), 3 mm thick, 1.5 mm proud; port, posts and the cast letters on the finish outside it",
+    "bronze": "an engraved bronze plate, the Facts panel plus a 26 mm margin (x 36 to 354, z 484 to 796), 3 mm thick, 1.5 mm proud; port, posts and the cast letters on the finish outside it",
     "label": "the same extent as a bare birch field (option)",
     "full": "a bare birch field x 26 to 364, z 140 to 830 (option)"
   },
@@ -160,9 +160,9 @@
       "ink": "the gable's other colour: board on the white flavours, accent on Chocolate and Oat"
     },
     "shakeWell": {
-      "where": "back, centred at z 300, under the port",
+      "where": "the plinth's back face, centred at z 55",
       "typeSizeMm": 26,
-      "ink": "accent"
+      "ink": "board (reversed on the accent plinth)"
     }
   }
 }

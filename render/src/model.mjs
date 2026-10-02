@@ -316,9 +316,9 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
         const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.rotation.y = Math.PI / 2; m.position.set(half + bd + 0.35, 680 * kk, 0); skin.add(m);
       }
       if (id === 'shake-well') {
-        // On the back, under the port, in the accent colour: spec since 2026-10-02.
-        const t = ctx.tex.label({ text: 'SHAKE WELL', sizeMm: FS.markSpec.shakeWell.type * kk, color: flavor.print, weight: 700 });
-        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.rotation.y = Math.PI; m.position.set(0, FS.markSpec.shakeWell.z * kk, -half - bd - 0.35); skin.add(m);
+        // On the plinth's back face, reversed in the body colour: spec since 2026-10-02.
+        const t = ctx.tex.label({ text: 'SHAKE WELL', sizeMm: FS.markSpec.shakeWell.type * kk, color: flavor.board, weight: 700 });
+        const m = decalMesh(t.texture, t.widthMm, t.heightMm); m.rotation.y = Math.PI; m.position.set(0, FS.markSpec.shakeWell.z * kk, -(off + 0.1)); skin.add(m);
       }
       if (id === 'keep-room-temperature') {
         // Proposal: the storage line, true of a speaker, on the right side under the gable.
@@ -440,7 +440,7 @@ export function buildCrate(THREE, addons, ctx, { flavors }) {
   const shortBoard = [up, up, end, up, end, end];
   const mesh = (geom, mat) => { const m = new THREE.Mesh(geom, mat); m.castShadow = m.receiveShadow = true; return m; };
   g.add(contactShadow(THREE, mats, C.w, C.d, 0.5));
-  g.add(mesh(new THREE.BoxGeometry(C.w, C.wall, C.d).translate(0, C.wall / 2, 0), [along, along, along, along, end, end]));
+  g.add(mesh(new THREE.BoxGeometry(C.w, C.wall, C.d).translate(0, C.wall / 2, 0), [end, end, along, along, along, along])); // the base board runs along x: end grain on its ends, long grain on its front edge
   for (const sz of [-1, 1]) g.add(mesh(new THREE.BoxGeometry(C.w, C.h, C.wall).translate(0, C.h / 2, sz * (C.d / 2 - C.wall / 2)), longBoard));
   for (const sx of [-1, 1]) g.add(mesh(new THREE.BoxGeometry(C.wall, C.h, C.d - 2 * C.wall).translate(sx * (C.w / 2 - C.wall / 2), C.h / 2, 0), shortBoard));
   const cols = 3, pitchX = 110, pitchZ = 110;
