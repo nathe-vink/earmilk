@@ -130,7 +130,7 @@ Before any render or edit, re-read the Geometry and Decisions sections. If a cha
 - Price points for the pair, a sleeve set, and the crate. Leave as `[PAIR PRICE]`, `[SLEEVE PRICE]`, `[CRATE PRICE]`, and since the amendments `[STAND PRICE]`. *Amended 2026-10-02: `[PAIR PRICE]` and `[CRATE PRICE]` only.*
 - Driver selection and port tuning. The 32 Hz target assumes ~85–90 L net for the woofer; confirm before quoting it as more than a target.
 - Whether the bowl works as a waveguide. The test is physical: one carved gable, one candidate tweeter, on/off-axis measurements vs. a flat baffle. Renders do not settle this.
-- *Added 2026-10-03, from the path-traced critic round:* whether the pint crate's wall should drop so the drivers show, and whether the spout's dome needs a different read at room distance. Both are geometry; neither is acted on in renders.
+- *Added 2026-10-03, from the path-traced critic rounds:* whether the pint crate's wall should drop so the drivers show; whether the spout's dome needs a different read at room distance (three rounds called it a lens barrel); whether the cast letters on Chocolate and Oat should be a darker metal, since polished metal on a cream plinth reads as blank in a pale studio; and whether the tweeter wants a visible flange in the bowl. All geometry or materials; none acted on in renders.
 - Board stock for the sleeve and whether the lock survives repeated swaps. *Gone 2026-10-02 with the sleeve. In its place: the finish system (lacquer, paint or laminate over the birch) and the badge's metal are open.*
 
 ## Suggested layout
