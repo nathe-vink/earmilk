@@ -32,3 +32,14 @@ Sends a rendered frame to Google's Gemini image model as the layout and asks for
     IMAGE_API_KEY=... python3 render/photo.py --shots 01,04 --variants 2 --date 2026-10-03
 
 On a free-tier Google key the image models return "quota exceeded" (free daily limit of zero for image generation, as of 2026-10-03); the project needs pay-as-you-go billing for the call to succeed.
+
+## Path-traced pass (`--glb` and `pathtrace.py`)
+
+The real-time renderer hits a ceiling the critic named in every round: one light the whole frame obeys, penumbra, bounce, contact occlusion. The path-traced pass renders the same model in Blender's Cycles on the CPU, so nothing drifts.
+
+    cd render && npm install          # three + playwright-core
+    pip install bpy                   # Blender as a Python module, about 350 MB
+    node render.mjs --v 11 --glb render/out/glb                    # export each frame as GLB + a sidecar with the light rig
+    python3 render/pathtrace.py --glb render/out/glb/shot-01-v11.glb --out renders/2026-10-03/shot-01-v11-pt.png --samples 128
+
+`--glb` exports the scene with its camera; fake contact-shadow decals are dropped and alpha-only decals become colour maps so glTF carries them. The sidecar lists the sun, area fills, hemisphere and point lamps; `pathtrace.py` rebuilds them as Cycles lamps with a real sun disc and a world dome, keeps the glTF materials, and renders with denoising and the AgX view. `render/out/` is not committed.

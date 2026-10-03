@@ -85,3 +85,14 @@ OPEN OTHER SIDE (back slope) and SHAKE WELL (first by the port, then moved onto 
 | `r5-return-for-deposit.png` | RETURN FOR DEPOSIT, small, reversed in the body colour. | The plinth's right side. |
 | `r5-barcode.png` | A barcode whose digits are the spec's own numbers (390, 860, 1055, 103). | Right side, low, where a carton carries it. |
 | `r5-all-new.png` | The three together with the two spec marks. | As above. |
+
+## 2026-10-03: the hand-made photoreal attempts, and why the pass moved to a path tracer
+
+Two chat image models were given the v11 hero frame and asked to change only light and materials. Both repainted the object instead: the proportions drifted (one pair squatter, one gable wider and taller), the cast letters came back as another word in caps in one and as mush in the other, and one swapped the black cones for tan paper. Kept here as the record of why editing models cannot carry this brief.
+
+| File | What |
+|---|---|
+| `handmade-gemini-hero.jpg` | Gemini, by hand, from the v11 hero frame. |
+| `handmade-chatgpt-hero.png` | ChatGPT, by hand, from the same frame. |
+
+The photoreal pass is now `render/pathtrace.py`: the same model, exported to glTF and rendered in Blender's Cycles, so nothing drifts.

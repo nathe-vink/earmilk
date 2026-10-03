@@ -49,6 +49,8 @@ const isRetired = args.list === 'retired';
 const outDir = args.out || path.join(repo, isExplore ? 'explore' : 'renders', date);
 fs.mkdirSync(outDir, { recursive: true });
 const only = args.only ? args.only.split(',').map(s => s.trim().padStart(2, '0')) : null;
+const glbDir = args.glb ? path.resolve(repo, args.glb === true ? 'render/out/glb' : args.glb) : null; // --glb [dir]: export each frame as GLB + sidecar instead of a PNG
+if (glbDir) fs.mkdirSync(glbDir, { recursive: true });
 
 const list = isExplore ? ({ explore, explore2, explore3, explore4, explore5 })[args.list].map(e => ({ id: e.id, frames: [e] })) : isRetired ? retired : shots;
 for (const shot of list) {
@@ -57,6 +59,14 @@ for (const shot of list) {
   for (const frame of shot.frames) {
     const t0 = Date.now();
     const cfg = { ...frame, size };
+    if (glbDir) {
+      const r = await page.evaluate(c => window.earmilk.exportGLB(c), cfg);
+      const base = path.join(glbDir, `${shot.id}-v${v}${frame.suffix || ""}`);
+      fs.writeFileSync(base + '.glb', Buffer.from(r.glb, 'base64'));
+      fs.writeFileSync(base + '.json', JSON.stringify(r.sidecar, null, 1));
+      console.log(`${path.relative(repo, base)}.glb  ${(Date.now() - t0) / 1000}s`);
+      continue;
+    }
     const url = await page.evaluate(c => window.earmilk.renderShot(c), cfg);
     const file = path.join(outDir, isExplore ? `${shot.id}.png` : `${shot.id}-v${v}${frame.suffix || ''}.png`);
     fs.writeFileSync(file, Buffer.from(url.split(',')[1], 'base64'));
