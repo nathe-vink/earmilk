@@ -4,7 +4,7 @@
     python3 render/pathtrace.py --glb render/out/glb/shot-01-v11.glb --out renders/2026-10-03/shot-01-v11-pt.png [--samples 128] [--scale 1]
 
 The sidecar JSON beside the GLB carries the real-time rig (sun, area fills, hemisphere, points), the camera and the exposure;
-this script rebuilds them as a sun lamp with a real disc, area lamps, a world of the room's sky colour, and AgX view transform.
+this script rebuilds them in Cycles units: a sun lamp with a real disc, area lamps (softboxes in the studio), a world dome, AgX view transform.
 Needs the `bpy` wheel (pip install bpy); the scene geometry and materials come from the GLB untouched, so nothing drifts.
 """
 import argparse, json, math, os, sys, time
@@ -26,6 +26,7 @@ def main():
     ap.add_argument('--sun-strength', type=float, default=1.0, help='multiplier on the sidecar sun intensity')
     ap.add_argument('--area-strength', type=float, default=1.0)
     ap.add_argument('--world-strength', type=float, default=1.0)
+    ap.add_argument('--sky-strength', type=float, default=1.0, help='multiplier on the glow of the sky planes outside the windows')
     a = ap.parse_args()
     import bpy  # noqa: E402
     from mathutils import Vector  # noqa: E402
@@ -43,57 +44,98 @@ def main():
     cam.data.angle_y = math.radians(side['camera']['fov'])
     cam.data.clip_start = 0.02; cam.data.clip_end = 200
 
-    # Lights: three.js lamps are gone from the glTF (only punctual ones survive, and we rebuild those too), so clear and rebuild.
+    # Lights. three.js lamps are gone from the glTF (only punctual ones survive, and those are rebuilt too), so clear and rebuild.
+    # Units: a three.js DirectionalLight intensity is an irradiance, as a Cycles sun strength is (W/m²); a RectAreaLight intensity is
+    # a radiance (nits), and a Cycles area lamp of power P over area A radiates P / (A·π); a PointLight intensity is in candela, and a
+    # Cycles point lamp of power P radiates P / (4π) per steradian. The rooms are closed boxes, so daylight is only what the window
+    # admits: the sun, the glowing sky plane outside it and the area fill standing just inside it. Cycles bounces the rest for real.
     for o in [o for o in scene.objects if o.type == 'LIGHT']:
         bpy.data.objects.remove(o, do_unlink=True)
     # three.js is Y-up, Z toward the camera; the glTF importer turns that into Blender's Z-up: (x, y, z) -> (x, -z, y)
     def P(v): return Vector((v[0], -v[2], v[1]))
+    def aim(o, dirv): o.rotation_euler = dirv.normalized().to_track_quat('-Z', 'Y').to_euler()
+    def lamp(name, kind, color):
+        d = bpy.data.lights.new(name, kind); d.color = srgb_to_linear(hex_rgb(color))
+        o = bpy.data.objects.new(name, d); scene.collection.objects.link(o); return d, o
     hemi = next((l for l in side['lights'] if l['type'] == 'hemi'), None)
+    studio = side['room'] == 'studio'
+    sun_e = max([l['intensity'] for l in side['lights'] if l['type'] == 'sun'] or [1.5])
+    for i, l in enumerate([l for l in side['lights'] if l['type'] == 'sun']):
+        pos, tgt = P(l['position']), P(l['target'])
+        if studio:
+            # The studio's directional lights stand in for softboxes: a large square lamp on the same axis, far enough back that its
+            # irradiance at the subject equals the real-time intensity (E = P / (π d²) on axis), so the key stays soft and the fill broad.
+            span = (tgt - pos).length  # the real-time rig's placement says how close the source was meant to be
+            dist = min(max(span, 2.2), 5.0) if i == 0 else 6.0
+            size = dist * 0.55 if i == 0 else 3.5
+            dirv = (tgt - pos).normalized()
+            d, o = lamp('softbox' if i == 0 else 'fill', 'AREA', l['color']); d.shape = 'SQUARE'; d.size = size
+            d.energy = l['intensity'] * math.pi * dist * dist * a.sun_strength
+            o.location = tgt - dirv * dist; aim(o, dirv)
+        else:
+            # AgX keeps the highlights that ACES clipped, so a sun tuned to read as sun in the real-time pass needs twice the strength here
+            d, o = lamp('sun', 'SUN', l['color']); d.energy = l['intensity'] * 2.0 * a.sun_strength; d.angle = math.radians(0.8)
+            o.location = pos; aim(o, tgt - pos)
     for l in side['lights']:
-        if l['type'] == 'sun':
-            d = bpy.data.lights.new('sun', 'SUN'); d.color = srgb_to_linear(hex_rgb(l['color']))
-            d.energy = l['intensity'] * 1.1 * a.sun_strength
-            d.angle = math.radians(1.6 if side['room'] in ('hero', 'apartmentBright', 'oldRoom') else 6.0)  # a real sun through a window; a broad soft key in the studio
-            o = bpy.data.objects.new('sun', d); scene.collection.objects.link(o)
-            o.location = P(l['position']); dirv = (P(l['target']) - P(l['position'])).normalized()
-            o.rotation_euler = dirv.to_track_quat('-Z', 'Y').to_euler()
-        elif l['type'] == 'area':
-            d = bpy.data.lights.new('fill', 'AREA'); d.color = srgb_to_linear(hex_rgb(l['color'])); d.shape = 'RECTANGLE'
-            d.size = l['width']; d.size_y = l['height']
-            d.energy = l['intensity'] * l['width'] * l['height'] * 60 * a.area_strength  # nits-ish to watts, by eye
-            o = bpy.data.objects.new('fill', d); scene.collection.objects.link(o)
-            o.location = P(l['position']); dirv = P(l['direction']).normalized()
-            o.rotation_euler = dirv.to_track_quat('-Z', 'Y').to_euler()
+        if l['type'] == 'area':
+            d, o = lamp('fill', 'AREA', l['color']); d.shape = 'RECTANGLE'; d.size = l['width']; d.size_y = l['height']
+            d.energy = l['intensity'] * l['width'] * l['height'] * math.pi * a.area_strength
+            o.location = P(l['position']); aim(o, P(l['direction']))
         elif l['type'] == 'point':
-            d = bpy.data.lights.new('lamp', 'POINT'); d.color = srgb_to_linear(hex_rgb(l['color'])); d.energy = l['intensity'] * 25; d.shadow_soft_size = 0.08
-            o = bpy.data.objects.new('lamp', d); scene.collection.objects.link(o); o.location = P(l['position'])
+            d, o = lamp('lamp', 'POINT', l['color']); d.energy = l['intensity'] * 4 * math.pi; d.shadow_soft_size = 0.08
+            o.location = P(l['position'])
 
-    # World: the hemisphere's sky colour as a soft dome, scaled by the real-time rig's ambient.
+    # World. The real-time hemisphere light is an irradiance E; a dome of radiance L gives E = π·L. In the rooms the ceiling and walls
+    # keep the dome out (and Cycles bounces light for real, which the hemisphere was faking), so it only matters where a set is open:
+    # the studio and the desk. The studio dome is a vertical gradient, white overhead and the backdrop tone at the horizon, so lacquer
+    # and metal have a soft source above them to reflect instead of one flat value.
     world = bpy.data.worlds.new('world'); scene.world = world; world.use_nodes = True
-    bg = world.node_tree.nodes['Background']
-    sky = hex_rgb(side.get('background') or (hemi['sky'] if hemi else '#ffffff'))
-    amb = (hemi['intensity'] if hemi else 0.3) + 0.5 * side.get('environmentIntensity', 0)
-    bg.inputs['Color'].default_value = (*srgb_to_linear(sky), 1); bg.inputs['Strength'].default_value = amb * 1.6 * a.world_strength
+    wt = world.node_tree; bg = wt.nodes['Background']
+    base = srgb_to_linear(hex_rgb(side.get('background') or (hemi['sky'] if hemi else '#ffffff')))
+    amb = ((hemi['intensity'] if hemi else 0.3) + 0.5 * side.get('environmentIntensity', 0)) / math.pi * a.world_strength
+    if studio:
+        tc = wt.nodes.new('ShaderNodeTexCoord'); sep = wt.nodes.new('ShaderNodeSeparateXYZ'); rng = wt.nodes.new('ShaderNodeMapRange'); ramp = wt.nodes.new('ShaderNodeValToRGB')
+        rng.inputs['From Min'].default_value = -0.05; rng.inputs['From Max'].default_value = 0.85; rng.clamp = True
+        ramp.color_ramp.elements[0].color = (*[c * 0.6 for c in base], 1); ramp.color_ramp.elements[1].color = (1, 1, 1, 1)
+        wt.links.new(tc.outputs['Generated'], sep.inputs['Vector']); wt.links.new(sep.outputs['Z'], rng.inputs['Value'])
+        wt.links.new(rng.outputs['Result'], ramp.inputs['Fac']); wt.links.new(ramp.outputs['Color'], bg.inputs['Color'])
+        bg.inputs['Strength'].default_value = amb * 1.3  # fill strength: the softbox is the key (path-traced round 2)
+    else:
+        bg.inputs['Color'].default_value = (*base, 1); bg.inputs['Strength'].default_value = amb
 
-    # Materials: glTF brought the colours, textures, roughness, metalness and clearcoat. Emissive planes (sky through windows) glow.
+    # Materials: glTF brought the colours, textures, roughness, metalness and clearcoat. The exporter names the ones that need a word here.
     emissive = set()
     for m in bpy.data.materials:
-        if m.name and 'sky' in m.name.lower(): emissive.add(m.name)
         if not m.use_nodes: continue
-        nt = m.node_tree; bsdf = next((n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED'), None)
+        nt = m.node_tree; name = (m.name or '').lower()
+        if 'sky' in name:
+            # The sky plane outside a window. glTF marks it unlit and the importer builds it as emission for camera rays only, mixed
+            # with transparency for everything else, so it lit nothing. Rebuild it as a plain emitter: daylight to the eye, and in a
+            # closed room the sky light the window admits. It scales with the room's sun, because the real-time rig's suns are
+            # cinematic rather than solar and the sky has to keep the shade readable beside them.
+            old = next((n for n in nt.nodes if n.type == 'EMISSION'), None)
+            color = tuple(old.inputs['Color'].default_value) if old else (1, 1, 1, 1)
+            for n in list(nt.nodes): nt.nodes.remove(n)
+            out = nt.nodes.new('ShaderNodeOutputMaterial'); em = nt.nodes.new('ShaderNodeEmission')
+            em.inputs['Color'].default_value = color; em.inputs['Strength'].default_value = 1.5 * sun_e * side.get('skyGlow', 1) * a.sky_strength
+            nt.links.new(em.outputs['Emission'], out.inputs['Surface']); m.use_backface_culling = False
+            emissive.add(m.name); continue
+        bsdf = next((n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED'), None)
         if bsdf is None: continue
-        if m.name in emissive:
-            bsdf.inputs['Emission Strength'].default_value = 1.0
-            bsdf.inputs['Emission Color'].default_value = bsdf.inputs['Base Color'].default_value
-            emissive.add(m.name)
+        if name.startswith('bronze'):
+            # The real-time renderer fakes bronze with a part-diffuse material because it has one pale environment map; here it is a metal.
+            bsdf.inputs['Metallic'].default_value = 1.0; bsdf.inputs['Roughness'].default_value = 0.35
+        if name.startswith(('finish', 'bronze', 'board', 'print', 'standpaint')) and not bsdf.inputs['Normal'].is_linked:
+            # Eased edges: a lacquered cabinet's arrises are not razor sharp. A shader-space bevel of 2 mm, no geometry change.
+            bev = nt.nodes.new('ShaderNodeBevel'); bev.inputs['Radius'].default_value = 0.002; bev.samples = 6
+            nt.links.new(bev.outputs['Normal'], bsdf.inputs['Normal'])
         if m.blend_method == 'BLEND' or m.surface_render_method == 'BLENDED':
             m.surface_render_method = 'DITHERED'  # alpha-tested decals in Cycles stay crisp
 
-    # The glowing sky planes stand just outside the windows; they must not shadow the sun or show up in reflections as walls.
+    # The glowing sky planes stand just outside the windows; they must not shadow the sun.
     for o in scene.objects:
         if o.type == 'MESH' and any(sl.material and sl.material.name in emissive for sl in o.material_slots):
             o.visible_shadow = False
-    # Any mesh the exporter marked as a plain unlit surface (MeshBasicMaterial) is a sky or a backdrop: no shadow from it either.
 
     # Cycles on the CPU, denoised, AgX.
     scene.render.engine = 'CYCLES'

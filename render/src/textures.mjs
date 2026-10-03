@@ -219,13 +219,13 @@ export function makeTextures(THREE) {
           const mix = r();
           ctx.fillStyle = mix < 0.22 ? dark : mix < 0.44 ? light : base;
           ctx.fillRect(x, y, pw, len);
-          ctx.globalAlpha = 0.1;
-          for (let k = 0; k < 40; k++) { ctx.fillStyle = r() > 0.5 ? dark : light; const gx = x + r() * pw; ctx.beginPath(); for (let yy = y; yy < y + len; yy += 24) ctx.lineTo(gx + Math.sin(yy * 0.01 + k) * 1.5, yy); ctx.lineWidth = 0.6 + r() * 1.6; ctx.strokeStyle = ctx.fillStyle; ctx.stroke(); }
+          ctx.globalAlpha = 0.16;
+          for (let k = 0; k < 64; k++) { ctx.fillStyle = r() > 0.5 ? dark : light; const gx = x + r() * pw; ctx.beginPath(); for (let yy = y; yy < y + len; yy += 24) ctx.lineTo(gx + Math.sin(yy * 0.01 + k) * 1.5, yy); ctx.lineWidth = 0.6 + r() * 1.6; ctx.strokeStyle = ctx.fillStyle; ctx.stroke(); }
           ctx.globalAlpha = 1;
-          ctx.fillStyle = 'rgba(0,0,0,0.22)'; ctx.fillRect(x, y + len - 2, pw, 2);
+          ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.fillRect(x, y + len - 3, pw, 3);
           y += len;
         }
-        ctx.fillStyle = 'rgba(0,0,0,0.22)'; ctx.fillRect(x, 0, 2, size);
+        ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.fillRect(x, 0, 3, size);
       }
       return canvasTexture(c, { repeat: [1, 1] });
     });

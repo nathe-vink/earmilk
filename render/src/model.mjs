@@ -46,7 +46,7 @@ export function makeMaterials(THREE, tex, flavor) {
   const board = new M.MeshPhysicalMaterial({ color: flavor.board, roughness: 0.55, metalness: 0, clearcoat: 0.3, clearcoatRoughness: 0.4, sheen: 0.15, sheenRoughness: 0.9, sheenColor: new M.Color(0xffffff), side: M.DoubleSide });
   const birch = new M.MeshStandardMaterial({ map: tex.birch(), roughness: 0.6, metalness: 0, side: M.DoubleSide });
   const bowl = new M.MeshPhysicalMaterial({ map: tex.gradient(flavor.throat.mouth, flavor.throat.throat), roughness: 0.4, metalness: 0, clearcoat: 0.3, clearcoatRoughness: 0.45, side: M.DoubleSide });
-  const decal = (t) => new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.7, metalness: 0, clearcoat: 0.15, clearcoatRoughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false });
+  const decal = (t) => Object.assign(new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.7, metalness: 0, clearcoat: 0.15, clearcoatRoughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false }), { name: 'decal' });
   const boardPrint = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.55, metalness: 0, clearcoat: 0.3, clearcoatRoughness: 0.4, sheen: 0.15, sheenRoughness: 0.9, sheenColor: new M.Color(0xffffff), side: M.DoubleSide });
   const printArea = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.58, metalness: 0, clearcoat: 0.25, clearcoatRoughness: 0.45, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
   const standPaint = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.5, metalness: 0, clearcoat: 0.2, clearcoatRoughness: 0.5 });
@@ -56,15 +56,15 @@ export function makeMaterials(THREE, tex, flavor) {
   const finishAccentArea = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.38, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.2, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
   const shadowLine = new M.MeshStandardMaterial({ color: 0x141210, roughness: 0.95, metalness: 0, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
   // Cast metal letters: polished faces, darker satin sides.
-  const badgeLetters = (t) => new M.MeshStandardMaterial({ color: 0xffffff, roughness: 0.12, metalness: 1.0, envMapIntensity: 3.2, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
-  const badgeSide = (t) => new M.MeshStandardMaterial({ color: 0x9a9792, roughness: 0.5, metalness: 1.0, envMapIntensity: 1.6, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  const badgeLetters = (t) => Object.assign(new M.MeshStandardMaterial({ color: 0xffffff, roughness: 0.12, metalness: 1.0, envMapIntensity: 3.2, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), { name: 'badgeLetters' });
+  const badgeSide = (t) => Object.assign(new M.MeshStandardMaterial({ color: 0x9a9792, roughness: 0.5, metalness: 1.0, envMapIntensity: 1.6, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), { name: 'badgeSide' });
   const badgeShade = (t) => new M.MeshBasicMaterial({ color: 0x000000, alphaMap: t, transparent: true, opacity: 0.7, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const bronze = new M.MeshStandardMaterial({ color: 0xb8894c, roughness: 0.5, metalness: 0.55, envMapIntensity: 1.8 }); // satin, patinated bronze: part diffuse so the key lights it and the dark engraving reads
-  const mark = (t) => new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.5, metalness: 0, clearcoat: 0.4, clearcoatRoughness: 0.25, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false });
-  return {
+  const mark = (t) => Object.assign(new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.5, metalness: 0, clearcoat: 0.4, clearcoatRoughness: 0.25, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false }), { name: 'mark' });
+  const mats = {
     board, birch, bowl, decal, boardPrint, printArea, standPaint,
     finishBody, finishAccent, finishAccentArea, shadowLine, badgeLetters, badgeSide, badgeShade, mark, bronze,
-    cone: new M.MeshStandardMaterial({ color: 0x202020, roughness: 0.55 }),
+    cone: new M.MeshStandardMaterial({ color: 0x202020, roughness: 0.72 }), // black paper: matte enough not to mirror the window
     frame: new M.MeshStandardMaterial({ color: 0x1e1e1e, roughness: 0.4, metalness: 0.55 }),
     surround: new M.MeshPhysicalMaterial({ color: 0x141414, roughness: 0.3, clearcoat: 0.5, clearcoatRoughness: 0.3 }),
     dustcap: new M.MeshStandardMaterial({ color: 0x141414, roughness: 0.35 }),
@@ -80,6 +80,8 @@ export function makeMaterials(THREE, tex, flavor) {
     shadow: new M.MeshBasicMaterial({ color: 0x000000, alphaMap: tex.radialShadow(), transparent: true, depthWrite: false, opacity: 0.5 }),
     crease: new M.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.16, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 }),
   };
+  for (const [k, v] of Object.entries(mats)) if (v && v.isMaterial) v.name = k; // the glTF carries the name; pathtrace.py keys its material overrides on it
+  return mats;
 }
 
 // A soft contact shadow on the floor under a footprint w x d (mm), centred at the origin of the parent.
@@ -440,7 +442,7 @@ export function buildCrate(THREE, addons, ctx, { flavors }) {
   const shortBoard = [up, up, end, up, end, end];
   const mesh = (geom, mat) => { const m = new THREE.Mesh(geom, mat); m.castShadow = m.receiveShadow = true; return m; };
   g.add(contactShadow(THREE, mats, C.w, C.d, 0.5));
-  g.add(mesh(new THREE.BoxGeometry(C.w, C.wall, C.d).translate(0, C.wall / 2, 0), [end, end, along, along, along, along])); // the base board runs along x: end grain on its ends, long grain on its front edge
+  g.add(mesh(new THREE.BoxGeometry(C.w - 2 * C.wall, C.wall, C.d - 2 * C.wall).translate(0, C.wall / 2, 0), [end, end, along, along, along, along])); // the base board sits inside the four walls, as a nailed crate bottom does; flush with them it shared their outer planes, which a path tracer renders black
   for (const sz of [-1, 1]) g.add(mesh(new THREE.BoxGeometry(C.w, C.h, C.wall).translate(0, C.h / 2, sz * (C.d / 2 - C.wall / 2)), longBoard));
   for (const sx of [-1, 1]) g.add(mesh(new THREE.BoxGeometry(C.wall, C.h, C.d - 2 * C.wall).translate(sx * (C.w / 2 - C.wall / 2), C.h / 2, 0), shortBoard));
   const cols = 3, pitchX = 110, pitchZ = 110;

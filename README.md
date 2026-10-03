@@ -50,6 +50,15 @@ Made on the v4 and v5 renders. They stand with the Decisions above and replace t
 - **Bronze plate** *(later the same day)*. The Nutrition Facts are an engraved bronze plate, not bare birch: the Facts panel plus a 26 mm margin (x 36 → 354, z 504 → 796), 3 mm thick, 1.5 mm proud of the finish, the engraving dark with patina. The wordmark above it is the same cast metal letters as the front (44 mm, 2.5 mm proud, centred at z 826). Bare birch now shows only in the section views.
 - **Shot 02, rebriefed.** The two rooms are the same pair in two homes, years apart: a bright first apartment, then a darker older house. The point is no longer the swap but that the speaker outlives its rooms, the finish fixed and the birch back ageing with the house.
 
+### Notes, 2026-10-03
+
+Render notes, not product decisions. Nothing here changes the Geometry or the Decisions.
+
+- **The render path is now path-traced.** Chat image models could not hold the carton (two hand-made attempts, in `explore/2026-10-03/`), and the free Gemini API tier refuses image calls. So the model built from `spec/geometry.md` is exported from the real-time scene and rendered in Blender's Cycles (`render/pathtrace.py`, the `-pt` frames): the same geometry and copy, real light. The real-time frames stay as the layout check.
+- **Rooms and sets.** The three rooms are closed boxes now (ceiling, right wall, a wall behind the camera), so the only daylight is what the window admits; the studio floor sweeps up into a backdrop. Out of frame in every shot.
+- **Eased arrises.** The path tracer rounds the cabinet's edges by about a millimetre in the shader, the way lacquer on birch actually sits; the silhouette does not change. The prompts' rule against softening edges is about the silhouette. *Say if the spec wants the arrises dead sharp.*
+- **Critic notes that are spec, not render** (path-traced round 1): the spout reads as a lens barrel at room distance (02b); the crate's wall hides the pints' drivers (06); the chair is a massing model, not furniture (02a). None acted on.
+
 ## Geometry (mm)
 
 Floorstander — square plan, gable-top.
@@ -121,6 +130,7 @@ Before any render or edit, re-read the Geometry and Decisions sections. If a cha
 - Price points for the pair, a sleeve set, and the crate. Leave as `[PAIR PRICE]`, `[SLEEVE PRICE]`, `[CRATE PRICE]`, and since the amendments `[STAND PRICE]`. *Amended 2026-10-02: `[PAIR PRICE]` and `[CRATE PRICE]` only.*
 - Driver selection and port tuning. The 32 Hz target assumes ~85–90 L net for the woofer; confirm before quoting it as more than a target.
 - Whether the bowl works as a waveguide. The test is physical: one carved gable, one candidate tweeter, on/off-axis measurements vs. a flat baffle. Renders do not settle this.
+- *Added 2026-10-03, from the path-traced critic round:* whether the pint crate's wall should drop so the drivers show, and whether the spout's dome needs a different read at room distance. Both are geometry; neither is acted on in renders.
 - Board stock for the sleeve and whether the lock survives repeated swaps. *Gone 2026-10-02 with the sleeve. In its place: the finish system (lacquer, paint or laminate over the birch) and the badge's metal are open.*
 
 ## Suggested layout
