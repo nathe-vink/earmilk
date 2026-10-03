@@ -24,3 +24,11 @@ One Three.js model of the carton speaker, built from `spec/geometry.md` through 
 Rendering here runs on SwiftShader (software WebGL 2) at 1800 x 1200 in a few seconds per frame.
 
 Assumptions the model makes beyond the spec, all also noted in `spec/geometry.md`: the sleeve board sits outside the spec dimensions, so the sleeved speaker is 393 mm wide, invisible at any shot scale; the pint's bowl is the floorstander's scaled by the plan ratio, with its throat closed, since the pint has one full-range driver and no tweeter; the pint's walls are 5 mm and its fin 2 mm.
+
+## Photoreal pass (`photo.py`)
+
+Sends a rendered frame to Google's Gemini image model as the layout and asks for light and materials only, writing `renders/<date>/shot-NN-vN-photo-X.png` beside it. The prompt is the shot's text-to-image paragraph under the constant block from `prompts/`. The key is read from `IMAGE_API_KEY` or the file named by `IMAGE_API_KEY_FILE`; keep it in the environment's settings, never in the repo.
+
+    IMAGE_API_KEY=... python3 render/photo.py --shots 01,04 --variants 2 --date 2026-10-03
+
+On a free-tier Google key the image models return "quota exceeded" (free daily limit of zero for image generation, as of 2026-10-03); the project needs pay-as-you-go billing for the call to succeed.
