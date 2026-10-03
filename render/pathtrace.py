@@ -78,10 +78,11 @@ def main():
     # Materials: glTF brought the colours, textures, roughness, metalness and clearcoat. Emissive planes (sky through windows) glow.
     emissive = set()
     for m in bpy.data.materials:
+        if m.name and 'sky' in m.name.lower(): emissive.add(m.name)
         if not m.use_nodes: continue
         nt = m.node_tree; bsdf = next((n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED'), None)
         if bsdf is None: continue
-        if m.get('emissive') or (m.name and 'sky' in m.name.lower()):
+        if m.name in emissive:
             bsdf.inputs['Emission Strength'].default_value = 1.0
             bsdf.inputs['Emission Color'].default_value = bsdf.inputs['Base Color'].default_value
             emissive.add(m.name)

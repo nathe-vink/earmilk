@@ -1,6 +1,6 @@
 # Shot prompts
 
-One file per shot, versioned: `prompts/shot-NN-vN.md`. A version is frozen once a render has been made from it. Changes go in the next version with a line at the top saying what changed and which critic round asked for it. The render a version produced is `renders/YYYY-MM-DD/shot-NN-vN.png`, same NN and vN; multi-frame shots add a letter (`shot-02-v1a.png`, `shot-02-v1b.png`).
+One file per shot, versioned: `prompts/shot-NN-vN.md`. A version is frozen once a render has been made from it. Changes go in the next version with a line at the top saying what changed and which critic round asked for it. The render a version produced is `renders/YYYY-MM-DD/shot-NN-vN.png`, same NN and vN; multi-frame shots add a letter (`shot-02-v1a.png`, `shot-02-v1b.png`). A path-traced render of the same version (see `render/README.md`) adds `-pt`: `shot-NN-vN-pt.png`.
 
 | NN | Shot | Flavor(s) | Frames |
 |---|---|---|---|

@@ -83,7 +83,7 @@ async function exportGLB(cfg) {
     if (m) {
       if (m.isMeshBasicMaterial && m.alphaMap && m.color.getHex() === 0) drop.push(o); // contact-shadow and letter-shade decals
       else if (m.alphaMap && !m.map) { m.map = m.alphaMap; m.transparent = true; m.needsUpdate = true; } // letters: alpha carried in the colour map
-      if (m.isMeshBasicMaterial && !m.alphaMap && m.map) m.userData.emissive = true; // sky planes and the like
+      else if (m.isMeshBasicMaterial && !m.alphaMap) m.name = 'unlit-sky'; // sky planes outside the windows: glow, cast nothing
     }
   });
   for (const o of drop) o.removeFromParent();
