@@ -14,7 +14,7 @@ from params import *  # noqa: F401,F403
 
 facts = json.load(open(os.path.join(HERE, 'out', 'parts.json')))['facts']
 g = facts['grommet']
-zf = FLOOR_Z + WORM_R + 0.05                       # the worm's centreline when it lies on the floor
+zf = FLOOR_Z + WORM_R * (1 - WORM_FLATTEN) + 0.05  # the worm's centreline when it lies on the floor
 
 
 def add(p, d, k):
@@ -49,9 +49,12 @@ c0, c1 = s_c - CLITELLUM_LEN / 2, s_c + CLITELLUM_LEN / 2
 end, prev = path[-1], path[-2]
 yaw = math.degrees(math.atan2(end[1] - prev[1], end[0] - prev[0]))
 
-def radius_profile():
+def radius_profile(L=None, c0=None, c1=None):
     """Radius factor along the worm, every 4 mm: a narrower head where it enters the cup, slow peristaltic waves (a
     uniform tube reads as a cable), the saddle's swell, and a blunt tail into the plug's ferrule."""
+    L = globals()['L'] if L is None else L
+    c0 = globals()['c0'] if c0 is None else c0
+    c1 = globals()['c1'] if c1 is None else c1
     pts, s = [], 0.0
     while s <= L:
         k = 1.0 + 0.055 * math.sin(2 * math.pi * s / 58.0) + 0.03 * math.sin(2 * math.pi * s / 23.0 + 1.3)
@@ -69,20 +72,29 @@ def radius_profile():
 
 
 worm = {
-    'id': 'worm', 'type': 'tube', 'points': path, 'radius': WORM_R, 'material': 'worm', 'segments': 28,
+    'id': 'worm', 'type': 'tube', 'points': path, 'radius': WORM_R, 'material': 'worm', 'segments': 40, 'flatten': WORM_FLATTEN,
     'profile_mm': radius_profile(),
-    'rings': {'pitch': WORM_RING_PITCH, 'depth': WORM_RING_DEPTH, 'width': 0.24, 'jitter': 0.14, 'skip_mm': [[c0 + 2, c1 - 2]], 'skip_fade': 5.0},
+    'rings': {'pitch': WORM_RING_PITCH, 'depth': WORM_RING_DEPTH, 'width': 0.17, 'jitter': 0.14, 'skip_mm': [[c0 + 2, c1 - 2]], 'skip_fade': 6.0, 'skip_depth': 0.35},
     'attrs': [{'name': 'saddle', 'from': c0 + 2, 'to': c1 - 2, 'fade': 7.0}],
     'caps': True,
 }
 
+# the close-up re-dresses the cable, as a photographer would: an S in front of the cup that turns back into the
+# frame, then away behind it; the saddle and plug are out of this frame
+detail_path = head + landing + [[x, y, zf] for x, y in [(-124, -100), (-140, -124), (-134, -150), (-106, -164), (-76, -154),
+                                                        (-62, -130), (-66, -104), (-50, -84), (-12, -86), (40, -100), (110, -96)]]
+Ld = length(detail_path)
+worm_detail = {**worm, 'id': 'worm-detail', 'points': detail_path, 'profile_mm': radius_profile(Ld, Ld + 50, Ld + 84),
+               'attrs': [], 'rings': {**worm['rings'], 'skip_mm': []}}
+
 MAT = {
     'shell': {'preset': 'satin_plastic', 'color': '#2f2c2a', 'roughness': 0.36, 'coat': 0.12, 'coat_roughness': 0.3},
-    'cushion': {'preset': 'protein_leather', 'color': '#211c19'},
-    'cloth': {'preset': 'fabric', 'color': '#3c3a37'},
+    'cushion': {'preset': 'protein_leather', 'color': '#221d1a', 'bump': {'type': 'noise', 'scale': 0.22, 'strength': 0.35},
+                'wrinkle': {'scale': 3.5, 'strength': 0.25}},
+    'cloth': {'preset': 'fabric', 'color': '#57534e'},
     'metal': {'preset': 'metal_satin', 'color': '#7d7974', 'roughness': 0.3},
     'rubber': {'preset': 'rubber', 'color': '#1c1815'},
-    'worm': {'preset': 'skin', 'color': '#c08a80', 'top_color': '#77434b', 'coat': 0.45, 'coat_roughness': 0.24, 'roughness': 0.5,
+    'worm': {'preset': 'skin', 'color': '#c08a80', 'top_color': '#77434b', 'coat': 0.7, 'coat_roughness': 0.1, 'roughness': 0.42,
              'sss': 0.45, 'sss_scale': 0.7,
              'attr_color': {'attr': 'saddle', 'color': '#dca88c', 'top_color': '#bd7d66'}},
     'plug': {'preset': 'metal_polished', 'color': '#dcd8d2'},
@@ -102,12 +114,20 @@ RIG = {'type': 'sweep', 'color': '#d9d8d4', 'dome': 0.3,
        'rim': {'azimuth': 150, 'elevation': 50, 'power': 0.7},
        'lights': [{'azimuth': -150, 'elevation': 22, 'size': [0.22, 1.5], 'distance': 2.0, 'power': 1.6},
                   {'azimuth': 140, 'elevation': 22, 'size': [0.22, 1.5], 'distance': 2.0, 'power': 1.3}]}
+RIG3 = {'type': 'sweep', 'color': '#d9d8d4', 'dome': 0.15, 'cove_depth': 4.0, 'cove_radius': 2.5,
+        'key': {'azimuth': -30, 'elevation': 62, 'size': 1.8, 'power': 0.8},
+        'fill': {'azimuth': 50, 'elevation': 25, 'power': 0.15},
+        'rim': {'azimuth': 170, 'elevation': 60, 'size': 1.6, 'power': 1.3},
+        'lights': [{'azimuth': -135, 'elevation': 20, 'size': [0.16, 1.4], 'distance': 1.6, 'power': 3.2},
+                   {'azimuth': 135, 'elevation': 20, 'size': [0.16, 1.4], 'distance': 1.6, 'power': 2.8},
+                   {'azimuth': -20, 'elevation': 35, 'size': 0.03, 'distance': 2.0, 'power': 2.0}]}
 shots = {
-    'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG,
-             'camera': {'position': [-300, -640, 125], 'target': [-2, -150, 14], 'lens': 40},
+    'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG3,
+             'camera': {'position': [-300, -665, 350], 'target': [-6, -128, 8], 'lens': 40},
              'floor_z': FLOOR_Z},
-    'detail': {'size': [1800, 1200], 'samples': 192, 'rig': RIG,
-               'camera': {'position': [-500, -360, 6], 'target': [-76, -62, -18], 'lens': 70, 'fstop': 11, 'focus': [-110, -58, -42]},
+    'detail': {'size': [1800, 1200], 'samples': 192, 'rig': RIG3, 'hide': ['worm', 'plug-barrel', 'plug', 'plug-rings'],
+               'objects_extra': [worm_detail],
+               'camera': {'position': [-450, -380, 74], 'target': [-104, -76, -20], 'lens': 70, 'fstop': 22, 'focus': [-112, -84, -40]},
                'floor_z': FLOOR_Z},
 }
 scene = {'materials': MAT, 'objects': objects, 'shots': shots,

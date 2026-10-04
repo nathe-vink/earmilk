@@ -25,9 +25,16 @@ Scene file (all lengths in millimetres, colours as sRGB hex):
     }
 
 Rigs size themselves to the subject's bounding box, so a 20 mm earbud and a 1 m speaker light the same way:
-  sweep   a seamless cove in `color`, a softbox key (`key`: azimuth, elevation in degrees), a fill, a rim, and a dome
-          that is white overhead and the cove's tone at the horizon
+  sweep   a seamless cove in `color` (`cove_depth`, `cove_radius` in subject sizes; `wall_color` and `wall_range` darken
+          it behind the subject), a softbox key (`key`: azimuth from the camera, elevation, size, power), a fill, a
+          rim, and a dome that is white overhead and the cove's tone at the horizon
   table   a tabletop (`surface`: oak, walnut, marble, linen, slate or a hex colour) under a large window light
+  any rig takes `lights`: extra area lights by azimuth from the camera, elevation, distance and size (a number, or
+          [w, h] for a strip) in subject sizes, power as irradiance at the subject: strips for edges, a pin for glints
+
+Tubes also take `flatten` (a soft tube lying on a floor), `attrs` (a float along the tube for a material's
+`attr_color`, e.g. a saddle that fades into the body), rings with `jitter`, `skip_mm`, `skip_fade`, `skip_depth`, and
+`bands` (a stretch in another material). Materials take `top_color`, `attr_color`, `bump` and `wrinkle`.
 Lessons carried from earmilk's path-traced rounds: light in physical units scaled to the subject, AgX view, the key
 on the camera's side of the subject, a dome at fill strength only, no coplanar faces (they render black).
 """
@@ -167,6 +174,17 @@ def main():
             bn = nt.nodes.new('ShaderNodeBump'); bn.inputs['Strength'].default_value = bump.get('strength', 0.2)
             bn.inputs['Distance'].default_value = bump.get('distance', 0.1) * MM
             nt.links.new(tx.outputs['Fac'], bn.inputs['Height']); nt.links.new(bn.outputs['Normal'], b.inputs['Normal'])
+            wr = spec.get('wrinkle')
+            if wr:                                    # leather that has been sat in: coarse creases over the grain
+                tx2 = nt.nodes.new('ShaderNodeTexNoise'); tx2.inputs['Detail'].default_value = 3.0
+                tx2.inputs['Scale'].default_value = 1.0 / (wr.get('scale', 4.0) * MM)
+                if 'Distortion' in tx2.inputs:
+                    tx2.inputs['Distortion'].default_value = wr.get('distortion', 0.6)
+                nt.links.new(tc.outputs['Object'], tx2.inputs['Vector'])
+                bn2 = nt.nodes.new('ShaderNodeBump'); bn2.inputs['Strength'].default_value = wr.get('strength', 0.2)
+                bn2.inputs['Distance'].default_value = wr.get('distance', 0.4) * MM
+                nt.links.new(tx2.outputs['Fac'], bn2.inputs['Height']); nt.links.new(bn.outputs['Normal'], bn2.inputs['Normal'])
+                nt.links.new(bn2.outputs['Normal'], b.inputs['Normal'])
         return m
 
     for name, spec in S.get('materials', {}).items():
@@ -266,14 +284,23 @@ def main():
             skips = [list(k) for k in rings.get('skip', [])] + [[at(a0), at(a1)] for a0, a1 in rings.get('skip_mm', [])]
             for (a0, a1) in skips:                                    # smooth bands (a worm's saddle, a plug) have no rings
                 fade = rings.get('skip_fade', 0.0) / L                # ease the rings in and out over this many mm
+                keep = rings.get('skip_depth', 0.0)                   # what is left of the rings inside (0: none)
                 if fade > 0:
-                    mask = np.minimum(mask, np.clip(np.maximum(a0 - u, u - a1) / fade, 0, 1))
+                    mask = np.minimum(mask, keep + (1 - keep) * np.clip(np.maximum(a0 - u, u - a1) / fade, 0, 1))
                 else:
-                    mask[(u >= a0) & (u <= a1)] = 0.0
+                    mask[(u >= a0) & (u <= a1)] = keep
             r = r * (1 - rings['depth'] * groove * mask)
         m = spec.get('segments', 20)
         th = np.linspace(0, 2 * np.pi, m, endpoint=False)
-        V = (C[:, None, :] + r[:, None, None] * (np.cos(th)[None, :, None] * N[:, None, :] + np.sin(th)[None, :, None] * B[:, None, :])).reshape(-1, 3)
+        if spec.get('flatten'):                                     # a soft tube resting on a floor: lower and wider
+            f_ = spec['flatten']
+            upv = np.array([0, 0, 1.0]) - T[:, 2:3] * T
+            upv /= np.maximum(np.linalg.norm(upv, axis=1, keepdims=True), 1e-9)
+            sdv = np.cross(T, upv)
+            V = (C[:, None, :] + r[:, None, None] * (np.cos(th)[None, :, None] * sdv[:, None, :] * (1 + f_)
+                                                     + np.sin(th)[None, :, None] * upv[:, None, :] * (1 - f_))).reshape(-1, 3)
+        else:
+            V = (C[:, None, :] + r[:, None, None] * (np.cos(th)[None, :, None] * N[:, None, :] + np.sin(th)[None, :, None] * B[:, None, :])).reshape(-1, 3)
         faces = []
         for i in range(n - 1):
             for j in range(m):
@@ -377,11 +404,27 @@ def main():
     if rt == 'sweep':
         col = rig.get('color', '#efece6')
         m = make_material('cove', {'preset': 'matte_plastic', 'color': col, 'roughness': 0.9})
+        cam_p = Vector(shot['camera']['position']) * MM if 'position' in shot.get('camera', {}) else centre + Vector((0, -3 * D, D))
+        away_v = Vector((centre.x - cam_p.x, centre.y - cam_p.y, 0)); away_v = away_v.normalized() if away_v.length > 1e-6 else Vector((0, 1, 0))
+        if rig.get('wall_color'):                     # a deliberate gradient: the set darkens behind the subject and up the wall
+            nt_c = m.node_tree; bc = nt_c.nodes['Principled BSDF']
+            tc_c = nt_c.nodes.new('ShaderNodeTexCoord'); sub = nt_c.nodes.new('ShaderNodeVectorMath'); sub.operation = 'SUBTRACT'
+            sub.inputs[1].default_value = (centre.x, centre.y, floor_z)
+            dot = nt_c.nodes.new('ShaderNodeVectorMath'); dot.operation = 'DOT_PRODUCT'
+            dot.inputs[1].default_value = (away_v.x, away_v.y, 1.0)            # distance behind the subject, plus height
+            mr_c = nt_c.nodes.new('ShaderNodeMapRange'); mx_c = nt_c.nodes.new('ShaderNodeMix'); mx_c.data_type = 'RGBA'
+            g0, g1 = rig.get('wall_range', [0.4, 3.0])                          # in units of the subject's size
+            mr_c.inputs['From Min'].default_value, mr_c.inputs['From Max'].default_value = g0 * D, g1 * D
+            mx_c.inputs['A'].default_value = (*lin(hex_rgb(col)), 1); mx_c.inputs['B'].default_value = (*lin(hex_rgb(rig['wall_color'])), 1)
+            nt_c.links.new(tc_c.outputs['Object'], sub.inputs[0]); nt_c.links.new(sub.outputs['Vector'], dot.inputs[0])
+            nt_c.links.new(dot.outputs['Value'], mr_c.inputs['Value'])
+            nt_c.links.new(mr_c.outputs['Result'], mx_c.inputs['Factor']); nt_c.links.new(mx_c.outputs['Result'], bc.inputs['Base Color'])
         # a cove behind the subject (away from the camera), sized to the subject
         cam_pos = Vector(shot['camera']['position']) * MM if 'position' in shot.get('camera', {}) else centre + Vector((0, -3 * D, D))
         away = Vector((centre.x - cam_pos.x, centre.y - cam_pos.y, 0)); away = away.normalized() if away.length > 1e-6 else Vector((0, 1, 0))
         side = Vector((-away.y, away.x, 0))
-        W, depth, R, Hh = 14 * D, 3.0 * D, 1.6 * D, 8 * D
+        W, depth, R, Hh = 14 * D, rig.get('cove_depth', 3.0) * D, rig.get('cove_radius', 1.6) * D, 8 * D
+        Hh = max(Hh, R + 2 * D)
         prof = [(-depth * 2.5, 0.0)] + [(depth + R * math.sin(t * math.pi / 2 / 16), R - R * math.cos(t * math.pi / 2 / 16)) for t in range(17)] + [(depth + R, Hh)]
         verts, faces = [], []
         for (dd, zz) in prof:

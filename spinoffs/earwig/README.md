@@ -22,7 +22,10 @@ Voice: deadpan. The box could say "Hypoallergenic. Not a real earwig." and nothi
 - **Bud**: one lofted body and stem, 20.4 x 17.2 mm across the body, 51 mm tall from the body's top to the forceps'
   tips (body 20, stem 17.7, forceps reaching 13 beyond the stem's end). The stem hangs from the body's outer side, as on
   every stem bud.
-- **Nozzle** angled into the canal (inward, forward, a little up), 5.6 mm, with a medium silicone tip, 12.4 mm.
+- **Shell** in two parts that meet on a parting line across the head: the outer half (and the stem) glossy lacquer, the
+  inner half, the nozzle's side, satin. Signs that it was made, and a place for the seam to go.
+- **Nozzle** angled into the canal (inward, forward, a little up), 5.6 mm, with a dark mesh just inside its end and a
+  medium silicone tip, 12.4 mm, in matte warm grey.
 - **Forceps**: two tapering arms that bow apart (7.4 mm at the widest, centre to centre) and nearly touch at the tips,
   3.1 mm thick at the root, in a slightly redder chestnut than the body. Pinching flexes them onto a force sensor in the stem's end; the
   voice microphone opens between them, where the noise is least.
@@ -50,7 +53,7 @@ The buds and case stay chestnut (an earwig is chestnut); the wig changes.
 
 | Name | Buds and case | Wig | Notes |
 |---|---|---|---|
-| Chestnut (hero) | `#5b2e1a`, forceps `#7f3c18` | chestnut (melanin 0.66, redness 0.45) | tone on tone |
+| Chestnut (hero) | `#4b2414` gloss outside, satin inside, forceps `#3e1c0f` | chestnut (melanin 0.62, redness 0.36) | tone on tone |
 | Blonde | chestnut | ash blonde | |
 | Ginger | chestnut | copper | |
 | Black | chestnut | blue-black | |
@@ -58,9 +61,27 @@ The buds and case stay chestnut (an earwig is chestnut); the wig changes.
 
 ## Shots
 
-1. **Hero.** The case standing in its bob; the two buds lying on their sides in front of it, forceps out, as buds lie on
-   a table. Warm cream sweep, everything sharp.
-2. **Detail.** Macro on a bud's stem and forceps, f/5.6, the case's hair soft behind.
+1. **Hero.** The case standing in its bob, left of centre with headroom; the two buds lying on their sides in front of
+   it, facing different ways, forceps out, as buds lie on a table. Warm cream sweep darkening behind, everything
+   sharp. Lit for gloss: tall strips either side for highlight lines, a top light along the part, a low back light to
+   outline the hair, little fill.
+2. **Detail.** From above, one bud in profile against the cream floor (silicone tip up, stem, forceps), the wigged
+   case at the frame's edge for context. Everything sharp. Alone in macro against a brown background the bud was read
+   as a tobacco pipe; context keeps it an earbud.
+
+## Where the renders stand (2026-10-04)
+
+Three critic rounds per shot, the limit for this look (`critic/LOG.md`). Hero: 5, 5, 5; `renders/hero-v3.png`.
+Close-up: 4 (read as a tobacco pipe), 4, 4; `renders/detail-v3.png`. What the rounds taught, for the next pass:
+
+- **Light.** Key to fill near 3:1, a harder key so every forceps tip and the case leave a dense contact shadow, a rim
+  behind the case for the hair's ends. Strips beside the case gave the gloss its lines; keep them.
+- **The groom.** Roots that rise less along the part (or a skin-tone part line), no seam down the front (the clump grid
+  and the part's ends meet there), some locks crossing, a few flyaways. At 3 % flyaways the bob turns to frizz.
+- **Context in macro.** Alone and brown on brown, the bud read as a pipe; with its silicone tip and the wigged case in
+  frame it reads as an earbud. Keep the case in the close-up, whole and soft.
+- **Headroom.** Leave 10 to 15 % on every side for a 16:9 crop, and floor between the pieces: outlines that touch merge.
+- **Focus.** Everything sharp (stopped down or stacked): shallow focus on a 50 mm object reads as per-object blur.
 
 ## What a render must not do
 

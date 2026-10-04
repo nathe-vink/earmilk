@@ -2,7 +2,15 @@
  "parts": {
   "bud-r": {
    "material": "shell",
-   "volume_cm3": 4.255
+   "volume_cm3": 2.705
+  },
+  "inner-r": {
+   "material": "satin",
+   "volume_cm3": 1.485
+  },
+  "grille-r": {
+   "material": "grille",
+   "volume_cm3": 0.001
   },
   "pincers-r": {
    "material": "pincer",
@@ -14,7 +22,15 @@
   },
   "bud-l": {
    "material": "shell",
-   "volume_cm3": 4.255
+   "volume_cm3": 2.705
+  },
+  "inner-l": {
+   "material": "satin",
+   "volume_cm3": 1.485
+  },
+  "grille-l": {
+   "material": "grille",
+   "volume_cm3": 0.001
   },
   "pincers-l": {
    "material": "pincer",

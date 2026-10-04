@@ -29,6 +29,10 @@ BUD_SECTIONS = [
 STEM_GROOVES = (-12.6, -16.0, -19.4, -22.8)   # the abdomen's segments: shallow grooves round the stem
 GROOVE_W, GROOVE_D = 0.6, 0.11
 
+SPLIT_X = 1.6                        # the head's parting line: outer half gloss, inner half (nozzle side) satin
+SPLIT_ZMIN = -8.0                    # below this the stem stays one piece
+SEAM = 0.25
+
 # --- nozzle and ear tip (PROPOSAL; the tip is a bought size: PLACEHOLDER) ---------------------------------------------
 NOZZLE_AT = (6.5, 0.8, 2.0)          # where the nozzle's axis leaves the body
 NOZZLE_DIR = (0.84, 0.46, 0.28)      # into the canal: inward, forward, a little up

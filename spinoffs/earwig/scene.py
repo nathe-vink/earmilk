@@ -38,7 +38,7 @@ def rot(axis, deg):
 def lying_pose(side, heading, at, roll=0.0):
     """A bud on its outer side (the inner side, with the nozzle, faces up), its stem pointing along `heading` degrees on
     the floor, tilted so it rests on its body and its pincer tips; returns translate and rotate for the scene."""
-    V = np.vstack([stl_vertices(f'{p}-{side}') for p in ('bud', 'pincers', 'tip')])
+    V = np.vstack([stl_vertices(f'{p}-{side}') for p in ('bud', 'inner', 'pincers', 'tip')])
     up_local = np.array([1.0 if side == 'r' else -1.0, 0, 0])            # the inner side faces up
     zg = np.array([math.cos(math.radians(heading)), math.sin(math.radians(heading)), 0])
     xg = np.array([0, 0, 1.0])
@@ -63,30 +63,51 @@ def lying_pose(side, heading, at, roll=0.0):
 
 
 MAT = {
-    'shell': {'preset': 'lacquer', 'color': '#5b2e1a', 'roughness': 0.22, 'coat': 0.9, 'coat_roughness': 0.05},
-    'pincer': {'preset': 'lacquer', 'color': '#7f3c18', 'roughness': 0.22, 'coat': 0.9, 'coat_roughness': 0.05},
-    'silicone': {'preset': 'silicone', 'color': '#3a2219', 'roughness': 0.42},
+    'shell': {'preset': 'lacquer', 'color': '#4b2414', 'roughness': 0.28, 'coat': 1.0, 'coat_roughness': 0.025},
+    'pincer': {'preset': 'lacquer', 'color': '#3e1c0f', 'roughness': 0.28, 'coat': 1.0, 'coat_roughness': 0.025},
+    'satin': {'preset': 'satin_plastic', 'color': '#4b2414', 'roughness': 0.42, 'coat': 0.15, 'coat_roughness': 0.35},
+    'grille': {'preset': 'fabric', 'color': '#121111'},
+    'silicone': {'preset': 'silicone', 'color': '#2b2623', 'roughness': 0.62, 'sss': 0.15, 'sheen': 0.2},
     'led': {'preset': 'emissive', 'color': '#ffd9a8', 'emission': 3.0},
-    'hair': {'preset': 'hair', 'melanin': 0.66, 'redness': 0.45, 'roughness': 0.26, 'radial_roughness': 0.32, 'coat': 0.08},
+    'hair': {'preset': 'hair', 'melanin': 0.62, 'redness': 0.36, 'roughness': 0.2, 'radial_roughness': 0.3, 'coat': 0.2},
 }
 case = facts['case']
 objects = [{'id': n, 'type': 'mesh', 'file': f'out/stl/{n}.stl', 'material': parts[n]['material']} for n in ('case-base', 'case-lid', 'case-led')]
 objects.append({'id': 'wig', 'type': 'python', 'file': 'hair.py',
                 'args': {'w': case['w'], 'd': case['d'], 'h': case['h'], 'r': case['r'], 'split_z': case['split_z'],
-                         'count': HAIR_COUNT, 'radius': HAIR_RADIUS, 'volume': list(HAIR_VOLUME), 'cut_below': HAIR_CUT_BELOW_SPLIT}})
-poses = {'r': lying_pose('r', heading=160, at=(-24, -40)), 'l': lying_pose('l', heading=204, at=(14, -80))}
+                         'count': HAIR_COUNT, 'radius': HAIR_RADIUS, 'volume': list(HAIR_VOLUME), 'cut_below': HAIR_CUT_BELOW_SPLIT,
+                         'clump': 0.8, 'clump_turn': 3.5, 'flyaway': 0.006, 'cut_jitter': 0.28, 'part_cross': 0.12}})
+R_HEADING, R_AT = 40, (4, -54)                     # the bud the close-up looks at
+poses = {'r': lying_pose('r', heading=R_HEADING, at=R_AT), 'l': lying_pose('l', heading=198, at=(50, -44))}
 for side, pose in poses.items():
-    for p in ('bud', 'pincers', 'tip'):
+    for p in ('bud', 'inner', 'grille', 'pincers', 'tip'):
         objects.append({'id': f'{p}-{side}', 'type': 'mesh', 'file': f'out/stl/{p}-{side}.stl', 'material': parts[f'{p}-{side}']['material'], **pose})
 
+RIG = {'type': 'sweep', 'color': '#e8ded1', 'wall_color': '#a39383', 'wall_range': [0.2, 1.9], 'dome': 0.2,
+       'key': {'azimuth': -40, 'elevation': 50, 'power': 0.7},
+       'fill': {'azimuth': 45, 'elevation': 25, 'power': 0.35},
+       'rim': {'azimuth': 180, 'elevation': 12, 'power': 1.6, 'size': 1.2},
+       'lights': [{'azimuth': -72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 2.2},
+                  {'azimuth': 72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 1.8},
+                  {'azimuth': 0, 'elevation': 86, 'size': 0.7, 'distance': 2.0, 'power': 1.2}]}
+# round 3 of the hero: a graded reflection across the case's face, less fill, a lighter sweep with a darker far end
+RIG3 = {'type': 'sweep', 'color': '#f1eae1', 'wall_color': '#ab9c8b', 'wall_range': [0.4, 2.2], 'dome': 0.12,
+        'key': {'azimuth': -40, 'elevation': 50, 'power': 0.55},
+        'fill': {'azimuth': 45, 'elevation': 25, 'power': 0.15},
+        'rim': {'azimuth': 180, 'elevation': 12, 'power': 1.8, 'size': 1.2},
+        'lights': [{'azimuth': -72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 2.4},
+                   {'azimuth': 72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 2.0},
+                   {'azimuth': 0, 'elevation': 86, 'size': 0.7, 'distance': 2.0, 'power': 1.2},
+                   {'azimuth': 14, 'elevation': 34, 'size': [1.1, 0.45], 'distance': 2.4, 'power': 0.7}]}
 shots = {
-    'hero': {'size': [1800, 1200], 'samples': 160,
-             'rig': {'type': 'sweep', 'color': '#eadfd2', 'key': {'azimuth': -48, 'elevation': 52}, 'rim': {'azimuth': 155, 'elevation': 32, 'power': 1.4}},
-             'camera': {'position': [-160, -395, 318], 'target': [8, -34, 16], 'lens': 100},
+    'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG3, 'exposure': 0.25,
+             'camera': {'position': [-160, -478, 290], 'target': [34, -36, 18], 'lens': 100},
              'floor_z': 0},
-    'detail': {'size': [1800, 1200], 'samples': 192,
-               'rig': {'type': 'sweep', 'color': '#eadfd2', 'key': {'azimuth': -40, 'elevation': 45}, 'rim': {'azimuth': 160, 'elevation': 25}},
-               'camera': {'position': [140, -200, 40], 'target': [30, -72, 6], 'lens': 100, 'fstop': 5.6, 'focus': [42, -68, 4]},
+    'detail': {'size': [1800, 1200], 'samples': 192, 'rig': RIG3,
+               # the bud on the right third, its forceps pointing into the frame, the wigged case whole behind it
+               'camera': {'position': [R_AT[0] - 2, R_AT[1] - 170, 118], 'target': [R_AT[0] - 22, R_AT[1] + 30, 12], 'lens': 50,
+                          'fstop': 8, 'focus': [R_AT[0], R_AT[1], 5]},
+               'hide': ['bud-l', 'inner-l', 'grille-l', 'pincers-l', 'tip-l'],
                'floor_z': 0},
 }
 json.dump({'materials': MAT, 'objects': objects, 'shots': shots}, open(os.path.join(HERE, 'shots.json'), 'w'), indent=1)

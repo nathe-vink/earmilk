@@ -76,14 +76,36 @@ def case():
     return base, lid, led, zs
 
 
+def split_shell(body):
+    """Two-part shell: the outer half gloss, the inner half (the nozzle's side) satin, a parting line between them.
+    Only the head splits; the stem stays one piece."""
+    big = 80.0
+    outer_box = Pos(SPLIT_X - SEAM / 2 - big / 2, 0, SPLIT_ZMIN + big / 2) * Box(big, big, big)
+    inner_box = Pos(SPLIT_X + SEAM / 2 + big / 2, 0, SPLIT_ZMIN + big / 2) * Box(big, big, big)
+    gap = Pos(SPLIT_X, 0, SPLIT_ZMIN + big / 2) * Box(SEAM, big, big)
+    lower = Pos(0, 0, SPLIT_ZMIN - big / 2) * Box(big, big, big)
+    outer = (body & outer_box) + (body & lower)
+    inner = body & inner_box
+    return outer - gap, inner
+
+
+def grille(end, d):
+    """The nozzle's mesh, just in front of its end face, so the tip's hole reads as an opening."""
+    pl = Plane(origin=tuple(end + d * 0.05), z_dir=tuple(d))
+    return pl * Cylinder(1.85, 0.1)
+
+
 def build():
     body, d, end = bud_body()
     tip = ear_tip(end, d)
+    body, inner = split_shell(body)
+    mesh = grille(end, d)
     pins = pincer(1) + pincer(-1)
     base, lid, led, zs = case()
     parts = {
-        'bud-r': (body, 'shell'), 'pincers-r': (pins, 'pincer'), 'tip-r': (tip, 'silicone'),
-        'bud-l': (mirror(body, Plane.YZ), 'shell'), 'pincers-l': (mirror(pins, Plane.YZ), 'pincer'), 'tip-l': (mirror(tip, Plane.YZ), 'silicone'),
+        'bud-r': (body, 'shell'), 'inner-r': (inner, 'satin'), 'grille-r': (mesh, 'grille'), 'pincers-r': (pins, 'pincer'), 'tip-r': (tip, 'silicone'),
+        'bud-l': (mirror(body, Plane.YZ), 'shell'), 'inner-l': (mirror(inner, Plane.YZ), 'satin'), 'grille-l': (mirror(mesh, Plane.YZ), 'grille'),
+        'pincers-l': (mirror(pins, Plane.YZ), 'pincer'), 'tip-l': (mirror(tip, Plane.YZ), 'silicone'),
         'case-base': (base, 'shell'), 'case-lid': (lid, 'shell'), 'case-led': (led, 'led'),
     }
     facts = {'case': {'w': CASE_W, 'd': CASE_D, 'h': CASE_H, 'r': CASE_R, 'split_z': zs},

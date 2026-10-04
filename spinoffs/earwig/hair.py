@@ -10,7 +10,8 @@ strands grow in about two seconds. Rendered as Cycles curves with the Principled
 
 
 def build(ctx, w, d, h, r, split_z, count=30000, radius=0.035, volume=(0.3, 3.2), cut_below=1.8, seed=7,
-          material='hair', points=16, step=0.45, translate=(0, 0, 0), frizz=0.08, clump=0.5, tuck=0.45):
+          material='hair', points=16, step=0.45, translate=(0, 0, 0), frizz=0.08, clump=0.5, tuck=0.45,
+          clump_turn=6.0, flyaway=0.0, cut_jitter=0.18, part_cross=0.0):
     np, bpy, MM = ctx.np, ctx.bpy, ctx.MM
     rng = np.random.default_rng(seed)
     c = np.array([0.0, 0.0, h / 2]); inner = np.array([w / 2, d / 2, h / 2]) - r
@@ -34,13 +35,20 @@ def build(ctx, w, d, h, r, split_z, count=30000, radius=0.035, volume=(0.3, 3.2)
     p = np.column_stack([x, y, z])
     hs = rng.uniform(volume[0], volume[1], n) ** 1.0                       # each strand's height off the lid
     half_part = w / 2 - d / 2                                              # the part runs along x, as long as the top is flat
-    cut = split_z - cut_below + rng.normal(0, 0.18, n)                     # a level cut, not a ruler's
+    cut = split_z - cut_below + rng.normal(0, cut_jitter, n)               # a level cut, not a ruler's
     # clumps: strands near each other share a small offset, so the surface breaks into locks instead of felt
     cell = 2.2                                                             # clump size, mm
     gx = np.floor((x + w) / cell).astype(int); gy = np.floor((y + d) / cell).astype(int)
     near = gx * 1000 + gy
     _, near = np.unique(near, return_inverse=True)
-    cl_off = rng.normal(0, 1, (near.max() + 1, 3)) * 0.35
+    ncl = near.max() + 1
+    cl_off = rng.normal(0, 1, (ncl, 3)) * 0.35
+    cl_turn = np.radians(rng.normal(0, clump_turn, ncl))[near]           # each lock combed a few degrees its own way
+    cut = cut + rng.normal(0, cut_jitter, ncl)[near]                       # and cut a little longer or shorter
+    fly = rng.random(n) < flyaway                                          # a few strands that will not lie down
+    fly_side = rng.normal(0, 1, n) * fly
+    cross = (np.abs(y) < 2.5) & (rng.random(n) < part_cross)               # strands that start across the part
+    cross_dir = -np.sign(y) * cross
     track = [p.copy()]
     alive = np.ones(n, bool); travelled = np.zeros(n)
     wob_phase = rng.uniform(0, 2 * np.pi, n); wob_k = rng.uniform(0.6, 1.4, n)
@@ -52,17 +60,21 @@ def build(ctx, w, d, h, r, split_z, count=30000, radius=0.035, volume=(0.3, 3.2)
         out = p.copy(); out[:, 0] = p[:, 0] - np.clip(p[:, 0], -half_part, half_part); out[:, 2] = 0
         out /= np.maximum(np.linalg.norm(out, axis=1, keepdims=True), 1e-6)
         v = out * 0.7 + np.array([0, 0, -1.0])
+        early = np.clip(1 - travelled / 3.0, 0, 1)                         # crossing the part, for the first 3 mm
+        v = v + np.column_stack([np.zeros(n), cross_dir * 1.5 * early, np.zeros(n)])
         v = v - (v * nn).sum(1, keepdims=True) * nn
         v /= np.maximum(np.linalg.norm(v, axis=1, keepdims=True), 1e-9)
-        # a little wave and frizz
         side = np.cross(nn, v)
-        v = v + side * (frizz * np.sin(travelled * wob_k * 0.9 + wob_phase))[:, None]
+        v = v * np.cos(cl_turn)[:, None] + side * np.sin(cl_turn)[:, None]  # the lock's own direction
+        side = np.cross(nn, v)
+        # a little wave and frizz, and the flyaways drifting off sideways
+        v = v + side * (frizz * np.sin(travelled * wob_k * 0.9 + wob_phase) + 0.25 * fly_side * np.clip(travelled / 12.0, 0, 1))[:, None]
         q = p + v * step
         # hold each strand at its own height: rise from the root over 2.5 mm, tuck under over the last 3 mm before the cut
         rise = np.clip(travelled / 2.5, 0, 1)
         to_cut = q[:, 2] - cut
         tuck_k = np.where(to_cut < 3.0, 1 - tuck * (1 - np.clip(to_cut / 3.0, 0, 1)), 1.0)
-        target = hs * (rise * (2 - rise)) * tuck_k
+        target = hs * (rise * (2 - rise)) * tuck_k * (1 + 0.6 * fly * np.clip(travelled / 12.0, 0, 1))
         target = target + (cl_off[near] * nn).sum(1) * clump * rise
         q = q - ((sdf(q) - np.maximum(target, 0.05)))[:, None] * normal(q)
         p = np.where(alive[:, None], q, p)

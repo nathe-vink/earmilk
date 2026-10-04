@@ -16,14 +16,18 @@ CAD lives in `.venv-fab`. `studio/setup.sh` repairs both.
   soft_touch, rubber, silicone, gummy, skin, lacquer, metal_polished, metal_satin, metal_brushed, anodized, leather,
   protein_leather, fabric, glass, smoked_glass, emissive, paper, wood, hair (Principled Hair: melanin, redness,
   roughness, radial_roughness, coat, tint). Overrides: roughness, metallic, coat, coat_roughness, sheen, sss,
-  sss_scale (mm), transmission, ior, emission, bump, `top_color` (a second colour on upward faces, e.g. a worm's back).
+  sss_scale (mm), transmission, ior, emission, bump, `wrinkle` (a coarse second bump: creased leather), `top_color` (a
+  second colour on upward faces, e.g. a worm's back), `attr_color` (blend to another colour where a tube's attr says).
 - `objects`: `mesh` (STL in mm, GLB, OBJ; translate mm, rotate degrees XYZ, smooth angle), `tube` (Catmull-Rom path
   through `points`; `radius`; `profile` by fraction or `profile_mm` by distance, negative from the end; `rings` with
-  pitch, depth, width, `skip_mm` and `skip_fade`; `bands` of another material by distance; caps; segments), `python`
+  pitch, depth, width, `jitter`, `skip_mm`, `skip_fade`, `skip_depth`; `attrs` that fade in and out by distance;
+  `bands` of another material by distance; `flatten` for a soft tube on a floor; caps; segments), `python`
   (a hook module with `build(ctx, **args)`; ctx has bpy, np, MM, material(), scene, base).
-- `shots`: size, samples, `rig` (`sweep`: cove colour, key/fill/rim azimuth, elevation, power, dome; `table`: surface,
-  wall, window), `camera` (position and target in mm, or azimuth/elevation/fill; lens; fstop and focus for depth of
-  field), hide, objects_extra, exposure, look, floor_z.
+- `shots`: size, samples, `rig` (`sweep`: cove colour, cove_depth, cove_radius, wall_color and wall_range for a
+  gradient, key/fill/rim azimuth, elevation, size, power, dome; `table`: surface, wall, window; any rig: `lights`, a
+  list of extra area lights, strips as `size: [w, h]`), `camera` (position and target in mm, or azimuth/elevation/
+  fill; lens; fstop and focus for depth of field), hide, objects_extra (a shot can re-dress a cable), exposure, look,
+  floor_z.
 
 ## Habits that keep renders good
 
@@ -31,6 +35,13 @@ CAD lives in `.venv-fab`. `studio/setup.sh` repairs both.
   1800 x 1200, 160 samples, 4 CPUs). Run finals in the background.
 - Rigs size themselves to the subject's bounding box; lights are in physical units scaled to it. Keep the key on
   the camera's side. The dome is fill only.
+- What the critic rounds on earworm and earwig taught: a broad soft wash reads as clay and as candy. Give dark and
+  glossy products two tall strips behind or beside them for edge lines, a high soft key that rolls the shapes from
+  light to dark, a small hard light for glints, and little fill so parts meet the floor in a dark contact line. Keep
+  the floor-to-wall horizon out of frame (raise the camera, or deepen the cove). In a macro, keep same-colour props
+  out from behind the subject: an earbud alone in brown on brown was read as a tobacco pipe. Shallow focus on a
+  50 mm product reads as per-object blur: stop down so everything is sharp. Keep outlines apart: two that touch merge.
+  Breaking up a wet coat beats raising it: raised, it glints on every ring like a steel spring.
 - Depth of field: product heroes want everything sharp (no `fstop`); macros want f/4 to f/5.6 with `focus` set.
   At 100 mm and 0.4 m, f/16 still holds only about 2 cm.
 - No coplanar faces between solids. Keep parts 0.3 to 0.5 mm apart or overlapping.

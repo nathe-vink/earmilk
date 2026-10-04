@@ -2,22 +2,35 @@
  "materials": {
   "shell": {
    "preset": "lacquer",
-   "color": "#5b2e1a",
-   "roughness": 0.22,
-   "coat": 0.9,
-   "coat_roughness": 0.05
+   "color": "#4b2414",
+   "roughness": 0.28,
+   "coat": 1.0,
+   "coat_roughness": 0.025
   },
   "pincer": {
    "preset": "lacquer",
-   "color": "#7f3c18",
-   "roughness": 0.22,
-   "coat": 0.9,
-   "coat_roughness": 0.05
+   "color": "#3e1c0f",
+   "roughness": 0.28,
+   "coat": 1.0,
+   "coat_roughness": 0.025
+  },
+  "satin": {
+   "preset": "satin_plastic",
+   "color": "#4b2414",
+   "roughness": 0.42,
+   "coat": 0.15,
+   "coat_roughness": 0.35
+  },
+  "grille": {
+   "preset": "fabric",
+   "color": "#121111"
   },
   "silicone": {
    "preset": "silicone",
-   "color": "#3a2219",
-   "roughness": 0.42
+   "color": "#2b2623",
+   "roughness": 0.62,
+   "sss": 0.15,
+   "sheen": 0.2
   },
   "led": {
    "preset": "emissive",
@@ -26,11 +39,11 @@
   },
   "hair": {
    "preset": "hair",
-   "melanin": 0.66,
-   "redness": 0.45,
-   "roughness": 0.26,
-   "radial_roughness": 0.32,
-   "coat": 0.08
+   "melanin": 0.62,
+   "redness": 0.36,
+   "roughness": 0.2,
+   "radial_roughness": 0.3,
+   "coat": 0.2
   }
  },
  "objects": [
@@ -68,7 +81,12 @@
      0.3,
      3.2
     ],
-    "cut_below": 1.8
+    "cut_below": 1.8,
+    "clump": 0.8,
+    "clump_turn": 3.5,
+    "flyaway": 0.006,
+    "cut_jitter": 0.28,
+    "part_cross": 0.12
    }
   },
   {
@@ -77,14 +95,46 @@
    "file": "out/stl/bud-r.stl",
    "material": "shell",
    "translate": [
-    -24,
-    -40,
+    4,
+    -54,
     9.782454901733843
    ],
    "rotate": [
-    -1.9421282643869634e-15,
+    -2.5454291208046852e-15,
     -79.32755790302667,
-    -20.00000000000001
+    -140.0
+   ]
+  },
+  {
+   "id": "inner-r",
+   "type": "mesh",
+   "file": "out/stl/inner-r.stl",
+   "material": "satin",
+   "translate": [
+    4,
+    -54,
+    9.782454901733843
+   ],
+   "rotate": [
+    -2.5454291208046852e-15,
+    -79.32755790302667,
+    -140.0
+   ]
+  },
+  {
+   "id": "grille-r",
+   "type": "mesh",
+   "file": "out/stl/grille-r.stl",
+   "material": "grille",
+   "translate": [
+    4,
+    -54,
+    9.782454901733843
+   ],
+   "rotate": [
+    -2.5454291208046852e-15,
+    -79.32755790302667,
+    -140.0
    ]
   },
   {
@@ -93,14 +143,14 @@
    "file": "out/stl/pincers-r.stl",
    "material": "pincer",
    "translate": [
-    -24,
-    -40,
+    4,
+    -54,
     9.782454901733843
    ],
    "rotate": [
-    -1.9421282643869634e-15,
+    -2.5454291208046852e-15,
     -79.32755790302667,
-    -20.00000000000001
+    -140.0
    ]
   },
   {
@@ -109,14 +159,14 @@
    "file": "out/stl/tip-r.stl",
    "material": "silicone",
    "translate": [
-    -24,
-    -40,
+    4,
+    -54,
     9.782454901733843
    ],
    "rotate": [
-    -1.9421282643869634e-15,
+    -2.5454291208046852e-15,
     -79.32755790302667,
-    -20.00000000000001
+    -140.0
    ]
   },
   {
@@ -125,14 +175,46 @@
    "file": "out/stl/bud-l.stl",
    "material": "shell",
    "translate": [
-    14,
-    -80,
+    50,
+    -44,
     9.782454901733843
    ],
    "rotate": [
-    -2.645478386540169e-15,
+    -2.0923348249538133e-16,
     79.32755790302667,
-    -156.00000000000003
+    -162.00000000000003
+   ]
+  },
+  {
+   "id": "inner-l",
+   "type": "mesh",
+   "file": "out/stl/inner-l.stl",
+   "material": "satin",
+   "translate": [
+    50,
+    -44,
+    9.782454901733843
+   ],
+   "rotate": [
+    -2.0923348249538133e-16,
+    79.32755790302667,
+    -162.00000000000003
+   ]
+  },
+  {
+   "id": "grille-l",
+   "type": "mesh",
+   "file": "out/stl/grille-l.stl",
+   "material": "grille",
+   "translate": [
+    50,
+    -44,
+    9.782454901733843
+   ],
+   "rotate": [
+    -2.0923348249538133e-16,
+    79.32755790302667,
+    -162.00000000000003
    ]
   },
   {
@@ -141,14 +223,14 @@
    "file": "out/stl/pincers-l.stl",
    "material": "pincer",
    "translate": [
-    14,
-    -80,
+    50,
+    -44,
     9.782454901733843
    ],
    "rotate": [
-    -2.645478386540169e-15,
+    -2.0923348249538133e-16,
     79.32755790302667,
-    -156.00000000000003
+    -162.00000000000003
    ]
   },
   {
@@ -157,14 +239,14 @@
    "file": "out/stl/tip-l.stl",
    "material": "silicone",
    "translate": [
-    14,
-    -80,
+    50,
+    -44,
     9.782454901733843
    ],
    "rotate": [
-    -2.645478386540169e-15,
+    -2.0923348249538133e-16,
     79.32755790302667,
-    -156.00000000000003
+    -162.00000000000003
    ]
   }
  ],
@@ -177,27 +259,80 @@
    "samples": 160,
    "rig": {
     "type": "sweep",
-    "color": "#eadfd2",
+    "color": "#f1eae1",
+    "wall_color": "#ab9c8b",
+    "wall_range": [
+     0.4,
+     2.2
+    ],
+    "dome": 0.12,
     "key": {
-     "azimuth": -48,
-     "elevation": 52
+     "azimuth": -40,
+     "elevation": 50,
+     "power": 0.55
+    },
+    "fill": {
+     "azimuth": 45,
+     "elevation": 25,
+     "power": 0.15
     },
     "rim": {
-     "azimuth": 155,
-     "elevation": 32,
-     "power": 1.4
-    }
+     "azimuth": 180,
+     "elevation": 12,
+     "power": 1.8,
+     "size": 1.2
+    },
+    "lights": [
+     {
+      "azimuth": -72,
+      "elevation": 18,
+      "size": [
+       0.16,
+       1.5
+      ],
+      "distance": 1.5,
+      "power": 2.4
+     },
+     {
+      "azimuth": 72,
+      "elevation": 18,
+      "size": [
+       0.16,
+       1.5
+      ],
+      "distance": 1.5,
+      "power": 2.0
+     },
+     {
+      "azimuth": 0,
+      "elevation": 86,
+      "size": 0.7,
+      "distance": 2.0,
+      "power": 1.2
+     },
+     {
+      "azimuth": 14,
+      "elevation": 34,
+      "size": [
+       1.1,
+       0.45
+      ],
+      "distance": 2.4,
+      "power": 0.7
+     }
+    ]
    },
+   "exposure": 0.25,
    "camera": {
     "position": [
      -160,
-     -395,
-     318
+     -478,
+     290
     ],
     "target": [
-     8,
-     -34,
-     16
+     34,
+     -36,
+     18
     ],
     "lens": 100
    },
@@ -211,35 +346,95 @@
    "samples": 192,
    "rig": {
     "type": "sweep",
-    "color": "#eadfd2",
+    "color": "#f1eae1",
+    "wall_color": "#ab9c8b",
+    "wall_range": [
+     0.4,
+     2.2
+    ],
+    "dome": 0.12,
     "key": {
      "azimuth": -40,
-     "elevation": 45
+     "elevation": 50,
+     "power": 0.55
+    },
+    "fill": {
+     "azimuth": 45,
+     "elevation": 25,
+     "power": 0.15
     },
     "rim": {
-     "azimuth": 160,
-     "elevation": 25
-    }
+     "azimuth": 180,
+     "elevation": 12,
+     "power": 1.8,
+     "size": 1.2
+    },
+    "lights": [
+     {
+      "azimuth": -72,
+      "elevation": 18,
+      "size": [
+       0.16,
+       1.5
+      ],
+      "distance": 1.5,
+      "power": 2.4
+     },
+     {
+      "azimuth": 72,
+      "elevation": 18,
+      "size": [
+       0.16,
+       1.5
+      ],
+      "distance": 1.5,
+      "power": 2.0
+     },
+     {
+      "azimuth": 0,
+      "elevation": 86,
+      "size": 0.7,
+      "distance": 2.0,
+      "power": 1.2
+     },
+     {
+      "azimuth": 14,
+      "elevation": 34,
+      "size": [
+       1.1,
+       0.45
+      ],
+      "distance": 2.4,
+      "power": 0.7
+     }
+    ]
    },
    "camera": {
     "position": [
-     140,
-     -200,
-     40
+     2,
+     -224,
+     118
     ],
     "target": [
-     30,
-     -72,
-     6
+     -18,
+     -24,
+     12
     ],
-    "lens": 100,
-    "fstop": 5.6,
+    "lens": 50,
+    "fstop": 8,
     "focus": [
-     42,
-     -68,
-     4
+     4,
+     -54,
+     5
     ]
    },
+   "hide": [
+    "bud-l",
+    "inner-l",
+    "grille-l",
+    "pincers-l",
+    "tip-l"
+   ],
    "floor_z": 0
   }
  }

@@ -43,11 +43,12 @@ GROMMET_LEN = 6.0
 GROMMET_ANGLE = 50.0      # degrees from straight down, toward the front: the worm leaves forward, where the camera sees it
 WORM_R = 3.2              # cable radius: 6.4 mm, a thick cable and a thin worm; thinner stops reading as a worm
 WORM_RING_PITCH = 2.4     # annuli
-WORM_RING_DEPTH = 0.055   # groove depth as a fraction of the radius
+WORM_RING_DEPTH = 0.04    # groove depth as a fraction of the radius
 CLITELLUM_FROM_HEAD = 290.0   # the saddle band, which is the inline remote, measured along the cable from the cup
 CLITELLUM_LEN = 34.0
-CLITELLUM_SWELL = 1.28    # radius factor at the saddle
+CLITELLUM_SWELL = 1.4     # radius factor at the saddle
 CABLE_LEN = 1200.0        # cup to plug
+WORM_FLATTEN = 0.1        # a soft sleeve lying on a floor is 10 % lower and wider than it is round
 
 # --- plug (PLACEHOLDER: 3.5 mm TRRS, CTIA, as bought) ----------------------------------------------------------------
 PLUG_D = 3.5

@@ -58,9 +58,27 @@ nothing else.
 
 ## Shots
 
-1. **Hero.** Standing on their cups on a neutral sweep; the worm leaves the left cup's burrow and crawls across the
-   floor toward the camera, saddle and plug in frame. Everything sharp.
-2. **Detail.** The worm's head going into the burrow, low and close, f/4.
+1. **Hero.** Standing on their cups on a neutral sweep, seen from about 30 degrees up so the floor fills the frame and
+   no horizon shows; the worm leaves the left cup's burrow and crawls across the floor toward the camera, saddle and
+   plug in frame, room on the right for copy. Everything sharp. Lit for dark gloss: a high soft key, a softbox high
+   behind, two tall strips behind for edge lines, a small hard light for glints on the worm, little fill.
+2. **Detail.** The left cup whole, wordmark readable, the worm leaving the burrow; for this shot the cable is
+   re-dressed in an S in front of the cup that turns back into the frame. f/22, the far cup soft.
+
+## Where the renders stand (2026-10-04)
+
+Three critic rounds per shot, the limit for this look (`critic/LOG.md`). Hero: 4, 5, 4; `renders/hero-v2.png` is the
+one to show. Close-up: 4, 5, 5; `renders/detail-v3.png`. What every round asked for, and the next pass should do:
+
+- **Light for dark gloss.** Strips behind for edge lines, a high soft key, a pin light for glints, little fill. Most of
+  the gain came from this; the critic still wants more contrast on the black cups.
+- **The worm alive, not machined.** Vary ring width and depth along the body, not just pitch; break the wet coat with a
+  roughness texture instead of raising it (raised, it glints on every crest); a pinch where it enters the burrow; the
+  saddle shot low enough that its swelling shows.
+- **Signs of manufacture.** Real pleats in the pads (geometry, not bump), stitching and edge binding on the band, a
+  grille in the driver openings.
+- **The set.** A floor that runs past the frame from any camera height; frames chosen on purpose (the whole product
+  with its band, or tight on the burrow).
 
 ## What a render must not do
 
