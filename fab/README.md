@@ -83,6 +83,27 @@ The simulation is the standard vented-box model fed with each driver's published
 ![Woofer response](out/acoustics/woofer-response.png)
 ![Port air speed](out/acoustics/port-speed.png)
 
+## Crossover (a starting point from models)
+
+`crossover.py` joins the mid set (DSA315-8, SB17MFC35-8, R3004/602200) with a textbook three-way network (third-order
+low-pass on the woofer, a band-pass and L-pad on the mid, a third-order high-pass and L-pad on the tweeter) and fits
+its 14 parts to Linkwitz-Riley targets at the label's 350 Hz and 2.2 kHz with `studio/xover/xover.py`. The drivers
+are lumped models from their datasheets in their boxes (88.1 L at 32 Hz, 7.6 L sealed, the bowl), placed where the
+spec puts them, with delays to a seated listener at 2.5 m. Results in `out/xover/`: `response.png`, `parts.csv`,
+`design.json`.
+
+- In the model the sum holds within about 2 dB from 150 Hz to 16 kHz and the impedance bottoms at 3.7 ohm: a 4 ohm
+  speaker, not the label's 8.
+- The bowl puts the tweeter 170 mm behind the front face, so it reaches the listener 0.37 ms after the mid. The fit
+  absorbs it with the mid in positive polarity; measured drivers will move it.
+- The woofer's first inductor is large (about 5 mH): wind it in 14 AWG air core, or use a laminated steel core for
+  lower resistance and size.
+- **Replace with measurements before buying parts.** Measure each driver in its finished box (gated FRD on the
+  listening axis, ZMA), put the files in the design as `"frd"` and `"zma"`, and run
+  `.venv-fab/bin/python studio/xover/xover.py fab/out/xover/design.json --optimize`.
+
+![Crossover](out/xover/response.png)
+
 ## Driver shortlist (a proposal for the README's open question)
 
 | Set | Woofer | Mid | Tweeter | Drivers per speaker |
@@ -104,7 +125,7 @@ The CAD tools need numpy 2 and Blender's `bpy` needs numpy 1, so the CAD tools l
     python3 -m venv .venv-fab && .venv-fab/bin/pip install -r fab/requirements.txt
     FAB_PY=.venv-fab/bin/python fab/build.sh
 
-`build.sh` runs `cad.py` (solids, STEP, STL, volumes), `acoustics.py` (port length, simulation, charts; it and the CAD settle the port in two passes), `flats.py` (DXF, nesting, cut list), `typeset.py` (letters, plate, stencils, templates; fonts from `render/fonts`), `drawings.py` (shop drawings), then `render_views.py` with the system Python and `bpy` (exploded and section views).
+`build.sh` runs `cad.py` (solids, STEP, STL, volumes), `acoustics.py` (port length, simulation, charts; it and the CAD settle the port in two passes), `crossover.py` (a starting network from driver models), `flats.py` (DXF, nesting, cut list), `typeset.py` (letters, plate, stencils, templates; fonts from `render/fonts`), `drawings.py` (shop drawings), then `render_views.py` with the system Python and `bpy` (exploded and section views).
 
 ## Checks the files pass
 

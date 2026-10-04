@@ -1,0 +1,108 @@
+{
+ "parts": {
+  "shell-r": {
+   "material": "shell",
+   "volume_cm3": 227.49
+  },
+  "shell-l": {
+   "material": "shell",
+   "volume_cm3": 226.83
+  },
+  "cushion-r": {
+   "material": "cushion",
+   "volume_cm3": 115.58
+  },
+  "cushion-l": {
+   "material": "cushion",
+   "volume_cm3": 115.58
+  },
+  "baffle-r": {
+   "material": "cloth",
+   "volume_cm3": 2.11
+  },
+  "baffle-l": {
+   "material": "cloth",
+   "volume_cm3": 2.11
+  },
+  "yoke-r": {
+   "material": "metal",
+   "volume_cm3": 9.11
+  },
+  "yoke-l": {
+   "material": "metal",
+   "volume_cm3": 9.11
+  },
+  "band": {
+   "material": "shell",
+   "volume_cm3": 44.04
+  },
+  "pad": {
+   "material": "cushion",
+   "volume_cm3": 40.14
+  },
+  "sliders": {
+   "material": "metal",
+   "volume_cm3": 15.0
+  },
+  "grommet": {
+   "material": "metal",
+   "volume_cm3": 0.72
+  },
+  "plug-barrel": {
+   "material": "metal",
+   "volume_cm3": 0.53
+  },
+  "plug": {
+   "material": "plug",
+   "volume_cm3": 0.12
+  },
+  "plug-rings": {
+   "material": "plug_rings",
+   "volume_cm3": 0.03
+  }
+ },
+ "facts": {
+  "grommet": {
+   "start": [
+    -109.5,
+    -36.38711104815145,
+    -30.53241146011062
+   ],
+   "dir": [
+    0.0,
+    -0.766044443118978,
+    -0.6427876096865394
+   ],
+   "mouth": [
+    -109.5,
+    -42.89848881466277,
+    -35.9961061424462
+   ]
+  },
+  "band": {
+   "zc": 22.99375,
+   "R": 117.00625,
+   "theta": 71.5621477237851
+  },
+  "wordmark_width_mm": 50.8,
+  "floor_z": -50.0
+ },
+ "print": {
+  "print-shell-r": {
+   "volume_cm3": 36.29,
+   "valid": true
+  },
+  "print-shell-l": {
+   "volume_cm3": 36.2,
+   "valid": true
+  },
+  "print-baffle-r": {
+   "volume_cm3": 12.97,
+   "valid": true
+  },
+  "print-baffle-l": {
+   "volume_cm3": 12.97,
+   "valid": true
+  }
+ }
+}

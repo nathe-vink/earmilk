@@ -7,6 +7,7 @@ PY="${FAB_PY:-.venv-fab/bin/python}"
 "$PY" fab/acoustics.py    # port length for 32 Hz, simulation, charts
 "$PY" fab/cad.py          # again, with the new port length
 "$PY" fab/acoustics.py    # and settle
+"$PY" fab/crossover.py    # a starting crossover from driver models (replace with measurements)
 "$PY" fab/flats.py        # DXF panels, nesting, cut list
 "$PY" fab/typeset.py      # letters, plate, stencils, templates
 "$PY" fab/drawings.py     # shop drawings

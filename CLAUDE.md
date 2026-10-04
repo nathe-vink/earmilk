@@ -53,3 +53,11 @@ Read `README.md` first. It is the handoff and the brief. The canvas it links to 
 
 - Commit a render together with the prompt version that produced it and its critic log row.
 - The canvas is edited on the canvas, not here. If the canvas and this repo disagree, say so and ask which is right; do not silently update either. The canvas carries the 2026-10-02 direction since its version 10, the cast-letter wordmark (no plate) since version 11, the contained back panel since version 12, the bronze plate, the back letters and the two spec marks since version 13, and SHAKE WELL on the plinth with the Facts footnote inside its border since version 14: no sleeve, the colour a finish, the plinth, the metal letters, the engraved back wordmark, the Sleeves board redrawn as Finish, and the Facts row changed to Finish. Its copy changes are drafts (marked in `copy/hero.md`) until the owner approves them.
+
+## Tools and the family (since 2026-10-04)
+
+- **Setup from scratch:** `studio/setup.sh` (idempotent; `--doctor` also runs `studio/doctor.py`, which exercises Chromium, Cycles, the CAD venv, the crossover simulator and the spec check). The cloud start hook in `.claude/hooks/session-start.sh` runs it and exports `FAB_PY` (the venv's Python).
+- **Two Pythons, on purpose:** the system Python has `bpy` and numpy 1; `.venv-fab` has build123d, numpy 2 and scipy. Never install CAD packages into the system Python.
+- **Skills:** `.claude/skills/new-product`, `pathtrace`, `critic-round`, `fab-package`. Use them.
+- **Spin-offs live in `spinoffs/<name>/`**, each with its own brief (`README.md`), `params.py`, `model.py`, `scene.py`, renders and critic log. earmilk's spec rules bind earmilk only; the family rules bind everything: proposals until the owner signs them, one joke per surface, the critic protocol (fresh context, image only, three rounds per shot per look), no keys in the repo.
+

@@ -1,0 +1,15 @@
+id,type,value,unit,between,note
+L1,L,5.2,mH,in-w1,air core, 14 AWG, DCR about 0.64 ohm
+C1,C,120,uF,w1-0,polypropylene film, 100 V or more
+L2,L,1.6,mH,w1-w2,air core, 14 AWG, DCR about 0.35 ohm
+C2,C,56,uF,in-m1,polypropylene film, 100 V or more
+L3,L,2.2,mH,m1-0,air core, 18 AWG, DCR about 1.01 ohm
+L4,L,0.95,mH,m1-m2,air core, 18 AWG, DCR about 0.66 ohm
+C3,C,15,uF,m2-0,polypropylene film, 100 V or more
+R1,R,3.9,ohm,m2-m3,10 W wirewound or metal oxide
+R2,R,100,ohm,m3-0,10 W wirewound or metal oxide
+C4,C,12,uF,in-t1,polypropylene film, 100 V or more
+L5,L,0.2,mH,t1-0,air core, 20 AWG, DCR about 0.48 ohm
+C5,C,18,uF,t1-t2,polypropylene film, 100 V or more
+R3,R,1.6,ohm,t2-t3,10 W wirewound or metal oxide
+R4,R,56,ohm,t3-0,10 W wirewound or metal oxide

@@ -1,0 +1,50 @@
+{
+ "parts": {
+  "bud-r": {
+   "material": "shell",
+   "volume_cm3": 4.255
+  },
+  "pincers-r": {
+   "material": "pincer",
+   "volume_cm3": 0.132
+  },
+  "tip-r": {
+   "material": "silicone",
+   "volume_cm3": 0.647
+  },
+  "bud-l": {
+   "material": "shell",
+   "volume_cm3": 4.255
+  },
+  "pincers-l": {
+   "material": "pincer",
+   "volume_cm3": 0.132
+  },
+  "tip-l": {
+   "material": "silicone",
+   "volume_cm3": 0.647
+  },
+  "case-base": {
+   "material": "shell",
+   "volume_cm3": 42.006
+  },
+  "case-lid": {
+   "material": "shell",
+   "volume_cm3": 24.425
+  },
+  "case-led": {
+   "material": "led",
+   "volume_cm3": 0.001
+  }
+ },
+ "facts": {
+  "case": {
+   "w": 62.0,
+   "d": 26.0,
+   "h": 48.0,
+   "r": 10.0,
+   "split_z": 29.759999999999998
+  },
+  "bud_height_mm": 51.0
+ }
+}

@@ -1,0 +1,12 @@
+{
+  "materials": {
+    "body": {"preset": "satin_plastic", "color": "#f2f0ec"}
+  },
+  "objects": [
+    {"id": "body", "type": "mesh", "file": "out/stl/body.stl", "material": "body"}
+  ],
+  "shots": {
+    "hero": {"size": [1800, 1200], "samples": 128, "rig": {"type": "sweep", "color": "#efece6"},
+             "camera": {"azimuth": -35, "elevation": 18, "lens": 85, "fill": 0.7}}
+  }
+}

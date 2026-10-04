@@ -69,6 +69,14 @@ Fabrication notes, not product decisions. Nothing here changes the Geometry or t
 - **The label and the physics disagree on one line.** The engraved Facts say 91 dB; a woofer that reaches 32 Hz in this box is rated about 90 dB, and voiced flat on this baffle the speaker should measure 85 to 88 dB. Engrave after measuring. "8 ohm" may become 6: every tweeter that fits the bowl is 4 ohm.
 - **The wordmark at 44 mm type is 172 mm wide,** as the renders show; geometry.md's "about 155" is an estimate the type size overrides. The fab files follow the type size.
 
+### Notes, 2026-10-04: tools and the family
+
+Tooling notes, not product decisions. Nothing here changes the Geometry or the Decisions.
+
+- **From scratch.** `studio/setup.sh` installs every tool the repo uses on a bare machine (render/'s node modules, Blender's `bpy`, the CAD venv) and `python3 studio/doctor.py` runs each one for real. In a Claude Code cloud session the start hook does this before work begins. `studio/README.md` lists the tools: a path tracer for any product's scene, canvas-exact typesetting, a crossover designer, a product template.
+- **Crossover, from models.** `fab/crossover.py` fits a three-way network to the shortlisted drivers (`fab/out/xover/`): Linkwitz-Riley targets at the label's 350 Hz and 2.2 kHz, 14 parts, the sum within about 2 dB from 150 Hz to 16 kHz in the model. Two numbers to carry: the tweeter, 170 mm back in the bowl, reaches a seated listener 0.37 ms after the mid; the network's impedance bottoms at 3.7 ohm, a 4 ohm speaker. Fit the built network to measurements.
+- **The family.** Two spin-offs are started in `spinoffs/`, each with its own brief, model, renders and critic log: **earworm**, wired headphones whose cable is an earthworm (the saddle is the remote), and **earwig**, earbuds whose stems end in forceps, with a charging case that wears a wig. Proposals for the owner; neither touches earmilk's spec.
+
 ## Geometry (mm)
 
 Floorstander — square plan, gable-top.
@@ -140,6 +148,7 @@ Before any render or edit, re-read the Geometry and Decisions sections. If a cha
 - Price points for the pair, a sleeve set, and the crate. Leave as `[PAIR PRICE]`, `[SLEEVE PRICE]`, `[CRATE PRICE]`, and since the amendments `[STAND PRICE]`. *Amended 2026-10-02: `[PAIR PRICE]` and `[CRATE PRICE]` only.*
 - Driver selection and port tuning. The 32 Hz target assumes ~85–90 L net for the woofer; confirm before quoting it as more than a target. *2026-10-04: the CAD measures 88.1 L net; `fab/README.md` has a driver shortlist, the port (152 mm for 32 Hz) and a simulation. Proposals, not answers.*
 - Whether the bowl works as a waveguide. The test is physical: one carved gable, one candidate tweeter, on/off-axis measurements vs. a flat baffle. Renders do not settle this. *2026-10-04: `fab/out/stl/gable-test-slice.stl` is that gable, printable in a weekend.*
+- *Added 2026-10-04, from the crossover model:* whether the label's crossover points (350 Hz and 2.2 kHz) survive measurement, whether the 0.37 ms the bowl puts between mid and tweeter is handled passively or the tweeter comes forward, and whether the label can say 4 ohm.
 - *Added 2026-10-04, from fabrication:* whether the Facts should state targets or measured figures (91 dB and 8 ohm are unlikely as measured; the plate is permanent); whether the gable may be printed and painted instead of carved birch; the letters' metal (silver as rendered: stainless or aluminium; or brass to sit with the bronze plate); whether the wordmark's width (172 mm at 44 mm type) or geometry.md's "about 155" is the one that matters.
 - *Added 2026-10-03, from the path-traced critic rounds:* whether the pint crate's wall should drop so the drivers show; whether the spout's dome needs a different read at room distance (three rounds called it a lens barrel); whether the cast letters on Chocolate and Oat should be a darker metal, since polished metal on a cream plinth reads as blank in a pale studio; and whether the tweeter wants a visible flange in the bowl. All geometry or materials; none acted on in renders.
 - Board stock for the sleeve and whether the lock survives repeated swaps. *Gone 2026-10-02 with the sleeve. In its place: the finish system (lacquer, paint or laminate over the birch) and the badge's metal are open.*
@@ -153,7 +162,10 @@ prompts/     one file per shot, versioned
 renders/     YYYY-MM-DD/shot-NN-vN.png
 critic/      LOG.md
 render/      the model, the real-time and path-traced renderers
-fab/         fabrication: CAD, cut files, drawings, acoustics, parts list (fab/README.md)
+fab/         fabrication: CAD, cut files, drawings, acoustics, crossover, parts list (fab/README.md)
+studio/      the tools for any product: setup, doctor, path tracer, typesetting, crossover designer, template
+spinoffs/    the rest of the family, one folder each: earworm (wired headphones), earwig (earbuds)
+.claude/     the cloud session's start hook and the project skills (new-product, pathtrace, critic-round, fab-package)
 ```
 
 ## Deliver pass already applied (for context)

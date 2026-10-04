@@ -1,0 +1,246 @@
+{
+ "materials": {
+  "shell": {
+   "preset": "lacquer",
+   "color": "#5b2e1a",
+   "roughness": 0.22,
+   "coat": 0.9,
+   "coat_roughness": 0.05
+  },
+  "pincer": {
+   "preset": "lacquer",
+   "color": "#7f3c18",
+   "roughness": 0.22,
+   "coat": 0.9,
+   "coat_roughness": 0.05
+  },
+  "silicone": {
+   "preset": "silicone",
+   "color": "#3a2219",
+   "roughness": 0.42
+  },
+  "led": {
+   "preset": "emissive",
+   "color": "#ffd9a8",
+   "emission": 3.0
+  },
+  "hair": {
+   "preset": "hair",
+   "melanin": 0.66,
+   "redness": 0.45,
+   "roughness": 0.26,
+   "radial_roughness": 0.32,
+   "coat": 0.08
+  }
+ },
+ "objects": [
+  {
+   "id": "case-base",
+   "type": "mesh",
+   "file": "out/stl/case-base.stl",
+   "material": "shell"
+  },
+  {
+   "id": "case-lid",
+   "type": "mesh",
+   "file": "out/stl/case-lid.stl",
+   "material": "shell"
+  },
+  {
+   "id": "case-led",
+   "type": "mesh",
+   "file": "out/stl/case-led.stl",
+   "material": "led"
+  },
+  {
+   "id": "wig",
+   "type": "python",
+   "file": "hair.py",
+   "args": {
+    "w": 62.0,
+    "d": 26.0,
+    "h": 48.0,
+    "r": 10.0,
+    "split_z": 29.759999999999998,
+    "count": 30000,
+    "radius": 0.035,
+    "volume": [
+     0.3,
+     3.2
+    ],
+    "cut_below": 1.8
+   }
+  },
+  {
+   "id": "bud-r",
+   "type": "mesh",
+   "file": "out/stl/bud-r.stl",
+   "material": "shell",
+   "translate": [
+    -24,
+    -40,
+    9.782454901733843
+   ],
+   "rotate": [
+    -1.9421282643869634e-15,
+    -79.32755790302667,
+    -20.00000000000001
+   ]
+  },
+  {
+   "id": "pincers-r",
+   "type": "mesh",
+   "file": "out/stl/pincers-r.stl",
+   "material": "pincer",
+   "translate": [
+    -24,
+    -40,
+    9.782454901733843
+   ],
+   "rotate": [
+    -1.9421282643869634e-15,
+    -79.32755790302667,
+    -20.00000000000001
+   ]
+  },
+  {
+   "id": "tip-r",
+   "type": "mesh",
+   "file": "out/stl/tip-r.stl",
+   "material": "silicone",
+   "translate": [
+    -24,
+    -40,
+    9.782454901733843
+   ],
+   "rotate": [
+    -1.9421282643869634e-15,
+    -79.32755790302667,
+    -20.00000000000001
+   ]
+  },
+  {
+   "id": "bud-l",
+   "type": "mesh",
+   "file": "out/stl/bud-l.stl",
+   "material": "shell",
+   "translate": [
+    14,
+    -80,
+    9.782454901733843
+   ],
+   "rotate": [
+    -2.645478386540169e-15,
+    79.32755790302667,
+    -156.00000000000003
+   ]
+  },
+  {
+   "id": "pincers-l",
+   "type": "mesh",
+   "file": "out/stl/pincers-l.stl",
+   "material": "pincer",
+   "translate": [
+    14,
+    -80,
+    9.782454901733843
+   ],
+   "rotate": [
+    -2.645478386540169e-15,
+    79.32755790302667,
+    -156.00000000000003
+   ]
+  },
+  {
+   "id": "tip-l",
+   "type": "mesh",
+   "file": "out/stl/tip-l.stl",
+   "material": "silicone",
+   "translate": [
+    14,
+    -80,
+    9.782454901733843
+   ],
+   "rotate": [
+    -2.645478386540169e-15,
+    79.32755790302667,
+    -156.00000000000003
+   ]
+  }
+ ],
+ "shots": {
+  "hero": {
+   "size": [
+    1800,
+    1200
+   ],
+   "samples": 160,
+   "rig": {
+    "type": "sweep",
+    "color": "#eadfd2",
+    "key": {
+     "azimuth": -48,
+     "elevation": 52
+    },
+    "rim": {
+     "azimuth": 155,
+     "elevation": 32,
+     "power": 1.4
+    }
+   },
+   "camera": {
+    "position": [
+     -160,
+     -395,
+     318
+    ],
+    "target": [
+     8,
+     -34,
+     16
+    ],
+    "lens": 100
+   },
+   "floor_z": 0
+  },
+  "detail": {
+   "size": [
+    1800,
+    1200
+   ],
+   "samples": 192,
+   "rig": {
+    "type": "sweep",
+    "color": "#eadfd2",
+    "key": {
+     "azimuth": -40,
+     "elevation": 45
+    },
+    "rim": {
+     "azimuth": 160,
+     "elevation": 25
+    }
+   },
+   "camera": {
+    "position": [
+     140,
+     -200,
+     40
+    ],
+    "target": [
+     30,
+     -72,
+     6
+    ],
+    "lens": 100,
+    "fstop": 5.6,
+    "focus": [
+     42,
+     -68,
+     4
+    ]
+   },
+   "floor_z": 0
+  }
+ }
+}
