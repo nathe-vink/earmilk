@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4875 1525" width="1218.75" height="381.25">
+<rect x="0" y="0" width="1525" height="1525" fill="#efe6d6" stroke="#999" stroke-width="4"/>
+<rect x="15.0" y="650.0" width="390.0" height="860.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="210.0" y="1080.0" font-size="40" text-anchor="middle" font-family="sans-serif">front-baffle</text>
+<rect x="417.0" y="650.0" width="390.0" height="860.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="612.0" y="1080.0" font-size="40" text-anchor="middle" font-family="sans-serif">front-baffle</text>
+<rect x="819.0" y="650.0" width="390.0" height="860.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1014.0" y="1080.0" font-size="40" text-anchor="middle" font-family="sans-serif">back-panel</text>
+<rect x="15.0" y="248.0" width="860.0" height="390.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="445.0" y="443.0" font-size="40" text-anchor="middle" font-family="sans-serif">back-panel</text>
+<rect x="887.0" y="286.8" width="398.0" height="351.2" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1086.0" y="462.4" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-02</text>
+<rect x="1221.0" y="1112.0" width="257.6" height="398.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1349.8" y="1311.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-04</text>
+<rect x="15.0" y="25.19999999999999" width="398.0" height="210.8" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="214.0" y="130.6" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-05</text>
+<rect x="425.0" y="25.19999999999999" width="398.0" height="210.8" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="624.0" y="130.6" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-05</text>
+<rect x="835.0" y="72.0" width="398.0" height="164.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1034.0" y="154.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-06</text>
+<rect x="1490.6" y="1112.0" width="16.0" height="398.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1498.6" y="1311.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-10</text>
+<rect x="1297.0" y="284.0" width="108.0" height="354.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1351.0" y="461.0" font-size="40" text-anchor="middle" font-family="sans-serif">mid-shelf</text>
+<rect x="1625" y="0" width="1525" height="1525" fill="#efe6d6" stroke="#999" stroke-width="4"/>
+<rect x="1640.0" y="650.0" width="354.0" height="860.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1817.0" y="1080.0" font-size="40" text-anchor="middle" font-family="sans-serif">side</text>
+<rect x="2006.0" y="650.0" width="354.0" height="860.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="2183.0" y="1080.0" font-size="40" text-anchor="middle" font-family="sans-serif">side</text>
+<rect x="2372.0" y="650.0" width="354.0" height="860.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="2549.0" y="1080.0" font-size="40" text-anchor="middle" font-family="sans-serif">side</text>
+<rect x="2738.0" y="650.0" width="354.0" height="860.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="2915.0" y="1080.0" font-size="40" text-anchor="middle" font-family="sans-serif">side</text>
+<rect x="1640.0" y="240.0" width="398.0" height="398.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1839.0" y="439.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-01</text>
+<rect x="2050.0" y="240.0" width="398.0" height="398.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="2249.0" y="439.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-01</text>
+<rect x="2460.0" y="286.8" width="398.0" height="351.2" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="2659.0" y="462.4" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-02</text>
+<rect x="2870.0" y="240.0" width="257.6" height="398.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="2998.8" y="439.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-04</text>
+<rect x="1640.0" y="64.0" width="398.0" height="164.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1839.0" y="146.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-06</text>
+<rect x="2050.0" y="110.8" width="398.0" height="117.2" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="2249.0" y="169.4" font-size="39.06666666666667" text-anchor="middle" font-family="sans-serif">gable-layer-07</text>
+<rect x="2460.0" y="110.8" width="398.0" height="117.2" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="2659.0" y="169.4" font-size="39.06666666666667" text-anchor="middle" font-family="sans-serif">gable-layer-07</text>
+<rect x="1640.0" y="28.4" width="398.0" height="23.6" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1839.0" y="40.2" font-size="7.866666666666667" text-anchor="middle" font-family="sans-serif">gable-layer-09</text>
+<rect x="2050.0" y="28.4" width="398.0" height="23.6" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="2249.0" y="40.2" font-size="7.866666666666667" text-anchor="middle" font-family="sans-serif">gable-layer-09</text>
+<rect x="2460.0" y="36.0" width="398.0" height="16.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="2659.0" y="44.0" font-size="5.333333333333333" text-anchor="middle" font-family="sans-serif">gable-layer-10</text>
+<rect x="3104.0" y="1112.0" width="16.0" height="398.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3112.0" y="1311.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-11</text>
+<rect x="3250" y="0" width="1525" height="1525" fill="#efe6d6" stroke="#999" stroke-width="4"/>
+<rect x="3265.0" y="1205.6" width="398.0" height="304.4" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3464.0" y="1357.8" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-03</text>
+<rect x="3675.0" y="1205.6" width="398.0" height="304.4" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3874.0" y="1357.8" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-03</text>
+<rect x="4085.0" y="1439.6" width="398.0" height="70.4" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="4284.0" y="1474.8" font-size="23.46666666666667" text-anchor="middle" font-family="sans-serif">gable-layer-08</text>
+<rect x="3265.0" y="1123.1999999999998" width="398.0" height="70.4" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3464.0" y="1158.3999999999999" font-size="23.46666666666667" text-anchor="middle" font-family="sans-serif">gable-layer-08</text>
+<rect x="3675.0" y="1177.6" width="398.0" height="16.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3874.0" y="1185.6" font-size="5.333333333333333" text-anchor="middle" font-family="sans-serif">gable-layer-11</text>
+<rect x="3265.0" y="757.2" width="354.0" height="354.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3442.0" y="934.2" font-size="40" text-anchor="middle" font-family="sans-serif">top-panel</text>
+<rect x="3631.0" y="757.2" width="354.0" height="354.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3808.0" y="934.2" font-size="40" text-anchor="middle" font-family="sans-serif">top-panel</text>
+<rect x="3997.0" y="757.2" width="354.0" height="354.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="4174.0" y="934.2" font-size="40" text-anchor="middle" font-family="sans-serif">bottom-panel</text>
+<rect x="4363.0" y="757.2" width="354.0" height="354.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="4540.0" y="934.2" font-size="40" text-anchor="middle" font-family="sans-serif">bottom-panel</text>
+<rect x="3265.0" y="391.20000000000005" width="354.0" height="354.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3442.0" y="568.2" font-size="40" text-anchor="middle" font-family="sans-serif">window-brace</text>
+<rect x="3631.0" y="391.20000000000005" width="354.0" height="354.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3808.0" y="568.2" font-size="40" text-anchor="middle" font-family="sans-serif">window-brace</text>
+<rect x="3997.0" y="493.20000000000005" width="354.0" height="252.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="4174.0" y="619.2" font-size="40" text-anchor="middle" font-family="sans-serif">mid-divider</text>
+<rect x="4363.0" y="493.20000000000005" width="354.0" height="252.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="4540.0" y="619.2" font-size="40" text-anchor="middle" font-family="sans-serif">mid-divider</text>
+<rect x="3265.0" y="271.20000000000005" width="354.0" height="108.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3442.0" y="325.20000000000005" font-size="36.0" text-anchor="middle" font-family="sans-serif">mid-shelf</text>
+</svg>

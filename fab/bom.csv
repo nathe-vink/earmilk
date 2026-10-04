@@ -1,0 +1,26 @@
+group,item,for a pair,unit price USD,source,status,note
+Wood,"Baltic birch plywood 18 mm, 5 x 5 ft sheet (B/BB)",3 sheets (4 if the gables are birch and you want a spare),90-154,"Cherokee Wood, The Wood & Shop, Rockler, MakerStock, local plywood dealer",listed,"3 sheets cover both cabinets and both gable glue-ups (fab/out/dxf/sheets.svg). Measure the real thickness before CNC work."
+Wood,"CNC cutting of the panels (2D profiles, two 3 mm groove pockets, one 1.5 mm pocket)",1 job,300-700,"local CNC cabinet or sign shop; makerspace ShopBot; SpeakerHardware custom shop (8-12 weeks)",estimate,"No instant online service cuts 18 mm plywood (SendCutSend stops at 12 mm)."
+Wood,"Gable, route A: CNC-milled laminated birch block (two halves, 3-axis)",2,400-1200 each,"local CNC sign, millwork or pattern shop; JMP Wood (NY/NJ)",estimate,"fab/out/step/gable-block-lower.step and -upper.step"
+Wood,"Gable, route B: 3D-printed in four pieces (PETG or ASA), filled and painted",2 sets of 4,60-80 filament each; 150-500 via a service,"makerspace printer; Craftcloud (US vendors)",estimate,"fab/out/stl/gable-print/. A material change from the spec's solid birch: the owner's call."
+Wood,Wood glue (Titebond II or III),1 bottle,10-15,hardware store,estimate,
+Wood,"Dowels 10 mm x 40 mm (block to body)",8,5,hardware store,estimate,
+Wood,Glue blocks or brad nails (optional),as needed,10,hardware store,estimate,
+Printed,"Bowl test slice (PLA is fine), 250 x 240 x 150",1,15-40 filament; 50-200 via a service,"makerspace; Craftcloud; JLC3DP (40% US tariff on plastics)",estimate,"fab/out/stl/gable-test-slice.stl or the -lower/-upper pair for support-free printing"
+Printed,"Port: tube with flange + flare collar (PETG or ASA, not PLA)",2 sets,25-60 per set via a service,"makerspace; Craftcloud",estimate,"Print the tube 10 mm long and trim to tune at 32 Hz"
+Drivers,"Woofer: Dayton Audio DSA315-8 (12 in)",2,139.98,Parts Express,listed (unverified),"Shortlisted for every tier. DS315-8 ($149.99) is the non-metal alternative."
+Drivers,"Midrange: SB Acoustics SB17MFC35-8 (budget/mid) or Satori MR16P-8 (premium)",2,75.90 or 206.60,Madisound,listed,
+Drivers,"Tweeter: Scan-Speak Illuminator R3004/602200 (mid/premium) or Peerless OC25SC65-04 in a printed ring (budget)",2,197.20 or 35.20,Madisound,listed,"Faceplate 62 mm max: the throat is 66"
+Electronics,"Binding posts, pair (4 mm banana, about 64 mm spacing)",2 pairs,15-40,Parts Express,estimate,"Re-cut the plate's 10 mm holes to the posts bought"
+Electronics,"Crossover parts (air-core inductors, film capacitors, resistors, boards)",2 sets,100-250 per speaker,"Parts Express, Madisound, Solen",estimate,"Designed from measurements in VituixCAD or XSim; low-DCR woofer inductor"
+Electronics,"Internal wire, 14-16 AWG, and spade/crimp terminals",1 roll,20-40,Parts Express,estimate,
+Electronics,"Measurement kit: miniDSP UMIK-1 mic + Dayton DATS V3 + REW (free)",1 each,80-110 + 130-150,"miniDSP, Parts Express",estimate (unverified),"Needed on every crossover route"
+Electronics,"Optional DSP audition: miniDSP 2x4 HD + three amp channels per speaker",1,225-250 + 100-450,"miniDSP, Parts Express",estimate (unverified),"Lets you hear and tune the crossover before building it passive"
+Damping,"Acoustic damping (polyfill or wool, felt for the bowl's faceplate gap)",1 lot,30-60,Parts Express,estimate,"Loosely fill the mid chamber; line the woofer chamber walls"
+Damping,"Gasket tape for drivers, putty to seal the wire holes",1 lot,10-20,Parts Express,estimate,"The tweeter pocket's wire hole must be sealed or it leaks the woofer box"
+Metal,"Cast-letter wordmark, 3.18 mm (0.125 in) sheet, laser cut: brass, aluminium or stainless",4 sets (front and back of each speaker),~$39 order minimum; letters a few dollars each,"SendCutSend; OSHCut or Xometry for the i-dot and for bronze",estimate,"fab/out/metal/wordmark-letters.dxf. The renders show silver letters: stainless or aluminium, polished; brass if the owner wants them warm."
+Metal,"Bronze or brass Nutrition Facts plate, 318 x 312 x 3, R3, etched and paint-filled",2,169-212 each from,"Woodland Manufacturing, Impact Signs, Saifee Signs; or a blank + local fiber-laser engraver",listed (from),"fab/out/metal/plate-facts.svg. Hold the order until the speaker is measured: the plate states 91 dB."
+Metal,"Terminal plate 128 x 64 x 3 (aluminium 5052 or brass)",2,8-15 each,SendCutSend (add to the letters order),estimate,fab/out/metal/terminal-plate.dxf
+Metal,"Letter mounting: epoxy (3M DP420 or Devcon), optional 1/16 in brass rod pins",1 lot,15-35,hardware or hobby store,estimate,"Templates: fab/out/metal/wordmark-template-front.pdf and -back.pdf"
+Finish,"Paint stencils (Oramask 813 vinyl): OPEN OTHER SIDE and SHAKE WELL",2 sets,15-40,"local sign shop, CraftCuts, or a library Cricut",estimate,"fab/out/marks/*.svg. Paint the text colour first, mask the letters, paint the field, peel."
+Finish,"DIY 2K finish: grain filler, 2K high-build primer, automotive basecoat (RAL 9016 or 9003 white, RAL 3028 red), 2K clear, abrasives, respirator",1 lot,500-1200,"Eastwood, SprayMax via 66autocolor, auto-paint supplier for RAL mixing",estimate,"Or an auto-body shop: about 800-2500 for the pair"

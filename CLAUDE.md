@@ -21,6 +21,7 @@ Read `README.md` first. It is the handoff and the brief. The canvas it links to 
 | `renders/YYYY-MM-DD/shot-NN-vN.png` | Output. NN and vN match the prompt file that produced it. |
 | `critic/PROMPT.md` | The critic prompt, verbatim, so every round is judged against the same bar. |
 | `critic/LOG.md` | One row per critic round. |
+| `fab/` | Fabrication, generated from `fab/params.py` by `fab/build.sh`: CAD (STEP/STL), DXF cut files, drawings, the acoustic worksheet, drivers, the parts list. `fab/README.md` is the guide. Proposals are marked; the outside follows `spec/geometry.md`. |
 
 ## Rendering in a Claude Code cloud session (checked 2026-10-01, path tracer added 2026-10-03)
 
@@ -33,6 +34,13 @@ Read `README.md` first. It is the handoff and the brief. The canvas it links to 
 - Coplanar faces of two solids render black in Cycles (the ray from one face hits the other). Keep boards inside walls, decals a hair off their surface.
 - If a render pipeline is added, keep it in one folder (`render/`) with its own README and no build step beyond `npm install`.
 - Keep every PNG under about 5 MB. If `renders/` grows past a few hundred MB, move it to Git LFS before clones get slow.
+
+## Fabrication files (since 2026-10-04)
+
+- `fab/params.py` copies `spec/geometry.md`. Change the spec first, then `params.py`, then run `fab/build.sh`; never edit generated files in `fab/out/` by hand.
+- The CAD tools (build123d, ezdxf, fonttools, uharfbuzz) need numpy 2 and live in a venv (`fab/requirements.txt`); Blender's `bpy` needs numpy 1 and stays on the system Python. Installing build123d into the system Python upgrades numpy and breaks the path tracer.
+- Numbers in `params.py` are marked SPEC, DERIVED, PROPOSAL or PLACEHOLDER. A PROPOSAL changes nothing outside; a change to a SPEC number is a spec change: stop and ask.
+- Driver data in `fab/drivers.json` came from web search without opening the pages (the container's network blocks supplier sites); treat it as a shortlist to confirm, not a decision.
 
 ## Critic protocol
 

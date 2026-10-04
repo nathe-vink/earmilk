@@ -1,0 +1,20 @@
+part,qty per speaker,qty for a pair,width mm,height mm,thickness mm,material,operations,note
+front-baffle,1,2,390.0,860.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside; pocket 3mm,outer face up; cutouts sized for the shortlisted Dayton DSA315-8 (272) and SB Acoustics SB17MFC35-8 (146): re-cut for other drivers
+back-panel,1,2,390.0,860.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside; pocket 1 5mm; pocket 3mm,outer face up (seen from behind); 1.5 mm pocket seats the 3 mm bronze plate 1.5 proud
+side,2,4,354.0,860.0,18,"Baltic birch plywood, B/BB, 18 mm",pocket 3mm,outer face up; finish the groove across the front and back panels' edges after glue-up
+top-panel,1,2,354.0,354.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside; drill 10 deep10,upper face up (front edge at the bottom of the drawing); dowels register the gable block
+bottom-panel,1,2,354.0,354.0,18,"Baltic birch plywood, B/BB, 18 mm",outline only,either face
+window-brace,1,2,354.0,354.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside,"sits at z 500 to 518, glued to all four walls"
+mid-shelf,1,2,354.0,108.0,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"z 572 to 590, from the baffle back to under the divider"
+mid-divider,1,2,354.0,252.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside,"y 108 to 126, z 590 to 842; seal the wire hole after wiring"
+gable-layer-01,1,2,398.0,398.0,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 1 of 11 (z 860 to 878); centre on y = 195"
+gable-layer-02,1,2,398.0,351.2,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 2 of 11 (z 878 to 896); centre on y = 195"
+gable-layer-03,1,2,398.0,304.4,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 3 of 11 (z 896 to 914); centre on y = 195"
+gable-layer-04,1,2,398.0,257.6,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 4 of 11 (z 914 to 932); centre on y = 195"
+gable-layer-05,1,2,398.0,210.8,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 5 of 11 (z 932 to 950); centre on y = 195"
+gable-layer-06,1,2,398.0,164.0,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 6 of 11 (z 950 to 968); centre on y = 195"
+gable-layer-07,1,2,398.0,117.2,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 7 of 11 (z 968 to 986); centre on y = 195"
+gable-layer-08,1,2,398.0,70.4,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 8 of 11 (z 986 to 1004); centre on y = 195"
+gable-layer-09,1,2,398.0,23.6,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 9 of 11 (z 1004 to 1022); centre on y = 195"
+gable-layer-10,1,2,398.0,16.0,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 10 of 11 (z 1022 to 1040); centre on y = 195"
+gable-layer-11,1,2,398.0,16.0,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 11 of 11 (z 1040 to 1058); centre on y = 195"

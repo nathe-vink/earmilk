@@ -1,0 +1,149 @@
+{
+ "woofer_chamber_air_l": 91.643,
+ "fb_target_hz": 32.0,
+ "woofers": [
+  {
+   "id": "dsa315-8",
+   "label": "Dayton Audio DSA315-8",
+   "Vb_net_l": 88.1,
+   "port_length_mm": 152.1,
+   "sens_2v83_datasheet": 90.3,
+   "sim_midband_2pi_db": 90.8,
+   "f3_hz": 31.7,
+   "f10_hz": 24.9,
+   "max_spl_40hz_db": 109.9,
+   "max_spl_30hz_db": 106.1,
+   "port_speed_at_max_25_80hz_ms": 27.0,
+   "z_min_ohm": 6.08,
+   "price_usd": 139.98,
+   "url": "https://www.daytonaudio.com/product/1317/dsa315-8-12-designer-series-aluminum-cone-woofer-8-ohm"
+  },
+  {
+   "id": "ds315-8",
+   "label": "Dayton Audio DS315-8",
+   "Vb_net_l": 88.1,
+   "port_length_mm": 152.1,
+   "sens_2v83_datasheet": 91.0,
+   "sim_midband_2pi_db": 91.4,
+   "f3_hz": 32.8,
+   "f10_hz": 25.2,
+   "max_spl_40hz_db": 109.9,
+   "max_spl_30hz_db": 106.1,
+   "port_speed_at_max_25_80hz_ms": 27.1,
+   "z_min_ohm": 6.21,
+   "price_usd": 149.99,
+   "url": "https://www.daytonaudio.com/product/1059/ds315-8-12-designer-series-woofer-speaker-8-ohm"
+  },
+  {
+   "id": "dc300-8",
+   "label": "Dayton Audio DC300-8",
+   "Vb_net_l": 88.1,
+   "port_length_mm": 152.1,
+   "sens_2v83_datasheet": 90.3,
+   "sim_midband_2pi_db": 90.6,
+   "f3_hz": 32.5,
+   "f10_hz": 24.6,
+   "max_spl_40hz_db": 107.7,
+   "max_spl_30hz_db": 104.4,
+   "port_speed_at_max_25_80hz_ms": 22.4,
+   "z_min_ohm": 6.94,
+   "price_usd": null,
+   "url": "https://www.daytonaudio.com/product/34/dc300-8-12-classic-woofer-8-ohm"
+  },
+  {
+   "id": "fw305",
+   "label": "Fostex FW305",
+   "Vb_net_l": 88.1,
+   "port_length_mm": 152.1,
+   "sens_2v83_datasheet": 93.0,
+   "sim_midband_2pi_db": 94.7,
+   "f3_hz": 47.5,
+   "f10_hz": 28.6,
+   "max_spl_40hz_db": 109.1,
+   "max_spl_30hz_db": 106.1,
+   "port_speed_at_max_25_80hz_ms": 27.5,
+   "z_min_ohm": 6.67,
+   "price_usd": 266.3,
+   "url": "https://www.madisoundspeakerstore.com/approx-12-woofers/fostex-fw305-12-woofer/"
+  }
+ ],
+ "mids": [
+  {
+   "id": "sb17mfc35-8",
+   "label": "SB Acoustics SB17MFC35-8",
+   "Vb_l": 7.6,
+   "Qtc": 0.91,
+   "Fc_hz": 82.0,
+   "sens_2v83": 88.0,
+   "price_usd": 75.9,
+   "url": "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17MFC35-8.pdf"
+  },
+  {
+   "id": "mr16p-8",
+   "label": "SB Acoustics Satori MR16P-8",
+   "Vb_l": 7.6,
+   "Qtc": 0.78,
+   "Fc_hz": 83.0,
+   "sens_2v83": 88.0,
+   "price_usd": 206.6,
+   "url": "https://sbacoustics.com/product/6%C2%BDin-satori-mr16p-8/"
+  },
+  {
+   "id": "dsa175-8",
+   "label": "Dayton Audio DSA175-8",
+   "Vb_l": 7.6,
+   "Qtc": 0.54,
+   "Fc_hz": 71.0,
+   "sens_2v83": 88.1,
+   "price_usd": 61.0,
+   "url": "https://www.daytonaudio.com/product/1314/dsa175-8-6-1-2-designer-series-aluminum-cone-woofer-8-ohm"
+  }
+ ],
+ "tweeters": [
+  {
+   "id": "r3004-602200",
+   "label": "Scan-Speak Illuminator R3004/602200",
+   "Fs": 420,
+   "sens_2v83": 89.5,
+   "faceplate_mm": 62,
+   "price_usd": 197.2,
+   "url": "https://www.scan-speak.dk/product/r3004-602200/"
+  },
+  {
+   "id": "d3004-602006",
+   "label": "Scan-Speak Silver D3004/602006",
+   "Fs": 700,
+   "sens_2v83": 89.0,
+   "faceplate_mm": 61.9,
+   "price_usd": 185.4,
+   "url": "https://www.madisoundspeakerstore.com/auto-tweeters/scanspeak-silver-series-d3004-602006-1-textile-dome-tweeter-each/"
+  },
+  {
+   "id": "oc25sc65-04",
+   "label": "Peerless (Tymphany) OC25SC65-04",
+   "Fs": 1382,
+   "sens_2v83": 93.1,
+   "faceplate_mm": null,
+   "price_usd": 35.2,
+   "url": "https://www.madisoundspeakerstore.com/soft-dome-tweeters-vifa/peerless-oc25sc65-04-1-textile-dome-tweeter-4-ohm/"
+  },
+  {
+   "id": "nd25fn-4",
+   "label": "Dayton Audio ND25FN-4",
+   "Fs": 1350,
+   "sens_2v83": 90.0,
+   "faceplate_mm": null,
+   "price_usd": 14.99,
+   "url": "https://www.daytonaudio.com/product/1194/nd25fn-4-1-neo-silk-dome-tweeter-element-4-ohm"
+  }
+ ],
+ "port": {
+  "for_woofer": "dsa315-8",
+  "Vb_net_l": 88.1,
+  "total_length_mm": 152.1,
+  "tube_length_mm": 134.1,
+  "tube_length_note": "the printed tube runs from the flange face to the collar; the flare collar adds 18 mm. Print it 10 mm long, measure the impedance dip, and trim to put it at 32 Hz.",
+  "tube_length_mm_for_cad": 134.1,
+  "speed_at_100db_peak_ms": 8.2
+ }
+}

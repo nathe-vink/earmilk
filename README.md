@@ -59,6 +59,16 @@ Render notes, not product decisions. Nothing here changes the Geometry or the De
 - **Eased arrises.** The path tracer rounds the cabinet's edges by about a millimetre in the shader, the way lacquer on birch actually sits; the silhouette does not change. The prompts' rule against softening edges is about the silhouette. *Say if the spec wants the arrises dead sharp.*
 - **Critic notes that are spec, not render** (path-traced round 1): the spout reads as a lens barrel at room distance (02b); the crate's wall hides the pints' drivers (06); the chair is a massing model, not furniture (02a). None acted on.
 
+### Notes, 2026-10-04: fabrication
+
+Fabrication notes, not product decisions. Nothing here changes the Geometry or the Decisions.
+
+- **`fab/` turns the spec into things a shop can make:** a parametric CAD model (STEP and STL for every part), DXF cut files for the 18 mm birch panels with a cut list and nesting (three 5 x 5 ft sheets for a pair), the gable as a laminated block split for 3-axis milling or as four printable pieces, the bowl test slice, a two-piece printed port, the cast-letter wordmark and its placing templates, the engraved Facts plate, the terminal plate, vinyl stencils for the two marks, shop drawings, an acoustic worksheet, a driver shortlist and a parts list. Start at `fab/README.md`.
+- **The outside is the spec; the inside is proposed.** Joinery, the mid's 8.0 L chamber, the brace, the groove, the gable's split and the tweeter pocket are marked `PROPOSAL` in `fab/params.py` and listed in `fab/README.md`.
+- **From the solids:** 88.1 L net for the woofer (inside the 85 to 90 L assumed), a 152 mm port for 32 Hz, 27 kg of wood per cabinet.
+- **The label and the physics disagree on one line.** The engraved Facts say 91 dB; a woofer that reaches 32 Hz in this box is rated about 90 dB, and voiced flat on this baffle the speaker should measure 85 to 88 dB. Engrave after measuring. "8 ohm" may become 6: every tweeter that fits the bowl is 4 ohm.
+- **The wordmark at 44 mm type is 172 mm wide,** as the renders show; geometry.md's "about 155" is an estimate the type size overrides. The fab files follow the type size.
+
 ## Geometry (mm)
 
 Floorstander — square plan, gable-top.
@@ -128,8 +138,9 @@ Before any render or edit, re-read the Geometry and Decisions sections. If a cha
 ## Open questions (do not assume answers)
 
 - Price points for the pair, a sleeve set, and the crate. Leave as `[PAIR PRICE]`, `[SLEEVE PRICE]`, `[CRATE PRICE]`, and since the amendments `[STAND PRICE]`. *Amended 2026-10-02: `[PAIR PRICE]` and `[CRATE PRICE]` only.*
-- Driver selection and port tuning. The 32 Hz target assumes ~85–90 L net for the woofer; confirm before quoting it as more than a target.
-- Whether the bowl works as a waveguide. The test is physical: one carved gable, one candidate tweeter, on/off-axis measurements vs. a flat baffle. Renders do not settle this.
+- Driver selection and port tuning. The 32 Hz target assumes ~85–90 L net for the woofer; confirm before quoting it as more than a target. *2026-10-04: the CAD measures 88.1 L net; `fab/README.md` has a driver shortlist, the port (152 mm for 32 Hz) and a simulation. Proposals, not answers.*
+- Whether the bowl works as a waveguide. The test is physical: one carved gable, one candidate tweeter, on/off-axis measurements vs. a flat baffle. Renders do not settle this. *2026-10-04: `fab/out/stl/gable-test-slice.stl` is that gable, printable in a weekend.*
+- *Added 2026-10-04, from fabrication:* whether the Facts should state targets or measured figures (91 dB and 8 ohm are unlikely as measured; the plate is permanent); whether the gable may be printed and painted instead of carved birch; the letters' metal (silver as rendered: stainless or aluminium; or brass to sit with the bronze plate); whether the wordmark's width (172 mm at 44 mm type) or geometry.md's "about 155" is the one that matters.
 - *Added 2026-10-03, from the path-traced critic rounds:* whether the pint crate's wall should drop so the drivers show; whether the spout's dome needs a different read at room distance (three rounds called it a lens barrel); whether the cast letters on Chocolate and Oat should be a darker metal, since polished metal on a cream plinth reads as blank in a pale studio; and whether the tweeter wants a visible flange in the bowl. All geometry or materials; none acted on in renders.
 - Board stock for the sleeve and whether the lock survives repeated swaps. *Gone 2026-10-02 with the sleeve. In its place: the finish system (lacquer, paint or laminate over the birch) and the badge's metal are open.*
 
@@ -141,6 +152,8 @@ copy/        label.md, hero.md
 prompts/     one file per shot, versioned
 renders/     YYYY-MM-DD/shot-NN-vN.png
 critic/      LOG.md
+render/      the model, the real-time and path-traced renderers
+fab/         fabrication: CAD, cut files, drawings, acoustics, parts list (fab/README.md)
 ```
 
 ## Deliver pass already applied (for context)

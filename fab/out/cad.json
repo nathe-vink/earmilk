@@ -1,0 +1,194 @@
+{
+ "parts": {
+  "front-baffle": {
+   "volume_l": 4.6864,
+   "bbox_mm": [
+    0.0,
+    -0.0,
+    0.0,
+    390.0,
+    18.0,
+    860.0
+   ],
+   "mass_kg": 3.19
+  },
+  "back-panel": {
+   "volume_l": 5.6799,
+   "bbox_mm": [
+    0.0,
+    372.0,
+    0.0,
+    390.0,
+    390.0,
+    860.0
+   ],
+   "mass_kg": 3.86
+  },
+  "side-left": {
+   "volume_l": 5.4767,
+   "bbox_mm": [
+    0.0,
+    18.0,
+    0.0,
+    18.0,
+    372.0,
+    860.0
+   ],
+   "mass_kg": 3.72
+  },
+  "side-right": {
+   "volume_l": 5.4767,
+   "bbox_mm": [
+    372.0,
+    18.0,
+    0.0,
+    390.0,
+    372.0,
+    860.0
+   ],
+   "mass_kg": 3.72
+  },
+  "top-panel": {
+   "volume_l": 2.2498,
+   "bbox_mm": [
+    18.0,
+    18.0,
+    842.0,
+    372.0,
+    372.0,
+    860.0
+   ],
+   "mass_kg": 1.53
+  },
+  "bottom-panel": {
+   "volume_l": 2.2557,
+   "bbox_mm": [
+    18.0,
+    18.0,
+    0.0,
+    372.0,
+    372.0,
+    18.0
+   ],
+   "mass_kg": 1.53
+  },
+  "window-brace": {
+   "volume_l": 1.1083,
+   "bbox_mm": [
+    18.0,
+    18.0,
+    500.0,
+    372.0,
+    372.0,
+    518.0
+   ],
+   "mass_kg": 0.75
+  },
+  "mid-shelf": {
+   "volume_l": 0.6882,
+   "bbox_mm": [
+    18.0,
+    18.0,
+    572.0,
+    372.0,
+    126.0,
+    590.0
+   ],
+   "mass_kg": 0.47
+  },
+  "mid-divider": {
+   "volume_l": 1.6037,
+   "bbox_mm": [
+    18.0,
+    108.0,
+    590.0,
+    372.0,
+    126.0,
+    842.0
+   ],
+   "mass_kg": 1.09
+  },
+  "gable-block": {
+   "volume_l": 10.5552,
+   "bbox_mm": [
+    -0.0,
+    -0.0,
+    860.0,
+    390.0,
+    390.0,
+    1055.0
+   ],
+   "mass_kg": 7.18
+  },
+  "port-tube": {
+   "volume_l": 0.2264
+  },
+  "bronze-plate": {
+   "volume_l": 0.2976,
+   "bbox_mm": [
+    36.0,
+    388.5,
+    484.0,
+    354.0,
+    391.5,
+    796.0
+   ]
+  },
+  "terminal-plate": {
+   "volume_l": 0.0241,
+   "bbox_mm": [
+    131.0,
+    390.0,
+    118.0,
+    259.0,
+    393.0,
+    182.0
+   ]
+  },
+  "gable-print-front-left": {
+   "volume_l": 1.276,
+   "size_mm": [
+    195.0,
+    150.0,
+    115.4
+   ]
+  },
+  "gable-print-front-right": {
+   "volume_l": 1.276,
+   "size_mm": [
+    195.0,
+    150.0,
+    115.4
+   ]
+  },
+  "gable-print-back-left": {
+   "volume_l": 4.001,
+   "size_mm": [
+    195.0,
+    240.0,
+    195.0
+   ]
+  },
+  "gable-print-back-right": {
+   "volume_l": 4.001,
+   "size_mm": [
+    195.0,
+    240.0,
+    195.0
+   ]
+  },
+  "gable-block-lower": {
+   "volume_l": 6.0237
+  },
+  "gable-block-upper": {
+   "volume_l": 4.5315
+  }
+ },
+ "units": "mm, litres, kg",
+ "woofer_chamber_air_l": 91.643,
+ "woofer_chamber_gross_l": 103.26,
+ "mid_chamber_gross_l": 8.029,
+ "bowl_cavity_l": 1.5,
+ "wood_mass_kg": 27.04,
+ "port_tube_length_mm": 134.2
+}

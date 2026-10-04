@@ -1,0 +1,9 @@
+# The CAD and drawing tools for fab/. They need numpy 2, and Blender's bpy (render/, fab/render_views.py) needs numpy 1,
+# so install these in their own virtual environment: python3 -m venv .venv-fab && .venv-fab/bin/pip install -r fab/requirements.txt
+build123d==0.13.0
+ezdxf>=1.4
+fonttools>=4.50
+uharfbuzz>=0.40
+matplotlib>=3.8
+scipy>=1.11
+numpy>=2.0
