@@ -27,7 +27,8 @@ Voice: deadpan. The box could say "Hypoallergenic. Not a real earwig." and nothi
 - **Shell** in two parts that meet on a parting line across the head: the outer half (and the stem) glossy chestnut,
   the inner half, the nozzle's side, a lighter satin chestnut. Signs that it was made, and a place for the seam to go.
 - **Nozzle** angled into the canal (inward, forward, a little up), 5.6 mm, with a dark mesh just inside its end and a
-  medium silicone tip, 12.4 mm, in pale taupe. (A cream inner half round a dark tip read as an eyeball.)
+  medium silicone tip, 12.4 mm, in translucent pale taupe: a stem on the nozzle and a thin skirt. (A cream inner half
+  round a dark tip read as an eyeball; a solid dome read as putty.)
 - **Forceps**: two short arms that bow gently apart and end in rounded tips, 2.8 mm thick at the root, 9.5 mm long:
   a pinch, not a stab. Pinching flexes them onto a force sensor in the stem's end; the voice microphone opens between
   them, where the noise is least.
@@ -64,16 +65,18 @@ The buds stay chestnut (an earwig is chestnut) and the case stays cream; the wig
 ## Shots
 
 1. **Hero.** The case standing in its bob, left of centre with headroom; the two buds lying on their sides in front of
-   it, facing different ways, forceps out, as buds lie on a table. Warm cream sweep darkening behind, everything
-   sharp. Lit for gloss: tall strips either side for highlight lines, a top light along the part, a low back light to
-   outline the hair, little fill.
-2. **Detail.** From above, one bud in profile against the cream floor (silicone tip up, stem, forceps), the wigged
-   case at the frame's edge for context. Everything sharp. Alone in macro against a brown background the bud was read
-   as a tobacco pipe; context keeps it an earbud.
+   it and to its right, both tails pointing back into the group, as buds lie on a table. Warm cream sweep darkening
+   behind, everything sharp. The white case is the brightest thing in frame: a key low and just right of the camera,
+   tall strips either side for highlight lines, a small pin for a glint on each bud, a low back light to outline the
+   hair, little fill.
+2. **Detail.** From above (about 37 degrees), one bud in profile against the cream floor (silicone tip up, stem,
+   forceps), the wigged case behind it for context, whole. Everything sharp; one key from high camera-left, so the case
+   throws its shadow back and to the right. Alone in macro against a brown background the bud was read as a tobacco
+   pipe; context keeps it an earbud. From low, the floor's far edge lined up with the hair's lower edge (round 2).
 
 ## Where the renders stand
 
-The softer look (v4, 2026-10-05) starts its own critic count. The first look's three rounds per shot are in
+The softer look (v4, 2026-10-05) starts its own critic count; v6 is its round 3, the last. The first look's three rounds per shot are in
 `critic/LOG.md`: hero 5, 5, 5; close-up 4 (read as a tobacco pipe), 4, 4; `renders/hero-v3.png` and `detail-v3.png`.
 What those rounds taught, carried into v4:
 

@@ -73,7 +73,7 @@ MAT = {
     'case': {'preset': 'satin_plastic', 'color': '#ece4d6', 'roughness': 0.3, 'coat': 0.45, 'coat_roughness': 0.07},
     'cap': {'preset': 'matte_plastic', 'color': '#3b2416', 'roughness': 0.8},       # the lid under the hair, like a wig's cap
     'grille': {'preset': 'fabric', 'color': '#5a5550'},                              # mid grey: a dark hole read as a pupil
-    'silicone': {'preset': 'silicone', 'color': '#8f8173', 'roughness': 0.6, 'sss': 0.3, 'sheen': 0.2},
+    'silicone': {'preset': 'silicone', 'color': '#9a8e82', 'roughness': 0.42, 'sss': 0.6, 'sss_radius': [1.0, 0.8, 0.65], 'sss_scale': 1.6, 'sheen': 0.25},   # translucent, not putty
     'led': {'preset': 'emissive', 'color': '#ffd9a8', 'emission': 3.0},
     'hair': {'preset': 'hair', 'melanin': 0.55, 'redness': 0.42, 'roughness': 0.2, 'radial_roughness': 0.3, 'coat': 0.12},
 }
@@ -86,10 +86,16 @@ objects.append({'id': 'wig', 'type': 'python', 'file': 'hair.py',
                          'clump': 0.8, 'clump_turn': 2.5, 'flyaway': 0.0, 'cut_jitter': 0.12, 'part_cross': 0.0,
                          'part_y': 5.0, 'frizz': 0.04, 'rise': 1.2, 'tuck': 0.55, 'part_gap': 0.35, 'part_flat': 2.5}})
 R_HEADING, R_AT = 40, (4, -54)                     # the bud the close-up looks at
-poses = {'r': lying_pose('r', heading=R_HEADING, at=R_AT), 'l': lying_pose('l', heading=198, at=(50, -44))}
-for side, pose in poses.items():
-    for p in ('bud', 'inner', 'grille', 'pincers', 'tip'):
-        objects.append({'id': f'{p}-{side}', 'type': 'mesh', 'file': f'out/stl/{p}-{side}.stl', 'material': parts[f'{p}-{side}']['material'], **pose})
+# v6 (softer round 2 on the hero): both tails point back into the group, the near one across the frame toward the case's
+# front, the far one toward its side, and the near bud clear of the case's corner (its tip nearly touched it, the tails
+# led out of the frame); the close-up keeps its own pose of the right bud, so each shot has its set of buds
+poses = {'r': lying_pose('r', heading=340, at=(40, -66)), 'l': lying_pose('l', heading=300, at=(76, -28)),
+         'r-d': lying_pose('r', heading=R_HEADING, at=R_AT)}
+BUD = ('bud', 'inner', 'grille', 'pincers', 'tip')
+for key, pose in poses.items():
+    side, sfx = key[0], key[1:]
+    for p in BUD:
+        objects.append({'id': f'{p}-{key}', 'type': 'mesh', 'file': f'out/stl/{p}-{side}.stl', 'material': parts[f'{p}-{side}']['material'], **pose})
 
 RIG = {'type': 'sweep', 'color': '#e8ded1', 'wall_color': '#a39383', 'wall_range': [0.2, 1.9], 'dome': 0.2,
        'key': {'azimuth': -40, 'elevation': 50, 'power': 0.7},
@@ -110,16 +116,27 @@ RIG3 = {'type': 'sweep', 'color': '#efe9df', 'wall_color': '#b3a594', 'wall_rang
                    {'azimuth': 0, 'elevation': 86, 'size': 0.7, 'distance': 2.0, 'power': 0.2},
                    {'azimuth': 14, 'elevation': 34, 'size': [1.1, 0.45], 'distance': 2.4, 'power': 0.45}],
         'cards': [{'azimuth': 80, 'elevation': 12, 'distance': 1.5, 'size': [1.2, 1.2]}]}
+# v6 (softer round 2 on the hero): the white case brighter than the backdrop. The key moves round to just right of the camera
+# and down to 32 degrees, so the case's face takes more of it than the floor does (from the front-left and high it was the
+# other way, and the case read as beige in fog); the sweep a little darker and greying sooner behind the group; a small,
+# bright pin for a crisp highlight on the lacquered buds
+RIG4 = {**RIG3, 'color': '#d3cabc', 'wall_color': '#8f8273', 'wall_range': [0.2, 1.3],
+        'key': {'azimuth': 18, 'elevation': 32, 'size': 1.0, 'power': 1.3},
+        'lights': RIG3['lights'] + [{'azimuth': -30, 'elevation': 35, 'size': 0.03, 'distance': 2.0, 'power': 0.8}]}
 shots = {
-    'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG3, 'exposure': 0.15,
+    'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG4, 'exposure': 0.15,
              'camera': {'position': [-176, -510, 312], 'target': [32, -32, 16], 'lens': 100},
-             'floor_z': 0},
-    'detail': {'size': [1800, 1200], 'samples': 192, 'rig': {**{k: v for k, v in RIG3.items() if k not in ('wall_color', 'wall_range')},
-                                                            'cove_depth': 5.0, 'cove_radius': 6.0},
-               # low (about 12 degrees) and pulled back (critic, softer round 1): the case left of centre with space above
-               # its hair, the bud in front and to the right, its forceps toward the open side
-               'camera': {'position': [160, -246, 62], 'target': [-20, -22, 18], 'lens': 60},
-               'hide': ['bud-l', 'inner-l', 'grille-l', 'pincers-l', 'tip-l'],
+             'hide': [f'{p}-r-d' for p in BUD], 'floor_z': 0},
+    # v6 (softer round 2 on the detail): from above again, as the brief has it (from low, the floor's far edge ran along the
+    # hair's lower edge, and a strip behind lit a patch of floor brighter than the case); one key from high camera-left, smaller,
+    # so the case throws its shadow back and to the right and the fringe a band onto the shell; that strip and the rim down
+    'detail': {'size': [1800, 1200], 'samples': 192,
+               'rig': {**{k: v for k, v in RIG4.items() if k not in ('wall_color', 'wall_range')},
+                       'key': {'azimuth': -45, 'elevation': 48, 'size': 0.8, 'power': 1.4},
+                       'rim': {**RIG4['rim'], 'power': 0.6},
+                       'lights': [RIG4['lights'][0], {**RIG4['lights'][1], 'power': 0.8}] + RIG4['lights'][2:]},
+               'camera': {'position': [85, -227, 178], 'target': [2, -30, 18], 'lens': 60},
+               'hide': [f'{p}-{k}' for p in BUD for k in ('l', 'r')],
                'floor_z': 0},
 }
 json.dump({'materials': MAT, 'objects': objects, 'shots': shots}, open(os.path.join(HERE, 'shots.json'), 'w'), indent=1)

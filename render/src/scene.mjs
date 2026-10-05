@@ -1,9 +1,10 @@
 // Rooms, lights and cameras for the shot list. Scene units: metres. Speakers are built in mm and scaled by 0.001.
 import { buildSpeaker, buildCrate } from './model.mjs';
 
-function sun(THREE, scene, { color = 0xffdcb4, intensity = 3, position, target = [0, 0.4, 0], bounds = 4, mapSize = 4096, softbox }) {
+function sun(THREE, scene, { color = 0xffdcb4, intensity = 3, position, target = [0, 0.4, 0], bounds = 4, mapSize = 4096, softbox, spread }) {
   const l = new THREE.DirectionalLight(color, intensity);
   if (softbox) l.userData.softbox = softbox; // the path-traced studio softbox's size in m (default 0.55 of its distance)
+  if (spread) l.userData.spread = spread;   // and its grid: the beam's spread in degrees, so the light stays on the subject
   l.position.set(...position); l.target.position.set(...target);
   l.castShadow = true;
   l.shadow.mapSize.set(mapSize, mapSize);
@@ -129,8 +130,11 @@ const ROOMS = {
     fillRect(THREE, scene, { color: 0xfff0dc, intensity: 0.8, w: 2.6, h: 1.6, position: [2.95, 1.6, 1.4], lookAt: [0, 1.0, 1.4] });
     bounce(THREE, scene, { sky: 0xe8e4dc, ground: 0xb8905f, intensity: 0.2 });
     enclose(THREE, scene, { x0: -5, x1: 3.5, z0: -2.5, z1: 4.5, h: 2.7, color: 0xebe6dc, window: 'right' });
-    chair(THREE, addons, scene, { position: [-0.7, 0, -2.1], rotationY: 0.25 }); // v15: against the wall between the pair, clear of both edges
-    return { exposure: 1.0, skyGlow: 2.0 }; // skyGlow: the path tracer's sky through this window, relative to the sun; a low sun admits little, so the shade needs more
+    // v16 (refinement round 2): the chair turned toward the window, set down rather than posed facing the camera
+    chair(THREE, addons, scene, { position: [-0.7, 0, -2.1], rotationY: 0.8 }); // v15: against the wall between the pair, clear of both edges
+    // v16: exposure down about half a stop, so the sunlit white sides (249 at v15) and the coral plinths stop clipping and the
+    // white faces separate the way the coral ones do
+    return { exposure: 0.72, skyGlow: 2.0 }; // skyGlow: the path tracer's sky through this window, relative to the sun; a low sun admits little, so the shade needs more
   },
   // Bright apartment: white walls, cool daylight from the front-right, pale floor, a pale chair.
   apartmentBright(THREE, addons, ctx, scene, o) {
@@ -153,19 +157,22 @@ const ROOMS = {
   oldRoom(THREE, addons, ctx, scene, o) {
     // v15 (refinement round 1): the window on the left wall, so the low sun's beam sweeps the front face and gable and the
     // shadow runs back-right; the cool fill and the lamp down, so the beam is the light the speaker answers to
-    scene.environmentIntensity = 0.1;
+    // v16 (refinement round 2): the room lifted out of the murk (env, bounce and the lamp up, exposure up a little) and the window
+    // taller, its sill at 0.35, so the beam takes the whole front from gable to plinth instead of cutting a diagonal across it
+    // below the mid driver, and lays a crisp patch on the boards
+    scene.environmentIntensity = 0.3;
     scene.background = new THREE.Color(0x4f4a42);
     scene.add(floorMesh(THREE, ctx.tex, { size: 10, planks: { base: '#5a4330', dark: '#4f3a29', light: '#634a35' }, roughness: 0.4 }));
     const back = wallMesh(THREE, { w: 10, h: 2.9, color: 0x7a7362, roughness: 1 }); back.position.set(0, 1.45, -2.0); scene.add(back);
     skirting(THREE, scene, { w: 10, z: -2.0, color: 0x8c8470, h: 0.14 });
-    windowWall(THREE, scene, { x: -2.6, color: 0x7a7362, sky: 0xc6d3e6, mullion: null, win: { z0: 1.6, z1: 2.8, sill: 0.95, head: 2.1 } });
+    windowWall(THREE, scene, { x: -2.6, color: 0x7a7362, sky: 0xc6d3e6, mullion: null, win: { z0: 1.6, z1: 2.8, sill: 0.35, head: 2.1 } });
     sun(THREE, scene, { color: 0xffc080, intensity: 2.6, position: [-7, 1.8, 6.0], target: [0.1, 0.8, 0], bounds: 4.5 });
     fillRect(THREE, scene, { color: 0xcbd7ea, intensity: 0.8, w: 1.0, h: 1.1, position: [-2.55, 1.5, 2.2], lookAt: [0, 1.0, 2.2] });
-    bounce(THREE, scene, { sky: 0x8fa0bb, ground: 0x5a4330, intensity: 0.22 });
-    const lamp = new THREE.PointLight(0xffcf9e, 5, 0, 2); lamp.position.set(1.7, 1.5, 1.3); scene.add(lamp);
+    bounce(THREE, scene, { sky: 0x8fa0bb, ground: 0x5a4330, intensity: 0.45 });
+    const lamp = new THREE.PointLight(0xffcf9e, 7, 0, 2); lamp.position.set(1.7, 1.5, 1.3); scene.add(lamp);
     enclose(THREE, scene, { x0: -2.6, x1: 5, z0: -2.0, z1: 4.5, h: 2.9, color: 0x7a7362, roughness: 1, window: 'left' });
     chair(THREE, addons, scene, { position: [0.9, 0, -1.6], rotationY: -0.5, color: 0x3d2a1c });
-    return { exposure: 0.95, skyGlow: 2.0 };
+    return { exposure: 1.15, skyGlow: 4.5 };   // v16: the window's sky brighter, so the room's left side is not a void
   },
   // Studio: #F8F7F4 ground sweeping up into a backdrop behind the subject, horizon faded with fog. Key light per shot.
   studio(THREE, addons, ctx, scene, o) {
@@ -190,9 +197,12 @@ const ROOMS = {
     // out and aimed past the row's centre toward its right end so the five stay within a third of a stop: the gable slopes take the
     // most light, the fronts less, the sides the camera sees fall into shade, and the sweep, twice as far from it, a stop below the
     // white fronts
-    if (key === 'lineup') sun(THREE, scene, { color: 0xffffff, intensity: 2.6, position: [-1.0, 3.37, 1.74], target: [0.6, 0.5, 0], bounds: 3, mapSize: 4096, softbox: 1.6 });
+    // v16: a grid on it (75 degree spread) and aimed a little higher, so the cabinets take the beam's core while the floor in
+    // front and the sweep behind fall off: the whites, not the empty floor, are the brightest thing in frame
+    if (key === 'lineup') sun(THREE, scene, { color: 0xffffff, intensity: 2.6, position: [-1.0, 3.37, 1.74], target: [0.35, 0.75, -0.1], bounds: 3, mapSize: 4096, softbox: 1.6, spread: 75 });
     if (key === 'swap') sun(THREE, scene, { color: 0xfff4e6, intensity: 2.6, position: [-1.2, 7, 1.8], target: [0, 0.8, 0], bounds: 3, mapSize: 4096 });
-    const fill = new THREE.DirectionalLight(0xffffff, o.fill ?? 0.5); fill.position.set(5, 3, 3); scene.add(fill);
+    const fill = new THREE.DirectionalLight(0xffffff, o.fill ?? 0.5); fill.position.set(...(o.fillPos || [5, 3, 3])); scene.add(fill);
+    if (o.fillSoftbox) fill.userData.softbox = o.fillSoftbox; // path-traced: a sized softbox where the rig puts it, not a broad 3.5 m fill
     bounce(THREE, scene, { sky: 0xffffff, ground: 0xf8f7f4, intensity: o.bounce ?? 0.25 });
     return { exposure: o.exposure ?? 1.0, toneMapping: 'neutral', reflector: o.reflector, strips: o.strips, backdropLight: o.backdropLight };
   },
@@ -200,7 +210,7 @@ const ROOMS = {
   desk(THREE, addons, ctx, scene, o) {
     scene.environmentIntensity = 0.4;
     scene.background = new THREE.Color(0xe9eaec); // neutral, so the fill is cooler than the sun and the pale cartons lift off the set (path-traced round 2)
-    const top = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.03, 1.3), new THREE.MeshStandardMaterial({ map: ctx.tex.planks({ base: '#cdb48c', dark: '#c6ac83', light: '#d3bb95' }), roughness: 0.35 }));
+    const top = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.03, 1.3), new THREE.MeshStandardMaterial({ map: ctx.tex.planks(o.desk || { base: '#cdb48c', dark: '#c6ac83', light: '#d3bb95' }), roughness: 0.35 }));
     top.material.name = 'desk';
     top.material.map = top.material.map.clone(); top.material.map.repeat.set(3.9, 1.8); top.material.map.needsUpdate = true;
     top.position.set(0, 0.72 - 0.015, 0.1); top.receiveShadow = top.castShadow = true; scene.add(top);

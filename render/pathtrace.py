@@ -77,6 +77,7 @@ def main():
             dirv = (tgt - pos).normalized()
             d, o = lamp('softbox' if i == 0 else 'fill', 'AREA', l['color']); d.shape = 'SQUARE'; d.size = size
             d.energy = l['intensity'] * math.pi * dist * dist * a.sun_strength
+            if l.get('spread'): d.spread = math.radians(l['spread'])   # a grid on the softbox: the light stays on the subject
             o.location = tgt - dirv * dist; aim(o, dirv)
         else:
             # AgX keeps the highlights that ACES clipped, so a sun tuned to read as sun in the real-time pass needs twice the strength here
@@ -193,6 +194,9 @@ def main():
             if name.startswith('finish'):
                 # Sprayed lacquer is never glass: a faint orange peel, about a millimetre across, that breaks long reflections up.
                 nrm = noise_bump(0.0011, 0.025, nrm)
+            elif name.startswith('bronze'):
+                # A brushed plate: fine grain along its width, so the reflector reads as a sheen across metal, not a flat swatch.
+                nrm = noise_bump(0.0004, 0.06, nrm, 0.0, 4.0, (1.0, 10.0, 10.0))
             nt.links.new(nrm, bsdf.inputs['Normal'])
         elif name.startswith('cone'):
             nt.links.new(noise_bump(0.0004, 0.12), bsdf.inputs['Normal']); bsdf.inputs['Roughness'].default_value = 0.8   # pressed paper
@@ -212,6 +216,16 @@ def main():
         if m.blend_method == 'BLEND' or m.surface_render_method == 'BLENDED':
             m.surface_render_method = 'DITHERED'  # alpha-tested decals in Cycles stay crisp
 
+    # Eased edges need each cabinet's finish in one object: the Bevel node only sees its own object's geometry, and the model
+    # builds every panel of the finish (front, back, sides, plinth faces, gable) as its own mesh, so the corners where front
+    # meets side stayed knife-sharp however large the radius (every critic round said so). Join them before rendering.
+    fin = [o for o in scene.objects if o.type == 'MESH' and o.material_slots
+           and all(sl.material and sl.material.name.lower().startswith('finish') for sl in o.material_slots)]
+    if len(fin) > 1:
+        for o in scene.objects: o.select_set(False)
+        for o in fin: o.select_set(True)
+        bpy.context.view_layer.objects.active = fin[0]
+        bpy.ops.object.join()
     # The glowing sky planes stand just outside the windows; they must not shadow the sun.
     for o in scene.objects:
         if o.type == 'MESH' and any(sl.material and sl.material.name in emissive for sl in o.material_slots):

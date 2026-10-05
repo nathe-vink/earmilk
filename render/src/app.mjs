@@ -75,7 +75,7 @@ async function exportGLB(cfg) {
   const lights = [];
   const drop = [];
   scene.traverse(o => {
-    if (o.isDirectionalLight) lights.push({ type: 'sun', color: hex(o.color), intensity: o.intensity, position: o.position.toArray(), target: o.target.position.toArray(), softbox: o.userData.softbox });
+    if (o.isDirectionalLight) lights.push({ type: 'sun', color: hex(o.color), intensity: o.intensity, position: o.position.toArray(), target: o.target.position.toArray(), softbox: o.userData.softbox, spread: o.userData.spread });
     else if (o.isRectAreaLight) { const d = new THREE.Vector3(0, 0, -1).applyQuaternion(o.quaternion); lights.push({ type: 'area', color: hex(o.color), intensity: o.intensity, width: o.width, height: o.height, position: o.position.toArray(), direction: d.toArray() }); }
     else if (o.isHemisphereLight) lights.push({ type: 'hemi', sky: hex(o.color), ground: hex(o.groundColor), intensity: o.intensity });
     else if (o.isPointLight) lights.push({ type: 'point', color: hex(o.color), intensity: o.intensity, position: o.getWorldPosition(new THREE.Vector3()).toArray() });

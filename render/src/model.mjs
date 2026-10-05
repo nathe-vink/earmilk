@@ -75,7 +75,7 @@ export function makeMaterials(THREE, tex, flavor) {
     trim: new M.MeshStandardMaterial({ color: 0xb9b6b1, roughness: 0.34, metalness: 1.0 }),
     dark: new M.MeshStandardMaterial({ color: 0x060606, roughness: 1, side: M.DoubleSide }),
     throatSeal: new M.MeshPhysicalMaterial({ color: flavor.throat.throat, roughness: 0.45, clearcoat: 0.3, clearcoatRoughness: 0.45, side: M.DoubleSide }),
-    portFlange: new M.MeshStandardMaterial({ color: 0x2c2c2c, roughness: 0.4, metalness: 0.6 }),
+    portFlange: new M.MeshPhysicalMaterial({ color: 0x2e2e2e, roughness: 0.5, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.15 }), // v16: moulded satin black, so its lip takes the key
     portBore: new M.MeshStandardMaterial({ color: 0x1c1c1c, roughness: 0.6, side: M.DoubleSide }), // moulded tube: a satin black the key can grade
     plate: new M.MeshStandardMaterial({ color: 0x1b1b1b, roughness: 0.45, metalness: 0.5 }),
     postRed: new M.MeshPhysicalMaterial({ color: 0xc62828, roughness: 0.35, clearcoat: 0.4, clearcoatRoughness: 0.3 }),
@@ -245,7 +245,7 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       labelMesh.rotation.y = Math.PI; labelMesh.position.set(0, B.label.top - lab.heightMm / 2, labelZ); cab.add(labelMesh);
       // The flange is a ring with a rounded inner lip (a 92 bore in a 112 flange, 3 proud), so the bore shows behind it; v14 and
       // earlier drew it as a solid disc over the bore, which read as a flat black disc (refinement round 1 on the back).
-      const ri = B.port.bore / 2, ro = B.port.flange / 2, lip = 2.5, edge = 1.0, prof = [new THREE.Vector2(ri, -2), new THREE.Vector2(ri, 3 - lip)];
+      const ri = B.port.bore / 2, ro = B.port.flange / 2, lip = 4.5, edge = 1.0, prof = [new THREE.Vector2(ri, -2), new THREE.Vector2(ri, 3 - lip)];   // v16: a fuller lip, so a crescent of light reads on it
       for (let i = 1; i <= 8; i++) { const t = (i / 8) * Math.PI / 2; prof.push(new THREE.Vector2(ri + lip - lip * Math.cos(t), 3 - lip + lip * Math.sin(t))); }
       for (let i = 0; i <= 4; i++) { const t = (i / 4) * Math.PI / 2; prof.push(new THREE.Vector2(ro - edge + edge * Math.sin(t), 3 - edge + edge * Math.cos(t))); }
       prof.push(new THREE.Vector2(ro, 0), new THREE.Vector2(ri, -2));
