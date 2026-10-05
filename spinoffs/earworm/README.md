@@ -96,8 +96,9 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
 
 ## Where the renders stand
 
-The in-ear look starts its own critic count (`critic/LOG.md`): v1 and v2 have had rounds 1 and 2, v3 is round 3, the last
-for this look. The over-ear version's renders are in `renders/over-ear/` and its rounds are in the log; its model is in
+The in-ear look has had its three critic rounds (`critic/LOG.md`): hero 4, 4, 4 and detail 4, 5, 5. Round 2 found two
+real bugs (both branches ran in one place; each lead out of its burrow kinked) that v3 fixed. What a next pass should do
+is at the end of the log: a camera built around one bud side-on, placed strips for the metal, a cable settled like rope. The over-ear version's renders are in `renders/over-ear/` and its rounds are in the log; its model is in
 git history.
 
 ## Files

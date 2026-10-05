@@ -76,7 +76,7 @@ The buds stay chestnut (an earwig is chestnut) and the case stays cream; the wig
 
 ## Where the renders stand
 
-The softer look (v4, 2026-10-05) starts its own critic count; v6 is its round 3, the last. The first look's three rounds per shot are in
+The softer look (v4, 2026-10-05) has had its three critic rounds: hero 5, 5, 5 and detail 4, 5, 6 (v6). What a next pass should do is at the end of the log. The first look's three rounds per shot are in
 `critic/LOG.md`: hero 5, 5, 5; close-up 4 (read as a tobacco pipe), 4, 4; `renders/hero-v3.png` and `detail-v3.png`.
 What those rounds taught, carried into v4:
 
