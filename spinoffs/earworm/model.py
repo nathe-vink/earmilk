@@ -42,9 +42,14 @@ def bud():
     end = BUD_LEN + NOZZLE_LEN
     shell = shell - Pos(end - 0.6, 0, 0) * Rot(0, 90, 0) * Cylinder(NOZZLE_D / 2 - 0.55, 1.4)       # the sound bore's mouth
     mesh = Pos(end - 1.0, 0, 0) * Rot(0, 90, 0) * Cylinder(NOZZLE_D / 2 - 0.5, 0.1)
-    r = TIP_D / 2
-    pts = [(0, 1.9), (0.0, 3.0), (1.0, r * 0.84), (2.8, r * 0.99), (4.6, r), (6.4, r * 0.8), (TIP_LEN, NOZZLE_D / 2 + 0.4)]
-    f = make_face([Spline(*[(x, y, 0) for x, y in pts]), Polyline((TIP_LEN, NOZZLE_D / 2 + 0.4, 0), (TIP_LEN, 1.9, 0), (0, 1.9, 0))]).face()
+    # The tip as bought: a stem that grips the nozzle and a thin skirt flaring back from its front lip, an air gap between
+    # them (it was a solid dome, which read as a rubber stopper: in-ear round 2). x from the tip's front lip, y the radius.
+    k = TIP_D / 11.5                                                               # the skirt drawn for a medium tip
+    ri, rs = NOZZLE_D / 2 + 0.02, NOZZLE_D / 2 + 0.7
+    outer = Spline(*[(x, y * k, 0) for x, y in [(0, rs + 0.3), (0.45, 4.6), (1.6, 5.45), (3.2, 5.75), (5.0, 5.6), (6.6, 5.0), (TIP_LEN, 4.5)]])
+    inner = Spline(*[(x, y * k, 0) for x, y in [(TIP_LEN - 0.2, 4.05), (6.3, 4.6), (4.9, 5.12), (3.2, 5.28), (1.8, 4.95), (1.0, 4.25)]] + [(0.85, rs, 0)])
+    f = make_face([outer, Polyline((TIP_LEN, 4.5 * k, 0), (TIP_LEN - 0.2, 4.05 * k, 0)), inner,
+                   Polyline((0.85, rs, 0), (5.8, rs, 0), (5.8, ri, 0), (0, ri, 0), (0, (rs + 0.3) * k, 0))]).face()
     tip = Pos(end + 1.0, 0, 0) * Rot(0, 0, 180) * revolve(f, Axis.X, 360)          # front of the tip 1 mm past the nozzle
     return {'cap': cap, 'shell': shell, 'mesh': mesh, 'tip': tip}
 

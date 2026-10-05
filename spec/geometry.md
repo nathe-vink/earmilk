@@ -153,12 +153,14 @@ As drawn before the amendment (Sleeves and Hero artboards): front wordmark about
 | Plan | 100 × 100 |
 | Body | 200. Gable rise 35, so the ridge is at `z = 235`. Fin 12, top at `z = 247`. |
 | Slope (derived) | run 50, rise 35: 61.0 long at 35.0° |
-| Driver | one full-range, frame ø ~68, centre `z = 95`: `z` 61 → 129 |
+| Driver | one full-range, frame ø ~68, centre `z = 95`: `z` 61 → 129. *Amended 2026-10-05, the owner: replaced by the two below.* |
+| Woofer (2026-10-05) | frame ø 68, centre `z = 67`: `z` 33 → 101 (the floorstander's 290 / 860 of the body). Clears the plinth (top at 28.2 plus the shadow line). |
+| Mid (2026-10-05) | frame ø 40, centre `z = 160`: `z` 140 → 180 (the floorstander's 690 / 860), 20 below the body's top. |
 | Bowl | "tiny bowl at the top", not dimensioned. Assumption for the crate shot only: the floorstander's bowl scaled by the plan ratio 100/390, so a mouth of about 54 × 30 and a throat of about ø 17. |
-| Tweeter (2026-10-05) | a small dome at the bowl's throat: faceplate ø 16.6 (the throat less 2 %), 1.4 thick; dome base ø 8.8, apex 2.4 forward. The full-range driver at 95 is the pint's woofer. |
+| Tweeter (2026-10-05) | a small dome at the bowl's throat: faceplate ø 16.6 (the throat less 2 %), 1.4 thick; dome base ø 8.8, apex 2.4 forward. Three drivers, as the floorstander has. |
 | Not a uniform scale of the floorstander (derived) | plan ×0.256, body ×0.233, gable ×0.233, fin ×0.267. The pint is squatter, like a real pint next to a half gallon. |
 | Crate | 340 × 250 × 130, holding 2 × 3 pints. The pints stand about 117 proud of the rim (derived). Six pints, five flavors, so one flavor appears twice; which one is not specified. |
-| Crate form (2026-10-05) | a moulded dairy crate in warm white: walls 4, corner radius 18, a rolled rim 7 tall standing 1.6 proud, a floor 6. Long walls: one upper window per pint, 84 × 52 (`z` 62 → 114) centred on each pint, so the front pints' drivers (`z` 67 → 135 above the crate floor) show through; six lower windows 38 × 24. Short walls: a hand-hold 100 × 24 at `z` 86 → 110 and four lower windows. Renders only: the crate's electronics are not designed. |
+| Crate form (2026-10-05) | a moulded dairy crate in warm white: walls 4, corner radius 18, a rolled rim 7 tall standing 1.6 proud, a floor 6. Long walls: one window per pint, 80 × 73 (`z` 39 → 112, corner radius 10), centred on each pint, so each front pint's woofer (`z` 39 → 107 above the crate's base) shows whole; a solid band below, so the plinths do not show through in pieces. Short walls: a hand-hold 100 × 24 at `z` 86 → 110 and four windows 38 × 28 at `z` 44 → 72. The mids (`z` 146 → 186) stand above the rim. Renders only: the crate's electronics are not designed. |
 
 ## Checks a model must pass
 

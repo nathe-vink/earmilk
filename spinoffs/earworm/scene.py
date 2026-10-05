@@ -66,7 +66,9 @@ Vb = np.vstack([stl_vertices(STL(n)) for n in BUD_PARTS])
 bud_ends = (BUD_LEN + 3.0, 1.0)                       # rests on its tip and on its back
 POSE = {'l': lying_pose(Vb, up=(0, 0, 1), axis=(1, 0, 0), heading=-118, at=(-48, -14), ends=bud_ends),
         'r': lying_pose(Vb, up=(0, 0, 1), axis=(1, 0, 0), heading=-94, at=(-22, -30), ends=bud_ends)}
-spine = catmull([[-33, 10, 0], [-42, 34, 0], [-31, 62, 0], [-4, 77, 0], [25, 74, 0], [41, 63, 0]])   # the pair's centreline
+# the pair's centreline: up the left, across the top and down the right to the splitter, so each branch draws about 290 mm
+# of its 300 (in-ear round 2: the split read as a bud-length from the buds, partly because both branches ran in one place)
+spine = catmull([[-33, 10, 0], [-50, 38, 0], [-44, 70, 0], [-12, 90, 0], [28, 89, 0], [60, 72, 0], [72, 47, 0]])
 sp_dir = spine[-1] - spine[-2]; sp_dir /= np.linalg.norm(sp_dir)
 heading_split = math.degrees(math.atan2(-sp_dir[1], -sp_dir[0]))     # the splitter's +x points back toward the branches
 Vs = stl_vertices(STL('splitter'))
@@ -89,10 +91,14 @@ def leave_bud(side):
 
 
 def into_splitter(k):
+    """The last points of a branch: along the splitter's axis, rising from the floor to the hole over 16 mm (it rose over 4, a
+    bend of two cable widths), into the hole."""
     sf = facts['splitter']
     h = to_world(SPLIT, sf['branch_holes'][k]); d = dir_world(SPLIT, sf['branch_dir'])
-    outer = add(h, d, 7); outer[2] = zb + 0.3
-    return [outer, add(h, d, 3), h, add(h, d, -5)]
+    far = add(h, d, 16); far[2] = zb + 0.15
+    mid = add(h, d, 9); mid[2] = zb + 0.45 * (h[2] - zb)
+    near = add(h, d, 3.5); near[2] = h[2] - 0.15
+    return [far, mid, near, h, add(h, d, -5)]
 
 
 def side_of(p):
@@ -103,26 +109,55 @@ def side_of(p):
 
 holes = facts['splitter']['branch_holes']
 hole_side = [side_of(to_world(SPLIT, h)) for h in holes]
-# which bud is on the left of the spine where it starts
+# which bud runs on the left of the spine: the one whose burrow lies further left of its start (both lie behind the start, so
+# a plain sign test put both on one side and the two branches ran inside each other, critic round 2 on the detail)
 t0 = spine[1] - spine[0]; t0 /= np.linalg.norm(t0)
-def start_side(pose):
-    v = np.asarray(to_world(pose, facts['bud']['worm_mouth'])[:2]) - spine[0][:2]
-    return 1 if (t0[0] * v[1] - t0[1] * v[0]) > 0 else -1
+def start_sides():
+    c = {}
+    for s, pose in POSE.items():
+        v = np.asarray(to_world(pose, facts['bud']['worm_mouth'])[:2]) - spine[0][:2]
+        c[s] = t0[0] * v[1] - t0[1] * v[0]
+    hi = max(c, key=c.get)
+    return {s: (1 if s == hi else -1) for s in c}
+SIDES = start_sides()
+
+
+def blend(p0, d0, p1, d1, step=4.0):
+    """Points about `step` mm apart on a cubic Hermite from p0 (heading d0) to p1 (heading d1), ends excluded: the lead out of
+    the burrow turns into the run on one smooth bend instead of a spline overshooting a long gap (the kink at the collar)."""
+    p0, p1 = np.asarray(p0, float), np.asarray(p1, float)
+    L = float(np.linalg.norm(p1 - p0)); n = max(2, int(round(L / step)))
+    m0 = np.asarray(d0, float) / np.linalg.norm(d0) * L; m1 = np.asarray(d1, float) / np.linalg.norm(d1) * L
+    out = []
+    for i in range(1, n):
+        u = i / n
+        out.append(((2 * u**3 - 3 * u**2 + 1) * p0 + (u**3 - 2 * u**2 + u) * m0 + (-2 * u**3 + 3 * u**2) * p1 + (u**3 - u**2) * m1).tolist())
+    return out
 
 
 def branch(side):
-    sgn = start_side(POSE[side])
+    sgn = SIDES[side]
     run = offset(spine, sgn * GAP)[2:-1:3]             # every third point of the offset spine, dropping the ends
     run[:, 2] = zb
     k = hole_side.index(sgn) if sgn in hole_side else 0
-    return leave_bud(side) + run.tolist() + into_splitter(k)
+    lead = leave_bud(side)
+    d_out = np.asarray(dir_world(POSE[side], facts['bud']['out_dir']))
+    j = next(i for i in range(len(run) - 1) if math.dist(lead[-1], run[i]) >= 24.0)   # a chord long enough for a gentle bend
+    ent = into_splitter(k)
+    toward = -np.asarray(dir_world(SPLIT, facts['splitter']['branch_dir']))                # along the splitter, toward it
+    run = run[j:]
+    run = run[(run - np.asarray(ent[0])) @ toward < -6.0]                                   # the run stops 6 mm short of the entry
+    tail = blend(run[-1], run[-1] - run[-2], ent[0], toward)
+    return lead + blend(lead[-1], d_out, run[0], run[1] - run[0]) + run.tolist() + tail + ent
 
 
 right, left = branch('r'), branch('l')
 sf = facts['splitter']
 mh = to_world(SPLIT, sf['main_hole']); md = dir_world(SPLIT, sf['main_dir'])
+# the main worm runs down the right side, curls left along the bottom and back on itself, and the plug points right into the
+# right third (round 2: the plug's tip sat on the frame's centre line)
 main = [add(mh, md, -5), mh, add(mh, md, 4), [mh[0] + md[0] * 12, mh[1] + md[1] * 12, zm]] + \
-       [[74, 30, zm], [80, 6, zm], [71, -17, zm], [54, -33, zm], [38, -41, zm], [24, -43, zm]]
+       [[88, 2, zm], [84, -22, zm], [66, -40, zm], [44, -45, zm], [27, -37, zm], [24, -20, zm], [32, -10, zm], [46, -12, zm]]
 end, prev = main[-1], main[-2]
 yaw = math.degrees(math.atan2(end[1] - prev[1], end[0] - prev[0]))
 inside = math.dist(right[0], right[1])                # length inside the bud
@@ -166,7 +201,7 @@ worm_m = {'id': 'worm-main', 'type': 'tube', 'points': main, 'radius': MAIN_R, '
 MAT = {
     'shell': {'preset': 'satin_plastic', 'color': '#2c2a28', 'roughness': 0.34, 'coat': 0.15, 'coat_roughness': 0.3},
     'metal': {'preset': 'metal_satin', 'color': '#7d7974', 'roughness': 0.28},
-    'silicone': {'preset': 'silicone', 'color': '#3b3734', 'roughness': 0.6, 'sss': 0.15, 'sheen': 0.2},
+    'silicone': {'preset': 'silicone', 'color': '#5f5a55', 'roughness': 0.42, 'sss': 0.6, 'sss_radius': [1.0, 0.85, 0.75], 'sss_scale': 1.6, 'sheen': 0.25},   # smoky translucent tips
     'grille': {'preset': 'fabric', 'color': '#111111'},
     'worm': {'preset': 'lacquer', 'color': '#b97a72', 'top_color': '#6f3c42', 'coat': 0.6, 'coat_roughness': 0.08, 'roughness': 0.34,
              'sss': 0.08, 'sss_scale': 0.3, 'attr_color': {'attr': 'saddle', 'color': '#e4c6b0', 'top_color': '#c79a82'}},
@@ -185,19 +220,24 @@ for n in ('plug-barrel', 'plug', 'plug-rings'):
                     'translate': [end[0], end[1], PLUG_BARREL_D / 2 + 0.05], 'rotate': [0, 0, yaw]})
 objects += [worm_r, worm_l, worm_m]
 
-RIG = {'type': 'sweep', 'color': '#ecebe7', 'dome': 0.12, 'cove_depth': 4.0, 'cove_radius': 2.5,
-       'key': {'azimuth': -30, 'elevation': 60, 'size': 0.8, 'power': 0.9},
-       'fill': {'azimuth': 50, 'elevation': 25, 'power': 0.12},
-       'rim': {'azimuth': 170, 'elevation': 50, 'size': 1.2, 'power': 1.1},
-       'lights': [{'azimuth': -135, 'elevation': 20, 'size': [0.16, 1.4], 'distance': 1.6, 'power': 2.8},
-                  {'azimuth': 135, 'elevation': 20, 'size': [0.16, 1.4], 'distance': 1.6, 'power': 2.4},
-                  {'azimuth': 0, 'elevation': 72, 'size': [0.1, 1.6], 'distance': 1.8, 'power': 1.6},
-                  {'azimuth': -20, 'elevation': 35, 'size': 0.03, 'distance': 2.0, 'power': 1.4}]}
+# in-ear round 2 asked, in both shots, for shadows with an edge and crisp lines on the metal: a smaller, stronger key, the dome,
+# fill and side strips down, a narrower overhead strip; the rim stays, so light comes through the worm's jacket
+RIG = {'type': 'sweep', 'color': '#ecebe7', 'dome': 0.07, 'cove_depth': 4.0, 'cove_radius': 2.5,
+       'key': {'azimuth': -30, 'elevation': 60, 'size': 0.32, 'power': 1.6},
+       'fill': {'azimuth': 50, 'elevation': 25, 'power': 0.06},
+       'rim': {'azimuth': 170, 'elevation': 50, 'size': 1.2, 'power': 0.7},
+       'lights': [{'azimuth': -135, 'elevation': 20, 'size': [0.16, 1.4], 'distance': 1.6, 'power': 1.2},
+                  {'azimuth': 135, 'elevation': 20, 'size': [0.16, 1.4], 'distance': 1.6, 'power': 1.0},
+                  {'azimuth': 0, 'elevation': 72, 'size': [0.06, 1.6], 'distance': 1.8, 'power': 0.9},
+                  {'azimuth': -20, 'elevation': 35, 'size': 0.03, 'distance': 2.0, 'power': 0.9}]}   # the key about 60 % of the light on the floor
+RIG_D = RIG   # from behind the pair the overhead strip lies along both barrels
 shots = {
     'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG, 'floor_z': 0, 'exposure': 0.3,
              'camera': {'position': [6, -250, 205], 'target': [6, 22, 0], 'lens': 58}},
-    'detail': {'size': [1800, 1200], 'samples': 192, 'rig': RIG, 'floor_z': 0, 'exposure': 0.3,
-               'camera': {'position': [40, 36, 62], 'target': [-30, -26, 2], 'lens': 60}},
+    'detail': {'size': [1800, 1200], 'samples': 192, 'rig': RIG_D, 'floor_z': 0, 'exposure': 0.3,
+               # behind the pair and low (round 2: both cables ran off the right edge, the lower left empty): both worms lead
+               # in from the bottom edge to their burrows, the segments lapping toward the camera, both earphones whole
+               'camera': {'position': [-20, 40, 46], 'target': [-36, -20, 4], 'lens': 45}},
 }
 json.dump({'materials': MAT, 'objects': objects, 'shots': shots,
            'notes': {'branch_r_mm': round(Lr), 'branch_l_mm': round(Ll), 'main_mm': round(Lm), 'saddle_from_bud_mm': SADDLE_FROM_BUD}},

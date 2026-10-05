@@ -8,7 +8,7 @@ export function specFor(kind) {
     const k = PINT.bowlScale;
     return {
       kind, plan: PINT.plan, body: PINT.body, gableRise: PINT.gableRise, fin: PINT.fin, board: PINT.board, wall: PINT.wall,
-      drivers: [{ z: PINT.driver.z, frame: PINT.driver.frame }],
+      drivers: [{ z: PINT.woofer.z, frame: PINT.woofer.frame }, { z: PINT.mid.z, frame: PINT.mid.frame }],
       bowl: { mouthWidth: FS.bowl.mouthWidth * k, mouthLength: FS.bowl.mouthLength * k, mouthCenterS: FS.bowl.mouthCenterS * k, throat: FS.bowl.throat * k, setback: FS.tweeter.faceplateY * k, axisZ: PINT.body + (FS.tweeter.z - FS.body) * k, bulge: 4.5 * k },
       // 2026-10-05, the owner: the pint's bowl carries a small dome tweeter at its throat, as the floorstander's does.
       tweeter: { faceplate: FS.bowl.throat * k * 0.98, faceplateThick: 1.4, apexForward: 2.4, domeBaseR: 4.4 }, back: null,
@@ -76,6 +76,7 @@ export function makeMaterials(THREE, tex, flavor) {
     dark: new M.MeshStandardMaterial({ color: 0x060606, roughness: 1, side: M.DoubleSide }),
     throatSeal: new M.MeshPhysicalMaterial({ color: flavor.throat.throat, roughness: 0.45, clearcoat: 0.3, clearcoatRoughness: 0.45, side: M.DoubleSide }),
     portFlange: new M.MeshStandardMaterial({ color: 0x2c2c2c, roughness: 0.4, metalness: 0.6 }),
+    portBore: new M.MeshStandardMaterial({ color: 0x1c1c1c, roughness: 0.6, side: M.DoubleSide }), // moulded tube: a satin black the key can grade
     plate: new M.MeshStandardMaterial({ color: 0x1b1b1b, roughness: 0.45, metalness: 0.5 }),
     postRed: new M.MeshPhysicalMaterial({ color: 0xc62828, roughness: 0.35, clearcoat: 0.4, clearcoatRoughness: 0.3 }),
     postBlack: new M.MeshPhysicalMaterial({ color: 0x2e2e2e, roughness: 0.35, metalness: 0.3, clearcoat: 0.4, clearcoatRoughness: 0.3 }),
@@ -225,7 +226,7 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       pts.push(new THREE.Vector2(0.001, lip - 1 - R * 0.36));
       const cone = mesh(new THREE.LatheGeometry(pts, 64), mats.cone); cone.rotation.x = Math.PI / 2; grp.add(cone);
       const cap = mesh(new THREE.SphereGeometry(R * 0.2, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2), mats.dustcap);
-      cap.rotation.x = Math.PI / 2; cap.scale.z = 0.6; cap.position.z = lip - 1 - R * 0.33; grp.add(cap);
+      cap.rotation.x = Math.PI / 2; cap.scale.y = 0.6; cap.position.z = lip - 1 - R * 0.33; grp.add(cap); // squashed along its own axis (it was squashed across it, a pill)
     }
 
     // Back of the cabinet: engraved label, port, binding posts (floorstander only).
@@ -242,8 +243,14 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       const lab = ctx.tex.engravedLabel(bronze ? { color: B.plate.patina } : {});
       const labelMesh = mesh(new THREE.PlaneGeometry(lab.widthMm, lab.heightMm), mats.decal(lab.texture), false);
       labelMesh.rotation.y = Math.PI; labelMesh.position.set(0, B.label.top - lab.heightMm / 2, labelZ); cab.add(labelMesh);
-      const flange = mesh(new THREE.CylinderGeometry(B.port.flange / 2, B.port.flange / 2, 3, 64), mats.portFlange); flange.rotation.x = Math.PI / 2; flange.position.set(0, B.port.z, -half - 1.5); cab.add(flange);
-      const bore = mesh(new THREE.CylinderGeometry(B.port.bore / 2, B.port.bore / 2, 100, 64, 1, true), mats.dark); bore.rotation.x = Math.PI / 2; bore.position.set(0, B.port.z, -half + 45); cab.add(bore);
+      // The flange is a ring with a rounded inner lip (a 92 bore in a 112 flange, 3 proud), so the bore shows behind it; v14 and
+      // earlier drew it as a solid disc over the bore, which read as a flat black disc (refinement round 1 on the back).
+      const ri = B.port.bore / 2, ro = B.port.flange / 2, lip = 2.5, edge = 1.0, prof = [new THREE.Vector2(ri, -2), new THREE.Vector2(ri, 3 - lip)];
+      for (let i = 1; i <= 8; i++) { const t = (i / 8) * Math.PI / 2; prof.push(new THREE.Vector2(ri + lip - lip * Math.cos(t), 3 - lip + lip * Math.sin(t))); }
+      for (let i = 0; i <= 4; i++) { const t = (i / 4) * Math.PI / 2; prof.push(new THREE.Vector2(ro - edge + edge * Math.sin(t), 3 - edge + edge * Math.cos(t))); }
+      prof.push(new THREE.Vector2(ro, 0), new THREE.Vector2(ri, -2));
+      const flange = mesh(new THREE.LatheGeometry(prof, 96), mats.portFlange); flange.rotation.x = -Math.PI / 2; flange.position.set(0, B.port.z, -half); cab.add(flange);
+      const bore = mesh(new THREE.CylinderGeometry(ri, ri, 90, 64, 1, true), mats.portBore); bore.rotation.x = Math.PI / 2; bore.position.set(0, B.port.z, -half + 45); cab.add(bore);
       const boreEnd = mesh(new THREE.CircleGeometry(B.port.bore / 2, 64), mats.dark); boreEnd.rotation.y = Math.PI; boreEnd.position.set(0, B.port.z, -half + 90); cab.add(boreEnd);
       const plate = mesh(new addons.RoundedBoxGeometry(B.posts.w, B.posts.h, 5, 2, 1.5), mats.plate); plate.position.set(0, postsZ, -half - 2.5 - 0.3); cab.add(plate);
       for (const [x, mat] of [[B.posts.spacing / 2, mats.postRed], [-B.posts.spacing / 2, mats.postBlack]]) {
@@ -458,8 +465,8 @@ function roundedRectShape(THREE, w, d, r) {
 }
 
 // The pint crate (spec: 340 x 250 x 130, 2 x 3 pints). Since 2026-10-05 a dairy crate, moulded in warm white: rounded corners,
-// a rolled rim, latticed walls whose upper windows frame each front pint's driver (the plain crate's wall hid them), hand-holds
-// in the short ends, a floor. Still a crate and nothing more: no ports, lights or controls. Units mm, origin at its floor centre.
+// a rolled rim, latticed walls whose windows frame each front pint's woofer (the plain crate's wall hid it; the mid stands
+// above the rim), hand-holds in the short ends, a floor. Still a crate and nothing more: no ports, lights or controls. Units mm, origin at its floor centre.
 export function buildCrate(THREE, addons, ctx, { flavors }) {
   const C = { w: 340, d: 250, h: 130, t: 4, r: 18, floor: 6, rimH: 7, rimOut: 1.6 };
   const g = new THREE.Group();
@@ -476,9 +483,11 @@ export function buildCrate(THREE, addons, ctx, { flavors }) {
     return new THREE.ExtrudeGeometry(sh, { depth: C.t - 1.4, ...bev });
   };
   const L = C.w - 2 * C.r, D = C.d - 2 * C.r;
-  const upper = [-110, 0, 110].map(x => [x - 42, 62, x + 42, 114, 9]);                   // one window per pint, framing its driver
-  const lowerLong = [-125, -75, -25, 25, 75, 125].map(x => [x - 19, 30, x + 19, 54, 6]);   // above the pints' plinths and badges
-  const lowerShort = [-75, -25, 25, 75].map(x => [x - 19, 30, x + 19, 54, 6]);
+  // one window per pint on the long walls, framing its woofer whole (pint z 67, frame 68, so crate z 39 to 107); a solid
+  // band below, so the pints' plinths and badges do not show through in pieces
+  const upper = [-110, 0, 110].map(x => [x - 40, 39, x + 40, 112, 10]);
+  const lowerLong = [];
+  const lowerShort = [-75, -25, 25, 75].map(x => [x - 19, 44, x + 19, 72, 6]);       // above the plinths, below the hand-hold
   const handle = [[-50, 86, 50, 110, 12]];                                                // a hand-hold in each short end
   for (const sz of [-1, 1]) {
     const m = mesh(panel(L, [...upper, ...lowerLong]));
@@ -506,7 +515,7 @@ export function buildCrate(THREE, addons, ctx, { flavors }) {
   // The floor, inside the walls.
   const fl = new THREE.ExtrudeGeometry(roundedRectShape(THREE, C.w - 2 * C.t - 0.6, C.d - 2 * C.t - 0.6, C.r - C.t), { depth: C.floor, bevelEnabled: false, curveSegments: 24 });
   fl.rotateX(-Math.PI / 2); g.add(mesh(fl));
-  const cols = 3, pitchX = 110, pitchZ = 110;
+  const cols = 3, pitchX = 110, pitchZ = 124;   // the rows 24 apart, each 9 from its long wall, so the woofers sit close behind their windows
   flavors.forEach((fl2, i) => {
     const col = i % cols, row = Math.floor(i / cols);
     const p = buildSpeaker(THREE, addons, ctx, { kind: 'pint', flavor: ctx.flavor(fl2) });

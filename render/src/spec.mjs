@@ -47,7 +47,11 @@ export const PINT = {
   body: 200,
   gableRise: 35,
   fin: { height: 12, thick: 2 },
-  driver: { z: 95, frame: 68 },
+  driver: { z: 95, frame: 68 },  // the spec's single full-range, until 2026-10-05
+  // 2026-10-05, the owner: the pint mirrors the floorstander's face, a woofer low and a mid high (the big one's heights
+  // scaled by the body ratio 200/860), with the small tweeter in the bowl.
+  woofer: { z: 67, frame: 68 },
+  mid: { z: 160, frame: 40 },
   bowlScale: 100 / 390,
   board: 0.6,
   wall: 5,

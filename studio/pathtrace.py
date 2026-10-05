@@ -30,7 +30,8 @@ Rigs size themselves to the subject's bounding box, so a 20 mm earbud and a 1 m 
           rim, and a dome that is white overhead and the cove's tone at the horizon
   table   a tabletop (`surface`: oak, walnut, marble, linen, slate or a hex colour) under a large window light
   any rig takes `lights`: extra area lights by azimuth from the camera, elevation, distance and size (a number, or
-          [w, h] for a strip) in subject sizes, power as irradiance at the subject: strips for edges, a pin for glints
+          [w, h] for a strip) in subject sizes, power as irradiance at the subject: strips for edges, a pin for glints;
+          and `cards`: black flags the camera does not see, for negative fill
 
 Tubes also take `flatten` (a soft tube lying on a floor), `attrs` (a float along the tube for a material's
 `attr_color`, e.g. a saddle that fades into the body), rings with `shape` ("groove", or "shingle": overlapping
@@ -488,7 +489,7 @@ def main():
         wbg.inputs['Color'].default_value = (*lin(hex_rgb(rig.get('color', '#ffffff'))), 1); wbg.inputs['Strength'].default_value = rig.get('dome', 1.0)
 
     # extra lights for any rig: strips for edges, kickers ({azimuth (from the camera), elevation, size: D or [w, h] in
-    # units of the subject's size, distance in the same units, power as irradiance at the subject, color})
+    # units of the subject's size, distance in the same units, power as irradiance at the subject, color, roll in degrees})
     cam_pos2 = Vector(shot['camera']['position']) * MM if 'position' in shot.get('camera', {}) else centre + Vector((0, -3 * D, D))
     cam_az2 = math.degrees(math.atan2(cam_pos2.x - centre.x, -(cam_pos2.y - centre.y)))
     for i, L_ in enumerate(rig.get('lights', [])):
@@ -499,6 +500,21 @@ def main():
             o.data.shape = 'RECTANGLE'; o.data.size = sz[0] * D; o.data.size_y = sz[1] * D
         else:
             o.data.size = sz * D
+        if L_.get('roll'):  # turn a strip about its own axis, e.g. to lay its reflection along a cylinder's length
+            o.rotation_euler.rotate_axis('Z', math.radians(L_['roll']))
+
+    # cards: black flags for negative fill ({azimuth (from the camera), elevation, distance and size in subject sizes,
+    # color}); unseen by the camera, they take bounce and dome light off one side so a face falls off toward its edge
+    for i, cd in enumerate(rig.get('cards', [])):
+        az, el = math.radians(cam_az2 + cd.get('azimuth', 90)), math.radians(cd.get('elevation', 10))
+        dist = cd.get('distance', 1.6) * D
+        loc = centre + Vector((math.sin(az) * math.cos(el), -math.cos(az) * math.cos(el), math.sin(el))) * dist
+        sz = cd.get('size', [1.0, 1.5]); w, h = (sz, sz) if not isinstance(sz, (list, tuple)) else sz
+        w, h = w * D, h * D
+        card = set_mesh(f'card{i}', [(-w / 2, -h / 2, 0), (w / 2, -h / 2, 0), (w / 2, h / 2, 0), (-w / 2, h / 2, 0)], [(0, 1, 2, 3)],
+                        make_material(f'card{i}', {'preset': 'matte_plastic', 'color': cd.get('color', '#0a0a0a'), 'roughness': 0.95}))
+        card.location = loc; card.rotation_euler = (centre - loc).to_track_quat('Z', 'Y').to_euler()
+        card.visible_camera = False
 
     # --- camera ------------------------------------------------------------------------------------------------------
     cs = shot.get('camera', {})

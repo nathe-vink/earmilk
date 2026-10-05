@@ -39,7 +39,7 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
 |---|---|
 | Earphone barrel: diameter, length | 10, 17 |
 | Nozzle: diameter, length | 5.2, 5 |
-| Tip (bought) | 11.5 diameter, 7.4 long |
+| Tip (bought) | 11.5 diameter, 7.4 long: a stem on the nozzle and a thin skirt, smoky translucent silicone |
 | Burrow collar | 5 diameter, 2.4 long |
 | Worm: branch and main diameter | 3.7, 4.6 |
 | Segment pitch: branch, main; flare | 2.5, 2.9; 16 % of the radius |
@@ -59,11 +59,13 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
 ## Shots
 
 1. **Hero.** On a pale sweep, seen from above at about 35 degrees: the two earphones in front with their tips toward the
-   camera, the worms looping back from each to meet at the splitter (the lay makes a heart, which nobody arranged on
-   purpose), the main worm curling away to the plug. Everything sharp. Lit for small dark metal: a high soft key, two
-   strips behind for edge lines, a pin light for glints, little fill.
-2. **Detail.** One earphone close and whole, the worm burrowing into its back, the segments lapping toward the tail;
-   the other earphone soft behind. f/22.
+   camera, the two worms side by side up the left, across the top and down the right to the splitter, the main worm
+   curling back so the plug points in from the right third. Everything sharp. Lit for small dark metal: a high, fairly
+   small key that is most of the light on the floor, two strips behind for edge lines, a narrow overhead strip for a
+   line down each barrel, a pin light for glints, little fill.
+2. **Detail.** From behind the pair and low: both worms lead in from the bottom of the frame and burrow into the backs of
+   the earphones, the segments lapping toward the camera; both earphones whole and sharp (focus blur doubled the near
+   edge in round 1).
 
 ## What a render must not do
 
@@ -94,8 +96,9 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
 
 ## Where the renders stand
 
-The in-ear look starts its own critic count (`critic/LOG.md`). The over-ear version's renders are in
-`renders/over-ear/` and its rounds are in the log; its model is in git history.
+The in-ear look starts its own critic count (`critic/LOG.md`): v1 and v2 have had rounds 1 and 2, v3 is round 3, the last
+for this look. The over-ear version's renders are in `renders/over-ear/` and its rounds are in the log; its model is in
+git history.
 
 ## Files
 

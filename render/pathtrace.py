@@ -30,6 +30,7 @@ def main():
     ap.add_argument('--fstop', type=float, default=0.0, help='depth of field, focused on the shot\'s look-at point; 0 for none')
     ap.add_argument('--strips', type=float, default=1.0, help='studio only: strength of the two edge strips behind the subject (0 for none)')
     ap.add_argument('--surface', type=float, default=1.0, help='strength of the surface detail (orange peel, paper, plaster, grain); 0 for none')
+    ap.add_argument('--bevel', type=float, default=2.0, help='eased edges on the finish, in the shader, mm (silhouette unchanged)')
     a = ap.parse_args()
     import bpy  # noqa: E402
     from mathutils import Vector  # noqa: E402
@@ -71,6 +72,8 @@ def main():
             span = (tgt - pos).length  # the real-time rig's placement says how close the source was meant to be
             dist = min(max(span, 2.2), 5.0) if i == 0 else 6.0
             size = dist * 0.55 if i == 0 else 3.5
+            if l.get('softbox'):  # a shot that sizes its softbox: where the rig put it, at that size, for a harder key and a crisper shadow
+                dist, size = min(max(span, 1.2), 6.0), l['softbox']
             dirv = (tgt - pos).normalized()
             d, o = lamp('softbox' if i == 0 else 'fill', 'AREA', l['color']); d.shape = 'SQUARE'; d.size = size
             d.energy = l['intensity'] * math.pi * dist * dist * a.sun_strength
@@ -88,7 +91,8 @@ def main():
             d, o = lamp('lamp', 'POINT', l['color']); d.energy = l['intensity'] * 4 * math.pi; d.shadow_soft_size = 0.08
             o.location = P(l['position'])
 
-    if studio and a.strips > 0:
+    strips = a.strips * (side.get('strips') if side.get('strips') is not None else 1.0)  # a shot can scale its strips in the sidecar
+    if studio and strips > 0:
         # Two tall strips behind the subject, left and right of the camera's line, so dark edges and glossy corners take a line
         # of light (what every spin-off critic round asked for). Irradiance about 1.6 W/m2 at the subject each.
         cp, lk = P(side['camera']['position']), P(side['camera']['lookAt'])
@@ -97,8 +101,32 @@ def main():
             ang = math.radians(sgn * 140)
             dirv = Vector((fwd.x * math.cos(ang) - fwd.y * math.sin(ang), fwd.x * math.sin(ang) + fwd.y * math.cos(ang), 0))
             d, o = lamp(f'strip{k}', 'AREA', '#ffffff'); d.shape = 'RECTANGLE'; d.size = 0.35; d.size_y = 2.6
-            dist = 3.2; d.energy = (1.6 if sgn < 0 else 1.3) * math.pi * dist * dist * a.strips
+            dist = 3.2; d.energy = (1.6 if sgn < 0 else 1.3) * math.pi * dist * dist * strips
             o.location = Vector((lk.x, lk.y, 0.9)) - dirv * dist; aim(o, Vector((lk.x, lk.y, 0.6)) - o.location)
+    if side.get('reflector'):
+        # A reflector card behind the camera that lights only the metal (light linking): the bronze plate and the posts mirror
+        # it (the shot names the receivers by material), so the polished faces read bright against the dark engraving, while the
+        # matte finish keeps the key's fall-off.
+        r = side['reflector']
+        cp, lk = P(side['camera']['position']), P(side['camera']['lookAt'])
+        d, o = lamp('reflector', 'AREA', '#ffffff'); d.shape = 'RECTANGLE'; d.size = r['w']; d.size_y = r['h']
+        d.energy = r['radiance'] * r['w'] * r['h'] * math.pi
+        o.location = cp + (cp - lk).normalized() * r.get('behind', 1.0); aim(o, lk - o.location)
+        rc = bpy.data.collections.new('reflector-receivers')
+        for ob in scene.objects:
+            if ob.type == 'MESH' and any(sl.material and sl.material.name.lower().startswith(tuple(r['receivers'])) for sl in ob.material_slots):
+                rc.objects.link(ob)
+        o.light_linking.receiver_collection = rc
+    if studio and side.get('backdropLight'):
+        # A wide softbox hung above and behind the subject, out of frame and facing down the sweep, unseen by the camera: the
+        # backdrop goes clean and bright behind a pale product, so a white body reads against it by its own shading.
+        # `backdropLight` is the irradiance (W/m2) it adds at the middle of the curve.
+        cp, lk = P(side['camera']['position']), P(side['camera']['lookAt'])
+        fwd = Vector((lk.x - cp.x, lk.y - cp.y, 0)).normalized()
+        d, o = lamp('backdrop', 'AREA', '#ffffff'); d.shape = 'RECTANGLE'; d.size = 6.0; d.size_y = 1.0
+        o.location = Vector((lk.x, lk.y, 2.2)) + fwd * 1.6; tgt = Vector((lk.x, lk.y, 0.5)) + fwd * 3.4
+        dist = (tgt - o.location).length; d.energy = side['backdropLight'] * math.pi * dist * dist; aim(o, tgt - o.location)
+        o.visible_camera = False
     if a.fstop > 0:
         cam.data.dof.use_dof = True; cam.data.dof.aperture_fstop = a.fstop
         cam.data.dof.focus_distance = (P(side['camera']['lookAt']) - P(side['camera']['position'])).length
@@ -160,7 +188,7 @@ def main():
             return bn.outputs['Normal']
         if name.startswith(('finish', 'bronze', 'board', 'print', 'standpaint')) and not bsdf.inputs['Normal'].is_linked:
             # Eased edges: a lacquered cabinet's arrises are not razor sharp. A shader-space bevel of 2 mm, no geometry change.
-            bev = nt.nodes.new('ShaderNodeBevel'); bev.inputs['Radius'].default_value = 0.002; bev.samples = 6
+            bev = nt.nodes.new('ShaderNodeBevel'); bev.inputs['Radius'].default_value = a.bevel / 1000; bev.samples = 6
             nrm = bev.outputs['Normal']
             if name.startswith('finish'):
                 # Sprayed lacquer is never glass: a faint orange peel, about a millimetre across, that breaks long reflections up.

@@ -1,5 +1,6 @@
-# Shot 06 · Mixed crate on a desk · v14
+# Shot 06 · Mixed crate on a desk · v15
 
+v15: after refinement round 1. The camera down to just above the gable tops (desk + 0.38 m), a shallower three-quarter (14 degrees) on an 85 mm lens, the crate a little left of centre with its shadow in frame; the two rows of pints 124 apart, each 9 mm from its long wall, so each front woofer sits close behind its window and shows whole from this angle. The wall a warm grey (#A49E92), so the white crate and bodies separate from it. Round dust caps (they were pills). Whole repeats. Eased edges 4 mm.
 v14: the 2026-10-05 amendments (the owner): each pint mirrors the floorstander's drivers, a woofer low and a mid high on its face and a small dome tweeter at the throat of its bowl; the crate is a moulded dairy crate in warm white whose windows frame the front pints' woofers, the mids above the rim. Render polish as every shot: paper cones, orange peel, desk grain.
 v13: paper cones matte; the eased arris 2 mm; the desk room's fill cooler and its dome neutral, so the pale cartons lift off the set. The crate's wall height, which hides the pints' drivers, is spec and goes to the owner. Path-traced round 2 asked for the rim below the discs.
 v12: the crate's base board now sits inside its four walls, the way a nailed crate bottom does; flush with them it shared their outer planes, which the path tracer rendered as a black band. The desk room keeps its open dome at a quarter of the strength the real-time rig implied, so the sun's shadow reads. Nothing on the product changed.

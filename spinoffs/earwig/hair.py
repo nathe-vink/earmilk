@@ -11,7 +11,8 @@ strands grow in about two seconds. Rendered as Cycles curves with the Principled
 
 def build(ctx, w, d, h, r, split_z, count=30000, radius=0.035, volume=(0.3, 3.2), cut_below=1.8, seed=7,
           material='hair', points=16, step=0.45, translate=(0, 0, 0), frizz=0.08, clump=0.5, tuck=0.45,
-          clump_turn=6.0, flyaway=0.0, cut_jitter=0.18, part_cross=0.0, part_y=0.0, rise=2.5):
+          clump_turn=6.0, flyaway=0.0, cut_jitter=0.18, part_cross=0.0, part_y=0.0, rise=2.5, part_gap=0.0,
+          part_flat=0.0):
     np, bpy, MM = ctx.np, ctx.bpy, ctx.MM
     rng = np.random.default_rng(seed)
     c = np.array([0.0, 0.0, h / 2]); inner = np.array([w / 2, d / 2, h / 2]) - r
@@ -29,6 +30,8 @@ def build(ctx, w, d, h, r, split_z, count=30000, radius=0.035, volume=(0.3, 3.2)
     x = rng.uniform(-w / 2, w / 2, n * 2); y = rng.uniform(-d / 2, d / 2, n * 2)
     dx = np.maximum(np.abs(x) - inner[0], 0); dy = np.maximum(np.abs(y) - inner[1], 0)
     ok = dx ** 2 + dy ** 2 < (0.75 * r) ** 2
+    if part_gap > 0:                                                       # a clean part: no roots on the line itself
+        ok &= ~((np.abs(y - part_y) < part_gap) & (np.abs(x) < w / 2 - r * 0.6))
     x, y, dx, dy = x[ok][:n], y[ok][:n], dx[ok][:n], dy[ok][:n]
     n = len(x)
     z = c[2] + inner[2] + np.sqrt(np.maximum(r ** 2 - dx ** 2 - dy ** 2, 0))
@@ -50,6 +53,7 @@ def build(ctx, w, d, h, r, split_z, count=30000, radius=0.035, volume=(0.3, 3.2)
     cross = (np.abs(y - part_y) < 2.5) & (rng.random(n) < part_cross)      # strands that start across the part
     cross_dir = -np.sign(y - part_y) * cross
     rise_mm = rise                                                         # how soon a strand reaches its height off the lid
+    pdist = np.abs(y - part_y)
     track = [p.copy()]
     alive = np.ones(n, bool); travelled = np.zeros(n)
     wob_phase = rng.uniform(0, 2 * np.pi, n); wob_k = rng.uniform(0.6, 1.4, n)
@@ -76,6 +80,8 @@ def build(ctx, w, d, h, r, split_z, count=30000, radius=0.035, volume=(0.3, 3.2)
         to_cut = q[:, 2] - cut
         tuck_k = np.where(to_cut < 3.0, 1 - tuck * (1 - np.clip(to_cut / 3.0, 0, 1)), 1.0)
         target = hs * (rise * (2 - rise)) * tuck_k * (1 + 0.6 * fly * np.clip(travelled / 12.0, 0, 1))
+        if part_flat > 0:                                                  # strands beside the part lie flat at first
+            target = target * np.clip((pdist + travelled * 0.5) / part_flat, 0.12, 1.0)
         target = target + (cl_off[near] * nn).sum(1) * clump * rise
         q = q - ((sdf(q) - np.maximum(target, 0.05)))[:, None] * normal(q)
         p = np.where(alive[:, None], q, p)

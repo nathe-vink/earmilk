@@ -1,8 +1,9 @@
 // Rooms, lights and cameras for the shot list. Scene units: metres. Speakers are built in mm and scaled by 0.001.
 import { buildSpeaker, buildCrate } from './model.mjs';
 
-function sun(THREE, scene, { color = 0xffdcb4, intensity = 3, position, target = [0, 0.4, 0], bounds = 4, mapSize = 4096 }) {
+function sun(THREE, scene, { color = 0xffdcb4, intensity = 3, position, target = [0, 0.4, 0], bounds = 4, mapSize = 4096, softbox }) {
   const l = new THREE.DirectionalLight(color, intensity);
+  if (softbox) l.userData.softbox = softbox; // the path-traced studio softbox's size in m (default 0.55 of its distance)
   l.position.set(...position); l.target.position.set(...target);
   l.castShadow = true;
   l.shadow.mapSize.set(mapSize, mapSize);
@@ -121,44 +122,50 @@ const ROOMS = {
     scene.add(floorMesh(THREE, ctx.tex, { size: 10, planks: { base: '#b8905f', dark: '#ab8456', light: '#c2996a' }, roughness: 0.42 }));
     const back = wallMesh(THREE, { w: 10, h: 2.7, color: 0xebe6dc }); back.position.set(0, 1.35, -2.5); scene.add(back);
     skirting(THREE, scene, { w: 10, z: -2.5 });
-    windowWall(THREE, scene, { x: 3.5, color: 0xe8e3d9, mullion: null, win: { z0: 1.4, z1: 4.0, sill: 0.8, head: 2.4 } }); // 2.6 m wide: at this sun angle the band across the floor has to be that wide to take in both cabinets (path-traced round 2)
-    sun(THREE, scene, { color: 0xffd8ac, intensity: 5.2, position: [7, 2.6, 5.5], target: [-0.3, 0.3, -0.3], bounds: 4.5 });
-    fillRect(THREE, scene, { color: 0xfff0dc, intensity: 1.3, w: 2.6, h: 1.6, position: [2.95, 1.6, 2.7], lookAt: [0, 1.0, 2.7] });
-    bounce(THREE, scene, { sky: 0xe8e4dc, ground: 0xb8905f, intensity: 0.28 });
+    // v15 (refinement round 1): the beam falls across both cabinets from the right, so each throws its own long shadow
+    // across the boards and the near one's lit side stands a stop above its front; no sun patch on the wall
+    windowWall(THREE, scene, { x: 3.5, color: 0xe8e3d9, mullion: null, win: { z0: 0.1, z1: 2.7, sill: 0.6, head: 2.4 } });
+    sun(THREE, scene, { color: 0xffd8ac, intensity: 5.2, position: [7, 2.4, 2.6], target: [0.6, 0.45, -0.1], bounds: 4.5 });
+    fillRect(THREE, scene, { color: 0xfff0dc, intensity: 0.8, w: 2.6, h: 1.6, position: [2.95, 1.6, 1.4], lookAt: [0, 1.0, 1.4] });
+    bounce(THREE, scene, { sky: 0xe8e4dc, ground: 0xb8905f, intensity: 0.2 });
     enclose(THREE, scene, { x0: -5, x1: 3.5, z0: -2.5, z1: 4.5, h: 2.7, color: 0xebe6dc, window: 'right' });
-    chair(THREE, addons, scene, { position: [-3.1, 0, -1.7], rotationY: 0.45 }); // clear of the left cabinet from the hero camera, inside the frame's left edge
+    chair(THREE, addons, scene, { position: [-0.7, 0, -2.1], rotationY: 0.25 }); // v15: against the wall between the pair, clear of both edges
     return { exposure: 1.0, skyGlow: 2.0 }; // skyGlow: the path tracer's sky through this window, relative to the sun; a low sun admits little, so the shade needs more
   },
   // Bright apartment: white walls, cool daylight from the front-right, pale floor, a pale chair.
   apartmentBright(THREE, addons, ctx, scene, o) {
-    scene.environmentIntensity = 0.4;
+    // v15 (refinement round 1): the window on the left wall, so the sun crosses the front face (the key the critic asked
+    // for), the right side falls a stop into shade and the shadow runs back-right; exposure down so the white holds
+    scene.environmentIntensity = 0.3;
     scene.background = new THREE.Color(0xf2f0eb);
     scene.add(floorMesh(THREE, ctx.tex, { size: 10, planks: { base: '#d8ccb2', dark: '#cfc2a7', light: '#dfd4bc' }, roughness: 0.32 }));
     const back = wallMesh(THREE, { w: 10, h: 2.7, color: 0xf4f2ee }); back.position.set(0, 1.35, -2.0); scene.add(back);
     skirting(THREE, scene, { w: 10, z: -2.0, color: 0xfaf9f6 });
-    windowWall(THREE, scene, { x: 2.6, color: 0xf4f2ee, sky: 0xf6fbff, mullion: null, win: { z0: 1.4, z1: 3.2, sill: 0.7, head: 2.4 } });
-    sun(THREE, scene, { color: 0xffffff, intensity: 3.4, position: [7, 4.5, 5.5], target: [-0.2, 0.3, -0.3], bounds: 4.5 });
-    fillRect(THREE, scene, { color: 0xeef4ff, intensity: 5, w: 1.8, h: 1.7, position: [2.55, 1.55, 2.3], lookAt: [0, 1.0, 2.3] });
-    bounce(THREE, scene, { sky: 0xf4f2ee, ground: 0xd8ccb2, intensity: 0.4 });
-    enclose(THREE, scene, { x0: -5, x1: 2.6, z0: -2.0, z1: 4.5, h: 2.7, color: 0xf4f2ee, window: 'right' });
-    chair(THREE, addons, scene, { position: [-2.4, 0, -1.1], rotationY: 0.5, color: 0xd9c9ad }); // left of the cabinet's shadow, which now falls back-left
-    return { exposure: 1.05 };
+    windowWall(THREE, scene, { x: -2.6, color: 0xf4f2ee, sky: 0xf6fbff, mullion: null, win: { z0: 1.4, z1: 3.2, sill: 0.7, head: 2.4 } });
+    sun(THREE, scene, { color: 0xffffff, intensity: 3.4, position: [-7, 3.2, 5.5], target: [0.1, 0.4, -0.2], bounds: 4.5 });
+    fillRect(THREE, scene, { color: 0xeef4ff, intensity: 2.6, w: 1.8, h: 1.7, position: [-2.55, 1.55, 2.3], lookAt: [0, 1.0, 2.3] });
+    bounce(THREE, scene, { sky: 0xf4f2ee, ground: 0xd8ccb2, intensity: 0.3 });
+    enclose(THREE, scene, { x0: -2.6, x1: 5, z0: -2.0, z1: 4.5, h: 2.7, color: 0xf4f2ee, window: 'left' });
+    chair(THREE, addons, scene, { position: [0.9, 0, -1.6], rotationY: -0.5, color: 0xd9c9ad }); // right of the cabinet, clear of it
+    return { exposure: 0.9 };
   },
   // Older, darker room: aged plaster, dark worn floor, skirting, warm low light from the right, a dark chair.
   oldRoom(THREE, addons, ctx, scene, o) {
-    scene.environmentIntensity = 0.12;
+    // v15 (refinement round 1): the window on the left wall, so the low sun's beam sweeps the front face and gable and the
+    // shadow runs back-right; the cool fill and the lamp down, so the beam is the light the speaker answers to
+    scene.environmentIntensity = 0.1;
     scene.background = new THREE.Color(0x4f4a42);
     scene.add(floorMesh(THREE, ctx.tex, { size: 10, planks: { base: '#5a4330', dark: '#4f3a29', light: '#634a35' }, roughness: 0.4 }));
     const back = wallMesh(THREE, { w: 10, h: 2.9, color: 0x7a7362, roughness: 1 }); back.position.set(0, 1.45, -2.0); scene.add(back);
     skirting(THREE, scene, { w: 10, z: -2.0, color: 0x8c8470, h: 0.14 });
-    windowWall(THREE, scene, { x: 2.6, color: 0x7a7362, sky: 0xc6d3e6, mullion: null, win: { z0: 1.6, z1: 2.8, sill: 0.95, head: 2.1 } }); // dusk sky, cool, so the lamp's warmth has a neutral to read against (path-traced round 2)
-    sun(THREE, scene, { color: 0xffc080, intensity: 2.4, position: [7, 3.2, 4.6], target: [-0.2, 0.3, -0.2], bounds: 4.5 });
-    fillRect(THREE, scene, { color: 0xcbd7ea, intensity: 2.2, w: 1.0, h: 1.1, position: [2.55, 1.5, 2.2], lookAt: [0, 1.0, 2.2] });
-    bounce(THREE, scene, { sky: 0x8fa0bb, ground: 0x5a4330, intensity: 0.3 });
-    const lamp = new THREE.PointLight(0xffcf9e, 10, 0, 2); lamp.position.set(1.7, 1.5, 1.3); scene.add(lamp); // a warm-white bulb, not tungsten amber: the white body stays white under it
-    enclose(THREE, scene, { x0: -5, x1: 2.6, z0: -2.0, z1: 4.5, h: 2.9, color: 0x7a7362, roughness: 1, window: 'right' });
-    chair(THREE, addons, scene, { position: [-2.4, 0, -1.1], rotationY: 0.5, color: 0x3d2a1c });
-    return { exposure: 0.95, skyGlow: 2.0 }; // dusk through the window against the lamp, so the room is not only the lamp
+    windowWall(THREE, scene, { x: -2.6, color: 0x7a7362, sky: 0xc6d3e6, mullion: null, win: { z0: 1.6, z1: 2.8, sill: 0.95, head: 2.1 } });
+    sun(THREE, scene, { color: 0xffc080, intensity: 2.6, position: [-7, 1.8, 6.0], target: [0.1, 0.8, 0], bounds: 4.5 });
+    fillRect(THREE, scene, { color: 0xcbd7ea, intensity: 0.8, w: 1.0, h: 1.1, position: [-2.55, 1.5, 2.2], lookAt: [0, 1.0, 2.2] });
+    bounce(THREE, scene, { sky: 0x8fa0bb, ground: 0x5a4330, intensity: 0.22 });
+    const lamp = new THREE.PointLight(0xffcf9e, 5, 0, 2); lamp.position.set(1.7, 1.5, 1.3); scene.add(lamp);
+    enclose(THREE, scene, { x0: -2.6, x1: 5, z0: -2.0, z1: 4.5, h: 2.9, color: 0x7a7362, roughness: 1, window: 'left' });
+    chair(THREE, addons, scene, { position: [0.9, 0, -1.6], rotationY: -0.5, color: 0x3d2a1c });
+    return { exposure: 0.95, skyGlow: 2.0 };
   },
   // Studio: #F8F7F4 ground sweeping up into a backdrop behind the subject, horizon faded with fog. Key light per shot.
   studio(THREE, addons, ctx, scene, o) {
@@ -172,11 +179,22 @@ const ROOMS = {
     const key = o.key || 'even';
     if (key === 'even') sun(THREE, scene, { color: 0xffffff, intensity: 2.4, position: [-5, 5, 4], target: [0, 0.5, 0], bounds: 3, mapSize: 4096 });
     if (key === 'rake') sun(THREE, scene, { color: 0xfff8f0, intensity: 3.2, position: [-0.9, 3.4, 1.5], target: [0, 0.9, 0.1], bounds: 1.2, mapSize: 4096 });
-    if (key === 'back') sun(THREE, scene, { color: 0xffffff, intensity: 2.2, position: [3.6, 4.0, -2.4], target: [0, 0.5, 0], bounds: 2.5, mapSize: 4096 }); // raking from upper right, so the back face falls off and the cast letters and port take an edge (path-traced round 2)
+    // v15: a key from the front-left at about 18 degrees, the one direction that reaches a tweeter facing forward under the
+    // bowl's upper lip (refinement round 1 on the close-up: the throat read as an eye socket under light from above)
+    if (key === 'bowl') sun(THREE, scene, { color: 0xfff6ec, intensity: 3.0, position: [-1.25, 1.62, 2.05], target: [0, 0.9, 0.09], bounds: 1.2, mapSize: 4096 });
+    // v15 (refinement round 1 on the back): a smaller, closer softbox from the camera's right, 30 degrees up and 50 off the back
+    // face, so the face falls off across its width, the posts, letters and port take an edge, and the cabinet's own shadow lands
+    // in frame at its left instead of behind it
+    if (key === 'back') sun(THREE, scene, { color: 0xffffff, intensity: 2.8, position: [-1.19, 1.45, -1.0], target: [0, 0.55, 0], bounds: 2.5, mapSize: 4096, softbox: 0.6 });
+    // v15 (refinement round 1 on the line-up): a softbox high at the front-left, 55 degrees up and 30 off the camera's axis, 3.5 m
+    // out and aimed past the row's centre toward its right end so the five stay within a third of a stop: the gable slopes take the
+    // most light, the fronts less, the sides the camera sees fall into shade, and the sweep, twice as far from it, a stop below the
+    // white fronts
+    if (key === 'lineup') sun(THREE, scene, { color: 0xffffff, intensity: 2.6, position: [-1.0, 3.37, 1.74], target: [0.6, 0.5, 0], bounds: 3, mapSize: 4096, softbox: 1.6 });
     if (key === 'swap') sun(THREE, scene, { color: 0xfff4e6, intensity: 2.6, position: [-1.2, 7, 1.8], target: [0, 0.8, 0], bounds: 3, mapSize: 4096 });
     const fill = new THREE.DirectionalLight(0xffffff, o.fill ?? 0.5); fill.position.set(5, 3, 3); scene.add(fill);
-    bounce(THREE, scene, { sky: 0xffffff, ground: 0xf8f7f4, intensity: 0.25 });
-    return { exposure: o.exposure ?? 1.0, toneMapping: 'neutral' };
+    bounce(THREE, scene, { sky: 0xffffff, ground: 0xf8f7f4, intensity: o.bounce ?? 0.25 });
+    return { exposure: o.exposure ?? 1.0, toneMapping: 'neutral', reflector: o.reflector, strips: o.strips, backdropLight: o.backdropLight };
   },
   // A desk against a white wall, daylight from the left.
   desk(THREE, addons, ctx, scene, o) {
@@ -186,7 +204,7 @@ const ROOMS = {
     top.material.name = 'desk';
     top.material.map = top.material.map.clone(); top.material.map.repeat.set(3.9, 1.8); top.material.map.needsUpdate = true;
     top.position.set(0, 0.72 - 0.015, 0.1); top.receiveShadow = top.castShadow = true; scene.add(top);
-    const back = wallMesh(THREE, { w: 8, h: 2.7, color: 0xf1eee8 }); back.position.set(0, 1.35, -0.55); scene.add(back);
+    const back = wallMesh(THREE, { w: 8, h: 2.7, color: o.wall ?? 0xf1eee8 }); back.position.set(0, 1.35, -0.55); scene.add(back);
     sun(THREE, scene, { color: 0xfff1dc, intensity: 3.0, position: [-3, 3.4, 2.0], target: [0, 0.75, 0], bounds: 1.5, mapSize: 4096 });
     fillRect(THREE, scene, { color: 0xdde6f3, intensity: 3.0, w: 1.5, h: 1.5, position: [-1.6, 1.4, 0.6], lookAt: [0, 0.8, 0] });
     bounce(THREE, scene, { sky: 0xf1eee8, ground: 0xcdb48c, intensity: 0.3 });
@@ -216,5 +234,5 @@ export function buildScene(THREE, addons, ctx, cfg) {
   const camera = new THREE.PerspectiveCamera(vfov, w / h, 0.05, 100);
   camera.position.set(...cam.position);
   camera.lookAt(new THREE.Vector3(...cam.lookAt));
-  return { scene, camera, exposure: cfg.exposure ?? roomOut.exposure ?? 1.0, toneMapping: roomOut.toneMapping || 'aces', skyGlow: roomOut.skyGlow ?? 1 };
+  return { scene, camera, exposure: cfg.exposure ?? roomOut.exposure ?? 1.0, toneMapping: roomOut.toneMapping || 'aces', skyGlow: roomOut.skyGlow ?? 1, reflector: roomOut.reflector, strips: roomOut.strips, backdropLight: roomOut.backdropLight };
 }

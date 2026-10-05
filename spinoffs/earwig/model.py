@@ -37,10 +37,14 @@ def bud_body():
 
 def ear_tip(end, d):
     """A mushroom silicone tip over the nozzle's end; its front face carries the sound hole."""
-    r = TIP_D / 2
-    pts = [(0, 1.9), (0.0, 3.0), (1.0, r * 0.84), (2.8, r * 0.99), (4.8, r), (6.6, r * 0.8), (TIP_LEN, NOZZLE_R + 0.5)]
-    sp = Spline(*[(x, y, 0) for x, y in pts])
-    f = make_face([sp, Polyline((TIP_LEN, NOZZLE_R + 0.5, 0), (TIP_LEN, 1.9, 0), (0, 1.9, 0))]).face()
+    # as bought: a stem that grips the nozzle and a thin skirt flaring back from its front lip, an air gap between them
+    # (a solid dome read as taupe putty with a black hole: softer round 2); the skirt drawn for a medium tip, scaled
+    k = TIP_D / 11.5
+    ri, rs = NOZZLE_R + 0.02, NOZZLE_R + 0.7
+    outer = Spline(*[(x, y * k, 0) for x, y in [(0, (rs + 0.3) / k), (0.45, 4.6), (1.6, 5.45), (3.2, 5.75), (5.0, 5.6), (6.6, 5.0), (TIP_LEN, 4.5)]])
+    inner = Spline(*[(x, y * k, 0) for x, y in [(TIP_LEN - 0.2, 4.05), (6.3, 4.6), (4.9, 5.12), (3.2, 5.28), (1.8, 4.95), (1.0, 4.25)]] + [(0.85, rs, 0)])
+    f = make_face([outer, Polyline((TIP_LEN, 4.5 * k, 0), (TIP_LEN - 0.2, 4.05 * k, 0)), inner,
+                   Polyline((0.85, rs, 0), (5.8, rs, 0), (5.8, ri, 0), (0, ri, 0), (0, rs + 0.3, 0))]).face()
     tip = revolve(f, Axis.X, 360)
     # front of the tip at the nozzle's end + 1.2, pointing along d; the tip's local +x runs back toward the body
     o = end + d * 1.2

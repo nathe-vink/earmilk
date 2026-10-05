@@ -1,7 +1,7 @@
 // One entry per shot in prompts/. Plain data: it is sent into the page as JSON. Positions in metres; lifts and offsets in mm.
 export const SIZE = [1800, 1200];
 
-const C2 = { position: [1.7, 1.2, 2.7], lookAt: [0.05, 0.55, 0], focal: 50 };
+const C2 = { position: [1.75, 0.95, 2.75], lookAt: [0.42, 0.6, 0], focal: 50 };   // v15: lower, the speaker left of the centre line
 const C7 = { position: [2.0, 1.05, 3.1], lookAt: [0.15, 0.9, 0], focal: 36 };
 const FLAVORS = ['whole', 'two-percent', 'skim', 'chocolate', 'oat'];
 const LID_ON_FLOOR = [560, -860, 0]; // clear of the speaker's footprint and of the tube's where it stands in frame c
@@ -18,16 +18,25 @@ export const shots = [
     { suffix: 'b', room: 'oldRoom', speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: C2 },
   ] },
   { id: 'shot-03', frames: [
-    { suffix: '', room: 'studio', roomOptions: { key: 'rake', env: 0.45, fill: 0.25 }, ao: { radius: 0.05, scale: 1.4 }, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { bowlShadow: false } }], camera: { position: [0.44, 1.01, 0.9], lookAt: [-0.03, 0.882, 0.09], focal: 95 } },
+    // v15 (refinement round 1): key 'bowl' from the front-left into the throat, less ambient, the camera back with the corner in frame
+    { suffix: '', room: 'studio', roomOptions: { key: 'bowl', env: 0.28, fill: 0.15 }, ao: { radius: 0.05, scale: 1.4 }, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { bowlShadow: false } }], camera: { position: [0.5, 1.03, 1.03], lookAt: [-0.06, 0.88, 0.1], focal: 95 } },
   ] },
   { id: 'shot-04', frames: [
-    { suffix: '', room: 'studio', roomOptions: { key: 'back', env: 0.6, groundRoughness: 0.8 }, speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: { position: [0, 0.62, -4.2], lookAt: [0, 0.5, 0], focal: 70 } },
+    // v15 (refinement round 1): the key from the camera's right; the dome at half (env, bounce) and the fill down; a reflector card behind the camera that lights
+    // only the bronze and the posts, so the plate reads bright against its dark engraving; no edge strips (they filled the shadow and show nothing from straight on)
+    { suffix: '', room: 'studio', roomOptions: { key: 'back', env: 0.15, fill: 0.2, bounce: 0.06, strips: 0, groundRoughness: 0.8, reflector: { w: 2.0, h: 1.2, radiance: 1.5, behind: 1.0, receivers: ['bronze', 'badgeside', 'post', 'screw'] } }, speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: { position: [0, 0.62, -4.2], lookAt: [0, 0.5, 0], focal: 70 } },
   ] },
   { id: 'shot-05', frames: [
-    { suffix: '', room: 'studio', roomOptions: { key: 'even', env: 0.5 }, speakers: FLAVORS.map((f, i) => ({ flavor: f, position: [(i - 2) * 0.52, 0, 0] })), camera: { position: [0, 1.3, 11.5], lookAt: [0, 0.5, 0], focal: 140 } },
+    // v15 (refinement round 1): the 'lineup' key, a softbox high at the front-left and close enough that the sweep falls a stop
+    // below the white fronts; dome, fill and strips down so the sides keep their shade; all five turned the same 7 degrees, the
+    // very slight three-quarter the brief allows, so each shows a sliver of its shaded side
+    { suffix: '', room: 'studio', roomOptions: { key: 'lineup', env: 0.3, fill: 0.15, strips: 0.2 }, speakers: FLAVORS.map((f, i) => ({ flavor: f, position: [(i - 2) * 0.52, 0, 0], rotationY: -0.12 })), camera: { position: [0, 1.3, 11.5], lookAt: [0, 0.5, 0], focal: 140 } },
   ] },
   { id: 'shot-06', frames: [
-    { suffix: '', room: 'desk', ao: { radius: 0.04, scale: 1.4 }, speakers: [], crate: { position: [0, 0.72, 0], flavors: ['whole', 'two-percent', 'skim', 'chocolate', 'oat', 'whole'] }, camera: { position: [0.6, 1.32, 1.35], lookAt: [0, 0.78, 0], focal: 60 } },
+    // v15 (refinement round 1): the camera down to just above the gable tops (desk + 0.38 m), a shallower three-quarter (14 degrees)
+    // on an 85 mm lens, the crate a little left of centre with its shadow in frame, so each woofer sits whole in its window; the
+    // wall a warm grey so the white crate and bodies separate from it
+    { suffix: '', room: 'desk', roomOptions: { wall: 0xa49e92 }, ao: { radius: 0.04, scale: 1.4 }, speakers: [], crate: { position: [0, 0.72, 0], flavors: ['whole', 'two-percent', 'skim', 'chocolate', 'oat', 'whole'] }, camera: { position: [0.413, 1.10, 1.437], lookAt: [0.06, 0.865, 0.02], focal: 85 } },
   ] },
 ];
 

@@ -69,13 +69,13 @@ async function renderShot(cfg) {
 // The same scene as a GLB for the path-traced pass (render/pathtrace.py), with a sidecar describing the lights the real-time
 // rig used, so Cycles can rebuild them as a sun, area lights and a world. Fake shadow decals are dropped: Cycles makes real ones.
 async function exportGLB(cfg) {
-  const { scene, camera, exposure, toneMapping, skyGlow } = buildScene(THREE, addons, ctx, cfg);
+  const { scene, camera, exposure, toneMapping, skyGlow, reflector, strips, backdropLight } = buildScene(THREE, addons, ctx, cfg);
   camera.name = 'shot-camera'; camera.updateMatrixWorld(); scene.add(camera);
   const hex = c => '#' + c.getHexString();
   const lights = [];
   const drop = [];
   scene.traverse(o => {
-    if (o.isDirectionalLight) lights.push({ type: 'sun', color: hex(o.color), intensity: o.intensity, position: o.position.toArray(), target: o.target.position.toArray() });
+    if (o.isDirectionalLight) lights.push({ type: 'sun', color: hex(o.color), intensity: o.intensity, position: o.position.toArray(), target: o.target.position.toArray(), softbox: o.userData.softbox });
     else if (o.isRectAreaLight) { const d = new THREE.Vector3(0, 0, -1).applyQuaternion(o.quaternion); lights.push({ type: 'area', color: hex(o.color), intensity: o.intensity, width: o.width, height: o.height, position: o.position.toArray(), direction: d.toArray() }); }
     else if (o.isHemisphereLight) lights.push({ type: 'hemi', sky: hex(o.color), ground: hex(o.groundColor), intensity: o.intensity });
     else if (o.isPointLight) lights.push({ type: 'point', color: hex(o.color), intensity: o.intensity, position: o.getWorldPosition(new THREE.Vector3()).toArray() });
@@ -92,7 +92,7 @@ async function exportGLB(cfg) {
   const bytes = new Uint8Array(buf); let bin = '';
   for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
   const sidecar = {
-    room: cfg.room, size: cfg.size, exposure, toneMapping, lights, skyGlow,
+    room: cfg.room, size: cfg.size, exposure, toneMapping, lights, skyGlow, reflector, strips, backdropLight,
     background: scene.background && scene.background.isColor ? hex(scene.background) : null,
     environmentIntensity: scene.environmentIntensity ?? 1,
     camera: { fov: camera.fov, position: camera.position.toArray(), lookAt: cfg.camera.lookAt, focal: cfg.camera.focal },

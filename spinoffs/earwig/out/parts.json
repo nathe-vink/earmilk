@@ -18,7 +18,7 @@
   },
   "tip-r": {
    "material": "silicone",
-   "volume_cm3": 0.647
+   "volume_cm3": 0.24
   },
   "bud-l": {
    "material": "shell",
@@ -38,7 +38,7 @@
   },
   "tip-l": {
    "material": "silicone",
-   "volume_cm3": 0.647
+   "volume_cm3": 0.24
   },
   "case-base": {
    "material": "case",
