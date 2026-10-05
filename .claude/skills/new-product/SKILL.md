@@ -24,7 +24,7 @@ add is a **proposal** until the owner signs it; say so in the brief and in `para
    lettering (extrude glyph faces with `both=True`: TrueType outlines run clockwise, so a one-sided extrude can cut air). Keep separate solids a hair apart or overlapping, never coplanar (Cycles renders coplanar faces black).
 5. **Scene.** Write `scene.py` that writes `shots.json` for `studio/pathtrace.py` from `params.py` and `out/parts.json`:
    materials (presets), meshes, generated tubes (cables, worms) and Python hooks (hair). Solve poses numerically when
-   a part must rest on the floor (see `spinoffs/earwig/scene.py`, `lying_pose`). See the `pathtrace` skill.
+   a part must rest on the floor (`studio/poses.py`; `spinoffs/earworm/scene.py` shows it). See the `pathtrace` skill.
 6. **Proofs.** `python3 studio/pathtrace.py spinoffs/NAME/shots.json --shot hero --samples 32 --scale 0.4 --out
    <scratchpad>/p1.png`, about 20 to 50 s. Look at every proof. Iterate framing, scale of the joke, and materials.
 7. **Finals.** Full size, default samples, into `renders/hero-v1.png` and `renders/detail-v1.png` (about 8 minutes
@@ -36,6 +36,6 @@ add is a **proposal** until the owner signs it; say so in the brief and in `para
 
 ## Reference products
 
-- `spinoffs/earworm/`: wired headphones; revolved cups, a worm cable drawn by the path tracer's tube with rings,
-  bands (the saddle) and a radius profile by distance.
+- `spinoffs/earworm/`: wired in-ear earphones; revolved earphone parts, solved resting poses, worm cables drawn by
+  the path tracer's tube with overlapping segments, a blended saddle and a radius profile by distance.
 - `spinoffs/earwig/`: true-wireless buds; lofted bud with pincers, a case with a wig grown by `hair.py`.

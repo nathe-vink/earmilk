@@ -23,24 +23,27 @@ function bounce(THREE, scene, { sky = 0xffffff, ground = 0xb8905f, intensity = 0
 
 function floorMesh(THREE, tex, { size = 9, planks, roughness = 0.34 }) {
   const m = new THREE.Mesh(new THREE.PlaneGeometry(size, size), new THREE.MeshStandardMaterial({ map: tex.planks(planks), roughness, metalness: 0 }));
+  m.material.name = 'floor';
   m.material.map = m.material.map.clone(); m.material.map.repeat.set(size / 1.2, size / 1.2); m.material.map.needsUpdate = true;
   m.rotation.x = -Math.PI / 2; m.receiveShadow = true; return m;
 }
 
 function wallMesh(THREE, { w, h, color, roughness = 0.95 }) {
   const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ color, roughness, metalness: 0 }));
+  m.material.name = 'wall';
   m.receiveShadow = true; return m;
 }
 
 function skirting(THREE, scene, { w, z, color = 0xf2efe8, h = 0.12 }) {
   const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.018), new THREE.MeshStandardMaterial({ color, roughness: 0.6 }));
+  m.material.name = 'skirting';
   m.position.set(0, h / 2, z + 0.009); m.receiveShadow = m.castShadow = true; scene.add(m);
 }
 
 // The rest of the box: ceiling, right wall and front wall (behind the camera), so the only daylight is what the window admits
 // and the lacquer has a room to reflect. Out of frame in every shot; in the path tracer they are what makes the light one story.
 function enclose(THREE, scene, { x0, x1, z0, z1, h, color, roughness = 0.95, window = 'right' }) {
-  const mat = new THREE.MeshStandardMaterial({ color, roughness, metalness: 0 });
+  const mat = new THREE.MeshStandardMaterial({ color, roughness, metalness: 0 }); mat.name = 'wall';
   const add = (geom, pos, rot) => { const m = new THREE.Mesh(geom, mat); m.position.set(...pos); m.rotation.set(...rot); m.receiveShadow = m.castShadow = true; scene.add(m); };
   add(new THREE.PlaneGeometry(x1 - x0, z1 - z0), [(x0 + x1) / 2, h, (z0 + z1) / 2], [Math.PI / 2, 0, 0]);  // ceiling, facing down
   if (window === 'right') add(new THREE.PlaneGeometry(z1 - z0, h), [x0, h / 2, (z0 + z1) / 2], [0, Math.PI / 2, 0]);   // left wall, facing +x
@@ -64,7 +67,7 @@ function sweep(THREE, scene, { color, roughness = 0.5, sign = -1, dist = 2.6, ra
 
 // A side wall at x = X with a window opening, mullions and a bright sky behind it.
 function windowWall(THREE, scene, { x, zRange = [-2.5, 4.5], h = 2.7, color, win = { z0: 0.3, z1: 1.7, sill: 0.8, head: 2.3 }, sky = 0xfff3dc, mullion = 0xf4f1ea }) {
-  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.95 });
+  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.95 }); mat.name = 'wall';
   const add = (w, hh, cz, cy) => { const m = new THREE.Mesh(new THREE.BoxGeometry(0.12, hh, w), mat); m.position.set(x, cy, cz); m.receiveShadow = true; m.castShadow = true; scene.add(m); };
   const [z0, z1] = zRange;
   add(win.z0 - z0, h, (z0 + win.z0) / 2, h / 2);
@@ -80,16 +83,33 @@ function windowWall(THREE, scene, { x, zRange = [-2.5, 4.5], h = 2.7, color, win
   skyM.position.set(x + 0.6 * Math.sign(x), 2, (win.z0 + win.z1) / 2); skyM.rotation.y = Math.sign(x) > 0 ? -Math.PI / 2 : Math.PI / 2; scene.add(skyM);
 }
 
-// A plain wooden chair, for scale.
-function chair(THREE, scene, { position, rotationY = 0, color = 0x8a6a46 }) {
-  const wood = new THREE.MeshStandardMaterial({ color, roughness: 0.5 });
+// A wooden dining chair, for scale: tapered round legs (the back pair raked and running up into the back), a seat with
+// rounded edges, a curved top rail and a lower rail, stretchers. Path-traced round 1 called the old one a massing model.
+function chair(THREE, addons, scene, { position, rotationY = 0, color = 0x8a6a46 }) {
+  const wood = new THREE.MeshStandardMaterial({ color, roughness: 0.45 }); wood.name = 'chairwood';
   const g = new THREE.Group();
-  const add = (w, h, d, x, y, z) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), wood); m.position.set(x, y, z); m.castShadow = m.receiveShadow = true; g.add(m); };
-  add(0.42, 0.035, 0.42, 0, 0.45, 0);
-  for (const sx of [-1, 1]) for (const sz of [-1, 1]) add(0.035, 0.45, 0.035, sx * 0.19, 0.225, sz * 0.19);
-  for (const sx of [-1, 1]) add(0.035, 0.45, 0.035, sx * 0.19, 0.69, -0.19);
-  add(0.42, 0.06, 0.025, 0, 0.86, -0.19);
-  add(0.42, 0.04, 0.025, 0, 0.66, -0.19);
+  const put = (m) => { m.castShadow = m.receiveShadow = true; g.add(m); return m; };
+  const rod = (a, b, r0, r1) => {
+    const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), len = A.distanceTo(B);
+    const m = put(new THREE.Mesh(new THREE.CylinderGeometry(r1, r0, len, 20), wood));
+    m.position.copy(A).add(B).multiplyScalar(0.5);
+    m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize());
+    return m;
+  };
+  const seat = put(new THREE.Mesh(new addons.RoundedBoxGeometry(0.44, 0.032, 0.42, 3, 0.012), wood)); seat.position.set(0, 0.45, 0);
+  for (const sx of [-1, 1]) {
+    rod([sx * 0.19, 0, 0.18], [sx * 0.185, 0.436, 0.175], 0.013, 0.017);           // front legs, tapering to the floor
+    rod([sx * 0.19, 0, -0.21], [sx * 0.18, 0.88, -0.19], 0.013, 0.016);           // back legs, raked, up into the back
+    rod([sx * 0.19, 0.16, 0.18], [sx * 0.19, 0.16, -0.205], 0.008, 0.008);        // side stretchers
+  }
+  rod([-0.19, 0.12, 0.18], [0.19, 0.12, 0.18], 0.008, 0.008);                      // front stretcher
+  const rail = (y, h, t) => {                                                       // a curved rail between the back legs
+    const geo = new THREE.CylinderGeometry(0.62, 0.62, h, 32, 1, true, -0.33, 0.66);
+    const inner = new THREE.CylinderGeometry(0.62 - t, 0.62 - t, h, 32, 1, true, -0.33, 0.66);
+    const a = put(new THREE.Mesh(geo, wood)); const b = put(new THREE.Mesh(inner, wood));
+    for (const m of [a, b]) { m.material = wood; m.position.set(0, y, 0.40); m.rotation.y = Math.PI; }
+  };
+  rail(0.80, 0.075, 0.016); rail(0.62, 0.035, 0.014);
   g.position.set(...position); g.rotation.y = rotationY; scene.add(g);
 }
 
@@ -106,7 +126,7 @@ const ROOMS = {
     fillRect(THREE, scene, { color: 0xfff0dc, intensity: 1.3, w: 2.6, h: 1.6, position: [2.95, 1.6, 2.7], lookAt: [0, 1.0, 2.7] });
     bounce(THREE, scene, { sky: 0xe8e4dc, ground: 0xb8905f, intensity: 0.28 });
     enclose(THREE, scene, { x0: -5, x1: 3.5, z0: -2.5, z1: 4.5, h: 2.7, color: 0xebe6dc, window: 'right' });
-    chair(THREE, scene, { position: [-3.1, 0, -1.7], rotationY: 0.45 }); // clear of the left cabinet from the hero camera, inside the frame's left edge
+    chair(THREE, addons, scene, { position: [-3.1, 0, -1.7], rotationY: 0.45 }); // clear of the left cabinet from the hero camera, inside the frame's left edge
     return { exposure: 1.0, skyGlow: 2.0 }; // skyGlow: the path tracer's sky through this window, relative to the sun; a low sun admits little, so the shade needs more
   },
   // Bright apartment: white walls, cool daylight from the front-right, pale floor, a pale chair.
@@ -121,7 +141,7 @@ const ROOMS = {
     fillRect(THREE, scene, { color: 0xeef4ff, intensity: 5, w: 1.8, h: 1.7, position: [2.55, 1.55, 2.3], lookAt: [0, 1.0, 2.3] });
     bounce(THREE, scene, { sky: 0xf4f2ee, ground: 0xd8ccb2, intensity: 0.4 });
     enclose(THREE, scene, { x0: -5, x1: 2.6, z0: -2.0, z1: 4.5, h: 2.7, color: 0xf4f2ee, window: 'right' });
-    chair(THREE, scene, { position: [-2.4, 0, -1.1], rotationY: 0.5, color: 0xd9c9ad }); // left of the cabinet's shadow, which now falls back-left
+    chair(THREE, addons, scene, { position: [-2.4, 0, -1.1], rotationY: 0.5, color: 0xd9c9ad }); // left of the cabinet's shadow, which now falls back-left
     return { exposure: 1.05 };
   },
   // Older, darker room: aged plaster, dark worn floor, skirting, warm low light from the right, a dark chair.
@@ -137,7 +157,7 @@ const ROOMS = {
     bounce(THREE, scene, { sky: 0x8fa0bb, ground: 0x5a4330, intensity: 0.3 });
     const lamp = new THREE.PointLight(0xffcf9e, 10, 0, 2); lamp.position.set(1.7, 1.5, 1.3); scene.add(lamp); // a warm-white bulb, not tungsten amber: the white body stays white under it
     enclose(THREE, scene, { x0: -5, x1: 2.6, z0: -2.0, z1: 4.5, h: 2.9, color: 0x7a7362, roughness: 1, window: 'right' });
-    chair(THREE, scene, { position: [-2.4, 0, -1.1], rotationY: 0.5, color: 0x3d2a1c });
+    chair(THREE, addons, scene, { position: [-2.4, 0, -1.1], rotationY: 0.5, color: 0x3d2a1c });
     return { exposure: 0.95, skyGlow: 2.0 }; // dusk through the window against the lamp, so the room is not only the lamp
   },
   // Studio: #F8F7F4 ground sweeping up into a backdrop behind the subject, horizon faded with fog. Key light per shot.
@@ -163,6 +183,7 @@ const ROOMS = {
     scene.environmentIntensity = 0.4;
     scene.background = new THREE.Color(0xe9eaec); // neutral, so the fill is cooler than the sun and the pale cartons lift off the set (path-traced round 2)
     const top = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.03, 1.3), new THREE.MeshStandardMaterial({ map: ctx.tex.planks({ base: '#cdb48c', dark: '#c6ac83', light: '#d3bb95' }), roughness: 0.35 }));
+    top.material.name = 'desk';
     top.material.map = top.material.map.clone(); top.material.map.repeat.set(3.9, 1.8); top.material.map.needsUpdate = true;
     top.position.set(0, 0.72 - 0.015, 0.1); top.receiveShadow = top.castShadow = true; scene.add(top);
     const back = wallMesh(THREE, { w: 8, h: 2.7, color: 0xf1eee8 }); back.position.set(0, 1.35, -0.55); scene.add(back);

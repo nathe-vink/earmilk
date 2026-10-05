@@ -54,6 +54,10 @@ Read `README.md` first. It is the handoff and the brief. The canvas it links to 
 - Commit a render together with the prompt version that produced it and its critic log row.
 - The canvas is edited on the canvas, not here. If the canvas and this repo disagree, say so and ask which is right; do not silently update either. The canvas carries the 2026-10-02 direction since its version 10, the cast-letter wordmark (no plate) since version 11, the contained back panel since version 12, the bronze plate, the back letters and the two spec marks since version 13, and SHAKE WELL on the plinth with the Facts footnote inside its border since version 14: no sleeve, the colour a finish, the plinth, the metal letters, the engraved back wordmark, the Sleeves board redrawn as Finish, and the Facts row changed to Finish. Its copy changes are drafts (marked in `copy/hero.md`) until the owner approves them.
 
+## The repo ahead of the canvas (since 2026-10-05)
+
+- The owner amended the pint and the crate in chat on 2026-10-05: the pint has a small dome tweeter at its bowl's throat, and the crate is a moulded dairy crate whose latticed walls frame the front pints' drivers (README, Amendments 2026-10-05; `spec/geometry.md`). The canvas has not been updated to match. Ask the owner before editing the canvas.
+
 ## Tools and the family (since 2026-10-04)
 
 - **Setup from scratch:** `studio/setup.sh` (idempotent; `--doctor` also runs `studio/doctor.py`, which exercises Chromium, Cycles, the CAD venv, the crossover simulator and the spec check). The cloud start hook in `.claude/hooks/session-start.sh` runs it and exports `FAB_PY` (the venv's Python).

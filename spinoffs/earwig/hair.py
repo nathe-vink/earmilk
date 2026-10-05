@@ -3,7 +3,7 @@
     {"type": "python", "file": "hair.py", "args": {"w": 62, "d": 26, "h": 48, "r": 10, "split_z": 29.76, ...}}
 
 Roots are scattered on the lid's crown (its top and the upper half of its rounded edges). Each strand is combed away
-from a centre part, follows the lid at its own small height (that spread is the wig's volume), falls over the edges
+from the part (centred, or to one side with `part_y`), follows the lid at its own small height (that spread is the wig's volume), falls over the edges
 under gravity, and is cut level a little below the lid's split, the way a bob is cut. Vectorised in numpy: 30,000
 strands grow in about two seconds. Rendered as Cycles curves with the Principled Hair BSDF (`"preset": "hair"`).
 """
@@ -11,7 +11,7 @@ strands grow in about two seconds. Rendered as Cycles curves with the Principled
 
 def build(ctx, w, d, h, r, split_z, count=30000, radius=0.035, volume=(0.3, 3.2), cut_below=1.8, seed=7,
           material='hair', points=16, step=0.45, translate=(0, 0, 0), frizz=0.08, clump=0.5, tuck=0.45,
-          clump_turn=6.0, flyaway=0.0, cut_jitter=0.18, part_cross=0.0):
+          clump_turn=6.0, flyaway=0.0, cut_jitter=0.18, part_cross=0.0, part_y=0.0, rise=2.5):
     np, bpy, MM = ctx.np, ctx.bpy, ctx.MM
     rng = np.random.default_rng(seed)
     c = np.array([0.0, 0.0, h / 2]); inner = np.array([w / 2, d / 2, h / 2]) - r
@@ -47,8 +47,9 @@ def build(ctx, w, d, h, r, split_z, count=30000, radius=0.035, volume=(0.3, 3.2)
     cut = cut + rng.normal(0, cut_jitter, ncl)[near]                       # and cut a little longer or shorter
     fly = rng.random(n) < flyaway                                          # a few strands that will not lie down
     fly_side = rng.normal(0, 1, n) * fly
-    cross = (np.abs(y) < 2.5) & (rng.random(n) < part_cross)               # strands that start across the part
-    cross_dir = -np.sign(y) * cross
+    cross = (np.abs(y - part_y) < 2.5) & (rng.random(n) < part_cross)      # strands that start across the part
+    cross_dir = -np.sign(y - part_y) * cross
+    rise_mm = rise                                                         # how soon a strand reaches its height off the lid
     track = [p.copy()]
     alive = np.ones(n, bool); travelled = np.zeros(n)
     wob_phase = rng.uniform(0, 2 * np.pi, n); wob_k = rng.uniform(0.6, 1.4, n)
@@ -57,7 +58,7 @@ def build(ctx, w, d, h, r, split_z, count=30000, radius=0.035, volume=(0.3, 3.2)
             break
         nn = normal(p)
         # comb: away from the part (a segment along x), and down
-        out = p.copy(); out[:, 0] = p[:, 0] - np.clip(p[:, 0], -half_part, half_part); out[:, 2] = 0
+        out = p.copy(); out[:, 0] = p[:, 0] - np.clip(p[:, 0], -half_part, half_part); out[:, 1] = p[:, 1] - part_y; out[:, 2] = 0
         out /= np.maximum(np.linalg.norm(out, axis=1, keepdims=True), 1e-6)
         v = out * 0.7 + np.array([0, 0, -1.0])
         early = np.clip(1 - travelled / 3.0, 0, 1)                         # crossing the part, for the first 3 mm
@@ -71,7 +72,7 @@ def build(ctx, w, d, h, r, split_z, count=30000, radius=0.035, volume=(0.3, 3.2)
         v = v + side * (frizz * np.sin(travelled * wob_k * 0.9 + wob_phase) + 0.25 * fly_side * np.clip(travelled / 12.0, 0, 1))[:, None]
         q = p + v * step
         # hold each strand at its own height: rise from the root over 2.5 mm, tuck under over the last 3 mm before the cut
-        rise = np.clip(travelled / 2.5, 0, 1)
+        rise = np.clip(travelled / rise_mm, 0, 1)
         to_cut = q[:, 2] - cut
         tuck_k = np.where(to_cut < 3.0, 1 - tuck * (1 - np.clip(to_cut / 3.0, 0, 1)), 1.0)
         target = hs * (rise * (2 - rise)) * tuck_k * (1 + 0.6 * fly * np.clip(travelled / 12.0, 0, 1))

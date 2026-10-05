@@ -20,7 +20,8 @@ CAD lives in `.venv-fab`. `studio/setup.sh` repairs both.
   second colour on upward faces, e.g. a worm's back), `attr_color` (blend to another colour where a tube's attr says).
 - `objects`: `mesh` (STL in mm, GLB, OBJ; translate mm, rotate degrees XYZ, smooth angle), `tube` (Catmull-Rom path
   through `points`; `radius`; `profile` by fraction or `profile_mm` by distance, negative from the end; `rings` with
-  pitch, depth, width, `jitter`, `skip_mm`, `skip_fade`, `skip_depth`; `attrs` that fade in and out by distance;
+  pitch, depth, width, `shape` ("groove", or "shingle": overlapping segments like a jointed snake toy, with `lip`,
+  `curve`, `undercut`), `jitter`, `skip_mm`, `skip_fade`, `skip_depth`; `attrs` that fade in and out by distance;
   `bands` of another material by distance; `flatten` for a soft tube on a floor; caps; segments), `python`
   (a hook module with `build(ctx, **args)`; ctx has bpy, np, MM, material(), scene, base).
 - `shots`: size, samples, `rig` (`sweep`: cove colour, cove_depth, cove_radius, wall_color and wall_range for a
@@ -46,4 +47,7 @@ CAD lives in `.venv-fab`. `studio/setup.sh` repairs both.
   At 100 mm and 0.4 m, f/16 still holds only about 2 cm.
 - No coplanar faces between solids. Keep parts 0.3 to 0.5 mm apart or overlapping.
 - A `KHR_materials_unlit` glTF surface imports as camera-only emission and lights nothing; rebuild it as an emitter.
-- Hair: 30,000 curves render fine; see `spinoffs/earwig/hair.py` for a vectorised groom on a rounded box.
+- Hair: 30,000 curves render fine; see `spinoffs/earwig/hair.py` for a vectorised groom on a rounded box (centre or
+  side part, clumps, flyaways, a level cut).
+- Small parts resting on a table: `studio/poses.py` (`lying_pose`, `to_world`), as `spinoffs/earworm/scene.py` uses it.
+- The camera clips at 1 mm, so a macro can sit as close as it likes.

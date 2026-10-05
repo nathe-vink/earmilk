@@ -69,6 +69,14 @@ Fabrication notes, not product decisions. Nothing here changes the Geometry or t
 - **The label and the physics disagree on one line.** The engraved Facts say 91 dB; a woofer that reaches 32 Hz in this box is rated about 90 dB, and voiced flat on this baffle the speaker should measure 85 to 88 dB. Engrave after measuring. "8 ohm" may become 6: every tweeter that fits the bowl is 4 ohm.
 - **The wordmark at 44 mm type is 172 mm wide,** as the renders show; geometry.md's "about 155" is an estimate the type size overrides. The fab files follow the type size.
 
+### Amendments, 2026-10-05: the pint and the crate
+
+Made by the owner on the v13 crate shot ("the top driver is missing … the crate itself can be improved"). They stand with the Decisions above; the pint stays parked otherwise.
+
+- **The pint has a tweeter.** A small dome at the throat of its bowl, as the floorstander's sits at the throat of its own: a faceplate filling the ø 17 throat and a dome of about ø 9. The full-range driver at 95 becomes the pint's woofer. Its electronics stay undesigned.
+- **The crate is a dairy crate.** The same 340 × 250 × 130 and 2 × 3, now moulded in warm white instead of five boards: rounded corners, a rolled rim, latticed walls, a hand-hold in each short end, a floor. The upper windows of the long walls are one per pint, sized and placed to frame the front pints' drivers, which the plain crate's wall hid (path-traced round 1 asked whether the wall should drop; the windows answer it without changing the height). Still a crate and nothing more: no ports, lights, cables or controls.
+- **Render polish, not product decisions** (v14): the tweeters' faceplates carry a polished chamfer, so the driver deep in each bowl reads as a driver; the domes are coated textile, not black holes; the lacquer has a faint orange peel, the cones pressed paper, the floors grain and the walls plaster; the studio adds two tall strips behind the subject for edge lines; the chair is a dining chair, not a massing model.
+
 ### Notes, 2026-10-04: tools and the family
 
 Tooling notes, not product decisions. Nothing here changes the Geometry or the Decisions.
@@ -89,7 +97,7 @@ Floorstander — square plan, gable-top.
 - Back (bare birch window inside the sleeve frame): window x 26→364, z 40→798. Engraved Nutrition Facts panel 266 wide × 240 tall, top at z 770 *(266 × 260 since 2026-10-02)*. Round port ø ~100 centered at z 405. Binding posts on a 128 × 64 plate centered at z 144.
 - Sleeve: tube 390 × 390 × 860 (open top and bottom, die-cut for woofer and mid, back panel is a frame), plus a lid covering gable + fin, die-cut at the bowl mouth. Both lock at the back seam. Board: heavy carton board / SBS, target ~1.2–1.5 mm; whether it holds a crisp fold at this size is an open test. *Amended 2026-10-02: no sleeve. The outer dimensions stay; the skin is the finish.*
 
-Pint — 100 × 100 plan, body 200, gable 35, fin 12. Single full-range ø ~68 at 95; tiny bowl at the top. Crate 340 × 250 × 130, 2 × 3.
+Pint — 100 × 100 plan, body 200, gable 35, fin 12. Single full-range ø ~68 at 95; tiny bowl at the top. Crate 340 × 250 × 130, 2 × 3. *Amended 2026-10-05: a small dome tweeter at the bowl's throat; the crate is a moulded dairy crate with latticed walls that frame the front pints' drivers.*
 
 Stand (optional accessory, amended 2026-10-01) — 390 × 390 × 110 painted block, 6 mm reveal. With the stand: overall 1,171; tweeter axis 1,019.5. *Amended 2026-10-02: replaced by the built-in plinth, z 0 → 110 of the cabinet, accent colour, 3 mm shadow line at z 110 → 113; overall height stays 1,055.*
 

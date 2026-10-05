@@ -27,6 +27,9 @@ def main():
     ap.add_argument('--area-strength', type=float, default=1.0)
     ap.add_argument('--world-strength', type=float, default=1.0)
     ap.add_argument('--sky-strength', type=float, default=1.0, help='multiplier on the glow of the sky planes outside the windows')
+    ap.add_argument('--fstop', type=float, default=0.0, help='depth of field, focused on the shot\'s look-at point; 0 for none')
+    ap.add_argument('--strips', type=float, default=1.0, help='studio only: strength of the two edge strips behind the subject (0 for none)')
+    ap.add_argument('--surface', type=float, default=1.0, help='strength of the surface detail (orange peel, paper, plaster, grain); 0 for none')
     a = ap.parse_args()
     import bpy  # noqa: E402
     from mathutils import Vector  # noqa: E402
@@ -85,6 +88,21 @@ def main():
             d, o = lamp('lamp', 'POINT', l['color']); d.energy = l['intensity'] * 4 * math.pi; d.shadow_soft_size = 0.08
             o.location = P(l['position'])
 
+    if studio and a.strips > 0:
+        # Two tall strips behind the subject, left and right of the camera's line, so dark edges and glossy corners take a line
+        # of light (what every spin-off critic round asked for). Irradiance about 1.6 W/m2 at the subject each.
+        cp, lk = P(side['camera']['position']), P(side['camera']['lookAt'])
+        fwd = Vector((lk.x - cp.x, lk.y - cp.y, 0)).normalized()
+        for k, sgn in enumerate((-1, 1)):
+            ang = math.radians(sgn * 140)
+            dirv = Vector((fwd.x * math.cos(ang) - fwd.y * math.sin(ang), fwd.x * math.sin(ang) + fwd.y * math.cos(ang), 0))
+            d, o = lamp(f'strip{k}', 'AREA', '#ffffff'); d.shape = 'RECTANGLE'; d.size = 0.35; d.size_y = 2.6
+            dist = 3.2; d.energy = (1.6 if sgn < 0 else 1.3) * math.pi * dist * dist * a.strips
+            o.location = Vector((lk.x, lk.y, 0.9)) - dirv * dist; aim(o, Vector((lk.x, lk.y, 0.6)) - o.location)
+    if a.fstop > 0:
+        cam.data.dof.use_dof = True; cam.data.dof.aperture_fstop = a.fstop
+        cam.data.dof.focus_distance = (P(side['camera']['lookAt']) - P(side['camera']['position'])).length
+
     # World. The real-time hemisphere light is an irradiance E; a dome of radiance L gives E = π·L. In the rooms the ceiling and walls
     # keep the dome out (and Cycles bounces light for real, which the hemisphere was faking), so it only matters where a set is open:
     # the studio and the desk. The studio dome is a vertical gradient, white overhead and the backdrop tone at the horizon, so lacquer
@@ -125,10 +143,44 @@ def main():
         if name.startswith('bronze'):
             # The real-time renderer fakes bronze with a part-diffuse material because it has one pale environment map; here it is a metal.
             bsdf.inputs['Metallic'].default_value = 1.0; bsdf.inputs['Roughness'].default_value = 0.35
+        def noise_bump(scale_m, strength, normal_in=None, distortion=0.0, detail=6.0, stretch=None):
+            """A bump from world-space noise with features about `scale_m` metres across; chained after `normal_in`."""
+            geo = nt.nodes.new('ShaderNodeNewGeometry'); tx = nt.nodes.new('ShaderNodeTexNoise')
+            tx.inputs['Scale'].default_value = 1.0 / scale_m; tx.inputs['Detail'].default_value = detail
+            if 'Distortion' in tx.inputs: tx.inputs['Distortion'].default_value = distortion
+            vec = geo.outputs['Position']
+            if stretch:                                   # grain: noise squashed along one axis
+                mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = stretch
+                nt.links.new(vec, mp.inputs['Vector']); vec = mp.outputs['Vector']
+            nt.links.new(vec, tx.inputs['Vector'])
+            bn = nt.nodes.new('ShaderNodeBump'); bn.inputs['Strength'].default_value = strength * a.surface
+            bn.inputs['Distance'].default_value = scale_m * 0.2
+            nt.links.new(tx.outputs['Fac'], bn.inputs['Height'])
+            if normal_in is not None: nt.links.new(normal_in, bn.inputs['Normal'])
+            return bn.outputs['Normal']
         if name.startswith(('finish', 'bronze', 'board', 'print', 'standpaint')) and not bsdf.inputs['Normal'].is_linked:
             # Eased edges: a lacquered cabinet's arrises are not razor sharp. A shader-space bevel of 2 mm, no geometry change.
             bev = nt.nodes.new('ShaderNodeBevel'); bev.inputs['Radius'].default_value = 0.002; bev.samples = 6
-            nt.links.new(bev.outputs['Normal'], bsdf.inputs['Normal'])
+            nrm = bev.outputs['Normal']
+            if name.startswith('finish'):
+                # Sprayed lacquer is never glass: a faint orange peel, about a millimetre across, that breaks long reflections up.
+                nrm = noise_bump(0.0011, 0.025, nrm)
+            nt.links.new(nrm, bsdf.inputs['Normal'])
+        elif name.startswith('cone'):
+            nt.links.new(noise_bump(0.0004, 0.12), bsdf.inputs['Normal']); bsdf.inputs['Roughness'].default_value = 0.8   # pressed paper
+        elif name.startswith('surround'):
+            bsdf.inputs['Roughness'].default_value = 0.45
+            if 'Sheen Weight' in bsdf.inputs: bsdf.inputs['Sheen Weight'].default_value = 0.3                             # rubber
+        elif name.startswith('crate'):
+            nt.links.new(noise_bump(0.0005, 0.06), bsdf.inputs['Normal'])                                                # moulded HDPE
+            if 'Subsurface Weight' in bsdf.inputs:
+                bsdf.inputs['Subsurface Weight'].default_value = 0.06; bsdf.inputs['Subsurface Scale'].default_value = 0.002
+        elif name.startswith(('floor', 'desk')):
+            nt.links.new(noise_bump(0.003, 0.05, None, 2.0, 4.0, (6.0, 1.0, 1.0)), bsdf.inputs['Normal'])                 # grain along the planks
+        elif name.startswith('wall'):
+            nt.links.new(noise_bump(0.004, 0.035), bsdf.inputs['Normal'])                                                # plaster
+        elif name.startswith('chairwood'):
+            nt.links.new(noise_bump(0.002, 0.05, None, 1.5, 4.0, (1.0, 1.0, 5.0)), bsdf.inputs['Normal'])
         if m.blend_method == 'BLEND' or m.surface_render_method == 'BLENDED':
             m.surface_render_method = 'DITHERED'  # alpha-tested decals in Cycles stay crisp
 

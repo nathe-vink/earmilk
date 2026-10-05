@@ -9,7 +9,7 @@ import json, math, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from params import *  # noqa: F401,F403
-from build123d import (Axis, Box, Circle, Cylinder, Ellipse, Plane, Polyline, Pos, Spline, Vertex, export_step, export_stl,
+from build123d import (Axis, Box, Circle, Cylinder, Ellipse, Plane, Polyline, Pos, Sphere, Spline, Vertex, export_step, export_stl,
                        extrude, fillet, loft, make_face, mirror, revolve)
 import numpy as np
 
@@ -19,14 +19,13 @@ OUT = os.path.join(HERE, 'out')
 def bud_body():
     secs = [Plane.XY.offset(z) * Pos(cx, 0) * Ellipse(a, b) for (z, a, b, cx) in BUD_SECTIONS]
     body = loft([Vertex(BUD_TOP[0], 0, BUD_TOP[1])] + secs + [Vertex(BUD_BOTTOM[0], 0, BUD_BOTTOM[1])])
-    # the abdomen's segments: shallow grooves round the stem
-    for zg in STEM_GROOVES:
-        zs = [s[0] for s in BUD_SECTIONS][::-1]
-        a = float(np.interp(zg, zs, [s[1] for s in BUD_SECTIONS][::-1]))
-        b = float(np.interp(zg, zs, [s[2] for s in BUD_SECTIONS][::-1]))
-        cx = float(np.interp(zg, zs, [s[3] for s in BUD_SECTIONS][::-1]))
-        ring = extrude(Plane.XY.offset(zg - GROOVE_W / 2) * Pos(cx, 0) * (Ellipse(a + 2, b + 2) - Ellipse(a - GROOVE_D, b - GROOVE_D)), amount=GROOVE_W)
-        body -= ring
+    # the abdomen's plates: each widens toward its lower edge and laps over the next, like a jointed toy or a beetle
+    zs = [q[0] for q in BUD_SECTIONS][::-1]
+    at_z = lambda z, k: float(np.interp(z, zs, [q[k] for q in BUD_SECTIONS][::-1]))
+    for zt, zb in STEM_PLATES:
+        top = Plane.XY.offset(zt) * Pos(at_z(zt, 3), 0) * Ellipse(at_z(zt, 1) - 0.02, at_z(zt, 2) - 0.02)
+        bot = Plane.XY.offset(zb + 0.02) * Pos(at_z(zb, 3), 0) * Ellipse(at_z(zb, 1) + PLATE_FLARE, at_z(zb, 2) + PLATE_FLARE)
+        body += loft([top, bot])
     # the nozzle: a short tapered barrel into the canal
     d = np.array(NOZZLE_DIR) / np.linalg.norm(NOZZLE_DIR)
     p0 = np.array(NOZZLE_AT) - d * 4.0
@@ -63,7 +62,8 @@ def pincer(sign):
         p = P(t); q = P(min(1, t + 1e-3)) - P(max(0, t - 1e-3)); q /= np.linalg.norm(q)
         r = PINCER_R0 + (PINCER_R1 - PINCER_R0) * t ** 1.3 + 0.12 * math.sin(math.pi * min(1, t * 2.5))
         secs.append(Plane(origin=tuple(p), z_dir=tuple(q)) * Circle(r))
-    return loft(secs)
+    tip_r = PINCER_R0 + (PINCER_R1 - PINCER_R0) + 0.12 * math.sin(math.pi * 1.0)
+    return loft(secs) + Pos(*P(1.0)) * Sphere(tip_r)                    # rounded tips: a pinch, not a stab
 
 
 def case():
@@ -106,7 +106,7 @@ def build():
         'bud-r': (body, 'shell'), 'inner-r': (inner, 'satin'), 'grille-r': (mesh, 'grille'), 'pincers-r': (pins, 'pincer'), 'tip-r': (tip, 'silicone'),
         'bud-l': (mirror(body, Plane.YZ), 'shell'), 'inner-l': (mirror(inner, Plane.YZ), 'satin'), 'grille-l': (mirror(mesh, Plane.YZ), 'grille'),
         'pincers-l': (mirror(pins, Plane.YZ), 'pincer'), 'tip-l': (mirror(tip, Plane.YZ), 'silicone'),
-        'case-base': (base, 'shell'), 'case-lid': (lid, 'shell'), 'case-led': (led, 'led'),
+        'case-base': (base, 'case'), 'case-lid': (lid, 'case'), 'case-led': (led, 'led'),
     }
     facts = {'case': {'w': CASE_W, 'd': CASE_D, 'h': CASE_H, 'r': CASE_R, 'split_z': zs},
              'bud_height_mm': round(BUD_TOP[1] - (PINCER_TOP_Z - PINCER_LEN_Z), 1)}

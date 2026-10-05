@@ -33,7 +33,9 @@ Rigs size themselves to the subject's bounding box, so a 20 mm earbud and a 1 m 
           [w, h] for a strip) in subject sizes, power as irradiance at the subject: strips for edges, a pin for glints
 
 Tubes also take `flatten` (a soft tube lying on a floor), `attrs` (a float along the tube for a material's
-`attr_color`, e.g. a saddle that fades into the body), rings with `jitter`, `skip_mm`, `skip_fade`, `skip_depth`, and
+`attr_color`, e.g. a saddle that fades into the body), rings with `shape` ("groove", or "shingle": overlapping
+segments like a jointed snake toy, with `lip`, `curve`, `undercut`), `jitter`, `depth_jitter` and `wobble` (segments that
+differ a little and sit a little out of line), `skip_mm`, `skip_fade`, `skip_depth`, and
 `bands` (a stretch in another material). Materials take `top_color`, `attr_color`, `bump` and `wrinkle`.
 Lessons carried from earmilk's path-traced rounds: light in physical units scaled to the subject, AgX view, the key
 on the camera's side of the subject, a dome at fill strength only, no coplanar faces (they render black).
@@ -246,7 +248,7 @@ def main():
         C = catmull(P)
         seg = np.linalg.norm(np.diff(C, axis=0), axis=1); s = np.concatenate([[0], np.cumsum(seg)]); L = s[-1]
         rings = spec.get('rings')
-        step = min(spec.get('step', 1.0), (rings['pitch'] / 8) if rings else 1e9)
+        step = min(spec.get('step', 1.0), (rings['pitch'] / (24 if rings.get('shape') == 'shingle' else 8)) if rings else 1e9)
         n = max(8, int(L / step))
         ss = np.linspace(0, L, n)
         C = np.column_stack([np.interp(ss, s, C[:, k]) for k in range(3)])
@@ -271,15 +273,31 @@ def main():
             prof = sorted([at(d), k] for d, k in spec['profile_mm'])
         prof = np.array(prof, float)
         r = spec.get('radius', 2.0) * np.interp(u, prof[:, 0], prof[:, 1])
+        seg_side = None
         if rings:
             if rings.get('jitter'):                                  # uneven annuli: the pitch wanders by +-jitter
                 rs = np.random.default_rng(rings.get('seed', 3))
                 wob = sum(np.sin(2 * np.pi * ss / wl + rs.uniform(0, 2 * np.pi)) for wl in (37.0, 13.0, 5.3)) / 2.2
                 cyc = np.concatenate([[0], np.cumsum(np.diff(ss) / (rings['pitch'] * (1 + rings['jitter'] * wob[1:])))])
-                phase = cyc % 1.0
             else:
-                phase = (ss % rings['pitch']) / rings['pitch']
-            groove = np.exp(-((phase - 0.5) / rings.get('width', 0.12)) ** 2)
+                cyc = ss / rings['pitch']
+            phase = cyc % 1.0
+            seg = np.floor(cyc).astype(int)                          # which segment each sample belongs to
+            rs2 = np.random.default_rng(rings.get('seed', 3) + 17)
+            nseg = int(seg.max()) + 2
+            seg_depth = 1 + rings.get('depth_jitter', 0.0) * rs2.uniform(-1, 1, nseg)
+            if rings.get('wobble'):                                  # segments a little out of line, like a flexed toy
+                seg_side = rs2.normal(0, 1, nseg)[seg] * rings['wobble']
+            if rings.get('shape') == 'shingle':
+                # overlapping segments, like a jointed snake toy or an insect's plates: each segment flares toward the
+                # tail and its rear lip laps over the start of the next, with a shadow line just under the lip
+                lipw = rings.get('lip', 0.08)
+                ramp = phase ** rings.get('curve', 0.7) * np.minimum(1.0, (1.0 - phase) / lipw)
+                under = np.exp(-(phase / rings.get('width', 0.06)) ** 2)
+                groove = None
+                shingle = (ramp - 0.5 - rings.get('undercut', 0.6) * under) * seg_depth[seg]
+            else:
+                groove = np.exp(-((phase - 0.5) / rings.get('width', 0.12)) ** 2)
             mask = np.ones_like(u)
             skips = [list(k) for k in rings.get('skip', [])] + [[at(a0), at(a1)] for a0, a1 in rings.get('skip_mm', [])]
             for (a0, a1) in skips:                                    # smooth bands (a worm's saddle, a plug) have no rings
@@ -289,13 +307,16 @@ def main():
                     mask = np.minimum(mask, keep + (1 - keep) * np.clip(np.maximum(a0 - u, u - a1) / fade, 0, 1))
                 else:
                     mask[(u >= a0) & (u <= a1)] = keep
-            r = r * (1 - rings['depth'] * groove * mask)
+            r = r * (1 + rings['depth'] * shingle * mask) if groove is None else r * (1 - rings['depth'] * groove * mask)
         m = spec.get('segments', 20)
         th = np.linspace(0, 2 * np.pi, m, endpoint=False)
+        upv0 = np.array([0, 0, 1.0]) - T[:, 2:3] * T
+        upv0 /= np.maximum(np.linalg.norm(upv0, axis=1, keepdims=True), 1e-9)
+        if seg_side is not None:                                    # sideways only, so nothing sinks into the floor
+            C = C + np.cross(T, upv0) * (seg_side * r)[:, None]
         if spec.get('flatten'):                                     # a soft tube resting on a floor: lower and wider
             f_ = spec['flatten']
-            upv = np.array([0, 0, 1.0]) - T[:, 2:3] * T
-            upv /= np.maximum(np.linalg.norm(upv, axis=1, keepdims=True), 1e-9)
+            upv = upv0
             sdv = np.cross(T, upv)
             V = (C[:, None, :] + r[:, None, None] * (np.cos(th)[None, :, None] * sdv[:, None, :] * (1 + f_)
                                                      + np.sin(th)[None, :, None] * upv[:, None, :] * (1 - f_))).reshape(-1, 3)
@@ -482,6 +503,7 @@ def main():
     # --- camera ------------------------------------------------------------------------------------------------------
     cs = shot.get('camera', {})
     cam = bpy.data.cameras.new('cam'); cam.lens = cs.get('lens', 85); cam.sensor_width = 36
+    cam.clip_start, cam.clip_end = 0.001, 200.0          # Blender clips at 100 mm by default: an earbud macro sits closer
     co = bpy.data.objects.new('cam', cam); sc.collection.objects.link(co); sc.camera = co
     tgt = Vector(cs['target']) * MM if 'target' in cs else centre
     if 'position' in cs:

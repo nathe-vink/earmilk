@@ -62,21 +62,25 @@ def lying_pose(side, heading, at, roll=0.0):
     return {'translate': tr, 'rotate': euler_xyz(R)}
 
 
+# 2026-10-04, a little less grotesque (the owner): a cream case, a sleek side-parted bob, buds in gloss chestnut with a
+# satin inner half and taupe tips (a cream inner half round a dark tip read as an eyeball)
 MAT = {
-    'shell': {'preset': 'lacquer', 'color': '#4b2414', 'roughness': 0.28, 'coat': 1.0, 'coat_roughness': 0.025},
-    'pincer': {'preset': 'lacquer', 'color': '#3e1c0f', 'roughness': 0.28, 'coat': 1.0, 'coat_roughness': 0.025},
-    'satin': {'preset': 'satin_plastic', 'color': '#4b2414', 'roughness': 0.42, 'coat': 0.15, 'coat_roughness': 0.35},
+    'shell': {'preset': 'lacquer', 'color': '#5a2f1b', 'roughness': 0.3, 'coat': 0.7, 'coat_roughness': 0.06},
+    'pincer': {'preset': 'lacquer', 'color': '#4e2716', 'roughness': 0.3, 'coat': 0.7, 'coat_roughness': 0.06},
+    'satin': {'preset': 'satin_plastic', 'color': '#7d4a2e', 'roughness': 0.42, 'coat': 0.15, 'coat_roughness': 0.3},
+    'case': {'preset': 'satin_plastic', 'color': '#ece4d6', 'roughness': 0.3, 'coat': 0.45, 'coat_roughness': 0.07},
     'grille': {'preset': 'fabric', 'color': '#121111'},
-    'silicone': {'preset': 'silicone', 'color': '#2b2623', 'roughness': 0.62, 'sss': 0.15, 'sheen': 0.2},
+    'silicone': {'preset': 'silicone', 'color': '#a08f80', 'roughness': 0.6, 'sss': 0.3, 'sheen': 0.2},
     'led': {'preset': 'emissive', 'color': '#ffd9a8', 'emission': 3.0},
-    'hair': {'preset': 'hair', 'melanin': 0.62, 'redness': 0.36, 'roughness': 0.2, 'radial_roughness': 0.3, 'coat': 0.2},
+    'hair': {'preset': 'hair', 'melanin': 0.55, 'redness': 0.42, 'roughness': 0.18, 'radial_roughness': 0.3, 'coat': 0.25},
 }
 case = facts['case']
 objects = [{'id': n, 'type': 'mesh', 'file': f'out/stl/{n}.stl', 'material': parts[n]['material']} for n in ('case-base', 'case-lid', 'case-led')]
 objects.append({'id': 'wig', 'type': 'python', 'file': 'hair.py',
                 'args': {'w': case['w'], 'd': case['d'], 'h': case['h'], 'r': case['r'], 'split_z': case['split_z'],
-                         'count': HAIR_COUNT, 'radius': HAIR_RADIUS, 'volume': list(HAIR_VOLUME), 'cut_below': HAIR_CUT_BELOW_SPLIT,
-                         'clump': 0.8, 'clump_turn': 3.5, 'flyaway': 0.006, 'cut_jitter': 0.28, 'part_cross': 0.12}})
+                         'count': HAIR_COUNT, 'radius': HAIR_RADIUS, 'volume': [0.3, 2.4], 'cut_below': 0.7,
+                         'clump': 0.8, 'clump_turn': 1.5, 'flyaway': 0.0, 'cut_jitter': 0.12, 'part_cross': 0.0,
+                         'part_y': 5.0, 'frizz': 0.03, 'rise': 1.2, 'tuck': 0.55}})
 R_HEADING, R_AT = 40, (4, -54)                     # the bud the close-up looks at
 poses = {'r': lying_pose('r', heading=R_HEADING, at=R_AT), 'l': lying_pose('l', heading=198, at=(50, -44))}
 for side, pose in poses.items():
@@ -90,23 +94,23 @@ RIG = {'type': 'sweep', 'color': '#e8ded1', 'wall_color': '#a39383', 'wall_range
        'lights': [{'azimuth': -72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 2.2},
                   {'azimuth': 72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 1.8},
                   {'azimuth': 0, 'elevation': 86, 'size': 0.7, 'distance': 2.0, 'power': 1.2}]}
-# round 3 of the hero: a graded reflection across the case's face, less fill, a lighter sweep with a darker far end
-RIG3 = {'type': 'sweep', 'color': '#f1eae1', 'wall_color': '#ab9c8b', 'wall_range': [0.4, 2.2], 'dome': 0.12,
-        'key': {'azimuth': -40, 'elevation': 50, 'power': 0.55},
-        'fill': {'azimuth': 45, 'elevation': 25, 'power': 0.15},
-        'rim': {'azimuth': 180, 'elevation': 12, 'power': 1.8, 'size': 1.2},
-        'lights': [{'azimuth': -72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 2.4},
-                   {'azimuth': 72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 2.0},
-                   {'azimuth': 0, 'elevation': 86, 'size': 0.7, 'distance': 2.0, 'power': 1.2},
-                   {'azimuth': 14, 'elevation': 34, 'size': [1.1, 0.45], 'distance': 2.4, 'power': 0.7}]}
+# v4 (the softer look): a smaller, harder key at about three times the fill so every piece sits in its own shadow, a
+# low rim behind the case for the hair's ends, strips beside it for the gloss, a graded reflection across its face
+RIG3 = {'type': 'sweep', 'color': '#efe9df', 'wall_color': '#b3a594', 'wall_range': [0.4, 2.2], 'dome': 0.08,
+        'key': {'azimuth': -40, 'elevation': 52, 'size': 0.9, 'power': 0.9},
+        'fill': {'azimuth': 45, 'elevation': 25, 'power': 0.12},
+        'rim': {'azimuth': 180, 'elevation': 12, 'power': 1.4, 'size': 0.8},
+        'lights': [{'azimuth': -72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 2.0},
+                   {'azimuth': 72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 1.6},
+                   {'azimuth': 0, 'elevation': 86, 'size': 0.7, 'distance': 2.0, 'power': 0.6},
+                   {'azimuth': 14, 'elevation': 34, 'size': [1.1, 0.45], 'distance': 2.4, 'power': 0.5}]}
 shots = {
-    'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG3, 'exposure': 0.25,
-             'camera': {'position': [-160, -478, 290], 'target': [34, -36, 18], 'lens': 100},
+    'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG3, 'exposure': 0.15,
+             'camera': {'position': [-176, -510, 312], 'target': [32, -32, 16], 'lens': 100},
              'floor_z': 0},
     'detail': {'size': [1800, 1200], 'samples': 192, 'rig': RIG3,
                # the bud on the right third, its forceps pointing into the frame, the wigged case whole behind it
-               'camera': {'position': [R_AT[0] - 2, R_AT[1] - 170, 118], 'target': [R_AT[0] - 22, R_AT[1] + 30, 12], 'lens': 50,
-                          'fstop': 8, 'focus': [R_AT[0], R_AT[1], 5]},
+               'camera': {'position': [R_AT[0] - 2, R_AT[1] - 176, 142], 'target': [R_AT[0] - 22, R_AT[1] + 22, 8], 'lens': 50},
                'hide': ['bud-l', 'inner-l', 'grille-l', 'pincers-l', 'tip-l'],
                'floor_z': 0},
 }

@@ -26,8 +26,8 @@ BUD_SECTIONS = [
     (-27.5, 2.6, 1.95, -2.0),
     (-28.4, 1.5, 1.1, -2.0),
 ]
-STEM_GROOVES = (-12.6, -16.0, -19.4, -22.8)   # the abdomen's segments: shallow grooves round the stem
-GROOVE_W, GROOVE_D = 0.6, 0.11
+STEM_PLATES = ((-11.4, -15.0), (-15.0, -18.6), (-18.6, -22.2), (-22.2, -25.6))   # the abdomen's plates, top to bottom
+PLATE_FLARE = 0.24                   # each plate widens toward its lower edge and laps over the next, like a jointed toy
 
 SPLIT_X = 1.6                        # the head's parting line: outer half gloss, inner half (nozzle side) satin
 SPLIT_ZMIN = -8.0                    # below this the stem stays one piece
@@ -43,11 +43,11 @@ TIP_LEN = 7.4
 
 # --- pincers (the forceps): two tapering lofts that bow apart and close at the tips (PROPOSAL) ------------------------
 PINCER_TOP_Z = -26.0                 # inside the stem's end
-PINCER_LEN_Z = 14.5
-PINCER_BASE_Y = 1.45                 # each pincer's base, off the stem's centre plane
-PINCER_BOW = 3.7                     # how far they bow apart
-PINCER_TIP_Y = 0.35                  # tip gap is twice this
-PINCER_R0, PINCER_R1 = 1.55, 0.3     # radius at the base and at the tip
+PINCER_LEN_Z = 9.5   # shorter and softer since 2026-10-04: less grotesque
+PINCER_BASE_Y = 1.3                  # each pincer's base, off the stem's centre plane
+PINCER_BOW = 2.3                     # how far they bow apart
+PINCER_TIP_Y = 0.8                   # tip gap is twice this
+PINCER_R0, PINCER_R1 = 1.4, 0.62     # radius at the base and at the tip, which is rounded, not pointed
 
 # --- case (PROPOSAL) --------------------------------------------------------------------------------------------------
 CASE_W, CASE_D, CASE_H = 62.0, 26.0, 48.0

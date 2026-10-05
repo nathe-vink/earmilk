@@ -1,107 +1,95 @@
 {
  "parts": {
-  "shell-r": {
+  "bud-cap": {
+   "material": "metal",
+   "volume_cm3": 0.584
+  },
+  "bud-shell": {
    "material": "shell",
-   "volume_cm3": 227.49
+   "volume_cm3": 0.728
   },
-  "shell-l": {
-   "material": "shell",
-   "volume_cm3": 226.83
+  "bud-mesh": {
+   "material": "grille",
+   "volume_cm3": 0.001
   },
-  "cushion-r": {
-   "material": "cushion",
-   "volume_cm3": 115.58
+  "bud-tip": {
+   "material": "silicone",
+   "volume_cm3": 0.532
   },
-  "cushion-l": {
-   "material": "cushion",
-   "volume_cm3": 115.58
-  },
-  "baffle-r": {
-   "material": "cloth",
-   "volume_cm3": 2.11
-  },
-  "baffle-l": {
-   "material": "cloth",
-   "volume_cm3": 2.11
-  },
-  "yoke-r": {
+  "splitter": {
    "material": "metal",
-   "volume_cm3": 9.11
-  },
-  "yoke-l": {
-   "material": "metal",
-   "volume_cm3": 9.11
-  },
-  "band": {
-   "material": "shell",
-   "volume_cm3": 44.04
-  },
-  "pad": {
-   "material": "cushion",
-   "volume_cm3": 40.14
-  },
-  "sliders": {
-   "material": "metal",
-   "volume_cm3": 15.0
-  },
-  "grommet": {
-   "material": "metal",
-   "volume_cm3": 0.72
+   "volume_cm3": 0.584
   },
   "plug-barrel": {
    "material": "metal",
-   "volume_cm3": 0.53
+   "volume_cm3": 0.36
   },
   "plug": {
    "material": "plug",
-   "volume_cm3": 0.12
+   "volume_cm3": 0.123
   },
   "plug-rings": {
    "material": "plug_rings",
-   "volume_cm3": 0.03
+   "volume_cm3": 0.033
   }
  },
  "facts": {
-  "grommet": {
-   "start": [
-    -109.5,
-    -36.38711104815145,
-    -30.53241146011062
+  "bud": {
+   "worm_start": [
+    4.0,
+    0,
+    0
    ],
-   "dir": [
+   "worm_mouth": [
+    -2.4,
+    0,
+    0
+   ],
+   "out_dir": [
+    -1.0,
+    0,
+    0
+   ],
+   "tip_front_x": 23.0,
+   "back_x": -2.4
+  },
+  "splitter": {
+   "main_hole": [
     0.0,
-    -0.766044443118978,
-    -0.6427876096865394
+    0,
+    0
    ],
-   "mouth": [
-    -109.5,
-    -42.89848881466277,
-    -35.9961061424462
+   "main_dir": [
+    -1.0,
+    0,
+    0
+   ],
+   "branch_holes": [
+    [
+     13.0,
+     2.2,
+     0
+    ],
+    [
+     13.0,
+     -2.2,
+     0
+    ]
+   ],
+   "branch_dir": [
+    1.0,
+    0,
+    0
    ]
-  },
-  "band": {
-   "zc": 22.99375,
-   "R": 117.00625,
-   "theta": 71.5621477237851
-  },
-  "wordmark_width_mm": 50.8,
-  "floor_z": -50.0
+  }
  },
  "print": {
-  "print-shell-r": {
-   "volume_cm3": 36.29,
+  "print-cap": {
+   "volume_cm3": 0.32,
    "valid": true
   },
-  "print-shell-l": {
-   "volume_cm3": 36.2,
-   "valid": true
-  },
-  "print-baffle-r": {
-   "volume_cm3": 12.97,
-   "valid": true
-  },
-  "print-baffle-l": {
-   "volume_cm3": 12.97,
+  "print-shell": {
+   "volume_cm3": 0.307,
    "valid": true
   }
  }
