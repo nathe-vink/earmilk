@@ -38,4 +38,4 @@ add is a **proposal** until the owner signs it; say so in the brief and in `para
 
 - `spinoffs/earworm/`: wired in-ear earphones; revolved earphone parts, solved resting poses, worm cables drawn by
   the path tracer's tube with overlapping segments, a blended saddle and a radius profile by distance.
-- `spinoffs/earwig/`: true-wireless buds; lofted bud with pincers, a case with a wig grown by `hair.py`.
+- `spinoffs/earwig/`: true-wireless buds; a lofted bud, a flexible tail of overlapping plates (a tube with shingle rings, like the earworm's cable) draped to the forceps, a case with a wing-case lid. (Its wig, grown by a hair hook, is in git history.)

@@ -3,8 +3,9 @@
     .venv-fab/bin/python spinoffs/earwig/model.py && python3 spinoffs/earwig/scene.py
     python3 studio/pathtrace.py spinoffs/earwig/shots.json --shot hero
 
-The case stands on the floor wearing its wig (hair.py grows it at render time). The buds lie in front of it on their
-outer sides, the way buds lie on a table: each pose is solved here so the bud rests on its body and its pincer tips.
+The case stands on the floor, its chestnut lid split like an earwig's wing covers. The buds lie in front of it on their
+outer sides, the way buds lie on a table, and each tail, a flexible run of overlapping plates since 2026-10-06, leaves
+its collar and drapes on the floor to the forceps; the path tracer draws the tails plate by plate along the paths laid here.
 """
 import json, math, os, struct, sys
 import numpy as np
@@ -35,109 +36,142 @@ def rot(axis, deg):
     return np.eye(3) + math.sin(t) * K + (1 - math.cos(t)) * K @ K
 
 
-def lying_pose(side, heading, at, roll=0.0):
-    """A bud on its outer side (the inner side, with the nozzle, faces up), its stem pointing along `heading` degrees on
-    the floor, tilted so it rests on its body and its pincer tips; returns translate and rotate for the scene."""
-    V = np.vstack([stl_vertices(f'{p}-{side}') for p in ('bud', 'inner', 'pincers', 'tip')])
+def euler_matrix(e):
+    """The rotation Blender applies for an XYZ Euler in degrees (R = Rz Ry Rx)."""
+    a, b, c = [math.radians(v) for v in e]
+    Rx = np.array([[1, 0, 0], [0, math.cos(a), -math.sin(a)], [0, math.sin(a), math.cos(a)]])
+    Ry = np.array([[math.cos(b), 0, math.sin(b)], [0, 1, 0], [-math.sin(b), 0, math.cos(b)]])
+    Rz = np.array([[math.cos(c), -math.sin(c), 0], [math.sin(c), math.cos(c), 0], [0, 0, 1]])
+    return Rz @ Ry @ Rx
+
+
+def lying_pose(side, heading, at, tilt=5.0):
+    """A bud on its outer side (the inner side, with the nozzle, faces up), its head toward `heading` degrees on the floor
+    and its tail's root the other way, the head end raised `tilt` degrees: since 2026-10-06 the tail hangs loose, so the bud
+    rests on its body alone. Returns translate, rotate and the matrix Blender will apply."""
+    V = np.vstack([stl_vertices(f'{p}-{side}') for p in ('bud', 'inner', 'tip', 'collar')])
     up_local = np.array([1.0 if side == 'r' else -1.0, 0, 0])            # the inner side faces up
     zg = np.array([math.cos(math.radians(heading)), math.sin(math.radians(heading)), 0])
     xg = np.array([0, 0, 1.0])
     yg = np.cross(zg, xg)
-    # columns: where local x, y, z go (for the left bud local x is the outer side, so flip it)
     R0 = np.column_stack([xg * up_local[0], yg * (1 if side == 'r' else -1) * up_local[0], zg])
-    R0 = rot(zg, roll) @ R0
-    body = V[:, 2] > -9; far = V[:, 2] < -24
-    lo, hi = -40.0, 40.0
-    for _ in range(60):                                                  # tilt about the floor axis across the stem
-        t = (lo + hi) / 2
-        R = rot(yg, t) @ R0
+    best = None
+    for t in (tilt, -tilt):                                              # the sign that raises the head end
+        R = euler_matrix(euler_xyz(rot(yg, t) @ R0))
         W = V @ R.T
-        if W[body, 2].min() < W[far, 2].min():                           # the far end is still in the air: tip it down
-            lo = t
-        else:
-            hi = t
-    R = rot(yg, (lo + hi) / 2) @ R0
+        head = W[V[:, 2] > 6, 2].mean(); root = W[V[:, 2] < -11, 2].mean()
+        if best is None or head - root > best[0]:
+            best = (head - root, R)
+    R = best[1]
     W = V @ R.T
     tr = [at[0], at[1], -W[:, 2].min() + 0.02]
-    return {'translate': tr, 'rotate': euler_xyz(R)}
+    return {'translate': tr, 'rotate': euler_xyz(R), 'matrix': R}
 
 
-# 2026-10-04, a little less grotesque (the owner): a cream case, a sleek side-parted bob, buds in gloss chestnut with a
-# satin inner half and taupe tips (a cream inner half round a dark tip read as an eyeball)
+def tail_path(pose, side, curl, wobble=0.0, step=1.5):
+    """The tail's centreline: straight out of the collar for 3 mm, down to the floor within about 10 mm, then lying on it,
+    its heading turning by `curl` degrees over the length (a slow S if `wobble`), so the two tails are never copies."""
+    T = facts['tail']; R = pose['matrix']; t0 = np.array(pose['translate'])
+    root = R @ np.array(T['root_r' if side == 'r' else 'root_l']) + t0
+    d = R @ np.array(T['dir']); h0 = math.atan2(d[1], d[0])
+    L = T['len']; n = int(L / step)
+    r = lambda s: T['r0'] + (T['r1'] - T['r0']) * (s / L)
+    pts, p = [], root[:2].copy()
+    for i in range(n + 1):
+        s = i * step
+        u = s / L
+        h = h0 + math.radians(curl) * (3 * u * u - 2 * u ** 3) + math.radians(wobble) * math.sin(2 * math.pi * u)
+        lie = r(s) * 0.94 + 0.05                                         # resting on the floor, a little flattened
+        z = lie + (root[2] - lie) * max(0.0, 1 - s / 10.0) ** 2 if s > 3 else root[2] + d[2] * s
+        pts.append([float(p[0]), float(p[1]), float(z)])
+        p = p + step * np.array([math.cos(h), math.sin(h)])
+    end = np.array(pts[-1]); tan = end - np.array(pts[-2]); tan[2] = 0; tan /= np.linalg.norm(tan)
+    return pts, end, tan
+
+
+FV = stl_vertices('forceps')
+
+
+def forceps_pose(end, tan, droop=7.0):
+    """The forceps at the tail's end: local -z (the arms) along the tail's last heading, local x up, nosed down `droop` degrees
+    so the tips and the knob both touch the floor."""
+    zl = -tan                                                            # local +z points back up the tail
+    xl = np.array([0, 0, 1.0]); yl = np.cross(zl, xl)
+    R = rot(yl, droop) @ np.column_stack([xl, yl, zl])
+    R = euler_matrix(euler_xyz(R))
+    kz = facts['forceps']['knob'][2]
+    W = FV @ R.T
+    c = end + tan * kz
+    return {'translate': [float(c[0]), float(c[1]), float(-W[:, 2].min() + 0.02)], 'rotate': euler_xyz(R)}
+
+
+def tail_tube(key, pts):
+    T = facts['tail']
+    return {'id': f'tail-{key}', 'type': 'tube', 'points': pts, 'radius': T['r0'], 'material': 'tail', 'segments': 32,
+            'flatten': 0.05, 'profile_mm': [[0, 1.0], [-1, T['r1'] / T['r0']]],
+            'rings': {'shape': 'shingle', 'pitch': T['pitch'], 'depth': T['flare'], 'lip': 0.1, 'curve': 0.6, 'width': 0.05,
+                      'undercut': 0.45, 'jitter': 0.02, 'depth_jitter': 0.06, 'wobble': 0.01}}
+
+
+# 2026-10-06 (the owner): no wig; the lid in the buds' chestnut lacquer, split like folded wing covers, on a cream base; the
+# stiff stems become flexible tails of overlapping plates that hang loose, in the same lacquer, ending in the forceps
 MAT = {
-    'shell': {'preset': 'lacquer', 'color': '#5a2f1b', 'roughness': 0.3, 'coat': 0.7, 'coat_roughness': 0.06,
+    'shell': {'preset': 'lacquer', 'color': '#5a2f1b', 'roughness': 0.28, 'coat': 0.8, 'coat_roughness': 0.05,
               'bump': {'type': 'noise', 'scale': 0.6, 'strength': 0.04}},            # a faint orange peel
+    'tail': {'preset': 'lacquer', 'color': '#5a2f1b', 'top_color': '#4a2614', 'roughness': 0.3, 'coat': 0.75, 'coat_roughness': 0.07},
     'pincer': {'preset': 'lacquer', 'color': '#5a2f1b', 'roughness': 0.3, 'coat': 0.7, 'coat_roughness': 0.06,
-               'bump': {'type': 'noise', 'scale': 0.6, 'strength': 0.04}},           # the shells' own lacquer (critic, softer round 1)
+               'bump': {'type': 'noise', 'scale': 0.6, 'strength': 0.04}},
     'satin': {'preset': 'satin_plastic', 'color': '#7d4a2e', 'roughness': 0.42, 'coat': 0.15, 'coat_roughness': 0.3},
     'case': {'preset': 'satin_plastic', 'color': '#ece4d6', 'roughness': 0.3, 'coat': 0.45, 'coat_roughness': 0.07},
-    'cap': {'preset': 'matte_plastic', 'color': '#3b2416', 'roughness': 0.8},       # the lid under the hair, like a wig's cap
     'grille': {'preset': 'fabric', 'color': '#5a5550'},                              # mid grey: a dark hole read as a pupil
-    'silicone': {'preset': 'silicone', 'color': '#9a8e82', 'roughness': 0.42, 'sss': 0.6, 'sss_radius': [1.0, 0.8, 0.65], 'sss_scale': 1.6, 'sheen': 0.25},   # translucent, not putty
+    'sensor': {'preset': 'gloss_plastic', 'color': '#1c1512', 'roughness': 0.06},     # the wear sensor's window
+    'silicone': {'preset': 'silicone', 'color': '#9a8e82', 'roughness': 0.42, 'sss': 0.6, 'sss_radius': [1.0, 0.8, 0.65], 'sss_scale': 1.6, 'sheen': 0.25},
     'led': {'preset': 'emissive', 'color': '#ffd9a8', 'emission': 3.0},
-    'hair': {'preset': 'hair', 'melanin': 0.55, 'redness': 0.42, 'roughness': 0.2, 'radial_roughness': 0.3, 'coat': 0.12},
 }
 case = facts['case']
-objects = [{'id': n, 'type': 'mesh', 'file': f'out/stl/{n}.stl', 'material': 'cap' if n == 'case-lid' else parts[n]['material']}
+objects = [{'id': n, 'type': 'mesh', 'file': f'out/stl/{n}.stl', 'material': parts[n]['material']}
            for n in ('case-base', 'case-lid', 'case-led')]
-objects.append({'id': 'wig', 'type': 'python', 'file': 'hair.py',
-                'args': {'w': case['w'], 'd': case['d'], 'h': case['h'], 'r': case['r'], 'split_z': case['split_z'],
-                         'count': HAIR_COUNT, 'radius': HAIR_RADIUS, 'volume': [0.3, 2.4], 'cut_below': 0.7,
-                         'clump': 0.8, 'clump_turn': 2.5, 'flyaway': 0.0, 'cut_jitter': 0.12, 'part_cross': 0.0,
-                         'part_y': 5.0, 'frizz': 0.04, 'rise': 1.2, 'tuck': 0.55, 'part_gap': 0.35, 'part_flat': 2.5}})
 R_HEADING, R_AT = 40, (4, -54)                     # the bud the close-up looks at
-# v6 (softer round 2 on the hero): both tails point back into the group, the near one across the frame toward the case's
-# front, the far one toward its side, and the near bud clear of the case's corner (its tip nearly touched it, the tails
-# led out of the frame); the close-up keeps its own pose of the right bud, so each shot has its set of buds
-poses = {'r': lying_pose('r', heading=340, at=(40, -66)), 'l': lying_pose('l', heading=300, at=(76, -28)),
-         'r-d': lying_pose('r', heading=R_HEADING, at=R_AT)}
-BUD = ('bud', 'inner', 'grille', 'pincers', 'tip')
-for key, pose in poses.items():
-    side, sfx = key[0], key[1:]
+# the hero's buds in front of the case and to its right, each tail draped back toward the group, curling its own way;
+# the close-up has its own right bud
+LAYOUT = {'r': (340, (42, -64), 70, 8), 'l': (300, (78, -26), -55, -6), 'r-d': (R_HEADING, R_AT, -85, 6)}
+BUD = ('bud', 'inner', 'grille', 'collar', 'sensor', 'tip')
+for key, (hd, at, curl, wob) in LAYOUT.items():
+    side = key[0]
+    pose = lying_pose(side, hd, at)
     for p in BUD:
-        objects.append({'id': f'{p}-{key}', 'type': 'mesh', 'file': f'out/stl/{p}-{side}.stl', 'material': parts[f'{p}-{side}']['material'], **pose})
+        objects.append({'id': f'{p}-{key}', 'type': 'mesh', 'file': f'out/stl/{p}-{side}.stl', 'material': parts[f'{p}-{side}']['material'],
+                        'translate': pose['translate'], 'rotate': pose['rotate']})
+    pts, end, tan = tail_path(pose, side, curl, wob)
+    objects.append(tail_tube(key, pts))
+    objects.append({'id': f'forceps-{key}', 'type': 'mesh', 'file': 'out/stl/forceps.stl', 'material': 'pincer', **forceps_pose(end, tan)})
+HERO_SET = [f'{p}-{k}' for p in BUD + ('tail', 'forceps') for k in ('r', 'l')]
+DETAIL_SET = [f'{p}-r-d' for p in BUD + ('tail', 'forceps')]
 
-RIG = {'type': 'sweep', 'color': '#e8ded1', 'wall_color': '#a39383', 'wall_range': [0.2, 1.9], 'dome': 0.2,
-       'key': {'azimuth': -40, 'elevation': 50, 'power': 0.7},
-       'fill': {'azimuth': 45, 'elevation': 25, 'power': 0.35},
-       'rim': {'azimuth': 180, 'elevation': 12, 'power': 1.6, 'size': 1.2},
-       'lights': [{'azimuth': -72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 2.2},
-                  {'azimuth': 72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 1.8},
-                  {'azimuth': 0, 'elevation': 86, 'size': 0.7, 'distance': 2.0, 'power': 1.2}]}
-# v5 (softer look, round 2): one large soft key high front-left at about three times the fill, so the fringe drops a
-# shadow band on the case and everything sits in a dense contact shadow; a strip behind-right as a rim; a black card
-# camera-right so the case's face falls off toward its right edge; the top light low, so the crown stops sparkling
-RIG3 = {'type': 'sweep', 'color': '#efe9df', 'wall_color': '#b3a594', 'wall_range': [0.4, 2.2], 'dome': 0.06,
-        'key': {'azimuth': -38, 'elevation': 62, 'size': 1.6, 'power': 1.15},
+# v7 light (2026-10-06): the v6 key, low and just right of the camera so the cream base is the brightest thing in frame,
+# a white card low in front to lift the chestnut lid's face, and pins for a glint on the lid's corner and on each bud
+RIG7 = {'type': 'sweep', 'color': '#d3cabc', 'wall_color': '#8f8273', 'wall_range': [0.2, 1.3], 'dome': 0.06,
+        'key': {'azimuth': 18, 'elevation': 34, 'size': 1.0, 'power': 1.3},
         'fill': {'azimuth': 45, 'elevation': 25, 'power': 0.08},
         'rim': {'azimuth': 180, 'elevation': 12, 'power': 1.2, 'size': 0.8},
         'lights': [{'azimuth': -72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 1.6},
                    {'azimuth': 150, 'elevation': 24, 'size': [0.14, 1.4], 'distance': 1.6, 'power': 2.4},
-                   {'azimuth': 0, 'elevation': 86, 'size': 0.7, 'distance': 2.0, 'power': 0.2},
-                   {'azimuth': 14, 'elevation': 34, 'size': [1.1, 0.45], 'distance': 2.4, 'power': 0.45}],
+                   {'azimuth': 0, 'elevation': 6, 'size': [1.4, 0.35], 'distance': 2.4, 'power': 0.35},
+                   {'azimuth': -30, 'elevation': 35, 'size': 0.03, 'distance': 2.0, 'power': 0.8},
+                   {'azimuth': -55, 'elevation': 48, 'size': 0.025, 'distance': 2.2, 'power': 0.5}],
         'cards': [{'azimuth': 80, 'elevation': 12, 'distance': 1.5, 'size': [1.2, 1.2]}]}
-# v6 (softer round 2 on the hero): the white case brighter than the backdrop. The key moves round to just right of the camera
-# and down to 32 degrees, so the case's face takes more of it than the floor does (from the front-left and high it was the
-# other way, and the case read as beige in fog); the sweep a little darker and greying sooner behind the group; a small,
-# bright pin for a crisp highlight on the lacquered buds
-RIG4 = {**RIG3, 'color': '#d3cabc', 'wall_color': '#8f8273', 'wall_range': [0.2, 1.3],
-        'key': {'azimuth': 18, 'elevation': 32, 'size': 1.0, 'power': 1.3},
-        'lights': RIG3['lights'] + [{'azimuth': -30, 'elevation': 35, 'size': 0.03, 'distance': 2.0, 'power': 0.8}]}
 shots = {
-    'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG4, 'exposure': 0.15,
-             'camera': {'position': [-176, -510, 312], 'target': [32, -32, 16], 'lens': 100},
-             'hide': [f'{p}-r-d' for p in BUD], 'floor_z': 0},
-    # v6 (softer round 2 on the detail): from above again, as the brief has it (from low, the floor's far edge ran along the
-    # hair's lower edge, and a strip behind lit a patch of floor brighter than the case); one key from high camera-left, smaller,
-    # so the case throws its shadow back and to the right and the fringe a band onto the shell; that strip and the rim down
+    'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG7, 'exposure': 0.15,
+             'camera': {'position': [-176, -510, 312], 'target': [30, -30, 14], 'lens': 100},
+             'hide': DETAIL_SET, 'floor_z': 0},
+    # from above, pulled back about 12 % with the group lower in frame (the case's top sat under 5 % from the edge)
     'detail': {'size': [1800, 1200], 'samples': 192,
-               'rig': {**{k: v for k, v in RIG4.items() if k not in ('wall_color', 'wall_range')},
+               'rig': {**{k: v for k, v in RIG7.items() if k not in ('wall_color', 'wall_range')},
                        'key': {'azimuth': -45, 'elevation': 48, 'size': 0.8, 'power': 1.4},
-                       'rim': {**RIG4['rim'], 'power': 0.6},
-                       'lights': [RIG4['lights'][0], {**RIG4['lights'][1], 'power': 0.8}] + RIG4['lights'][2:]},
-               'camera': {'position': [85, -227, 178], 'target': [2, -30, 18], 'lens': 60},
-               'hide': [f'{p}-{k}' for p in BUD for k in ('l', 'r')],
-               'floor_z': 0},
+                       'rim': {**RIG7['rim'], 'power': 0.6},
+                       'lights': [RIG7['lights'][0], {**RIG7['lights'][1], 'power': 0.8}] + RIG7['lights'][2:]},
+               'camera': {'position': [92, -252, 196], 'target': [0, -24, 14], 'lens': 60},
+               'hide': HERO_SET, 'floor_z': 0},
 }
 json.dump({'materials': MAT, 'objects': objects, 'shots': shots}, open(os.path.join(HERE, 'shots.json'), 'w'), indent=1)
-print('shots.json written; bud poses', json.dumps(poses))
+print('shots.json written:', len(objects), 'objects')

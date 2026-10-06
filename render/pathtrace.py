@@ -72,10 +72,13 @@ def main():
             span = (tgt - pos).length  # the real-time rig's placement says how close the source was meant to be
             dist = min(max(span, 2.2), 5.0) if i == 0 else 6.0
             size = dist * 0.55 if i == 0 else 3.5
-            if l.get('softbox'):  # a shot that sizes its softbox: where the rig put it, at that size, for a harder key and a crisper shadow
-                dist, size = min(max(span, 1.2), 6.0), l['softbox']
+            sb = l.get('softbox')
+            if sb:  # a shot that sizes its softbox: where the rig put it, at that size, for a harder key and a crisper shadow
+                dist, size = min(max(span, 1.2), 6.0), (max(sb) if isinstance(sb, list) else sb)
             dirv = (tgt - pos).normalized()
             d, o = lamp('softbox' if i == 0 else 'fill', 'AREA', l['color']); d.shape = 'SQUARE'; d.size = size
+            if isinstance(sb, list):  # a strip box [w, h]: w level across, h along the light's up, so lacquer mirrors it as a band
+                d.shape = 'RECTANGLE'; d.size, d.size_y = sb[0], sb[1]
             d.energy = l['intensity'] * math.pi * dist * dist * a.sun_strength
             if l.get('spread'): d.spread = math.radians(l['spread'])   # a grid on the softbox: the light stays on the subject
             o.location = tgt - dirv * dist; aim(o, dirv)
@@ -99,7 +102,7 @@ def main():
         cp, lk = P(side['camera']['position']), P(side['camera']['lookAt'])
         fwd = Vector((lk.x - cp.x, lk.y - cp.y, 0)).normalized()
         for k, sgn in enumerate((-1, 1)):
-            ang = math.radians(sgn * 140)
+            ang = math.radians(sgn * side.get('stripAngle', 140))  # 140: behind the subject; a shot can bring them round to its sides
             dirv = Vector((fwd.x * math.cos(ang) - fwd.y * math.sin(ang), fwd.x * math.sin(ang) + fwd.y * math.cos(ang), 0))
             d, o = lamp(f'strip{k}', 'AREA', '#ffffff'); d.shape = 'RECTANGLE'; d.size = 0.35; d.size_y = 2.6
             dist = 3.2; d.energy = (1.6 if sgn < 0 else 1.3) * math.pi * dist * dist * strips
@@ -112,7 +115,9 @@ def main():
         cp, lk = P(side['camera']['position']), P(side['camera']['lookAt'])
         d, o = lamp('reflector', 'AREA', '#ffffff'); d.shape = 'RECTANGLE'; d.size = r['w']; d.size_y = r['h']
         d.energy = r['radiance'] * r['w'] * r['h'] * math.pi
-        o.location = cp + (cp - lk).normalized() * r.get('behind', 1.0); aim(o, lk - o.location)
+        o.location = cp + (cp - lk).normalized() * r.get('behind', 1.0)
+        if r.get('position'): o.location = P(r['position'])  # or where the shot puts it: where the metal mirrors it from the camera
+        aim(o, (P(r['aim']) if r.get('aim') else lk) - o.location)
         rc = bpy.data.collections.new('reflector-receivers')
         for ob in scene.objects:
             if ob.type == 'MESH' and any(sl.material and sl.material.name.lower().startswith(tuple(r['receivers'])) for sl in ob.material_slots):

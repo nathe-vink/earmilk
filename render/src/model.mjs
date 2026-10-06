@@ -56,9 +56,11 @@ export function makeMaterials(THREE, tex, flavor) {
   const finishAccent = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.38, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.2, side: M.DoubleSide });
   const finishAccentArea = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.38, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.2, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
   const shadowLine = new M.MeshStandardMaterial({ color: 0x141210, roughness: 0.95, metalness: 0, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
-  // Cast metal letters: polished faces, darker satin sides.
-  const badgeLetters = (t) => Object.assign(new M.MeshStandardMaterial({ color: 0xffffff, roughness: 0.12, metalness: 1.0, envMapIntensity: 3.2, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), { name: 'badgeLetters' });
-  const badgeSide = (t) => Object.assign(new M.MeshStandardMaterial({ color: 0x9a9792, roughness: 0.5, metalness: 1.0, envMapIntensity: 1.6, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), { name: 'badgeSide' });
+  // Cast metal letters: polished faces, darker satin sides. 2026-10-06, the owner: on the light plinths (Chocolate's cream,
+  // Skim's pale blue) the front letters are dark bronze, so they read against the plinth (polished, they read white on white).
+  // `lt` is the plinth's letter metal from spec/colorways.json ({ face, side }), or nothing for polished.
+  const badgeLetters = (t, lt) => Object.assign(new M.MeshStandardMaterial({ color: lt ? lt.face : 0xffffff, roughness: lt ? 0.22 : 0.12, metalness: 1.0, envMapIntensity: lt ? 2.4 : 3.2, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), { name: 'badgeLetters' });
+  const badgeSide = (t, lt) => Object.assign(new M.MeshStandardMaterial({ color: lt ? lt.side : 0x9a9792, roughness: 0.5, metalness: 1.0, envMapIntensity: 1.6, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), { name: 'badgeSide' });
   const badgeShade = (t) => new M.MeshBasicMaterial({ color: 0x000000, alphaMap: t, transparent: true, opacity: 0.7, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const bronze = new M.MeshStandardMaterial({ color: 0xb8894c, roughness: 0.5, metalness: 0.55, envMapIntensity: 1.8 }); // satin, patinated bronze: part diffuse so the key lights it and the dark engraving reads
   const mark = (t) => Object.assign(new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.5, metalness: 0, clearcoat: 0.4, clearcoatRoughness: 0.25, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false }), { name: 'mark' });
@@ -73,6 +75,8 @@ export function makeMaterials(THREE, tex, flavor) {
     faceplate: new M.MeshStandardMaterial({ color: 0x2b2b2b, roughness: 0.28, metalness: 0.85 }),
     dome: new M.MeshPhysicalMaterial({ color: 0x2a2a2a, roughness: 0.7, sheen: 0.6, sheenRoughness: 0.4, sheenColor: new M.Color(0xffffff) }), // coated textile
     trim: new M.MeshStandardMaterial({ color: 0xb9b6b1, roughness: 0.34, metalness: 1.0 }),
+    lip: new M.MeshStandardMaterial({ color: 0xd9d7d3, roughness: 0.1, metalness: 1.0, envMapIntensity: 2.0 }), // 2026-10-06: the scoop's polished stainless lip
+    gasket: new M.MeshPhysicalMaterial({ color: 0x262626, roughness: 0.45, metalness: 0, clearcoat: 0.5, clearcoatRoughness: 0.25 }), // the moulded ring the tweeter seats in
     dark: new M.MeshStandardMaterial({ color: 0x060606, roughness: 1, side: M.DoubleSide }),
     throatSeal: new M.MeshPhysicalMaterial({ color: flavor.throat.throat, roughness: 0.45, clearcoat: 0.3, clearcoatRoughness: 0.45, side: M.DoubleSide }),
     portFlange: new M.MeshPhysicalMaterial({ color: 0x2e2e2e, roughness: 0.5, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.15 }), // v16: moulded satin black, so its lip takes the key
@@ -199,6 +203,10 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       const ring = mesh(new THREE.TorusGeometry(baseR + 1.5 * kd, 1.5 * kd, 12, 64), mats.surround); ring.position.set(0, axisY, throatZ + 0.6 * kd); cab.add(ring);
       // a satin chamfer round the faceplate's edge, and the faceplate's screws: what says "driver", not "lens", deep in the bowl
       const trim = mesh(new THREE.TorusGeometry(pr - 0.9 * kd, 0.9 * kd, 10, 96), mats.trim); trim.position.set(0, axisY, throatZ + 0.1); cab.add(trim);
+      // v17 (refinement round 3 on the close-up: the driver had no visible seat, a loose part dropped in): a moulded ring where the
+      // throat ends, the faceplate's edge seated in it
+      const seat = mesh(new THREE.TorusGeometry((pr + throatR) / 2 + 0.4 * kd, Math.max(1.5 * kd, 0.5), 12, 96), mats.gasket);
+      seat.scale.z = 0.7; seat.position.set(0, axisY, throatZ + 0.2); cab.add(seat);
       if (pr > 20) for (let i = 0; i < 4; i++) {
         const a = Math.PI / 4 + i * Math.PI / 2, rr = (pr + baseR + 3) / 2 + 1.5;
         const head = mesh(new THREE.SphereGeometry(1.6, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), mats.screw);
@@ -291,15 +299,15 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
 
     // Wordmark: cast metal letters standing on the plinth's front, no plate, the way the lettering sits on a La Marzocco machine.
     // The letter mask is stacked through the relief depth (darker satin sides) under a polished face, over a contact shadow on the lacquer.
-    const Bz = FS.badge, relief = Bz.relief * kk, steps = 4;
+    const Bz = FS.badge, relief = Bz.relief * kk, steps = 4, plinthLetters = flavor.plinth && flavor.plinth.letters;
     const badge = new THREE.Group(); badge.position.set(0, Bz.z * kk, off); skin.add(badge);
     const wm = ctx.tex.wordmark({ sizeMm: Bz.type * kk, color: '#FFFFFF', trackingEm: P.trackingEm });
     const plane = () => new THREE.PlaneGeometry(wm.widthMm, wm.heightMm);
     const shade = new THREE.Mesh(plane(), mats.badgeShade(wm.texture)); shade.position.set(0.9 * kk, -1.5 * kk, 0.05); shade.renderOrder = 2; badge.add(shade);
     for (let i = 1; i <= steps; i++) {
-      const side = new THREE.Mesh(plane(), mats.badgeSide(wm.texture)); side.position.z = relief * i / (steps + 1); side.renderOrder = 2 + i; badge.add(side);
+      const side = new THREE.Mesh(plane(), mats.badgeSide(wm.texture, plinthLetters)); side.position.z = relief * i / (steps + 1); side.renderOrder = 2 + i; badge.add(side);
     }
-    const letters = new THREE.Mesh(plane(), mats.badgeLetters(wm.texture)); letters.position.z = relief; letters.renderOrder = 3 + steps; letters.castShadow = true; badge.add(letters);
+    const letters = new THREE.Mesh(plane(), mats.badgeLetters(wm.texture, plinthLetters)); letters.position.z = relief; letters.renderOrder = 3 + steps; letters.castShadow = true; badge.add(letters);
 
     // Back: the wordmark as the same cast letters as the front, above the plate (floorstander only).
     if (S.back && FS.backBadge) {
@@ -361,6 +369,14 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       }
     }
     skin.add(mesh(slab(THREE, slopeWithMouth(), bd).applyMatrix4(frontBasis), gableMat));
+    // 2026-10-06, the owner: a polished stainless lip round the scoop's mouth, a rolled edge over the finish's cut and the bowl's
+    // joint, so the opening reads as a made scoop and not a hole at room distance (every critic round read it as a hole or an eye).
+    // Half-round, 4.8 wide and 1.6 proud on the floorstander; the same ring on every flavour.
+    {
+      const rl = Math.max(2.4 * kk, 0.9), zc = bd - 0.35 * rl, pts = [];
+      for (let i = 0; i < 160; i++) { const th = i / 160 * Math.PI * 2; pts.push(V3(rx * Math.cos(th), b.mouthCenterS + ry * Math.sin(th), zc).applyMatrix4(frontBasis)); }
+      skin.add(mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true), 320, rl, 16, true), mats.lip));
+    }
     skin.add(mesh(slab(THREE, slopeRect(), bd, 4).applyMatrix4(backBasis), gableMat));
     skin.add(mesh(slab(THREE, endTri(), bd, 4).applyMatrix4(rightBasis), gableMat));
     skin.add(mesh(slab(THREE, endTri(), bd, 4).applyMatrix4(leftBasis), gableMat));

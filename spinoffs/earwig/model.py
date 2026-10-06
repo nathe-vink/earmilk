@@ -2,15 +2,16 @@
 
     .venv-fab/bin/python spinoffs/earwig/model.py
 
-Writes out/stl/<part>.stl, out/step/<part>.step and out/parts.json (part names, materials, volumes, and the case's
-dimensions, which the wig in hair.py grows on). The wig is not CAD: the path tracer grows it (hair.py).
+Writes out/stl/<part>.stl, out/step/<part>.step and out/parts.json (part names, materials, volumes, the case's
+dimensions, and the tail's root and direction in each bud's frame). The tail is not CAD: it is a moulded sleeve of
+overlapping plates over a soft core, and the path tracer draws it, plate by plate, along the path scene.py lays.
 """
 import json, math, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from params import *  # noqa: F401,F403
 from build123d import (Axis, Box, Circle, Cylinder, Ellipse, Plane, Polyline, Pos, Sphere, Spline, Vertex, export_step, export_stl,
-                       extrude, fillet, loft, make_face, mirror, revolve)
+                       extrude, fillet, loft, make_face, mirror, revolve, scale)
 import numpy as np
 
 OUT = os.path.join(HERE, 'out')
@@ -19,13 +20,7 @@ OUT = os.path.join(HERE, 'out')
 def bud_body():
     secs = [Plane.XY.offset(z) * Pos(cx, 0) * Ellipse(a, b) for (z, a, b, cx) in BUD_SECTIONS]
     body = loft([Vertex(BUD_TOP[0], 0, BUD_TOP[1])] + secs + [Vertex(BUD_BOTTOM[0], 0, BUD_BOTTOM[1])])
-    # the abdomen's plates: each widens toward its lower edge and laps over the next, like a jointed toy or a beetle
-    zs = [q[0] for q in BUD_SECTIONS][::-1]
-    at_z = lambda z, k: float(np.interp(z, zs, [q[k] for q in BUD_SECTIONS][::-1]))
-    for zt, zb in STEM_PLATES:
-        top = Plane.XY.offset(zt) * Pos(at_z(zt, 3), 0) * Ellipse(at_z(zt, 1) - 0.02, at_z(zt, 2) - 0.02)
-        bot = Plane.XY.offset(zb + 0.02) * Pos(at_z(zb, 3), 0) * Ellipse(at_z(zb, 1) + PLATE_FLARE, at_z(zb, 2) + PLATE_FLARE)
-        body += loft([top, bot])
+    # since 2026-10-06 the body ends at a short neck; the tail (scene.py, drawn by the path tracer) leaves it there
     # the nozzle: a short tapered barrel into the canal
     d = np.array(NOZZLE_DIR) / np.linalg.norm(NOZZLE_DIR)
     p0 = np.array(NOZZLE_AT) - d * 4.0
@@ -53,8 +48,8 @@ def ear_tip(end, d):
 
 
 def pincer(sign):
-    """One forceps arm: circles along a bowed curve in the y-z plane, tapering to the tip."""
-    cx = BUD_SECTIONS[-1][3]
+    """One forceps arm, in the forceps' own frame: circles along a bowed curve in the y-z plane, tapering to the tip."""
+    cx = 0.0
     n = 10
     def P(t):
         z = PINCER_TOP_Z - PINCER_LEN_Z * t
@@ -70,12 +65,32 @@ def pincer(sign):
     return loft(secs) + Pos(*P(1.0)) * Sphere(tip_r)                    # rounded tips: a pinch, not a stab
 
 
+def forceps():
+    """The tail's last plate, a small knob, with the two arms running from it down -z: the forceps the tail ends in, in
+    their own frame so the scene can set them at the tail's end. Pinching them is the control."""
+    kx, ky, kz = FORCEPS_KNOB[1], FORCEPS_KNOB[0], FORCEPS_KNOB[2]
+    knob = scale(Sphere(1.0), by=(kx, ky, kz))
+    return knob + pincer(1) + pincer(-1)
+
+
+def collar():
+    """A satin collar round the tail's root, where the plates leave the body."""
+    return Pos(*TAIL_ROOT) * Cylinder(COLLAR_R, COLLAR_LEN)
+
+
 def case():
     b = Pos(0, 0, CASE_H / 2) * Box(CASE_W, CASE_D, CASE_H)
     b = fillet(b.edges(), CASE_R)
     zs = CASE_H * LID_SPLIT
     base = b & (Pos(0, 0, (zs - LID_GAP / 2) / 2) * Box(CASE_W + 2, CASE_D + 2, zs - LID_GAP / 2))
     lid = b & (Pos(0, 0, (zs + LID_GAP / 2 + CASE_H + 1) / 2) * Box(CASE_W + 2, CASE_D + 2, CASE_H + 1 - zs - LID_GAP / 2))
+    # the wing-case lid (2026-10-06): a seam down the middle, front to back over the top, like an earwig's folded wing covers.
+    # The groove is the lid's outer skin (the lid less a copy shrunk by the seam's depth) inside a thin slab at x = 0.
+    c = lid.center()
+    k = WING_SEAM_D * 2
+    inner = Pos(c.X, c.Y, c.Z) * scale(Pos(-c.X, -c.Y, -c.Z) * lid, by=((CASE_W - k) / CASE_W, (CASE_D - k) / CASE_D, 1 - k / (CASE_H - zs)))
+    seam = (lid - inner) & Pos(0, 0, CASE_H / 2) * Box(WING_SEAM_W, CASE_D + 4, CASE_H + 4)
+    lid = lid - seam
     led = Pos(0, -CASE_D / 2 + 0.25, zs - 7.0) * Cylinder(0.6, 1.0, rotation=(90, 0, 0))   # status light on the front
     return base, lid, led, zs
 
@@ -93,6 +108,15 @@ def split_shell(body):
     return outer - gap, inner
 
 
+def sensor(body):
+    """The wear sensor's window, a dark gloss oval on the inner half: the shell grown 0.6 % about its centre, clipped to an
+    elliptical prism through the window, less the shell itself, so the window follows the surface (critic, softer round 3)."""
+    c = body.center()
+    big = Pos(c.X, c.Y, c.Z) * scale(Pos(-c.X, -c.Y, -c.Z) * body, by=1.006)
+    prism = Plane.YZ.offset(SPLIT_X + 1) * Pos(SENSOR_AT[0], SENSOR_AT[1]) * extrude(Ellipse(SENSOR_AB[0], SENSOR_AB[1]), 14)
+    return (big & prism) - body
+
+
 def grille(end, d):
     """The nozzle's mesh, just in front of its end face, so the tip's hole reads as an opening."""
     pl = Plane(origin=tuple(end + d * 0.05), z_dir=tuple(d))
@@ -103,17 +127,25 @@ def build():
     body, d, end = bud_body()
     tip = ear_tip(end, d)
     body, inner = split_shell(body)
+    win = sensor(inner)
     mesh = grille(end, d)
-    pins = pincer(1) + pincer(-1)
+    fc = forceps()
+    col = collar()
     base, lid, led, zs = case()
     parts = {
-        'bud-r': (body, 'shell'), 'inner-r': (inner, 'satin'), 'grille-r': (mesh, 'grille'), 'pincers-r': (pins, 'pincer'), 'tip-r': (tip, 'silicone'),
+        'bud-r': (body, 'shell'), 'inner-r': (inner, 'satin'), 'grille-r': (mesh, 'grille'), 'collar-r': (col, 'satin'), 'tip-r': (tip, 'silicone'),
         'bud-l': (mirror(body, Plane.YZ), 'shell'), 'inner-l': (mirror(inner, Plane.YZ), 'satin'), 'grille-l': (mirror(mesh, Plane.YZ), 'grille'),
-        'pincers-l': (mirror(pins, Plane.YZ), 'pincer'), 'tip-l': (mirror(tip, Plane.YZ), 'silicone'),
-        'case-base': (base, 'case'), 'case-lid': (lid, 'case'), 'case-led': (led, 'led'),
+        'collar-l': (mirror(col, Plane.YZ), 'satin'), 'tip-l': (mirror(tip, Plane.YZ), 'silicone'),
+        'sensor-r': (win, 'sensor'), 'sensor-l': (mirror(win, Plane.YZ), 'sensor'),
+        'forceps': (fc, 'pincer'),
+        'case-base': (base, 'case'), 'case-lid': (lid, 'shell'), 'case-led': (led, 'led'),
     }
+    rx, ry, rz = TAIL_ROOT
     facts = {'case': {'w': CASE_W, 'd': CASE_D, 'h': CASE_H, 'r': CASE_R, 'split_z': zs},
-             'bud_height_mm': round(BUD_TOP[1] - (PINCER_TOP_Z - PINCER_LEN_Z), 1)}
+             'tail': {'root_r': [rx, ry, rz], 'root_l': [-rx, ry, rz], 'dir': [0, 0, -1.0], 'len': TAIL_LEN,
+                      'r0': TAIL_R0, 'r1': TAIL_R1, 'pitch': TAIL_PITCH, 'flare': TAIL_FLARE},
+             'forceps': {'knob': list(FORCEPS_KNOB), 'len': PINCER_LEN_Z - PINCER_TOP_Z},
+             'bud_height_mm': round(BUD_TOP[1] - BUD_BOTTOM[1], 1)}
     return parts, facts
 
 

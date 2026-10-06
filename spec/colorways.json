@@ -50,7 +50,12 @@
       "swatchCaption": "Light blue on white.",
       "lid": "print",
       "plinth": {
-        "fill": "#6FA5DC"
+        "fill": "#6FA5DC",
+        "letters": {
+          "metal": "dark bronze",
+          "face": "#6B4A2C",
+          "side": "#45301D"
+        }
       }
     },
     "chocolate": {
@@ -59,13 +64,19 @@
       "boardNote": "brown finish all over",
       "print": "#F1E3CC",
       "throat": {
-        "mouth": "#E2CBA3",
-        "throat": "#A97E4F"
+        "mouth": "#5E3A1F",
+        "throat": "#2B170B"
       },
+      "throatNote": "2026-10-06, the owner: dark, from the body brown at the mouth to a dark chocolate at the throat (was cream #E2CBA3 to tan #A97E4F, which read paler than the face around it)",
       "swatchCaption": "Brown board, cream print.",
       "lid": "board",
       "plinth": {
-        "fill": "#F1E3CC"
+        "fill": "#F1E3CC",
+        "letters": {
+          "metal": "dark bronze",
+          "face": "#6B4A2C",
+          "side": "#45301D"
+        }
       }
     },
     "oat": {
@@ -122,7 +133,7 @@
     "The bottom 110 mm is a built-in plinth in the accent colour on all four sides, with a 3 mm shadow line above it.",
     "The wordmark is cast metal lettering standing on the plinth's front, no plate, and an engraving on the back panel above the Nutrition Facts. Nothing on the sides, nothing under the gable.",
     "Bare birch shows only on the back panel and in the bowl's exploded or section views.",
-    "The throat is painted, light at the mouth to dark at the throat.",
+    "The throat is painted, light at the mouth to dark at the throat. A polished stainless lip rings the mouth (2026-10-06).",
     "Flavor is the colorway only. One voicing.",
     "Two printed marks are spec: OPEN OTHER SIDE on the back slope and SHAKE WELL by the port. Nothing else is printed."
   ],
@@ -139,7 +150,14 @@
     "faces": "polished",
     "sides": "satin",
     "centreZMm": 55,
-    "metal": "the alloy is open"
+    "metal": "the alloy is open",
+    "onLightPlinths": "2026-10-06, the owner: dark bronze letters on the light plinths (Chocolate's cream, Skim's pale blue), set per flavour under plinth.letters; polished on the others"
+  },
+  "lip": {
+    "where": "round the bowl's mouth on the front slope, floorstander and pint",
+    "finish": "polished stainless, the same on every flavour",
+    "section": "half-round over the finish's cut edge and the bowl's joint: 4.8 mm wide and 1.6 mm proud on the floorstander, scaled on the pint",
+    "since": "2026-10-06, the owner"
   },
   "backPanel": {
     "default": "bronze",

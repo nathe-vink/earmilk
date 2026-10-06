@@ -31,6 +31,7 @@ Rigs size themselves to the subject's bounding box, so a 20 mm earbud and a 1 m 
   table   a tabletop (`surface`: oak, walnut, marble, linen, slate or a hex colour) under a large window light
   any rig takes `lights`: extra area lights by azimuth from the camera, elevation, distance and size (a number, or
           [w, h] for a strip) in subject sizes, power as irradiance at the subject: strips for edges, a pin for glints;
+          or placed with `at` and `aim` in millimetres (sizes still in subject sizes), for a strip laid along one part;
           and `cards`: black flags the camera does not see, for negative fill
 
 Tubes also take `flatten` (a soft tube lying on a floor), `attrs` (a float along the tube for a material's
@@ -495,6 +496,11 @@ def main():
     for i, L_ in enumerate(rig.get('lights', [])):
         o = area_light(f'extra{i}', cam_az2 + L_.get('azimuth', 0), L_.get('elevation', 30), L_.get('distance', 2.2) * D,
                        1.0, L_.get('power', 1.0), L_.get('color', '#ffffff'))
+        if 'at' in L_:   # or placed in the scene's frame (mm) and aimed at `aim` (mm): a strip laid for one part, not the set
+            aim = Vector(L_['aim']) * MM if 'aim' in L_ else centre
+            o.location = Vector(L_['at']) * MM
+            o.rotation_euler = (aim - o.location).to_track_quat('-Z', 'Y').to_euler()
+            o.data.energy = L_.get('power', 1.0) * math.pi * (aim - o.location).length ** 2
         sz = L_.get('size', 0.6)
         if isinstance(sz, (list, tuple)):
             o.data.shape = 'RECTANGLE'; o.data.size = sz[0] * D; o.data.size_y = sz[1] * D

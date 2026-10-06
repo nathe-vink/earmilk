@@ -2,7 +2,7 @@
  "parts": {
   "bud-r": {
    "material": "shell",
-   "volume_cm3": 2.742
+   "volume_cm3": 2.367
   },
   "inner-r": {
    "material": "satin",
@@ -12,9 +12,9 @@
    "material": "grille",
    "volume_cm3": 0.001
   },
-  "pincers-r": {
-   "material": "pincer",
-   "volume_cm3": 0.088
+  "collar-r": {
+   "material": "satin",
+   "volume_cm3": 0.04
   },
   "tip-r": {
    "material": "silicone",
@@ -22,7 +22,7 @@
   },
   "bud-l": {
    "material": "shell",
-   "volume_cm3": 2.742
+   "volume_cm3": 2.367
   },
   "inner-l": {
    "material": "satin",
@@ -32,21 +32,33 @@
    "material": "grille",
    "volume_cm3": 0.001
   },
-  "pincers-l": {
-   "material": "pincer",
-   "volume_cm3": 0.088
+  "collar-l": {
+   "material": "satin",
+   "volume_cm3": 0.04
   },
   "tip-l": {
    "material": "silicone",
    "volume_cm3": 0.24
+  },
+  "sensor-r": {
+   "material": "sensor",
+   "volume_cm3": 0.0
+  },
+  "sensor-l": {
+   "material": "sensor",
+   "volume_cm3": 0.0
+  },
+  "forceps": {
+   "material": "pincer",
+   "volume_cm3": 0.16
   },
   "case-base": {
    "material": "case",
    "volume_cm3": 42.006
   },
   "case-lid": {
-   "material": "case",
-   "volume_cm3": 24.425
+   "material": "shell",
+   "volume_cm3": 24.381
   },
   "case-led": {
    "material": "led",
@@ -61,6 +73,36 @@
    "r": 10.0,
    "split_z": 29.759999999999998
   },
-  "bud_height_mm": 46.0
+  "tail": {
+   "root_r": [
+    -2.0,
+    0.0,
+    -12.6
+   ],
+   "root_l": [
+    2.0,
+    0.0,
+    -12.6
+   ],
+   "dir": [
+    0,
+    0,
+    -1.0
+   ],
+   "len": 46.0,
+   "r0": 2.65,
+   "r1": 1.9,
+   "pitch": 2.3,
+   "flare": 0.21
+  },
+  "forceps": {
+   "knob": [
+    2.5,
+    2.2,
+    1.8
+   ],
+   "len": 11.1
+  },
+  "bud_height_mm": 24.4
  }
 }

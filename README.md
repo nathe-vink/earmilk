@@ -77,13 +77,23 @@ Made by the owner on the v13 crate shot ("the top driver is missing … the crat
 - **The crate is a dairy crate.** The same 340 × 250 × 130 and 2 × 3, now moulded in warm white instead of five boards: rounded corners, a rolled rim, latticed walls, a hand-hold in each short end, a floor. The long walls have one window per pint, sized and placed to frame each front pint's woofer whole, which the plain crate's wall hid (path-traced round 1 asked whether the wall should drop; the windows answer it without changing the height); the mids stand above the rim. Still a crate and nothing more: no ports, lights, cables or controls.
 - **Render polish, not product decisions** (v14): the tweeters' faceplates carry a polished chamfer, so the driver deep in each bowl reads as a driver; the domes are coated textile, not black holes; the lacquer has a faint orange peel, the cones pressed paper, the floors grain and the walls plaster; the studio adds two tall strips behind the subject for edge lines; the chair is a dining chair, not a massing model.
 
+### Amendments, 2026-10-06: the critics' design points
+
+Made by the owner on four points the refinement critics raised (v14 to v16). They stand with the Decisions above.
+
+- **Dark letters on the light plinths.** The cast letters on Chocolate's cream plinth and Skim's pale blue one are dark bronze (`#6B4A2C` faces, `#45301D` sides); polished, they read as white on white, as two critic rounds said of the line-up. The other three plinths keep polished letters. The back's letters are unchanged.
+- **A polished lip at the scoop.** A stainless half-round lip rings the bowl's mouth over the finish's cut edge and the bowl's joint, 4.8 wide and 1.6 proud on the floorstander and scaled on the pint, the same on every flavour, so the opening reads as a made scoop and not a hole at room distance (every critic round read it as a hole, an eye or a lens).
+- **A three-quarter back view.** Shot 04 has two frames: the straight-on back as before, and a three-quarter from the back-left with the gable's end, a side and the cabinet's shadow, which every critic round on the back asked for.
+- **Chocolate's throat runs dark,** from the body brown at the mouth to a dark chocolate at the throat (`#5E3A1F` to `#2B170B`; it ran cream to tan, paler than the brown face around it).
+- **Render polish, not product decisions** (v17): the tweeter's faceplate sits in a moulded ring where the throat ends (the close-up's critic saw no seat); the hero's window moves to the wall behind the camera so the sun takes the fronts; the bright room's window narrows so its beam lands on the cabinet; the older room's window widens so its patch shows on the back wall.
+
 ### Notes, 2026-10-04: tools and the family
 
 Tooling notes, not product decisions. Nothing here changes the Geometry or the Decisions.
 
 - **From scratch.** `studio/setup.sh` installs every tool the repo uses on a bare machine (render/'s node modules, Blender's `bpy`, the CAD venv) and `python3 studio/doctor.py` runs each one for real. In a Claude Code cloud session the start hook does this before work begins. `studio/README.md` lists the tools: a path tracer for any product's scene, canvas-exact typesetting, a crossover designer, a product template.
 - **Crossover, from models.** `fab/crossover.py` fits a three-way network to the shortlisted drivers (`fab/out/xover/`): Linkwitz-Riley targets at the label's 350 Hz and 2.2 kHz, 14 parts, the sum within about 2 dB from 150 Hz to 16 kHz in the model. Two numbers to carry: the tweeter, 170 mm back in the bowl, reaches a seated listener 0.37 ms after the mid; the network's impedance bottoms at 3.7 ohm, a 4 ohm speaker. Fit the built network to measurements.
-- **The family.** Two spin-offs are started in `spinoffs/`, each with its own brief, model, renders and critic log: **earworm**, wired headphones whose cable is an earthworm (the saddle is the remote), and **earwig**, earbuds whose stems end in forceps, with a charging case that wears a wig. Proposals for the owner; neither touches earmilk's spec.
+- **The family.** Two spin-offs are started in `spinoffs/`, each with its own brief, model, renders and critic log: **earworm**, wired headphones whose cable is an earthworm (the saddle is the remote), and **earwig**, earbuds whose flexible tails of overlapping plates end in forceps, with a case whose lid is split like an earwig's wing covers (the wig went, 2026-10-06). Proposals for the owner; neither touches earmilk's spec.
 
 ## Geometry (mm)
 
@@ -117,7 +127,7 @@ White board unless noted. Print = wordmark on front and side. Throat = bowl inte
 | Whole | #FFFFFF | #C62828 | #C62828 → #8E1B1B |
 | 2% | #FFFFFF | #1F4FCF | #1F4FCF → #153792 |
 | Skim | #FFFFFF | #6FA5DC | #8FBBE8 → #4F86BF |
-| Chocolate | #5E3A1F (whole board) | #F1E3CC | #E2CBA3 → #A97E4F |
+| Chocolate | #5E3A1F (whole board) | #F1E3CC | #5E3A1F → #2B170B *(2026-10-06; was #E2CBA3 → #A97E4F)* |
 | Oat | #D9BC92 unbleached | #2B2118 | #8E6A3E → #5C4224 |
 
 Birch: #EAD8B0 face, #D4BE95 side, engraving #6B5232. Ground for flat compositions: #F8F7F4.
@@ -136,7 +146,7 @@ Shot list, in priority order:
 1. **Hero pair in a room.** Whole, late-afternoon window light, a chair or sofa arm in frame for scale, speakers ~2 m apart, 3/4 view, camera at 1.2 m with a ~50 mm look.
 2. **Two rooms, years apart.** The same floor spot and the same speaker, once in Whole in a bright apartment, once in Oat in a darker, older room. This is the sleeve argument; it must read as one object that changed its skin. *Amended 2026-10-02: no sleeve, so no skin change. Rebriefed: the same pair in two homes, years apart, a bright first apartment and then a darker older house; the point is that the speaker outlives its rooms.*
 3. **Bowl close-up.** Front 3/4 at gable height, the throat and the dome in focus, the fold of the lid's die-cut visible at the mouth edge. *Amended 2026-10-02: the mouth edge is the finish's edge on the carved gable.*
-4. **Back.** Straight-on, engraved label legible, port and posts, the sleeve frame around the birch. *Amended 2026-10-02: the finished back with the bare birch field around the Facts panel only, the wordmark engraved above it, the port and posts on the finish below.*
+4. **Back.** Straight-on, engraved label legible, port and posts, the sleeve frame around the birch. *Amended 2026-10-02: the finished back with the bare birch field around the Facts panel only, the wordmark engraved above it, the port and posts on the finish below.* *Amended 2026-10-06: two frames, (a) straight-on as before and (b) a three-quarter from the back-left, about 33° off the back face and 10° up, with the gable's end, a side and the cabinet's shadow in frame.*
 5. **Five flavors lineup.** Flat ground, equal spacing, in flavor order.
 6. **Mixed crate** on a desk, six pints, five flavors.
 7. **Sleeve swap**, three frames: lid off, tube sliding, new flavor on. *Retired 2026-10-02: no sleeve.*

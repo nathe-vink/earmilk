@@ -69,6 +69,7 @@ Black paper cones. No grilles. The sleeve's die-cuts equal the frame diameters (
 | Faceplate (as drawn) | 62 tall, 6 thick: `y` 170 → 176 |
 | Dome apex (as drawn) | about 8 forward of the faceplate plane, `y ≈ 162` |
 | Body behind the faceplate (as drawn) | about 38 deep × 60 tall, `y` 176 → 214, inside the block |
+| Seat (2026-10-06, as modelled) | a moulded satin-black ring where the throat ends, ø 64 on its centreline (between the faceplate's 62 and the throat's 66), 3 across, the faceplate's edge seated in it. A render detail answering a critic ("no visible seat"), not a dimension the owner set. |
 
 ### Bowl (the waveguide)
 
@@ -83,6 +84,7 @@ Black paper cones. No grilles. The sleeve's die-cuts equal the frame diameters (
 | Surface | one smooth loft from the mouth ellipse to the throat circle. No flats, no edges. Painted: light at the mouth, dark at the throat (`spec/colorways.json`). |
 | Centreline section (as drawn) | the floor runs almost straight from the lower lip back to the throat bottom, sagging about 3 below that chord; the ceiling arches about 6 above the chord from the throat top to the upper lip. The hollow reads as a concave bowl, deeper above the axis than below it. |
 | Clearances (derived) | the throat bottom is 10.5 above the body top; the slope surface directly above the throat is at `z ≈ 991`; the bowl is carved entirely within the block. |
+| Lip (2026-10-06, the owner) | polished stainless, half-round, round the mouth ellipse over the finish's cut edge and the bowl's joint: radius 2.4, its centre on the ellipse 0.84 below the finish's outer face, so 4.8 wide and 1.6 proud of the finish. The same on every flavour. |
 
 **Pattern angles.** The README's ~12° down and ~37° up are measured from the dome apex, 8 forward of the faceplate plane, which is how the Section artboard draws them. Derived from the lip coordinates above: 12.1° down and 37.7° up from the apex at `y = 162`; 11.5° and 33.8° if measured from the faceplate plane instead. Build the model with the apex at `y ≈ 162` and the README's figures hold.
 
@@ -121,7 +123,7 @@ No sleeve. The outer dimensions stay as above; the skin is a finish on the birch
 | Gable and fin | finished in the accent (print) colour on Whole, 2% and Skim; body colour on Chocolate and Oat |
 | Plinth | the bottom 110 of the cabinet, all four sides, in the accent colour, flush with the body; overall height stays 1,055 |
 | Shadow line | 3 mm, `z` 110 → 113, a dark groove where the plinth meets the body (this repo's reading of "built in") |
-| Wordmark on the plinth | cast metal letters, the wordmark itself with no plate behind it, the way the lettering stands on a La Marzocco machine: Archivo Black, 44 mm type size, 2.5 proud, polished faces and satin sides, centred on the plinth's front at `z` 55 (about 155 wide). *The 2026-10-02 plate (180 × 56) lasted one render and is withdrawn.* |
+| Wordmark on the plinth | cast metal letters, the wordmark itself with no plate behind it, the way the lettering stands on a La Marzocco machine: Archivo Black, 44 mm type size, 2.5 proud, polished faces and satin sides, centred on the plinth's front at `z` 55 (about 155 wide). *The 2026-10-02 plate (180 × 56) lasted one render and is withdrawn.* *2026-10-06, the owner: dark bronze letters on the light plinths (Chocolate's cream, Skim's pale blue), polished on the others; per flavour in `spec/colorways.json`.* |
 | Wordmark elsewhere | engraved on the back panel (above); nowhere else |
 | Edges | every edge and bevel takes the colour of its face, which a sleeve could not do |
 
@@ -158,6 +160,7 @@ As drawn before the amendment (Sleeves and Hero artboards): front wordmark about
 | Mid (2026-10-05) | frame ø 40, centre `z = 160`: `z` 140 → 180 (the floorstander's 690 / 860), 20 below the body's top. |
 | Bowl | "tiny bowl at the top", not dimensioned. Assumption for the crate shot only: the floorstander's bowl scaled by the plan ratio 100/390, so a mouth of about 54 × 30 and a throat of about ø 17. |
 | Tweeter (2026-10-05) | a small dome at the bowl's throat: faceplate ø 16.6 (the throat less 2 %), 1.4 thick; dome base ø 8.8, apex 2.4 forward. Three drivers, as the floorstander has. |
+| Lip (2026-10-06, the owner) | the floorstander's polished lip round the mouth, radius 0.9 (its 2.4 scaled by the plan ratio would be 0.6, too fine to make or see), 0.6 proud. |
 | Not a uniform scale of the floorstander (derived) | plan ×0.256, body ×0.233, gable ×0.233, fin ×0.267. The pint is squatter, like a real pint next to a half gallon. |
 | Crate | 340 × 250 × 130, holding 2 × 3 pints. The pints stand about 117 proud of the rim (derived). Six pints, five flavors, so one flavor appears twice; which one is not specified. |
 | Crate form (2026-10-05) | a moulded dairy crate in warm white: walls 4, corner radius 18, a rolled rim 7 tall standing 1.6 proud, a floor 6. Long walls: one window per pint, 80 × 73 (`z` 39 → 112, corner radius 10), centred on each pint, so each front pint's woofer (`z` 39 → 107 above the crate's base) shows whole; a solid band below, so the plinths do not show through in pieces. Short walls: a hand-hold 100 × 24 at `z` 86 → 110 and four windows 38 × 28 at `z` 44 → 72. The mids (`z` 146 → 186) stand above the rim. Renders only: the crate's electronics are not designed. |

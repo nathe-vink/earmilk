@@ -28,7 +28,7 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
 - **The worm**: segments 2.5 mm long on the branches (3.7 mm across) and 2.9 mm on the main cable (4.6 mm across), each
   flaring about 16 % toward its rear lip and lapping over the next; slow swellings along the body, darker on top, paler
   underneath. Moulded silicone over a four-conductor cable.
-- **The saddle** on the right branch: 22 mm long, swelling to 5.7 mm, smooth (the segments show only faintly through
+- **The saddle** on the right branch: 22 mm long, swelling to 6.3 mm (1.7 times the worm), smooth (the segments show only faintly through
   it), paler and warmer; one button (squeeze: play, pause, answer; twice: next) and the microphone's hole underneath.
 - **Splitter** a 7 x 13 mm gunmetal barrel; **plug** 3.5 mm TRRS (CTIA) in a gunmetal barrel, the tail tapering into it.
 - **Lengths**: 300 mm from each earphone to the splitter, 900 mm from the splitter to the plug.
@@ -43,7 +43,7 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
 | Burrow collar | 5 diameter, 2.4 long |
 | Worm: branch and main diameter | 3.7, 4.6 |
 | Segment pitch: branch, main; flare | 2.5, 2.9; 16 % of the radius |
-| Saddle: from the earphone, length, diameter | 120, 22, 5.7 |
+| Saddle: from the earphone, length, diameter | 120, 22, 6.3 |
 | Splitter | 7 x 13 |
 | Plug barrel | 6 x 13 |
 | Lengths: earphone to splitter, splitter to plug | 300, 900 |
@@ -58,14 +58,18 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
 
 ## Shots
 
-1. **Hero.** On a pale sweep, seen from above at about 35 degrees: the two earphones in front with their tips toward the
-   camera, the two worms side by side up the left, across the top and down the right to the splitter, the main worm
-   curling back so the plug points in from the right third. Everything sharp. Lit for small dark metal: a high, fairly
-   small key that is most of the light on the floor, two strips behind for edge lines, a narrow overhead strip for a
-   line down each barrel, a pin light for glints, little fill.
-2. **Detail.** From behind the pair and low: both worms lead in from the bottom of the frame and burrow into the backs of
-   the earphones, the segments lapping toward the camera; both earphones whole and sharp (focus blur doubled the near
-   edge in round 1).
+1. **Hero.** Low, about 15 degrees, on a long lens (110 mm), built around one earphone: the right one in front,
+   side-on, from the tip's skirt to the burrow; the left one behind it and further left, turned with its tip toward the
+   camera. The two worms leave their burrows backward (the near one in a hook to the right), come together behind the
+   pair and run back side by side like a rope settled on the floor, touching in places and apart in others, then round
+   to the left to the splitter; the saddle swells on the right branch in the middle distance; the main worm curls back
+   and round, and the plug lies at the back of the right third, pointing in. Everything sharp. A small, hard key from
+   behind and above that lays a line down the metal and throws the shadows toward the camera, a strip laid along the
+   near cap, strips at the sides for edges, a pin, little fill.
+2. **Detail.** From the front-right and higher (about 38 degrees), so the floor reads as a floor under the earphones:
+   the right one forward and turned, the left one behind it, the worms leading back from their burrows; both whole and
+   sharp (focus blur doubled the near edge in round 1). A strip laid along each cap, placed where the cap mirrors it
+   from this camera, so each takes one unbroken line.
 
 ## What a render must not do
 
@@ -96,10 +100,13 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
 
 ## Where the renders stand
 
-The in-ear look has had its three critic rounds (`critic/LOG.md`): hero 4, 4, 4 and detail 4, 5, 5. Round 2 found two
-real bugs (both branches ran in one place; each lead out of its burrow kinked) that v3 fixed. What a next pass should do
-is at the end of the log: a camera built around one bud side-on, placed strips for the metal, a cable settled like rope. The over-ear version's renders are in `renders/over-ear/` and its rounds are in the log; its model is in
-git history.
+The in-ear look had its three critic rounds (`critic/LOG.md`): hero 4, 4, 4 and detail 4, 5, 5. Round 2 found two real
+bugs (both branches ran in one place; each lead out of its burrow kinked) that v3 fixed. v4 (2026-10-06) is the next pass
+round 3 asked for, a new batch for the critic: a camera built around one bud side-on, a new lay for it with each worm on
+its own path, the saddle resting on the floor and rising above it (it had swelled down through the floor, so from any
+height it read as a colour change), strips laid along each cap, a softer coat so every crest does not take the same hard
+glint. The over-ear version's renders are in `renders/over-ear/` and its rounds are in the log; its model is in git
+history.
 
 ## Files
 
