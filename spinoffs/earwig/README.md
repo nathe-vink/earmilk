@@ -71,16 +71,27 @@ Voice: deadpan. The box could say "Hypoallergenic. Not a real earwig." and nothi
 
 ## Where the renders stand
 
-The 2026-10-06 look (no wig, flexible tails, the wing-case lid; v7) starts its own critic count in `critic/LOG.md`. The
-softer look with the wig (v4 to v6) had three rounds: hero 5, 5, 5 and detail 4, 5, 6; its renders stay in `renders/`.
-What the earlier rounds taught, carried into v7:
+The 2026-10-06 look (no wig, flexible tails, the wing-case lid) had its three critic rounds, v7 to v9 (`critic/LOG.md`):
+hero 5, 5, 5 and detail 5, 5, 5. The softer look with the wig (v4 to v6) had three rounds: hero 5, 5, 5 and detail 4, 5,
+6; its renders stay in `renders/`. What the rounds taught, for a next pass:
 
 - **Light.** The cream base brighter than the backdrop: a key low and near the camera, so the case's face takes more of
-  it than the floor does; strips for lines on the gloss; a pin for a crisp highlight on each lacquered part.
+  it than the floor does; strips for lines on the gloss; a pin for a crisp highlight on each lacquered part. A smaller,
+  harder key with little fill: a broad wash leaves the contacts a pale haze and the set seems to hover.
+- **The hero is a bud.** From high and wide the case is the biggest, brightest shape and the bud reads as a pipe: the
+  camera down and in on one bud, its tail laid across the frame to the forceps, the case behind and to one side as
+  support.
+- **The tail.** It leaves the collar in line with the neck, then bends once, easily, to the floor: a bend tighter than
+  its own width read as a crimp, and one that turns at once skews its first plates. Turn the forceps to show their
+  profile; from above they read as a ring.
+- **Finishes.** Two, not four: the gloss shell and lid, and one satin for the inner half, the collar and the tail.
+  Near-matching browns in near-matching finishes look like accidents.
 - **Context in macro.** Alone and brown on brown, the bud read as a pipe; with its silicone tip and the case in frame
   it reads as an earbud. Keep the case in the close-up, whole.
-- **Headroom.** Leave 10 to 15 % on every side for a 16:9 crop, and floor between the pieces: outlines that touch merge.
-- **Focus.** Everything sharp: shallow focus on a 50 mm object reads as per-object blur.
+- **Headroom.** Leave 10 to 15 % on every side for a 16:9 crop, and floor between the pieces: outlines that touch merge
+  (the v9 close-up's tip touched the case's corner and the two read as one lump).
+- **Focus.** Deep: shallow focus on a 50 mm object reads as per-object blur. At most the case behind a touch soft, as
+  in the v8 and v9 close-ups at f/16.
 
 ## What a render must not do
 

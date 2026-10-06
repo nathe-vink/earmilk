@@ -71,10 +71,13 @@ def offset_var(curve, d):
 
 Vb = np.vstack([stl_vertices(STL(n)) for n in BUD_PARTS])
 bud_ends = (BUD_LEN + 3.0, 1.0)                       # rests on its tip and on its back
-POSE = {'r': lying_pose(Vb, up=(0, 0, 1), axis=(1, 0, 0), heading=180, at=(0, 0), ends=bud_ends),
-        'l': lying_pose(Vb, up=(0, 0, 1), axis=(1, 0, 0), heading=245, at=(-42, 33), ends=bud_ends)}
+POSE = {'r': lying_pose(Vb, up=(0, 0, 1), axis=(1, 0, 0), heading=180, at=(12, 0), ends=bud_ends),
+        'l': lying_pose(Vb, up=(0, 0, 1), axis=(1, 0, 0), heading=218, at=(-40, 30), ends=bud_ends)}   # v6: turned, its bore no longer staring into the lens
 # the pair's centreline, from behind the earphones (where the two worms come together) back and round to the splitter
-spine = catmull([[-12, 62, 0], [-5, 92, 0], [5, 121, 0], [2, 150, 0], [-18, 169, 0], [-44, 175, 0]])
+# v5 (round 1 of the v4 batch: three strands side by side and a hairpin, no lead to follow): one Y, read at a glance: the pair
+# runs back and a little right in one long curve to the splitter, and the main worm goes on beyond it and bends away left to the
+# plug at the back, crossing nothing
+spine = catmull([[-4, 64, 0], [2, 94, 0], [12, 124, 0], [24, 152, 0], [32, 172, 0]])
 sp_dir = spine[-1] - spine[-2]; sp_dir /= np.linalg.norm(sp_dir)
 heading_split = math.degrees(math.atan2(-sp_dir[1], -sp_dir[0]))     # the splitter's +x points back toward the branches
 Vs = stl_vertices(STL('splitter'))
@@ -186,7 +189,7 @@ mh = to_world(SPLIT, sf['main_hole']); md = dir_world(SPLIT, sf['main_dir'])
 # the main worm leaves the splitter to the left, curls back and round to the right behind everything, and comes forward on
 # the right so the plug lies at the back of the right third, pointing in toward the earphones
 main = [add(mh, md, -5), mh, add(mh, md, 4), [mh[0] + md[0] * 12, mh[1] + md[1] * 12, zm]] + \
-       [[-84, 184, zm], [-80, 201, zm], [-58, 206, zm], [-30, 198, zm], [-2, 204, zm], [26, 202, zm], [44, 186, zm], [50, 164, zm], [46, 143, zm]]
+       [[44, 226, zm], [36, 252, zm], [12, 270, zm], [-22, 277, zm], [-56, 270, zm], [-76, 250, zm], [-82, 226, zm]]   # v6: longer, a cable's length
 end, prev = main[-1], main[-2]
 yaw = math.degrees(math.atan2(end[1] - prev[1], end[0] - prev[0]))
 inside = math.dist(right[0], right[1])                # length inside the bud
@@ -232,7 +235,7 @@ def settle(P, profile):
 def segs(pitch, skip=()):
     """Overlapping segments like a jointed toy snake, each a little different and a little out of line."""
     return {'shape': 'shingle', 'pitch': pitch, 'depth': SEG_DEPTH, 'lip': 0.12, 'curve': 0.6, 'width': 0.05,
-            'undercut': 0.4, 'jitter': 0.05, 'depth_jitter': 0.25, 'wobble': 0.035,
+            'undercut': 0.4, 'jitter': 0.10, 'depth_jitter': 0.45, 'wobble': 0.05,   # v5: more unlike each other (round 1: copied)
             'skip_mm': list(skip), 'skip_fade': 2.0, 'skip_depth': 0.25}
 
 
@@ -248,11 +251,11 @@ worm_m = {'id': 'worm-main', 'type': 'tube', 'points': main, 'radius': MAIN_R, '
 
 MAT = {
     'shell': {'preset': 'satin_plastic', 'color': '#2c2a28', 'roughness': 0.34, 'coat': 0.15, 'coat_roughness': 0.3},
-    'metal': {'preset': 'metal_satin', 'color': '#7d7974', 'roughness': 0.28},
-    'silicone': {'preset': 'silicone', 'color': '#5f5a55', 'roughness': 0.42, 'sss': 0.6, 'sss_radius': [1.0, 0.85, 0.75], 'sss_scale': 1.6, 'sheen': 0.25},   # smoky translucent tips
+    'metal': {'preset': 'metal_satin', 'color': '#86827c', 'roughness': 0.18},   # v6: finer polish, so a strip draws a white line on it (round 2: grey pewter)
+    'silicone': {'preset': 'silicone', 'color': '#8d8680', 'roughness': 0.5, 'sss': 1.0, 'sss_radius': [1.0, 0.8, 0.65], 'sss_scale': 3.0, 'sheen': 0.35, 'bump': {'type': 'noise', 'scale': 0.15, 'strength': 0.12}},   # v6: clearer still, a fine moulded texture   # smoky translucent tips; v5 lighter and clearer, so they glow and thin at the edges, not grey caps
     'grille': {'preset': 'fabric', 'color': '#111111'},
-    'worm': {'preset': 'lacquer', 'color': '#b97a72', 'top_color': '#6f3c42', 'coat': 0.6, 'coat_roughness': 0.13, 'roughness': 0.34,   # v4: the coat a little softer, so every crest does not take the same hard glint
-             'sss': 0.08, 'sss_scale': 0.3, 'attr_color': {'attr': 'saddle', 'color': '#e4c6b0', 'top_color': '#c79a82'}},
+    'worm': {'preset': 'lacquer', 'color': '#b97a72', 'top_color': '#6f3c42', 'coat': 0.5, 'coat_roughness': 0.26, 'roughness': 0.36,   # v6: the plates still hard (the owner's exoskeleton), the glints broader   # v4: the coat a little softer, so every crest does not take the same hard glint; v5 softer still
+             'sss': 0.2, 'sss_scale': 0.5, 'attr_color': {'attr': 'saddle', 'color': '#e4c6b0', 'top_color': '#c79a82'}},   # v5: light glows through the ridges (round 1: opaque, a hose)
     'plug': {'preset': 'metal_polished', 'color': '#dcd8d2'},
     'plug_rings': {'preset': 'gloss_plastic', 'color': '#0e0e0e'},
 }
@@ -270,8 +273,10 @@ objects += [worm_r, worm_l, worm_m]
 
 # v4 (in-ear round 3): a key small and hard enough to lay a line down the metal, from behind and above so the shadows fall
 # toward the camera; little fill; strips laid for each camera, each along one cap, so the cap carries one unbroken line.
-CAM_HERO = {'position': [-10, -319, 91], 'target': [-10, 100, 0], 'lens': 110}
-CAM_DETAIL = {'position': [69, -113, 113], 'target': [-24, 14, 4], 'lens': 70}
+CAM_HERO = {'position': [-18, -319, 91], 'target': [-20, 109, 0], 'lens': 110}   # v6: the near bud's tip off the centre line
+# v5 (round 1 of the v4 batch: a wide lens a few centimetres away, yet everything sharp: a scale model): a 100 mm macro from 27 cm,
+# focused on the near bud's parting line at f/16, so the far bud softens and the cable falls away behind
+CAM_DETAIL = {'position': [100, -176, 178], 'target': [-25, 8, 4], 'lens': 100, 'fstop': 16, 'focus': [3, 0, 5]}   # v6: the near bud right of centre
 
 
 def cap_centre(side):
@@ -299,20 +304,25 @@ def strip_for(side, camera, tilt=40.0, dist=200.0, size=(0.05, 0.6), power=1.0):
             'size': list(size), 'power': power}
 
 
-RIG4 = {'type': 'sweep', 'color': '#ecebe7', 'dome': 0.06, 'cove_depth': 4.0, 'cove_radius': 2.5,
-        'key': {'azimuth': 180, 'elevation': 42, 'size': 0.14, 'power': 1.5},
-        'fill': {'azimuth': 0, 'elevation': 22, 'power': 0.14},
-        'rim': {'azimuth': 140, 'elevation': 28, 'size': 0.6, 'power': 0.4},
-        'lights': [strip_for('r', CAM_HERO, tilt=40, size=(0.04, 0.5), power=1.2),
+# v5 (round 1 of the v4 batch: one broad wash, soft grey gradients on the metal, a dull backdrop darkening upward): the key
+# stronger and smaller against less fill, and a wide light thrown on the backdrop from above the set, out of frame
+BACKDROP = {'at': [-10, 520, 520], 'aim': [-10, 2300, 380], 'size': [3.0, 1.0], 'power': 1.1}
+RIG4 = {'type': 'sweep', 'color': '#efeeeb', 'dome': 0.06, 'cove_depth': 4.0, 'cove_radius': 2.5,
+        'key': {'azimuth': 180, 'elevation': 42, 'size': 0.11, 'power': 2.1},
+        'fill': {'azimuth': 0, 'elevation': 22, 'power': 0.10},
+        'rim': {'azimuth': 140, 'elevation': 28, 'size': 0.6, 'power': 0.45},
+        'lights': [BACKDROP, strip_for('r', CAM_HERO, tilt=40, size=(0.04, 0.5), power=1.4),
                    {'azimuth': -115, 'elevation': 18, 'size': [0.12, 1.2], 'distance': 1.6, 'power': 0.7},
                    {'azimuth': 115, 'elevation': 18, 'size': [0.12, 1.2], 'distance': 1.6, 'power': 0.6},
                    {'azimuth': -25, 'elevation': 35, 'size': 0.03, 'distance': 2.0, 'power': 0.6}]}
-RIG4D = {'type': 'sweep', 'color': '#ecebe7', 'dome': 0.06, 'cove_depth': 4.0, 'cove_radius': 2.5,
-         'key': {'azimuth': 160, 'elevation': 45, 'size': 0.14, 'power': 1.5},
-         'fill': {'azimuth': 0, 'elevation': 25, 'power': 0.14},
+# v6 (round 2 of the v4 batch: one even wash, the barrels no brighter than the floor, no contact line): the dome and fill halved,
+# the floor falling off toward the top, the strips along the caps twice as strong
+RIG4D = {'type': 'sweep', 'color': '#ecebe7', 'wall_color': '#b9b7b2', 'wall_range': [0.3, 1.6], 'dome': 0.03, 'cove_depth': 4.0, 'cove_radius': 2.5,
+         'key': {'azimuth': 160, 'elevation': 45, 'size': 0.14, 'power': 1.6},
+         'fill': {'azimuth': 0, 'elevation': 25, 'power': 0.07},
          'rim': {'azimuth': 200, 'elevation': 30, 'size': 0.6, 'power': 0.4},
-         'lights': [strip_for('r', CAM_DETAIL, tilt=30, size=(0.04, 0.5), power=1.2),
-                    strip_for('l', CAM_DETAIL, tilt=30, size=(0.04, 0.5), power=1.2),
+         'lights': [strip_for('r', CAM_DETAIL, tilt=30, size=(0.04, 0.5), power=2.6),
+                    strip_for('l', CAM_DETAIL, tilt=30, size=(0.04, 0.5), power=2.6),
                     {'azimuth': -25, 'elevation': 35, 'size': 0.03, 'distance': 2.0, 'power': 0.5}]}
 shots = {
     # in-ear round 3 on the hero: a camera built around one bud. Low (15 degrees) on a long lens: the right earphone side-on in

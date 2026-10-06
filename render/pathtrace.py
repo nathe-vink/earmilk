@@ -193,8 +193,9 @@ def main():
             if normal_in is not None: nt.links.new(normal_in, bn.inputs['Normal'])
             return bn.outputs['Normal']
         if name.startswith(('finish', 'bronze', 'board', 'print', 'standpaint')) and not bsdf.inputs['Normal'].is_linked:
-            # Eased edges: a lacquered cabinet's arrises are not razor sharp. A shader-space bevel of 2 mm, no geometry change.
-            bev = nt.nodes.new('ShaderNodeBevel'); bev.inputs['Radius'].default_value = a.bevel / 1000; bev.samples = 6
+            # Eased edges: a lacquered cabinet's arrises are not razor sharp. A shader-space bevel, no geometry change; the shot's
+            # bevelScale shrinks it with the cabinets (the pint is 100/390 of the floorstander: 6 mm rounded its 2 mm fin right through).
+            bev = nt.nodes.new('ShaderNodeBevel'); bev.inputs['Radius'].default_value = a.bevel * side.get('bevelScale', 1) / 1000; bev.samples = 6
             nrm = bev.outputs['Normal']
             if name.startswith('finish'):
                 # Sprayed lacquer is never glass: a faint orange peel, about a millimetre across, that breaks long reflections up.

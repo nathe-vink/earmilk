@@ -82,7 +82,7 @@ def tail_path(pose, side, curl, wobble=0.0, step=1.5):
         u = s / L
         h = h0 + math.radians(curl) * (3 * u * u - 2 * u ** 3) + math.radians(wobble) * math.sin(2 * math.pi * u)
         lie = r(s) * 0.94 + 0.05                                         # resting on the floor, a little flattened
-        z = lie + (root[2] - lie) * max(0.0, 1 - s / 10.0) ** 2 if s > 3 else root[2] + d[2] * s
+        z = lie + (root[2] - lie) * max(0.0, 1 - s / 24.0) ** 2 if s > 3 else root[2] + d[2] * s   # v9: down over 24 mm, one easy bend (over 10 the plates piled up: a crimp)
         pts.append([float(p[0]), float(p[1]), float(z)])
         p = p + step * np.array([math.cos(h), math.sin(h)])
     end = np.array(pts[-1]); tan = end - np.array(pts[-2]); tan[2] = 0; tan /= np.linalg.norm(tan)
@@ -118,23 +118,23 @@ def tail_tube(key, pts):
 MAT = {
     'shell': {'preset': 'lacquer', 'color': '#5a2f1b', 'roughness': 0.28, 'coat': 0.8, 'coat_roughness': 0.05,
               'bump': {'type': 'noise', 'scale': 0.6, 'strength': 0.04}},            # a faint orange peel
-    'tail': {'preset': 'lacquer', 'color': '#5a2f1b', 'top_color': '#4a2614', 'roughness': 0.3, 'coat': 0.75, 'coat_roughness': 0.07},
+    'tail': {'preset': 'lacquer', 'color': '#5a2f1b', 'top_color': '#4a2614', 'roughness': 0.38, 'coat': 0.35, 'coat_roughness': 0.2},   # v9: satin, moulded plates, not the shells' wet gloss
     'pincer': {'preset': 'lacquer', 'color': '#5a2f1b', 'roughness': 0.3, 'coat': 0.7, 'coat_roughness': 0.06,
                'bump': {'type': 'noise', 'scale': 0.6, 'strength': 0.04}},
-    'satin': {'preset': 'satin_plastic', 'color': '#7d4a2e', 'roughness': 0.42, 'coat': 0.15, 'coat_roughness': 0.3},
+    'satin': {'preset': 'satin_plastic', 'color': '#8e5a38', 'roughness': 0.42, 'coat': 0.15, 'coat_roughness': 0.3},   # v8: a clear step lighter than the gloss (round 1: three near-matching browns)
     'case': {'preset': 'satin_plastic', 'color': '#ece4d6', 'roughness': 0.3, 'coat': 0.45, 'coat_roughness': 0.07},
     'grille': {'preset': 'fabric', 'color': '#5a5550'},                              # mid grey: a dark hole read as a pupil
     'sensor': {'preset': 'gloss_plastic', 'color': '#1c1512', 'roughness': 0.06},     # the wear sensor's window
-    'silicone': {'preset': 'silicone', 'color': '#9a8e82', 'roughness': 0.42, 'sss': 0.6, 'sss_radius': [1.0, 0.8, 0.65], 'sss_scale': 1.6, 'sheen': 0.25},
+    'silicone': {'preset': 'silicone', 'color': '#a2978a', 'roughness': 0.5, 'sss': 1.0, 'sss_radius': [1.0, 0.8, 0.65], 'sss_scale': 3.2, 'sheen': 0.35, 'bump': {'type': 'noise', 'scale': 0.15, 'strength': 0.1}},   # v9: clearer, a fine moulded texture   # v8: clearer, so it glows at the edges (round 1: clay)
     'led': {'preset': 'emissive', 'color': '#ffd9a8', 'emission': 3.0},
 }
 case = facts['case']
 objects = [{'id': n, 'type': 'mesh', 'file': f'out/stl/{n}.stl', 'material': parts[n]['material']}
            for n in ('case-base', 'case-lid', 'case-led')]
-R_HEADING, R_AT = 40, (4, -54)                     # the bud the close-up looks at
+R_HEADING, R_AT = 31, (20, -74)                    # the bud the close-up looks at (v8: its tail leaves across the view and curls back to the case)
 # the hero's buds in front of the case and to its right, each tail draped back toward the group, curling its own way;
 # the close-up has its own right bud
-LAYOUT = {'r': (340, (42, -64), 70, 8), 'l': (300, (78, -26), -55, -6), 'r-d': (R_HEADING, R_AT, -85, 6)}
+LAYOUT = {'r': (340, (42, -64), 70, 8), 'l': (300, (78, -26), -55, -6), 'r-d': (R_HEADING, R_AT, -110, 4)}
 BUD = ('bud', 'inner', 'grille', 'collar', 'sensor', 'tip')
 for key, (hd, at, curl, wob) in LAYOUT.items():
     side = key[0]
@@ -150,27 +150,38 @@ DETAIL_SET = [f'{p}-r-d' for p in BUD + ('tail', 'forceps')]
 
 # v7 light (2026-10-06): the v6 key, low and just right of the camera so the cream base is the brightest thing in frame,
 # a white card low in front to lift the chestnut lid's face, and pins for a glint on the lid's corner and on each bud
-RIG7 = {'type': 'sweep', 'color': '#d3cabc', 'wall_color': '#8f8273', 'wall_range': [0.2, 1.3], 'dome': 0.06,
-        'key': {'azimuth': 18, 'elevation': 34, 'size': 1.0, 'power': 1.3},
+# v8 (round 1 of the v7 batch: the cream base only 3 to 5 % above the sweep, its outline lost on the right): the sweep half a stop
+# darker and falling off sooner behind the group, so the cream stands clearly lighter; the key smaller, for a firmer contact
+# shadow; the back-right kicker stronger, an edge on the case's far side
+RIG7 = {'type': 'sweep', 'color': '#c3baac', 'wall_color': '#85796b', 'wall_range': [0.1, 1.1], 'dome': 0.06,
+        'key': {'azimuth': 18, 'elevation': 34, 'size': 0.6, 'power': 1.3},
         'fill': {'azimuth': 45, 'elevation': 25, 'power': 0.08},
         'rim': {'azimuth': 180, 'elevation': 12, 'power': 1.2, 'size': 0.8},
         'lights': [{'azimuth': -72, 'elevation': 18, 'size': [0.16, 1.5], 'distance': 1.5, 'power': 1.6},
-                   {'azimuth': 150, 'elevation': 24, 'size': [0.14, 1.4], 'distance': 1.6, 'power': 2.4},
+                   {'azimuth': 150, 'elevation': 24, 'size': [0.14, 1.4], 'distance': 1.6, 'power': 3.2},
                    {'azimuth': 0, 'elevation': 6, 'size': [1.4, 0.35], 'distance': 2.4, 'power': 0.35},
                    {'azimuth': -30, 'elevation': 35, 'size': 0.03, 'distance': 2.0, 'power': 0.8},
                    {'azimuth': -55, 'elevation': 48, 'size': 0.025, 'distance': 2.2, 'power': 0.5}],
         'cards': [{'azimuth': 80, 'elevation': 12, 'distance': 1.5, 'size': [1.2, 1.2]}]}
 shots = {
-    'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG7, 'exposure': 0.15,
-             'camera': {'position': [-176, -510, 312], 'target': [30, -30, 14], 'lens': 100},
+    'hero': {'size': [1800, 1200], 'samples': 160, 'rig': RIG7, 'exposure': 0.19,   # v9: up, the cream reading clean (round 2: dingy beige)
+             # v8 (round 1: the case owned the frame, the group floating with a fifth empty on every side): closer and lower,
+             # aimed into the buds, so the tails and forceps lead and the case stands behind them
+             # v9 (round 2: the case crowding the top-left, the bottom fifth and right quarter empty): pulled back a little and aimed lower
+             'camera': {'position': [-135, -452, 190], 'target': [40, -50, 10], 'lens': 92},
              'hide': DETAIL_SET, 'floor_z': 0},
     # from above, pulled back about 12 % with the group lower in frame (the case's top sat under 5 % from the edge)
     'detail': {'size': [1800, 1200], 'samples': 192,
-               'rig': {**{k: v for k, v in RIG7.items() if k not in ('wall_color', 'wall_range')},
-                       'key': {'azimuth': -45, 'elevation': 48, 'size': 0.8, 'power': 1.4},
+               'rig': {**RIG7,
+                       'key': {'azimuth': -45, 'elevation': 40, 'size': 0.6, 'power': 1.4},
                        'rim': {**RIG7['rim'], 'power': 0.6},
                        'lights': [RIG7['lights'][0], {**RIG7['lights'][1], 'power': 0.8}] + RIG7['lights'][2:]},
-               'camera': {'position': [92, -252, 196], 'target': [0, -24, 14], 'lens': 60},
+               # v8 (round 1: the case the hero, the tailed bud small and seen from above): low (about 18 degrees) and close
+               # on the bud, its tail across the view and curling back toward the case's foot, the case behind and softer
+               # (focused on the bud at f/16)
+               # v9 (round 2: the cream tip in front of the cream base; the lid at the top edge): from further right, so the case
+               # stands beside the bud, not behind its tip, and a little further back
+               'camera': {'position': [158, -224, 78], 'target': [-6, -40, 14], 'lens': 62, 'fstop': 16, 'focus': [20, -74, 6]},
                'hide': HERO_SET, 'floor_z': 0},
 }
 json.dump({'materials': MAT, 'objects': objects, 'shots': shots}, open(os.path.join(HERE, 'shots.json'), 'w'), indent=1)

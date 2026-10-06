@@ -1,7 +1,8 @@
 // One entry per shot in prompts/. Plain data: it is sent into the page as JSON. Positions in metres; lifts and offsets in mm.
 export const SIZE = [1800, 1200];
 
-const C2 = { position: [1.45, 0.95, 2.9], lookAt: [0.4, 0.6, 0], focal: 50 };   // v15: lower, the speaker left of the centre line;
+const C2 = { position: [0.98, 0.95, 2.95], lookAt: [0.3, 0.6, 0], focal: 50 };   // v15: lower, the speaker left of the centre line;
+// v19: more frontal again (about 18 degrees off the axis), so the tweeter sits inside the scoop's opening (round 2 on the bright room)
 // v16: a little more frontal (about 25 degrees off the axis, was 32), so the tweeter sits further into the bowl's opening
 const C7 = { position: [2.0, 1.05, 3.1], lookAt: [0.15, 0.9, 0], focal: 36 };
 const FLAVORS = ['whole', 'two-percent', 'skim', 'chocolate', 'oat'];
@@ -11,7 +12,7 @@ const OLD_SLEEVE = { flavor: 'whole', position: [0, 0, 0], state: { cabinet: fal
 export const shots = [
   { id: 'shot-01', frames: [
     // v11: the pair toed in toward the listening spot, the camera lower on a longer lens so the two read as a pair.
-    { suffix: '', room: 'hero', speakers: [{ flavor: 'whole', position: [-1, 0, 0], rotationY: 0.2 }, { flavor: 'whole', position: [1, 0, 0], rotationY: -0.2 }], camera: { position: [2.3, 1.0, 4.4], lookAt: [0.0, 0.55, 0], focal: 60 } },
+    { suffix: '', room: 'hero', speakers: [{ flavor: 'whole', position: [-1, 0, 0], rotationY: 0.2 }, { flavor: 'whole', position: [1, 0, 0], rotationY: -0.2 }], camera: { position: [2.3, 1.0, 4.4], lookAt: [0.1, 0.55, 0], focal: 57 } },   // v19: the right cabinet off the edge
   ] },
   { id: 'shot-02', frames: [
     { suffix: 'a', room: 'apartmentBright', speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: C2 },
@@ -27,7 +28,14 @@ export const shots = [
     // gable's outline and the fin; the top light a strip box (0.25 x 1.4) further up, so the slope mirrors it as one band above the
     // bowl; a low card in front lighting the bowl's back wall; the key further and smaller. New in the model: the scoop's polished
     // lip and the ring the tweeter seats in
-    { suffix: '', room: 'studio', roomOptions: { key: 'bowl', env: 0.28, fill: 0.9, fillPos: [-1.8, 4.5, 0.13], fillSoftbox: [0.25, 1.4], card: { color: 0xffffff, intensity: 4, w: 0.5, h: 0.25, position: [0.05, 0.86, 1.15], lookAt: [-0.02, 0.95, 0.05] } }, ao: { radius: 0.05, scale: 1.4 }, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { bowlShadow: false } }], camera: { position: [0.64, 1.60, 1.38], lookAt: [-0.035, 0.99, 0.04], focal: 90 } },
+    // v18 (round 1 of the v17 batch: neither hero nor detail, an accidental crop; the driver a lens or an eye; a haze across the
+    // slope): back to the brief, gable height (0.97 m) and close, 25 degrees off the axis, so the mouth fills much of the frame and
+    // the camera looks along the throat at the tweeter, face on inside the lip, the fin across the top; the mouth on a third; the
+    // top strip narrower and further, so the slope mirrors it as a line, not a haze
+    // v19 (round 2 of the v17 batch: a wash bleaching the red to salmon; the white body the sweep's value; the bowl's left a murk):
+    // a mid-grey set, so the white body stands off it and bounces less into the sides; half the environment, so the slope holds its
+    // red beside the strip's band; the card into the bowl brighter and aimed at its far side; the tweeter's seat ring satin metal
+    { suffix: '', room: 'studio', roomOptions: { key: 'bowl', env: 0.12, ground: 0xb7b3ac, fill: 0.7, fillPos: [-2.2, 5.2, 0.13], fillSoftbox: [0.12, 1.4], card: { color: 0xffffff, intensity: 9, w: 0.45, h: 0.22, position: [0.06, 0.84, 0.95], lookAt: [-0.05, 0.92, 0.04] } }, ao: { radius: 0.05, scale: 1.4 }, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { bowlShadow: false } }], camera: { position: [0.36, 0.985, 0.80], lookAt: [0.035, 0.94, 0.07], focal: 62 } },
   ] },
   { id: 'shot-04', frames: [
     // v15 (refinement round 1): the key from the camera's right; the dome at half (env, bounce) and the fill down; a reflector card behind the camera that lights
@@ -37,7 +45,11 @@ export const shots = [
     // off the back face toward its left side and 10 up, the cabinet on the left third with its shadow running out to the right;
     // the key across from the camera ('back3q'), the fill from the camera's side, the edge strips at a little over half; the
     // reflector card where the plate mirrors it from this camera (low, out to the right), lighting only the metal
-    { suffix: 'b', room: 'studio', roomOptions: { key: 'back3q', env: 0.15, fill: 0.35, fillPos: [-4, 2.5, -3], bounce: 0.06, strips: 0.6, groundRoughness: 0.8, reflector: { w: 1.4, h: 0.9, radiance: 1.5, position: [1.57, 0.2, -2.48], aim: [0, 0.64, -0.2], receivers: ['bronze', 'badgeside', 'post', 'screw', 'portflange'] } }, speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: { position: [-2.40, 1.31, -3.69], lookAt: [-0.32, 0.52, 0.21], focal: 70 } },
+    // v18 (round 1 of the v17 batch: the sweep's curve read as a hard horizon behind the carton; a bright patch on the empty floor):
+    // the sweep turned to face this camera; the key further onto the back and gridded (see 'back3q')
+    // v19 (round 2): the key a stop down, larger and higher (see 'back3q'); the fill from the camera's side up, a bounce for the side;
+    // the strips up a little for a rim; the reflector brighter, so the plate reads as metal, not an ochre block
+    { suffix: 'b', room: 'studio', roomOptions: { key: 'back3q', env: 0.15, fill: 0.5, fillPos: [-4, 2.5, -3], bounce: 0.06, strips: 0.8, groundRoughness: 0.8, turnSweep: true, reflector: { w: 1.4, h: 0.9, radiance: 2.6, position: [1.57, 0.2, -2.48], aim: [0, 0.64, -0.2], receivers: ['bronze', 'badgeside', 'post', 'screw', 'portflange'] } }, speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: { position: [-2.40, 1.31, -3.69], lookAt: [-0.32, 0.52, 0.21], focal: 70 } },
   ] },
   { id: 'shot-05', frames: [
     // v15 (refinement round 1): the 'lineup' key, a softbox high at the front-left and close enough that the sweep falls a stop
@@ -49,7 +61,10 @@ export const shots = [
     // v17 (refinement round 3: no edge took a line; the letters ghosts on the light plinths): the key further round; the strips
     // brought round to the sides (75 degrees off the camera's line), where a vertical corner mirrors them as a line. In the model,
     // dark bronze letters on Chocolate's and Skim's plinths (the owner, 2026-10-06), and Chocolate's throat dark
-    { suffix: '', room: 'studio', roomOptions: { key: 'lineup', env: 0.3, fill: 0.35, strips: 0.8, stripAngle: 75, exposure: 1.1 }, speakers: FLAVORS.map((f, i) => ({ flavor: f, position: [(i - 2) * 0.52, 0, 0] })), camera: { position: [0, 1.3, 11.5], lookAt: [0, 0.5, 0], focal: 140 } },
+    // v18 (round 1 of the v17 batch: cutouts against the grey, a grey halo round every driver): the strips back behind the row's
+    // sides (125 degrees off the camera's line) and up, a rim on every silhouette; a smaller key (see 'lineup'); in the model each
+    // driver's flange now covers its hole's cut edge, whose eased rim was the halo
+    { suffix: '', room: 'studio', roomOptions: { key: 'lineup', env: 0.3, fill: 0.35, strips: 1.1, stripAngle: 125, exposure: 1.1 }, speakers: FLAVORS.map((f, i) => ({ flavor: f, position: [(i - 2) * 0.52, 0, 0] })), camera: { position: [0, 1.3, 11.5], lookAt: [0, 0.5, 0], focal: 140 } },
   ] },
   { id: 'shot-06', frames: [
     // v15 (refinement round 1): the camera down to just above the gable tops (desk + 0.38 m), a shallower three-quarter (14 degrees)
@@ -59,7 +74,12 @@ export const shots = [
     // (crate, desk and wall sat in one band of warm mid-tones and the crate melted into the desk)
     // v17 (refinement round 3: the shadow sides sat a shade below the fronts while the floor's shadow fell to half): the cool fill,
     // the dome and the environment down; the camera a little higher, so the back row's gables read over the front row
-    { suffix: '', room: 'desk', roomOptions: { wall: 0xa49e92, desk: { base: '#6e4f36', dark: '#56402c', light: '#86634a' }, env: 0.25, fill: 1.2, bounce: 0.12 }, ao: { radius: 0.04, scale: 1.4 }, speakers: [], crate: { position: [0, 0.72, 0], flavors: ['whole', 'two-percent', 'skim', 'chocolate', 'oat', 'whole'] }, camera: { position: [0.413, 1.20, 1.437], lookAt: [0.06, 0.86, 0.02], focal: 85 } },
+    // v18 (round 1 of the v17 batch: three faces and three rooftops): higher again (about 20 degrees down), so all six read
+    // v19 (round 2: the woofers cropped unevenly by their windows; the crate's shaded side as pale as its front): a little lower
+    // (about 18 degrees), the pints closer to the crate's walls (see buildCrate), the fill and the dome down
+    // v20 (round 3: the pints read inflated, their fins rolled bolsters): the eased edges at the pint's scale, 1.5 mm, not the
+    // floorstander's 6 mm, which on a 100 mm carton with a 2 mm fin rounded the corners and the whole fin (no critic round)
+    { suffix: '', bevelScale: 100 / 390, room: 'desk', roomOptions: { wall: 0xa49e92, desk: { base: '#6e4f36', dark: '#56402c', light: '#86634a' }, env: 0.22, fill: 0.8, bounce: 0.08 }, ao: { radius: 0.04, scale: 1.4 }, speakers: [], crate: { position: [0, 0.72, 0], flavors: ['whole', 'two-percent', 'skim', 'chocolate', 'oat', 'whole'] }, camera: { position: [0.40, 1.29, 1.42], lookAt: [0.06, 0.845, 0.02], focal: 85 } },
   ] },
 ];
 

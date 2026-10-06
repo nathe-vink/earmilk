@@ -76,7 +76,7 @@ export function makeMaterials(THREE, tex, flavor) {
     dome: new M.MeshPhysicalMaterial({ color: 0x2a2a2a, roughness: 0.7, sheen: 0.6, sheenRoughness: 0.4, sheenColor: new M.Color(0xffffff) }), // coated textile
     trim: new M.MeshStandardMaterial({ color: 0xb9b6b1, roughness: 0.34, metalness: 1.0 }),
     lip: new M.MeshStandardMaterial({ color: 0xd9d7d3, roughness: 0.1, metalness: 1.0, envMapIntensity: 2.0 }), // 2026-10-06: the scoop's polished stainless lip
-    gasket: new M.MeshPhysicalMaterial({ color: 0x262626, roughness: 0.45, metalness: 0, clearcoat: 0.5, clearcoatRoughness: 0.25 }), // the moulded ring the tweeter seats in
+    gasket: new M.MeshStandardMaterial({ color: 0x8f8c87, roughness: 0.36, metalness: 1.0 }), // the ring the tweeter seats in; v19 satin metal, a mount that reads (black, it vanished against the faceplate)
     dark: new M.MeshStandardMaterial({ color: 0x060606, roughness: 1, side: M.DoubleSide }),
     throatSeal: new M.MeshPhysicalMaterial({ color: flavor.throat.throat, roughness: 0.45, clearcoat: 0.3, clearcoatRoughness: 0.45, side: M.DoubleSide }),
     portFlange: new M.MeshPhysicalMaterial({ color: 0x2e2e2e, roughness: 0.5, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.15 }), // v16: moulded satin black, so its lip takes the key
@@ -278,7 +278,9 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     // front, and the wordmark engraved on the bare birch panel at the back. Nothing on the sides, nothing under the gable.
     const skin = new THREE.Group(); body.add(skin);
     const frontShape = rectShape(THREE, -half, 0, half, S.body);
-    for (const dr of S.drivers) frontShape.holes.push(circleHole(THREE, 0, dr.z, dr.frame / 2));
+    // v18: each hole 5 mm inside its driver's flange (10 % on the pint), so the flange covers the cut edge: the shader's eased
+    // edge rounded the hole's rim into a grey ring round every driver that read as a drop shadow (round 1 of the v17 batch)
+    for (const dr of S.drivers) frontShape.holes.push(circleHole(THREE, 0, dr.z, dr.frame / 2 - Math.min(5, dr.frame * 0.05)));
     skin.add(mesh(slab(THREE, frontShape, bd).translate(0, 0, half), mats.finishBody));
     const backShape = rectShape(THREE, -half, 0, half, S.body);
     if (S.back) {
@@ -487,7 +489,7 @@ export function buildCrate(THREE, addons, ctx, { flavors }) {
   const C = { w: 340, d: 250, h: 130, t: 4, r: 18, floor: 6, rimH: 7, rimOut: 1.6 };
   const g = new THREE.Group();
   const mats = ctx.materials(ctx.flavor('whole'));
-  const crate = new THREE.MeshPhysicalMaterial({ color: 0xece8e0, roughness: 0.48, metalness: 0, clearcoat: 0.12, clearcoatRoughness: 0.6, side: THREE.DoubleSide });
+  const crate = new THREE.MeshPhysicalMaterial({ color: 0xe2ddd3, roughness: 0.48, metalness: 0, clearcoat: 0.12, clearcoatRoughness: 0.6, side: THREE.DoubleSide });   // v19: a shade deeper, so the white pints stand off it
   crate.name = 'crate';
   const mesh = (geom) => { const m = new THREE.Mesh(geom, crate); m.castShadow = m.receiveShadow = true; return m; };
   g.add(contactShadow(THREE, mats, C.w, C.d, 0.5));
@@ -531,7 +533,9 @@ export function buildCrate(THREE, addons, ctx, { flavors }) {
   // The floor, inside the walls.
   const fl = new THREE.ExtrudeGeometry(roundedRectShape(THREE, C.w - 2 * C.t - 0.6, C.d - 2 * C.t - 0.6, C.r - C.t), { depth: C.floor, bevelEnabled: false, curveSegments: 24 });
   fl.rotateX(-Math.PI / 2); g.add(mesh(fl));
-  const cols = 3, pitchX = 110, pitchZ = 124;   // the rows 24 apart, each 9 from its long wall, so the woofers sit close behind their windows
+  // v19 (round 2 of the v17 batch: from a raised camera the woofers, set back behind the wall, sat off-centre in their windows):
+  // the rows 136 apart, each 3 from its long wall, so the woofers sit just behind their windows and parallax barely shifts them
+  const cols = 3, pitchX = 110, pitchZ = 136;
   flavors.forEach((fl2, i) => {
     const col = i % cols, row = Math.floor(i / cols);
     const p = buildSpeaker(THREE, addons, ctx, { kind: 'pint', flavor: ctx.flavor(fl2) });

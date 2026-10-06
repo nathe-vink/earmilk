@@ -101,12 +101,21 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
 ## Where the renders stand
 
 The in-ear look had its three critic rounds (`critic/LOG.md`): hero 4, 4, 4 and detail 4, 5, 5. Round 2 found two real
-bugs (both branches ran in one place; each lead out of its burrow kinked) that v3 fixed. v4 (2026-10-06) is the next pass
-round 3 asked for, a new batch for the critic: a camera built around one bud side-on, a new lay for it with each worm on
-its own path, the saddle resting on the floor and rising above it (it had swelled down through the floor, so from any
-height it read as a colour change), strips laid along each cap, a softer coat so every crest does not take the same hard
-glint. The over-ear version's renders are in `renders/over-ear/` and its rounds are in the log; its model is in git
-history.
+bugs (both branches ran in one place; each lead out of its burrow kinked) that v3 fixed. A second batch (v4 to v6,
+2026-10-06) ended at hero 4, 5, 5 and detail 5, 5, 5: one Y from the buds to the splitter, the main worm going on to the
+plug and crossing nothing; the near bud side on and off the centre line; the detail on a 100 mm macro's perspective at
+f/16, the far bud soft; plates kept hard (the owner's exoskeleton; one critic asked for soft silicone) under a softer
+coat; clearer tips with a fine texture; the metal finer polished, with strips along each cap. What the last round asks
+of a next pass:
+
+- **The lay.** The two leads apart from the splitter to the saddle, the saddle well clear of where they meet (it read
+  as a knot); the cable at its real length, the plug's run leaving the frame or coiled behind the buds (eight
+  bud-lengths from jack to tips read as a scale model).
+- **The plates.** Bunching on the inside of each bend and spreading on the outside; even rings read as a pattern.
+- **Light.** Long strips low along the buds' axes with black cards beside them, so each cap takes a line and a dark
+  edge; a key from the camera's side for the tips' faces; the floor nearer white.
+
+The over-ear version's renders are in `renders/over-ear/` and its rounds are in the log; its model is in git history.
 
 ## Files
 

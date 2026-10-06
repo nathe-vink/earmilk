@@ -69,7 +69,7 @@ Black paper cones. No grilles. The sleeve's die-cuts equal the frame diameters (
 | Faceplate (as drawn) | 62 tall, 6 thick: `y` 170 → 176 |
 | Dome apex (as drawn) | about 8 forward of the faceplate plane, `y ≈ 162` |
 | Body behind the faceplate (as drawn) | about 38 deep × 60 tall, `y` 176 → 214, inside the block |
-| Seat (2026-10-06, as modelled) | a moulded satin-black ring where the throat ends, ø 64 on its centreline (between the faceplate's 62 and the throat's 66), 3 across, the faceplate's edge seated in it. A render detail answering a critic ("no visible seat"), not a dimension the owner set. |
+| Seat (2026-10-06, as modelled) | a ring where the throat ends, ø 64 on its centreline (between the faceplate's 62 and the throat's 66), 3 across, the faceplate's edge seated in it; satin metal since v19 (moulded satin black, it vanished against the faceplate). A render detail answering a critic ("no visible seat"), not a dimension the owner set. |
 
 ### Bowl (the waveguide)
 
