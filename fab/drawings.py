@@ -134,9 +134,9 @@ def general_arrangement(pdf):
     B.line([(0, 0), (PLAN, 0), (PLAN, BODY), (0, BODY)], close=True)
     B.line([(0, BODY), (PLAN, BODY), (PLAN, RIDGE_Z), (0, RIDGE_Z)], close=True); B.rect(0, RIDGE_Z, PLAN, TOTAL)
     B.line([(0, PLINTH_H), (PLAN, PLINTH_H)], lw=0.3); B.line([(0, PLINTH_H + SHADOW), (PLAN, PLINTH_H + SHADOW)], lw=0.3)
-    ax.add_patch(FancyBboxPatch(B.p(PLATE['x0'], PLATE['z0']), (PLATE['x1'] - PLATE['x0']) * k, (PLATE['z1'] - PLATE['z0']) * k,
-                                boxstyle=f'round,pad=0,rounding_size={PLATE["r"] * k}', fill=False, lw=0.6))
-    B.text(RUN, (PLATE['z0'] + PLATE['z1']) / 2, 'bronze Facts plate\n318 x 312 x 3, 1.5 proud', size=4.6, ha='center', va='center')
+    fx0, fz1 = RUN - LABEL['w'] / 2, LABEL['top']; fz0 = fz1 - LABEL['h']
+    B.rect(fx0, fz0, fx0 + LABEL['w'], fz1, lw=0.6)
+    B.text(RUN, (fz0 + fz1) / 2, 'Nutrition Facts, printed\n266 x 260, under the clear', size=4.6, ha='center', va='center')
     B.circle(RUN, PORT['z'], PORT['flange']); B.circle(RUN, PORT['z'], PORT['bore'])
     B.rect(RUN - POSTS['w'] / 2, POSTS['z'] - POSTS['h'] / 2, RUN + POSTS['w'] / 2, POSTS['z'] + POSTS['h'] / 2)
     for sx in (-1, 1):
@@ -145,8 +145,8 @@ def general_arrangement(pdf):
     B.text(RUN, (BODY + RIDGE_Z) / 2 - 4, 'OPEN OTHER SIDE ->', size=4.5, ha='center', color=NOTE)
     B.text(RUN, 50, 'SHAKE WELL', size=4.5, ha='center', color=NOTE)
     B.dim((PLAN, 0), (PLAN, PORT['z']), 35); B.dim((PLAN, 0), (PLAN, POSTS['z']), 70)
-    B.dim((0, PLATE['z0']), (0, PLATE['z1']), -30, '312'); B.dim((0, 0), (0, PLATE['z0']), -30)
-    B.dim((PLATE['x0'], PLATE['z1']), (PLATE['x1'], PLATE['z1']), 26, '318')
+    B.dim((0, fz0), (0, fz1), -30, '260'); B.dim((0, 0), (0, fz0), -30)
+    B.dim((fx0, fz1), (fx0 + LABEL['w'], fz1), 26, '266')
     B.text(RUN + 62, PORT['z'] - 3, f'port: 92 bore, 112 flange,\n{port_total:.0f} long incl. flare', size=4.4)
 
     # SECTION A-A on the centreline (cut x = 195, seen from the right)

@@ -13,7 +13,7 @@
    "mass_kg": 3.19
   },
   "back-panel": {
-   "volume_l": 5.6799,
+   "volume_l": 5.8287,
    "bbox_mm": [
     0.0,
     372.0,
@@ -22,7 +22,7 @@
     390.0,
     860.0
    ],
-   "mass_kg": 3.86
+   "mass_kg": 3.96
   },
   "side-left": {
    "volume_l": 5.4767,
@@ -121,18 +121,7 @@
    "mass_kg": 7.18
   },
   "port-tube": {
-   "volume_l": 0.2264
-  },
-  "bronze-plate": {
-   "volume_l": 0.2976,
-   "bbox_mm": [
-    36.0,
-    388.5,
-    484.0,
-    354.0,
-    391.5,
-    796.0
-   ]
+   "volume_l": 0.2263
   },
   "terminal-plate": {
    "volume_l": 0.0241,
@@ -189,6 +178,6 @@
  "woofer_chamber_gross_l": 103.26,
  "mid_chamber_gross_l": 8.029,
  "bowl_cavity_l": 1.5,
- "wood_mass_kg": 27.04,
- "port_tube_length_mm": 134.2
+ "wood_mass_kg": 27.14,
+ "port_tube_length_mm": 134.1
 }

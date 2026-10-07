@@ -38,6 +38,8 @@ export const shots = [
     { suffix: '', room: 'studio', roomOptions: { key: 'bowl', env: 0.12, ground: 0xb7b3ac, fill: 0.7, fillPos: [-2.2, 5.2, 0.13], fillSoftbox: [0.12, 1.4], card: { color: 0xffffff, intensity: 9, w: 0.45, h: 0.22, position: [0.06, 0.84, 0.95], lookAt: [-0.05, 0.92, 0.04] } }, ao: { radius: 0.05, scale: 1.4 }, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { bowlShadow: false } }], camera: { position: [0.36, 0.985, 0.80], lookAt: [0.035, 0.94, 0.07], focal: 62 } },
   ] },
   { id: 'shot-04', frames: [
+    // v20 (the owner, 2026-10-07): no bronze plate; the Nutrition Facts printed on the body's finish under the clear, like a carton's
+    // panel (spec: back.panel 'print'). The reflector still lights the letters, the posts and the port's flange.
     // v15 (refinement round 1): the key from the camera's right; the dome at half (env, bounce) and the fill down; a reflector card behind the camera that lights
     // only the bronze and the posts, so the plate reads bright against its dark engraving; no edge strips (they filled the shadow and show nothing from straight on)
     { suffix: 'a', room: 'studio', roomOptions: { key: 'back', env: 0.15, fill: 0.2, bounce: 0.06, strips: 0, groundRoughness: 0.8, reflector: { w: 2.0, h: 1.2, radiance: 1.5, behind: 1.0, receivers: ['bronze', 'badgeside', 'post', 'screw', 'portflange'] } }, speakers: [{ flavor: 'whole', position: [0, 0, 0] }], camera: { position: [0, 0.62, -4.2], lookAt: [0, 0.5, 0], focal: 70 } },
@@ -118,6 +120,15 @@ export const explore5 = [
   { id: 'r5-barcode', ...marked(['open-other-side', 'shake-well', 'barcode'], SIDE_CAM) },
   { id: 'r5-all-new', ...marked(['open-other-side', 'shake-well', 'keep-room-temperature', 'return-for-deposit', 'barcode'], SIDE_CAM) },
 ];
+
+// Sixth exploration, 2026-10-07: the scoop's trim. The owner is unsure of the metal ("it looks like a diner"). Four options, each in
+// the close-up's frame and nearer in the bright room: the spec's polished lip with the tweeter's bright ring; the lip as spec with the
+// tweeter's ring and seat black; the lip in the gable's own lacquer, the ring black; no lip, the ring black. Proposals, not spec.
+const TRIM_NEAR = { position: [0.75, 1.35, 1.55], lookAt: [0.02, 0.86, 0.05], focal: 50 };
+const BOWL_CLOSE = shots.find(s => s.id === 'shot-03').frames[0];
+const trimClose = (scoopTrim) => ({ ...BOWL_CLOSE, speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { bowlShadow: false, scoopTrim } }] });
+const trimNear = (scoopTrim) => ({ room: 'apartmentBright', speakers: [{ flavor: 'whole', position: [0, 0, 0], state: { scoopTrim } }], camera: TRIM_NEAR });
+export const explore6 = ['polished', 'black', 'tone', 'none'].flatMap(t => [{ id: `r6-trim-${t}-close`, ...trimClose(t) }, { id: `r6-trim-${t}-near`, ...trimNear(t) }]);
 
 // Retired 2026-10-02 with the sleeve: the three-frame swap. Kept so `--list retired` can still render it in the sleeve look.
 const SLEEVE = { look: { mode: 'sleeve' } };

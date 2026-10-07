@@ -15,7 +15,7 @@ Read `README.md` first. It is the handoff and the brief. The canvas it links to 
 | `spec/geometry.md` | The README's numbers expanded into one coordinate frame, with derived values and as-drawn details from the canvas. A model is built from this file. |
 | `spec/colorways.json` | The five flavors, birch, drivers and ground as machine-readable hex, plus the print layout (which flavours carry the lid colour, the band, the optional stand and panel). The model reads its default look from here. |
 | `explore/` | Design questions rendered as options, one dated section per question in its README. Not shots. |
-| `copy/label.md` | The printed Nutrition Facts copy and the shorter engraved version on the back window. |
+| `copy/label.md` | The label artboard's Nutrition Facts copy and the shorter version on the back (printed under the clear since 2026-10-07; engraved before). |
 | `copy/hero.md` | Every other line of copy on the canvas, by surface. |
 | `prompts/shot-NN-vN.md` | One brief per shot, versioned. A version is frozen once a render has been made from it; changes go in vN+1. |
 | `renders/YYYY-MM-DD/shot-NN-vN.png` | Output. NN and vN match the prompt file that produced it. |
@@ -57,6 +57,7 @@ Read `README.md` first. It is the handoff and the brief. The canvas it links to 
 ## The repo ahead of the canvas (since 2026-10-05)
 
 - The owner amended the pint and the crate in chat on 2026-10-05: the pint mirrors the floorstander's drivers (a woofer ø 68 at 67 and a mid ø 40 at 160 on its face, a small dome tweeter at its bowl's throat), and the crate is a moulded dairy crate whose windows frame the front pints' woofers (README, Amendments 2026-10-05; `spec/geometry.md`). The canvas has not been updated to match. Ask the owner before editing the canvas.
+- On 2026-10-07 the owner moved the Nutrition Facts from the bronze plate to a print on the back's finish, under the clear (README, Amendments 2026-10-07). The canvas still shows the plate.
 
 ## Tools and the family (since 2026-10-04)
 

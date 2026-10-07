@@ -10,7 +10,7 @@ Writes to out/metal and out/marks:
                                     the i's dot is its own), for laser, waterjet or CNC cutting from 2.5 to 3 mm metal
   wordmark-letters.step / .stl      the same, 2.5 mm thick, for a casting service or a printed casting master
   wordmark-template-front.pdf/svg   1:1 drilling and placing template for the plinth's front (and the back)
-  plate-facts.svg / .pdf / .dxf     the bronze Nutrition Facts plate, 318 x 312: outline, and the engraving as filled areas
+  facts-print.svg / .pdf            the Nutrition Facts printed on the back under the clear (2026-10-07), 266 x 260, 1:1
   terminal-plate.dxf                128 x 64 plate for the binding posts
   stencil-open-other-side.svg       vinyl mask letters for the back slope (27 mm Archivo Bold with the arrow)
   stencil-shake-well.svg            vinyl mask letters for the plinth's back face (26 mm)
@@ -140,23 +140,26 @@ def make_wordmark_files():
     return info
 
 
-def make_plate_files():
-    """The Facts plate: 318 x 312, the engraved panel 266 x 260 centred with a 26 margin. Plate frame: x right, y up,
-    origin at the plate's bottom-left corner."""
-    W, H = PLATE['x1'] - PLATE['x0'], PLATE['z1'] - PLATE['z0']
-    m = 26.0
+def make_facts_print():
+    """The Nutrition Facts as printed on the back's finish (2026-10-07, the owner; an engraved bronze plate before): the
+    panel 266 x 260, black = ink, 1:1 and right-reading, for a screen (film positive) or a water-slide decal. A 15 mm
+    margin carries crop marks at the corners and centre marks top and bottom; on the cabinet the panel is centred on the
+    back with its top border at z 770, 90 mm below the body's top edge. Frame: x right, y up, origin at the sheet's
+    bottom-left corner."""
+    m = 15.0
     LW, LH = LABEL['w'], LABEL['h']
-    ox, top = m, H - m                       # label's left edge and top edge in plate coordinates
-    def Y(v):                                # label y (mm down from its top) to plate y (up)
+    W, H = LW + 2 * m, LH + 2 * m
+    ox, top = m, H - m                       # panel's left edge and top edge in sheet coordinates
+    def Y(v):                                # panel y (mm down from its top) to sheet y (up)
         return top - v
-    etch = []
-    # Border: 1.2 wide, its outer edge at the label's edge.
+    ink = []
+    # Border: 1.2 wide, its outer edge at the panel's edge.
     t = 1.2
-    etch.append([(ox, Y(0)), (ox + LW, Y(0)), (ox + LW, Y(LH)), (ox, Y(LH))])
-    etch.append([(ox + t, Y(t)), (ox + t, Y(LH - t)), (ox + LW - t, Y(LH - t)), (ox + LW - t, Y(t))])   # hole (reverse)
+    ink.append([(ox, Y(0)), (ox + LW, Y(0)), (ox + LW, Y(LH)), (ox, Y(LH))])
+    ink.append([(ox + t, Y(t)), (ox + t, Y(LH - t)), (ox + LW - t, Y(LH - t)), (ox + LW - t, Y(t))])   # hole (reverse)
     x0, x1 = ox + 14, ox + LW - 14
     def rule(y, th):
-        etch.append([(x0, Y(y - th / 2)), (x1, Y(y - th / 2)), (x1, Y(y + th / 2)), (x0, Y(y + th / 2))][::-1])
+        ink.append([(x0, Y(y - th / 2)), (x1, Y(y - th / 2)), (x1, Y(y + th / 2)), (x0, Y(y + th / 2))][::-1])
     black, bold, reg = Font('ArchivoBlack-Regular.woff'), Font('Archivo-Bold.woff'), Font('Archivo-Regular.woff')
     # Title: 34 mm Archivo Black, tracking fixed at -0.02 x 34 mm, shrunk by 3 % steps until it fits the 238 mm measure.
     size, track_mm = 34.0, -0.02 * 34.0
@@ -165,32 +168,35 @@ def make_plate_files():
         if w <= (x1 - x0) or size < 4:
             break
         size *= 0.97
-    etch += c
+    ink += c
     rule(48, 1.4); rule(72, 7.6)
     rows = [('Sensitivity', '91 dB'), ('Frequency response', '32 Hz to 20 kHz'), ('Impedance', '8 ohm'),
             ('Woofer', '12 in'), ('Midrange', '6.5 in'), ('Tweeter', '1 in')]
     for i, (k, v) in enumerate(rows):
         b = 98 + 22 * i
-        etch += set_line(bold, k, 12.0, 0.0, x0, Y(b))[0]
-        etch += set_line(reg, v, 12.0, 0.0, x1, Y(b), align='right')[0]
+        ink += set_line(bold, k, 12.0, 0.0, x0, Y(b))[0]
+        ink += set_line(reg, v, 12.0, 0.0, x1, Y(b), align='right')[0]
         rule(105 + 22 * i, 1.4)
     rule(226, 7.6)
-    etch += set_line(reg, 'Contains no milk.', 11.0, 0.0, x0, Y(244))[0]
-    # Plate outline with 3 mm corners.
-    r = PLATE['r']; outline = []
-    for (cx, cy, a0) in ((W - r, r, -90), (W - r, H - r, 0), (r, H - r, 90), (r, r, 180)):
-        for k in range(9):
-            a = math.radians(a0 + 90 * k / 8); outline.append((cx + r * math.cos(a), cy + r * math.sin(a)))
-    os.makedirs(os.path.join(OUT, 'metal'), exist_ok=True)
-    write_svg(os.path.join(OUT, 'metal', 'plate-facts.svg'), W, H, [
-        ('outline', [outline], 'fill="none" stroke="#000" stroke-width="0.25"'),
-        ('etch', etch, 'fill="#000" fill-rule="nonzero"')])
-    write_pdf(os.path.join(OUT, 'metal', 'plate-facts.pdf'), W, H, fills=[(etch, '#000')], strokes=[([outline], '#000', 0.4)],
-              title='earmilk: bronze Nutrition Facts plate, 318 x 312 x 3 mm, R3 corners. Black = engrave or etch ~0.3 mm deep, then darken. 1:1.')
-    groups = pieces(etch)
-    write_dxf(os.path.join(OUT, 'metal', 'plate-facts.dxf'), [('OUTLINE_CUT', [outline]), ('ENGRAVE_OUTLINES', etch)],
-              fills=[('ENGRAVE_FILL', groups)])
-    return {'title_size_mm': round(size, 2), 'plate_mm': [W, H]}
+    ink += set_line(reg, 'Contains no milk.', 11.0, 0.0, x0, Y(244))[0]
+    # Crop marks (8 mm, 3 mm off the panel's corners) and centre marks, as thin filled bars outside the panel.
+    marks, mw = [], 0.25
+    def bar(xa, ya, xb, yb):
+        if xa == xb:
+            marks.append([(xa - mw / 2, ya), (xa + mw / 2, ya), (xa + mw / 2, yb), (xa - mw / 2, yb)])
+        else:
+            marks.append([(xa, ya - mw / 2), (xb, ya - mw / 2), (xb, ya + mw / 2), (xa, ya + mw / 2)])
+    for (cx, cy, dx, dy) in ((ox, top, -1, 1), (ox + LW, top, 1, 1), (ox, top - LH, -1, -1), (ox + LW, top - LH, 1, -1)):
+        bar(min(cx + dx * 3, cx + dx * 11), cy, max(cx + dx * 3, cx + dx * 11), cy)
+        bar(cx, min(cy + dy * 3, cy + dy * 11), cx, max(cy + dy * 3, cy + dy * 11))
+    bar(W / 2, top + 3, W / 2, top + 11); bar(W / 2, top - LH - 11, W / 2, top - LH - 3)
+    os.makedirs(os.path.join(OUT, 'marks'), exist_ok=True)
+    write_svg(os.path.join(OUT, 'marks', 'facts-print.svg'), W, H, [
+        ('marks', marks, 'fill="#000"'),
+        ('ink', ink, 'fill="#000" fill-rule="nonzero"')])
+    write_pdf(os.path.join(OUT, 'marks', 'facts-print.pdf'), W, H, fills=[(ink, '#000'), (marks, '#000')], strokes=[],
+              title='earmilk Nutrition Facts, printed under the 2K clear. 1:1, black = ink. Centre on the back, top border 90 mm below the body\'s top edge.')
+    return {'title_size_mm': round(size, 2), 'panel_mm': [LW, LH], 'sheet_mm': [W, H]}
 
 
 def make_terminal_plate():
@@ -237,7 +243,7 @@ def make_stencils():
 
 
 def main():
-    info = {'wordmark': make_wordmark_files(), 'plate': make_plate_files(), 'marks': make_stencils()}
+    info = {'wordmark': make_wordmark_files(), 'facts': make_facts_print(), 'marks': make_stencils()}
     make_terminal_plate()
     json.dump(info, open(os.path.join(OUT, 'typeset.json'), 'w'), indent=1)
     print(json.dumps(info, indent=1))

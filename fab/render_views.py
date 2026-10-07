@@ -15,13 +15,13 @@ OUT = HERE / 'out' / 'views'
 
 WOOD = ['front-baffle', 'back-panel', 'side-left', 'side-right', 'top-panel', 'bottom-panel', 'window-brace',
         'mid-shelf', 'mid-divider', 'gable-block']
-OTHER = {'port-tube-with-flange': 'pla', 'port-flare-collar': 'pla', 'bronze-plate': 'bronze', 'terminal-plate': 'dark'}
+OTHER = {'port-tube-with-flange': 'pla', 'port-flare-collar': 'pla', 'terminal-plate': 'dark'}
 # Exploded offsets in mm (spec frame: x right, y back, z up).
 EXPLODE = {
     'front-baffle': (0, -260, 0), 'back-panel': (0, 300, 0), 'side-left': (-260, 0, 0), 'side-right': (260, 0, 0),
     'top-panel': (0, 0, 120), 'bottom-panel': (0, 0, -160), 'window-brace': (0, 0, 0), 'mid-shelf': (0, -60, 0),
     'mid-divider': (0, -60, 40), 'gable-block': (0, 0, 300), 'port-tube-with-flange': (0, 420, 0),
-    'port-flare-collar': (0, 180, 0), 'bronze-plate': (0, 360, 0), 'terminal-plate': (0, 360, 0),
+    'port-flare-collar': (0, 180, 0), 'terminal-plate': (0, 360, 0),
 }
 
 

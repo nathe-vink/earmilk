@@ -41,7 +41,7 @@ earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it.
 ## Back
 
 - Bare birch where the sleeve opens. Nutrition Facts engraved above the port, binding posts below. *(draft 2026-10-02: "An engraved bronze plate carries the Nutrition Facts. The wordmark is cast metal above it; the port and the posts sit on the finish below, and the plinth says SHAKE WELL.")*
-- The sleeve's back panel is a frame; it locks around the window, so the wood is what ages. *(draft 2026-10-02: "The finish stops at the plate, so the bronze is what ages.")*
+- The sleeve's back panel is a frame; it locks around the window, so the wood is what ages. *(draft 2026-10-02: "The finish stops at the plate, so the bronze is what ages.")* *(withdrawn 2026-10-07 with the plate; draft: "The Nutrition Facts are printed under the clear, so they last as long as the paint.")*
 
 ## Pint crate (parked)
 

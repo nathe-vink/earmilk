@@ -121,6 +121,8 @@ See "Mounting the letters" below.
 
 ## 5. Brass or bronze "Nutrition Facts" plate: 318 x 312 x 3 mm, 3 mm corner radius, fine engraving or etch with dark fill (2 plates)
 
+*Withdrawn 2026-10-07: the owner moved the Facts onto the body, printed on the colour coat and sealed under the 2K clear (`fab/README.md`, step 7). This section is kept as research. For the print: a local screen printer or sign shop that can screen a catalysed (2K) ink onto a painted panel, or laser water-slide decal paper for a one-off. Not researched here; confirm ink-under-clear compatibility on a sprayed card before the cabinets.*
+
 The text goes down to about 2 mm tall, so you need chemical etching, a fiber laser, or fine milled engraving. Ordinary laser-cutting services can't do this.
 
 | Service | Does it? | Material / thickness | File format | Limits that matter | Price | Lead time | URL |

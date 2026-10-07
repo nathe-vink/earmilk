@@ -3,6 +3,8 @@
 // Spec (x, y, z) maps to local (x - plan/2, z, plan/2 - y).
 import { FS, PINT, derived } from './spec.mjs';
 
+const FACTS_INK = '#1E1A17'; // the printed Facts on the light bodies: a warm near-black, as a carton's panel (spec/colorways.json, facts)
+
 export function specFor(kind) {
   if (kind === 'pint') {
     const k = PINT.bowlScale;
@@ -64,9 +66,12 @@ export function makeMaterials(THREE, tex, flavor) {
   const badgeShade = (t) => new M.MeshBasicMaterial({ color: 0x000000, alphaMap: t, transparent: true, opacity: 0.7, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const bronze = new M.MeshStandardMaterial({ color: 0xb8894c, roughness: 0.5, metalness: 0.55, envMapIntensity: 1.8 }); // satin, patinated bronze: part diffuse so the key lights it and the dark engraving reads
   const mark = (t) => Object.assign(new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.5, metalness: 0, clearcoat: 0.4, clearcoatRoughness: 0.25, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false }), { name: 'mark' });
+  // 2026-10-07, the owner: the Nutrition Facts printed on the body's colour coat and sealed under the clear, so the ink takes the
+  // finish's sheen (a sticker would sit on top with its own)
+  const factsPrint = (t) => Object.assign(new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.38, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.2, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false }), { name: 'facts-print' });
   const mats = {
     board, birch, bowl, decal, boardPrint, printArea, standPaint,
-    finishBody, finishAccent, finishAccentArea, shadowLine, badgeLetters, badgeSide, badgeShade, mark, bronze,
+    finishBody, finishAccent, finishAccentArea, shadowLine, badgeLetters, badgeSide, badgeShade, mark, bronze, factsPrint,
     cone: new M.MeshStandardMaterial({ color: 0x202020, roughness: 0.72 }), // black paper: matte enough not to mirror the window
     frame: new M.MeshStandardMaterial({ color: 0x1e1e1e, roughness: 0.4, metalness: 0.55 }),
     surround: new M.MeshPhysicalMaterial({ color: 0x141414, roughness: 0.3, clearcoat: 0.5, clearcoatRoughness: 0.3 }),
@@ -77,6 +82,7 @@ export function makeMaterials(THREE, tex, flavor) {
     trim: new M.MeshStandardMaterial({ color: 0xb9b6b1, roughness: 0.34, metalness: 1.0 }),
     lip: new M.MeshStandardMaterial({ color: 0xd9d7d3, roughness: 0.1, metalness: 1.0, envMapIntensity: 2.0 }), // 2026-10-06: the scoop's polished stainless lip
     gasket: new M.MeshStandardMaterial({ color: 0x8f8c87, roughness: 0.36, metalness: 1.0 }), // the ring the tweeter seats in; v19 satin metal, a mount that reads (black, it vanished against the faceplate)
+    ringBlack: new M.MeshPhysicalMaterial({ color: 0x242424, roughness: 0.45, metalness: 0, clearcoat: 0.5, clearcoatRoughness: 0.25 }), // explore 2026-10-07: the tweeter's ring and seat moulded black, no bright metal
     dark: new M.MeshStandardMaterial({ color: 0x060606, roughness: 1, side: M.DoubleSide }),
     throatSeal: new M.MeshPhysicalMaterial({ color: flavor.throat.throat, roughness: 0.45, clearcoat: 0.3, clearcoatRoughness: 0.45, side: M.DoubleSide }),
     portFlange: new M.MeshPhysicalMaterial({ color: 0x2e2e2e, roughness: 0.5, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.15 }), // v16: moulded satin black, so its lip takes the key
@@ -120,7 +126,11 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
   const mats = ctx.materials(flavor);
   const backPanel = S.back ? (st.backPanel || S.back.panel) : null;
   const backField = S.back ? (backPanel === 'full' ? S.back.window : { x0: 195 - S.back.label.w / 2 - S.back.labelMargin, x1: 195 + S.back.label.w / 2 + S.back.labelMargin, z0: S.back.label.top - S.back.label.h - S.back.labelMargin, z1: S.back.label.top + S.back.labelMargin }) : null;
-  const bronze = backPanel === 'bronze';
+  const bronze = backPanel === 'bronze', printed = backPanel === 'print';
+  // The scoop's trim (explore 2026-10-07, the owner unsure of the metal): 'polished' (spec since 2026-10-06: the stainless lip, the
+  // tweeter's bright ring and satin seat), 'black' (the lip as spec, the tweeter's ring and seat black), 'tone' (the lip in the
+  // gable's own lacquer, the tweeter's ring black), 'none' (no lip, the tweeter's ring black).
+  const scoopTrim = st.scoopTrim || 'polished';
   const postsZ = S.back ? (backPanel === 'full' ? S.back.posts.zFull : S.back.posts.z) : 0;
   const d = derived(S);
   const half = S.plan / 2, L = d.slope, dy = d.dirY, dz = d.dirZ, ridgeZ = d.ridgeZ;
@@ -202,10 +212,10 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       dome.rotation.x = Math.PI / 2; dome.position.set(0, axisY, throatZ + h - sr); cab.add(dome);
       const ring = mesh(new THREE.TorusGeometry(baseR + 1.5 * kd, 1.5 * kd, 12, 64), mats.surround); ring.position.set(0, axisY, throatZ + 0.6 * kd); cab.add(ring);
       // a satin chamfer round the faceplate's edge, and the faceplate's screws: what says "driver", not "lens", deep in the bowl
-      const trim = mesh(new THREE.TorusGeometry(pr - 0.9 * kd, 0.9 * kd, 10, 96), mats.trim); trim.position.set(0, axisY, throatZ + 0.1); cab.add(trim);
+      const trim = mesh(new THREE.TorusGeometry(pr - 0.9 * kd, 0.9 * kd, 10, 96), scoopTrim === 'polished' ? mats.trim : mats.ringBlack); trim.position.set(0, axisY, throatZ + 0.1); cab.add(trim);
       // v17 (refinement round 3 on the close-up: the driver had no visible seat, a loose part dropped in): a moulded ring where the
       // throat ends, the faceplate's edge seated in it
-      const seat = mesh(new THREE.TorusGeometry((pr + throatR) / 2 + 0.4 * kd, Math.max(1.5 * kd, 0.5), 12, 96), mats.gasket);
+      const seat = mesh(new THREE.TorusGeometry((pr + throatR) / 2 + 0.4 * kd, Math.max(1.5 * kd, 0.5), 12, 96), scoopTrim === 'polished' ? mats.gasket : mats.ringBlack);
       seat.scale.z = 0.7; seat.position.set(0, axisY, throatZ + 0.2); cab.add(seat);
       if (pr > 20) for (let i = 0; i < 4; i++) {
         const a = Math.PI / 4 + i * Math.PI / 2, rr = (pr + baseR + 3) / 2 + 1.5;
@@ -237,7 +247,7 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       cap.rotation.x = Math.PI / 2; cap.scale.y = 0.6; cap.position.z = lip - 1 - R * 0.33; grp.add(cap); // squashed along its own axis (it was squashed across it, a pill)
     }
 
-    // Back of the cabinet: engraved label, port, binding posts (floorstander only).
+    // Back of the cabinet: the Nutrition Facts, port, binding posts (floorstander only).
     if (S.back) {
       const B = S.back;
       let labelZ = -half - 0.3;
@@ -248,8 +258,10 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
         plate.position.set(0, (backField.z0 + backField.z1) / 2, -half - bd0 - proud + pt / 2); cab.add(plate);
         labelZ = -half - bd0 - proud - 0.3;
       }
-      const lab = ctx.tex.engravedLabel(bronze ? { color: B.plate.patina } : {});
-      const labelMesh = mesh(new THREE.PlaneGeometry(lab.widthMm, lab.heightMm), mats.decal(lab.texture), false);
+      // 2026-10-07, the owner: printed on the body's finish like a carton's panel, in the flavour's Facts ink, under the clear
+      if (printed) labelZ = -half - S.board - 0.3;
+      const lab = ctx.tex.engravedLabel(bronze ? { color: B.plate.patina } : printed ? { color: flavor.factsInk || FACTS_INK } : {});
+      const labelMesh = mesh(new THREE.PlaneGeometry(lab.widthMm, lab.heightMm), printed ? mats.factsPrint(lab.texture) : mats.decal(lab.texture), false);
       labelMesh.rotation.y = Math.PI; labelMesh.position.set(0, B.label.top - lab.heightMm / 2, labelZ); cab.add(labelMesh);
       // The flange is a ring with a rounded inner lip (a 92 bore in a 112 flange, 3 proud), so the bore shows behind it; v14 and
       // earlier drew it as a solid disc over the bore, which read as a flat black disc (refinement round 1 on the back).
@@ -285,7 +297,7 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     const backShape = rectShape(THREE, -half, 0, half, S.body);
     if (S.back) {
       const w = backField;
-      if (!bronze) { const hole = new THREE.Path(); hole.moveTo(w.x0 - half, w.z0); hole.lineTo(w.x0 - half, w.z1); hole.lineTo(w.x1 - half, w.z1); hole.lineTo(w.x1 - half, w.z0); hole.closePath(); backShape.holes.push(hole); }
+      if (!bronze && !printed) { const hole = new THREE.Path(); hole.moveTo(w.x0 - half, w.z0); hole.lineTo(w.x0 - half, w.z1); hole.lineTo(w.x1 - half, w.z1); hole.lineTo(w.x1 - half, w.z0); hole.closePath(); backShape.holes.push(hole); }
       if (S.back.port.z + S.back.port.bore / 2 > w.z1 || S.back.port.z - S.back.port.bore / 2 < w.z0) backShape.holes.push(circleHole(THREE, 0, S.back.port.z, S.back.port.bore / 2 + 1));
     }
     skin.add(mesh(slab(THREE, backShape, bd, 64).translate(0, 0, -half - bd), mats.finishBody));
@@ -374,10 +386,10 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     // 2026-10-06, the owner: a polished stainless lip round the scoop's mouth, a rolled edge over the finish's cut and the bowl's
     // joint, so the opening reads as a made scoop and not a hole at room distance (every critic round read it as a hole or an eye).
     // Half-round, 4.8 wide and 1.6 proud on the floorstander; the same ring on every flavour.
-    {
+    if (scoopTrim !== 'none') {
       const rl = Math.max(2.4 * kk, 0.9), zc = bd - 0.35 * rl, pts = [];
       for (let i = 0; i < 160; i++) { const th = i / 160 * Math.PI * 2; pts.push(V3(rx * Math.cos(th), b.mouthCenterS + ry * Math.sin(th), zc).applyMatrix4(frontBasis)); }
-      skin.add(mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true), 320, rl, 16, true), mats.lip));
+      skin.add(mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true), 320, rl, 16, true), scoopTrim === 'tone' ? gableMat : mats.lip));
     }
     skin.add(mesh(slab(THREE, slopeRect(), bd, 4).applyMatrix4(backBasis), gableMat));
     skin.add(mesh(slab(THREE, endTri(), bd, 4).applyMatrix4(rightBasis), gableMat));

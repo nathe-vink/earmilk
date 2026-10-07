@@ -77,7 +77,9 @@
           "face": "#6B4A2C",
           "side": "#45301D"
         }
-      }
+      },
+      "factsInk": "#F1E3CC",
+      "factsInkNote": "2026-10-07: the printed Facts in the cream print colour on the brown body"
     },
     "oat": {
       "name": "Oat",
@@ -92,7 +94,9 @@
       "lid": "board",
       "plinth": {
         "fill": "#2B2118"
-      }
+      },
+      "factsInk": "#2B2118",
+      "factsInkNote": "2026-10-07: the printed Facts in the brown print colour"
     }
   },
   "birch": {
@@ -131,11 +135,11 @@
     "No sleeve: the colours are a finish on the birch cabinet, fixed per speaker.",
     "Whole, 2% and Skim carry the gable and fin in the accent colour; Chocolate and Oat stay one colour, gable included.",
     "The bottom 110 mm is a built-in plinth in the accent colour on all four sides, with a 3 mm shadow line above it.",
-    "The wordmark is cast metal lettering standing on the plinth's front, no plate, and an engraving on the back panel above the Nutrition Facts. Nothing on the sides, nothing under the gable.",
-    "Bare birch shows only on the back panel and in the bowl's exploded or section views.",
+    "The wordmark is cast metal lettering standing on the plinth's front, no plate, and the same letters on the back above the Nutrition Facts. Nothing on the sides, nothing under the gable.",
+    "Bare birch shows only in the bowl's exploded or section views.",
     "The throat is painted, light at the mouth to dark at the throat. A polished stainless lip rings the mouth (2026-10-06).",
     "Flavor is the colorway only. One voicing.",
-    "Two printed marks are spec: OPEN OTHER SIDE on the back slope and SHAKE WELL by the port. Nothing else is printed."
+    "Three printed marks are spec: OPEN OTHER SIDE on the back slope, SHAKE WELL on the plinth's back, and the Nutrition Facts on the back (2026-10-07), all sealed under the clear. Nothing else is printed."
   ],
   "plinth": {
     "heightMm": 110,
@@ -160,10 +164,11 @@
     "since": "2026-10-06, the owner"
   },
   "backPanel": {
-    "default": "bronze",
-    "bronze": "an engraved bronze plate, the Facts panel plus a 26 mm margin (x 36 to 354, z 484 to 796), 3 mm thick, 1.5 mm proud; port, posts and the cast letters on the finish outside it",
+    "default": "print",
+    "bronze": "an engraved bronze plate, the Facts panel plus a 26 mm margin (x 36 to 354, z 484 to 796), 3 mm thick, 1.5 mm proud; port, posts and the cast letters on the finish outside it (default 2026-10-02 to 2026-10-06; withdrawn 2026-10-07)",
     "label": "the same extent as a bare birch field (option)",
-    "full": "a bare birch field x 26 to 364, z 140 to 830 (option)"
+    "full": "a bare birch field x 26 to 364, z 140 to 830 (option)",
+    "print": "2026-10-07, the owner: no plate. The Nutrition Facts panel (266 x 260, top at z 770) printed directly on the back's finish, like a carton's, in the flavour's Facts ink (see 'facts'), on the cured colour coat and sealed under the 2K clear, so it cannot scratch off without cutting through the clear"
   },
   "backBadge": {
     "type": "cast metal letters, as the front",
@@ -181,6 +186,17 @@
       "where": "the plinth's back face, centred at z 55",
       "typeSizeMm": 26,
       "ink": "board (reversed on the accent plinth)"
+    },
+    "facts": {
+      "where": "the back, 266 x 260, top at z 770",
+      "ink": "see 'facts'",
+      "since": "2026-10-07"
     }
+  },
+  "facts": {
+    "where": "the back, centred, 266 x 260 mm, top at z 770; the cast letters above it, the port below",
+    "ink": "#1E1A17, a warm near-black, on the white flavours; the flavour's factsInk where it has one (Chocolate cream, Oat brown)",
+    "process": "printed on the cured colour coat (screen print with a catalysed ink, or a water-slide decal), then buried under the 2K clear and flatted level, as guitar headstock logos are",
+    "since": "2026-10-07, the owner"
   }
 }

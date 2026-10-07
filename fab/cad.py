@@ -66,9 +66,7 @@ def back_panel():
     p -= cyl_y(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5, PLAN - WALL - 1, PLAN + 1)   # the tube's 100 OD, a push fit
     tw, th = TERMINAL_CUTOUT
     p -= box(RUN - tw / 2, PLAN - WALL - 1, POSTS['z'] - th / 2, RUN + tw / 2, PLAN + 1, POSTS['z'] + th / 2)
-    # The bronze plate sits 1.5 proud: a 1.5 deep pocket takes the other half of its 3 mm.
-    pk = PLATE['t'] - PLATE['proud']
-    p -= rounded_rect_prism(PLATE['x0'], PLAN - pk, PLATE['z0'], PLATE['x1'], PLAN + 1, PLATE['z1'], PLATE['r'], axis='y')
+    # 2026-10-07: no plate pocket. The Facts are printed on the finish, under the clear.
     p -= shadow_groove('back')
     return p
 
@@ -213,11 +211,6 @@ def port_parts(length=None):
 
 
 # --- Metal parts on the back (flat, for the assembly view) ----------------------------------------------------------------
-def bronze_plate():
-    pk = PLATE['t'] - PLATE['proud']
-    return rounded_rect_prism(PLATE['x0'], PLAN - pk, PLATE['z0'], PLATE['x1'], PLAN - pk + PLATE['t'], PLATE['z1'], PLATE['r'], axis='y')
-
-
 def terminal_plate():
     w, h = POSTS['w'], POSTS['h']
     p = rounded_rect_prism(RUN - w / 2, PLAN, POSTS['z'] - h / 2, RUN + w / 2, PLAN + 3, POSTS['z'] + h / 2, 3, axis='y')
@@ -240,7 +233,6 @@ def build():
         'mid-divider': mid_divider(),
         'gable-block': gable_block(),
         'port-tube': port_tube(),
-        'bronze-plate': bronze_plate(),
         'terminal-plate': terminal_plate(),
     }
     return parts

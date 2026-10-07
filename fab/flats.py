@@ -12,7 +12,6 @@ DXF layers (the names say what to do; CNC shops read them):
   CUT_OUTSIDE       through cut, tool outside the line (panel outlines)
   CUT_INSIDE        through cut, tool inside the line (holes and windows)
   POCKET_3MM        3 mm deep, from the outer face (the shadow-line groove)
-  POCKET_1_5MM      1.5 mm deep, from the outer face (the bronze plate's seat)
   DRILL_10_DEEP10   10 mm holes, 10 deep (dowels)
   NOTES             part name and face, not cut
 """
@@ -23,7 +22,7 @@ import ezdxf
 from ezdxf.enums import TextEntityAlignment
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
-LAYERS = {'CUT_OUTSIDE': 7, 'CUT_INSIDE': 1, 'POCKET_3MM': 3, 'POCKET_1_5MM': 4, 'DRILL_10_DEEP10': 6, 'NOTES': 8}
+LAYERS = {'CUT_OUTSIDE': 7, 'CUT_INSIDE': 1, 'POCKET_3MM': 3, 'DRILL_10_DEEP10': 6, 'NOTES': 8}
 
 
 def rect(x0, y0, x1, y1):
@@ -52,13 +51,11 @@ def panel_defs():
         'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW)},
         note='outer face up; cutouts sized for the shortlisted Dayton DSA315-8 (272) and SB Acoustics SB17MFC35-8 (146): re-cut for other drivers'))
     tw, th = TERMINAL_CUTOUT
-    pk = PLATE
     P.append(dict(name='back-panel', qty=1, w=PLAN, h=BODY, layers={
         'CUT_INSIDE': circle(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5)
                       + rect(RUN - tw / 2, POSTS['z'] - th / 2, RUN + tw / 2, POSTS['z'] + th / 2),
-        'POCKET_1_5MM': rrect(PLAN - pk['x1'], pk['z0'], PLAN - pk['x0'], pk['z1'], pk['r']),
         'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW)},
-        note='outer face up (seen from behind); 1.5 mm pocket seats the 3 mm bronze plate 1.5 proud'))
+        note='outer face up (seen from behind); the Facts are printed on this face after the colour coat, under the clear'))
     P.append(dict(name='side', qty=2, w=INNER, h=BODY, layers={'POCKET_3MM': rect(0, PLINTH_H, INNER, PLINTH_H + SHADOW)},
                   note='outer face up; finish the groove across the front and back panels\' edges after glue-up'))
     dowels = [(60.0, 200.0), (PLAN - 60.0, 200.0), (60.0, 330.0), (PLAN - 60.0, 330.0)]

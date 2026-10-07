@@ -3,7 +3,7 @@
 Two versions exist and they differ on purpose.
 
 - The **printed label** is the label artboard on the canvas ("Nutrition Facts"). It is a separate deliverable and is not printed on the speaker.
-- The **engraved panel** is the shorter version cut into the birch back window, above the port, 266 × 240 mm. *2026-10-02: cut into the bronze plate on the back, 266 × 260, the footnote inside the border with 14 mm padding on every side.*
+- The **engraved panel** is the shorter version cut into the birch back window, above the port, 266 × 240 mm. *2026-10-02: cut into the bronze plate on the back, 266 × 260, the footnote inside the border with 14 mm padding on every side.* *2026-10-07 (the owner): printed directly on the back's finish, like a carton's panel, in the same place and size and with the same copy; sealed under the clear so it cannot scratch off. No plate.*
 
 Both follow the FDA Nutrition Facts proportions: heavy title, a 10 px rule, 1 px row rules, bold labels, right-aligned values. Archivo Black for the title and the headline figure, Archivo for everything else. All figures are targets, not measurements; the asterisk and its footnote stay.
 
@@ -70,7 +70,7 @@ Contains no milk. Not a significant source of Bluetooth.
 
 Contains no milk.
 
-The engraved version drops the serving lines, power, crossover, cabinet, sleeve, height, weight and the asterisk footnote. "8 ohm" is spelled out, no Ω. The only footnote is "Contains no milk." Engraving colour #6B5232 on the birch face #EAD8B0.
+The engraved version drops the serving lines, power, crossover, cabinet, sleeve, height, weight and the asterisk footnote. "8 ohm" is spelled out, no Ω. The only footnote is "Contains no milk." Engraving colour #6B5232 on the birch face #EAD8B0. *2026-10-07: printed, ink #1E1A17 on the white flavours, the print colour on Chocolate (#F1E3CC) and Oat (#2B2118).*
 
 ### Proportions as drawn (mm from the panel's top edge; ±1 mm)
 

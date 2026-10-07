@@ -39,10 +39,12 @@ BOWL = dict(mouth_w=211.0, mouth_l=118.0, mouth_s=79.0, throat=66.0,
 
 PORT = dict(z=405.0, d=100.0, bore=92.0, flange=112.0)   # SPEC round port at z 405, 92 bore in a 112 flange (as drawn)
 POSTS = dict(w=128.0, h=64.0, z=150.0, post_d=24.0, spacing=64.0)  # SPEC binding-post plate, centre z 150 (2026-10-02)
-PLATE = dict(x0=36.0, x1=354.0, z0=484.0, z1=796.0, t=3.0, proud=1.5, r=3.0)  # SPEC bronze Facts plate on the back
-LABEL = dict(w=266.0, h=260.0, top=770.0)  # SPEC engraved Facts panel, 14 mm padding on every side
+# 2026-10-07, the owner: no bronze plate (it was 318 x 312 x 3, 1.5 proud, at x 36 to 354, z 484 to 796). The Facts are
+# printed on the back's finish under the 2K clear.
+LABEL = dict(w=266.0, h=260.0, top=770.0)  # SPEC printed Facts panel, centred on the back, 14 mm padding inside its border
+FACTS_INK = '#1E1A17'                      # SPEC on the white flavours; Chocolate cream #F1E3CC, Oat brown #2B2118
 BADGE = dict(type=44.0, relief=2.5, z=55.0, tracking=-0.035)       # SPEC cast letters on the plinth's front (Archivo Black)
-BACK_BADGE = dict(type=44.0, relief=2.5, z=826.0, tracking=-0.035)  # SPEC the same letters on the back, above the plate
+BACK_BADGE = dict(type=44.0, relief=2.5, z=826.0, tracking=-0.035)  # SPEC the same letters on the back, above the Facts
 MARK_OPEN = dict(text='OPEN OTHER SIDE', type=27.0, tracking=0.04, arrow=True)   # SPEC on the back slope, Archivo 700
 MARK_SHAKE = dict(text='SHAKE WELL', type=26.0, tracking=0.04, z=55.0)          # SPEC on the plinth's back face, Archivo 700
 

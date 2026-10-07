@@ -14,7 +14,7 @@ One Three.js model of the carton speaker, built from `spec/geometry.md` through 
 | `src/spec.mjs` | The numbers, in the frame `spec/geometry.md` defines. |
 | `src/check-spec.mjs` | Prints the derived values and exits non-zero if any drift. |
 | `src/model.mjs` | Cabinet, carved block, bowl loft, tweeter, drivers, sleeve tube and lid, print decals, back details; the pint and the crate. |
-| `src/textures.mjs` | Canvas textures: wordmarks, the engraved label, the bowl gradient, birch grain, floor planks. |
+| `src/textures.mjs` | Canvas textures: wordmarks, the Nutrition Facts label (printed on the finish since 2026-10-07; engraved before), the bowl gradient, birch grain, floor planks. |
 | `src/scene.mjs` | Rooms, lights and cameras. |
 | `src/shots.mjs` | One entry per shot, plain data, matching `prompts/`. |
 | `src/app.mjs`, `page.html` | The page that renders a shot config to a PNG data URL. |
@@ -48,5 +48,5 @@ What the path tracer does differently from the real-time scene, and why (round 1
 
 - The rooms are closed boxes (`enclose` in `scene.mjs`), so the only daylight is the window's: the sun (at twice the real-time strength, because AgX keeps the highlights ACES clipped), the sky plane glowing outside the opening (`1.5 × sun × skyGlow`, the rig's suns being cinematic rather than solar) and the area fill inside it. Cycles bounces the rest; the dome stays outside. glTF marks the sky plane unlit and Blender's importer builds that as emission for camera rays only, mixed with transparency for every other ray, so it lit nothing until `pathtrace.py` rebuilt it as a plain emitter.
 - The studio's directional lights become softboxes on the same axis (square area lamps, 2.6 m at 4.5 m for the key), its dome a vertical gradient from white overhead to the backdrop tone at the horizon, and the floor sweeps up into a backdrop (`sweep`), so lacquer and metal have something to reflect and there is no horizon seam.
-- Materials named `finish*` and `bronze` get a shader-space bevel of 2 mm on their normals (eased arrises, silhouette unchanged); `bronze` is rendered as a metal (the real-time renderer fakes it part-diffuse against one pale environment map); `*sky*` planes emit and cast no shadow.
+- Materials named `finish*` and `bronze` get a shader-space bevel on their normals (eased arrises, silhouette unchanged): `--bevel` mm, 6 in the finals, times the shot's `bevelScale` (100/390 for the pints); `bronze` is rendered as a metal (the real-time renderer fakes it part-diffuse against one pale environment map); `*sky*` planes emit and cast no shadow.
 - Flags: `--samples`, `--scale`, `--time-limit`, `--sun-strength`, `--area-strength`, `--world-strength`, `--sky-strength`, all multipliers on the sidecar values. Full frames take about four minutes on four cores; `--scale 0.5 --samples 48` is a one-minute proof.

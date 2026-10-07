@@ -16,8 +16,10 @@ export const FS = {
     // 2026-10-02: no sleeve. Two shapes for the bare birch field on the finished back:
     //  'label' (default): the Facts panel plus a 26 margin all round; the port, the posts and the engraved wordmark sit on the finish outside it.
     //  'full': the field from above the plinth to 30 below the body's top, with the same 26 margin at the sides and above the plinth (was z 40 to 798 inside the sleeve frame).
-    //  'bronze' (default from v10): the same extent as 'label', but as an engraved bronze plate on the finish, the Facts cut into it.
-    panel: 'bronze',
+    //  'bronze' (default v10 to v19): the same extent as 'label', but as an engraved bronze plate on the finish, the Facts cut into it.
+    //  'print' (default from 2026-10-07, the owner): no plate; the Facts printed on the body's finish like a carton's panel, in the
+    //  flavour's Facts ink, sealed under the clear coat so they cannot scratch off. The same panel, 266 x 260, top at z 770.
+    panel: 'print',
     window: { x0: 26, x1: 364, z0: 140, z1: 830 },
     labelMargin: 26,
     plate: { thick: 3, proud: 1.5, cornerR: 3, patina: '#2B2016' },

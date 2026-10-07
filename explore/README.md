@@ -96,3 +96,19 @@ Two chat image models were given the v11 hero frame and asked to change only lig
 | `handmade-chatgpt-hero.png` | ChatGPT, by hand, from the same frame. |
 
 The photoreal pass is now `render/pathtrace.py`: the same model, exported to glTF and rendered in Blender's Cycles, so nothing drifts.
+
+## 2026-10-07, round 6: the scoop's trim
+
+The owner is not sure of the metal round the tweeter ("it looks like a diner"). Since 2026-10-06 the spec has a polished stainless lip on the scoop's mouth, and the renders give the tweeter a bright chamfer and a satin metal seat. Four options, each in the close-up's frame and nearer in the bright room. Proposals until the owner picks one.
+
+    cd render && node render.mjs --list explore6 --glb render/out/glb
+    python3 render/pathtrace.py --glb render/out/glb/r6-trim-tone-close-v1.glb --out explore/2026-10-07/r6-trim-tone-close-pt.png --samples 64 --bevel 6
+
+| Files | What |
+|---|---|
+| `r6-trim-polished-*-pt.png` | As spec now: the polished stainless lip, the tweeter's bright chamfer and satin metal seat. |
+| `r6-trim-black-*-pt.png` | The lip as spec; the tweeter's chamfer and seat moulded black, so the tweeter itself has no bright ring. |
+| `r6-trim-tone-*-pt.png` | The lip in the gable's own lacquer, a rolled edge in the carton's colour; the tweeter's ring black. No bright metal at the scoop. |
+| `r6-trim-none-*-pt.png` | No lip, as before 2026-10-06 (the critics read the bare cut as a hole); the tweeter's ring black. |
+
+The close-ups are 1800 × 1200 at 64 samples, the nearer views 900 × 600: comparisons, not finals.
