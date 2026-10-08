@@ -105,8 +105,14 @@ def main():
                       f'there is {g["normal_off_deg"]} degrees from the one given, so its lamp was placed from the surface\'s.'
                       for g in rep.get('glints', []) if not g.get('skipped') and g.get('normal_off_deg', 0) > 10]
             notes += [f'- change `{p_["id"]}` was not applied: {p_["why"]}.' for p_ in rep.get('pending', []) if p_.get('why') != 'not selected']
+            for tr in rep.get('tuning', []):
+                tried = ', '.join(f'{v:g} gave {r}' for v, r in tr['proofs'])
+                verdict = ('it was set to %g' % tr['set'] if tr.get('set') is not None else 'nothing was set') + \
+                          ('' if tr['moves_the_test'] else '; the test did not move with this setting, so it is not the lever for it')
+                notes.append(f'- the engine tuned `{tr["setting"]}` for {tr["change"]} ({tr["test"].get("metric")} {tr["test"].get("op")} '
+                             f'{tr["test"].get("value")}) by proof renders: {tried}; {verdict}.')
             if notes:
-                L += ['## What the engine could not do in this render', '',
+                L += ['## What the engine did and could not do in this render', '',
                       'A glint is placed from the surface the camera sees at its point: where that surface mirrors a part of '
                       'the set or the product into the camera, no lamp can be there, so the glint is skipped.', ''] + notes + ['']
     text = '\n'.join(L) + '\n'

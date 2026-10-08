@@ -1,0 +1,359 @@
+{
+ "stage1": {
+  "impression": "A coherent late-afternoon living room with the red-and-white carton pair flanking a white turntable on a taupe sideboard, window light and carton-shaped shadows on the wall, but the pair is small in a frame given over to sideboard, floor and blank wall, and the right speaker's wordmark blows out to a white smear. The palette is murky grey-taupe rather than bright, the print is a flat blue placeholder and the turntable a plain white box, so it reads as a competent draft, not a homepage hero.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Right wordmark reads as cast metal: its letters at median 150-225 with at most 2% clipped and the counters open (now median 252, 100% clipped); the left wordmark within about 30 levels of it (now 81).",
+  "Product exposure: white fronts (part:front-baffle) at median 228-238 with p95 at most 243 and a visible top-to-bottom gradient (now 209.7 / 228.7); gable red within dE2000 3.5 of #C62828 (now 7.1), plinth fronts within 4 (now 7.8 and 8.8).",
+  "The pair dominates: each speaker at least 40% of the frame height (now 32-36%), with no edge tangencies: no sideboard leg cut by the bottom edge (now the right leg at x 1048-1068), no print cut by the top edge, no half carton silhouette on a frame edge.",
+  "A bright room: shaded back wall at least 140 (now 86-102), sun patches 195-230 (now 146-157) with crisp carton silhouettes, darkest floor corner at least 70 (now 45).",
+  "The print is a real artwork that stays subordinate: lum range 35-110 inside the opening (now 9.6), no hue that competes with the red.",
+  "Props at the product's level: the turntable is a featureless white box whose front (about 200-207) matches the speakers' white, so three equal whites sit in a row; it needs a real deck with a darker plinth.",
+  "The lacquer reads as gloss: a soft graduated reflection on the red roof slopes and plinths; the left white front is now one value across its width (212.3-212.4 in every bin of an x profile).",
+  "Neutral whites: |b - r| at most 4 on the fronts (left front now 211/212/219).",
+  "One or two lived-in cues beyond the turntable (records, a plant, books) kept clear of the speakers' silhouettes."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The product sits about half a stop under: the white fronts read grey-white and the red renders too dark and too saturated against #C62828.",
+   "evidence": {
+    "region": [
+     312,
+     296,
+     1066,
+     356
+    ],
+    "measured": "part:gable-block median RGB (171, 14, 17), dE2000 7.12 to #C62828 (L* 35 vs 43.8); plinth fronts [314,553,334,578] and [937,582,960,614] dE 7.8 and 8.8; part:front-baffle median 209.7, p95 228.7 (left 212.8, right 207.4). Re-tonemapping this frame through PBR Neutral at +0.5 EV gives gable dE 2.45, plinths 2.9/4.1, front median 234.5, p95 240.6, no new clipping; at +0.8 EV the gable overshoots to dE 4.4."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.6,
+    "to": 1.1
+   },
+   "expected": "Fronts at median about 232-236 with p95 at most 242, gable dE about 2.5, plinth fronts at most 4, woofer cones from 13.6 to about 22, frame median from 90 to about 112. dE rises again past about +0.75 EV, so the test bounds it on both sides.",
+   "accept": {
+    "region": "part:gable-block",
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 3.5
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Glint 0 burns the right speaker's wordmark into a solid white silhouette, so the cast-metal brand mark is illegible and haloes the red plinth.",
+   "evidence": {
+    "region": [
+     960,
+     588,
+     1025,
+     608
+    ],
+    "measured": "right letters (letters-front-* inside [930,570,1140,700]) median 252, p5 249.9, 100% of pixels clipped; 31.8% of this plinth box clipped; at 6x the counters of 'e' and 'a' are filled in. The left wordmark, without a glint, reads 81."
+   },
+   "change": {
+    "setting": "glints.0.power_w",
+    "from": 2,
+    "to": 0.4
+   },
+   "expected": "The right letters read as bright satin metal at median about 180-215 with at most 2% clipped, counters open, and the plinth box [960,588,1025,608] clipping from 31.8% to under 1%. The box in the test also holds the letters after the c3/c7 reframe (they land near x 1031-1112, y 663-689).",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      930,
+      570,
+      1140,
+      700
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     150,
+     225
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "camera",
+   "problem": "The pair is too small to read first as a product: the speakers are 285 px (left) and 324 px (right) tall, 32-36% of the frame, while sideboard and floor fill the bottom 38% and the right sideboard leg runs off the bottom edge.",
+   "evidence": {
+    "region": [
+     253,
+     560,
+     1105,
+     900
+    ],
+    "measured": "part boxes: left speaker y 298-583, right y 296-620; sideboard and floor occupy y 560-900; the right leg (x 1048-1068) is cut by the bottom edge from y 865; the sideboard body's bottom edge runs from y 790 (x 280-300) to y 860 (x 1000-1020)."
+   },
+   "change": {
+    "setting": "camera.lens_mm",
+    "from": 40,
+    "to": 50
+   },
+   "expected": "Speakers about 356-405 px tall (40-45% of the frame), the pair spanning x 220-1165 with even margins, the left window light still in frame (x 70-145). With c7 the right woofer centres near (1073, 441), so the test region sits on its cone; the region reads 121 now (wall and cabinet side) and 22 in a 50 mm re-framing of this render, and passes only for about 45-57 mm.",
+   "accept": {
+    "region": [
+     1063,
+     420,
+     1083,
+     440
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     3,
+     60
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "At 50 mm the print would be cut by the top edge, and it already hangs high (its bottom about 0.45 m above the sideboard), floating apart from the group.",
+   "evidence": {
+    "region": [
+     575,
+     30,
+     797,
+     350
+    ],
+    "measured": "outer moulding top at y 46 (profile x 650-700, y 20-60: 85 falling to 46.7), with its contact shadow starting at y 30; re-framing this render to 50 mm with the content 41 px lower puts the moulding above the top edge: band [560,0,820,30] lum_range 68.1 vs 9.4 now."
+   },
+   "change": {
+    "setting": "set.props.1.z",
+    "from": 1.44,
+    "to": 1.27
+   },
+   "expected": "The print's top moulding lands about 60-70 px below the top edge of the new frame and its bottom about 0.27-0.30 m above the sideboard, so print, turntable and pair read as one group; the band [560,0,820,30] stays plain wall (range about 10-12 after the brighter exposure).",
+   "accept": {
+    "region": [
+     560,
+     0,
+     820,
+     30
+    ],
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 20
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "The print is a flat slate rectangle that reads as a blank board or a switched-off screen: the one placeholder in a room meant to look lived-in, and the largest dark mass in the upper half.",
+   "evidence": {
+    "region": [
+     620,
+     95,
+     750,
+     265
+    ],
+    "measured": "lum median 70.5, p5 65.6, p95 75.2 (range 9.6), RGB (56, 73, 89): a uniform fill of #8C9EAB."
+   },
+   "change": {
+    "setting": "set.props.1.artwork",
+    "from": "flat fill #8C9EAB",
+    "to": {
+     "bands": [
+      [
+       "#CDBB9C",
+       0.38
+      ],
+      [
+       "#A9875C",
+       0.3
+      ],
+      [
+       "#5C4A3B",
+       0.32
+      ]
+     ],
+     "ground": "#D8CDBA",
+     "seed": 3
+    },
+    "asked": {
+     "what": "artwork texture replacing the flat art fill",
+     "where": "set.props.1 picture plane inside the mat; frame size and mat unchanged",
+     "size": "fills the portrait opening edge to edge, at least 1200 x 1600 px",
+     "content": "a muted abstract painting or a black-and-white photograph with visible tonal structure; warm neutrals, no saturated red or blue, no large pure-black areas",
+     "brightness": "renders at lum about 100-175 with p95-p5 of 35-110 at the new exposure; nothing in it brighter than about 200"
+    },
+    "note": "Built as the engine's procedural artwork for a framed print: a colour-field painting in warm neutrals (cream, ochre, umber) with soft edges and canvas grain, 900 x 1200 px."
+   },
+   "expected": "The print reads as art with mid-value structure (lum range 35-110 inside the opening), quieter than the product: nothing in it brighter than the speakers' white or as saturated as their red. The test region lies inside the opening before and after c3, c4 and c7.",
+   "accept": {
+    "region": [
+     650,
+     180,
+     720,
+     260
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     35,
+     110
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The room is dim for a 'bright' brief: the light #CFC6BA wall renders a mid grey-brown in shade, and the corrected exposure alone only lifts it to about 125.",
+   "evidence": {
+    "region": [
+     300,
+     60,
+     540,
+     260
+    ],
+    "measured": "median 102.2 (p5 96.3, p95 107.9); right of the print [850,60,1000,260] 89.3; sideboard top [450,575,540,595] 80.8; floor corner [1110,780,1350,900] 45.4, RGB (67, 42, 14); frame median 90.3; sun patch [800,440,900,540] 157 against the shade, about 2.2x in linear light. A +0.5 EV re-tonemap takes this region only to 125.2."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 3,
+    "to": 4
+   },
+   "expected": "Shaded back wall 140-160, floor and sideboard shadows up 20-30 levels, sun patches about 195-210 (still about 1.9x the shade in linear light) with the carton silhouettes about 95-110; the fronts gain a few levels but p95 stays at most 243. The region maps onto the same shaded wall after the reframe (103.9 vs 102.2 now).",
+   "accept": {
+    "region": [
+     300,
+     60,
+     540,
+     260
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     138,
+     162
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "camera",
+   "problem": "At 50 mm the sideboard's bottom edge and the top of its left leg would sit in a sliver along the bottom-left edge, the same tangency the right leg has now.",
+   "evidence": {
+    "region": [
+     180,
+     870,
+     450,
+     900
+    ],
+    "measured": "in a 50 mm re-framing of this render with no shift, the band holds the body's bottom edge and the dark underside: lum_range 72.5 (p5 57.4); with at least 20 px of downward shift it is door only: lum_range 4.9. Now it is floor: lum_range 17.7."
+   },
+   "change": {
+    "setting": "camera.target",
+    "from": [
+     0,
+     0.02,
+     0.84
+    ],
+    "to": [
+     0,
+     0.02,
+     0.9
+    ]
+   },
+   "expected": "Content moves about 40 px down at 50 mm: the bottom edge cuts only through the doors, the speakers' roofs sit on the upper-third line (y about 300), and the print gains headroom.",
+   "accept": {
+    "region": [
+     180,
+     870,
+     450,
+     900
+    ],
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 12
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The left wordmark reads as flat grey print, not cast metal, so once the right one is fixed the pair's marks will not match.",
+   "evidence": {
+    "region": [
+     335,
+     560,
+     412,
+     578
+    ],
+    "measured": "left letters (letters-front-* inside [240,550,420,665]) median 81.2, p5 63.7, p95 90.5: one flat value with no highlight, against the right wordmark's 252."
+   },
+   "change": {
+    "setting": "glints.1",
+    "from": "none",
+    "to": {
+     "at": [
+      -0.65,
+      -0.113,
+      0.589
+     ],
+     "normal": [
+      0,
+      -1,
+      0
+     ],
+     "size_m": 0.12,
+     "power_w": 0.4,
+     "receivers": [
+      "letters-front-0",
+      "letters-front-1",
+      "letters-front-2",
+      "letters-front-3",
+      "letters-front-4",
+      "letters-front-5",
+      "letters-front-6",
+      "letters-front-7"
+     ]
+    }
+   },
+   "expected": "The left letters carry a metal highlight at median 150-225 without clipping, within about 30 levels of the right wordmark; the box in the test also holds them after the reframe (they land near x 252-344, y 633-651).",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      240,
+      550,
+      420,
+      665
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     150,
+     225
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Lift the woofer cones out of near-black (part:woofer-cone median 13.6, p95 26.1) by lightening or texturing materials.paper_cone.",
+   "why": "The drivers' materials and colours are the named products' own and fixed; only exposure may change how the black paper cone reproduces (c1 takes it to about 22)."
+  },
+  {
+   "request": "Move the speakers closer together or toe them in, so both render the same size (left 285 px vs right 324 px tall) and the pair can be framed tighter while keeping more of the room.",
+   "why": "The product's placement in this frame is fixed; the size difference comes from the 1.3 m spacing seen from a camera 0.85 m right of centre."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

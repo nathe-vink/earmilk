@@ -206,6 +206,9 @@ def main():
     report = {'shot': a.shot, 'image': str(out), 'seconds': {'build': round(t1 - t0, 1), 'render': round(t2 - t1, 1)},
               'samples': int(cy.samples), 'size': [scene.render.resolution_x, scene.render.resolution_y],
               'applied': applied, 'pending': pending, 'sets': a.sets, 'glints': glint_log, 'sun_aim': sun_aim}
+    tside = Path(a.shot).with_suffix('.tune.json')
+    if tside.exists():
+        report['tuning'] = json.loads(tside.read_text())
 
     report['parts_2d'] = _parts_2d(scene, cam, objs, part_of)
     if a.masks:

@@ -9,6 +9,7 @@ room:  a closed box (floor, four walls, ceiling) so light bounces as it does ind
        `props`: simple furniture and a rug, placed in metres.
 """
 import math
+from pathlib import Path
 
 import bmesh
 from mathutils import Vector
@@ -470,11 +471,71 @@ def prop(bpy, name, p, mats):
         pm = M.make(bpy, name + '-print', 'satin_paint', {'color': p.get('print', '#D8CFC0'), 'roughness': 0.85, 'specular': 0.2})
         made.append(box(bpy, name + '-print', -w / 2 + 0.05, -0.032, z - hh / 2 + 0.05, w / 2 - 0.05, -0.029, z + hh / 2 - 0.05, pm))
         art = M.make(bpy, name + '-art', 'satin_paint', {'color': p.get('art', '#3F5B6E'), 'roughness': 0.85, 'specular': 0.2})
+        if p.get('artwork'):
+            _image_base(bpy, art, _artwork_png(p['artwork']))
         made.append(box(bpy, name + '-art', -w / 2 + 0.11, -0.0335, z - hh / 2 + 0.2, w / 2 - 0.11, -0.0325, z + hh / 2 - 0.12, art))
     for o in made:
         o.rotation_euler.z += rot
         o.location = Matrix_rot(rot) @ o.location + Vector((x, y, 0))
     return made
+
+
+def _artwork_png(spec):
+    """A colour-field painting for a framed print, made here so the room has art and not a placeholder: `bands`, colours
+    from top to bottom as [hex, share of the height], soft-edged, on a ground (`ground`), with a canvas's fine grain and
+    a little drift in each field. Returns the PNG's path (cached by its spec)."""
+    import hashlib, json, tempfile
+    import numpy as np
+    from PIL import Image
+    key = hashlib.sha1(json.dumps(spec, sort_keys=True).encode()).hexdigest()[:12]
+    path = Path(tempfile.gettempdir()) / f'engine-artwork-{key}.png'
+    if path.exists():
+        return path
+    W, H = 900, 1200
+    rng = np.random.default_rng(spec.get('seed', 3))
+    def rgb(h):
+        h = h.lstrip('#'); return np.array([int(h[i:i + 2], 16) for i in (0, 2, 4)], dtype=float)
+    img = np.ones((H, W, 3)) * rgb(spec.get('ground', '#D8CDBA'))
+    yy, xx = np.mgrid[0:H, 0:W]
+    m = 0.07                                             # the ground's margin round the fields
+    top = m * H
+    bands = spec.get('bands', [['#CDBB9C', 0.38], ['#A9875C', 0.30], ['#5C4A3B', 0.32]])
+    usable = H * (1 - 2 * m)
+    for col, share in bands:
+        h_ = usable * share
+        y0, y1 = top + 0.012 * H, top + h_ - 0.012 * H
+        x0, x1 = m * W, (1 - m) * W
+        feather = 0.018 * W
+        # a soft-edged rectangle whose edges wander a little, as a brushed edge does
+        wob = lambda n: np.interp(np.arange(n), np.linspace(0, n, 12), rng.normal(0, 0.006 * W, 12))
+        ex0 = x0 + wob(H)[:, None]; ex1 = x1 + wob(H)[:, None]; ey0 = y0 + wob(W)[None, :]; ey1 = y1 + wob(W)[None, :]
+        a = (np.clip((xx - ex0) / feather + 0.5, 0, 1) * np.clip((ex1 - xx) / feather + 0.5, 0, 1) *
+             np.clip((yy - ey0) / feather + 0.5, 0, 1) * np.clip((ey1 - yy) / feather + 0.5, 0, 1))
+        c = rgb(col)
+        drift = (rng.normal(0, 1, (H // 60 + 2, W // 60 + 2)))
+        drift = np.kron(drift, np.ones((60, 60)))[:H, :W]
+        from PIL import ImageFilter
+        drift = np.asarray(Image.fromarray(((drift + 3) * 40).clip(0, 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(40)), dtype=float) / 40 - 3
+        field = c[None, None, :] * (1 + 0.035 * drift[:, :, None])
+        img = img * (1 - a[:, :, None] * 0.92) + field * a[:, :, None] * 0.92
+        top += h_
+    grain = rng.normal(0, 3.0, (H, W, 1))
+    img = (img + grain).clip(0, 255).astype(np.uint8)
+    Image.fromarray(img).save(path)
+    return path
+
+
+def _image_base(bpy, mat, path):
+    """Put an image on a material's base colour, mapped across the object's box (x along its width, z up it)."""
+    nt = mat.node_tree
+    bsdf = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
+    tex = nt.nodes.new('ShaderNodeTexImage'); tex.image = bpy.data.images.load(str(path), check_existing=True)
+    tex.image.colorspace_settings.name = 'sRGB'
+    tc = nt.nodes.new('ShaderNodeTexCoord'); sep = nt.nodes.new('ShaderNodeSeparateXYZ'); comb = nt.nodes.new('ShaderNodeCombineXYZ')
+    nt.links.new(tc.outputs['Generated'], sep.inputs['Vector'])
+    nt.links.new(sep.outputs['X'], comb.inputs['X']); nt.links.new(sep.outputs['Z'], comb.inputs['Y'])
+    nt.links.new(comb.outputs['Vector'], tex.inputs['Vector'])
+    nt.links.new(tex.outputs['Color'], bsdf.inputs['Base Color'])
 
 
 def Matrix_rot(a):

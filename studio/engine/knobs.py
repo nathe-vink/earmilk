@@ -91,6 +91,8 @@ KNOBS = [
     ('set.flags', 'list of {center_m: [x, y, z], size_m: [w, h], normal: [x, y, z]}', None, 'black cards the camera cannot see: they cast shadows (a flag to cut sun off a wall) and soak up bounce light; out of reflections unless "glossy": true'),
     ('set.bounces', 'list of {center_m, size_m, normal}', None, 'white cards the camera cannot see: bounce fill, and seen in reflections'),
     ('set.props.*.rotate_z', 'deg', (-180, 180), 'room: a prop\'s turn'),
+    ('set.props.*.artwork', '{bands: [[hex, share], ...], ground: hex, seed: n}', None, 'frame: a colour-field painting in the print (bands top to bottom, soft-edged, canvas grain) instead of the flat art colour'),
+    ('set.props.*.z', 'm', (0.3, 3), 'frame: the print\'s centre height'),
     # product
     ('product.flavour', 'choice', ('whole', 'two', 'skim', 'chocolate', 'oat'), 'colourway (fixed colours per flavour)'),
     ('product.instances', 'list of {position, rotate_z}', None, 'copies of the product: position m, rotation deg about z'),

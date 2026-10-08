@@ -1,0 +1,250 @@
+{
+ "stage1": {
+  "impression": "An exploded gable-top carton speaker on a warm seamless sweep: the explode reads at a glance, but the product fills barely a third of the frame width and the driver face sits on the shadow side, so the black drivers and rings read as flat silhouettes on a grey-white wall. The white body is close to one value per face, the floating parts feel ungrounded and a soft diagonal bright streak crosses the upper-right sweep, so it reads as a clean CG draft rather than a homepage hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Front baffle reads as white in shade: front-baffle median 205-222 inside [594,300,712,700] (now 180.5), and brighter than the sweep behind its right edge (now 179-186 against 198, so the edge is inverted)",
+  "Drivers read as objects, not holes: woofer-cone p95 >= 40 (now 25.9), woofer-cap crush <= 10 % (now 40 %), mid-cone p5-p95 spread >= 15 (now 13.8-20.7)",
+  "Accent holds on the roof's front slope and the insert top: delta E2000 <= 10 vs #C62828 (now 31.2 at [560,252,584,286], rgb 243,165,168; insert top 247,151,146)",
+  "Every exploded pair clears by >= 5 px: the woofer trim ring overlaps the surround by up to 7 px on rows 614-653 and sits within 2 px on rows 592-613 and 654-676; the insert comes within 1 px of the roof, the tweeter within 5 px of the insert",
+  "White lacquer renders neutral: side panel within delta E 3 of a neutral of equal lightness (now 6.0; rgb 243,231,222, a* +2.6, b* +5.8)",
+  "The big white side carries 12-30 levels of falloff (now 5.8 top to bottom, and 232.9 in all eight columns across)",
+  "Pocket reads as empty, with the boss bore and magnets visible: magnets-pocket is 25 px at median 24, and the bore sits behind the tweeter",
+  "Backdrop is one deliberate falloff: now 145 top-left against 177 top-centre, with a soft diagonal step 205 -> 165 across the upper right ([1000,100,1350,300] p5-p95 range 32)",
+  "Cast letters read as metal and the red faces carry gradation: letters median 110, p95 122, no glint; the key-lit gable end is p5-p95 67.5-69",
+  "Balanced placement: 192 px of sweep above the fin against 75 px below the plinth"
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The front baffle carries both drivers, their rebates and every explode axis, but only the 0.8 W/m2 fill lights it while the key lights the plain side, so its white lacquer renders grey and darker than the sweep behind it.",
+   "evidence": {
+    "region": [
+     594,
+     300,
+     712,
+     700
+    ],
+    "measured": "front-baffle pixels median 180.5, rgb 185,176,172, against side-left 232.9; strip [680,475,706,520] 179.2 next to sweep [716,475,745,520] 197.8 (profile 179 -> 186 -> 197, so the white is darker than its backdrop); woofer-cap 40 % crushed (L<=3), woofer-cone median 7.4"
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": 0.8,
+    "to": 1.7
+   },
+   "expected": "Front white median rises from 180 to about 212. That is ~20 levels under the key-lit side, which keeps the two-face modelling, and 15-20 above the sweep behind its right edge, so the baffle reads as white in shade. Woofer-surround median 29 -> ~40, woofer-cap crush 40 % -> under 10 %.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      594,
+      300,
+      712,
+      700
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     205,
+     222
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The roof's glossy front slope (the face that holds the pocket) and the insert's top mirror the whole rim softbox, washing the accent to pink.",
+   "evidence": {
+    "region": [
+     560,
+     252,
+     584,
+     286
+    ],
+    "measured": "slope median rgb 243,165,168, delta E2000 31.2 vs #C62828, while the key-lit gable end beside it is 220,28,23 (delta E 5.4); insert top 247,151,146. The slope's mirror direction is az ~159, el ~34. The rim (az 150, el 30, 1 x 1.6 m) sits ~14 deg from it, inside its +-12 x +-18 deg extent, and its radiance x Fresnel (~5.1 x 0.078 = 0.39 linear) matches the 0.38 added to G. A direct-light model also makes the rim the largest single source on the floor behind the drivers, where the sweep (198-205) outshines the baffle."
+   },
+   "change": {
+    "setting": "lights.rim.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The slope left of the pocket returns to lacquered red near 225,50,48 (delta E <= 10; the remaining veil is the sweep wall's reflection, ~0.03 linear) and the insert top loses its pink. The floor behind the drivers drops ~10 levels, which widens the white baffle's edge against it. Lowering the rim instead would put its sheen on the semi-gloss floor, inside the frame near (1208,804).",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      560,
+      252,
+      584,
+      286
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 10
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The black anodised woofer cone, its cap and the papyrus mid cone show almost no reflection, so the drivers read as holes. The fill is the only lamp near their axis on the camera side, and its share in reflections is held to 0.4.",
+   "evidence": {
+    "region": [
+     706,
+     560,
+     763,
+     692
+    ],
+    "measured": "woofer-cone median 7.4, p95 25.9, 11.4 % crushed; woofer-cap median 4.6, 40 % crushed; mid-cone p5-p95 13.8-20.7 (one flat brown); woofer-surround p95 64"
+   },
+   "change": {
+    "setting": "lights.fill.specular",
+    "from": 0.4,
+    "to": 1.0
+   },
+   "expected": "The fill shows as a soft highlight band on the camera-side wall of each cone, on the left of each surround roll and on the caps: woofer-cone p95 26 -> 50-90. The white and red faces do not change, because their mirror directions point at the floor and the back wall.",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     40,
+     130
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "camera",
+   "problem": "Seen 59 deg off the explode axis, the woofer trim ring overlaps the woofer surround and the insert nearly touches the roof, which breaks the brief's 'every part distinct, nothing overlapping'.",
+   "evidence": {
+    "region": [
+     755,
+     590,
+     780,
+     660
+    ],
+    "measured": "mask: the ring's left edge is up to 7 px inside the surround's right edge on rows 614-653 and within 2 px on rows 592-613 and 654-676; insert-to-roof gap 1 px, tweeter-to-insert 5 px; [771,622,775,642] p5 50.3. A projection fitted to the cabinet corners (product yaw 72 deg, fit error < 2 px) reproduces the overlap (-5.3 px) and gives +7.4 px at a 4 deg orbit"
+   },
+   "change": {
+    "setting": "camera.position",
+    "from": [
+     1,
+     -3.45,
+     1.62
+    ],
+    "to": [
+     0.757,
+     -3.497,
+     1.62
+    ]
+   },
+   "expected": "A 4 deg orbit round the target toward the side (azimuth 13.1 -> 9.1 deg, same height and radius). The ring clears the surround by ~7 px at its closest (rows 620-650, x ~770-777). The insert-to-roof and tweeter-to-insert gaps open by a few px, and the tweeter uncovers more of the pocket's back wall. The cabinet shifts <= 9 px; the front face narrows from ~110 to ~97 px.",
+   "accept": {
+    "region": [
+     771,
+     622,
+     775,
+     642
+    ],
+    "metric": "lum_p5",
+    "op": ">=",
+    "value": 90
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "post",
+   "problem": "The Whole body is #FFFFFF but renders cream, because the 5600 K key is rendered against the default white point.",
+   "evidence": {
+    "region": [
+     445,
+     340,
+     585,
+     700
+    ],
+    "measured": "side white median rgb 243,231,222, a* +2.6, b* +5.8, delta E2000 6.0 from a neutral of the same lightness; the sweep is warmer (b* +6.5) than its paper #C9C5BE (b* +4.0)"
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": "default",
+    "to": 5600
+   },
+   "expected": "Side white near 236,233,231, within delta E 3 of neutral, and the sweep moves from beige toward its paper colour. The plinth red stays within delta E 3 of #C62828 (now 1.7), and the fill-lit front turns very slightly cool.",
+   "accept": {
+    "region": {
+     "part": "side-left",
+     "box": [
+      436,
+      320,
+      594,
+      690
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#E8E8E8",
+    "op": "<=",
+    "value": 3.0
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The white side is the largest surface in the frame, and it is one value from eave to plinth and from back edge to corner, so it reads as a card. The 1.4 m key at 2.4 m lights it evenly, and the face sits in the view transform's shoulder.",
+   "evidence": {
+    "region": [
+     445,
+     340,
+     585,
+     700
+    ],
+    "measured": "y-profile 234.9, 234.7, 233.9, 233.6, 232.8, 231.8, 230.8, 229.8 (falloff 5.8 on the part, p5-p95 range 5.8); x-profile 232.9 in all eight bins"
+   },
+   "change": {
+    "setting": "lights.key.orbit.distance_m",
+    "from": 2.4,
+    "to": 1.5
+   },
+   "expected": "The irradiance at the target is held, so the closer lamp's inverse-square falloff opens a gradient: roughly 238 under the eave to 215 above the plinth (12-30 levels), median near 230. The gable end above gains a similar gradient and brightens 10-20 %, so watch that its red does not lift past R 235.",
+   "accept": {
+    "region": {
+     "part": "side-left",
+     "box": [
+      436,
+      320,
+      594,
+      690
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     30
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Explode the woofer trim ring about 30 mm further along its axis (or seat the woofer about 30 mm nearer the baffle)",
+   "why": "Exploded positions are fixed. At this camera the ring overlaps the surround by up to 7 px, and the only in-scope fix (c4's 4 deg orbit) costs about 12 % of the front baffle's width."
+  },
+  {
+   "request": "Draw the waveguide insert about 20 mm further out of its pocket",
+   "why": "Fixed. Its edge comes within 1 px of the roof in projection, which breaks the brief's 'insert clear of the roof', and the orbit opens that gap by only a few px."
+  }
+ ],
+ "score_if_fixed": 7.4
+}

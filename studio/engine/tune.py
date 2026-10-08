@@ -80,6 +80,11 @@ def main():
         if f1 == f0:
             print(f'  the test does not move with {a.knob} between {v0:g} and {v1:g}: not this setting\'s to fix'); break
         v2 = v1 + (goal - f1) * (v1 - v0) / (f1 - f0)
+        # a strength (a power, an irradiance) never crosses zero, and where the reading saturates (a highlight in the
+        # view's shoulder) the secant overshoots: then step by a factor of three toward the aim instead
+        positive = (v0 > 0 and v1 > 0) or knobs[0].split('.')[-1] in ('power_w', 'irradiance', 'strength')
+        if positive and (v2 <= 0 or v2 > 10 * max(v0, v1) or v2 < min(v0, v1) / 10):
+            v2 = v1 * (3.0 if (goal - f1) * (f1 - f0) * (v1 - v0) > 0 else 1 / 3.0)
         if isinstance(rng, tuple) and len(rng) == 2 and all(isinstance(x, (int, float)) for x in rng):
             v2 = min(max(v2, rng[0]), rng[1])
         if abs(v2 - v1) < 1e-9:
@@ -89,6 +94,14 @@ def main():
     ok = [p for p in proofs if p[2]]
     best = min(ok, key=lambda p: abs(p[1] - goal)) if ok else min(proofs, key=lambda p: abs(p[1] - goal))
     print(f"best: {a.knob} = {best[0]:.4g} ({t['metric']} {best[1]}, {'passes' if best[2] else 'still fails'})")
+    # what was tried, for the render's report and the next critic's card (the shot's .tune.json, one record a run)
+    side = Path(a.shot).with_suffix('.tune.json')
+    log = json.loads(side.read_text()) if side.exists() else []
+    moved = len({p[1] for p in proofs}) > 1
+    log.append({'change': a.change, 'setting': ','.join(knobs), 'test': {k: t[k] for k in ('metric', 'op', 'value') if k in t},
+                'proofs': [[round(p[0], 4), p[1]] for p in proofs], 'set': round(best[0], 4) if a.save else None,
+                'passes': bool(best[2]), 'moves_the_test': moved})
+    side.write_text(json.dumps(log, indent=1) + '\n')
     if a.save:
         raw = json.loads(Path(a.shot).read_text())
         for k in knobs:
