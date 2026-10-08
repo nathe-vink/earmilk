@@ -7,11 +7,10 @@ the browser used, with the renders' tracking, so the metal matches the pictures.
 
 Writes to out/metal and out/marks:
   wordmark-letters.dxf / .svg       the cast-letter wordmark at 44 mm type size, one closed outline per piece (8 pieces:
-                                    the i's dot is its own), for laser, waterjet or CNC cutting from 2.5 to 3 mm metal
-  wordmark-letters.step / .stl      the same, 2.5 mm thick, for a casting service or a printed casting master
+                                    the i's dot is its own), for laser, waterjet or CNC cutting from 1.5 mm metal (2026-10-08; 2.5 to 3 before)
+  wordmark-letters.step / .stl      the same, 1.5 mm thick, for a casting service or a printed casting master
   wordmark-template-front.pdf/svg   1:1 drilling and placing template for the plinth's front (and the back)
   facts-print.svg / .pdf            the Nutrition Facts printed on the back under the clear (2026-10-07), 266 x 260, 1:1
-  terminal-plate.dxf                128 x 64 plate for the binding posts
   stencil-open-other-side.svg       vinyl mask letters for the fin's back face (2026-10-07; the back slope before), 27 mm Archivo Bold with the arrow
   stencil-shake-well.svg            vinyl mask letters for the plinth's back face (26 mm)
 """
@@ -91,7 +90,7 @@ def make_wordmark_files():
     W, H = bx1 - bx0 + 2 * pad, by1 - by0 + 2 * pad
     write_dxf(os.path.join(OUT, 'metal', 'wordmark-letters.dxf'), [('CUT', shifted)])
     write_svg(os.path.join(OUT, 'metal', 'wordmark-letters.svg'), W, H, [('letters', shifted, 'fill="#000" fill-rule="evenodd"')])
-    # 3D: each piece 2.5 mm thick, for a casting service or a printed casting master.
+    # 3D: each piece BADGE relief thick (1.5 mm since 2026-10-08), for a casting service or a printed casting master.
     try:
         from build123d import Face, Wire, Polyline, extrude, export_step, export_stl, Compound
         solids = []
@@ -175,7 +174,7 @@ def make_facts_print():
     for i, (k, v) in enumerate(rows):
         b = 98 + 22 * i
         ink += set_line(bold, k, 12.0, 0.0, x0, Y(b))[0]
-        ink += set_line(reg, v, 12.0, 0.0, x1, Y(b), align='right')[0]
+        ink += set_line(bold, v, 12.0, 0.0, x1, Y(b), align='right')[0]   # 2026-10-08: the values bold like the names
         rule(105 + 22 * i, 1.4)
     rule(226, 7.6)
     ink += set_line(reg, 'Contains no milk.', 11.0, 0.0, x0, Y(244))[0]
@@ -197,27 +196,6 @@ def make_facts_print():
     write_pdf(os.path.join(OUT, 'marks', 'facts-print.pdf'), W, H, fills=[(ink, '#000'), (marks, '#000')], strokes=[],
               title='earmilk Nutrition Facts, printed under the 2K clear. 1:1, black = ink. Centre on the back, top border 90 mm below the body\'s top edge.')
     return {'title_size_mm': round(size, 2), 'panel_mm': [LW, LH], 'sheet_mm': [W, H]}
-
-
-def make_terminal_plate():
-    import ezdxf
-    w, h, r = POSTS['w'], POSTS['h'], 3.0
-    doc = ezdxf.new('R2010'); doc.units = ezdxf.units.MM; msp = doc.modelspace()
-    for n in ('CUT_OUTSIDE', 'CUT_INSIDE', 'NOTES'):
-        doc.layers.add(n)
-    pts = []
-    for (cx, cy, a0) in ((w - r, r, -90), (w - r, h - r, 0), (r, h - r, 90), (r, r, 180)):
-        for k in range(9):
-            a = math.radians(a0 + 90 * k / 8); pts.append((cx + r * math.cos(a), cy + r * math.sin(a)))
-    msp.add_lwpolyline(pts, close=True, dxfattribs={'layer': 'CUT_OUTSIDE'})
-    for sx in (-1, 1):
-        msp.add_circle((w / 2 + sx * POSTS['spacing'] / 2, h / 2), POST_HOLE / 2, dxfattribs={'layer': 'CUT_INSIDE'})
-    for sx in (-1, 1):
-        for sy in (-1, 1):
-            msp.add_circle((w / 2 + sx * 56, h / 2 + sy * 25), 1.75, dxfattribs={'layer': 'CUT_INSIDE'})
-    msp.add_text('terminal plate 128 x 64 x 3, post holes 10 mm (placeholder: match the posts), screws M3/#4', height=2.5,
-                 dxfattribs={'layer': 'NOTES'}).set_placement((0, -6))
-    doc.saveas(os.path.join(OUT, 'metal', 'terminal-plate.dxf'))
 
 
 def make_stencils():
@@ -244,7 +222,6 @@ def make_stencils():
 
 def main():
     info = {'wordmark': make_wordmark_files(), 'facts': make_facts_print(), 'marks': make_stencils()}
-    make_terminal_plate()
     json.dump(info, open(os.path.join(OUT, 'typeset.json'), 'w'), indent=1)
     print(json.dumps(info, indent=1))
 

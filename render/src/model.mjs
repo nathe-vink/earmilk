@@ -3,6 +3,8 @@
 // Spec (x, y, z) maps to local (x - plan/2, z, plan/2 - y).
 import { FS, PINT, derived } from './spec.mjs';
 
+// 2026-10-08, the owner: the recessed terminal cup's body, through the back (the flange is FS.back.posts' 128 x 64)
+const CUP = { w: 112, h: 48, r: 5, wall: 3, flangeT: 3 };
 const FACTS_INK = '#1E1A17'; // the printed Facts on the light bodies: a warm near-black, as a carton's panel (spec/colorways.json, facts)
 
 export function specFor(kind) {
@@ -58,28 +60,42 @@ export function makeMaterials(THREE, tex, flavor) {
   // v23 (round 2 of the owner's look: the roof mirrored the fin's OPEN OTHER SIDE as a blurred ghost; every face read matte): the
   // colour coat flat under a full clear (a 2K clear is a whole layer, 4 % at normal incidence), so the sheen is the clear's, one
   // lobe tight enough to mirror a light as a shape, and the broad lobe of the colour coat's own gloss, which caught the fin, is gone
-  const finishBody = new M.MeshPhysicalMaterial({ color: flavor.board, roughness: 0.7, metalness: 0, clearcoat: 1.0, clearcoatRoughness: 0.1, side: M.DoubleSide });
-  const finishAccent = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.7, metalness: 0, clearcoat: 1.0, clearcoatRoughness: 0.1, side: M.DoubleSide });
-  const finishAccentArea = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.7, metalness: 0, clearcoat: 1.0, clearcoatRoughness: 0.1, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+  // 2026-10-08 (v26): the clear polished to 0.05 (was 0.1): at 0.1 a strip light spread into a broad pink band across the red
+  // slopes, which every studio critic read as a wash on matte plastic; polished, a light draws a line
+  const finishBody = new M.MeshPhysicalMaterial({ color: flavor.board, roughness: 0.7, metalness: 0, clearcoat: 1.0, clearcoatRoughness: 0.05, side: M.DoubleSide });
+  const finishAccent = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.7, metalness: 0, clearcoat: 1.0, clearcoatRoughness: 0.05, side: M.DoubleSide });
+  const finishAccentArea = new M.MeshPhysicalMaterial({ color: flavor.print, roughness: 0.7, metalness: 0, clearcoat: 1.0, clearcoatRoughness: 0.05, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
   const shadowLine = new M.MeshStandardMaterial({ color: 0x141210, roughness: 0.95, metalness: 0, side: M.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
   // Cast metal letters: polished faces, darker satin sides. 2026-10-06, the owner: on the light plinths (Chocolate's cream,
   // Skim's pale blue) the front letters are dark bronze, so they read against the plinth (polished, they read white on white).
   // `lt` is the plinth's letter metal from spec/colorways.json ({ face, side }), or nothing for polished.
   const badgeLetters = (t, lt) => Object.assign(new M.MeshStandardMaterial({ color: lt ? lt.face : 0xffffff, roughness: lt ? 0.22 : 0.12, metalness: 1.0, envMapIntensity: lt ? 2.4 : 3.2, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), { name: 'badgeLetters' });
-  const badgeSide = (t, lt) => Object.assign(new M.MeshStandardMaterial({ color: lt ? lt.side : 0x9a9792, roughness: 0.5, metalness: 1.0, envMapIntensity: 1.6, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), { name: 'badgeSide' });
+  // 2026-10-08, the owner: the sides finished like the faces (a darker satin side read as an extruded drop shadow); the name stays,
+  // so the shots' reflector still links to them
+  const badgeSide = (t, lt) => Object.assign(new M.MeshStandardMaterial({ color: lt ? lt.face : 0xffffff, roughness: lt ? 0.22 : 0.12, metalness: 1.0, envMapIntensity: lt ? 2.4 : 3.2, alphaMap: t, transparent: true, alphaTest: 0.4, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), { name: 'badgeSide' });
   const badgeShade = (t) => new M.MeshBasicMaterial({ color: 0x000000, alphaMap: t, transparent: true, opacity: 0.7, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const bronze = new M.MeshStandardMaterial({ color: 0xb8894c, roughness: 0.5, metalness: 0.55, envMapIntensity: 1.8 }); // satin, patinated bronze: part diffuse so the key lights it and the dark engraving reads
   const mark = (t) => Object.assign(new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.5, metalness: 0, clearcoat: 0.4, clearcoatRoughness: 0.25, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false }), { name: 'mark' });
   // 2026-10-07, the owner: the Nutrition Facts printed on the body's colour coat and sealed under the clear, so the ink takes the
   // finish's sheen (a sticker would sit on top with its own)
-  const factsPrint = (t) => Object.assign(new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.7, metalness: 0, clearcoat: 1.0, clearcoatRoughness: 0.1, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false }), { name: 'facts-print' });
+  const factsPrint = (t) => Object.assign(new M.MeshPhysicalMaterial({ map: t, transparent: true, roughness: 0.7, metalness: 0, clearcoat: 1.0, clearcoatRoughness: 0.05, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, depthWrite: false }), { name: 'facts-print' });
   const mats = {
     board, birch, bowl, decal, boardPrint, printArea, standPaint,
     finishBody, finishAccent, finishAccentArea, shadowLine, badgeLetters, badgeSide, badgeShade, mark, bronze, factsPrint,
-    cone: new M.MeshStandardMaterial({ color: 0x202020, roughness: 0.72 }), // black paper: matte enough not to mirror the window
+    cone: new M.MeshStandardMaterial({ color: 0x2c2c2c, roughness: 0.72 }), // black paper: matte enough not to mirror the window; 2026-10-08 a charcoal (was 0x202020, near-pure black in every frame), pressed ribs in pathtrace.py
     frame: new M.MeshStandardMaterial({ color: 0x1e1e1e, roughness: 0.4, metalness: 0.55 }),
     surround: new M.MeshPhysicalMaterial({ color: 0x141414, roughness: 0.3, clearcoat: 0.5, clearcoatRoughness: 0.3 }),
-    dustcap: new M.MeshStandardMaterial({ color: 0x141414, roughness: 0.35 }),
+    dustcap: new M.MeshStandardMaterial({ color: 0x181818, roughness: 0.55 }), // 2026-10-08 satin (0.35 mirrored the key as a pinpoint: "marbles")
+    // 2026-10-08, the owner: a moulded trim ring over each driver's frame and its screws, satin black, level with the finish
+    // v25 (round 1 of the owner's answers: the rings merged with the black surrounds, flat grey with no lip): a dark gunmetal satin,
+    // so the crown takes the key as one bright ring
+    trimRing: new M.MeshPhysicalMaterial({ color: 0x2a2a2a, roughness: 0.32, metalness: 0.6, clearcoat: 0.3, clearcoatRoughness: 0.25 }),
+    // the throat's flat floor, which seats the tweeter's faceplate, in the throat's own colour (the bowl's paint at its end)
+    seat: new M.MeshPhysicalMaterial({ color: flavor.throat.throat, roughness: 0.62, metalness: 0 }),
+    // the recessed terminal cup: a satin flange, a matte cup; the posts' metal nickel bright, so the black post reads in the cup
+    terminalFlange: new M.MeshPhysicalMaterial({ color: 0x1f1f1f, roughness: 0.4, metalness: 0, clearcoat: 0.4, clearcoatRoughness: 0.3 }),
+    terminalCup: new M.MeshStandardMaterial({ color: 0x3e3e3e, roughness: 0.8, metalness: 0, side: M.DoubleSide }),   // v25 a dark grey moulding (black, the black post vanished in it)
+    postMetal: new M.MeshStandardMaterial({ color: 0xcfcbc4, roughness: 0.22, metalness: 1.0 }),
     screw: new M.MeshStandardMaterial({ color: 0x4a4a4a, roughness: 0.35, metalness: 0.8 }),
     faceplate: new M.MeshStandardMaterial({ color: 0x2b2b2b, roughness: 0.28, metalness: 0.85 }),
     dome: new M.MeshPhysicalMaterial({ color: 0x2a2a2a, roughness: 0.7, sheen: 0.6, sheenRoughness: 0.4, sheenColor: new M.Color(0xffffff) }), // coated textile
@@ -90,10 +106,10 @@ export function makeMaterials(THREE, tex, flavor) {
     dark: new M.MeshStandardMaterial({ color: 0x060606, roughness: 1, side: M.DoubleSide }),
     throatSeal: new M.MeshPhysicalMaterial({ color: flavor.throat.throat, roughness: 0.45, clearcoat: 0.3, clearcoatRoughness: 0.45, side: M.DoubleSide }),
     portFlange: new M.MeshPhysicalMaterial({ color: 0x2e2e2e, roughness: 0.5, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.15 }), // v16: moulded satin black, so its lip takes the key
-    portBore: new M.MeshStandardMaterial({ color: 0x333333, roughness: 0.55, side: M.DoubleSide }), // moulded tube: a satin black the key can grade; v23 a real black plastic's 3 % (was 1 %), so its wall shows going in
+    portBore: new M.MeshPhysicalMaterial({ color: 0x484848, roughness: 0.4, clearcoat: 0.5, clearcoatRoughness: 0.3, side: M.DoubleSide }), // moulded tube: a satin black the key can grade; v23 a real black plastic's 3 % (was 1 %), so its wall shows going in; v24 a satin sheen, so the wall takes a streak of the key (round 3: a flat black disc); v25 a dark grey (still read as a flat black disc)
     plate: new M.MeshStandardMaterial({ color: 0x1b1b1b, roughness: 0.45, metalness: 0.5 }),
     postRed: new M.MeshPhysicalMaterial({ color: 0xc62828, roughness: 0.35, clearcoat: 0.4, clearcoatRoughness: 0.3 }),
-    postBlack: new M.MeshPhysicalMaterial({ color: 0x2e2e2e, roughness: 0.35, metalness: 0.3, clearcoat: 0.4, clearcoatRoughness: 0.3 }),
+    postBlack: new M.MeshPhysicalMaterial({ color: 0x2e2e2e, roughness: 0.25, metalness: 0.3, clearcoat: 0.9, clearcoatRoughness: 0.12 }),   // v25 glossier, so it shows its shape in the cup
     shadow: new M.MeshBasicMaterial({ color: 0x000000, alphaMap: tex.radialShadow(), transparent: true, depthWrite: false, opacity: 0.5 }),
     crease: new M.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.16, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 }),
   };
@@ -175,19 +191,28 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     // Cabinet: a real box of birch panels (baffle with driver cut-outs, back with the port hole, sides, top, bottom), the carved block, the fin.
     const cab = new THREE.Group(); body.add(cab);
     const wall = S.wall;
-    const baffle = rectShape(THREE, -half, 0, half, S.body);
+    // 2026-10-08: with the arrises rounded 6 mm the core's square corners stood half a millimetre out of the finish's rounds, a
+    // cream line down every corner and along the hips (round 1 of the owner's answers); in the finish's look the core's outer
+    // panels stop short of the corners, inside the rounds; v26 by the round less the board, so they clear the shadow lines'
+    // smaller floor rounds too (half that showed a tan sliver in the groove at the corner, round 2)
+    const ci = look.mode === 'finish' ? Math.max(0, FS.arris * kk - S.board) : 0, hc = half - ci;
+    const baffle = rectShape(THREE, -hc, 0, hc, S.body);
     for (const dr of S.drivers) baffle.holes.push(circleHole(THREE, 0, dr.z, dr.frame / 2 * 0.86));
     cab.add(mesh(new THREE.ExtrudeGeometry(baffle, { depth: wall, bevelEnabled: false, curveSegments: 64 }).translate(0, 0, half - wall), mats.birch));
-    const backPanel = rectShape(THREE, -half, 0, half, S.body);
+    const backPanel = rectShape(THREE, -hc, 0, hc, S.body);
     if (S.back) backPanel.holes.push(circleHole(THREE, 0, S.back.port.z, S.back.port.bore / 2));
+    if (S.back && S.back.posts.cupDepth && look.mode === 'finish') backPanel.holes.push(roundedRectHole(THREE, -CUP.w / 2 - 0.5, postsZ - CUP.h / 2 - 0.5, CUP.w / 2 + 0.5, postsZ + CUP.h / 2 + 0.5, CUP.r));
     cab.add(mesh(new THREE.ExtrudeGeometry(backPanel, { depth: wall, bevelEnabled: false, curveSegments: 64 }).translate(0, 0, -half), mats.birch));
     for (const sx of [-1, 1]) cab.add(mesh(new THREE.BoxGeometry(wall, S.body, S.plan - 2 * wall).translate(sx * (half - wall / 2), S.body / 2, 0), mats.birch));
     cab.add(mesh(new THREE.BoxGeometry(S.plan - 2 * wall, wall, S.plan - 2 * wall).translate(0, S.body - wall / 2, 0), mats.birch));
     cab.add(mesh(new THREE.BoxGeometry(S.plan - 2 * wall, wall, S.plan - 2 * wall).translate(0, wall / 2, 0), mats.birch));
-    cab.add(mesh(new THREE.ShapeGeometry(slopeWithMouth(), 64).applyMatrix4(frontBasis), mats.birch));
-    cab.add(mesh(new THREE.ShapeGeometry(slopeRect(), 4).applyMatrix4(backBasis), mats.birch));
-    cab.add(mesh(new THREE.ShapeGeometry(endTri(), 4).applyMatrix4(rightBasis), mats.birch));
-    cab.add(mesh(new THREE.ShapeGeometry(endTri(), 4).applyMatrix4(leftBasis), mats.birch));
+    const coreSlope = () => rectShape(THREE, -hc, 0, hc, L);
+    const coreSlopeMouth = () => { const sh = coreSlope(); sh.holes.push(ellipseHole(THREE, 0, b.mouthCenterS, rx, ry)); return sh; };
+    const coreTri = () => { const sh = new THREE.Shape(); sh.moveTo(-(half - ci / dz), S.body); sh.lineTo(half - ci / dz, S.body); sh.lineTo(0, ridgeZ - ci / dy); sh.closePath(); return sh; };
+    cab.add(mesh(new THREE.ShapeGeometry(coreSlopeMouth(), 64).applyMatrix4(frontBasis), mats.birch));
+    cab.add(mesh(new THREE.ShapeGeometry(coreSlope(), 4).applyMatrix4(backBasis), mats.birch));
+    cab.add(mesh(new THREE.ShapeGeometry(coreTri(), 4).applyMatrix4(rightBasis), mats.birch));
+    cab.add(mesh(new THREE.ShapeGeometry(coreTri(), 4).applyMatrix4(leftBasis), mats.birch));
     cab.add(mesh(new THREE.BoxGeometry(S.plan, S.fin.height, S.fin.thick).translate(0, ridgeZ + S.fin.height / 2, 0), mats.birch));
 
     // Bowl: smooth loft from the mouth ellipse (in the slope plane) to the throat circle (in the plane of the faceplate).
@@ -218,9 +243,15 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       // a satin chamfer round the faceplate's edge, and the faceplate's screws: what says "driver", not "lens", deep in the bowl
       const trim = mesh(new THREE.TorusGeometry(pr - 0.9 * kd, 0.9 * kd, 10, 96), scoopTrim === 'polished' ? mats.trim : mats.ringBlack); trim.position.set(0, axisY, throatZ + 0.1); cab.add(trim);
       // v17 (refinement round 3 on the close-up: the driver had no visible seat, a loose part dropped in): a moulded ring where the
-      // throat ends, the faceplate's edge seated in it
-      const seat = mesh(new THREE.TorusGeometry((pr + throatR) / 2 + 0.4 * kd, Math.max(1.5 * kd, 0.5), 12, 96), scoopTrim === 'polished' ? mats.gasket : mats.ringBlack);
-      seat.scale.z = 0.7; seat.position.set(0, axisY, throatZ + 0.2); cab.add(seat);
+      // throat ends, the faceplate's edge seated in it. 2026-10-08, the owner: the throat wider than the faceplate (74 round 62),
+      // its floor a flat ring in the throat's own colour that the faceplate sits flush in, so the bowl ends on a made landing
+      // (the black torus read as a lens's rim); the polished option keeps its satin gasket
+      if (scoopTrim === 'polished') {
+        const seat = mesh(new THREE.TorusGeometry((pr + throatR) / 2 + 0.4 * kd, Math.max(1.5 * kd, 0.5), 12, 96), mats.gasket);
+        seat.scale.z = 0.7; seat.position.set(0, axisY, throatZ + 0.2); cab.add(seat);
+      } else if (throatR - pr > 1) {
+        const seat = mesh(new THREE.RingGeometry(pr + 0.3 * kd, throatR + 0.4 * kd, 128, 1), mats.seat); seat.position.set(0, axisY, throatZ); cab.add(seat);
+      }
       if (pr > 20) for (let i = 0; i < 4; i++) {
         const a = Math.PI / 4 + i * Math.PI / 2, rr = (pr + baseR + 3) / 2 + 1.5;
         const head = mesh(new THREE.SphereGeometry(1.6, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), mats.screw);
@@ -230,18 +261,37 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     }
 
     // Drivers: basket flange standing proud of the board with screws, a rolled surround, a shaded paper cone, a dust cap.
+    // 2026-10-08, the owner: flush. Each frame sits in a rebate, a satin black trim ring over it and its screws lies level with the
+    // finish, a 0.8 reveal round it whose floor is dark, like the grooves' (proud on bare frames with eight screws, every round
+    // read them as stock parts). The sleeve's look keeps them proud.
+    const flushDrivers = look.mode === 'finish' && (st.driverMount || FS.driverMount) === 'flush';
     for (const dr of S.drivers) {
       const R = dr.frame / 2;
-      const grp = new THREE.Group(); grp.position.set(0, dr.z, half + S.board); cab.add(grp);
       const lip = Math.max(2.5, R * 0.025);
-      const flange = mesh(new THREE.CylinderGeometry(R, R, lip, 64, 1, true), mats.frame); flange.rotation.x = Math.PI / 2; flange.position.z = lip / 2; grp.add(flange);
-      const top = mesh(new THREE.RingGeometry(R * 0.88, R, 64), mats.frame); top.position.z = lip; grp.add(top);
-      const inner = mesh(new THREE.CylinderGeometry(R * 0.88, R * 0.88, lip + 1, 64, 1, true), mats.frame); inner.rotation.x = Math.PI / 2; inner.position.z = lip / 2 - 0.5; grp.add(inner);
-      const n = R > 60 ? 8 : 6;
-      for (let i = 0; i < n; i++) {
-        const a = (i + 0.5) * Math.PI * 2 / n, sr = Math.max(1.6, R * 0.02);
-        const screw = mesh(new THREE.CylinderGeometry(sr, sr, 1.2, 16), mats.screw); screw.rotation.x = Math.PI / 2;
-        screw.position.set(Math.cos(a) * R * 0.94, Math.sin(a) * R * 0.94, lip + 0.6); grp.add(screw);
+      const grp = new THREE.Group(); grp.position.set(0, dr.z, half + S.board - (flushDrivers ? lip : 0)); cab.add(grp);
+      if (flushDrivers) {
+        // The trim ring's profile, outer to inner (so the lathe's normals face out of the cabinet): a 1 mm eased outer edge level
+        // with the finish, a crown 0.5 proud across its width that takes the light as one ring, a rounded inner edge down to the
+        // surround, which it clamps.
+        const e = Math.max(0.3, kk), r1 = R, r0 = R * 0.86, crown = 0.5 * kk, prof = [new THREE.Vector2(r1, 0), new THREE.Vector2(r1, lip - e)];
+        for (let i = 1; i <= 6; i++) { const t = (i / 6) * Math.PI / 2; prof.push(new THREE.Vector2(r1 - e + e * Math.cos(t), lip - e + e * Math.sin(t))); }
+        for (let i = 1; i < 12; i++) { const u = i / 12; prof.push(new THREE.Vector2(r1 - e - (r1 - r0 - 2 * e) * u, lip + crown * Math.sin(Math.PI * u))); }
+        for (let i = 0; i <= 6; i++) { const t = (i / 6) * Math.PI / 2; prof.push(new THREE.Vector2(r0 + e - e * Math.sin(t), lip - e + e * Math.cos(t))); }
+        prof.push(new THREE.Vector2(r0, lip - 3 * e));
+        grp.add(mesh(new THREE.LatheGeometry(prof, 128), mats.trimRing).rotateX(Math.PI / 2));
+        // the reveal's floor: dark, just in front of the core's face, under the finish's cut edge
+        const gap = Math.max(0.3, 0.8 * kk), floor = mesh(new THREE.RingGeometry(R - 0.5 * kk, R + gap + 2 * kk, 128, 1), mats.shadowLine, false);
+        floor.position.z = lip - S.board + 0.05; grp.add(floor);
+      } else {
+        const flange = mesh(new THREE.CylinderGeometry(R, R, lip, 64, 1, true), mats.frame); flange.rotation.x = Math.PI / 2; flange.position.z = lip / 2; grp.add(flange);
+        const top = mesh(new THREE.RingGeometry(R * 0.88, R, 64), mats.frame); top.position.z = lip; grp.add(top);
+        const inner = mesh(new THREE.CylinderGeometry(R * 0.88, R * 0.88, lip + 1, 64, 1, true), mats.frame); inner.rotation.x = Math.PI / 2; inner.position.z = lip / 2 - 0.5; grp.add(inner);
+        const n = R > 60 ? 8 : 6;
+        for (let i = 0; i < n; i++) {
+          const a = (i + 0.5) * Math.PI * 2 / n, sr = Math.max(1.6, R * 0.02);
+          const screw = mesh(new THREE.CylinderGeometry(sr, sr, 1.2, 16), mats.screw); screw.rotation.x = Math.PI / 2;
+          screw.position.set(Math.cos(a) * R * 0.94, Math.sin(a) * R * 0.94, lip + 0.6); grp.add(screw);
+        }
       }
       const sur = mesh(new THREE.TorusGeometry(R * 0.83, R * 0.055, 16, 64), mats.surround); sur.position.z = lip - 0.5; grp.add(sur);
       const pts = []; for (let i = 0; i <= 10; i++) { const f = i / 10; pts.push(new THREE.Vector2(R * 0.78 - (R * 0.78 - R * 0.18) * f, lip - 1 - R * 0.36 * Math.pow(f, 0.85))); }
@@ -276,11 +326,43 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       const flange = mesh(new THREE.LatheGeometry(prof, 96), mats.portFlange); flange.rotation.x = -Math.PI / 2; flange.position.set(0, B.port.z, -half); cab.add(flange);
       const bore = mesh(new THREE.CylinderGeometry(ri, ri, 90, 64, 1, true), mats.portBore); bore.rotation.x = Math.PI / 2; bore.position.set(0, B.port.z, -half + 45); cab.add(bore);
       const boreEnd = mesh(new THREE.CircleGeometry(B.port.bore / 2, 64), mats.dark); boreEnd.rotation.y = Math.PI; boreEnd.position.set(0, B.port.z, -half + 90); cab.add(boreEnd);
-      const plate = mesh(new addons.RoundedBoxGeometry(B.posts.w, B.posts.h, 5, 2, 1.5), mats.plate); plate.position.set(0, postsZ, -half - 2.5 - 0.3); cab.add(plate);
-      for (const [x, mat] of [[B.posts.spacing / 2, mats.postRed], [-B.posts.spacing / 2, mats.postBlack]]) {
-        const post = mesh(new THREE.CylinderGeometry(B.posts.postD / 2, B.posts.postD / 2 * 0.85, 16, 48), mat); post.rotation.x = Math.PI / 2; post.position.set(x, postsZ, -half - 5.3 - 8); cab.add(post);
-        const collar = mesh(new THREE.CylinderGeometry(B.posts.postD / 2 * 0.55, B.posts.postD / 2 * 0.55, 4, 32), mats.screw); collar.rotation.x = Math.PI / 2; collar.position.set(x, postsZ, -half - 5.3 - 16 - 2); cab.add(collar);
-        const hole = mesh(new THREE.CircleGeometry(4.5, 32), mats.dark); hole.rotation.y = Math.PI; hole.position.set(x, postsZ, -half - 5.3 - 20.2); cab.add(hole);
+      if (B.posts.cupDepth && look.mode === 'finish') {
+        // 2026-10-08, the owner: a recessed terminal cup (the flat plate's edge sat 5 above the plinth's shadow line, its black post
+        // lost on it). The flange, the old plate's 128 x 64, stands 3 proud of the finish on four screws; the cup's body runs
+        // through the back, its floor cupDepth in from the flange's face; on the floor each post's hex and nickel shank, a red or
+        // black cap, a bright tip with the banana hole, about 8 past the flange.
+        const fz = -half - S.board, fw = B.posts.w, fh = B.posts.h, ft = CUP.flangeT, bv = 0.8;
+        const iw = CUP.w - 2 * CUP.wall, ih = CUP.h - 2 * CUP.wall, floorZ = fz - ft + B.posts.cupDepth;
+        const rr = (w, h, r) => roundedRectShape(THREE, w, h, r);
+        const flShape = rr(fw - 2 * bv, fh - 2 * bv, 7 - bv); flShape.holes.push(roundedRectHole(THREE, -iw / 2 - bv, -ih / 2 - bv, iw / 2 + bv, ih / 2 + bv, 4 + bv));
+        const flG = new THREE.ExtrudeGeometry(flShape, { depth: ft - 2 * bv, bevelEnabled: true, bevelThickness: bv, bevelSize: bv, bevelSegments: 3, curveSegments: 24 }).translate(0, 0, bv);
+        const flange = mesh(flG, mats.terminalFlange); flange.position.set(0, postsZ, fz - ft); cab.add(flange);
+        const wallShape = rr(CUP.w, CUP.h, CUP.r); wallShape.holes.push(roundedRectHole(THREE, -iw / 2, -ih / 2, iw / 2, ih / 2, 4));
+        const walls = mesh(new THREE.ExtrudeGeometry(wallShape, { depth: floorZ - fz + 0.5, bevelEnabled: false, curveSegments: 24 }), mats.terminalCup); walls.position.set(0, postsZ, fz - 0.5); cab.add(walls);
+        const floor = mesh(new THREE.ShapeGeometry(rr(iw, ih, 4), 24).rotateY(Math.PI), mats.terminalCup); floor.position.set(0, postsZ, floorZ); cab.add(floor);
+        for (const [sx, sy] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+          const x = sx * (fw / 2 - 5.5), y = postsZ + sy * (fh / 2 - 5.5);
+          const head = mesh(new THREE.SphereGeometry(2.6, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2), mats.screw); head.rotation.x = -Math.PI / 2; head.scale.y = 0.45; head.position.set(x, y, fz - ft); cab.add(head);
+          const slot = mesh(new THREE.BoxGeometry(3.4, 0.5, 0.6), mats.dark); slot.rotation.z = 0.5 + sx * 0.3; slot.position.set(x, y, fz - ft - 1.05); cab.add(slot);
+        }
+        const along = (geo, z0, len) => { geo.rotateX(-Math.PI / 2); geo.translate(0, 0, z0 - len / 2); return geo; };   // a cylinder from z0 outward (toward -z) by len
+        for (const [x, mat] of [[B.posts.spacing / 2, mats.postRed], [-B.posts.spacing / 2, mats.postBlack]]) {
+          const at = (geo, m) => { const o = mesh(geo, m); o.position.set(x, postsZ, 0); cab.add(o); return o; };
+          at(along(new THREE.CylinderGeometry(8, 8, 2.5, 6), floorZ, 2.5), mats.postMetal);                       // the hex nut on the cup's floor
+          at(along(new THREE.CylinderGeometry(4, 4, 8, 24), floorZ - 2.5, 8), mats.postMetal);                    // the shank
+          const capR = B.posts.postD / 2 - 1;
+          at(along(new THREE.CylinderGeometry(capR * 0.9, capR, 16, 48), floorZ - 7, 16), mat);                   // the cap, a little tapered
+          at(along(new THREE.CylinderGeometry(capR * 0.9 - 0.8, capR * 0.9, 1.2, 48), floorZ - 23, 1.2), mat);    // its eased outer edge
+          at(along(new THREE.CylinderGeometry(5.5, 5.5, 3, 32), floorZ - 24.2, 3), mats.postMetal);               // the tip
+          const hole = at(new THREE.CircleGeometry(2.2, 24), mats.dark); hole.rotation.y = Math.PI; hole.position.z = floorZ - 27.25;
+        }
+      } else {
+        const plate = mesh(new addons.RoundedBoxGeometry(B.posts.w, B.posts.h, 5, 2, 1.5), mats.plate); plate.position.set(0, postsZ, -half - 2.5 - 0.3); cab.add(plate);
+        for (const [x, mat] of [[B.posts.spacing / 2, mats.postRed], [-B.posts.spacing / 2, mats.postBlack]]) {
+          const post = mesh(new THREE.CylinderGeometry(B.posts.postD / 2, B.posts.postD / 2 * 0.85, 16, 48), mat); post.rotation.x = Math.PI / 2; post.position.set(x, postsZ, -half - 5.3 - 8); cab.add(post);
+          const collar = mesh(new THREE.CylinderGeometry(B.posts.postD / 2 * 0.55, B.posts.postD / 2 * 0.55, 4, 32), mats.screw); collar.rotation.x = Math.PI / 2; collar.position.set(x, postsZ, -half - 5.3 - 16 - 2); cab.add(collar);
+          const hole = mesh(new THREE.CircleGeometry(4.5, 32), mats.dark); hole.rotation.y = Math.PI; hole.position.set(x, postsZ, -half - 5.3 - 20.2); cab.add(hole);
+        }
       }
     }
   }
@@ -303,14 +385,18 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     const yBody0 = ph + sl, yBody1 = S.body - gl;
     const frontShape = rectShape(THREE, -HR, yBody0, HR, yBody1);
     // v18: each hole 5 mm inside its driver's flange (10 % on the pint), so the flange covers the cut edge: the shader's eased
-    // edge rounded the hole's rim into a grey ring round every driver that read as a drop shadow (round 1 of the v17 batch)
-    for (const dr of S.drivers) frontShape.holes.push(circleHole(THREE, 0, dr.z, dr.frame / 2 - Math.min(5, dr.frame * 0.05)));
+    // edge rounded the hole's rim into a grey ring round every driver that read as a drop shadow (round 1 of the v17 batch).
+    // 2026-10-08: flush drivers, so the hole is the rebate's edge, 0.8 outside the trim ring, over a dark reveal
+    const flushHoles = (st.driverMount || FS.driverMount) === 'flush';
+    for (const dr of S.drivers) frontShape.holes.push(circleHole(THREE, 0, dr.z, flushHoles ? dr.frame / 2 + Math.max(0.3, 0.8 * kk) : dr.frame / 2 - Math.min(5, dr.frame * 0.05)));
     skin.add(mesh(slab(THREE, frontShape, bd).translate(0, 0, half), mats.finishBody));
     const backShape = rectShape(THREE, -HR, yBody0, HR, yBody1);
     if (S.back) {
       const w = backField;
       if (!bronze && !printed) { const hole = new THREE.Path(); hole.moveTo(w.x0 - half, w.z0); hole.lineTo(w.x0 - half, w.z1); hole.lineTo(w.x1 - half, w.z1); hole.lineTo(w.x1 - half, w.z0); hole.closePath(); backShape.holes.push(hole); }
       if (S.back.port.z + S.back.port.bore / 2 > w.z1 || S.back.port.z - S.back.port.bore / 2 < w.z0) backShape.holes.push(circleHole(THREE, 0, S.back.port.z, S.back.port.bore / 2 + 1));
+      // 2026-10-08: the terminal cup's body through the back (its flange covers the cut)
+      if (S.back.posts.cupDepth) backShape.holes.push(roundedRectHole(THREE, -CUP.w / 2 - 0.5, postsZ - CUP.h / 2 - 0.5, CUP.w / 2 + 0.5, postsZ + CUP.h / 2 + 0.5, CUP.r));
     }
     skin.add(mesh(slab(THREE, backShape, bd, 64).translate(0, 0, -half - bd), mats.finishBody));
     for (const sx of [-1, 1]) skin.add(mesh(new addons.RoundedBoxGeometry(bd, yBody1 - yBody0, 2 * HR, 2, Math.min(0.5, bd * 0.33)).translate(sx * (half + bd / 2), (yBody0 + yBody1) / 2, 0), mats.finishBody));
@@ -356,7 +442,7 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
     const badge = new THREE.Group(); badge.position.set(0, Bz.z * kk, off); skin.add(badge);
     const wm = ctx.tex.wordmark({ sizeMm: Bz.type * kk, color: '#FFFFFF', trackingEm: P.trackingEm });
     const plane = () => new THREE.PlaneGeometry(wm.widthMm, wm.heightMm);
-    const shade = new THREE.Mesh(plane(), mats.badgeShade(wm.texture)); shade.position.set(0.9 * kk, -1.5 * kk, 0.05); shade.renderOrder = 2; badge.add(shade);
+    // 2026-10-08: no painted shade under the letters (the path tracer casts their own; the painted one doubled every letter)
     for (let i = 1; i <= steps; i++) {
       const side = new THREE.Mesh(plane(), mats.badgeSide(wm.texture, plinthLetters)); side.position.z = relief * i / (steps + 1); side.renderOrder = 2 + i; badge.add(side);
     }
@@ -368,7 +454,6 @@ export function buildSpeaker(THREE, addons, ctx, { kind = 'fs', flavor, state = 
       const back = new THREE.Group(); back.position.set(0, (backPanel === 'full' ? Bb.zFull : Bb.z) * kk, backPanel === 'full' ? -half - 0.3 : -half - bd - 0.3); back.rotation.y = Math.PI; skin.add(back);
       const wmb = ctx.tex.wordmark({ sizeMm: Bb.type * kk, color: '#FFFFFF', trackingEm: P.trackingEm });
       const planeB = () => new THREE.PlaneGeometry(wmb.widthMm, wmb.heightMm);
-      const shadeB = new THREE.Mesh(planeB(), mats.badgeShade(wmb.texture)); shadeB.position.set(0.9 * kk, -1.5 * kk, 0.05); shadeB.renderOrder = 2; back.add(shadeB);
       for (let i = 1; i <= steps; i++) { const side = new THREE.Mesh(planeB(), mats.badgeSide(wmb.texture)); side.position.z = reliefB * i / (steps + 1); side.renderOrder = 2 + i; back.add(side); }
       const lettersB = new THREE.Mesh(planeB(), mats.badgeLetters(wmb.texture)); lettersB.position.z = reliefB; lettersB.renderOrder = 3 + steps; lettersB.castShadow = true; back.add(lettersB);
     }

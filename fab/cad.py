@@ -65,6 +65,9 @@ def front_panel():
     p = outer_corners(box(0, 0, 0, PLAN, WALL, BODY), 0)
     p -= cyl_y(RUN, WOOFER['z'], WOOFER_CUTOUT, -1, WALL + 1)
     p -= cyl_y(RUN, MID['z'], MID_CUTOUT, -1, WALL + 1)
+    # 2026-10-08, the owner: the drivers flush, each frame and the trim ring over it in a rebate from the outer face
+    p -= cyl_y(RUN, WOOFER['z'], WOOFER_REBATE['d'], -1, WOOFER_REBATE['depth'])
+    p -= cyl_y(RUN, MID['z'], MID_REBATE['d'], -1, MID_REBATE['depth'])
     p -= shadow_groove('front')
     p -= shadow_groove('front', GABLE_SHADOW_Z0)
     return p
@@ -139,15 +142,17 @@ def bowl_point(th, t):
     return (mx * (1 - t) + tx * t + rad[0] * amp, my * (1 - t) + ty * t + rad[1] * amp, mz * (1 - t) + tz * t + rad[2] * amp)
 
 
-def bowl_cavity(n_th=64, n_t=12):
-    """The air of the bowl: a smooth loft from the mouth ellipse (in the slope plane) to the throat circle (y = 170),
-    the same surface render/src/model.mjs draws, plus a short extrusion of the mouth outward so the cut is clean."""
+def bowl_cavity(n_th=96, n_t=24):
+    """The air of the bowl: a loft from the mouth ellipse (in the slope plane) to the throat circle (y = 125 since 2026-10-08),
+    the same surface render/src/model.mjs draws, plus a short extrusion of the mouth outward so the cut is clean. Faceted: flat
+    strips between 25 polygon sections of 96 points, within 0.05 mm of the surface. Since the throat came forward, the smooth
+    loft through 12 spline sections overshot the throat plane by 11 mm where the ceiling meets it at a grazing angle, and a
+    ruled loft between splines left a block that no plane could split."""
     wires = []
     for i in range(n_t + 1):
         t = i / n_t
-        pts = [bowl_point(2 * math.pi * k / n_th, t) for k in range(n_th)]
-        wires.append(Wire([Edge.make_spline(pts, periodic=True)]))
-    loft = Solid.make_loft(wires, ruled=False)
+        wires.append(Wire.make_polygon([Vector(*bowl_point(2 * math.pi * k / n_th, t)) for k in range(n_th)], close=True))
+    loft = Solid.make_loft(wires, ruled=True)
     mouth = Face(wires[0])
     normal = Vector(0, -DZ, DY)
     ext = extrude(mouth, amount=30, dir=normal)
@@ -225,13 +230,22 @@ def port_parts(length=None):
     return tube, collar
 
 
-# --- Metal parts on the back (flat, for the assembly view) ----------------------------------------------------------------
-def terminal_plate():
-    w, h = POSTS['w'], POSTS['h']
-    p = rounded_rect_prism(RUN - w / 2, PLAN, POSTS['z'] - h / 2, RUN + w / 2, PLAN + 3, POSTS['z'] + h / 2, 3, axis='y')
+# --- The terminal cup on the back ------------------------------------------------------------------------------------------
+def terminal_cup():
+    """2026-10-08, the owner: a recessed terminal cup in place of the flat plate. Printed (PETG or ASA) and sprayed satin black:
+    the 128 x 64 flange 3 thick on the back's face, the body 112 x 48 through the back to its inner face, a 3 mm wall and floor,
+    the posts through the floor 18 in from the flange's face, four screws through the flange's corners."""
+    C, w, h, z = TERMINAL_CUP, POSTS['w'], POSTS['h'], POSTS['z']
+    face = PLAN + C['flange_t']
+    cup = rounded_rect_prism(RUN - w / 2, PLAN, z - h / 2, RUN + w / 2, face, z + h / 2, C['flange_r'], axis='y')
+    cup += rounded_rect_prism(RUN - C['w'] / 2, face - C['depth'], z - C['h'] / 2, RUN + C['w'] / 2, PLAN + 0.5, z + C['h'] / 2, C['r'], axis='y')
+    iw, ih, floor_y = C['w'] - 2 * C['wall'], C['h'] - 2 * C['wall'], face - C['recess']
+    cup -= rounded_rect_prism(RUN - iw / 2, floor_y, z - ih / 2, RUN + iw / 2, face + 1, z + ih / 2, C['r'] - C['wall'], axis='y')
     for sx in (-1, 1):
-        p -= cyl_y(RUN + sx * POSTS['spacing'] / 2, POSTS['z'], POST_HOLE, PLAN - 1, PLAN + 4)
-    return p
+        cup -= cyl_y(RUN + sx * POSTS['spacing'] / 2, z, POST_HOLE, face - C['depth'] - 1, floor_y + 1)
+        for sz in (-1, 1):
+            cup -= cyl_y(RUN + sx * (w / 2 - 5.5), z + sz * (h / 2 - 5.5), 3.4, PLAN - 1, face + 1)
+    return cup
 
 
 # --- Assembly ------------------------------------------------------------------------------------------------------------
@@ -248,7 +262,7 @@ def build():
         'mid-divider': mid_divider(),
         'gable-block': gable_block(),
         'port-tube': port_tube(),
-        'terminal-plate': terminal_plate(),
+        'terminal-cup': terminal_cup(),
     }
     return parts
 

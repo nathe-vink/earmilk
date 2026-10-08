@@ -8,10 +8,13 @@ export const FS = {
   gableRise: 150,
   fin: { height: 45, thick: 8 },
   wall: 18,
-  woofer: { z: 290, frame: 310 },
+  woofer: { z: 320, frame: 310 }, // 2026-10-08, the owner: 30 higher (was 290), so its frame stands 52 clear of the plinth's shadow line (was 22)
   mid: { z: 690, frame: 170 },
-  tweeter: { faceplateY: 170, z: 903.5, faceplate: 62, faceplateThick: 6, apexForward: 8, bodyDepth: 38, bodyHeight: 60 },
-  bowl: { mouthWidth: 211, mouthLength: 118, mouthCenterS: 79, throat: 66 },
+  // 2026-10-08, the owner: the faceplate 125 behind the front face (was 170) and the throat 74 (was 66), its floor a flat ring
+  // 6 wide that seats the faceplate: from the 170 setback every camera off the axis saw it pushed into the far end of the
+  // mouth and cut by the rim, a lens or an eye
+  tweeter: { faceplateY: 125, z: 903.5, faceplate: 62, faceplateThick: 6, apexForward: 8, bodyDepth: 38, bodyHeight: 60 },
+  bowl: { mouthWidth: 211, mouthLength: 118, mouthCenterS: 79, throat: 74 },
   back: {
     // 2026-10-02: no sleeve. Two shapes for the bare birch field on the finished back:
     //  'label' (default): the Facts panel plus a 26 margin all round; the port, the posts and the engraved wordmark sit on the finish outside it.
@@ -25,7 +28,9 @@ export const FS = {
     plate: { thick: 3, proud: 1.5, cornerR: 3, patina: '#2B2016' },
     label: { w: 266, h: 260, top: 770 }, // 260 since 2026-10-02: the footnote sits inside the border with the same 14 mm padding as the sides
     port: { d: 100, z: 405, flange: 112, bore: 92 },
-    posts: { w: 128, h: 64, z: 150, zFull: 185, postD: 24, spacing: 64 }, // 150 clears the plinth's shadow line (was 144); 185 sits inside the full field
+    posts: { w: 128, h: 64, z: 175, zFull: 185, postD: 24, spacing: 64, cupDepth: 18 }, // 2026-10-08, the owner: 175 (was 150, its edge 5 above the
+    // plinth's shadow line), and a recessed terminal cup, its 128 x 64 flange 3 proud with four screws, the posts on its floor 18 in;
+    // 185 sits inside the full field
   },
   sleeve: { board: 1.5 },
   // 2026-10-02: no sleeve. The colour is a finish on the birch; the skin keeps the sleeve's outer dimensions.
@@ -33,9 +38,13 @@ export const FS = {
   // 2026-10-07, the owner: the arrises rounded in the model, 3 mm on the body's vertical corners and the gable's hips (the fin's
   // edges 1.5), scaled on the pint; a 3 mm shadow line where the gable meets the body, z 857 to 860, like the plinth's; no lip at
   // the scoop, the finish's cut edge eased and the tweeter's ring and seat black.
-  arris: 3, finArris: 1.5, gableLine: 3, scoopTrim: 'none',
-  badge: { type: 44, relief: 2.5, z: 55 }, // cast metal letters, no plate: the wordmark itself in relief on the plinth's front
-  backBadge: { type: 44, relief: 2.5, z: 813, zFull: 800 }, // 2026-10-07, the owner: centred between the body's top edge (the gable line's foot, 857) and the Facts (770): 27 mm of white above and below the ink (was 826)
+  // 2026-10-08, the owner: 6 on the body and the hips, 3 on the fin (were 3 and 1.5): at room distance a 3 mm round is two
+  // pixels and every critic still called the corners knife-sharp. And the drivers flush, each frame in a rebate with its trim ring
+  // level with the finish, a 0.8 reveal round it ('proud' as before).
+  arris: 6, finArris: 3, gableLine: 3, scoopTrim: 'none', driverMount: 'flush',
+  badge: { type: 44, relief: 1.5, z: 55 }, // cast metal letters, no plate: the wordmark itself in relief on the plinth's front; 2026-10-08,
+  // the owner: 1.5 proud (was 2.5), the sides finished like the faces (their darker satin read as an extrusion and a drop shadow)
+  backBadge: { type: 44, relief: 1.5, z: 813, zFull: 800 }, // 2026-10-07, the owner: centred between the body's top edge (the gable line's foot, 857) and the Facts (770): 27 mm of white above and below the ink (was 826)
   // cast metal letters like the front, centred above the plate (or inside the full birch field)
   // Marks that are spec since 2026-10-02: the gable's instruction on the back slope (on the fin's back face since 2026-10-07,
   // the owner), and the carton's other line by the port.

@@ -12,6 +12,7 @@ DXF layers (the names say what to do; CNC shops read them):
   CUT_OUTSIDE       through cut, tool outside the line (panel outlines)
   CUT_INSIDE        through cut, tool inside the line (holes and windows)
   POCKET_3MM        3 mm deep, from the outer face (the shadow-line groove)
+  POCKET_<n>MM      n mm deep, from the outer face, clearing inside the circle (2026-10-08: the flush drivers' rebates)
   DRILL_10_DEEP10   10 mm holes, 10 deep (dowels)
   NOTES             part name and face, not cut
 """
@@ -22,7 +23,8 @@ import ezdxf
 from ezdxf.enums import TextEntityAlignment
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
-LAYERS = {'CUT_OUTSIDE': 7, 'CUT_INSIDE': 1, 'POCKET_3MM': 3, 'DRILL_10_DEEP10': 6, 'NOTES': 8}
+WOOFER_POCKET, MID_POCKET = f"POCKET_{WOOFER_REBATE['depth']:g}MM", f"POCKET_{MID_REBATE['depth']:g}MM"
+LAYERS = {'CUT_OUTSIDE': 7, 'CUT_INSIDE': 1, 'POCKET_3MM': 3, WOOFER_POCKET: 4, MID_POCKET: 5, 'DRILL_10_DEEP10': 6, 'NOTES': 8}
 
 
 def rect(x0, y0, x1, y1):
@@ -46,16 +48,18 @@ def panel_defs():
     """Each panel: name, qty per speaker, width, height (as seen from its outer face), features by layer, note."""
     wh = TWEETER['faceplate_y'] + TWEETER['faceplate_t'] + TWEETER['body_depth'] / 2   # wire hole y (cad.wire_hole_y)
     P = []
-    P.append(dict(name='front-baffle', qty=1, w=PLAN, h=BODY, layers={
-        'CUT_INSIDE': circle(RUN, WOOFER['z'], WOOFER_CUTOUT) + circle(RUN, MID['z'], MID_CUTOUT),
-        'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, PLAN, BODY)},
-        note='outer face up; round the two vertical outer edges 3 mm after glue-up; cutouts sized for the shortlisted Dayton DSA315-8 (272) and SB Acoustics SB17MFC35-8 (146): re-cut for other drivers'))
+    front = {'CUT_INSIDE': circle(RUN, WOOFER['z'], WOOFER_CUTOUT) + circle(RUN, MID['z'], MID_CUTOUT),
+             'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, PLAN, BODY)}
+    front[WOOFER_POCKET] = front.get(WOOFER_POCKET, []) + circle(RUN, WOOFER['z'], WOOFER_REBATE['d'])
+    front[MID_POCKET] = front.get(MID_POCKET, []) + circle(RUN, MID['z'], MID_REBATE['d'])
+    P.append(dict(name='front-baffle', qty=1, w=PLAN, h=BODY, layers=front,
+        note=f'outer face up; round the two vertical outer edges {EDGE_R:g} mm after glue-up; cutouts sized for the shortlisted Dayton DSA315-8 (272) and SB Acoustics SB17MFC35-8 (146), rebates for their frames and the trim rings (flush): re-cut for other drivers'))
     tw, th = TERMINAL_CUTOUT
     P.append(dict(name='back-panel', qty=1, w=PLAN, h=BODY, layers={
         'CUT_INSIDE': circle(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5)
                       + rect(RUN - tw / 2, POSTS['z'] - th / 2, RUN + tw / 2, POSTS['z'] + th / 2),
         'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, PLAN, BODY)},
-        note='outer face up (seen from behind); round the two vertical outer edges 3 mm after glue-up; the Facts are printed on this face after the colour coat, under the clear'))
+        note=f'outer face up (seen from behind); round the two vertical outer edges {EDGE_R:g} mm after glue-up; the terminal cup\'s body goes through the 113 x 49 hole; the Facts are printed on this face after the colour coat, under the clear'))
     P.append(dict(name='side', qty=2, w=INNER, h=BODY, layers={'POCKET_3MM': rect(0, PLINTH_H, INNER, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, INNER, BODY)},
                   note='outer face up; finish the groove across the front and back panels\' edges after glue-up'))
     dowels = [(60.0, 200.0), (PLAN - 60.0, 200.0), (60.0, 330.0), (PLAN - 60.0, 330.0)]

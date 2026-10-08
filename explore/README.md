@@ -120,3 +120,9 @@ The close-ups are 1800 × 1200 at 64 samples, the nearer views 900 × 600: compa
 The owner: "I think the open other side should be on the top fold rather than the angle, but I could be wrong." The round-2 three-quarter back, with the line on the back slope (`r7-open-slope-pt.png`, as spec until then) and on the fin's back face (`r7-open-fin-pt.png`), both with the back's letters centred between the edge and the Facts. **Chosen by the owner: the fin.**
 
     cd render && node render.mjs --list explore7 --glb render/out/glb
+
+## 2026-10-08, round 8: the owner's changes up close
+
+What the owner approved on 2026-10-08, close, on the batch's final model and finish: the recessed terminal cup at 175, its flange on four screws and the posts standing in it (`r8-cup-pt.png`); the woofer flush under its gunmetal trim ring, the cone ribbed charcoal paper, the cap satin (`r8-woofer-pt.png`); the tweeter forward to 125, its faceplate seated flush on the throat's flat floor (`r8-tweeter-pt.png`). A record of the spec, not options: 1800 × 1200 at 64 samples.
+
+    cd render && node render.mjs --list explore8 --glb render/out/glb

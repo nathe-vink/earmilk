@@ -159,7 +159,7 @@ export function makeTextures(THREE) {
       rows.forEach(([k, v], i) => {
         const base = 98 + 22 * i;
         ctx.font = `700 ${mm(12)}px "Archivo"`; ctx.textAlign = 'left'; ctx.fillText(k, x0, mm(base));
-        ctx.font = `400 ${mm(12)}px "Archivo"`; ctx.textAlign = 'right'; ctx.fillText(v, x1, mm(base));
+        ctx.font = `700 ${mm(12)}px "Archivo"`; ctx.textAlign = 'right'; ctx.fillText(v, x1, mm(base));   // 2026-10-08: the values bold like the names (Regular read pale grey)
         rule(105 + 22 * i, 1.4);
       });
       ctx.textAlign = 'left';
@@ -222,10 +222,10 @@ export function makeTextures(THREE) {
           ctx.globalAlpha = 0.16;
           for (let k = 0; k < 64; k++) { ctx.fillStyle = r() > 0.5 ? dark : light; const gx = x + r() * pw; ctx.beginPath(); for (let yy = y; yy < y + len; yy += 24) ctx.lineTo(gx + Math.sin(yy * 0.01 + k) * 1.5, yy); ctx.lineWidth = 0.6 + r() * 1.6; ctx.strokeStyle = ctx.fillStyle; ctx.stroke(); }
           ctx.globalAlpha = 1;
-          ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.fillRect(x, y + len - 3, pw, 3);
+          ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.fillRect(x, y + len - 3, pw, 3);   // 2026-10-08: the seams lighter (0.32 read as black hairlines)
           y += len;
         }
-        ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.fillRect(x, 0, 3, size);
+        ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.fillRect(x, 0, 3, size);
       }
       return canvasTexture(c, { repeat: [1, 1] });
     });

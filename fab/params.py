@@ -28,26 +28,31 @@ PLINTH_H = 110.0        # SPEC plinth z 0 to 110, accent colour
 SHADOW = 3.0            # SPEC shadow line z 110 to 113
 SHADOW_DEPTH = 3.0      # PROPOSAL the shadow line is a groove 3 wide and 3 deep
 GABLE_SHADOW_Z0 = 857.0 # SPEC 2026-10-07, the owner: a second 3 mm shadow line where the gable meets the body, z 857 to 860
-EDGE_R = 3.0            # SPEC 2026-10-07, the owner: the body's vertical corners and the gable's hips rounded 3 mm
-FIN_EDGE_R = 1.5        # SPEC 2026-10-07: the fin's edges 1.5 mm
+EDGE_R = 6.0            # SPEC 2026-10-08, the owner: the body's vertical corners and the gable's hips rounded 6 mm (3 mm on 2026-10-07)
+FIN_EDGE_R = 3.0        # SPEC 2026-10-08: the fin's edges 3 mm (1.5 on 2026-10-07)
 
-WOOFER = dict(z=290.0, frame=310.0)   # SPEC centre height and frame diameter (as drawn)
+WOOFER = dict(z=320.0, frame=310.0)   # SPEC centre height and frame diameter (as drawn); 2026-10-08, the owner: z 320 (was 290)
 MID = dict(z=690.0, frame=170.0)      # SPEC
 
-TWEETER = dict(faceplate_y=170.0, z=903.5, faceplate=62.0, faceplate_t=6.0, apex_forward=8.0,
-               body_d=43.0, body_depth=30.0)  # SPEC faceplate <= 62 at y = 170. Body: PLACEHOLDER sized for the shortlisted
+TWEETER = dict(faceplate_y=125.0, z=903.5, faceplate=62.0, faceplate_t=6.0, apex_forward=8.0,
+               body_d=43.0, body_depth=30.0)  # SPEC faceplate <= 62 at y = 125 (2026-10-08, the owner; was 170). Body: PLACEHOLDER sized for the shortlisted
                # Scan-Speak Illuminator (43 mm cutout behind a 62 mm faceplate), which leaves a 9 mm shoulder for its screws.
-BOWL = dict(mouth_w=211.0, mouth_l=118.0, mouth_s=79.0, throat=66.0,
-            bulge=4.5)  # SPEC mouth and throat; bulge as built in render/src/model.mjs: the floor sags 3, the ceiling arches 6
+BOWL = dict(mouth_w=211.0, mouth_l=118.0, mouth_s=79.0, throat=74.0,
+            bulge=4.5)  # SPEC mouth and throat (74 since 2026-10-08, the owner; was 66: the faceplate seats on the throat's flat
+                        # floor, a ring 6 wide); bulge as built in render/src/model.mjs: the floor sags 3, the ceiling arches 6
 
 PORT = dict(z=405.0, d=100.0, bore=92.0, flange=112.0)   # SPEC round port at z 405, 92 bore in a 112 flange (as drawn)
-POSTS = dict(w=128.0, h=64.0, z=150.0, post_d=24.0, spacing=64.0)  # SPEC binding-post plate, centre z 150 (2026-10-02)
+POSTS = dict(w=128.0, h=64.0, z=175.0, post_d=24.0, spacing=64.0)  # SPEC terminal cup's flange, centre z 175 (2026-10-08, the owner; the plate at 150 before)
+TERMINAL_CUP = dict(w=112.0, h=48.0, r=5.0, wall=3.0, depth=21.0, flange_t=3.0, flange_r=7.0, recess=18.0)
+                        # SPEC 2026-10-08, the owner: a recessed cup, the posts on its floor 18 in from the flange's face.
+                        # PROPOSAL its make: printed (PETG or ASA), sprayed satin black; the body 112 x 48 runs through the back,
+                        # flush with its inner face, the 128 x 64 flange 3 proud of the finish on four screws
 # 2026-10-07, the owner: no bronze plate (it was 318 x 312 x 3, 1.5 proud, at x 36 to 354, z 484 to 796). The Facts are
 # printed on the back's finish under the 2K clear.
 LABEL = dict(w=266.0, h=260.0, top=770.0)  # SPEC printed Facts panel, centred on the back, 14 mm padding inside its border
 FACTS_INK = '#1E1A17'                      # SPEC on the white flavours; Chocolate cream #F1E3CC, Oat brown #2B2118
-BADGE = dict(type=44.0, relief=2.5, z=55.0, tracking=-0.035)       # SPEC cast letters on the plinth's front (Archivo Black)
-BACK_BADGE = dict(type=44.0, relief=2.5, z=813.0, tracking=-0.035)  # SPEC the same letters on the back; 2026-10-07 centred between the body's top edge (857) and the Facts (770), was 826
+BADGE = dict(type=44.0, relief=1.5, z=55.0, tracking=-0.035)       # SPEC cast letters on the plinth's front (Archivo Black); 1.5 proud since 2026-10-08 (was 2.5)
+BACK_BADGE = dict(type=44.0, relief=1.5, z=813.0, tracking=-0.035)  # SPEC the same letters on the back; 2026-10-07 centred between the body's top edge (857) and the Facts (770), was 826
 MARK_OPEN = dict(text='OPEN OTHER SIDE', type=27.0, tracking=0.04, arrow=True)   # SPEC on the fin's back face (2026-10-07, the owner; was the back slope), Archivo 700
 MARK_SHAKE = dict(text='SHAKE WELL', type=26.0, tracking=0.04, z=55.0)          # SPEC on the plinth's back face, Archivo 700
 
@@ -67,8 +72,11 @@ BRACE_WINDOW_R = 30.0     # PROPOSAL corner radius of the opening
 # The gable: a solid block, laminated from 18 mm birch layers and carved by CNC (SPEC: "a solid carved birch block").
 GABLE_LAYER = 18.0        # PROPOSAL 11 layers of 18 mm, glued up, the top trimmed: 198 for a 195 block with its fin
 GABLE_SPLIT_Z = 914.0     # PROPOSAL split for 3-axis milling: 3 layers below (z 860 to 914), 8 above. The bowl's floor is
-                          # all below z 872 and its ceiling all above 936, so each half is cut from one side with no undercut
-                          # worth the name (under 0.5 mm at the side walls, which sanding takes).
+                          # all below z 873 and its ceiling all above 940, so each half is cut from one side. The side walls
+                          # overhang the split a little: up to 1.2 mm in the lower half and 2.8 in the upper (80 to 105 deep,
+                          # 7 to 12 above the split) since the throat came forward on 2026-10-08 (1.3 and 0.3 before). Sand
+                          # them, or mill the upper half's bowl with the block tilted onto the slope, along the mouth's axis.
+                          # No split height does better than about 1.9 in both (z 916).
 WIRE_HOLE_D = 14.0        # PROPOSAL tweeter wires drop from the pocket into the woofer chamber through the block and the top
 DOWEL_D, DOWEL_DEPTH = 10.0, 20.0  # PROPOSAL four 10 mm dowels register the block on the body
 
@@ -76,7 +84,12 @@ DOWEL_D, DOWEL_DEPTH = 10.0, 20.0  # PROPOSAL four 10 mm dowels register the blo
 WOOFER_CUTOUT = 272.0     # PLACEHOLDER the shortlisted Dayton DSA315-8 / DS315-8 (fab/drivers.json); re-cut for another driver
 MID_CUTOUT = 146.0        # PLACEHOLDER the shortlisted SB Acoustics SB17MFC35-8; the Satori MR16P-8 wants 140.3
 CLEAR = 1.0               # PLACEHOLDER radial clearance for the tweeter pocket
-TERMINAL_CUTOUT = (96.0, 36.0)   # PLACEHOLDER hole behind the post plate, for the posts' threads and nuts; leaves wood for its four screws
+TERMINAL_CUTOUT = (113.0, 49.0)  # DERIVED the terminal cup's body plus 0.5 a side, through the back (was 96 x 36 behind a flat plate)
+# 2026-10-08, the owner: the drivers flush. Each frame sits in a rebate as deep as its flange and the printed trim ring over it, so
+# the ring's face is level with the finish, with a 0.8 reveal round it.
+WOOFER_REBATE = dict(d=315.6, depth=8.0)  # PLACEHOLDER the DSA315-8's 314 frame + 2 x 0.8; depth its flange (about 5, measure it) + the 3 mm ring
+MID_REBATE = dict(d=172.6, depth=6.0)     # PLACEHOLDER the SB17MFC35-8's 171 frame + 2 x 0.8; depth its flange (about 3, measure it) + the ring
+TRIM_RING = dict(t=3.0, width=20.0)       # PROPOSAL printed trim ring over each frame and its screws, sprayed satin black, a friction fit
 POST_HOLE = 10.0          # PLACEHOLDER binding-post hole in the plate
 
 # --- Port (DERIVED in fab/acoustics.py; this is the length the files are cut to) ------------------------------------

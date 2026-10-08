@@ -16,9 +16,9 @@ const rows = [
   ['mouth lower lip (y, z)', `${lower.y.toFixed(1)}, ${lower.z.toFixed(1)}`, '15.9, 872.2'],
   ['mouth centre (y, z)', `${centre.y.toFixed(1)}, ${centre.z.toFixed(1)}`, '62.6, 908.2'],
   ['mouth upper lip (y, z)', `${upper.y.toFixed(1)}, ${upper.z.toFixed(1)}`, '109.4, 944.1'],
-  ['pattern from apex, lower (deg)', (-angFrom(apexY, lower)).toFixed(1), '12.1'],
-  ['pattern from apex, upper (deg)', angFrom(apexY, upper).toFixed(1), '37.7'],
-  ['throat bottom above body top', (FS.tweeter.z - b.throat / 2 - FS.body).toFixed(1), '10.5'],
+  ['pattern from apex, lower (deg)', (-angFrom(apexY, lower)).toFixed(1), '17.2'],   // 12.1 before 2026-10-08 (the tweeter at 170)
+  ['pattern from apex, upper (deg)', angFrom(apexY, upper).toFixed(1), '79.4'],   // 37.7 before
+  ['throat bottom above body top', (FS.tweeter.z - b.throat / 2 - FS.body).toFixed(1), '6.5'],   // 10.5 before
   ['internal gross volume (L)', (((FS.plan - 2 * FS.wall) ** 2 * (FS.body - 2 * FS.wall)) / 1e6).toFixed(1), '103.3'],
 ];
 let bad = 0;

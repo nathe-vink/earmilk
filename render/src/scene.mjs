@@ -42,6 +42,14 @@ function skirting(THREE, scene, { w, z, color = 0xf2efe8, h = 0.12 }) {
   m.position.set(0, h / 2, z + 0.009); m.receiveShadow = m.castShadow = true; scene.add(m);
 }
 
+// 2026-10-08: the same skirting along a side wall, from z0 to z1 (round 2 of the owner's answers: the bright room's back
+// wall had one and its left wall none)
+function skirtingAlong(THREE, scene, { x, z0, z1, color = 0xf2efe8, h = 0.12 }) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(0.018, h, z1 - z0), new THREE.MeshStandardMaterial({ color, roughness: 0.6 }));
+  m.material.name = 'skirting';
+  m.position.set(x + 0.009, h / 2, (z0 + z1) / 2); m.receiveShadow = m.castShadow = true; scene.add(m);
+}
+
 // The rest of the box: ceiling, right wall and front wall (behind the camera), so the only daylight is what the window admits
 // and the lacquer has a room to reflect. Out of frame in every shot; in the path tracer they are what makes the light one story.
 function enclose(THREE, scene, { x0, x1, z0, z1, h, color, roughness = 0.95, window = 'right' }) {
@@ -162,14 +170,20 @@ const ROOMS = {
     sun(THREE, scene, { color: 0xffeedb, intensity: 5.2, position: o.sunPos || [-3.78, 3.10, 6.55], target: [0, 0.5, 0], bounds: 4.5 });   // less amber: the white reads white against the boards; 2026-10-07: a shot can turn it
     fillRect(THREE, scene, { color: 0xd2e0f4, intensity: 0.3, w: 5.6, h: 2.2, position: [-1.85, 1.7, 4.4], lookAt: [-1.85, 1.0, 0] });
     fillRect(THREE, scene, { color: 0xffffff, intensity: o.card ?? 22, w: 0.3, h: 1.6, position: [-0.6, 1.1, 3.9], lookAt: [0, 0.6, 0] });   // 2026-10-07: a shot can dim the card
+    // 2026-10-08: and add a soft cool fill from the camera's right, where the room's wall bounced only warm light onto the
+    // cabinets' shaded sides (round 2 of the owner's answers: "a flat tan from top to bottom")
+    if (o.sideFill) fillRect(THREE, scene, { color: o.sideFillColor ?? 0xdde6f2, intensity: o.sideFill, w: 1.2, h: 1.8, position: o.sideFillPos || [3.3, 1.4, 1.8], lookAt: [0, 0.6, 0] });
     bounce(THREE, scene, { sky: 0xe8e4dc, ground: 0xb8905f, intensity: 0.2 });
     enclose(THREE, scene, { x0: -5, x1: 3.5, z0: wz, z1: 4.5, h: 3.0, color: wallColor, window: 'front' });
+    // 2026-10-08: the side walls' skirting, like the back wall's (round 3 of the owner's answers: it stopped dead at the corner
+    // and the left wall met the floor bare); after the batch's last render, so it shows from the next
+    skirtingAlong(THREE, scene, { x: -5, z0: wz, z1: 4.5, color: o.skirting ?? 0xf2efe8 });
     // v16 (refinement round 2): the chair turned toward the window, set down rather than posed facing the camera
     // v18: the chair against the wall left of the left cabinet, out of the middle (round 1: the centre went to the chair)
     chair(THREE, addons, scene, { position: o.chairPos || [-2.62, 0, -1.02], rotationY: o.chairRot ?? 0.35 });   // v19: clear of the left cabinet's edge; 2026-10-07: a shot can move it
     // v16: exposure down about half a stop, so the sunlit white sides (249 at v15) and the coral plinths stop clipping and the
     // white faces separate the way the coral ones do
-    return { exposure: 0.72, skyGlow: 0.7 };  // v18: less sky, the window being over twice as wide; v19 less again // skyGlow: the path tracer's sky through this window, relative to the sun; a low sun admits little, so the shade needs more
+    return { exposure: 0.72, skyGlow: o.skyGlow ?? 0.7 };  // v18: less sky, the window being over twice as wide; v19 less again; 2026-10-08 a shot can raise it (a cool fill in the shade) // skyGlow: the path tracer's sky through this window, relative to the sun; a low sun admits little, so the shade needs more
   },
   // Bright apartment: white walls, cool daylight from the front-right, pale floor, a pale chair.
   apartmentBright(THREE, addons, ctx, scene, o) {
@@ -192,6 +206,7 @@ const ROOMS = {
     // 2026-10-08: and the sky's and the sun's colour (round 2 of the v21 look: the sun without punch, the wall's patch pale cream,
     // the shade the same warm taupe as the sun)
     windowWall(THREE, scene, { x: -1.7, color: 0xe4dfd6, sky: o.sky ?? 0xf6fbff, mullion: null, win: door });
+    skirtingAlong(THREE, scene, { x: -1.7 + 0.06, z0: -2.0, z1: door.z0, color: 0xfaf9f6 });   // on the wall's inner face (it is 0.12 thick)
     sun(THREE, scene, { color: o.sunColor ?? 0xffffff, intensity: o.sunIntensity ?? 3.4, position: o.sunPos || [-4.9, 4.5, 4.9], target: [0, 0.5, 0], bounds: 4.5 });
     fillRect(THREE, scene, { color: o.fillColor ?? 0xeef4ff, intensity: o.fill ?? 1.4, w: Math.min(1.8, door.z1 - door.z0 - 0.2), h: 2.3, position: [-1.65, 1.35, doorZ], lookAt: [0, 1.0, doorZ] });
     bounce(THREE, scene, { sky: 0xf4f2ee, ground: 0xd8ccb2, intensity: 0.3 });
@@ -211,8 +226,11 @@ const ROOMS = {
     scene.add(floorMesh(THREE, ctx.tex, { size: 10, planks: { base: '#5a4330', dark: '#4f3a29', light: '#634a35' }, roughness: 0.4 }));
     // v18: the back wall 0.8 m behind the cabinet, where a floorstander stands, so its shadow climbs the wall inside the sun's
     // patch, gable and all, beside the glazing bar's (round 1: the sun on the wall never seemed to reach the speaker)
-    const back = wallMesh(THREE, { w: 10, h: 2.9, color: 0x7a7362, roughness: 1 }); back.position.set(0, 1.45, -0.8); scene.add(back);
-    skirting(THREE, scene, { w: 10, z: -0.8, color: 0x8c8470, h: 0.14 });
+    // 2026-10-08: a shot can bring the back wall nearer (round 2 of the owner's answers: from 0.6 m behind the cabinet the low
+    // sun laid its silhouette on the wall as a squat barn half its height)
+    const wz = o.wallZ ?? -0.8;
+    const back = wallMesh(THREE, { w: 10, h: 2.9, color: 0x7a7362, roughness: 1 }); back.position.set(0, 1.45, wz); scene.add(back);
+    skirting(THREE, scene, { w: 10, z: wz, color: 0x8c8470, h: 0.14 });
     // v17 (refinement round 3: no window patch to explain the key; the amber turned the white cream and the red orange): the
     // window three panes wide (z 0.2 to 2.8), so past the cabinet the beam lays its patch, a glazing bar's shadow across it, on the
     // back wall behind the chair; the sun's colour less amber
@@ -222,16 +240,16 @@ const ROOMS = {
     // v19 (round 2: no shadow across the boards from the plinth to the wall's silhouette; the front not warm): the sun higher (18
     // degrees) and a touch warmer, the window wider and taller, so the whole cabinet stands in the beam, the sunlit boards are
     // bright enough to show its shadow running from the plinth to the wall, and the silhouette still climbs the wall
-    windowWall(THREE, scene, { x: -2.6, zRange: [-0.8, 4.5], color: 0x7a7362, sky: 0xc6d3e6, mullion: null, bars: { at: o.barsAt || [1.75], color: 0x8c8470 }, win: { z0: 1.15, z1: 2.8, sill: 0.05, head: 2.45 } });   // 2026-10-07: a shot can move the bar
+    windowWall(THREE, scene, { x: -2.6, zRange: [wz, 4.5], color: 0x7a7362, sky: 0xc6d3e6, mullion: null, bars: { at: o.barsAt || [1.75], color: 0x8c8470 }, win: { z0: 1.15, z1: 2.8, sill: 0.05, head: 2.45 } });   // 2026-10-07: a shot can move the bar
     // 2026-10-08: a shot can warm the sun and dim the lamp (round 2 of the v21 look: the speaker's sunlit front a pale off-white
     // beside the wall's amber patch, its shaded side one step below it; the lamp at the right lit that side)
-    sun(THREE, scene, { color: o.sunColor ?? 0xffcf9c, intensity: 2.6, position: [-5.83, 3.27, 4.89], target: [0, 0.8, 0], bounds: 4.5 });
+    sun(THREE, scene, { color: o.sunColor ?? 0xffcf9c, intensity: 2.6, position: o.sunPos || [-5.83, 3.27, 4.89], target: [0, 0.8, 0], bounds: 4.5 });   // 2026-10-08: a shot can move it
     fillRect(THREE, scene, { color: 0xcbd7ea, intensity: o.fill ?? 0.8, w: 1.0, h: 1.1, position: [-2.55, 1.5, 2.2], lookAt: [0, 1.0, 2.2] });
-    bounce(THREE, scene, { sky: 0x8fa0bb, ground: 0x5a4330, intensity: 0.45 });
-    const lamp = new THREE.PointLight(0xffcf9e, o.lamp ?? 7, 0, 2); lamp.position.set(1.7, 1.5, 1.3); scene.add(lamp);
-    enclose(THREE, scene, { x0: -2.6, x1: 5, z0: -0.8, z1: 4.5, h: 2.9, color: 0x7a7362, roughness: 1, window: 'left' });
+    bounce(THREE, scene, { sky: 0x8fa0bb, ground: 0x5a4330, intensity: o.bounce ?? 0.45 });   // 2026-10-08: a shot can raise the room's sky bounce
+    const lamp = new THREE.PointLight(o.lampColor ?? 0xffcf9e, o.lamp ?? 7, 0, 2); lamp.position.set(1.7, 1.5, 1.3); scene.add(lamp);   // 2026-10-08: a shot can cool it (a sky-lit shade)
+    enclose(THREE, scene, { x0: -2.6, x1: 5, z0: wz, z1: 4.5, h: 2.9, color: 0x7a7362, roughness: 1, window: 'left' });
     chair(THREE, addons, scene, { position: o.chairPos || [-1.05, 0, -0.42], rotationY: 0.5, color: 0x3d2a1c });   // v18: in the room's shade at the left
-    return { exposure: 1.15, skyGlow: 2.6 };   // v16: the window's sky brighter, so the room's left side is not a void; v17: less, the window is twice as wide
+    return { exposure: 1.15, skyGlow: o.skyGlow ?? 2.6 };   // v16: the window's sky brighter, so the room's left side is not a void; v17: less, the window is twice as wide; 2026-10-08: a shot can dim it (the sun the one main light)
   },
   // Studio: #F8F7F4 ground sweeping up into a backdrop behind the subject, horizon faded with fog. Key light per shot.
   studio(THREE, addons, ctx, scene, o) {

@@ -106,15 +106,18 @@ def general_arrangement(pdf):
     F.line([(0, GABLE_SHADOW_Z0), (PLAN, GABLE_SHADOW_Z0)], lw=0.3)
     F.circle(RUN, WOOFER['z'], WOOFER['frame'], lw=0.35, ls='--'); F.circle(RUN, WOOFER['z'], WOOFER_CUTOUT)
     F.circle(RUN, MID['z'], MID['frame'], lw=0.35, ls='--'); F.circle(RUN, MID['z'], MID_CUTOUT)
+    # 2026-10-08, the owner: flush drivers, each frame and its trim ring in a rebate
+    F.circle(RUN, WOOFER['z'], WOOFER_REBATE['d'], lw=0.3); F.circle(RUN, MID['z'], MID_REBATE['d'], lw=0.3)
     # mouth ellipse seen from the front: its across width is true, its height is the slope length times the vertical
     mz0, mz1 = BODY + DZ * (BOWL['mouth_s'] - BOWL['mouth_l'] / 2), BODY + DZ * (BOWL['mouth_s'] + BOWL['mouth_l'] / 2)
     ax.add_patch(Ellipse(F.p(RUN, (mz0 + mz1) / 2), BOWL['mouth_w'] * k, (mz1 - mz0) * k, fill=False, lw=0.6))
-    F.rect(RUN - 86, 39, RUN + 86, 71.5, lw=0.3, color=NOTE); F.text(RUN, 22, 'cast letters, 44 mm type, 2.5 proud', size=4.5, color=NOTE, ha='center')
+    F.rect(RUN - 86, 39, RUN + 86, 71.5, lw=0.3, color=NOTE); F.text(RUN, 22, f"cast letters, 44 mm type, {BADGE['relief']:g} proud", size=4.5, color=NOTE, ha='center')
     F.dim((0, 0), (PLAN, 0), -60)
     F.dim((0, 0), (0, TOTAL), -95); F.dim((0, 0), (0, BODY), -55); F.dim((0, 0), (0, PLINTH_H), -25)
     F.dim((PLAN, 0), (PLAN, WOOFER['z']), 35); F.dim((PLAN, 0), (PLAN, MID['z']), 75)
     F.text(RUN, WOOFER['z'] - 8, f'cutout {WOOFER_CUTOUT:.0f}', size=4.6, ha='center'); F.text(RUN, MID['z'] - 6, f'cutout {MID_CUTOUT:.0f}', size=4.6, ha='center')
-    F.text(RUN, WOOFER['z'] - WOOFER['frame'] / 2 - 18, 'frame 310 (dashed)', size=4.2, ha='center', color=THIN)
+    F.text(RUN, WOOFER['z'] - WOOFER['frame'] / 2 - 18, f"frame 310 (dashed), rebate {WOOFER_REBATE['d']:g} x {WOOFER_REBATE['depth']:g} deep", size=4.2, ha='center', color=THIN)
+    F.text(RUN, MID['z'] + MID['frame'] / 2 + 8, f"rebate {MID_REBATE['d']:g} x {MID_REBATE['depth']:g} deep", size=4.2, ha='center', color=THIN)
 
     # RIGHT SIDE (looking at x = 390 from outside: front to the left... third angle puts the right view to the right)
     S = View(ax, 36 + step, base, k)
@@ -130,7 +133,7 @@ def general_arrangement(pdf):
     S.text(RUN, TOTAL + 10, f'fin {FIN_T:.0f} thick, full width', size=4.5, ha='center')
     S.text(RUN, PLINTH_H + 12, 'shadow line 3 x 3 groove at 110', size=4.5, ha='center')
     S.text(RUN, GABLE_SHADOW_Z0 - 14, 'shadow line 3 x 3 rebate at 857 (2026-10-07)', size=4.5, ha='center')
-    S.text(RUN, BODY / 2, 'corners and hips R3, fin R1.5', size=4.5, ha='center', color=NOTE)
+    S.text(RUN, BODY / 2, f'corners and hips R{EDGE_R:g}, fin R{FIN_EDGE_R:g}', size=4.5, ha='center', color=NOTE)
 
     # BACK (seen from behind)
     B = View(ax, 36 + 2 * step, base, k)
@@ -144,8 +147,11 @@ def general_arrangement(pdf):
     B.text(RUN, (fz0 + fz1) / 2, 'Nutrition Facts, printed\n266 x 260, under the clear', size=4.6, ha='center', va='center')
     B.circle(RUN, PORT['z'], PORT['flange']); B.circle(RUN, PORT['z'], PORT['bore'])
     B.rect(RUN - POSTS['w'] / 2, POSTS['z'] - POSTS['h'] / 2, RUN + POSTS['w'] / 2, POSTS['z'] + POSTS['h'] / 2)
+    iw, ih = TERMINAL_CUP['w'] - 2 * TERMINAL_CUP['wall'], TERMINAL_CUP['h'] - 2 * TERMINAL_CUP['wall']
+    B.rect(RUN - iw / 2, POSTS['z'] - ih / 2, RUN + iw / 2, POSTS['z'] + ih / 2, lw=0.35)      # 2026-10-08: the recessed cup
     for sx in (-1, 1):
         B.circle(RUN + sx * POSTS['spacing'] / 2, POSTS['z'], POSTS['post_d'], lw=0.4)
+    B.text(RUN + 70, POSTS['z'] - 3, f"terminal cup, {TERMINAL_CUP['recess']:g} deep", size=4.4)
     B.rect(RUN - 86, BACK_BADGE['z'] - 16, RUN + 86, BACK_BADGE['z'] + 16.5, lw=0.3, color=NOTE)
     B.text(RUN, RIDGE_Z + FIN_H / 2 - 4, 'OPEN OTHER SIDE ->', size=4.0, ha='center', color=NOTE)   # 2026-10-07: on the fin
     B.text(RUN, 50, 'SHAKE WELL', size=4.5, ha='center', color=NOTE)
@@ -169,9 +175,12 @@ def general_arrangement(pdf):
     X.fill([(W, BRACE_Z), (RUN - h, BRACE_Z), (RUN - h, BRACE_Z + W), (W, BRACE_Z + W)])
     X.fill([(RUN + h, BRACE_Z), (PLAN - W, BRACE_Z), (PLAN - W, BRACE_Z + W), (RUN + h, BRACE_Z + W)])
     # holes through the baffle
-    for (zc, d) in ((WOOFER['z'], WOOFER_CUTOUT), (MID['z'], MID_CUTOUT)):
+    for (zc, d, rb) in ((WOOFER['z'], WOOFER_CUTOUT, WOOFER_REBATE), (MID['z'], MID_CUTOUT, MID_REBATE)):
+        ax.add_patch(Rectangle(X.p(-0.5, zc - rb['d'] / 2), (rb['depth'] + 0.5) * k, rb['d'] * k, facecolor='white', edgecolor='none'))   # the rebate
         ax.add_patch(Rectangle(X.p(-0.5, zc - d / 2), (W + 1) * k, d * k, facecolor='white', edgecolor='none'))
-        X.line([(0, zc - d / 2), (W, zc - d / 2)], lw=0.5); X.line([(0, zc + d / 2), (W, zc + d / 2)], lw=0.5)
+        X.line([(rb['depth'], zc - d / 2), (W, zc - d / 2)], lw=0.5); X.line([(rb['depth'], zc + d / 2), (W, zc + d / 2)], lw=0.5)
+        X.line([(0, zc - rb['d'] / 2), (rb['depth'], zc - rb['d'] / 2), (rb['depth'], zc - d / 2)], lw=0.5)
+        X.line([(0, zc + rb['d'] / 2), (rb['depth'], zc + rb['d'] / 2), (rb['depth'], zc + d / 2)], lw=0.5)
     # port tube
     pb = PORT['bore'] / 2; L = port_total
     X.line([(PLAN + 5, PORT['z'] + PORT['flange'] / 2), (PLAN + 5, PORT['z'] - PORT['flange'] / 2)], lw=0.6)
