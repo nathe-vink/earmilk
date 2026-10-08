@@ -25,7 +25,7 @@
   "clamp": 8,
   "bounces": 12,
   "view": "Standard",
-  "exposure": -0.1,
+  "exposure": 0.0,
   "white_balance_k": 5600
  },
  "title": "The back, three-quarter",
@@ -76,7 +76,7 @@
     0,
     0.6
    ],
-   "irradiance": 1.7,
+   "irradiance": 2.4,
    "color": 5600
   },
   "fill": {

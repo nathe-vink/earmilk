@@ -1,0 +1,286 @@
+{
+ "stage1": {
+  "impression": "A gable-top milk-carton speaker stands in a sunlit empty room whose light story is carried by window patches, raking floor bands and the carton's gable shadow on the wall. The product itself reads as CG: the white front is one flat bright value with razor edges, the red-on-red 'earmilk' logo barely registers, a pale sliver at the plinth corner looks like a gap, and dead grey wall fills the top third while the side table and twigs pull the eye left.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Shaded walls read light: [560,20,1300,220] lum_median >= 170 and frame median >= 145, with the sunlit front at 240-250 and clip_pct 0 (now 121.7 and 119.1).",
+  "White face free of window-bar shadows: lum_range <= 4 over [528,440,650,488] and an unbroken plinth red (now 54.6, with a 28-level dip on the plinth at x~598).",
+  "Shaded side reads as white in shade: [662,335,740,625] lum 145-175 with R-B <= 15 (now 94.5 at 109/91/81), and the right gable end at R >= 130 (now 89).",
+  "Neutral whites: delta-E00 <= 2.5 to #FFFFFF on the sunlit front (now 4.93) and <= 2.5 to #F1EEE8 on the sunlit wall (now 4.75).",
+  "Wordmark legible at 1x: letters at least 60 levels apart from the plinth around them (now +15).",
+  "Clean silhouette: >= 40 px of background between the table and the speaker (now 0) and no foreign shadow touching the product's edge (now a 135.5 wedge at [752,512,772,545] on a 236 wall).",
+  "Plinth red continuous round the front-right corner: no body-white round at x 650-656, y 662-708 (now lum 95, RGB 114/92/76 between reds at 69 and 34).",
+  "Sunlit accent red within delta-E00 <= 5 of #C62828 on the plinth front once the room is lifted (now 6.1-6.3 at 229/32/35).",
+  "Floor contact anchored: a 2-4 px occlusion line under the plinth front at least 10 levels below the floor beside it (now none: y-profile 71, 89, 95, 102, 107), and the cast shadow beside the base >= 20 levels below the adjacent sunlit floor after the fill is added (now about 20-25)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The room is not bright or airy: everything outside the sun patches sits in the mid-greys, so the frame reads as a dim, contrasty afternoon instead of a bright morning room.",
+   "evidence": {
+    "region": [
+     560,
+     20,
+     1300,
+     220
+    ],
+    "measured": "shaded back wall lum_median 121.7, RGB 128/120/119 on #F1EEE8 plaster; left wall [0,50,95,500] 111.0; floor [0,600,1350,900] 110.9; frame median 119.1; against these the sunlit patch [1060,420,1270,500] reads 235.3"
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": "3",
+    "to": "8"
+   },
+   "expected": "Skylight through the two windows carries most of the room's indirect light, so the shaded walls rise about 1 stop to ~160-175 and the frame median to ~145. The sunlit front and patches move only within the PBR Neutral shoulder (~246-249, nothing clipped), and the shade turns cooler and more neutral.",
+   "accept": {
+    "region": [
+     560,
+     20,
+     1300,
+     220
+    ],
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 155
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The front window's glazing bars throw a soft cross of shadow through the middle of the white face, over the fin and across the wordmark, so the product face reads smudged and half the logo sits in shadow.",
+   "evidence": {
+    "region": [
+     528,
+     440,
+     650,
+     488
+    ],
+    "measured": "lum_p5 187.9, lum_range 54.6, where a clean strip [528,470,580,488] has a range of 1.2; under the eave the x-profile [526,336,652,358] dips from 242.4 to 195.7 at x~595; the left-strip y-profile [528,400,556,500] dips from 242.4 to 208.1 at y~442; on the plinth the bar takes the red from ~70 to 41.5 at x~598, so the letters 'ilk' read 80-84 against 'ear' at 94-98; the geometry fits window 0's centre and upper bars (x~-1.75 m, z~1.73 m) projected along the sun"
+   },
+   "change": {
+    "setting": "set.windows.0.mullions",
+    "from": "[2, 3]",
+    "to": "[1, 1]"
+   },
+   "expected": "The front face, fin and plinth take clean, uniform sun (white ~246-249, no band). The right back-wall patch becomes a plain rectangle framing the carton's crisp silhouette, and window 1 keeps its bars, so the room still reads as window-lit. The floor in front of the plinth comes out of the lower bar's shadow.",
+   "accept": {
+    "region": [
+     528,
+     440,
+     650,
+     488
+    ],
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 4
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The shaded side of the white carton is a flat warm brown-grey 148 levels below the front, so in shade the white product reads khaki, and the right gable end reads maroon instead of the accent red.",
+   "evidence": {
+    "region": [
+     662,
+     335,
+     740,
+     625
+    ],
+    "measured": "side lum_median 94.5, RGB 109/91/81 (R-B 28), delta-E00 47.2 to #FFFFFF; y-profile 92.7 to 96.8 (flat); the corner steps from 242 to ~91 across 2 px; right gable end [700,290,742,322] RGB 89/9/7, lum 25.9; the corner positions put the side normal at azimuth ~80 deg because the carton is turned ~10 deg toward -x"
+   },
+   "change": {
+    "setting": "lights.fill_right",
+    "from": "none",
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.0,
+      1.4
+     ],
+     "orbit": {
+      "azimuth_deg": 90,
+      "elevation_deg": 12,
+      "distance_m": 2.4
+     },
+     "irradiance": 0.35,
+     "color": "#FFFFFF"
+    }
+   },
+   "expected": "The light sits 10 deg off the side's normal and 100 deg off the front's, ~37 deg off the view axis (outside the 24 deg half-field), and low enough to add little to the floor. The side lifts to ~150-165 and turns near-neutral (B >= 135, R-B <= 15) while the front is untouched. The front/side step falls to ~85-95 levels and the gable end reads red (R >= 130).",
+   "accept": {
+    "region": [
+     662,
+     335,
+     740,
+     625
+    ],
+    "metric": "b_median",
+    "op": ">=",
+    "value": 135
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The client's white renders magenta: on every sunlit white, green sits about 5% low against red and blue.",
+   "evidence": {
+    "region": [
+     528,
+     470,
+     580,
+     488
+    ],
+    "measured": "clean sunlit white RGB 246/241/247, delta-E00 4.93 to #FFFFFF, linear G/R 0.954; the sunlit wall [1060,420,1270,500] RGB 245/233/229 is 4.75 from #F1EEE8; the deficit matches the 4.6% G/R gap between a 5000 K blackbody (1, 0.792, 0.628) and D50 (1, 0.830, 0.614), which points to a Planckian sun under a daylight-locus white point"
+   },
+   "change": {
+    "setting": "sun.color",
+    "from": "5000",
+    "to": "#FFEBCE"
+   },
+   "expected": "The same 5000 K warmth, taken from the daylight locus. Sunlit whites go neutral to faintly warm (front ~248/248/246, G within 2 of R), the sunlit wall comes within ~2 of #F1EEE8, and the sun-fed bounce loses its pink cast.",
+   "accept": {
+    "region": [
+     528,
+     470,
+     580,
+     488
+    ],
+    "metric": "delta_e",
+    "hex": "#FFFFFF",
+    "op": "<=",
+    "value": 3.0
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The cast-metal wordmark barely separates from the red plinth, because letters facing the camera from below eye height mirror the oak floor about 0.2 m in front of the speaker and render bronze-brown on red.",
+   "evidence": {
+    "region": [
+     528,
+     645,
+     552,
+     705
+    ],
+    "measured": "plinth red beside the letters lum_median 74.2 (229/32/35); part:letters-front-* lum_median 89.6, RGB 127/81/65, only +15 levels; the wordmark profile [552,672,616,680] peaks at 87-93 on a 71-77 ground; the whole wordmark is 56 px wide (x 556-612); letter centre ~(-0.047, -0.193, 0.05) m on a face turned ~10 deg toward -x"
+   },
+   "change": {
+    "setting": "glints.0",
+    "from": "none",
+    "to": {
+     "at": [
+      -0.047,
+      -0.193,
+      0.05
+     ],
+     "normal": [
+      -0.174,
+      -0.985,
+      0.0
+     ],
+     "size_m": 0.2,
+     "power_w": 0.5,
+     "receivers": [
+      "letters-front-0",
+      "letters-front-1",
+      "letters-front-2",
+      "letters-front-3",
+      "letters-front-4",
+      "letters-front-5",
+      "letters-front-6",
+      "letters-front-7"
+     ]
+    }
+   },
+   "expected": "A soft polished highlight across all seven letters at ~170-220 against the plinth's ~75-85, so 'earmilk' reads at 1x as bright metal. Only the letters receive the light, so the plinth and the floor are unchanged.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 150
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "composition",
+   "problem": "The side table butts into the speaker (its top runs behind the left edge and its back leg stops 2 px short of it) and a wedge of its sun shadow pokes out past the right edge, leaving a tangent on one side of the silhouette and a stray shape on the other.",
+   "evidence": {
+    "region": [
+     496,
+     444,
+     522,
+     460
+    ],
+    "measured": "the table top here reads lum 77.3; the x-profile [500,445,540,452] reads 76.5-79.1 up to x~523 and then 202.1 from x~524, with no gap; the back leg spans x 504-522; the shadow wedge [752,512,772,545] is 135.5 against the lit wall beside it [790,450,860,500] at 236.1"
+   },
+   "change": {
+    "setting": "set.props.1.position",
+    "from": "[-0.75, 0.25]",
+    "to": "[-1.0, 0.25]"
+   },
+   "expected": "About 55 px of clear wall between the table top's right end and the speaker, and about 80 px at the back leg. The table leaves window 0's sun, so the wedge goes and that spot reads as lit wall (>= 225).",
+   "accept": {
+    "region": [
+     496,
+     444,
+     522,
+     460
+    ],
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 140
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "composition",
+   "problem": "The vase is placed separately from the table, so c6 alone would leave it standing in mid-air; its twigs also crowd the wall just above the speaker's left shoulder.",
+   "evidence": {
+    "region": [
+     468,
+     130,
+     500,
+     200
+    ],
+    "measured": "the vase position [-0.75, 0.25] at z 0.5 equals the table's; the right twig crosses this patch of wall (lum_p5 114.3 vs median 142.2, lum_range 29.7)"
+   },
+   "change": {
+    "setting": "set.props.2.position",
+    "from": "[-0.75, 0.25]",
+    "to": "[-1.0, 0.25]"
+   },
+   "expected": "The vase stays centred on the moved table. The twigs shift ~75 px left, leaving [468,130,500,200] as plain wall (range <= 5) and opening the space above the speaker's left shoulder.",
+   "accept": {
+    "region": [
+     468,
+     130,
+     500,
+     200
+    ],
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 12
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Make the plinth's front-right 6 mm corner round the accent red, like the faces either side of it",
+   "why": "It renders in the body white (x 650-656, y 662-708: lum 95, RGB 114/92/76 between reds at 69 and 34), so the most-seen corner carries a pale ~5 px seam that reads as a gap in the plinth band and departs from the spec's accent-coloured plinth. It is the product's material assignment, which is fixed (under product), so it goes to the model owner."
+  },
+  {
+   "request": "Brighter or larger plinth letters (e.g. a bright aluminium finish)",
+   "why": "The cast letters' finish and size are fixed marks (56 px wide here). From below eye height they mirror the oak floor and sit only +15 levels on the red, so the c5 glint is the only lever. If the engine cannot light them along a mirror direction 15 deg below horizontal, the wordmark stays weak at 1x."
+  }
+ ],
+ "score_if_fixed": 7.5
+}

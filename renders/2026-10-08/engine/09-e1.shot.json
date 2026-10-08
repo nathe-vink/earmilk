@@ -4,16 +4,24 @@
   1200
  ],
  "product": {
-  "def": "studio/products/earmilk.json",
+  "def": "studio/products/earmilk-bookshelf.json",
   "flavour": "whole",
   "instances": [
    {
     "position": [
-     0,
-     0,
-     0
+     -0.66,
+     0.0,
+     0.56
     ],
-    "rotate_z": -14
+    "rotate_z": 5
+   },
+   {
+    "position": [
+     0.66,
+     0.0,
+     0.56
+    ],
+    "rotate_z": -5
    }
   ]
  },
@@ -28,7 +36,7 @@
   "exposure": 0.6,
   "white_balance_k": 5200
  },
- "title": "One speaker, bright room, morning light",
+ "title": "The bookshelf pair on a sideboard",
  "set": {
   "kind": "room",
   "size": [
@@ -66,8 +74,8 @@
      2.0
     ],
     "mullions": [
-     1,
-     1
+     2,
+     3
     ]
    },
    {
@@ -86,6 +94,33 @@
   ],
   "props": [
    {
+    "kind": "sideboard",
+    "position": [
+     0,
+     0.02
+    ],
+    "size": [
+     1.7,
+     0.45,
+     0.56
+    ],
+    "color": "#8A7D6F",
+    "tt_x": 0.0
+   },
+   {
+    "kind": "frame",
+    "position": [
+     0,
+     1.0
+    ],
+    "z": 1.55,
+    "size": [
+     0.62,
+     0.82
+    ],
+    "art": "#3F5B6E"
+   },
+   {
     "kind": "curtain",
     "position": [
      -2.68,
@@ -97,44 +132,19 @@
     ],
     "rotate_z": -90,
     "folds": 8
-   },
-   {
-    "kind": "table",
-    "position": [
-     -1.0,
-     0.25
-    ],
-    "size": [
-     0.45,
-     0.45,
-     0.5
-    ],
-    "color": "#A07A54"
-   },
-   {
-    "kind": "vase",
-    "position": [
-     -1.0,
-     0.25
-    ],
-    "z": 0.5,
-    "height": 0.26,
-    "branches": 4,
-    "seed": 11,
-    "color": "#E9E3D8"
    }
   ]
  },
  "camera": {
   "position": [
-   1.55,
-   -3.3,
-   1.02
+   0.85,
+   -2.95,
+   1.12
   ],
   "target": [
-   0.1,
    0.0,
-   0.56
+   0.02,
+   0.84
   ],
   "lens_mm": 40,
   "level": true
@@ -144,55 +154,14 @@
   "elevation_deg": 15,
   "irradiance": 2.5,
   "angle_deg": 1.0,
-  "color": "#FFEBCE"
+  "color": 5000
  },
  "sky": {
   "kind": "gradient",
-  "strength": 8.0,
+  "strength": 3.0,
   "zenith": "#9FB8DA",
   "horizon": "#E4ECF3",
   "ground": "#8A8478"
  },
- "lights": {
-  "fill_right": {
-   "type": "area",
-   "size_m": [
-    1.0,
-    1.4
-   ],
-   "orbit": {
-    "azimuth_deg": 90,
-    "elevation_deg": 12,
-    "distance_m": 2.4
-   },
-   "irradiance": 0.35,
-   "color": "#FFFFFF"
-  }
- },
- "glints": [
-  {
-   "at": [
-    -0.047,
-    -0.193,
-    0.05
-   ],
-   "normal": [
-    -0.174,
-    -0.985,
-    0.0
-   ],
-   "size_m": 0.2,
-   "power_w": 0.5,
-   "receivers": [
-    "letters-front-0",
-    "letters-front-1",
-    "letters-front-2",
-    "letters-front-3",
-    "letters-front-4",
-    "letters-front-5",
-    "letters-front-6",
-    "letters-front-7"
-   ]
-  }
- ]
+ "lights": {}
 }

@@ -1,0 +1,168 @@
+{
+ "size": [
+  1800,
+  1200
+ ],
+ "product": {
+  "def": "studio/products/earmilk.json",
+  "flavour": "whole",
+  "instances": [
+   {
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "rotate_z": 90
+   }
+  ],
+  "cutaway": {
+   "box_m": [
+    -0.3,
+    -0.6,
+    -0.05,
+    0.0,
+    0.6,
+    1.2
+   ],
+   "skip": "cable-*|connector-*|grommet-top|gland-amp|magnets-*|pins-*",
+   "sections": [
+    {
+     "match": "waveguide-insert",
+     "color": "#B8BCBE",
+     "roughness": 0.5
+    },
+    {
+     "match": "front-baffle|back-panel|side-*|gable-block|top-panel|bottom-panel|window-brace|mid-shelf|mid-divider|amp-box-*",
+     "color": "#DCC49A"
+    },
+    {
+     "match": "*-ring|port-tube",
+     "color": "#3A3A3A",
+     "roughness": 0.6
+    }
+   ]
+  }
+ },
+ "materials": {},
+ "render": {
+  "samples": 192,
+  "adaptive": 0.015,
+  "denoise": true,
+  "clamp": 8,
+  "bounces": 12,
+  "view": "Khronos PBR Neutral",
+  "exposure": 0.0
+ },
+ "title": "The inside",
+ "set": {
+  "kind": "sweep",
+  "color": "#C9C5BE",
+  "width": 9,
+  "front": 7,
+  "depth": 2.0,
+  "radius": 1.4,
+  "height": 5
+ },
+ "camera": {
+  "position": [
+   0.95,
+   -2.8,
+   1.25
+  ],
+  "target": [
+   0.0,
+   0.0,
+   0.55
+  ],
+  "lens_mm": 50,
+  "level": true
+ },
+ "sky": {
+  "kind": "gradient",
+  "strength": 0.6,
+  "zenith": "#FFFFFF",
+  "horizon": "#DAD7D1",
+  "ground": "#6E6A63"
+ },
+ "lights": {
+  "key": {
+   "type": "area",
+   "size_m": [
+    1.4,
+    1.4
+   ],
+   "orbit": {
+    "azimuth_deg": -35,
+    "elevation_deg": 42,
+    "distance_m": 2.3
+   },
+   "target": [
+    0,
+    0,
+    0.6
+   ],
+   "irradiance": 3.0,
+   "color": 5600
+  },
+  "fill": {
+   "type": "area",
+   "size_m": [
+    2.0,
+    2.0
+   ],
+   "orbit": {
+    "azimuth_deg": 40,
+    "elevation_deg": 18,
+    "distance_m": 3.0
+   },
+   "target": [
+    0,
+    0,
+    0.55
+   ],
+   "irradiance": 0.9,
+   "color": 6200,
+   "specular": 0.4
+  },
+  "inside": {
+   "type": "area",
+   "size_m": [
+    0.8,
+    1.2
+   ],
+   "orbit": {
+    "azimuth_deg": -8,
+    "elevation_deg": 8,
+    "distance_m": 1.5
+   },
+   "target": [
+    0,
+    0.05,
+    0.55
+   ],
+   "irradiance": 1.1,
+   "color": 5200,
+   "specular": 0.2
+  },
+  "rim": {
+   "type": "area",
+   "size_m": [
+    1.0,
+    1.6
+   ],
+   "orbit": {
+    "azimuth_deg": 160,
+    "elevation_deg": 35,
+    "distance_m": 2.6
+   },
+   "target": [
+    0,
+    0,
+    0.8
+   ],
+   "irradiance": 1.0,
+   "color": 6500
+  }
+ }
+}

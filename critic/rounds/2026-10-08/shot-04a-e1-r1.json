@@ -1,0 +1,186 @@
+{
+ "stage1": {
+  "impression": "A witty, crisply printed milk-carton speaker shot dead-on against warm taupe, but it reads as a flat graphic: the cream-tinted white panel looks like one value, the red gable is a flat trapezoid that mirrors its own OPEN OTHER SIDE legibly, and the port is a dead black disc. The frame is bottom-heavy, with about a third of it empty backdrop above the fin while the carton runs off the bottom edge just under the port, so the Facts panel sits small and low.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Framing: fin top 60-120 px from the top edge, the fin-to-port block centred (top and bottom margins within 30 px of each other), Facts panel at least 340 px wide; now the fin top is at y 340 (30% of the frame empty), the port ends 38 px from the bottom edge, and the panel is 288 px wide with 9 px body caps.",
+  "The Whole body reads white: part:back-panel within DeltaE2000 2.5 of a neutral grey of its own lightness (now 6.06 against #E2E2E2, R-B 21 levels, nearer Chocolate's #F1E3CC at 5.95).",
+  "The white panel carries the light: 12-34 levels of falloff from under the eave to the frame's foot and at least 6 levels left to right (now 4.0 and 3.1 on part:back-panel).",
+  "The gable reads as two lit planes: the roof at least 13 levels lighter than the fin face (now 67.2 against 59.8; gable-block falloff -7.9).",
+  "The port's flare carries a highlight that follows its curve (part:port-tube p95 at least 35; now 21.9, a flat ring at about 15 around a 0.0 hole).",
+  "The fin face's red within DeltaE2000 2.5 of #C62828 (now 4.06 at 205, 21, 17: the fin mirrors only a dim horizon, so PBR Neutral's toe pulls G and B to about 20 against the spec's 40).",
+  "The mirrored OPEN OTHER SIDE under the ridge is not legible (now letters to p95 86.4 on a band of median 56.5, beside a 67 roof); no setting removes it, so it needs a retouch."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "composition",
+   "problem": "The carton sinks to the bottom of the frame: rows 0-340 (30% of the height) are empty backdrop above the fin while the frame cuts the body 38 px under the port, so the Facts panel is centred at y 769, 68% of the way down.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     900,
+     340
+    ],
+    "measured": "backdrop only, 154 falling to 146 left to right, range at most 5 per 200 px block; fin top edge at row 340 (155 to 87.5); port-tube box [389, 964, 511, 1087] in a 1125 px frame; Facts border x 306-594, y 628-910"
+   },
+   "change": {
+    "setting": "camera.target",
+    "from": "[0, 0, 0.83]",
+    "to": "[0, 0, 0.676]"
+   },
+   "expected": "The level camera's lens shift lowers the frame 0.154 m at the target. With c2 (105 mm) the fin top lands at y ~100 (8.9% headroom) and the port bottom at y ~1026 (99 px clear of the edge), so the gable-to-port block is centred and the body bleeds off the bottom as a deliberate crop. A resampled preview put the fin edge at rows 99-100 and the port at rows 871-1021. The accept box is the fin's letter-free left end in the reframed image (now backdrop, G 151; in the preview, G 21).",
+   "accept": {
+    "region": [
+     225,
+     105,
+     250,
+     125
+    ],
+    "metric": "g_median",
+    "op": "<",
+    "value": 70
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "camera",
+   "problem": "The Facts panel, the frame's purpose, is small: 288 x 282 px (32% of the width) with 9 px body caps, inside a carton that fills only 47% of the width.",
+   "evidence": {
+    "region": [
+     306,
+     628,
+     594,
+     910
+    ],
+    "measured": "border box 288 x 282 px; title 36 px tall (rows 645-680); body caps 9 px (the S of Sensitivity, rows 725-733); carton x 239-661 (422 px)"
+   },
+   "change": {
+    "setting": "camera.lens_mm",
+    "from": "85",
+    "to": "105"
+   },
+   "expected": "Scales the frame x1.235 from the same 2.15 m stand-off, which keeps perspective flatter than moving in. The Facts panel becomes ~357 px wide (x 271-629, y 456-806) with body caps ~11 px, and the carton spans x 189-710 (58% of the width) with ~189 px of backdrop each side. It needs c1, or the bottom edge cuts the port. The accept box sits just inside the carton's new left edge (now backdrop at 156.6; 228.9 in the preview).",
+   "accept": {
+    "region": [
+     195,
+     600,
+     215,
+     700
+    ],
+    "metric": "lum_median",
+    "op": ">",
+    "value": 190
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The Whole body (#FFFFFF) renders cream at median 237, 225, 216 (R-B 21), DeltaE2000 6.06 from a neutral grey of the same lightness and nearer the Chocolate flavour's #F1E3CC (5.95) than to white.",
+   "evidence": {
+    "region": "part:back-panel",
+    "measured": "rgb median 237, 225, 216; DeltaE2000 6.06 vs #E2E2E2 and 5.95 vs #F1E3CC; inverting PBR Neutral gives an illuminant of R:G:B 1.13 : 1 : 0.915, which matches the 5600 K Planckian key against D65 (modelled 1.134 : 1 : 0.92); a white-balance shift alone leaves a pink cast (best about 3.6 at 5800 K) because a Planckian lamp sits below the daylight locus"
+   },
+   "change": {
+    "setting": "lights.key.color",
+    "from": "5600",
+    "to": "#FFFFFF"
+   },
+   "expected": "The panel goes to ~229, 227, 224 (R-B at most 6, a faint warmth left from the sweep bounce and the 6200 K fill), DeltaE ~1.6-1.9 to a grey of its own lightness. The backdrop's R-B falls from 25 to ~12, and once c5 lifts it the roof's red reads ~196, 40, 42 (DeltaE ~0.6 to #C62828).",
+   "accept": {
+    "region": "part:back-panel",
+    "metric": "delta_e",
+    "hex": "#E2E2E2",
+    "op": "<=",
+    "value": 2.5
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The white panel is one value, 224-231 over its whole visible area, so the carton reads as a printed card, not a lit box.",
+   "evidence": {
+    "region": "part:back-panel",
+    "measured": "profile y 228.9, 228.0, 227.7, 227.0, 226.4, 226.0, 225.1, 224.9 (falloff 4.0); profile x 228.8 to 225.7 (3.1); strip x 250-295 runs 230.1 to 226.8, strip x 605-650 runs 227.9 to 223.7; the R channel's 241 to 237 is a ~10% scene-linear drop that PBR Neutral's shoulder squeezes into 4 levels"
+   },
+   "change": {
+    "setting": "lights.key.orbit.distance_m",
+    "from": "2.4",
+    "to": "1.3"
+   },
+   "expected": "Irradiance stays normalised at the target, so the panel mid holds ~224 while the light falls from ~229 under the eave to ~212-215 at the frame's foot (15-20 levels between the profile's end bins) and 8-12 levels left to right, which reads as a soft top-left key. The softbox stays outside the frame and out of the panel's and fin's mirror directions. The backdrop drops 10-20 levels (to ~135) because the key's spill on the sweep roughly halves.",
+   "accept": {
+    "region": "part:back-panel",
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     34
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The gable reads as one flat red shape: the roof is a single 67 from ridge to eave and only 7 levels above the vertical fin face, so the 37.6 degree slope does not separate from the fin.",
+   "evidence": {
+    "region": "part:gable-block",
+    "measured": "profile y 59.2, 58.2, 64.1, 67.5, 67.3, 67.2, 67.1, 67.1 (falloff -7.9); fin face [262, 344, 290, 384] at 59.8; roof [262, 420, 640, 500] at 67.2, range 4.0; from the card's geometry, the 28 degree key gives the roof only 6% more irradiance than the fin"
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": "28",
+    "to": "38"
+   },
+   "expected": "With c4, the roof gets ~25% more key and the fin ~12% more: roof ~74-78 (about 198, 41, 42), fin ~60, gable-block falloff -15 to -19. The higher key also steepens the panel's vertical falloff (helping c4) and lowers the panel mid by ~3 levels.",
+   "accept": {
+    "region": "part:gable-block",
+    "metric": "falloff",
+    "axis": "y",
+    "op": "<=",
+    "value": -13
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The port reads as a printed black disc: its flare is a flat ring at about 15 with no highlight, around a 92 px hole at 0.0.",
+   "evidence": {
+    "region": "part:port-tube",
+    "measured": "median 7.1, p95 21.9, 47% crushed; rings at r 52-60 px from centre (450, 1025) have median 15.1-15.6, max 18; the hole (r < 46 px) has median 0.0, 99.7% at or below 3; the upper half sits ~15, the lower half 1-2"
+   },
+   "change": {
+    "setting": "glints.port_lip",
+    "from": "none",
+    "to": "{\"at\": [-0.035, -0.197, 0.438], \"normal\": [-0.41, -0.82, 0.41], \"size_m\": 0.1, \"power_w\": 3, \"receivers\": [\"port-tube\"]}"
+   },
+   "expected": "A soft highlight arc on the flare's upper-left quarter (10 to 1 o'clock), peaking at 80-120 and fading round the ring, so the mouth reads as a rounded flare; the hole stays black.",
+   "accept": {
+    "region": "part:port-tube",
+    "metric": "lum_p95",
+    "op": ">=",
+    "value": 35
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Remove the mirrored OPEN OTHER SIDE from the roof just under the ridge",
+   "why": "It is the gloss lacquer mirroring the fin in the fixed 37.6 degree roof: from any camera below about 1.5 m, the slope within ~22 mm of the fin sees the fin's face (band y 389-404, median 56.5, letters to p95 86.4, against a 67 roof). Only a different roof or fin (fixed geometry), a satin coat (which changes the product's finish) or a camera far above the carton (which breaks straight on and level) would remove it. It matters because it prints the hero line again, reversed, directly under it; it needs a retouch."
+  },
+  {
+   "request": "Make the 3 mm shadow line under the gable read as a dark line",
+   "why": "The reveal is fixed geometry, only about 3 px at this scale, and bounce light keeps its white light: the eave runs 67, 84, 152, 196, 228 with no dip below the red, so no setting can draw it darker than the red above it. It matters because without it the gable looks printed on the body rather than seated on it."
+  }
+ ],
+ "score_if_fixed": 7.5
+}

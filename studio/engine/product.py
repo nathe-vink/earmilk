@@ -282,7 +282,17 @@ def cutaway(bpy, spec, instances, objs):
 
 
 def _zoned_mesh(bpy, src, key, base_mat, zones, mats):
+    import bmesh
     me = src.copy(); me.name = key
+    # cut the faces at each zone's boundary first: a face that spans it (a tall rounded corner, one strip from the
+    # floor to the eave) would otherwise take one material by its centre and leave a stripe of the wrong colour
+    bm = bmesh.new(); bm.from_mesh(me)
+    for z in zones:
+        for k in ('above_z_mm', 'below_z_mm'):
+            if k in z:
+                geom = bm.verts[:] + bm.edges[:] + bm.faces[:]
+                bmesh.ops.bisect_plane(bm, geom=geom, dist=1e-7, plane_co=(0, 0, z[k] / 1000.0), plane_no=(0, 0, 1))
+    bm.to_mesh(me); bm.free()
     me.materials.clear(); me.materials.append(base_mat)
     idx = {}
     for z in zones:

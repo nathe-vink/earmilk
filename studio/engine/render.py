@@ -115,7 +115,8 @@ def main():
         ob = {'area': Lt.area, 'spot': Lt.spot, 'point': Lt.point}[kind](bpy, name, spec, centre)
         if spec.get('receivers'):
             Lt.link_receivers(bpy, ob, [o for o in objs if any(Pr._match(part_of[o.name], r) for r in spec['receivers'])])
-    for i, g in enumerate(sh.get('glints', [])):
+    gl = sh.get('glints') or []
+    for i, g in enumerate(gl.values() if isinstance(gl, dict) else gl):   # a list, or named glints
         ob = Lt.glint(bpy, f'glint{i}', g, C)
         if g.get('receivers'):
             Lt.link_receivers(bpy, ob, [o for o in objs if any(Pr._match(part_of[o.name], r) for r in g['receivers'])])

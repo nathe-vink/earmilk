@@ -119,3 +119,15 @@ shots:
       The range page: the floorstander on the floor beside a bookshelf on a sideboard, one family in two sizes and two
       flavours, in the same room and light.
     must_show: [both whole, the size relation readable, their fronts and roofs]
+  shot-08b:
+    title: The tweeter, how it fits and how it is wired
+    purpose: >-
+      The detail the builder asked for: the roof cut on its centre plane, close, so the waveguide insert, the tweeter
+      rear-mounted in its counterbore, the magnets that hold the insert, the connector bay behind it with the plugged
+      connector, the cable channel, the grommet under the top panel and the cable's run into the box all read at a
+      glance. A technical cutaway rendered photographically; a close-up by brief, the whole speaker not required.
+    must_show: [the insert and its waveguide in section, the tweeter in its counterbore, the magnets, the connector in its bay, the cable down the channel through the grommet]
+    fixed:
+      - >-
+        The cut's position (the centre plane) and what is cut; do not ask for parts to move or to be cut
+        differently. Camera, light, set and the section colours' reproduction may change.
