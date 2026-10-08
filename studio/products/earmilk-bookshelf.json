@@ -12,19 +12,30 @@
    "accent": "#C62828",
    "letters": "#C9C9C6",
    "letters_preset": "metal",
-   "facts_ink": "#1E1A17"
+   "facts_ink": "#1E1A17",
+   "insert": "#C62828"
   },
   "two": {
    "body": "#FFFFFF",
    "accent": "#1F4FCF",
    "letters": "#C9C9C6",
    "letters_preset": "metal",
-   "facts_ink": "#1E1A17"
+   "facts_ink": "#1E1A17",
+   "insert": "#1F4FCF"
   },
   "skim": {
    "body": "#FFFFFF",
    "accent": "#6FA5DC",
    "letters": "#4A3A28",
+   "letters_preset": "metal",
+   "facts_ink": "#1E1A17",
+   "insert": "#6FA5DC"
+  },
+  "matcha": {
+   "body": "#FFFFFF",
+   "accent": "#004225",
+   "insert": "#A4C26B",
+   "letters": "#C9C9C6",
    "letters_preset": "metal",
    "facts_ink": "#1E1A17"
   },
@@ -33,14 +44,24 @@
    "accent": "#F1E3CC",
    "letters": "#4A3A28",
    "letters_preset": "metal",
-   "facts_ink": "#F1E3CC"
+   "facts_ink": "#F1E3CC",
+   "insert": "#F1E3CC"
   },
   "oat": {
    "body": "#D9BC92",
    "accent": "#2B2118",
    "letters": "#C9C9C6",
    "letters_preset": "metal",
-   "facts_ink": "#2B2118"
+   "facts_ink": "#2B2118",
+   "insert": "#2B2118"
+  },
+  "matcha-kelly": {
+   "body": "#FFFFFF",
+   "accent": "#4CBB17",
+   "insert": "#A4C26B",
+   "letters": "#C9C9C6",
+   "letters_preset": "metal",
+   "facts_ink": "#1E1A17"
   }
  },
  "materials": {
@@ -152,6 +173,10 @@
    "preset": "plastic",
    "color": "#8C9297",
    "roughness": 0.45
+  },
+  "insert": {
+   "preset": "paint",
+   "color": "$insert"
   }
  },
  "assign": [
@@ -160,8 +185,12 @@
    "material": "body"
   },
   {
-   "match": "gable-block|waveguide-insert",
+   "match": "gable-block",
    "material": "accent"
+  },
+  {
+   "match": "waveguide-insert",
+   "material": "insert"
   },
   {
    "match": "letters-*",

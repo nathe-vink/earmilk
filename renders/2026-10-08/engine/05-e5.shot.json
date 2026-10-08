@@ -9,8 +9,8 @@
   "instances": [
    {
     "position": [
-     -1.625,
-     0.125,
+     -1.3,
+     0.1,
      0
     ],
     "rotate_z": -22,
@@ -18,8 +18,8 @@
    },
    {
     "position": [
-     -0.975,
-     0.075,
+     -0.65,
+     0.05,
      0
     ],
     "rotate_z": -22,
@@ -27,8 +27,8 @@
    },
    {
     "position": [
-     -0.325,
-     0.025,
+     0.0,
+     0.0,
      0
     ],
     "rotate_z": -22,
@@ -36,17 +36,8 @@
    },
    {
     "position": [
-     0.325,
-     -0.025,
-     0
-    ],
-    "rotate_z": -22,
-    "flavour": "matcha"
-   },
-   {
-    "position": [
-     0.975,
-     -0.075,
+     0.65,
+     -0.05,
      0
     ],
     "rotate_z": -22,
@@ -54,8 +45,8 @@
    },
    {
     "position": [
-     1.625,
-     -0.125,
+     1.3,
+     -0.1,
      0
     ],
     "rotate_z": -22,
@@ -74,7 +65,7 @@
   "exposure": -0.55,
   "white_balance_k": 5800
  },
- "title": "Six flavours",
+ "title": "Five flavours",
  "set": {
   "kind": "sweep",
   "color": "#808080",

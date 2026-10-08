@@ -31,7 +31,7 @@ fixed:
     The drivers are real, named products, mounted flush under trim rings (the owner's decision). Their materials and
     colours are the products' own.
   - >-
-    The flavours' colours (sRGB): Whole body #FFFFFF, accent #C62828; 2% #FFFFFF / #1F4FCF; Skim #FFFFFF / #6FA5DC;
+    The flavours' colours (sRGB): Whole body #FFFFFF, accent #C62828; 2% #FFFFFF / #1F4FCF; Skim #FFFFFF / #6FA5DC; Matcha #FFFFFF / #004225 (British racing green), its waveguide insert matcha #A4C26B;
     Chocolate #5E3A1F / #F1E3CC; Oat #D9BC92 / #2B2118. You may ask for a colour to be reproduced more accurately
     (exposure, white balance, view transform), never for a different colour.
   - >-
@@ -74,10 +74,10 @@ shots:
       The back as an object on a studio sweep: the label, the port and the amplifier's connections, with copy space.
     must_show: [the back with its label, port and connections, one side, the floor contact]
   shot-05:
-    title: Five flavours
+    title: Six flavours
     purpose: >-
-      The range page: all five colourways in a row, raised three-quarter, as one product line.
-    must_show: [all five whole, their colours true, the same finish on each]
+      The range page: all six colourways in a row, raised three-quarter, as one product line.
+    must_show: [all six whole, their colours true, the same finish on each]
   shot-06:
     title: The pint crate
     purpose: >-

@@ -98,7 +98,7 @@ KNOBS = [
     ('set.props.*.artwork', '{bands: [[hex, share], ...], ground: hex, seed: n}', None, 'frame: a colour-field painting in the print (bands top to bottom, soft-edged, canvas grain) instead of the flat art colour'),
     ('set.props.*.z', 'm', (0.3, 3), 'frame: the print\'s centre height'),
     # product
-    ('product.flavour', 'choice', ('whole', 'two', 'skim', 'chocolate', 'oat'), 'colourway (fixed colours per flavour)'),
+    ('product.flavour', 'choice', ('whole', 'two', 'skim', 'matcha', 'chocolate', 'oat', 'matcha-kelly'), 'colourway (fixed colours per flavour)'),
     ('product.instances', 'list of {position, rotate_z}', None, 'copies of the product: position m, rotation deg about z'),
     ('product.instances.*.position', 'm [x, y, z]', None, 'where this copy stands: x and y on the floor; z is its base\'s height (0 on the floor, the top of the furniture it stands on)'),
     ('product.instances.*.rotate_z', 'deg', (-360, 360), 'its turn about z: 0 faces -y; + turns its front toward +x'),

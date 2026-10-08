@@ -120,7 +120,7 @@ No sleeve. The outer dimensions stay as above; the skin is a finish on the birch
 | | |
 |---|---|
 | Body | finished in the flavour's board colour, `z` 113 → 860 on the body and the whole gable on Chocolate and Oat |
-| Gable and fin | finished in the accent (print) colour on Whole, 2% and Skim; body colour on Chocolate and Oat |
+| Gable and fin | finished in the accent (print) colour on Whole, 2%, Skim and Matcha; body colour on Chocolate and Oat |
 | Plinth | the bottom 110 of the cabinet, all four sides, in the accent colour, flush with the body; overall height stays 1,055 |
 | Shadow line | 3 mm, `z` 110 → 113, a dark groove where the plinth meets the body (this repo's reading of "built in") |
 | Gable shadow line (2026-10-07, the owner) | 3 mm, `z` 857 → 860, a dark groove where the gable meets the body, all four sides, like the plinth's; on the pint scaled (0.77) |
@@ -132,7 +132,7 @@ No sleeve. The outer dimensions stay as above; the skin is a finish on the birch
 
 | | |
 |---|---|
-| Lid | On the white-board flavours (Whole, 2%, Skim) the lid, gable and fin, is printed in the flavour's print colour. Chocolate and Oat stay one colour, lid included. |
+| Lid | On the white-board flavours (Whole, 2%, Skim, Matcha) the lid, gable and fin, is printed in the flavour's print colour. Chocolate and Oat stay one colour, lid included. |
 | Band | A band of the print colour, 110 tall from the floor line, around the front and both sides. On the back it covers only the sleeve frame below the window, `z` 0 → 40. |
 | Wordmark | "earmilk", Archivo Black, 52 mm type size, reversed in the board colour, centred in the band: on the front at `x = 195`, and on the right side centred on the depth, reading front to back. Nothing is printed under the gable. Tracking −0.035 em. |
 | Owner's panel (optional, print to order) | Right side, above the band: 300 wide × 330 tall, centred on the depth, `z` 295 → 625, in the print colour. Headline, a halftone portrait, four rows the owner fills in. Copy in `copy/hero.md`. |
@@ -163,7 +163,7 @@ As drawn before the amendment (Sleeves and Hero artboards): front wordmark about
 | Tweeter (2026-10-05) | a small dome at the bowl's throat: faceplate ø 16.6 (the throat less 2 %; ø 18.6 since 2026-10-08), 1.4 thick; dome base ø 8.8, apex 2.4 forward. Three drivers, as the floorstander has. |
 | Lip (2026-10-06, the owner) | *Withdrawn 2026-10-07 (the owner): no lip; the mouth is the finish's cut edge, eased 1.5.* the floorstander's polished lip round the mouth, radius 0.9 (its 2.4 scaled by the plan ratio would be 0.6, too fine to make or see), 0.6 proud. |
 | Not a uniform scale of the floorstander (derived) | plan ×0.256, body ×0.233, gable ×0.233, fin ×0.267. The pint is squatter, like a real pint next to a half gallon. |
-| Crate | 340 × 250 × 130, holding 2 × 3 pints. The pints stand about 117 proud of the rim (derived). Six pints, five flavors, so one flavor appears twice; which one is not specified. |
+| Crate | 340 × 250 × 130, holding 2 × 3 pints. The pints stand about 117 proud of the rim (derived). Six pints, one of each flavor (six since 2026-10-08; with five, one appeared twice). |
 | Crate form (2026-10-05) | a moulded dairy crate in warm white: walls 4, corner radius 18, a rolled rim 7 tall standing 1.6 proud, a floor 6. Long walls: one window per pint, 80 × 73 (`z` 39 → 112, corner radius 10), centred on each pint, so each front pint's woofer (`z` 39 → 107 above the crate's base) shows whole; a solid band below, so the plinths do not show through in pieces. Short walls: a hand-hold 100 × 24 at `z` 86 → 110 and four windows 38 × 28 at `z` 44 → 72. The mids (`z` 146 → 186) stand above the rim. Renders only: the crate's electronics are not designed. |
 
 ## Checks a model must pass

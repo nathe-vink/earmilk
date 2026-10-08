@@ -14,14 +14,15 @@ earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it.
 - Button: Reserve a pair
 - Price line: Pair, [PAIR PRICE]
 - Dimension callout on the drawing: 1,055 mm
-- Flavor selector: Whole · 2% · Skim · Chocolate · Oat. Default Whole.
+- Flavor selector: Whole · 2% · Skim · Matcha · Chocolate · Oat. Default Whole.
 
 ## Flavors
 
-- Flavor is the colorway. Same speaker, five finishes: the gable, the plinth and the throat take the color, and Chocolate and Oat take the whole cabinet. *(draft 2026-10-02, no sleeve; the earlier line read "Same speaker, different carton: the print, the lid and the throat take the color, and Chocolate and Oat take the whole board.")*
+- Flavor is the colorway. Same speaker, six finishes: the gable, the plinth and the throat take the color, and Chocolate and Oat take the whole cabinet. *(draft 2026-10-02, no sleeve; the earlier line read "Same speaker, different carton: the print, the lid and the throat take the color, and Chocolate and Oat take the whole board.")*
 - Whole: Red on white.
 - 2%: Blue on white.
 - Skim: Light blue on white.
+- Matcha: British racing green on white, a matcha horn. *(added 2026-10-08)*
 - Chocolate: Brown board, cream print. *(draft 2026-10-02: Brown all over, cream plinth.)*
 - Oat: Unbleached board, brown print. *(draft 2026-10-02: Unbleached all over, dark plinth.)*
 

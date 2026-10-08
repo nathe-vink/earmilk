@@ -9,7 +9,7 @@ Canvas (source of truth for layout, copy and proportions): https://claude.ai/art
 - A serious passive three-way that is, unmistakably, a half gallon of milk — and a cabinet that outlives its skin. *Amended 2026-10-08: active, with a plate amplifier in the back; and a bookshelf sibling.*
 - The treble fires forward from the throat of a concave bowl carved into the front gable panel. The bowl is the waveguide. *Amended 2026-10-08: the bowl is now a waveguide shaped by acoustic simulation, in an insert set into the roof.*
 - The cabinet is birch; the carton is a two-piece sleeve of heavy printed board (tube + lid). Swap the sleeve, keep the speaker. *Amended 2026-10-02: no sleeve. The carton is the cabinet, finished in the flavour's colours; the colour is fixed per speaker. See Amendments, 2026-10-02.*
-- Flavor is the colorway. Five flavors. One voicing.
+- Flavor is the colorway. Six flavors. One voicing. *(Five until 2026-10-08, when the owner added a green one: Matcha, British racing green on white, its tweeter's waveguide in matcha green.)*
 
 Voice: dairy deadpan. The spec sheet is an FDA-style Nutrition Facts panel. One joke per surface, maximum.
 
@@ -27,7 +27,7 @@ Voice: dairy deadpan. The spec sheet is an FDA-style Nutrition Facts panel. One 
 
 Made after the first render and critic rounds, from the explorations in `explore/`. They stand with the Decisions above.
 
-- **Lids.** Whole, 2% and Skim carry the lid (gable and fin) in the flavour's print colour. Chocolate and Oat stay one colour.
+- **Lids.** Whole, 2%, Skim and Matcha carry the lid (gable and fin) in the flavour's print colour. Chocolate and Oat stay one colour.
 - **Band.** A printed band of the print colour, 110 mm tall, wraps the base of the sleeve (front and sides; on the back only the frame below the window). The wordmark sits in the band, reversed in the board colour, on the front and the right side. Nothing is printed under the gable.
 - **Stand, optional.** A painted block in the print colour, 390 × 390 × 110, with a 6 mm reveal under the carton. It takes the band's job and its wordmark; a sleeve used on a stand is printed without the band. It does not swap with the sleeve. The speaker stays passive; if a version ever went active, the stand is where controls would live.
 - **Owner's panel, optional.** A print-to-order "Have you heard me?" panel on the right side above the band, 300 × 330 mm, in the print colour: headline, a halftone portrait, four rows the owner fills in. Not on the default sleeve.
@@ -38,7 +38,7 @@ Made after the first render and critic rounds, from the explorations in `explore
 
 Made on the v4 and v5 renders. They stand with the Decisions above and replace the 2026-10-01 amendments where the two disagree.
 
-- **No sleeve.** The carton is the cabinet. The colourway is a finish on the birch: the body in the board colour, the gable and fin in the accent colour on Whole, 2% and Skim, Chocolate and Oat one colour all over. The colour is fixed per speaker, so every edge and bevel takes it. Nothing swaps. `[SLEEVE PRICE]`, the board-stock question and the sleeve-swap shot go away.
+- **No sleeve.** The carton is the cabinet. The colourway is a finish on the birch: the body in the board colour, the gable and fin in the accent colour on Whole, 2%, Skim and Matcha, Chocolate and Oat one colour all over. The colour is fixed per speaker, so every edge and bevel takes it. Nothing swaps. `[SLEEVE PRICE]`, the board-stock question and the sleeve-swap shot go away.
 - **Plinth.** The band and the stand are one thing: a built-in plinth, the bottom 110 mm of the cabinet on all four sides, in the accent colour, inside the 1,055 overall height, with a 3 mm shadow line where it meets the body. (The shadow line, and the plinth sitting inside the height rather than under it, are this repo's reading; say so if either is wrong.)
 - **Wordmark.** On the front only, as cast metal letters: the wordmark itself standing in relief on the plinth's front, no plate behind it, the way the lettering sits on a La Marzocco machine. On the back, engraved in the birch above the Nutrition Facts panel. Nowhere else: not on the sides, not under the gable. *(A plate version was rendered first and withdrawn the same day.)*
 - **Dropped.** The owner's panel. Other milk-themed marks that are not about the owner are explored in `explore/2026-10-02/` and are proposals, not spec.
@@ -181,6 +181,7 @@ White board unless noted. Print = wordmark on front and side. Throat = bowl inte
 | Whole | #FFFFFF | #C62828 | #C62828 → #8E1B1B |
 | 2% | #FFFFFF | #1F4FCF | #1F4FCF → #153792 |
 | Skim | #FFFFFF | #6FA5DC | #8FBBE8 → #4F86BF |
+| Matcha | #FFFFFF | #004225 British racing green *(or Kelly green #4CBB17)* | the waveguide insert itself matcha #A4C26B *(added 2026-10-08)* |
 | Chocolate | #5E3A1F (whole board) | #F1E3CC | #5E3A1F → #2B170B *(2026-10-06; was #E2CBA3 → #A97E4F)* |
 | Oat | #D9BC92 unbleached | #2B2118 | #8E6A3E → #5C4224 |
 
@@ -201,8 +202,8 @@ Shot list, in priority order:
 2. **Two rooms, years apart.** The same floor spot and the same speaker, once in Whole in a bright apartment, once in Oat in a darker, older room. This is the sleeve argument; it must read as one object that changed its skin. *Amended 2026-10-02: no sleeve, so no skin change. Rebriefed: the same pair in two homes, years apart, a bright first apartment and then a darker older house; the point is that the speaker outlives its rooms.*
 3. **Bowl close-up.** Front 3/4 at gable height, the throat and the dome in focus, the fold of the lid's die-cut visible at the mouth edge. *Amended 2026-10-02: the mouth edge is the finish's edge on the carved gable.*
 4. **Back.** Straight-on, engraved label legible, port and posts, the sleeve frame around the birch. *Amended 2026-10-02: the finished back with the bare birch field around the Facts panel only, the wordmark engraved above it, the port and posts on the finish below.* *Amended 2026-10-06: two frames, (a) straight-on as before and (b) a three-quarter from the back-left, about 33° off the back face and 10° up, with the gable's end, a side and the cabinet's shadow in frame.* *Amended 2026-10-07: the Facts printed on the finish, legible, no plate.*
-5. **Five flavors lineup.** Flat ground, equal spacing, in flavor order.
-6. **Mixed crate** on a desk, six pints, five flavors.
+5. **Six flavors lineup.** Flat ground, equal spacing, in flavor order.
+6. **Mixed crate** on a desk, six pints, one of each flavor.
 7. **Sleeve swap**, three frames: lid off, tube sliding, new flavor on. *Retired 2026-10-02: no sleeve.*
 
 Keep every render's dimensions consistent; drift in the carton's proportions between shots is a failure.

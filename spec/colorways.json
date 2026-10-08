@@ -4,6 +4,7 @@
     "whole",
     "two-percent",
     "skim",
+    "matcha",
     "chocolate",
     "oat"
   ],
@@ -57,6 +58,25 @@
           "side": "#45301D"
         }
       }
+    },
+    "matcha": {
+      "name": "Matcha",
+      "board": "#FFFFFF",
+      "boardNote": "white finish",
+      "print": "#004225",
+      "printNote": "British racing green; the owner's other choice is Kelly green #4CBB17 (the flavour 'matcha-kelly' in the products, for comparison)",
+      "waveguide": "#A4C26B",
+      "waveguideNote": "the tweeter's waveguide insert in matcha green, its own colour (the other flavours' inserts take their print colour)",
+      "throat": {
+        "mouth": "#A4C26B",
+        "throat": "#7C9A4A"
+      },
+      "swatchCaption": "British racing green on white, a matcha horn.",
+      "lid": "print",
+      "plinth": {
+        "fill": "#004225"
+      },
+      "addedNote": "2026-10-08, the owner: \"a green one too\", Kelly or British racing green, \"maybe with a matcha green tweeter port\""
     },
     "chocolate": {
       "name": "Chocolate",
