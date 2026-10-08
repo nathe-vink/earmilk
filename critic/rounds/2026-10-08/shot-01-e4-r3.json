@@ -1,0 +1,321 @@
+{
+ "stage1": {
+  "impression": "A competent lifestyle draft: the white-and-red carton pair flanks a sideboard in warm low sun, but the pair is small and set left over a heavy dark floor, and the left speaker's white body nearly disappears into the cream sun patch behind it. The fronts are flat cards (warm cream on the left, grey on the right), the two wordmarks render differently, the woofers are black holes with blue streaks, and denoiser smear and a laminate-smooth floor give it away as CG.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Left speaker stands clear of its background by at least 50 levels on every edge. Today its upper body has 27 levels against the sun patch on its left ([80,370,98,440] = 192.5 vs front 219.6) and 25 on its right (wall 199.3 vs side 223.9, edge step 15.3); the right speaker has a 95.9 step.",
+  "Brand red within dE2000 3 of #C62828 on gables and plinths. Today it measures 5.1 to 6.2, rendered (186,12,12) / (179,12,15): too saturated and too dark.",
+  "Sunlit white fronts at 224 to 240 with no clipped channel. Today they are 220.7 (L) and 212.8 (R), dE2000 9.3 and 9.9 from #FFFFFF.",
+  "White fronts modelled with at least 8 levels of falloff from the eave down. Today the left front reads 221.4 to 220.8 and the right 214.3 to 213.1.",
+  "Woofer cones read as dark metal with at most 15% of pixels at or below 3. Today 57% (L) and 43% (R) are; the right mid cone sits at median 4.6 against 25.9 on the left.",
+  "Both wordmarks read as cast metal and match within 15 levels. Today L is 39.8, 7 levels below its own plinth, and R is 67.4.",
+  "Oak floor reads as boards: at least 16 levels of plank-to-plank range in the shaded floor (today 10.0 at [20,760,500,890]) and grain visible near the camera (none at 4x today).",
+  "Left speaker reads as a box: its visible side and front need at least 25 levels between them. Today the side is 200.1 and the front 219.7; on the right speaker they are 82.9 and 211.5. This needs the key light from camera-left, which means re-staging the windows and sun.",
+  "No denoiser smear at 3x (twig shadows 6-10 px soft, plaster and woofer surrounds smudged) and a frame big enough for a spread. Both are fixed on this card."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The sun patch on the near-white wall is as bright as the white cabinet in front of it, so the left speaker's upper body has no silhouette and the product is not the clearest thing in the frame; the copy-space wall is a mauve mid-grey that suits neither dark nor light type.",
+   "evidence": {
+    "region": [
+     80,
+     370,
+     98,
+     440
+    ],
+    "measured": "Wall left of the left speaker 192.5 vs its front [100,370,118,440] 219.6 (27 levels). Wall right of it [248,300,262,400] 199.3 vs its sunlit side [234,360,247,440] 223.9 (25 levels; edge step 15.3 at [240,330,275,400]). The right speaker against shaded wall has a 95.9 step. Copy wall [960,80,1330,480] 120.3, rgb (123,119,124)."
+   },
+   "change": {
+    "setting": "set.wall.color",
+    "from": "#E6E0D5",
+    "to": "#B0A595"
+   },
+   "expected": "The sun patch beside the left speaker drops to 130-172 and still reads as warm sun against shaded wall near 85-100. The left speaker's upper front and side stand at least 55 levels clear of it. The copy-space wall goes from 120.3 (mauve, R=B>G) to about 85-100 warm-neutral (R>=G>=B), a calm field for white type. The patch keeps its window-frame and twig shadows.",
+   "accept": {
+    "region": [
+     80,
+     370,
+     98,
+     440
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     130,
+     172
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "post",
+   "problem": "The view transform's toe takes the darkest channel out of dark and saturated pixels. That crushes the drivers and pushes the brand red to neon: G and B sit at 9-15 where #C62828 has 40.",
+   "evidence": {
+    "region": [
+     100,
+     298,
+     926,
+     365
+    ],
+    "measured": "part:gable-block L (186,12,12) dE 5.45, R (179,12,15) dE 6.06, both 5.73. Plinths [104,617,230,628] (190,9,10) dE 5.26 and [798,617,922,628] (179,11,14) dE 6.16. part:woofer-cone L median 1.6 with 57.2% <=3, R 5.2 with 43.1%. Right mid cone median 4.6 (29.9% crushed). Art [462,92,562,215] (3,31,47). Inverting the Khronos PBR Neutral toe on this frame gives gables (186,43,43), dE 2.49."
+   },
+   "change": {
+    "setting": "render.view",
+    "from": "Khronos PBR Neutral",
+    "to": "Standard"
+   },
+   "expected": "Gables and plinths read about (186-198, 40-48, 40-48), dE2000 at or under 3.5. Woofer cones lift from medians 1.6/5.2 to about 15-30 with at most 15% crushed, keeping the glint streak. The right mid cone goes from 4.6 to about 30. Shadows open by 10-20 levels (shaded floor 58 to about 70-78). Only specular lines on the cabinet corners and waveguide rim may clip, under 0.5% of the frame.",
+   "accept": {
+    "region": "part:gable-block",
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 3.5
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "The sunlit white fronts render light grey-cream instead of white. Most of their light is bounce: the two toed-in fronts differ 39% in sun incidence (0.53 vs 0.38) but only 8 levels in value. c1's darker walls will cut that bounce further.",
+   "evidence": {
+    "region": [
+     110,
+     455,
+     225,
+     490
+    ],
+    "measured": "Left white band 220.7, rgb (230,219,210), dE2000 9.26 to #FFFFFF. Right band [800,455,920,490] 212.8, dE 9.9. Frame p99 220.5, clip 0.0%, so there is headroom."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 1.1,
+    "to": 1.4
+   },
+   "expected": "Left white band at 224-234 and the right one about 10 lower, after c1 and c2. The left speaker's sunlit side [234,360,247,440] stays under clipping (R channel at most 252). There is room left for c4's ramp at the eave, and the red stays within dE 3.5.",
+   "accept": {
+    "region": [
+     110,
+     455,
+     225,
+     490
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     224,
+     234
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "Both lacquered white fronts are one value from eave to plinth, so the cabinets read as flat cards instead of gloss-coated volumes.",
+   "evidence": {
+    "region": [
+     221,
+     368,
+     229,
+     612
+    ],
+    "measured": "Left front strip profile 221.4, 221.7, 221.5, 221.8, 222.0, 221.5, 220.9, 220.8 (falloff 0.6, range 2.6). Right strip [913,368,921,612] 214.3 to 213.1 (falloff 1.2)."
+   },
+   "change": {
+    "setting": "lights.front_ramp",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      3.7,
+      0.6
+     ],
+     "position": [
+      0,
+      -4.6,
+      0.3
+     ],
+     "target": [
+      0,
+      0,
+      0.3
+     ],
+     "strength": 1.0,
+     "color": "#FFF8F0",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.0,
+       0.56
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "This is an upright panel 0.4 m behind the camera, 3.7 m wide in x by 0.6 m tall in z, seen only in reflections. It sits where the clear coat mirrors the camera's rays from the upper third of each front (the eave at z 0.87 mirrors z 0.56; z 0.6 mirrors the floor). The result is a smooth ramp in the lacquer from the eave down about a third of each front: the top bin 8-14 levels above the lower front on both speakers, no channel clipped (top under 248 luma). Trim rings pick up a thin rim highlight; the lower fronts and c3's band are unchanged.",
+   "accept": {
+    "region": [
+     221,
+     368,
+     229,
+     612
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     8,
+     14
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "material",
+   "problem": "The oak boards are nearly identical in tone and show no grain, so the floor reads as smooth laminate. The card requires a floor that reads as a real material.",
+   "evidence": {
+    "region": [
+     20,
+     760,
+     500,
+     890
+    ],
+    "measured": "Shaded floor lum_range 10.0 (p5 54.2, p95 64.2), median 58.3. A 4x crop of [900,700,1120,840] shows seams and flat boards with no visible figure."
+   },
+   "change": {
+    "setting": "set.floor.plank_contrast",
+    "from": 0.45,
+    "to": 0.8
+   },
+   "expected": "Board-to-board variation in the shaded floor rises from 10 to 16-30 levels, so individual oak boards read under the low sun without turning into a checkerboard. The sunlit band keeps its mullion shadows.",
+   "accept": {
+    "region": [
+     20,
+     760,
+     500,
+     890
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     16,
+     30
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "Once c1 darkens the walls, the unchanged off-white skirting will become a bright band right across the copy space and behind both speakers at woofer height. Today it barely shows.",
+   "evidence": {
+    "region": [
+     960,
+     540,
+     1330,
+     556
+    ],
+    "measured": "Skirting 128.0, rgb (126,127,141), vs wall above [960,500,1330,528] 122.9 today. With the wall near 90-100 after c1, an #EDEAE4 skirting would sit 40-50 levels above it."
+   },
+   "change": {
+    "setting": "set.skirting.color",
+    "from": "#EDEAE4",
+    "to": "#BCB2A3"
+   },
+   "expected": "Skirting painted a shade lighter than the new wall: 0-15 levels above the wall in the copy space instead of a 40-50-level stripe. The floor line stays legible, the frame keeps no extra horizontal, and the skirting loses its blue cast.",
+   "accept": {
+    "region": [
+     960,
+     540,
+     1330,
+     556
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     88,
+     118
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The cast wordmarks mirror the floor just in front of each plinth (which is why glints 3 and 4 were skipped). The left one mirrors shaded floor and goes darker than its own red plinth; the right one mirrors sunlit floor and goes grey, so the pair's marks neither read as metal nor match.",
+   "evidence": {
+    "region": [
+     100,
+     600,
+     260,
+     660
+    ],
+    "measured": "Left letters (part letters-front-* in this box) median 39.8, rgb (77,31,8), vs plinth [104,629,134,642] 46.8 (188,9,9). Right letters 67.4, rgb (99,60,46). Glints 3 and 4 skipped: the letters mirror floor 0.24 m away."
+   },
+   "change": {
+    "setting": "lights.letters_card",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.5,
+      0.2
+     ],
+     "position": [
+      0,
+      -0.44,
+      0.003
+     ],
+     "target": [
+      0,
+      -0.44,
+      1.0
+     ],
+     "strength": 1.0,
+     "color": "#FFFFFF",
+     "diffuse": false
+    }
+   },
+   "expected": "An upward-facing card lying on the floor 0.15-0.35 m in front of both plinths (y -0.54 to -0.34, where the letters at z 0.04-0.08 mirror it), seen only in reflections. Both wordmarks read as cast metal catching light: letter faces at 110-165 against plinths near 75 after c2, left and right within 15 levels. The plinths' clear coat picks up at most a faint band (plinth dE to #C62828 still at or under 3.5). The white fronts and the floor are unaffected.",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      100,
+      600,
+      260,
+      660
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     110,
+     165
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "More samples or lighter denoising to remove the painterly smear",
+   "why": "Sampling settings are fixed. At 3x the twig shadows on the wall are 6-10 px soft (about 2 px expected from a 0.53 degree sun at 0.75 m), the plaster mottles and the woofer surrounds smudge. At magazine-spread size this reads as CG, and it caps the frame below 9."
+  },
+  {
+   "request": "Render the frame larger than 1350 x 900 for the magazine spread",
+   "why": "Frame size is fixed. A printed spread needs roughly four times the width, and upscaling this frame will magnify the denoiser smear and the 10 px-tall wordmark."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

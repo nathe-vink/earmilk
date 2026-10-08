@@ -39,8 +39,8 @@
   "denoise": true,
   "clamp": 8,
   "bounces": 12,
-  "view": "Khronos PBR Neutral",
-  "exposure": 1.1,
+  "view": "Standard",
+  "exposure": 1.4,
   "white_balance_k": 4900
  },
  "title": "Hero pair, sunlit living room",
@@ -61,15 +61,15 @@
    "base": "#A97F55",
    "dark": "#8E6843",
    "light": "#BF9668",
-   "plank_contrast": 0.45
+   "plank_contrast": 0.8
   },
   "wall": {
-   "color": "#E6E0D5"
+   "color": "#B0A595"
   },
   "ceiling": "#F2EFEA",
   "skirting": {
    "h": 0.12,
-   "color": "#EDEAE4"
+   "color": "#BCB2A3"
   },
   "windows": [
    {
@@ -192,7 +192,59 @@
   "horizon": "#E7EDF2",
   "ground": "#857F73"
  },
- "lights": {},
+ "lights": {
+  "front_ramp": {
+   "type": "panel",
+   "size_m": [
+    3.7,
+    0.6
+   ],
+   "position": [
+    0,
+    -4.6,
+    0.3
+   ],
+   "target": [
+    0,
+    0,
+    0.3
+   ],
+   "strength": 1.0,
+   "color": "#FFF8F0",
+   "ramp": {
+    "axis": "z",
+    "at_m": [
+     0.0,
+     0.56
+    ],
+    "values": [
+     0,
+     1
+    ]
+   },
+   "diffuse": false
+  },
+  "letters_card": {
+   "type": "panel",
+   "size_m": [
+    2.5,
+    0.2
+   ],
+   "position": [
+    0,
+    -0.44,
+    0.003
+   ],
+   "target": [
+    0,
+    -0.44,
+    1.0
+   ],
+   "strength": 1.0,
+   "color": "#FFFFFF",
+   "diffuse": false
+  }
+ },
  "glints": [
   {
    "at": [

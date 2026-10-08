@@ -67,6 +67,25 @@ def smooth_parts(bpy, parts, rules):
         me.set_sharp_from_angle(angle=math.radians(r.get('angle_deg', 20)))
 
 
+def _upsample(A, f, axis=0, closed=False):
+    """A sampled surface (S, T, 3) made f times finer along `axis` by Catmull-Rom between its samples (closed: the
+    axis wraps round)."""
+    import numpy as np
+    A = np.moveaxis(A, axis, 0)
+    n = A.shape[0]
+    idx = lambda k: (k % n) if closed else min(max(k, 0), n - 1)
+    out = []
+    segs = n if closed else n - 1
+    for k in range(segs):
+        p0, p1, p2, p3 = A[idx(k - 1)], A[idx(k)], A[idx(k + 1)], A[idx(k + 2)]
+        for s in range(f):
+            t = s / f
+            out.append(0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t ** 3))
+    if not closed:
+        out.append(A[-1])
+    return np.moveaxis(np.array(out), 0, axis)
+
+
 def _grid_normal(p, quad, V, NV):
     """The grid's normal at p, linear across the triangle of the quad p lies on (a, b, c or a, c, d): continuous
     across the grid, where weighting the four corners by distance spikes at each one and a mirrored edge saw-tooths
@@ -111,6 +130,7 @@ def normals_from(bpy, parts, rules, origin_mm, root):
                  for i in range(S) for j in range(T - 1)]
         bvh = BVHTree.FromPolygons(V.tolist(), quads)
         me = ob.data
+        skin_normals = {}
         within = r.get('within_mm', 0.3) / 1000.0
         if r.get('refine'):
             # normals alone cannot fix a long thin facet: the normal interpolated across it still kinks at its edges,
@@ -141,27 +161,46 @@ def normals_from(bpy, parts, rules, origin_mm, root):
             # and pokes through a skin laid closer than that)
             import bmesh
             off = r.get('skin_offset_mm', 0.05) / 1000.0
+            up = int(r['skin']) if not isinstance(r['skin'], bool) else 1
+            SV, SN = G.astype(float), NG.astype(float)
+            if up > 1:
+                # Catmull-Rom between the grid's samples, round the axis (closed) and along the wall (open): a skin up
+                # times finer, since Cycles keeps a grazing reflection above each flat triangle and the correction
+                # steps at the triangles' size
+                SV, SN = _upsample(SV, up, closed=True), _upsample(SN, up, closed=True)
+                SV, SN = _upsample(SV, up, axis=1), _upsample(SN, up, axis=1)
+                SN /= np.linalg.norm(SN, axis=2, keepdims=True)
+            S2, T2 = SV.shape[:2]
+            SVf = ((SV - np.array(origin_mm, dtype=float)) / 1000.0).reshape(-1, 3); SNf = SN.reshape(-1, 3)
+            squads = [((i % S2) * T2 + j, ((i + 1) % S2) * T2 + j, ((i + 1) % S2) * T2 + j + 1, (i % S2) * T2 + j + 1)
+                      for i in range(S2) for j in range(T2 - 1)]
             bm = bmesh.new(); bm.from_mesh(me)
-            vs = [bm.verts.new(Vector(V[k]) + Vector(NV[k]) * off) for k in range(len(V))]
+            n_before = len(bm.verts)
+            vs = [bm.verts.new(Vector(SVf[k]) + Vector(SNf[k]) * off) for k in range(len(SVf))]
             bm.verts.ensure_lookup_table()
             nf = 0
-            for q in quads:
+            for q in squads:
                 try:
                     # wound so the face's normal points into the air, as the grid's normals do
                     f = bm.faces.new([vs[k] for k in q])
                 except ValueError:
                     continue
                 f.normal_update()                          # a new face's normal is not computed until asked
-                if f.normal.dot(Vector(NV[q[0]])) < 0:
+                if f.normal.dot(Vector(SNf[q[0]])) < 0:
                     f.normal_flip()
                 f.smooth = True; f.material_index = 0; nf += 1
             bm.to_mesh(me); bm.free(); me.update()
-            print(f'normals: {name}: a skin of {nf} faces from {r["grid"]}, {off * 1000:g} mm over the facets')
-            # its own corners sit on the grid (the BVH below finds them within `within`); the facets beneath keep theirs
+            print(f'normals: {name}: a skin of {nf} faces from {r["grid"]} (x{up}), {off * 1000:g} mm over the facets')
+            if up > 1:
+                # the skin's own corners take its interpolated normals directly; the facets beneath go through the BVH
+                skin_normals = {n_before + k: Vector(SNf[k]) for k in range(len(SNf))}
         corner = [Vector(c.vector) for c in me.corner_normals]
         at_vertex, changed = {}, 0
         for li, loop in enumerate(me.loops):
             vi = loop.vertex_index
+            if vi in skin_normals:
+                corner[li] = skin_normals[vi]; changed += 1
+                continue
             if vi not in at_vertex:
                 loc, _, fi, _ = bvh.find_nearest(me.vertices[vi].co, within)
                 if loc is None:
