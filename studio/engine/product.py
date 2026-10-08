@@ -112,29 +112,7 @@ def normals_from(bpy, parts, rules, origin_mm, root):
         bvh = BVHTree.FromPolygons(V.tolist(), quads)
         me = ob.data
         within = r.get('within_mm', 0.3) / 1000.0
-        if r.get('skin'):
-            # the true surface itself, as fine as the grid, a hair into the air over the CAD's facets: a concave bowl
-            # mirrors its own far wall, so its facets show in reflections however its normals are set
-            import bmesh
-            off = r.get('skin_offset_mm', 0.05) / 1000.0
-            bm = bmesh.new(); bm.from_mesh(me)
-            vs = [bm.verts.new(Vector(V[k]) + Vector(NV[k]) * off) for k in range(len(V))]
-            bm.verts.ensure_lookup_table()
-            nf = 0
-            for q in quads:
-                try:
-                    # wound so the face's normal points into the air, as the grid's normals do
-                    f = bm.faces.new([vs[k] for k in q])
-                except ValueError:
-                    continue
-                f.normal_update()                          # a new face's normal is not computed until asked
-                if f.normal.dot(Vector(NV[q[0]])) < 0:
-                    f.normal_flip()
-                f.smooth = True; f.material_index = 0; nf += 1
-            bm.to_mesh(me); bm.free(); me.update()
-            print(f'normals: {name}: a skin of {nf} faces from {r["grid"]}, {off * 1000:g} mm over the facets')
-            # its own corners sit on the grid (the BVH below finds them within `within`); the facets beneath keep theirs
-        if r.get('refine') and not r.get('skin'):
+        if r.get('refine'):
             # normals alone cannot fix a long thin facet: the normal interpolated across it still kinks at its edges,
             # and a mirrored light's edge saw-tooths along them. Cut each facet on the surface into refine+1 a side
             # and set the new corners on the true surface (each one's nearest point on the grid)
@@ -157,6 +135,29 @@ def normals_from(bpy, parts, rules, origin_mm, root):
                 poly.use_smooth = True
             print(f'normals: {name}: {len(faces)} facets on the surface refined x{int(r["refine"]) + 1} a side, '
                   f'{n0} to {len(me.polygons)} faces, {moved} new corners set on it')
+        if r.get('skin'):
+            # the true surface itself, as fine as the grid, a hair into the air over the CAD's facets (refined first:
+            # on a concave bowl a flat facet bulges into the air by its sagitta, 0.16 mm on the ruled loft's coarsest,
+            # and pokes through a skin laid closer than that)
+            import bmesh
+            off = r.get('skin_offset_mm', 0.05) / 1000.0
+            bm = bmesh.new(); bm.from_mesh(me)
+            vs = [bm.verts.new(Vector(V[k]) + Vector(NV[k]) * off) for k in range(len(V))]
+            bm.verts.ensure_lookup_table()
+            nf = 0
+            for q in quads:
+                try:
+                    # wound so the face's normal points into the air, as the grid's normals do
+                    f = bm.faces.new([vs[k] for k in q])
+                except ValueError:
+                    continue
+                f.normal_update()                          # a new face's normal is not computed until asked
+                if f.normal.dot(Vector(NV[q[0]])) < 0:
+                    f.normal_flip()
+                f.smooth = True; f.material_index = 0; nf += 1
+            bm.to_mesh(me); bm.free(); me.update()
+            print(f'normals: {name}: a skin of {nf} faces from {r["grid"]}, {off * 1000:g} mm over the facets')
+            # its own corners sit on the grid (the BVH below finds them within `within`); the facets beneath keep theirs
         corner = [Vector(c.vector) for c in me.corner_normals]
         at_vertex, changed = {}, 0
         for li, loop in enumerate(me.loops):

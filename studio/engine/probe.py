@@ -106,3 +106,37 @@ def reflections(bpy, scene, cam, objs, part_of, pattern, match, step=2):
         out[what] = {'share': round(s['n'] / total, 3), 'box_px': [s['x0'], s['y0'], s['x1'], s['y1']],
                      'az_deg': [q(az, 0.05), q(az, 0.5), q(az, 0.95)], 'el_deg': [q(el, 0.05), q(el, 0.5), q(el, 0.95)]}
     return {'part': pattern, 'pixels_sampled': total, 'step': step, 'seen': out}
+
+
+def reflection_map(bpy, scene, cam, objs, part_of, pattern, match, box, out_png):
+    """Every pixel of `box` [x0, y0, x1, y1] (the frame's pixels) on parts matching `pattern`, coloured by what its
+    reflected ray meets first (the shading normal's mirror, as the render's): a map of which object draws which part
+    of a reflection, to find the one behind an artefact. Writes out_png and returns {label: [pixels, colour]}."""
+    import numpy as np
+    from PIL import Image
+    dg = bpy.context.evaluated_depsgraph_get()
+    W, H = scene.render.resolution_x, scene.render.resolution_y
+    M = cam.matrix_world; origin = M.translation
+    tr, br, bl, tl = [M @ v for v in cam.data.view_frame(scene=scene)]
+    targets = {o.name for o in objs if match(part_of[o.name], pattern)}
+    x0, y0, x1, y1 = box
+    img = np.zeros((y1 - y0, x1 - x0, 3), np.uint8)
+    pal, counts = {}, {}
+    colours = [(230, 60, 60), (60, 160, 230), (250, 200, 40), (90, 200, 90), (200, 90, 220), (240, 140, 40), (40, 40, 40), (255, 255, 255), (120, 120, 120)]
+    for py in range(y0, y1):
+        for px in range(x0, x1):
+            u, v = (px + 0.5) / W, (py + 0.5) / H
+            d = ((tl + (tr - tl) * u + (bl - tl) * v) - origin).normalized()
+            hit, loc, nrm, hob = _cast(scene, dg, origin, d, through_panels=True)
+            if not hit or hob.name not in targets:
+                continue
+            n = nrm if nrm.dot(d) < 0 else -nrm
+            r = (d - 2 * d.dot(n) * n).normalized()
+            o2 = loc + n * 1e-4
+            hit2, loc2, _, hob2 = _cast(scene, dg, o2, r, through_panels=False, receiver=hob.name)
+            what = (('panel ' if hob2.get('engine_light') else '') + _clean(hob2.name)) if hit2 else 'world (sky)'
+            if what not in pal:
+                pal[what] = colours[len(pal) % len(colours)]
+            img[py - y0, px - x0] = pal[what]; counts[what] = counts.get(what, 0) + 1
+    Image.fromarray(img).save(out_png)
+    return {k: [counts[k], pal[k]] for k in counts}

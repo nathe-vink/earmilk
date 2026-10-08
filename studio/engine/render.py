@@ -191,7 +191,14 @@ def main():
     out = Path(a.out); out.parent.mkdir(parents=True, exist_ok=True)
     if a.probe:
         import probe as Pb
-        res = {pat: Pb.reflections(bpy, scene, cam, objs, part_of, pat, Pr._match) for pat in a.probe}
+        res = {}
+        for pat in a.probe:
+            if '@' in pat:          # 'part@x0,y0,x1,y1': a per-pixel map of what that box of the part reflects
+                pp, bx = pat.split('@')
+                res[pat] = Pb.reflection_map(bpy, scene, cam, objs, part_of, pp, Pr._match, [int(v) for v in bx.split(',')],
+                                             str(out.with_suffix('.map.png')))
+            else:
+                res[pat] = Pb.reflections(bpy, scene, cam, objs, part_of, pat, Pr._match)
         out.with_suffix('.probe.json').write_text(json.dumps({'shot': a.shot, 'scale': a.scale, 'glints': glint_log, 'probes': res}, indent=1) + '\n')
         for pat, r in res.items():
             print(f'{pat}: {r.get("pixels_sampled", 0)} pixels sampled' + (f' ({r["error"]})' if 'error' in r else ''))
