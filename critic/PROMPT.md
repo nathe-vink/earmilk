@@ -45,7 +45,8 @@ Then prescribe the changes that would raise the score most, at most eight, ranke
 
 - the **problem**, in one sentence, and the **evidence**: the region and what you measured;
 - the **change**: one setting from the card, its current value and the value to set (or a delta), in the card's
-  units. If the fix needs something the card does not offer (a new prop, a texture, a light the set lacks), say so as
+  units. Write "to" as a plain JSON value (a number, a list, an object, a quoted string, or a delta such as "+0.5"),
+  with nothing else in it: any remark belongs in "expected". If the fix needs something the card does not offer (a new prop, a texture, a light the set lacks), say so as
   a change of kind "asset" and describe exactly what is needed (what, where, how big, how bright). If it would change
   something the card marks fixed, do not prescribe it: list it under `out_of_scope`, with the reason it matters;
 - the **expected** result in the frame, in measurable terms;

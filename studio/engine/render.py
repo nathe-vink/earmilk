@@ -63,6 +63,8 @@ def main():
     for blk in blocks:
         pdef = Pr.load_def(blk['def'], ROOT)
         templates = Pr.import_model(bpy, Path(ROOT, pdef['model']), pdef['origin_mm'], pdef.get('axes', 'gltf'))
+        if pdef.get('smooth'):
+            Pr.smooth_parts(bpy, templates, pdef['smooth'])
         o_, p_ = Pr.place(bpy, pdef, templates, {**sh, 'product': blk}, ROOT)
         objs += o_; part_of.update(p_)
     if objs:
@@ -109,14 +111,15 @@ def main():
         Lt.sun(bpy, sh['sun'])
     Lt.world(bpy, sh.get('sky', {'kind': 'gradient'}), sh.get('sun'))
     for name, spec in (sh.get('lights') or {}).items():
-        if spec.get('off'):
+        if not spec or spec.get('off'):
             continue
         kind = spec.get('type', 'area')
         ob = {'area': Lt.area, 'spot': Lt.spot, 'point': Lt.point}[kind](bpy, name, spec, centre)
         if spec.get('receivers'):
             Lt.link_receivers(bpy, ob, [o for o in objs if any(Pr._match(part_of[o.name], r) for r in spec['receivers'])])
     gl = sh.get('glints') or []
-    for i, g in enumerate(gl.values() if isinstance(gl, dict) else gl):   # a list, or named glints
+    gl = [g for g in (gl.values() if isinstance(gl, dict) else gl) if g]    # a list, or named glints; gaps skipped
+    for i, g in enumerate(gl):
         ob = Lt.glint(bpy, f'glint{i}', g, C)
         if g.get('receivers'):
             Lt.link_receivers(bpy, ob, [o for o in objs if any(Pr._match(part_of[o.name], r) for r in g['receivers'])])
@@ -155,7 +158,11 @@ def main():
     vs.exposure = R.get('exposure', 0.0)
     if R.get('white_balance_k'):
         vs.use_white_balance = True; vs.white_balance_temperature = R['white_balance_k']; vs.white_balance_tint = R.get('white_balance_tint', 10.0)
-    scene.render.image_settings.file_format = 'PNG'; scene.render.image_settings.color_depth = '8'
+    if R.get('format') == 'EXR':
+        # scene-linear radiance, no view transform: what the meter reads
+        scene.render.image_settings.file_format = 'OPEN_EXR'; scene.render.image_settings.color_depth = '32'
+    else:
+        scene.render.image_settings.file_format = 'PNG'; scene.render.image_settings.color_depth = '8'
 
     out = Path(a.out); out.parent.mkdir(parents=True, exist_ok=True)
     scene.render.filepath = str(out.resolve())
@@ -223,6 +230,7 @@ def _masks(bpy, scene, objs, part_of, out):
         vs.view_transform = 'Raw'
     except TypeError:
         pass
+    scene.render.image_settings.file_format = 'PNG'; scene.render.image_settings.color_depth = '8'
     mp = out.with_suffix('.mask.png')
     scene.render.filepath = str(mp.resolve())
     bpy.ops.render.render(write_still=True)

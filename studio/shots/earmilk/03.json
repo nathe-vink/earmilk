@@ -1,15 +1,148 @@
 {
- "extends": "base.json",
- "title": "The waveguide, close",
- "size": [1800, 1200],
- "product": {"def": "studio/products/earmilk.json", "flavour": "whole", "instances": [{"position": [0, 0, 0], "rotate_z": -16}]},
- "set": {"kind": "sweep", "color": "#B7B2AA", "width": 8, "front": 6, "depth": 1.6, "radius": 1.2, "height": 5},
- "camera": {"position": [0.42, -1.1, 1.42], "target": [0.0, -0.03, 0.93], "lens_mm": 85, "level": false, "fstop": 8, "focus": [0.0, -0.06, 0.93]},
- "sky": {"kind": "gradient", "strength": 0.5, "zenith": "#FFFFFF", "horizon": "#D6D3CD", "ground": "#6A665F"},
- "lights": {
-  "key": {"type": "area", "size_m": [1.0, 1.0], "orbit": {"azimuth_deg": -50, "elevation_deg": 55, "distance_m": 1.6}, "target": [0, 0, 0.95], "irradiance": 3.0, "color": 5600},
-  "fill": {"type": "area", "size_m": [1.5, 1.5], "orbit": {"azimuth_deg": 50, "elevation_deg": 25, "distance_m": 2.5}, "target": [0, 0, 0.9], "irradiance": 0.7, "color": 6200, "specular": 0.4},
-  "top": {"type": "area", "size_m": [1.6, 0.4], "position": [0.0, -0.35, 2.3], "target": [0.0, -0.05, 0.95], "irradiance": 1.4, "color": 6000}
+ "size": [
+  1800,
+  1200
+ ],
+ "product": {
+  "def": "studio/products/earmilk.json",
+  "flavour": "whole",
+  "instances": [
+   {
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "rotate_z": -16
+   }
+  ]
  },
- "render": {"exposure": 0.0}
+ "materials": {},
+ "render": {
+  "samples": 192,
+  "adaptive": 0.015,
+  "denoise": true,
+  "clamp": 8,
+  "bounces": 12,
+  "view": "Khronos PBR Neutral",
+  "exposure": 0.0,
+  "white_balance_k": 5700
+ },
+ "title": "The waveguide, close",
+ "set": {
+  "kind": "sweep",
+  "color": "#B7B2AA",
+  "width": 8,
+  "front": 6,
+  "depth": 1.6,
+  "radius": 1.2,
+  "height": 5
+ },
+ "camera": {
+  "position": [
+   0.42,
+   -1.1,
+   1.42
+  ],
+  "target": [
+   0.0,
+   -0.03,
+   0.93
+  ],
+  "lens_mm": 85,
+  "level": false,
+  "fstop": 16,
+  "focus": [
+   0.0,
+   -0.06,
+   0.93
+  ]
+ },
+ "sky": {
+  "kind": "gradient",
+  "strength": 0.5,
+  "zenith": "#FFFFFF",
+  "horizon": "#D6D3CD",
+  "ground": "#6A665F"
+ },
+ "lights": {
+  "key": {
+   "type": "area",
+   "size_m": [
+    1.0,
+    1.0
+   ],
+   "orbit": {
+    "azimuth_deg": -50,
+    "elevation_deg": 20,
+    "distance_m": 1.6
+   },
+   "target": [
+    0,
+    0,
+    0.95
+   ],
+   "irradiance": 3.0,
+   "color": 5600
+  },
+  "fill": {
+   "type": "area",
+   "size_m": [
+    1.5,
+    1.5
+   ],
+   "orbit": {
+    "azimuth_deg": 50,
+    "elevation_deg": 25,
+    "distance_m": 2.5
+   },
+   "target": [
+    0,
+    0,
+    0.9
+   ],
+   "irradiance": 1.2,
+   "color": 5700,
+   "specular": 0.4
+  },
+  "top": {
+   "type": "area",
+   "size_m": [
+    1.6,
+    0.4
+   ],
+   "position": [
+    0.45,
+    -0.35,
+    2.3
+   ],
+   "target": [
+    0.0,
+    -0.05,
+    0.95
+   ],
+   "irradiance": 1.4,
+   "color": 6000
+  }
+ },
+ "glints": [
+  null,
+  {
+   "at": [
+    0.0,
+    -0.049,
+    0.953
+   ],
+   "normal": [
+    -0.23,
+    -0.66,
+    0.72
+   ],
+   "size_m": 0.04,
+   "power_w": 3,
+   "receivers": [
+    "tweeter-dome"
+   ]
+  }
+ ]
 }

@@ -324,5 +324,11 @@
    "mode": "ink",
    "material": "accent"
   }
+ ],
+ "smooth": [
+  {
+   "match": "waveguide-insert",
+   "angle_deg": 20
+  }
  ]
 }

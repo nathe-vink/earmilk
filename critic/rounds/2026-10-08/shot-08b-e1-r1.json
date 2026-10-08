@@ -1,0 +1,334 @@
+{
+ "stage1": {
+  "impression": "A legible cutaway of a house-shaped object with a glossy red horn and a black driver, but the beige section and the warm-grey backdrop are each one flat value, so most of the frame reads as a CAD fill rather than a lit photograph. A zipper of jagged sparkles along the horn's lower crease, a grainy grey band under the horn, a near-black driver block, a dull brick-red chimney that does not match the gloss red, and a crop that stops in the rooms with no ground keep it a draft.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The birch section reads as a lit plane: at least 15 levels of falloff from the ridge to the top panel on the section left of the bay.",
+  "The interior recedes: the left room wall [600,740,840,890] at least 40 levels under the section mid-tone [250,560,520,630] (now 215.3 vs 209.0).",
+  "No faceting in the horn: edge (x) <= 6 in [1060,553,1100,566] (now 15.0).",
+  "Clean section fills: the insert's cut face p5-p95 range <= 3.5 in [800,590,860,620] (now 6.5).",
+  "The accent reads as the accent: the fin's front face within dE2000 6 of #C62828 (now 14.91), the horn's diffuse red within dE2000 5 (now 7.19).",
+  "A finished backdrop: a soft pool of at least 10 levels across the top band (now 4.0), neutral.",
+  "The tweeter's dome profile separates from the throat red by at least 25 luminance levels (now 62.2 vs 50.4)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The interior is brighter than the cut face in front of it, so depth reads inverted and the eye drops into the empty left room instead of the tweeter.",
+   "evidence": {
+    "region": [
+     600,
+     740,
+     840,
+     890
+    ],
+    "measured": "Left room back wall lum_median 215.3 against the birch section [250,560,520,630] at 209.0; the inside lamp at 5 deg shines under the top panel straight onto the back wall."
+   },
+   "change": {
+    "setting": "lights.inside.orbit.elevation_deg",
+    "from": "5",
+    "to": "35"
+   },
+   "expected": "The visible room walls fall to about 120-150, at least 45 levels under the section; the connector bay and channel stay lit from above-front.",
+   "accept": {
+    "region": [
+     600,
+     740,
+     840,
+     890
+    ],
+    "metric": "lum_median",
+    "op": "<=",
+    "value": 170
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "asset",
+   "problem": "The rim highlight on the crease along the horn's lower wall breaks into a row of saw-tooth sparkles, a tessellation artefact on the hero part.",
+   "evidence": {
+    "region": [
+     1060,
+     553,
+     1100,
+     566
+    ],
+    "measured": "edge (x) 15.0 against 0.4 on smooth red; diagonal highlight dashes about 4.5 mm apart along the crease; waveguide-insert pixels."
+   },
+   "change": {
+    "setting": "asset: waveguide-insert mesh, horn surface along its lower crease",
+    "from": "faceted about every 4.5 mm",
+    "to": "smooth vertex normals on the round, split only at true sharp edges; profile unchanged"
+   },
+   "expected": "One continuous crease highlight; edge in the test box <= 6.",
+   "accept": {
+    "region": [
+     1060,
+     553,
+     1100,
+     566
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "<=",
+    "value": 6
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The birch cut face is one value from ridge to top panel and from eave to insert, so it reads as a flat fill rather than a lit section.",
+   "evidence": {
+    "region": [
+     300,
+     400,
+     520,
+     712
+    ],
+    "measured": "birch section falloff 0.7; red channel at 240-242, above PBR Neutral's knee."
+   },
+   "change": {
+    "setting": "lights.key.orbit.distance_m",
+    "from": "1.5",
+    "to": "0.7"
+   },
+   "expected": "About 10-18 levels brighter near the ridge than at the top panel; section mid-tone about 195-203.",
+   "accept": {
+    "region": {
+     "part": "gable-block|top-panel",
+     "box": [
+      300,
+      400,
+      520,
+      712
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": ">=",
+    "value": 10
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "Sky ambient sets the backdrop and fills every plane evenly, so the sweep is a flat mid-grey card and the shaping lamps cannot model the product.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     1350,
+     120
+    ],
+    "measured": "top band range 4.0; left strip median 158.9, only about 50 levels under the 209 section."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": "0.6",
+    "to": "0.3"
+   },
+   "expected": "The backdrop drops to about 120-135; the fin's clear-coat veil falls by about a third.",
+   "accept": {
+    "region": [
+     0,
+     0,
+     170,
+     900
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     105,
+     142
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "Moved to 0.7 m at its current 0.9 m size, the key would smear every specular it makes and soften the falloff c3 is for.",
+   "evidence": {
+    "region": [
+     621,
+     395,
+     656,
+     612
+    ],
+    "measured": "magnets-insert lum_p95 239.0; a 0.9 m panel at 0.7 m has about 3.5x the solid angle of today's key."
+   },
+   "change": {
+    "setting": "lights.key.size_m",
+    "from": "[0.9, 0.9]",
+    "to": "[0.45, 0.45]"
+   },
+   "expected": "The key keeps today's angular size at 0.7 m; magnets' p95 stays at 215 or above.",
+   "accept": {
+    "region": "part:magnets-insert",
+    "metric": "lum_p95",
+    "op": ">=",
+    "value": 215
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "asset",
+   "problem": "The insert's grey cut face carries a vertical streak grain that reads as noise next to the clean birch section.",
+   "evidence": {
+    "region": [
+     800,
+     590,
+     860,
+     620
+    ],
+    "measured": "p5-p95 range 6.5 against 3.0 on the birch; vertical streaks of about 21 px period."
+   },
+   "change": {
+    "setting": "asset: waveguide-insert section (cut-face) material",
+    "from": "grey section with a streaked grain",
+    "to": "smooth matte section shader at the same colour and value, no bump or grain"
+   },
+   "expected": "The insert's cut face as clean as the birch: range <= 3.5.",
+   "accept": {
+    "region": [
+     800,
+     590,
+     860,
+     620
+    ],
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 3.5
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The fin's front face reads dusty brick instead of the accent red because no lamp reaches it and the clear coat mirrors the grey sweep.",
+   "evidence": {
+    "region": [
+     692,
+     140,
+     752,
+     250
+    ],
+    "measured": "fin front face rgb 151,96,88, dE2000 14.91 vs #C62828; throat right of the dome lum 50.4 against the dome 62.2."
+   },
+   "change": {
+    "setting": "lights.mouth",
+    "from": "absent",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.6,
+      0.6
+     ],
+     "orbit": {
+      "azimuth_deg": 90,
+      "elevation_deg": 40,
+      "distance_m": 1.2
+     },
+     "target": [
+      0.05,
+      0.05,
+      0.97
+     ],
+     "irradiance": 2.0,
+     "color": 5600,
+     "specular": 0
+    }
+   },
+   "expected": "The fin face about rgb 185,78,75, dE2000 about 8; the throat lifts (r_median at least 175); no new highlights.",
+   "accept": {
+    "region": [
+     692,
+     140,
+     752,
+     250
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 9
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The sweep has no light of its own, so even darkened it stays an even field with nothing to seat the roof in.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     1350,
+     120
+    ],
+    "measured": "top band range 4.0; backdrop pixel range 2.7 in [20,300,150,400]."
+   },
+   "change": {
+    "setting": "lights.bg",
+    "from": "absent",
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.0,
+      1.0
+     ],
+     "orbit": {
+      "azimuth_deg": 0,
+      "elevation_deg": 25,
+      "distance_m": 1.4
+     },
+     "target": [
+      -0.55,
+      3.33,
+      0.95
+     ],
+     "irradiance": 0.45,
+     "color": 5600,
+     "specular": 0
+    }
+   },
+   "expected": "A soft pool on the sweep behind the roof; the top band's range 8-12; nothing on the product changes.",
+   "accept": {
+    "region": [
+     0,
+     0,
+     1350,
+     120
+    ],
+    "metric": "lum_range",
+    "op": ">=",
+    "value": 8
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Separate the insert's cut face from the birch cut face in value (207.2 vs 209.0).",
+   "why": "Section colours are fixed and only their reproduction may change."
+  },
+  {
+   "request": "Finish the routed connector bay and cable channel walls in raw birch instead of the red lacquer.",
+   "why": "The product's materials are fixed; the black lead separates from the dark red walls only by its sheen."
+  },
+  {
+   "request": "Re-route the tweeter cable after the grommet so it drops straight into the box.",
+   "why": "The cable path is part of the product arrangement (fixed)."
+  },
+  {
+   "request": "Show the tweeter's internals (motor, voice coil, chamber) in its section rather than a uniform dark block.",
+   "why": "What is cut and the drivers' own materials are fixed."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

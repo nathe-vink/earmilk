@@ -42,6 +42,31 @@ def load_def(path, root):
     return d
 
 
+def smooth_parts(bpy, parts, rules):
+    """Shade faceted CAD surfaces smooth: a lofted or ruled surface (a waveguide's wall) arrives from the CAD as
+    hundreds of flat facets, each with its own normals, and a gloss coat mirrors them as stair-steps. For each part a
+    rule matches, weld its vertices and mark only edges sharper than `angle_deg` as hard, so the reflection follows the
+    surface's true curve. Shading only: the geometry, and anything measured from it, stays as the CAD made it.
+
+        "smooth": [{"match": "waveguide-insert", "angle_deg": 20}]
+    """
+    import bmesh
+    for name, ob in parts.items():
+        r = next((r for r in rules if _match(name, r['match'])), None)
+        if r is None:
+            continue
+        me = ob.data
+        bm = bmesh.new(); bm.from_mesh(me)
+        bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-6)
+        bm.to_mesh(me); bm.free()
+        # the CAD's per-facet normals ride along as custom normals and would override the smoothing: drop them
+        if 'custom_normal' in me.attributes:
+            me.attributes.remove(me.attributes['custom_normal'])
+        for p in me.polygons:
+            p.use_smooth = True
+        me.set_sharp_from_angle(angle=math.radians(r.get('angle_deg', 20)))
+
+
 def import_model(bpy, glb, origin_mm, axes='gltf'):
     """Import the GLB once; return {part name: object} with the transforms baked into the meshes, in metres, in the
     CAD's frame shifted so origin_mm sits at (0, 0, 0). The objects are unlinked templates (not in the scene)."""
@@ -215,9 +240,12 @@ def cutaway(bpy, spec, instances, objs):
         r = next((r for r in rules if _match(pname, r['match'])), None)
         if r is None:
             return None
-        if r['color'] not in secs:
-            secs[r['color']] = M.make(bpy, f'section {r["color"]}', 'birch', {'color': r['color'], 'roughness': r.get('roughness', 0.7)})
-        return secs[r['color']]
+        key = (r['color'], r.get('preset', 'birch'))
+        if key not in secs:
+            # wood sections take the birch shader (its grain); anything else a plain one ("preset": "plastic")
+            ov = {'color': r['color'], 'roughness': r.get('roughness', 0.7)}
+            secs[key] = M.make(bpy, f'section {r["color"]} {key[1]}', key[1], {k: v for k, v in ov.items() if k in M.PRESET_DEFAULTS[key[1]]})
+        return secs[key]
     lo, hi = Vector((x0, y0, z0)), Vector((x1, y1, z1))
     by_inst = {}
     for ob in objs:

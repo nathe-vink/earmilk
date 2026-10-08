@@ -1,0 +1,399 @@
+{
+ "stage1": {
+  "impression": "Warm late-sun interior with two red-and-white carton-shaped speakers either side of a grey credenza; the raking light gives it mood, but the white fronts read as flat, evenly bright cards. The right speaker stays bright white while standing in the wall's shade, so it looks pasted in, and the dark wordmark on the red plinths is nearly illegible.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Each cabinet must show two faces at least 25 levels apart. Today the left speaker's lit side sits 3.2 above its front (232.2 vs 229.0, with ambient about 60% of the front's light), and the right speaker shows only its front.",
+  "Both red gables must span at least 25 levels and carry a lacquer highlight of 245 or more. Today the right gable's range is 5.3 (52.6 to 57.8) and no product pixel exceeds 242.1, so the lacquer reads matte.",
+  "Both 12-in woofer cones must hold their profile: woofer-cone crush_pct of 30 or less with a highlight band of 90 or more on each. Today they are 70.1% and 61.8% crushed.",
+  "The wordmark must read on both plinths: letters at least 40 levels from the surrounding red. Today they sit +15.4 (68.6 vs 53.2) and -14.0 (42.7 vs 56.7) at the median.",
+  "The Whole body must read white, not pink: |a*| of 2 or less on the lit fronts (today +4.3 on both; the right front is Lab 90.1/+4.3/+1.0), and the shaded wall should read warm-neutral at b* of +2 or more (today 53.8/+3.0/-1.4 against the plaster's +6.1). The cause is the orange floor bounce plus blue sky, which white_balance_k cannot cancel.",
+  "The floor and wall must read as material: in-plank 5-px high-pass sigma of 2.5 or more (today 1.0 to 1.6), and plaster sigma of 1.5 or more in the raking sun (today 0.44).",
+  "Low-sun shadow edges must be 15 px or less at 10-90% (today 27-28 px).",
+  "Plinths must be grounded: the floor at the plinth line at least 15 levels darker than 15 px out (today 5 to 8).",
+  "The lit plinth red must be within dE2000 3 of #C62828 (today 4.1 to 4.7, with G/B crushed to 13-16 against 40)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "camera",
+   "problem": "The nearer, right speaker reads as a flat cut-out card: no side face is visible, its white front is one value from eave to plinth, and its red gable is a single flat value.",
+   "evidence": {
+    "region": [
+     788,
+     300,
+     928,
+     671
+    ],
+    "measured": "side-left: 0 px. Right front white strip x792-808: 225.7 at the eave, 224.2 at the plinth. Right gable-block p5 52.6, p95 57.8 (range 5.3). Left speaker: front 229.0 vs lit side-right 232.2. The mask edges fit about 4 deg of toe-in, which hides the right speaker's inner side from camera x=0.55 (projection checked against glints.0 and the base corners to within 2 px)."
+   },
+   "change": {
+    "setting": "camera.position",
+    "from": [
+     0.55,
+     -4.1,
+     1.15
+    ],
+    "to": [
+     0.0,
+     -4.1,
+     1.15
+    ]
+   },
+   "expected": "Centred listening-position view, keeping target [0, 0, 0.58], lens 35 and shift_x 0.12. Both inner sides show about 17 px wide. The right speaker's left side, out of the sun, appears at about 110-190 lum beside its 226 front (a face step of at least 26), and its gable gains a shaded side triangle. The left speaker's lit side narrows from 27 to about 17 px. Fronts sit at about u 100-235 and 792-927, bases level at v of about 656, and the copy space still starts at about u 928.",
+   "accept": {
+    "region": "part:side-left",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     100,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The right 12-in woofer cone (black anodised aluminium) is a black hole whose conical profile does not read; glints.0 reaches only the rings and surrounds.",
+   "evidence": {
+    "region": [
+     802,
+     501,
+     913,
+     609
+    ],
+    "measured": "woofer-cone in the right half: crush_pct 70.14, lum_median 1.3, rgb median 3,1,1, p95 123.7 (one thin rim band only). Woofer-cap crush_pct 56.97."
+   },
+   "change": {
+    "setting": "glints.1",
+    "from": "none",
+    "to": {
+     "at": [
+      1.089,
+      -0.178,
+      0.26
+     ],
+     "normal": [
+      -0.425,
+      -0.791,
+      0.44
+     ],
+     "size_m": 0.4,
+     "power_w": 64,
+     "receivers": [
+      "woofer-cone",
+      "woofer-cap"
+     ]
+    }
+   },
+   "expected": "The point sits on the cone's lower-outer sector, 85 mm off axis and 38 mm behind the ring plane, at a 35 deg cone slope rotated by the toe-in, so the lamp falls front-centre at about 38 deg elevation. Its radiance matches glints.0 (64 W / 0.16 m2 = 4 W / 0.01 m2). Expect a soft band of about 90-140 lum following the cone into a catchlight on the cap, crush_pct of the right cone from 70.1 to 45 or less, and no spill elsewhere, since the lamp is linked to the receivers.",
+   "accept": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      675,
+      0,
+      1350,
+      900
+     ]
+    },
+    "metric": "crush_pct",
+    "op": "<=",
+    "value": 45
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The left woofer cone is also crushed, so the pair would not match once the right cone is lit.",
+   "evidence": {
+    "region": [
+     126,
+     485,
+     226,
+     586
+    ],
+    "measured": "woofer-cone in the left half: crush_pct 61.81, lum_median 1.4, p95 165.5 (one narrow arc). Woofer-cap crush_pct 86.43."
+   },
+   "change": {
+    "setting": "glints.2",
+    "from": "none",
+    "to": {
+     "at": [
+      -1.081,
+      -0.178,
+      0.261
+     ],
+     "normal": [
+      0.425,
+      -0.791,
+      0.44
+     ],
+     "size_m": 0.4,
+     "power_w": 64,
+     "receivers": [
+      "woofer-cone",
+      "woofer-cap"
+     ]
+    }
+   },
+   "expected": "This mirrors c1/c2 about x=0: a band of about 90-140 lum on the left cone's lower-outer sector plus a cap catchlight. crush_pct of the left cone goes from 61.8 to 45 or less, so both woofers read alike.",
+   "accept": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      0,
+      0,
+      675,
+      900
+     ]
+    },
+    "metric": "crush_pct",
+    "op": "<=",
+    "value": 45
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The right wordmark does not separate from the red plinth: the cast letters mirror the dim floor 0.2 m in front and read as a brown smudge with no highlight.",
+   "evidence": {
+    "region": [
+     827,
+     642,
+     888,
+     654
+    ],
+    "measured": "letters-front-* in the right half: lum_median 68.6, p95 75.2, rgb 107,60,33. The plinth around them is lum_median 53.2 (rgb 199,13,15): a 15-level step."
+   },
+   "change": {
+    "setting": "glints.3",
+    "from": "none",
+    "to": {
+     "at": [
+      1.031,
+      -0.214,
+      0.073
+     ],
+     "normal": [
+      -0.066,
+      -0.937,
+      0.342
+     ],
+     "size_m": 0.3,
+     "power_w": 4,
+     "receivers": [
+      "letters-front-0",
+      "letters-front-1",
+      "letters-front-2",
+      "letters-front-3",
+      "letters-front-4",
+      "letters-front-5",
+      "letters-front-6",
+      "letters-front-7"
+     ]
+    }
+   },
+   "expected": "The normal is the letter face rotated by the toe-in and tilted 20 deg up, as on glints.0, so the lamp sits about 24 deg up in front, clear of the floor. Its radiance is about 1/9 of glints.0, to suit metal reflectance of about 0.55 against the rings' 0.05. The rounded top edges of each letter catch a warm metal line of about 150-220 lum that outlines the word against the 53-lum red. Letters' p95 goes from 75.2 to 140-235; the red and white do not change.",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      675,
+      0,
+      1350,
+      900
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     140,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The left wordmark is 14 levels darker than its plinth with no highlight, so the brand reads on neither speaker.",
+   "evidence": {
+    "region": [
+     148,
+     616,
+     203,
+     627
+    ],
+    "measured": "letters-front-* in the left half: lum_median 42.7, p95 57.2, rgb 86,32,9. Plinth lum_median 56.7 (rgb 214,14,16)."
+   },
+   "change": {
+    "setting": "glints.4",
+    "from": "none",
+    "to": {
+     "at": [
+      -1.024,
+      -0.214,
+      0.075
+     ],
+     "normal": [
+      0.066,
+      -0.937,
+      0.342
+     ],
+     "size_m": 0.3,
+     "power_w": 4,
+     "receivers": [
+      "letters-front-0",
+      "letters-front-1",
+      "letters-front-2",
+      "letters-front-3",
+      "letters-front-4",
+      "letters-front-5",
+      "letters-front-6",
+      "letters-front-7"
+     ]
+    }
+   },
+   "expected": "This mirrors c4: top-edge metal highlights of about 150-220 lum outline the left wordmark. Letters' p95 goes from 57.2 to 140-235.",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      0,
+      0,
+      675,
+      900
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     140,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "material",
+   "problem": "The oak floor shows seams and plank-to-plank steps but no grain inside a plank, so it reads as flat-colour laminate rather than real oak.",
+   "evidence": {
+    "region": [
+     400,
+     800,
+     500,
+     840
+    ],
+    "measured": "5-px high-pass sigma inside planks: 0.99 here, 1.26 at [1000,700,1100,740], 1.62 at [1100,640,1200,660]. Plank-to-plank steps 3-14 levels. [60,830,200,880] lum_range 7.5 (p5 58.7, p95 66.2)."
+   },
+   "change": {
+    "setting": "materials.oak.grain",
+    "from": 0.6,
+    "to": 1.0
+   },
+   "expected": "Oak figure becomes visible along each board, strongest on the large foreground planks; set.floor does not override grain, so the floor inherits it. In-plank sigma rises to 2.5 or more, and lum_range at [60,830,200,880] goes from 7.5 to 12 or more with its median staying about 62. That region stays in the same shaded zone after c1: content mapped through the new camera gives 57.7/61.9/65.9.",
+   "accept": {
+    "region": [
+     60,
+     830,
+     200,
+     880
+    ],
+    "metric": "lum_range",
+    "op": ">=",
+    "value": 12
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "material",
+   "problem": "The plaster wall has no texture even where the low sun rakes it, so it reads as a CG plane.",
+   "evidence": {
+    "region": [
+     10,
+     390,
+     80,
+     460
+    ],
+    "measured": "7-px high-pass sigma 0.44 in this sun patch (lum 213.8), the same as 0.41 in shade at [960,100,1100,240]. lum_range 1.9 in the sunlit [445,300,480,400]. Sun incidence on the back wall is about 63 deg off normal."
+   },
+   "change": {
+    "setting": "materials.plaster.bump",
+    "from": 0.025,
+    "to": 0.1
+   },
+   "expected": "A fine trowelled texture shows in the sun patch: lum_range at [445,300,480,400] goes from 1.9 to 6 or more (sigma 1.5 or more) with the median about 218. The shaded copy-space wall stays calm (sigma about 1 or less). The region stays uniformly sunlit after c1 (mapped content 217.6-219.5).",
+   "accept": {
+    "region": [
+     445,
+     300,
+     480,
+     400
+    ],
+    "metric": "lum_range",
+    "op": ">=",
+    "value": 6
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The sun's shadow edges are as soft as a softbox, so the low sun reads as studio light rather than sunlight.",
+   "evidence": {
+    "region": [
+     380,
+     300,
+     640,
+     306
+    ],
+    "measured": "The sun patch's right edge on the wall falls from 218 to 110. 10-90% width is 27 px at y 300-306 and 28 px at y 380-386; largest step 4.7/px. This matches angle_deg 1, twice the real sun."
+   },
+   "change": {
+    "setting": "sun.angle_deg",
+    "from": 1,
+    "to": 0.53
+   },
+   "expected": "Penumbrae halve: the wall patch edge narrows to about 14 px at 10-90% and its largest step rises to 7.5/px or more. Window-bar and twig shadows on wall and floor get crisper, with no change in overall level. After c1 the edge sits at about u 506, still inside the region.",
+   "accept": {
+    "region": [
+     380,
+     300,
+     590,
+     306
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": ">=",
+    "value": 7.5
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Remove the pair's toe-in, or turn the right speaker, so its inner side faces the camera.",
+   "why": "Product placement is fixed. The fitted ~4 deg toe-in is why the right cabinet shows no side from x=0.55, so the volume has to come from the camera (c1)."
+  },
+  {
+   "request": "Make the cast letters lighter or larger, track them wider, or change their metal on the red plinth.",
+   "why": "The marks are fixed. The letters sit within 14-15 levels of the red (42.7/68.6 vs 56.7/53.2), so light can only add edge highlights (c4, c5), not full-face contrast."
+  },
+  {
+   "request": "Give the woofer a lighter or glossier cone so it is not crushed.",
+   "why": "The Dayton cone's black anodised finish is the product's own. 62-70% of its pixels crush to black, so glints have to carry its shape."
+  },
+  {
+   "request": "Make the waveguide shallower or add a rim or grille so the tweeter is not a dark hole.",
+   "why": "The waveguide is set by acoustic simulation. The tweeter dome reads at lum 6.5-7.2, and only a catchlight or camera change can help it read."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

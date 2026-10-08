@@ -85,8 +85,32 @@ def parse_value(text):
         return text
 
 
+def _clean(to):
+    """A critic's value as written may trail a remark: "-1.30 (centre at world y = -2.75)" or a JSON object followed by
+    "(a card high at front left)". Keep the value: a leading number, or the first complete JSON object or list."""
+    if not isinstance(to, str):
+        return to
+    t = to.strip()
+    m = re.match(r'^([+-]?\d+(\.\d*)?)\s*\(', t)
+    if m:
+        return m.group(1)
+    if t[:1] in '{[':
+        depth, quote = 0, False
+        for i, ch in enumerate(t):
+            if ch == '"' and (i == 0 or t[i - 1] != '\\'):
+                quote = not quote
+            elif not quote and ch in '{[':
+                depth += 1
+            elif not quote and ch in '}]':
+                depth -= 1
+                if depth == 0:
+                    return t[:i + 1]
+    return to
+
+
 def resolve(current, to):
     """The new value for a change: absolute, or relative to `current` ("+0.5", "-20", "x0.8", "+15%")."""
+    to = _clean(to)
     if isinstance(to, str) and isinstance(current, (int, float)) and not isinstance(current, bool):
         t = to.strip()
         m = re.fullmatch(r'([+-])\s*([\d.]+)\s*%', t)
@@ -103,7 +127,10 @@ def resolve(current, to):
             return float(t)
         except ValueError:
             return to
-    # an absolute value written as JSON text ("[2, 1]", "{\"at\": ...}", "0.12") becomes the value; "#897C6E" stays text
+    # an absolute value written as JSON text ("[2, 1]", "{\"at\": ...}", "0.12") becomes the value; "#897C6E" stays text.
+    # A signed number on a setting that has no value yet ("+0.18" on a default) is that number.
+    if isinstance(to, str) and re.fullmatch(r'\s*[+-]?\d+(\.\d*)?\s*', to):
+        return float(to)
     return parse_value(to) if isinstance(to, str) else to
 
 
@@ -134,6 +161,12 @@ def apply_changes(d, critic, only=None):
             if not setting or ' ' in setting:
                 pending.append({'id': cid, 'why': f'no such setting: {setting!r}'}); continue
         new = resolve(cur, c.get('to'))
+        # a value the setting cannot take is held back with the reason, rather than crashing the render
+        bad = (isinstance(cur, (int, float)) and not isinstance(cur, bool) and isinstance(new, str)) or \
+              (isinstance(cur, (list, dict)) and isinstance(new, str)) or \
+              (setting.split('.')[0] in ('glints', 'lights') and setting.count('.') == 1 and isinstance(new, str))
+        if bad:
+            pending.append({'id': cid, 'why': f'the value {new!r} does not fit {setting} (now {cur!r})'}); continue
         set_path(d, setting, new)
         applied.append({'id': cid, 'setting': setting, 'from': cur, 'to': new})
     return applied, pending

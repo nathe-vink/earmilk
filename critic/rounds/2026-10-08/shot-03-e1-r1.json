@@ -1,0 +1,282 @@
+{
+ "stage1": {
+  "impression": "A tight, high three-quarter crop of a glossy red gable roof whose carved horn and small dark driver are the hero, on a warm grey sweep, with crisp geometry and a convincing lacquer. A broad soft highlight washes the right half of the front slope and the horn's right flank to salmon pink, the fin and right gable end sink to flat maroon slabs, and the white body reads as dull grey card, so it is a clean draft rather than a hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "No lamp reflection washes the front slope: [740,300,840,350] and [820,420,960,640] both g_median <= 50 (now 121 and 148), and the lit slope is within dE00 2 of #C62828 (now 6.84).",
+  "The slope still reads as lacquer through one deliberate specular, a line no wider than about 25 px peaking at luma 180 or more along the waveguide rim or the ridge, instead of either a broad pink wash or a dead-flat field (the plain slope varies 0.4 levels across x 280-700 now).",
+  "The tweeter reads as a machined part: a crisp dome highlight peaking at luma 180 or more and a visible surround roll (part:tweeter-surround p95 >= 50; now 25.0).",
+  "The waveguide walls carry a continuous gradient of at least 40 levels from the lit wall to the far wall, with no stair-stepped facets in their reflections (now at x 540-610, y 440-475; see out_of_scope).",
+  "Whites are neutral and white yet modelled: front and side |R-B| <= 4 (now 18 and 11), front luma 230-245 without clipping, with at least 15 levels of falloff across it (now 3-6, so it reads as a card).",
+  "The shadow side stays within about 1 stop of the lit slope: gable end r_median >= 150 and dE00 <= 10 vs #C62828 (now 138 and 12.17).",
+  "Every roof edge is sharp: computed defocus <= 1.5 px at the fin ends and the nearest roof corner (now 2.4-4.9 px at f/8)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The 1x1 m key's mirror image lies across the right half of the glossy front slope, so the clear coat turns the brand red into a broad salmon wash that is the brightest thing in the frame and pulls the eye off the tweeter.",
+   "evidence": {
+    "region": [
+     740,
+     300,
+     840,
+     350
+    ],
+    "measured": "Upper slope right of the arch, outside the top strip's footprint: lum_median 145.7, RGB (240,121,115), against the plain slope [290,230,500,300] at 78.7, (230,38,36), range 2.0. G > 90 on 48% of slope pixels. A ray trace through the fitted camera (card camera, product turned -15.8 deg, RMS 3.1 px on 7 corners) puts the key at az -50/el 55 across the mirror directions of about 50% of the slope. At el 20 the nearest slope mirror ray clears it by 7.2 deg (9.0 deg allowing the fit's residual), and no planar face mirrors it."
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 55,
+    "to": 20
+   },
+   "expected": "[740,300,840,350] turns plain red, about (205-212, 33-36, 35-38) with g_median about 35. The white front's key term rises 64% (n.l 0.47 to 0.78), taking the front baffle from lum 207.6 to about 235 before c4. The slope's key term falls 21% (n.l 0.94 to 0.75), pulling the red toward #C62828. The fin goes from lum 55 to about 60-63, with about 18% irradiance falloff from its left end to its right.",
+   "accept": {
+    "region": [
+     740,
+     300,
+     840,
+     350
+    ],
+    "metric": "g_median",
+    "op": "<=",
+    "value": 50
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The top strip's mirror image lands inside the same band and stacks on the key's into a hot core that would stay as a pink stripe once the key moves.",
+   "evidence": {
+    "region": [
+     820,
+     420,
+     960,
+     640
+    ],
+    "measured": "lum_median 168.0, RGB (243,148,143), dE00 26.86 vs #C62828. G >= 140 occurs only in x 840-950, y 455-680, where the trace overlaps the 1.6x0.4 m strip's mirror image (19% of the slope) with the key's. With the strip centred at x = 0.45 m, the nearest slope mirror ray clears it by 26 deg."
+   },
+   "change": {
+    "setting": "lights.top.position",
+    "from": [
+     0,
+     -0.35,
+     2.3
+    ],
+    "to": [
+     0.45,
+     -0.35,
+     2.3
+    ]
+   },
+   "expected": "With c1, the band core falls from lum 168 to about 70, roughly (204,34,36), and dE00 vs #C62828 drops from 26.9 to about 1-2. The strip still lights the slope and the bowl from overhead (slope n.l 0.90 to 0.80) and adds about 0.2 W/m2 to the gable end.",
+   "accept": {
+    "region": [
+     820,
+     420,
+     960,
+     640
+    ],
+    "metric": "lum_median",
+    "op": "<=",
+    "value": 90
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The tweeter at the throat reads as a dark ball with one soft smudge of light, not as a precise part.",
+   "evidence": {
+    "region": [
+     641,
+     391,
+     699,
+     461
+    ],
+    "measured": "part:tweeter-dome lum_median 23.7, p95 49.2 (upper-left quadrant p95 58.4); part:tweeter-surround median 12.2, p95 25.0. At 58x70 px the dome has no crisp highlight to describe its curvature."
+   },
+   "change": {
+    "setting": "glints.1",
+    "from": "none",
+    "to": {
+     "at": [
+      0.0,
+      -0.049,
+      0.953
+     ],
+     "normal": [
+      -0.23,
+      -0.66,
+      0.72
+     ],
+     "size_m": 0.04,
+     "power_w": 3,
+     "receivers": [
+      "tweeter-dome"
+     ]
+    }
+   },
+   "expected": "A crisp highlight about 6-10 px across on the dome's upper-left shoulder near pixel (656, 412), peaking at luma 180 or more. Its lamp sits at az -78/el 45, on the key's side, so the highlight reads as motivated. The dome's median stays at 35 or below, its own black.",
+   "accept": {
+    "region": {
+     "part": "tweeter-dome",
+     "box": [
+      641,
+      391,
+      671,
+      426
+     ]
+    },
+    "metric": "lum_p95",
+    "op": ">=",
+    "value": 100
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "post",
+   "problem": "Under the default white point the 5600 K key gives the Whole body (#FFFFFF) a cream cast and pushes the red light.",
+   "evidence": {
+    "region": [
+     60,
+     740,
+     300,
+     900
+    ],
+    "measured": "Front baffle (216,206,198): R-B 18, dE00 5.13 vs a neutral of equal lightness (#CFCFCF) and 8.99 vs #F0F0F0. Background [1200,0,1350,300] is (165,154,143), R-B 22 against the paper's own 13 (#B7B2AA). Linear R/G 1.105 and B/G 0.930 on the front match about 5900 K now, and about 5730 K once c1 raises the key's share of its light to about 63%."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": "(default)",
+    "to": 5700
+   },
+   "expected": "The front baffle goes neutral at about (240-245, 241-245, 240-244), with dE00 vs #F0F0F0 about 1. With c1-c2, the plain slope's red moves from (230,38,36), dE00 6.84, to about (208,34,37), dE00 about 2. The background's R-B falls to about 10-13.",
+   "accept": {
+    "region": [
+     60,
+     740,
+     300,
+     900
+    ],
+    "metric": "delta_e",
+    "hex": "#F0F0F0",
+    "op": "<=",
+    "value": 3.0
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The right gable end sees only the 0.7 W/m2 fill and sinks to maroon, reading as a different colour rather than the roof's shadow side.",
+   "evidence": {
+    "region": [
+     1100,
+     460,
+     1230,
+     540
+    ],
+    "measured": "lum_median 53.7, RGB (138,32,25), range 3.4, dE00 12.17 vs #C62828. R 138 against 230 on the lit slope is 3.1:1 in linear light (1.6 stops)."
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": 0.7,
+    "to": 1.2
+   },
+   "expected": "The gable end goes to about (150-158, 32, 33-36), dE00 about 9.5, sitting about 1 stop under the lit slope. Side-right rises from lum 167 to about 190-198, which also clears the white body's right edge from the background at about 155.",
+   "accept": {
+    "region": [
+     1100,
+     460,
+     1230,
+     540
+    ],
+    "metric": "r_median",
+    "op": ">=",
+    "value": 146
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "With the white point set for the key, the 6200 K fill would turn the white body's shadow side visibly blue.",
+   "evidence": {
+    "region": [
+     1000,
+     820,
+     1280,
+     900
+    ],
+    "measured": "Side-right (173,166,162): R-B 11 against the key-lit front's 18, so the fill-lit side already renders cooler than the front. With WB 5700 and the fill at 6200 K, the irradiance model renders it (189,195,201), B-R 12, dE00 3.65 vs #C3C3C3."
+   },
+   "change": {
+    "setting": "lights.fill.color",
+    "from": 6200,
+    "to": 5700
+   },
+   "expected": "Side-right renders about (192,195,197), |R-B| 5 or less, dE00 vs #C3C3C3 about 1.6, and the gable end turns a touch warmer.",
+   "accept": {
+    "region": [
+     1000,
+     820,
+     1280,
+     900
+    ],
+    "metric": "delta_e",
+    "hex": "#C3C3C3",
+    "op": "<=",
+    "value": 3.0
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "camera",
+   "problem": "At f/8 the fin's ends and the nearest roof corner fall outside the depth of field, softening a frame whose brief is close and sharp.",
+   "evidence": {
+    "region": [
+     358,
+     35,
+     362,
+     63
+    ],
+    "measured": "The fin's top-edge step at x=360 is 32.7, against 48.4 at its centre [690,108,694,140]. Computed f/8 defocus (85 mm, focus 1.224 m): 2.4 px at the fin's left end (1.333 m), 2.9 px at its right end (1.116 m), 4.9 px at the nearest eave corner (1.052 m). The waveguide stays within 1.6 px."
+   },
+   "change": {
+    "setting": "camera.fstop",
+    "from": 8,
+    "to": 16
+   },
+   "expected": "Defocus falls to 1.2-1.4 px at the fin ends and 2.4 px at the nearest corner, and the waveguide to 0.8 px or less. The top-edge step at x=360 rises from 32.7 toward the centre's 45 or so.",
+   "accept": {
+    "region": [
+     358,
+     35,
+     362,
+     63
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": ">=",
+    "value": 40
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Re-tessellate or smooth-shade the waveguide insert at the throat.",
+   "why": "The far-wall reflection near the tweeter breaks into stair-steps at x 540-610, y 440-475 (visible in a 5x crop), which reads as polygons on a part presented as precision-machined. The waveguide's surface is set by acoustic simulation and sits under product, so even its mesh is not this pass's to change; it needs the product model's owner."
+  },
+  {
+   "request": "Lighten or retexture the tweeter dome and surround so they show detail.",
+   "why": "The dome's median is luma 23.7 and the surround's 12.2, so they read as near-black. But the drivers' materials and colours are the products' own, so detail has to come from light (c3), not from the part."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

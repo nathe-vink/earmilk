@@ -1,0 +1,309 @@
+{
+ "stage1": {
+  "impression": "A red-and-white carton speaker stands in a dark room raked by low amber window light, its gabled shadow thrown large across the left wainscot, a cinematic idea with real mood. But the empty wall patches at upper left are the brightest thing in frame, the floor and lower third crush toward black, the white front reads peach with a mullion bar through the tweeter and a lavender wedge across the woofer, and the red base and logo sink into murk, so the set out-shouts the product.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The silhouette reads as the carton at a glance: on the wall it is at most 1.8x the carton's width (now 394 px = 2.46x, x 156-550) and at least 1.3x taller than wide (now 0.93), with gable shoulders and fin on a flat surface and lit wall on both sides.",
+  "The silhouette visibly belongs to the speaker: a sunlit floor band carries the speaker's floor shadow from its base to the wall (the floor near the base is unlit now, lum 15-17, and the silhouette's base merges into it below y 620).",
+  "Sunlit white reads as white in warm light: front delta-E <= 14 vs #FFFFFF (now 18.56, about 20 after c8; next step render.white_balance_k 4300 -> about 3500), with tonal response instead of one value (now 214.2-216.2 across the whole lit face).",
+  "The shaded side reads as white in shade: side-left lum 60-90 with b/r >= 0.85 (now 32.8, rgb [52, 30, 4]).",
+  "Accent red within delta-E 8 of #C62828 wherever lit: fin now 14.34 (rgb [245, 81, 80]), plinth now 32.88 at lum 10.",
+  "Wordmark legible: letters (now lum 40) on a lit plinth (now lum 10), not two murky values.",
+  "No glazing-bar shadow on a driver (now a bar crosses the mid at y 420-465).",
+  "Woofer cone holds detail: crush <= 30% (now 78.33%, median 0.4)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The silhouette, which is the frame's subject, does not read as the carton: the 55-degree sun stretches it to 2.46x the carton's width, a squat house shape wider than it is tall, thrown 205 px from the speaker.",
+   "evidence": {
+    "region": [
+     146,
+     320,
+     560,
+     720
+    ],
+    "measured": "Dark run x 156-550 (394 px) from y 335 to the floor at ~700, H/W 0.93, against the speaker's 252 x 527 px on screen; interior lum 4.1-4.8, crush 7.6-14.6%; lit wainscot beside it 99.7. A ray-cast of the room calibrated to this frame (patch edges within 3 px, bars on the front within 2 px, silhouette within 15 px) gives 0.96 m on the wall = 2.46 x 0.39 m."
+   },
+   "change": {
+    "setting": "sun.azimuth_deg",
+    "from": "55",
+    "to": "38"
+   },
+   "expected": "Applied with c2-c4: silhouette about 0.66 m wide (1.7x the carton), predicted box x 414-666, y 307-681 (252 x 374 px, H/W 1.5), 88 px left of the speaker; region [560,470,640,560] goes from lit panel (98.9) to shadow (about 20-30 with the c5 fill).",
+   "accept": {
+    "region": [
+     560,
+     470,
+     640,
+     560
+    ],
+    "metric": "lum_median",
+    "op": "<=",
+    "value": 35
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "With a 38-degree sun, light through the window as placed (centre y = -1.45) no longer reaches the speaker, so the beam has to enter further toward the front of the right wall.",
+   "evidence": {
+    "region": [
+     870,
+     352,
+     1000,
+     386
+    ],
+    "measured": "Front under the eave is 216.0 now. Back-projecting the wall patch gives an effective opening of y -1.862 to -0.867 (a 0.23 m reveal trims the front jamb); the ray-cast with azimuth 38 and this window leaves the speaker out of the sun and casts no silhouette."
+   },
+   "change": {
+    "setting": "set.windows.0.along",
+    "from": "0",
+    "to": -1.3
+   },
+   "expected": "Speaker centred in the beam: 95% of front-baffle pixels sunlit (ray-cast); front under the eave about 208 after c8. (The window's centre moves from world y -1.45 to -2.75, toward the front wall.)",
+   "accept": {
+    "region": [
+     870,
+     352,
+     1000,
+     386
+    ],
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 195
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "Trimmed by the reveal at 38 degrees, the 1.15 m opening gives a beam no wider than the speaker's 0.52 m cross-section, so the silhouette would get no lit wall around it, and with the c6 sill the 1.9 m height would put a bar across the woofer.",
+   "evidence": {
+    "region": [
+     672,
+     490,
+     698,
+     600
+    ],
+    "measured": "Wall between today's patch and the speaker is lum 5.6; ray-cast at 38 degrees with a 1.15 m opening placed to light the speaker leaves 3 px of lit wall on each side of the silhouette."
+   },
+   "change": {
+    "setting": "set.windows.0.size",
+    "from": "[1.15, 1.9]",
+    "to": "[1.6, 2.5]"
+   },
+   "expected": "Opening y -3.55 to -1.95, head at 2.90 m: about 89 px of lit panel left of the silhouette and 55 px right of it (x 666-721) at about 85, then a dark gap of about 30 px (x 722-754) before the speaker's left face. With c6, rows spaced 0.625 m put the one bar shadow on the front at y 480-530, between the mid ring (bottom 470) and woofer ring (top 532).",
+   "accept": {
+    "region": [
+     672,
+     490,
+     698,
+     600
+    ],
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 40
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "With the window centred at y = -2.75, its centre mullion's shadow would run the full height of the front through both drivers.",
+   "evidence": {
+    "region": [
+     966,
+     352,
+     977,
+     386
+    ],
+    "measured": "Strip is 216.0 now. The ray-cast of c1-c3 with mullions [2, 4] puts a vertical stripe over 3169 front-baffle pixels at x 965-976, y 346-757; today the mullion lands on the fin (x 893-905, lum 52.8 against about 115 on the lit fin)."
+   },
+   "change": {
+    "setting": "set.windows.0.mullions",
+    "from": "[2, 4]",
+    "to": "[1, 4]"
+   },
+   "expected": "No vertical bar on the speaker; the strip stays at the lit-front value (about 208); the pool still reads as window light through its three horizontal bars.",
+   "accept": {
+    "region": [
+     966,
+     352,
+     977,
+     386
+    ],
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 190
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The white body's shaded side renders as brown card, because only warm bounce reaches it and the PBR Neutral toe strips its blue.",
+   "evidence": {
+    "region": [
+     770,
+     400,
+     845,
+     650
+    ],
+    "measured": "lum_median 32.8, rgb [52, 30, 4] (b/r 0.08), delta-E 80.9 vs #FFFFFF; profile top to bottom 39.9 to 27.6."
+   },
+   "change": {
+    "setting": "lights.fill",
+    "from": "none",
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.2,
+      1.2
+     ],
+     "orbit": {
+      "azimuth_deg": -65,
+      "elevation_deg": 18,
+      "distance_m": 2.6
+     },
+     "irradiance": 0.17,
+     "color": 5000
+    }
+   },
+   "expected": "Side-left about 72 and near neutral (about [74, 71, 76], b/r about 1.0) against a lit front of about 208, so it reads as white in shade. The silhouette lifts only to about 20-30. The light sits 41 degrees off the camera axis, outside the frame's 24-degree half-width.",
+   "accept": {
+    "region": [
+     770,
+     400,
+     845,
+     650
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     55,
+     100
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "The sill's shadow covers the bottom of the front and the whole plinth, so the red base renders near-black, the wordmark sinks and a lavender sky-lit wedge cuts across the woofer.",
+   "evidence": {
+    "region": [
+     862,
+     742,
+     900,
+     772
+    ],
+    "measured": "Plinth lum 10.3, rgb [46, 0, 5], delta-E 32.9 vs #C62828; wedge [880,690,1000,712] lum 32.9, rgb [40, 30, 41]; front strip x 860-873 drops from 214 to 33 at y ~675; letters 40 on a plinth of 10; floor near the base 15-17."
+   },
+   "change": {
+    "setting": "set.windows.0.sill",
+    "from": "0.55",
+    "to": "0.40"
+   },
+   "expected": "The sill shadow falls below the floor line at the speaker: 99% of plinth pixels sunlit, plinth about [231, 51, 49] at lum about 89 with c8, letters catching sun, no wedge. A sun band 125-355 px wide crosses the floor from (372-495, 700) to (1056-1203, 860) and carries the speaker's floor shadow to the wall silhouette.",
+   "accept": {
+    "region": [
+     862,
+     742,
+     900,
+     772
+    ],
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 50
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "set",
+   "problem": "At the new sun angle the silhouette's fin and gable land on the wainscot cap rail, whose lit face and dark underside would cut through the carton's most recognisable feature.",
+   "evidence": {
+    "region": [
+     140,
+     290,
+     160,
+     350
+    ],
+    "measured": "Rail at y 300-340 (profile at x 150: 196 plaster, 96 rail face, 60 then 40 at its underside). The ray-cast puts the new fin's shadow at z about 0.93 m, y about 300-310, on the rail (top 0.92 m); today the fin plateau already sits just under the rail at y ~335."
+   },
+   "change": {
+    "setting": "set.wainscot.height",
+    "from": "0.92",
+    "to": "1.25"
+   },
+   "expected": "The rail moves to y about 175-210, about 45 px above the speaker's top (y 253) and about 90 px above the fin's shadow, so gable and fin fall on flat panel; band [360,232,425,282] reads as lit panel (about 85) instead of plaster crossed by a mullion (132).",
+   "accept": {
+    "region": [
+     360,
+     232,
+     425,
+     282
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     40,
+     120
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The sun drives sunlit surfaces deep into the PBR Neutral shoulder, so the white front is pinned at one value and sunlit red desaturates to pink.",
+   "evidence": {
+    "region": [
+     810,
+     256,
+     895,
+     272
+    ],
+    "measured": "Fin rgb [245, 81, 80], delta-E 14.34 vs #C62828; lit front [870,352,1000,386] 216.0 with range 1.2 and r 250, profile 215.2 to 214.2 over 365 px; inverting the transform puts the front at scene peak about 1.8, shoulder slope 0.034."
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": "3.2",
+    "to": "1.8"
+   },
+   "expected": "With c1's squarer incidence (front x1.23, back wall x1.37): front about [246, 202, 162], lum about 208, slope 0.11 (3x the tonal response); sunlit red on fin and plinth about [231, 51, 49], delta-E about 7.7; wall patch 196 to about 186; lit panel about 85. Front delta-E vs #FFFFFF drifts 18.6 to about 20, so white balance (blocking_9) is the next step.",
+   "accept": {
+    "region": [
+     810,
+     256,
+     895,
+     272
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 9.5
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Turn the speaker about 90 degrees so a gable end faces the window.",
+   "why": "A sun parallel to the ridge would throw the iconic side profile (triangle plus thin fin) instead of the fin seen lengthwise as a 208 px flat plateau (x 250-458); but the product's placement in this frame is fixed."
+  },
+  {
+   "request": "Move the speaker nearer the back wall (about 0.52 m behind it now).",
+   "why": "A shorter throw would make the silhouette taller and nearer the carton's own proportions; placement is fixed."
+  },
+  {
+   "request": "Lighten the woofer cone or give it a grey sheen.",
+   "why": "Cone median 0.4 with 78.33% of pixels at or below 3 reads as a hole, but it is the Dayton's own black anodised aluminium; only light, such as a glint on its lower right flank, may reveal it."
+  }
+ ],
+ "score_if_fixed": 7.5
+}

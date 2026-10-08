@@ -31,8 +31,9 @@
    "sections": [
     {
      "match": "waveguide-insert",
-     "color": "#B8BCBE",
-     "roughness": 0.5
+     "color": "#8C9297",
+     "roughness": 0.6,
+     "preset": "plastic"
     },
     {
      "match": "front-baffle|back-panel|side-*|gable-block|top-panel|bottom-panel|window-brace|mid-shelf|mid-divider|amp-box-*",

@@ -25,7 +25,7 @@
   "clamp": 8,
   "bounces": 12,
   "view": "Khronos PBR Neutral",
-  "exposure": 0.25
+  "exposure": 0.0
  },
  "title": "The back's label, straight on",
  "set": {

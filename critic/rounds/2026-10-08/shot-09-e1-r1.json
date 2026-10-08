@@ -1,0 +1,339 @@
+{
+ "stage1": {
+  "impression": "Two red-and-white gable-top speakers flank a white turntable on a taupe sideboard under a framed navy print, with low sun laying window patterns over a pale grey wall and oak floor; the carton shape reads at once, the hi-fi less so. The white fronts are flat, the right speaker melts into the sunlit wall behind it, the pair is small in a frame given over to wall and furniture, and the picture frame touches the top edge with a dark panel that pulls the eye off the product.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Both speakers separate from the wall along their whole silhouette: edge step >= 30 across the right speaker's left edge [915,470,950,570] (now 3.8; the left speaker's edge [295,470,330,540] is 79.6).",
+  "The fronts are modelled: falloff >= 8 from under the woofer to the plinth on both speakers ([318,462,408,546] now 0.2, [940,468,1048,582] now 0.0) while the brightest white stays >= 240.",
+  "The lit white is the brightest surface in frame: no wall or floor sun patch within 30 levels of the fronts (wall band [1120,450,1180,600] 235.1, left-wall patch [200,150,250,300] 238.6, fronts 240.4).",
+  "Accent red within dE2000 3 of #C62828 over the whole plinth and roof (right plinth [1022,588,1048,610] 6.33 with R falling 203 to 155 down the band; gable 2.12 / 3.24).",
+  "Both wordmarks legible: cast letters >= 40 levels above their plinth on each speaker (right 60.3 on 45.8, left 99.4 on 57.5).",
+  "Clean edges and spacing: picture frame >= 30 px below the top edge (its border is at v = 0 now) and >= 100 px clear of each speaker (44 px from the right speaker now); the sideboard's right leg whole or cut decisively (now cut 35 px below the carcass by the bottom edge).",
+  "The product holds the darkest marks: art panel >= 55 (now 30.6, holding 66% of the image's pixels darker than 40, 3.5x the drivers' dark area).",
+  "White reproduced neutral on the lit fronts: |R-G| <= 2 and |B-G| <= 2 (now 244/239/244, a magenta cast).",
+  "The waveguide reads as a lit bowl, not a dark notch: waveguide-insert p95 >= 100 on both speakers (now 72.2 and 71.8).",
+  "The pair carries the frame: each speaker >= 40% of frame height (now 32-36%, v 296-582 and 296-620) with both whole and the sideboard top in frame."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The right speaker's white front and the sunlit wall behind it render at the same value, so its left edge and lower two thirds vanish, and the product white is no brighter than the room's sun patches.",
+   "evidence": {
+    "region": [
+     915,
+     470,
+     950,
+     570
+    ],
+    "measured": "edge step 3.8: wall 236.8 at [895,420,928,575] against front 239.8; the left speaker's edge [295,470,330,540] steps 79.6; wall right of the right speaker [1072,420,1110,575] is 236.0."
+   },
+   "change": {
+    "setting": "set.wall.color",
+    "from": "#F1EEE8",
+    "to": "#CFC6BA"
+   },
+   "expected": "The sunlit band behind the right speaker falls to about 170-185 (with c3), the shaded wall to about 105-130, the right front's edge step rises to about 50-60, and the lit white becomes the brightest surface in frame.",
+   "accept": {
+    "region": [
+     915,
+     470,
+     950,
+     570
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": ">=",
+    "value": 30
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The fronts are lit almost entirely by the flat frontal sun, so the white under each woofer is a single value that reads as a card, and the waveguide bowls read as dark notches.",
+   "evidence": {
+    "region": [
+     318,
+     462,
+     408,
+     546
+    ],
+    "measured": "lum_median 240.4, lum_range 1.9, falloff 0.2; right front falloff 0.0 at 239.6; waveguide-insert p95 72.2 left / 71.8 right; sideboard top 83.1."
+   },
+   "change": {
+    "setting": "lights.key",
+    "from": "none",
+    "to": {
+     "type": "area",
+     "size_m": [
+      2.0,
+      0.4
+     ],
+     "orbit": {
+      "azimuth_deg": 0,
+      "elevation_deg": 35,
+      "distance_m": 0.6
+     },
+     "irradiance": 1.6,
+     "color": 5200
+    }
+   },
+   "expected": "Each front falls from about 240 just under the woofer to about 230-235 above the plinth (falloff 6-10), with a soft reflection of the strip along each eave; the waveguide bowls get a lit lip (p95 >= 95); the sideboard top rises to about 100-110. The strip orbits the pair's mid-height centre, 0.38 m in front of the fronts and 0.34 m above their middle, long side along x.",
+   "accept": {
+    "region": [
+     318,
+     462,
+     408,
+     546
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": ">=",
+    "value": 5
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The sun is the only key on the speakers and pins every lit white in the PBR Neutral shoulder, so the fronts' modelling and the window light's texture are both crushed.",
+   "evidence": {
+    "region": [
+     1120,
+     450,
+     1180,
+     600
+    ],
+    "measured": "lum_median 235.1 (flat); left-wall patch 238.6; fronts 240.4; every lit white within 6 levels of the others; the fronts' input near 1.13, about three quarters from the sun."
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": "2.5",
+    "to": "1.0"
+   },
+   "expected": "With c1, the wall band drops to about 165-185 and keeps its mullion edges and plaster bump; the sun's share of the fronts' light falls to about a third, so c2's falloff lands on the knee.",
+   "accept": {
+    "region": [
+     1120,
+     450,
+     1180,
+     600
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     150,
+     205
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "composition",
+   "problem": "The picture frame's top border touches the image's top edge.",
+   "evidence": {
+    "region": [
+     680,
+     0,
+     870,
+     30
+    ],
+    "measured": "lum_median 48.8, b_median 25.0: the brown border fills v 0-16."
+   },
+   "change": {
+    "setting": "set.props.1.z",
+    "from": "1.55",
+    "to": "1.44"
+   },
+   "expected": "The frame drops 0.11 m, its top border to about v 41; the strip becomes plain wall.",
+   "accept": {
+    "region": [
+     680,
+     0,
+     870,
+     30
+    ],
+    "metric": "b_median",
+    "op": ">=",
+    "value": 55
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "The art panel is the darkest large mass in the frame and sits at the apex of the composition, so it out-pulls the speakers.",
+   "evidence": {
+    "region": [
+     710,
+     95,
+     742,
+     215
+    ],
+    "measured": "lum_median 31.4; the panel holds 66% of the image's pixels darker than 40."
+   },
+   "change": {
+    "setting": "set.props.1.art",
+    "from": "#3F5B6E",
+    "to": "#8C9EAB"
+   },
+   "expected": "The art renders as a mid slate at about 60-85; the woofers become the darkest marks in frame.",
+   "accept": {
+    "region": [
+     710,
+     95,
+     742,
+     215
+    ],
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 55
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The nearer speaker's cast letters reflect a dark part of the room and sink into the red plinth.",
+   "evidence": {
+    "region": [
+     966,
+     595,
+     1019,
+     606
+    ],
+    "measured": "right letters lum_median 60.3 on a plinth of 45.8; the left wordmark reads 99.4 on 57.5."
+   },
+   "change": {
+    "setting": "glints.0",
+    "from": "none",
+    "to": {
+     "at": [
+      0.65,
+      -0.113,
+      0.589
+     ],
+     "normal": [
+      0,
+      -1,
+      0
+     ],
+     "size_m": 0.12,
+     "power_w": 2,
+     "receivers": [
+      "letters-front-0",
+      "letters-front-1",
+      "letters-front-2",
+      "letters-front-3",
+      "letters-front-4",
+      "letters-front-5",
+      "letters-front-6",
+      "letters-front-7"
+     ]
+    }
+   },
+   "expected": "The right wordmark lifts from 60 to about 110-160, 50 or more above the plinth.",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      950,
+      585,
+      1035,
+      615
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     90,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "composition",
+   "problem": "The frame hangs over the right speaker because the camera's offset shifts the back wall right.",
+   "evidence": {
+    "region": [
+     872,
+     100,
+     886,
+     280
+    ],
+    "measured": "brown right border here; the frame centres at u 776 against the speakers' midpoint at 688; gaps 44 px right, 217 px left."
+   },
+   "change": {
+    "setting": "set.props.1.position",
+    "from": "[0, 1]",
+    "to": "[-0.25, 1]"
+   },
+   "expected": "The frame centres near u 685 over the speakers' midpoint; gaps about 126 px and 135 px.",
+   "accept": {
+    "region": [
+     872,
+     100,
+     886,
+     280
+    ],
+    "metric": "b_median",
+    "op": ">=",
+    "value": 55
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "set",
+   "problem": "The front window's upper transom casts a soft shadow across both plinths.",
+   "evidence": {
+    "region": [
+     1022,
+     588,
+     1048,
+     610
+    ],
+    "measured": "falloff 15.5; R falls 203 to 155 down the band; dE 6.33 to #C62828."
+   },
+   "change": {
+    "setting": "set.windows.0.mullions",
+    "from": "[2, 3]",
+    "to": "[2, 1]"
+   },
+   "expected": "Each plinth one even red (falloff <= 4); the vertical bar's soft shadow stays as window light.",
+   "accept": {
+    "region": [
+     1022,
+     588,
+     1048,
+     610
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "<=",
+    "value": 4
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Stand the sideboard, and the pair on it, against the back wall",
+   "why": "The pair's placement is fixed; each speaker's sun shadow lands about 1 m to its right as a free-floating carton silhouette that reads as a third object."
+  },
+  {
+   "request": "Make the waveguide read as a bowl by reshaping it",
+   "why": "Set by acoustic simulation; only light may change how it reads (c2)."
+  },
+  {
+   "request": "A brighter or polished finish on the cast letters",
+   "why": "The marks and their finish are fixed; the fix has to be light (c6)."
+  }
+ ],
+ "score_if_fixed": 7.5
+}

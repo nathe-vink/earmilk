@@ -1,6 +1,4 @@
 {
- "extends": "base.json",
- "title": "The inside",
  "size": [
   1800,
   1200
@@ -31,8 +29,9 @@
    "sections": [
     {
      "match": "waveguide-insert",
-     "color": "#B8BCBE",
-     "roughness": 0.5
+     "color": "#8C9297",
+     "roughness": 0.6,
+     "preset": "plastic"
     },
     {
      "match": "front-baffle|back-panel|side-*|gable-block|top-panel|bottom-panel|window-brace|mid-shelf|mid-divider|amp-box-*",
@@ -46,9 +45,21 @@
    ]
   }
  },
+ "materials": {},
+ "render": {
+  "samples": 192,
+  "adaptive": 0.015,
+  "denoise": true,
+  "clamp": 8,
+  "bounces": 12,
+  "view": "Khronos PBR Neutral",
+  "exposure": 0.0,
+  "white_balance_k": 5800
+ },
+ "title": "The inside",
  "set": {
   "kind": "sweep",
-  "color": "#C9C5BE",
+  "color": "#75726D",
   "width": 9,
   "front": 7,
   "depth": 2.0,
@@ -67,7 +78,8 @@
    0.55
   ],
   "lens_mm": 50,
-  "level": true
+  "level": true,
+  "shift_x": 0.18
  },
  "sky": {
   "kind": "gradient",
@@ -84,7 +96,7 @@
     1.4
    ],
    "orbit": {
-    "azimuth_deg": -35,
+    "azimuth_deg": -85.0,
     "elevation_deg": 42,
     "distance_m": 2.3
    },
@@ -93,7 +105,7 @@
     0,
     0.6
    ],
-   "irradiance": 3.0,
+   "irradiance": 6.0,
    "color": 5600
   },
   "fill": {
@@ -132,7 +144,7 @@
     0.05,
     0.55
    ],
-   "irradiance": 1.1,
+   "irradiance": 0.3,
    "color": 5200,
    "specular": 0.2
   },
@@ -154,9 +166,26 @@
    ],
    "irradiance": 1.0,
    "color": 6500
+  },
+  "kick": {
+   "type": "area",
+   "size_m": [
+    0.3,
+    1.2
+   ],
+   "orbit": {
+    "azimuth_deg": 105,
+    "elevation_deg": 20,
+    "distance_m": 1.4
+   },
+   "target": [
+    0.15,
+    0.04,
+    0.5
+   ],
+   "irradiance": 1.3,
+   "color": 5600,
+   "specular": 1.0
   }
- },
- "render": {
-  "exposure": 0.0
  }
 }

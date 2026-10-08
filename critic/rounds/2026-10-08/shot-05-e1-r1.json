@@ -1,0 +1,229 @@
+{
+ "stage1": {
+  "impression": "A readable line-up of five carton speakers on a warm beige seamless, lit flat and even, so the white fronts sit at a single value and the soft shadows barely plant the units. The tan unit sinks into a backdrop of nearly its own colour, and the evenly spaced, centred diagonal leaves dead floor and wall: a competent catalogue draft, not a homepage hero.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Neutral white point: the white fronts' R, G and B within 4 levels of each other (now 239/226/216, Lab b* +6.5), so Whole, 2% and Skim read white and stay distinct from the Chocolate's cream plinth.",
+  "Every unit at least 30 levels off the sweep along its silhouette. The Oat is only 14 levels above the sweep at its left edge (167 vs 153) and 16 below it on the right (147 vs 163).",
+  "Plumb verticals: every vertical edge within \u00b10.5\u00b0. The Whole's left edge leans +4.1\u00b0 and the Oat's right edge \u22124.6\u00b0.",
+  "Woofer cones show their form on all five units: per-cone lum_p95 \u2265 55 with no more than 15% of pixels at or below 3. The Oat's cone is p95 26 with 41% crushed, and all five cones together are 28% crushed.",
+  "Light shape on the white fronts: 15 to 25 levels of falloff from eave to plinth with the roofs still on spec (now 5 to 7 levels, e.g. 229 to 224 on the Skim).",
+  "Light colourways' fronts within \u0394E 4 of spec while the roofs stay within \u0394E 3. The Oat body is L* 68.9 vs 77.8 (\u0394E 7.2), the Chocolate cream plinth \u0394E 8.5 and the Skim plinth \u0394E 7.4; the fronts get about 0.45 EV less light than the roofs.",
+  "A defined contact shadow at every base: under the Skim's front edge the floor is only 14 levels darker than 50 px out (178 vs 192).",
+  "A spread-safe version: the fold at x = 750 runs through the Skim's woofer, so a spread crop needs the fold in a gap between units."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The whole frame has a warm cast, so the white bodies render cream and every colourway drifts warm or loses blue.",
+   "evidence": {
+    "region": [
+     738,
+     300,
+     768,
+     392
+    ],
+    "measured": "Skim white front (front-baffle in this box): RGB median 239/226/216, Lab 90.6/+2.7/+6.5, \u0394E 6.55 to neutral #E6E6E6. Whole and 2% fronts read the same (240/227/216). Skim plinth b* \u221226.5 vs spec \u221233.3; Chocolate cream plinth b* +17.8 vs +12.9. The sweep renders 183/171/159 from paper #C9C4BB. In linear light the cast is R/G 1.13, B/G 0.89, which matches a 5500 to 5800 K source under the default D65 white point (the key is 5600 K)."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": "(default, 6504)",
+    "to": "5800"
+   },
+   "expected": "White fronts neutral: R, G and B within 4 levels, |a*| and |b*| \u2264 2. The Skim and 2% plinths regain blue (b* within 3 of spec), the cream plinth's b* falls to about +13, and the roofs lose their warm lean. 5800 rather than 5600 because, once c2 removes the warm bounce, the 6300 K fill and the D65 sky are about 30% of the fronts' light.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      738,
+      300,
+      768,
+      392
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#E6E6E6",
+    "op": "<=",
+    "value": 3.0
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The sweep has the Oat body's lightness and hue family (#C9C4BB against #D9BC92), so the nearest unit melts into it. Its 153 to 213 range also overlaps the products' mid-tones, and its brightest patch is the empty floor at bottom left.",
+   "evidence": {
+    "region": [
+     1050,
+     310,
+     1072,
+     530
+    ],
+    "measured": "The sweep in the gap left of the Oat reads 152.7 against the Oat front's 166.7 (14 levels). Right of the Oat [1270,300,1300,540] it reads 163.4 against the Oat side's 147.4. The top-right wall is 172.7 and the empty bottom-left floor 213.4, the brightest background in frame, coloured 228/211/194."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#C9C4BB",
+    "to": "#808080"
+   },
+   "expected": "The sweep renders about 100 to 160: the wall behind the row about 110 to 125, the bottom-left floor \u2264 160, neutral after c1. The Oat front sits \u2265 40 levels above the sweep at its left edge and its side \u2265 20 above the sweep on its right. Cutting the floor bounce by more than half should also take the white fronts' eave-to-plinth falloff from 5\u20137 to about 9\u201312 levels.",
+   "accept": {
+    "region": [
+     1300,
+     30,
+     1480,
+     190
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     100,
+     140
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "camera",
+   "problem": "The camera tilts down with no lens shift, so the verticals converge and the end units lean outward like a fan instead of standing as one line.",
+   "evidence": {
+    "region": [
+     1236,
+     330,
+     1300,
+     520
+    ],
+    "measured": "Across the Oat's right edge the largest column step is only 1.5, smeared over 23 px by a \u22124.6\u00b0 lean. Edge leans from the part mask: Whole left +4.1\u00b0, 2% left +2.5\u00b0, Skim left +0.8\u00b0, Chocolate right \u22122.6\u00b0, Oat left \u22123.1\u00b0."
+   },
+   "change": {
+    "setting": "camera.level",
+    "from": "false",
+    "to": "true"
+   },
+   "expected": "Every vertical edge within \u00b10.5\u00b0. The units render 5\u20139% larger with their bases 15\u201330 px lower, and all five stay whole with \u2265 120 px of top and bottom margin. The Oat's right edge becomes a sharp step at about x 1275\u20131285.",
+   "accept": {
+    "region": [
+     1236,
+     330,
+     1320,
+     520
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": ">=",
+    "value": 8
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The 12 in woofer cones read as black holes, and what sheen they have fades along the row from the Whole to the Oat, so the drivers do not match from unit to unit.",
+   "evidence": {
+    "region": [
+     1075,
+     415,
+     1240,
+     570
+    ],
+    "measured": "Oat woofer cone: p95 26, median 4.9, 41.5% of pixels \u2264 3. Cone p95 by unit, Whole to Oat: 81, 84, 72, 44, 26. All five cones: median 5.9, 27.8% crushed; dust caps 31.3% crushed."
+   },
+   "change": {
+    "setting": "lights.cone_card",
+    "from": "none",
+    "to": {
+     "type": "area",
+     "size_m": [
+      6,
+      2
+     ],
+     "orbit": {
+      "azimuth_deg": -30,
+      "elevation_deg": 35,
+      "distance_m": 6
+     },
+     "irradiance": 1.6,
+     "color": 5800,
+     "specular": 1.0,
+     "diffuse": 0
+    }
+   },
+   "expected": "Every cone shows a soft crescent of reflection on its lower half and every dust cap a highlight on its upper left, the same on all five: per-cone p95 \u2265 55 and crush \u2264 20%. The trim rings, hips and the waveguide scoop pick up thin highlights. With diffuse 0, fronts, sides and sweep stay within 2 levels.",
+   "accept": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      1075,
+      415,
+      1240,
+      570
+     ]
+    },
+    "metric": "lum_p95",
+    "op": ">=",
+    "value": 55
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "post",
+   "problem": "The camera-facing fronts render about 0.45 EV under spec while the roofs sit on it. c2 also removes about 15% of the fronts' light (the floor bounce), which would drop the white fronts to about 214.",
+   "evidence": {
+    "region": [
+     738,
+     300,
+     768,
+     392
+    ],
+    "measured": "White front 228. Oat body L* 68.9 vs spec 77.8, Skim plinth L* 57.9 vs 66.1, Chocolate cream plinth L* 79.8 vs 90.8. The roof front slopes are on spec: 2% \u0394E 0.3, Skim \u0394E 1.6, Oat \u0394E 2.3."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": "0",
+    "to": "+0.2"
+   },
+   "expected": "With c2 in, the white fronts hold at 224\u2013236 and the light colourways keep their lightness (Oat body L* \u2265 68). The roofs rise about 0.2 EV: the blue roof stays within \u0394E 3 and the red stays near its current 4.3.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      738,
+      300,
+      768,
+      392
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     224,
+     236
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A satin or lighter finish on the woofer cones so the 12 in drivers show their shape without a reflection card.",
+   "why": "The cone is the Dayton RSS315HF-4's own black anodised aluminium and is fixed. It matters because the cones are the largest feature on every front and 28% of their pixels are crushed; c4 is the in-scope route."
+  },
+  {
+   "request": "Brighter or polished cast letters, so 'earmilk' reads as metal rather than grey print (letters median 117, RGB 128/112/103).",
+   "why": "The marks and their finish are fixed. At range-page size the wordmark reads as printed type on every plinth."
+  },
+  {
+   "request": "Larger rounds on the corners and hips, or deeper shadow lines, so the box edges catch a highlight and the white fronts stop reading as flat cards.",
+   "why": "The 6 mm rounds and 3 mm shadow lines are the spec, and the flat fronts are the main thing still between this frame and a 9."
+  },
+  {
+   "request": "Regroup the five into a row square to the camera with smaller gaps, so they render at one scale and the inner side faces see the fill.",
+   "why": "Placement is fixed under product. The Oat renders 12% taller than the Whole (379 vs 337 px), which reads as a hierarchy, and the narrow gaps make the side faces model differently: the Skim's side falls 65 levels front to back while the Oat's is flat."
+  }
+ ],
+ "score_if_fixed": 7.6
+}

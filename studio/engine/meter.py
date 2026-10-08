@@ -5,9 +5,9 @@ exposure that would put each at a target value in the final image.
     python3 studio/engine/meter.py studio/shots/earmilk/04b.json [--part back-panel --part side-left]
         [--region 783 440 805 620] [--target 225] [--set path=value ...]
 
-It renders the shot small and 3 stops under (so the brightest white sits far below any clip or shoulder), with the
-part mask, inverts the shot's view transform (Standard, or Khronos PBR Neutral's offset), and prints for each part
-or region its median scene-linear luminance at exposure 0, what the final image shows there now, and the EV change
+It renders the shot small as a scene-linear EXR (the radiance itself, before any view transform or exposure), with
+the part mask, and prints for each part or region its median scene-linear luminance at exposure 0, what the final
+image shows there now through the shot's view transform and exposure, and the EV change
 that would bring it to --target (an sRGB value, 0 to 255). Regions are in the pixels of the image they were measured
 on, a critic's staged render at 0.75 scale by default (--ref-scale).
 A critic predicting an exposure guesses; this measures.
@@ -91,18 +91,21 @@ def main():
     exp0 = sh.get('render', {}).get('exposure', 0.0)
     W, H = sh.get('size', [1600, 1000])
     with tempfile.TemporaryDirectory() as td:
-        out = Path(td) / 'meter.png'
+        out = Path(td) / 'meter.exr'
+        # the beauty pass as scene-linear EXR (no view transform, no exposure): exact from black cones to blown whites
         cmd = [sys.executable, str(HERE / 'render.py'), a.shot, '--out', str(out), '--samples', str(a.samples), '--scale', str(a.scale),
-               '--masks', '--set', f'render.exposure={exp0 - UNDER}'] + sum((['--set', s_] for s_ in a.sets), [])
+               '--masks', '--set', 'render.format=EXR'] + sum((['--set', s_] for s_ in a.sets), [])
         r = subprocess.run(cmd, capture_output=True, text=True)
         if r.returncode or not out.exists():
             raise SystemExit(r.stderr[-2000:])
-        img = np.asarray(Image.open(out).convert('RGB')).astype(float) / 255.0
+        import bpy
+        im = bpy.data.images.load(str(out))
+        w, h = im.size
+        px = np.array(im.pixels[:], dtype=np.float32).reshape(h, w, 4)[::-1, :, :3]   # Blender stores rows bottom-up
         mask = np.asarray(Image.open(out.with_suffix('.mask.png')).convert('RGB'))[:, :, 0]
         legend = json.loads(out.with_suffix('.mask.json').read_text())
-    lin = srgb_inv(img)
-    scene = (lin if view == 'Standard' else pbr_neutral_inv_low(lin)) * 2 ** (UNDER - exp0)   # at exposure 0
-    lum = scene @ LUM
+    lum = px.astype(float) @ LUM                                                       # scene-linear, at exposure 0
+    img = px
     k = img.shape[1] / (W * a.ref_scale)
     rows = []
     for p in a.part:

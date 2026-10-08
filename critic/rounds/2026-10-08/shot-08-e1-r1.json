@@ -1,0 +1,237 @@
+{
+ "stage1": {
+  "impression": "A cutaway of a house-shaped speaker on a warm seamless sweep that reads but is lit flat: the tan section, the cream chambers and the backdrop sit at nearly one value, so the cut does not stand in front of the cavities and the base melts into the floor. The black drivers, port and amp are silhouettes without form, the white side is a grey wash and the product is a narrow column centred in a wide frame, a competent draft rather than a hero.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Cut faces are the lightest planes and the chambers recede: part:top-panel >= 210 with part:side-right median <= 185 and p5 <= 125 (now 213.4 against 215.2 and 147.3, i.e. the chambers are brighter than the cut).",
+  "The base is seated: the floor directly under the bottom panel at least 45 levels darker than its cut face (now 207.5 against 206.7, a 1-level step) and a visible cast shadow at the foot of the front baffle (floor beside it now 198-204, no dip).",
+  "Every silhouette clears the backdrop by >= 60 levels (now back panel 22.3, gable 214.2 against 188.9, front baffle 16.5) and no empty area is brighter than the cut faces (floor [0,760,300,900] is 221.0 now).",
+  "The drivers read in section: woofer-cone p95 >= 60 with a highlight band, woofer-frame and mid-frame crush_pct <= 30 (now 77.7 and 55.4), amp-module p95 >= 40 (now 17.4).",
+  "Colour holds: front baffle median >= 225 and neutral, |b*| <= 2 (now 195.8, b* +6.5); accent within dE2000 3 of #C62828 on the bowl's mid-tones (3.83 now) and on the fin face (9.73 now).",
+  "The plinth band shows the Whole accent #C62828 as the card specifies (its zone reads neutral [182,174,168]); a product-file fix, not a render setting.",
+  "Nothing of the product within 20 px of the spread's fold at x=675 (fold band lum_range 180.9 now).",
+  "The section is modelled, not printed: about 20 levels of falloff from gable to plinth on the cut faces (now 214.2 to 206.7 along the back-panel cut strip)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The product's light planes, the floor and the backdrop share one value, so the section's outline and its base are carried by hue alone: the bottom panel's cut face and the floor under it are the same luminance, and the brightest area in the frame is empty floor.",
+   "evidence": {
+    "region": [
+     560,
+     780,
+     830,
+     840
+    ],
+    "measured": "bottom-panel cut strip [600,800,780,812] median 206.6, floor directly below [600,816,800,830] 207.5, 1-px profile y 804-827 flat at 206.7-207.5 (no contact step); back-panel cut 213.1 against backdrop beside it 190.9 (edge 22.3); gable cut face 214.2 against backdrop 188.9; front-baffle edge 16.5; floor [0,760,300,900] 221.0 and [560,840,830,895] 211.5, both brighter than the cut faces"
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#C9C5BE",
+    "to": "#75726D"
+   },
+   "expected": "Same warm hue (Lab 48.2/0.2/3.2 against 79.7/0.1/4.0), about -1.7 EV of paper reflectance: with c5's stronger key, foreground floor about 145-160 and backdrop about 120-140, so the bottom panel's cut face (about 205) stands at least 45 levels off the floor, every silhouette clears by 60 or more, the brightest pixels sit on the product, and the glossy fin stops mirroring a bright floor (its dE2000 to #C62828, 9.73 now, falls).",
+   "accept": {
+    "region": [
+     560,
+     840,
+     830,
+     895
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     130,
+     170
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The low frontal 'inside' lamp floods the chambers, so the interior walls are brighter than the cut faces and the cut reads flush with the cavities instead of standing in front of them.",
+   "evidence": {
+    "region": "part:side-right",
+    "measured": "interior wall median 215.2, p95 227.7; upper chamber [612,272,716,436] 219.8, profile 208.3 to 224.0 top to bottom; cut faces only 213.4 (top-panel) and 213.1 (back-panel strip); the back-panel cut steps only 12 levels to its own inner face (213.1 to 200.7) and the top-panel cut -13.1 into the cavity, so the cut is separated by hue, not value"
+   },
+   "change": {
+    "setting": "lights.inside.irradiance",
+    "from": "1.1",
+    "to": "0.3"
+   },
+   "expected": "Interior wall median about 165-175 and its corners about 120-135 while the cut faces hold about 213 (with c5): the section becomes the lightest plane and the chambers recede by 35-50 levels; the cables (65-73) still read against the walls.",
+   "accept": {
+    "region": "part:side-right",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     145,
+     190
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The drivers in section, a must-show, are black silhouettes: no lamp sits where the cones' forward-facing surfaces can mirror it into the lens, so the woofer's cone, basket and cap merge into one mass and the mid's papyrus cone has no tone.",
+   "evidence": {
+    "region": "part:woofer-*",
+    "measured": "woofer-cone median 5.6, p95 18.9, range 15.8; woofer-cap 8.3; woofer-frame median 1.4 with 77.7 % at L <= 3; mid-frame 55.4 % at L <= 3; mid-cone median 23.8, range 9.8. The cones mirror the camera toward azimuth about 95-135, elevation 15-25; the fill (40/18) and key (-35/42) are nowhere near it."
+   },
+   "change": {
+    "setting": "lights.kick",
+    "from": "(none)",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.3,
+      1.2
+     ],
+     "orbit": {
+      "azimuth_deg": 105,
+      "elevation_deg": 20,
+      "distance_m": 1.4
+     },
+     "target": [
+      0.15,
+      0.04,
+      0.5
+     ],
+     "irradiance": 1.3,
+     "color": 5600,
+     "specular": 1.0
+    }
+   },
+   "expected": "A soft grey highlight band (about 60-120) along the lower half of the woofer cone's far side and on the mid cone, edge light on both trim rings and surrounds, mid-cone median about 45 so its fibre shows; the strip stands in front of the baffle and behind the cut plane, so it adds nothing to the cut faces or chambers; it also lifts the white front baffle from 195.8 to about 228.",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "lum_p95",
+    "op": ">=",
+    "value": 50
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The key comes in close enough to the section's normal that it reaches much of every chamber's back wall, so the walls get nearly the cut's light and the panels throw no shadow into the cavities.",
+   "evidence": {
+    "region": [
+     612,
+     272,
+     716,
+     436
+    ],
+    "measured": "upper-chamber wall median 219.8, rising only from 208.3 under the top panel to 224.0 at the brace (x profile 212.0 to 226.0); interior p5 147.3, so no corner anywhere in the chambers falls into shadow"
+   },
+   "change": {
+    "setting": "lights.key.orbit.azimuth_deg",
+    "from": "-35",
+    "to": "-50"
+   },
+   "expected": "At -50 the top and back panels shade most of each back wall (only the lower right of each chamber sees the key, through a soft penumbra): shadowed corners about 120-135, the mid chamber about 95-110, while key-facing tops (window brace, amp-box lid) stay lit, so planes separate by orientation.",
+   "accept": {
+    "region": "part:side-right",
+    "metric": "lum_p5",
+    "op": "<=",
+    "value": 135
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "Once the inside lamp is cut (c2) and the key rakes (c4), the cut faces lose about 30 % of their light and would sink to about 185; the key has to carry the section.",
+   "evidence": {
+    "region": "part:top-panel",
+    "measured": "cut faces 213.4 (top-panel), 213.1 (back-panel strip), window-brace 202.5; by the card's geometry the inside lamp lands on the section at cos 0.98 (1.08 W/m2) and the key at cos 0.61 now, 0.48 at azimuth -50"
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": "3",
+    "to": "6"
+   },
+   "expected": "Cut faces hold at about 210-218, key-facing tops (window brace, amp-box lid) rise to about 225-235 without clipping under PBR Neutral; the extra floor spill is absorbed by c1's darker paper.",
+   "accept": {
+    "region": "part:window-brace",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     207,
+     238
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "composition",
+   "problem": "The product is centred, so across a spread the fold at x=675 runs through the tweeter cable's channel, the port tube and the amp box, and neither page carries the product whole.",
+   "evidence": {
+    "region": [
+     655,
+     60,
+     695,
+     860
+    ],
+    "measured": "product box x 557-825, centre about 691; the fold band has lum_range 180.9 (p5 46.2, p95 227.3), i.e. it is full of product"
+   },
+   "change": {
+    "setting": "camera.shift_x",
+    "from": "(default, 0)",
+    "to": "+0.18"
+   },
+   "expected": "The product moves about 243 px left (box about 314-582, centre about 448): whole on the left page, 90 px or more clear of the fold, front baffle facing the open right page for copy; the same placement serves a homepage hero with copy right. A shift, not a pan, so perspective and the cut's angle are unchanged.",
+   "accept": {
+    "region": [
+     655,
+     60,
+     695,
+     860
+    ],
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 80
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "post",
+   "problem": "The white body renders cream: a 5600 K key and a 5200 K inside lamp against the default white point, plus warm bounce, push the front baffle to b* +6.5 and the floor to b* +9.9 against the paper's own +4.0.",
+   "evidence": {
+    "region": "part:front-baffle",
+    "measured": "rgb [202,194,183], Lab 78.8/0.9/6.5; dE2000 5.79 to a neutral of equal luminance (#C3C3C3) and 9.53 to #E3E3E3; the bowl's red mid-tone [189,25,22] has b* 45.9 against #C62828's 40.3 (dE2000 3.83)"
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": "(default; D65 6500 K assumed)",
+    "to": "5800"
+   },
+   "expected": "The 5600 K key renders neutral: front baffle about 228 (with c3) at |b*| 2 or less, the bowl's b* drops about 4 toward #C62828 (dE2000 at most 3), the birch section stays warm (b* about 25).",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "delta_e",
+    "hex": "#E3E3E3",
+    "op": "<=",
+    "value": 4.5
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Render the plinth band in the Whole accent #C62828, as the card specifies",
+   "why": "The plinth zone that carries the 'earmilk' letters (front-baffle 808-822, 745-800) reads neutral [182,174,168] (Lab 71.6/1.8/4.1) while the bowl and fin carry the accent; it is the product's colour assignment (fixed), so the product file needs checking, but as rendered the flavour's band is missing from the frame."
+  },
+  {
+   "request": "Show the drivers' cut faces as bare sectioned metal (or a light cap colour) so cone, basket and motor separate",
+   "why": "The baskets face away from every lamp position that keeps the cut readable (woofer-frame 77.7 % and mid-frame 55.4 % at L <= 3); c3 can put a highlight on the cone but not separate the basket, and the drivers' materials are the products' own (fixed)."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
