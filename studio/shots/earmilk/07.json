@@ -24,7 +24,7 @@
     "match": "waveguide-insert|magnets-insert|pins-insert",
     "offset_m": [
      0,
-     -0.33,
+     -0.52,
      0
     ]
    },
@@ -32,7 +32,7 @@
     "match": "tweeter-*",
     "offset_m": [
      0,
-     -0.2,
+     -0.36,
      0
     ]
    },
@@ -79,7 +79,7 @@
   "bounces": 12,
   "view": "Khronos PBR Neutral",
   "exposure": 0.0,
-  "white_balance_k": 5600
+  "white_balance_k": 6000
  },
  "title": "How it goes together",
  "set": {
@@ -94,8 +94,8 @@
  "camera": {
   "position": [
    0.757,
-   -3.497,
-   1.62
+   -3.75,
+   2.6
   ],
   "target": [
    0.2,
@@ -116,7 +116,7 @@
   "key": {
    "type": "area",
    "size_m": [
-    1.4,
+    0.6,
     1.4
    ],
    "orbit": {
@@ -190,6 +190,87 @@
    "irradiance": 1.2,
    "color": 6500,
    "off": true
+  },
+  "drivers": {
+   "type": "panel",
+   "size_m": [
+    0.8,
+    1.1
+   ],
+   "position": [
+    1.6,
+    -0.7,
+    0.6
+   ],
+   "target": [
+    0.33,
+    -0.1,
+    0.5
+   ],
+   "strength": 1.0,
+   "color": "#FFFFFF",
+   "ramp": {
+    "axis": "z",
+    "at_m": [
+     0.1,
+     1.1
+    ],
+    "values": [
+     0.25,
+     1
+    ]
+   },
+   "diffuse": false
+  },
+  "sweep": {
+   "type": "area",
+   "size_m": [
+    5.0,
+    2.5
+   ],
+   "position": [
+    -0.7,
+    2.3,
+    3.0
+   ],
+   "target": [
+    -0.7,
+    4.4,
+    0.7
+   ],
+   "irradiance": 1.5,
+   "color": 5800
+  },
+  "gloss": {
+   "type": "panel",
+   "size_m": [
+    2.0,
+    0.9
+   ],
+   "position": [
+    1.05,
+    1.6,
+    2.05
+   ],
+   "target": [
+    0.09,
+    -0.03,
+    0.95
+   ],
+   "strength": 1.0,
+   "color": "#FFFFFF",
+   "ramp": {
+    "axis": "z",
+    "at_m": [
+     1.7,
+     2.4
+    ],
+    "values": [
+     0.3,
+     1
+    ]
+   },
+   "diffuse": false
   }
  }
 }

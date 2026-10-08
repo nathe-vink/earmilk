@@ -1,0 +1,433 @@
+{
+ "stage1": {
+  "impression": "A clean, legible exploded view of the carton speaker on a mid-grey sweep, but it is lit like a draft: soft, frontal light leaves the white body as two near-equal panels and the black drivers as near-silhouettes with almost no specular shape. The assembly sits low under a dead band of dull grey, its grounding is faint, and the grey wordmark on the red plinth barely reads.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The pocket's boss bore and both pocket magnets are visible and read as distinct features. Now magnets-pocket has 0 px in the mask, and the pocket shows only its floor (top-panel, 1556 px) and a sliver of back wall.",
+  "Every exploded part stands clear of the cabinet and of the other parts by at least 15 px. Now the insert's grey body hides the cabinet's top-right eave corner (box [694,305,706,342] reads 168.7, rgb [162,169,185], the insert, not the baffle), and the tweeter hangs over the pocket opening (box [652,262,712,316] p5 14.8 against 66.7 for the wood and red around it).",
+  "The drivers read as engineered parts. The woofer cone needs a median of at least 22 with a graded sheen (now 9.3, p95 57.2), the woofer motor and basket need lifting from 9.9 and 13.8 (4.6% crushed), and the mid cone needs to show some modelling (now 20.8 with a p5-p95 range of 7).",
+  "The white lacquer is neutral, within \u0394E2000 3 of a neutral grey on both faces. Now the side-left is [227,227,237], \u0394E 4.4, and the baffle is [203,205,217], \u0394E 5.8.",
+  "The cabinet's front corner reads as a corner, with the baffle beside it at least 12 levels below the side panel. Now they are 224.5 and 224.4, with an edge step of 3.6.",
+  "The lacquer shows controlled specular, with a graded reflection on the red roof slope and the insert's red skin. Now the front slope is a single value (74.5, p5-p95 range 1.6), and nothing in the frame passes 234.5.",
+  "The backdrop reads as a clean, light sweep, at least 170 behind the product, with no dark corner on the key side. Now the top band is 157.3 and the top-left corner 140.1.",
+  "A firm contact shadow sits under the plinth, with the floor within 6 px of the base at least 40 levels below the open floor. Now it is 176 against 197.",
+  "The cast-metal wordmark reads as metal, with a highlight on its letter faces. Now the letters are median 96.7, p95 109, on a plinth of about 65.",
+  "The assembly is balanced vertically, centred within 25 px. Now it sits 193 px from the top and 73 px from the bottom."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "composition",
+   "problem": "The insert is drawn out like a drawer, but in the frame it still overlaps the cabinet: its grey body covers the top-right eave corner, so it does not read as clear of its pocket.",
+   "evidence": {
+    "region": [
+     692,
+     300,
+     712,
+     345
+    ],
+    "measured": "In the mask, waveguide-insert lies in front of front-baffle from x 692-698 to the cabinet's right silhouette at x 707, for y 300-343. Box [694,305,706,342] reads lum 168.7, rgb [162,169,185], which is the insert's blue-grey, where the white baffle should be about 187-205. The insert spans x 691-856 and its red skin x 742-856."
+   },
+   "change": {
+    "setting": "product.explode.0.offset_m",
+    "from": [
+     0,
+     -0.33,
+     0
+    ],
+    "to": [
+     0,
+     -0.52,
+     0
+    ]
+   },
+   "expected": "The insert moves about 85-90 px to the right, its left edge from x 691 to about 779 and its tip to about 944. The eave corner reads white again (box [694,305,706,342] at 180 or more), and a gap of about 25-30 px opens in front of the pocket for the tweeter (c2). The red skin leaves x 818-846. Apply this before c2: at the tweeter's new 0.36 m the insert must be at 0.5 m or more, or the two parts collide.",
+   "accept": {
+    "region": [
+     818,
+     315,
+     846,
+     335
+    ],
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     110,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "composition",
+   "problem": "The tweeter hangs in front of the pocket opening and the roof edge instead of in the gap between the pocket and the insert, so it hides the pocket and looks stuck to the roof.",
+   "evidence": {
+    "region": [
+     652,
+     262,
+     712,
+     316
+    ],
+    "measured": "tweeter-frame [650,259,683,300] lies inside the pocket opening (x 585-700) and overlaps the red roof edge. In this box 31% of pixels are tweeter, and lum_p5 is 14.8 against 66.7 for the non-tweeter pixels. The tweeter's centre projects at about the baffle plane, because its 0.2 m offset barely exceeds its mounting depth of about 0.19 m behind the baffle."
+   },
+   "change": {
+    "setting": "product.explode.1.offset_m",
+    "from": [
+     0,
+     -0.2,
+     0
+    ],
+    "to": [
+     0,
+     -0.36,
+     0
+    ]
+   },
+   "expected": "The tweeter moves about 75 px to the right, centre about (745, 288), spanning x 728-762. That clears the cabinet's right silhouette (x 707) by about 20 px and stops at least 15 px short of the moved insert, so it sits alone on the axis between the pocket and the insert. The box then holds only wood, red and white, with p5 at 60 or more.",
+   "accept": {
+    "region": [
+     652,
+     262,
+     712,
+     316
+    ],
+    "metric": "lum_p5",
+    "op": "between",
+    "value": [
+     45,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "camera",
+   "problem": "The camera is almost at eye level, 16 degrees above the target and 60 degrees off the insert's draw axis, so it looks across the roof pocket. The pocket's near wall hides the boss bore and the pocket magnets, and the horn mouth is seen edge-on.",
+   "evidence": {
+    "region": [
+     580,
+     240,
+     705,
+     335
+    ],
+    "measured": "magnets-pocket, magnets-insert and pins-insert have 0 px in the mask. In the pocket only the floor (top-panel 1556 px, lum 173.5) and a strip of curved back wall at x 585-650 are visible. The camera sees the opening at about 63 degrees to its normal. The tweeter's mounting point, back-projected from its 0.2 m offset, lands at about (574, 271), behind the near red slope."
+   },
+   "change": {
+    "setting": "camera.position",
+    "from": [
+     0.757,
+     -3.497,
+     1.62
+    ],
+    "to": [
+     0.757,
+     -3.75,
+     2.6
+    ]
+   },
+   "expected": "The camera ends up about 28 degrees above the target and 24 degrees above the pocket. The target is unchanged, and the level shift keeps verticals vertical. The product keeps its size, about 640 px tall from the fin top near y 183 to the base near y 834. The pocket opening is seen at about 49 degrees instead of 63, so the bore and the pocket magnets show past the near wall, and the horn mouth turns toward the lens. The backdrop becomes mostly floor. Every other test here is written on parts or on the background, so it survives this move.",
+   "accept": {
+    "region": "part:magnets-pocket",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     15,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The black drivers read as holes. The woofer's anodised cone, motor and basket and the mid's papyrus cone carry no highlight, so the cone profiles, surround rolls and baskets, which are what a build page shows, cannot be read.",
+   "evidence": {
+    "region": [
+     649,
+     534,
+     775,
+     717
+    ],
+    "measured": "woofer-cone median 9.3 (p5 3.9, p95 57.2), woofer-cap 5.0, woofer-motor 9.9, woofer-frame 13.8 with 4.6% of pixels at 3 or below. mid-cone 20.8 with p5-p95 of 17.8-24.7, so no gradient. The far walls of both cones mirror a direction about 8 degrees off the driver axis (azimuth about 64-65, elevation about 3-5 degrees). There the set has nothing but floor, about 190, reflected at roughly 5%."
+   },
+   "change": {
+    "setting": "lights.drivers",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.8,
+      1.1
+     ],
+     "position": [
+      1.6,
+      -0.7,
+      0.6
+     ],
+     "target": [
+      0.33,
+      -0.1,
+      0.5
+     ],
+     "strength": 1.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.1,
+       1.1
+      ],
+      "values": [
+       0.25,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "A graded sheen appears across the far wall of both cones, brighter toward the top, with a highlight line along each surround roll and the trim rings' rounded edges. The woofer cone median lands at about 25-45 with highlights at 150 or less, and the mid cone median at 28 or more. Because the panel is reflection-only, the baffle, the side and the floor do not change. The front-corner round may pick up a thin highlight line, which helps c7.",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     22,
+     60
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The sweep reads as a dull, cool mid-grey wall that is darkest on the key side, so the frame looks dim instead of like a clean studio sweep, and the paper renders well below its own value.",
+   "evidence": {
+    "region": [
+     300,
+     0,
+     1050,
+     150
+    ],
+    "measured": "lum_median 157.3, rgb [157,157,161], p5 146.3. The top-left [0,0,300,150] is 140.1 and the top-right 162.3, a ramp of 22 levels from left to right, and the floor in front is 180-193. The #C9C5BE paper (lum 197) renders 35-57 levels below its own value behind the product."
+   },
+   "change": {
+    "setting": "lights.sweep",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      5.0,
+      2.5
+     ],
+     "position": [
+      -0.7,
+      2.3,
+      3.0
+     ],
+     "target": [
+      -0.7,
+      4.4,
+      0.7
+     ],
+     "irradiance": 1.5,
+     "color": 5800
+    }
+   },
+   "expected": "A broad glow lights the curve and far floor behind the product, centred slightly left of it. The area behind the assembly rises to about 178-185 and falls off to about 165 at the frame corners, which lifts the dark key-side corner. The white panels, at 205-230, stay at least 25 levels above the sweep. The lamp faces away from the product, so it puts no light on it.",
+   "accept": {
+    "region": [
+     300,
+     0,
+     1050,
+     150
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     170,
+     192
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "post",
+   "problem": "The Whole white lacquer renders cool blue, with blue 10-14 levels above red on both faces, and the warm sweep paper renders bluish too.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      655,
+      470,
+      700,
+      512
+     ]
+    },
+    "measured": "The baffle between the holes is rgb [203,205,217], \u0394E2000 5.76 against neutral #CDCDCD. The side-left upper middle is [227,227,237], \u0394E 4.4 against #E3E3E3. The paper renders [162,162,166], although its own colour #C9C5BE has red 11 above blue. The fill (6200 K), top (6000 K) and the #FFFFFF zenith are all bluer than the 5600 K white point."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 5600,
+    "to": 6000
+   },
+   "expected": "The baffle comes to about [207,205,210] (\u0394E about 3 against neutral), the side-left to about [231,227,229] (\u0394E about 2.8), and the sweep to a faintly warm grey of about [165,162,161]. The red roof stays within \u0394E 2.5 of #C62828, and luminance changes by less than 1 level.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      655,
+      470,
+      700,
+      512
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#CDCDCD",
+    "op": "<=",
+    "value": 3.5
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The cabinet's front corner dissolves. The 1.4 m key sits 0.67 m from the product with its centre about 0.37 m behind the baffle plane, but about 0.24 m of its width reaches in front of that plane. It wraps round the corner and lights the baffle beside it as brightly as the side panel, so the box reads as a rounded slab.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      602,
+      340,
+      622,
+      720
+     ]
+    },
+    "measured": "The baffle beside the corner is 224.5 (rgb [223,224,237]) and the side-left beside it is 224.4. The largest edge step across the corner at y 470-512 is 3.6, with only a faint line of 6 levels on the round. The baffle falls from 226.7 at the corner to 203-208 by x 650-700, so the wrap is the source."
+   },
+   "change": {
+    "setting": "lights.key.size_m",
+    "from": [
+     1.4,
+     1.4
+    ],
+    "to": [
+     0.6,
+     1.4
+    ]
+   },
+   "expected": "The narrowed key stays wholly behind the baffle plane, so the baffle beside the corner drops to about 205-210, the level of its fill. The side-left keeps about 222-226 and keeps its vertical falloff of about 19 levels, inside c6's 12-30, because the key's height and its irradiance at the target are unchanged. The corner gets a step of 12-18 levels, and the plinth's floor shadow sharpens slightly.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      602,
+      340,
+      622,
+      720
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     198,
+     214
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The lacquer reads as matte paint: the red roof slope and the insert's red skin reflect nothing, and no pixel in the frame carries a specular highlight.",
+   "evidence": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      558,
+      248,
+      578,
+      278
+     ]
+    },
+    "measured": "The front slope is lum 74.5 with p5 73.9 and p95 75.5, a single flat value, and \u0394E 1.6 against #C62828. The frame's maximum luminance is 234.5, the maximum R is 238, and nothing clips. The slope mirrors azimuth about 158, elevation 30 degrees with this camera, and about 143, 31 after c3, both behind and to the right, where no lamp is lit (rim is off)."
+   },
+   "change": {
+    "setting": "lights.gloss",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.0,
+      0.9
+     ],
+     "position": [
+      1.05,
+      1.6,
+      2.05
+     ],
+     "target": [
+      0.09,
+      -0.03,
+      0.95
+     ],
+     "strength": 1.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       1.7,
+       2.4
+      ],
+      "values": [
+       0.3,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "A soft graded reflection appears across the front slope and the insert's red skin, peaking at about 150-180 and fading to the pure red, with at least half of each surface within \u0394E 4 of #C62828. A thin bright line runs along the fin top. The panel is reflection-only, so nothing else brightens. The panel spans about \u00b124 degrees in azimuth and \u00b112 degrees in elevation, so it covers the slope's mirror direction with either camera.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      558,
+      248,
+      578,
+      278
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     115,
+     200
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Lighten or gloss the woofer's cone and surround so the driver reads.",
+   "why": "The drivers are named products whose materials and colours are their own. The 12 in cone, at median 9.3, is the largest dead mass in the frame, so light (c4) has to carry it."
+  },
+  {
+   "request": "Enlarge or embolden the plinth wordmark so it reads at this size.",
+   "why": "Its typeface, size and tracking are fixed marks. At 20 px tall and lum 97 on a red of about 65 it barely reads, and only a glint on the letter faces can lift it."
+  },
+  {
+   "request": "Cut away the pocket's near wall, or draw the insert straight up instead of forward, to expose the bore without moving the camera.",
+   "why": "Cutaways and each part's axis and order are fixed. The bore and pocket magnets (0 px now) can only be reached with the camera (c3)."
+  },
+  {
+   "request": "Make the waveguide shallower so the tweeter dome shows in the throat.",
+   "why": "The waveguide's depth and profile and the tweeter's place in it are set by acoustic simulation for coverage and the crossover match to the mid."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
