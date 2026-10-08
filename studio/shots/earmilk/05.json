@@ -136,6 +136,31 @@
    "color": 6300,
    "specular": 0.3
   },
+  "cone_scrim": {
+   "type": "panel",
+   "size_m": [
+    12,
+    4.6
+   ],
+   "position": [
+    0,
+    -4.0,
+    2.75
+   ],
+   "target": [
+    0,
+    0,
+    2.75
+   ],
+   "strength": 6.7,
+   "color": 5800,
+   "diffuse": false,
+   "receivers": [
+    "woofer-cone",
+    "woofer-cap"
+   ],
+   "_why": "the critic's reflection card for the cones (c4), sized from the reflection probe: the cones' lower halves mirror the front sky at azimuth -85 to 28 and elevation 2 to 58, which the 8 x 3 m card covered 4.8 % of"
+  },
   "cone_card": {
    "type": "area",
    "size_m": [

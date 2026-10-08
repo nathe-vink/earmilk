@@ -13,7 +13,7 @@
      0,
      0
     ],
-    "rotate_z": 0
+    "rotate_z": 72
    }
   ],
   "hide": [
@@ -92,16 +92,16 @@
  },
  "camera": {
   "position": [
-   -2.2,
-   -2.95,
+   1.0,
+   -3.45,
    1.62
   ],
   "target": [
+   0.2,
    0.0,
-   -0.24,
    0.6
   ],
-  "lens_mm": 58,
+  "lens_mm": 50,
   "level": true
  },
  "sky": {
@@ -119,13 +119,13 @@
     1.4
    ],
    "orbit": {
-    "azimuth_deg": -55,
-    "elevation_deg": 48,
+    "azimuth_deg": -40,
+    "elevation_deg": 45,
     "distance_m": 2.4
    },
    "target": [
+    0.2,
     0,
-    -0.25,
     0.7
    ],
    "irradiance": 3.2,
@@ -138,13 +138,13 @@
     2.0
    ],
    "orbit": {
-    "azimuth_deg": 40,
+    "azimuth_deg": 50,
     "elevation_deg": 18,
     "distance_m": 3.2
    },
    "target": [
+    0.2,
     0,
-    -0.2,
     0.6
    ],
    "irradiance": 0.8,
@@ -158,13 +158,13 @@
     0.6
    ],
    "position": [
-    0.0,
-    -0.5,
+    0.2,
+    -0.4,
     2.6
    ],
    "target": [
+    0.2,
     0.0,
-    -0.25,
     0.9
    ],
    "irradiance": 1.3,

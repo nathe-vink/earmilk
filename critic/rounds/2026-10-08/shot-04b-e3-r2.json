@@ -1,0 +1,312 @@
+{
+ "stage1": {
+  "impression": "A three-quarter rear view of a carton-shaped speaker on a warm-grey sweep, placed right of centre with open copy space to the left and legible graphics. The white body reads as dull grey, the big shadow-side face is one flat value, and the soft, fill-heavy light leaves only a faint contact shadow, so it looks like a competent CG catalogue draft rather than a lit product.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "White planes neutral: back-panel and side-face whites within 2 levels of R=G=B (now B runs 6 to 8 above R everywhere; back-panel white is dE2000 4.7 from neutral #EAEAEA)",
+  "Side face modelled and separated: at least 10 levels of top-to-bottom falloff on the white side face (now 0.1: 189.6 to 189.5), and its left silhouette at least 35 levels above the backdrop beside it (now 15 to 28)",
+  "Hero white at 234 to 244 on the back panel (now median 226, 231 at the eave falling to 222), with clipping only on the corner's specular line",
+  "Product wholly on the right-hand page of a spread: at least 50 px clear of the centre line x=675 (now the gutter cuts 43 px into the side face) and a copy block of at least 55% of the width",
+  "A contact core under the plinth: floor within 8 px of the base at least 40 levels darker than the floor 60 px out (now a soft 22 to 30 level ramp, darkest 135 to 145, no core)",
+  "The lacquered red reads as lacquer: a reflection gradient of at least 10 levels across the roof's back slope (now one value, 85.3 to 88.1) and no mirrored ghost of the fin's OPEN OTHER SIDE on the slope below it (now +12 levels)",
+  "The connections read at spread size: gold RCA unclipped (now 68% of its pixels clipped), the amplifier plate showing a satin gradient (now flat 16.4 across its width)",
+  "Accent within dE2000 2 of #C62828 on the lit roof slope (now 3.9, G/B lifted to 55/58 by a bluish veil)"
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The white body renders blue: every white plane carries B 6 to 8 levels above R, while the warm paper loses its yellow, so a Whole-white product reads as cold grey.",
+   "evidence": {
+    "region": [
+     775,
+     300,
+     806,
+     620
+    ],
+    "measured": "back-panel white strip RGB median (232, 230, 238); side face [645,250,765,690] (190, 190, 198); label paper [812,298,942,472] (227, 226, 234); back-panel pixels in [700,250,1150,620] dE2000 4.70 vs neutral #EAEAEA; backdrop [650,20,950,100] (174, 169, 170), dE 5.18 from the paper's #B4AFA7, whose B sits 8 below G. Source: fill at 6400 K, rim 6000 K and a #FFFFFF dome against a 5600 K white point."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": "5600",
+    "to": "5800"
+   },
+   "expected": "White planes within 2 levels of R=G=B, back panel about (236, 235, 234) and side about (199, 199, 198) once c2 to c5 land (those cut the blue dome and add 5600 K light, so 5800 rather than the 5900 the current mix alone would need); the paper reads warm grey again (R > G > B); the red loses its blue veil.",
+   "accept": {
+    "region": {
+     "part": "back-panel",
+     "box": [
+      700,
+      250,
+      1150,
+      620
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#EAEAEA",
+    "op": "<=",
+    "value": 2.5
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The side face is one value top to bottom, 189.6 to 190.8 over 440 px, because roughly 60% of its light is non-directional, so it reads as a card, and its left silhouette, the edge against the copy space, sits only 15 to 28 levels above the backdrop.",
+   "evidence": {
+    "region": [
+     645,
+     250,
+     765,
+     690
+    ],
+    "measured": "profile y 189.6, 190.6, 190.8, 190.6, 190.6, 190.6, 189.8, 189.7 (falloff 0.1, p5 184.8, p95 195.8); left silhouette at y 300/450/600: backdrop 168/164/155 against the side's 183/184/184; edge [600,400,660,600] largest step 12.7. Light budget (estimate from the card's calibration, irradiance 3 gives white about 230): lamps' direct light about 0.85 of the side's about 2.0 W/m2."
+   },
+   "change": {
+    "setting": "lights.side",
+    "from": "(none)",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.8,
+      1.4
+     ],
+     "orbit": {
+      "azimuth_deg": -75,
+      "elevation_deg": 40,
+      "distance_m": 2.0
+     },
+     "target": [
+      0.19,
+      -0.11,
+      0.55
+     ],
+     "irradiance": 0.75,
+     "color": 5600
+    }
+   },
+   "expected": "A high softbox off the side face's front edge, outside the frame and outside every mirror direction of the vertical lacquer. Side face about 205 under the eave falling to about 195 above the plinth (8-bin falloff 9 to 10; single columns 13 to 16, e.g. left column 202-206 to 186-191), median about 200, still 30 to 35 below the back panel so the corner holds; its left edge at 190 to 206 against a backdrop of 140 to 162, a 35 to 55 level step.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      600,
+      262,
+      900,
+      690
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     6,
+     30
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "composition",
+   "problem": "The product straddles a spread's centre: its left edge is at x=632, so the gutter at x=675 cuts 43 px into the side face, and with its centre at x=802 the copy block gets only 47% of the width.",
+   "evidence": {
+    "region": [
+     655,
+     120,
+     700,
+     760
+    ],
+    "measured": "gutter band lum_p95 189.6, median 186.7 (the white side face fills it); front-baffle part box x0 = 632, back-panel x1 = 972."
+   },
+   "change": {
+    "setting": "camera.shift_x",
+    "from": "(default) 0",
+    "to": "-0.078"
+   },
+   "expected": "Product moves about 105 px right to x 737 to 1077: 62 px clear of the centre line on the right-hand page, copy block 0 to 737 (55% of the width), right margin 273 px. It is a lens shift, so perspective, reflections and the glint placements are unchanged; the gutter band becomes plain backdrop (about 140 to 162).",
+   "accept": {
+    "region": [
+     655,
+     120,
+     700,
+     760
+    ],
+    "metric": "lum_p95",
+    "op": "<",
+    "value": 178
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "A bright, even dome does about a third of the lighting: it flattens every plane, holds the backdrop at 145 to 170 so the white barely pops (side face only about 1.3x the copy block in linear light), and lays a bluish veil over the lacquered red.",
+   "evidence": {
+    "region": [
+     40,
+     40,
+     400,
+     450
+    ],
+    "measured": "copy block median 149.7 (p5 139.9, p95 156.9; profile 144.9 to 152.7); gable-block median (202, 54, 57), dE2000 3.65 vs #C62828 whose G/B are 40/40; roof back slope one value, 86.7 (p5 85.3, p95 88.1). Estimate from the card's calibration: lamps' direct light is about 0.85 of the copy block's about 2.4 W/m2, the rest is dome and bounce."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": "0.4",
+    "to": "0.15"
+   },
+   "expected": "Copy block median 123 to 136 and still even (p95 - p5 about 15 to 20); backdrop beside the product's left edge 140 to 155; the lamps now carry the shape. The roof's veil drops: gable median toward (200, 45, 46), dE2000 1.3 to 2.2 vs #C62828 with c1.",
+   "accept": {
+    "region": [
+     40,
+     40,
+     400,
+     450
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     115,
+     140
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The hero white is low: the back panel runs 231 at the eave to 222 above the plate, light grey next to a white web page, and c4 alone would drop it about 10 levels more.",
+   "evidence": {
+    "region": [
+     770,
+     250,
+     972,
+     620
+    ],
+    "measured": "back-panel pixels median 226, profile 231.0, 229.0, 227.0, 226.3, 224.8, 224.0, 221.2, 222.0 (falloff 9.0), p95 234.0; label paper [812,298,942,472] median 226.8."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": "1.7",
+    "to": "2.3"
+   },
+   "expected": "Back panel about 241 to 244 under the eave falling to 229 to 231 above the plate (median 234 to 236, falloff 11 to 13, p95 about 248), no clipping beyond the corner's specular line; label paper about 236; the key keeps its place, so the diagonal gradient across the panel stays.",
+   "accept": {
+    "region": {
+     "part": "back-panel",
+     "box": [
+      700,
+      250,
+      1150,
+      620
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     230,
+     244
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The gold RCA input is blown out by glint 0: all three channels clip, so it reads as a white blob, not a connector.",
+   "evidence": {
+    "region": [
+     904,
+     673,
+     913,
+     681
+    ],
+    "measured": "part amp-rca: 57 px, median 255, clip_pct 68.4, core (255, 255, 255); gold shows only in its shaded pixels, e.g. (218, 128, 37), (166, 113, 42). The other receivers sit well below clipping: amp-connectors median 170.7, amp-switch 195.0."
+   },
+   "change": {
+    "setting": "glints.0.receivers",
+    "from": [
+     "amp-connectors",
+     "amp-rca",
+     "amp-switch"
+    ],
+    "to": [
+     "amp-connectors",
+     "amp-switch"
+    ]
+   },
+   "expected": "The RCA renders as gold under the set's light (R 150 to 230, B 30 to 90), at most 10% clipped; the XLR, USB and IEC parts keep their glint (about 170 and 195).",
+   "accept": {
+    "region": "part:amp-rca",
+    "metric": "clip_pct",
+    "op": "<=",
+    "value": 10
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The amplifier plate is a dead-flat black slab, 16.4 across its whole width, so it reads as a hole or a printed rectangle rather than the anodised plate that carries the connections.",
+   "evidence": {
+    "region": [
+     786,
+     624,
+     967,
+     742
+    ],
+    "measured": "part amp-plate median 16.4, p5 15.4, p95 24.9; x profile 16.4 in seven of eight bins then 17.1; y profile 16.1 to 17.1."
+   },
+   "change": {
+    "setting": "glints.1",
+    "from": "(none)",
+    "to": {
+     "at": [
+      0.344,
+      -0.245,
+      0.22
+     ],
+     "normal": [
+      0.574,
+      -0.819,
+      0
+     ],
+     "size_m": 0.3,
+     "power_w": 5,
+     "receivers": [
+      "amp-plate"
+     ]
+    }
+   },
+   "expected": "A broad satin sheen centred on the plate's left end (about x 805, y 671 now) peaking around 40 to 55 and falling to the 16 to 20 base before the connectors; the plate stays black (median at most 28) and the connectors read against its darker right half. Tune power_w to land the peak in that band.",
+   "accept": {
+    "region": "part:amp-plate",
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     8,
+     45
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Turn the product 10 to 15 degrees so the back panel faces the lens more squarely",
+   "why": "The product's placement is fixed. It matters because the label and the amplifier plate are foreshortened to 202 px across a 390 mm face, leaving the connections the brief requires as 5 to 10 px features."
+  },
+  {
+   "request": "Enlarge, regroup or lighten the amplifier's connectors and plate",
+   "why": "The Hypex plate amplifier is a real, named part of the product with its own geometry and finish; at this framing its connections occupy about 70 x 25 px, so light (c6, c7) is the only lever."
+  },
+  {
+   "request": "Move or remove the fin's OPEN OTHER SIDE print so it no longer mirrors into the roof slope below it",
+   "why": "The marks and the fin are fixed. The ghost (+12 levels under the fin) reads as a misprint at spread size; only a less glossy clear coat could soften it, at the cost of every lacquer highlight."
+  }
+ ],
+ "score_if_fixed": 7.5
+}

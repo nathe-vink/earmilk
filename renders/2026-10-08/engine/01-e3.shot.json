@@ -1,0 +1,302 @@
+{
+ "size": [
+  1800,
+  1200
+ ],
+ "product": {
+  "def": "studio/products/earmilk.json",
+  "flavour": "whole",
+  "instances": [
+   {
+    "position": [
+     -1.05,
+     0,
+     0
+    ],
+    "rotate_z": 5
+   },
+   {
+    "position": [
+     1.05,
+     0,
+     0
+    ],
+    "rotate_z": -5
+   }
+  ]
+ },
+ "materials": {
+  "oak": {
+   "grain": 1.0
+  },
+  "plaster": {
+   "bump": 0.1
+  }
+ },
+ "render": {
+  "samples": 192,
+  "adaptive": 0.015,
+  "denoise": true,
+  "clamp": 8,
+  "bounces": 12,
+  "view": "Khronos PBR Neutral",
+  "exposure": 1.1,
+  "white_balance_k": 4900
+ },
+ "title": "Hero pair, sunlit living room",
+ "set": {
+  "kind": "room",
+  "size": [
+   7.0,
+   6.0,
+   2.9
+  ],
+  "center": [
+   0.4,
+   -2.0
+  ],
+  "floor": {
+   "plank_w": 0.2,
+   "plank_l": 2.0,
+   "base": "#A97F55",
+   "dark": "#8E6843",
+   "light": "#BF9668",
+   "plank_contrast": 0.45
+  },
+  "wall": {
+   "color": "#E6E0D5"
+  },
+  "ceiling": "#F2EFEA",
+  "skirting": {
+   "h": 0.12,
+   "color": "#EDEAE4"
+  },
+  "windows": [
+   {
+    "wall": "right",
+    "along": 0.1,
+    "sill": 0.35,
+    "size": [
+     2.0,
+     2.2
+    ],
+    "mullions": [
+     2,
+     1
+    ]
+   },
+   {
+    "wall": "front",
+    "along": -2.2,
+    "sill": 0.5,
+    "size": [
+     1.4,
+     1.9
+    ],
+    "mullions": [
+     2,
+     3
+    ]
+   }
+  ],
+  "props": [
+   {
+    "kind": "rug",
+    "position": [
+     0,
+     -2.85
+    ],
+    "size": [
+     2.6,
+     1.7
+    ],
+    "color": "#8C8273"
+   },
+   {
+    "kind": "sideboard",
+    "position": [
+     0.0,
+     0.25
+    ],
+    "size": [
+     1.4,
+     0.42,
+     0.52
+    ],
+    "color": "#897C6E"
+   },
+   {
+    "kind": "vase",
+    "position": [
+     0.48,
+     0.25
+    ],
+    "z": 0.52,
+    "height": 0.3,
+    "branches": 5,
+    "seed": 3
+   },
+   {
+    "kind": "frame",
+    "position": [
+     0.0,
+     1.0
+    ],
+    "z": 1.55,
+    "size": [
+     0.62,
+     0.82
+    ],
+    "art": "#3F5B6E"
+   },
+   {
+    "kind": "curtain",
+    "position": [
+     3.82,
+     -0.5
+    ],
+    "size": [
+     0.9,
+     2.85
+    ],
+    "rotate_z": 90
+   }
+  ]
+ },
+ "camera": {
+  "position": [
+   0.0,
+   -4.1,
+   1.15
+  ],
+  "target": [
+   0.0,
+   0.0,
+   0.58
+  ],
+  "lens_mm": 35,
+  "level": true,
+  "shift_x": 0.12
+ },
+ "sun": {
+  "azimuth_deg": 62,
+  "elevation_deg": 13,
+  "irradiance": 2.6,
+  "angle_deg": 0.53,
+  "color": "#FFDDAF"
+ },
+ "sky": {
+  "kind": "gradient",
+  "strength": 2.6,
+  "zenith": "#9FB8DA",
+  "horizon": "#E7EDF2",
+  "ground": "#857F73"
+ },
+ "lights": {},
+ "glints": [
+  {
+   "at": [
+    1.108,
+    -0.212,
+    0.437
+   ],
+   "normal": [
+    0.115,
+    -0.942,
+    0.317
+   ],
+   "size_m": 0.1,
+   "power_w": 4,
+   "receivers": [
+    "woofer-ring",
+    "mid-ring",
+    "woofer-surround",
+    "mid-surround"
+   ]
+  },
+  {
+   "at": [
+    1.089,
+    -0.178,
+    0.26
+   ],
+   "normal": [
+    -0.425,
+    -0.791,
+    0.44
+   ],
+   "size_m": 0.4,
+   "power_w": 64,
+   "receivers": [
+    "woofer-cone",
+    "woofer-cap"
+   ]
+  },
+  {
+   "at": [
+    -1.081,
+    -0.178,
+    0.261
+   ],
+   "normal": [
+    0.425,
+    -0.791,
+    0.44
+   ],
+   "size_m": 0.4,
+   "power_w": 64,
+   "receivers": [
+    "woofer-cone",
+    "woofer-cap"
+   ]
+  },
+  {
+   "at": [
+    1.031,
+    -0.214,
+    0.073
+   ],
+   "normal": [
+    -0.066,
+    -0.937,
+    0.342
+   ],
+   "size_m": 0.3,
+   "power_w": 4,
+   "receivers": [
+    "letters-front-0",
+    "letters-front-1",
+    "letters-front-2",
+    "letters-front-3",
+    "letters-front-4",
+    "letters-front-5",
+    "letters-front-6",
+    "letters-front-7"
+   ]
+  },
+  {
+   "at": [
+    -1.024,
+    -0.214,
+    0.075
+   ],
+   "normal": [
+    0.066,
+    -0.937,
+    0.342
+   ],
+   "size_m": 0.3,
+   "power_w": 4,
+   "receivers": [
+    "letters-front-0",
+    "letters-front-1",
+    "letters-front-2",
+    "letters-front-3",
+    "letters-front-4",
+    "letters-front-5",
+    "letters-front-6",
+    "letters-front-7"
+   ]
+  }
+ ]
+}

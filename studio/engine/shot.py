@@ -153,7 +153,8 @@ def apply_changes(d, critic, only=None):
         if ch.get('kind') == 'asset':
             pending.append({'id': cid, 'why': 'asset: ' + json.dumps(ch.get('change', {}))[:200]}); continue
         c = ch.get('change', {})
-        setting = c.get('setting', '')
+        # a remark after the path ("lights.bg (new light)") is the critic's, not part of the setting
+        setting = re.sub(r'\s*\(.*$', '', c.get('setting', '')).strip()
         try:
             cur = get_path(d, setting)
         except KeyError:

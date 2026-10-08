@@ -53,7 +53,12 @@ def main():
           'origin with its front toward -y, z up; the camera\'s position and target are world points. Relative values are '
           'allowed in "to": "+0.5", "-20", "x0.8", "+15%". To add a light, set `lights.NEWNAME` to a whole spec, e.g. '
           '`{"type": "area", "size_m": [0.6, 0.6], "orbit": {"azimuth_deg": 30, "elevation_deg": 20, "distance_m": 2}, '
-          '"irradiance": 1.0, "color": 5600}`; to remove one, set `lights.NAME.off` to true. A glint (a highlight exactly '
+          '"irradiance": 1.0, "color": 5600}` (an orbit is round the product\'s centre; `"position": [x, y, z]` places a '
+          'lamp anywhere else); to remove one, set `lights.NAME.off` to true. A graduated light for a gloss surface to '
+          'mirror as a smooth ramp is a panel: `{"type": "panel", "size_m": [1.2, 0.25], "position": [x, y, z], "target": '
+          '[x, y, z], "strength": 1.0, "color": "#FFFFFF", "ramp": {"axis": "y", "at_m": [0.2, 0.45], "values": [0, 1]}, '
+          '"diffuse": false}` (strength the peak radiance; the ramp along a world axis; diffuse false: seen only in '
+          'reflections). A glint (a highlight exactly '
           'where a surface would mirror a small lamp into the camera) is `glints.N`: `{"at": [x, y, z], "normal": [nx, ny, nz], '
           '"size_m": 0.05, "power_w": 2, "receivers": ["part name"]}`.', '',
           '| setting | now | unit | range | meaning |', '|---|---|---|---|---|']
@@ -90,6 +95,19 @@ def main():
             for n, v in sorted(parts.items(), key=lambda kv: -kv[1]['pixels']):
                 L.append(f'| {n} | {v["pixels"]} | {v["box"]} | {v["lum_median"]} | {v["rgb_median"]} |')
             L.append('')
+        # what the engine could not do in this render, in its own words: the critic's prescriptions meet the physics here
+        rp = Path(a.image).with_suffix('.report.json')
+        if rp.exists():
+            rep = json.loads(rp.read_text())
+            notes = [f'- glint `{g["glint"]}` was skipped: {g["skipped"]}.' for g in rep.get('glints', []) if g.get('skipped')]
+            notes += [f'- glint `{g["glint"]}` was moved {g["moved_mm"]} mm onto the {g["on"]}; the surface\'s own normal '
+                      f'there is {g["normal_off_deg"]} degrees from the one given, so its lamp was placed from the surface\'s.'
+                      for g in rep.get('glints', []) if not g.get('skipped') and g.get('normal_off_deg', 0) > 10]
+            notes += [f'- change `{p_["id"]}` was not applied: {p_["why"]}.' for p_ in rep.get('pending', []) if p_.get('why') != 'not selected']
+            if notes:
+                L += ['## What the engine could not do in this render', '',
+                      'A glint is placed from the surface the camera sees at its point: where that surface mirrors a part of '
+                      'the set or the product into the camera, no lamp can be there, so the glint is skipped.', ''] + notes + ['']
     text = '\n'.join(L) + '\n'
     if a.out:
         Path(a.out).write_text(text)

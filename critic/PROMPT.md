@@ -54,7 +54,10 @@ Then prescribe the changes that would raise the score most, at most eight, ranke
   ..., "op": ..., "value": ...}`. Metrics: lum_median, lum_mean, lum_p5, lum_p95, lum_range, r_median, g_median,
   b_median, clip_pct, crush_pct, falloff (with "axis"), delta_e (with "hex"), edge (with "axis"). Ops: <, <=, >, >=,
   between ([lo, hi]). Regions are in this image's pixels; they must still mean the same thing after the change
-  (choose regions on the product or the set that the change will not move).
+  (choose regions on the product or the set that the change will not move). Where too much would also be wrong (a
+  highlight, a glint, a fill, a falloff, a pool of light), use "between", its upper bound where it would start to look
+  wrong: the engine tunes each change's strength by proof renders until its test passes with a margin, so a test
+  open at the top lets it overshoot. A camera move moves every region: test a moved frame's parts by `part:NAME`.
 
 Also list what stands between this image and a 9 (`blocking_9`), as concrete conditions, and estimate the score once
 your changes are made (`score_if_fixed`).

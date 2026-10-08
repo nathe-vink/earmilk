@@ -28,7 +28,7 @@ import shot as S  # noqa: E402
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('shot')
-    ap.add_argument('--out', required=True)
+    ap.add_argument('--out')
     ap.add_argument('--set', action='append', default=[], dest='sets')
     ap.add_argument('--apply'); ap.add_argument('--only', nargs='*')
     ap.add_argument('--save-shot')
@@ -36,7 +36,11 @@ def main():
     ap.add_argument('--crop', type=float, nargs=4)
     ap.add_argument('--masks', action='store_true')
     ap.add_argument('--threads', type=int, default=0)
+    ap.add_argument('--no-render', action='store_true', help='apply and save the shot (--save-shot) without rendering')
+    ap.add_argument('--probe', action='append', default=[], help='what a part mirrors into the camera (probe.py); no render')
     a = ap.parse_args()
+    if not a.out and not a.no_render:
+        ap.error('--out is required unless --no-render')
 
     sh = S.load(a.shot)
     applied, pending = [], []
@@ -45,6 +49,9 @@ def main():
     S.apply_overrides(sh, a.sets)
     if a.save_shot:
         S.save(sh, a.save_shot)
+    if a.no_render:
+        print(json.dumps({'applied': applied, 'pending': pending}, indent=1, default=str))
+        return
 
     import bpy  # noqa: E402
     from mathutils import Vector  # noqa: E402
@@ -107,6 +114,12 @@ def main():
         cd.dof.focus_distance = (F - C).dot((T - C).normalized())
 
     # --- light -----------------------------------------------------------------------------------------------------
+    sun_aim = None
+    if (sh.get('sun') or {}).get('aim') and (sh.get('set') or {}).get('kind') == 'room':
+        # the sun placed by where its light should land: through a window's point onto a point in the room
+        az, el = St.sun_through_window(sh['set'], sh['sun']['aim'])
+        sh['sun']['azimuth_deg'], sh['sun']['elevation_deg'] = round(az, 2), round(el, 2)
+        sun_aim = {'azimuth_deg': round(az, 2), 'elevation_deg': round(el, 2)}
     if 'sun' in sh and sh['sun'].get('irradiance', 0) > 0:
         Lt.sun(bpy, sh['sun'])
     Lt.world(bpy, sh.get('sky', {'kind': 'gradient'}), sh.get('sun'))
@@ -114,15 +127,24 @@ def main():
         if not spec or spec.get('off'):
             continue
         kind = spec.get('type', 'area')
-        ob = {'area': Lt.area, 'spot': Lt.spot, 'point': Lt.point}[kind](bpy, name, spec, centre)
+        ob = {'area': Lt.area, 'spot': Lt.spot, 'point': Lt.point, 'panel': Lt.panel}[kind](bpy, name, spec, centre)
         if spec.get('receivers'):
             Lt.link_receivers(bpy, ob, [o for o in objs if any(Pr._match(part_of[o.name], r) for r in spec['receivers'])])
     gl = sh.get('glints') or []
-    gl = [g for g in (gl.values() if isinstance(gl, dict) else gl) if g]    # a list, or named glints; gaps skipped
-    for i, g in enumerate(gl):
+    names = list(gl.keys()) if isinstance(gl, dict) else [str(i) for i in range(len(gl))]
+    gl = list(gl.values()) if isinstance(gl, dict) else list(gl)
+    glint_log = []
+    for i, (gname, g) in enumerate(zip(names, gl)):
+        if not g:
+            continue                                                       # a gap in a list of glints
+        recv = [o for o in objs if any(Pr._match(part_of[o.name], r) for r in g['receivers'])] if g.get('receivers') else objs
+        g, note = Lt.true_glint(bpy, g, recv, C)
+        glint_log.append({'glint': gname, **note})
+        if note.get('skipped'):
+            continue
         ob = Lt.glint(bpy, f'glint{i}', g, C)
         if g.get('receivers'):
-            Lt.link_receivers(bpy, ob, [o for o in objs if any(Pr._match(part_of[o.name], r) for r in g['receivers'])])
+            Lt.link_receivers(bpy, ob, recv)
 
     # --- render settings ---------------------------------------------------------------------------------------------
     R = sh.get('render', {})
@@ -165,6 +187,15 @@ def main():
         scene.render.image_settings.file_format = 'PNG'; scene.render.image_settings.color_depth = '8'
 
     out = Path(a.out); out.parent.mkdir(parents=True, exist_ok=True)
+    if a.probe:
+        import probe as Pb
+        res = {pat: Pb.reflections(bpy, scene, cam, objs, part_of, pat, Pr._match) for pat in a.probe}
+        out.with_suffix('.probe.json').write_text(json.dumps({'shot': a.shot, 'scale': a.scale, 'glints': glint_log, 'probes': res}, indent=1) + '\n')
+        for pat, r in res.items():
+            print(f'{pat}: {r.get("pixels_sampled", 0)} pixels sampled' + (f' ({r["error"]})' if 'error' in r else ''))
+            for what, v in r.get('seen', {}).items():
+                print(f'  {v["share"] * 100:5.1f}%  {what:34s} box {v["box_px"]}  az {v["az_deg"]}  el {v["el_deg"]}')
+        return
     scene.render.filepath = str(out.resolve())
     t1 = time.time()
     bpy.ops.render.render(write_still=True)
@@ -172,13 +203,16 @@ def main():
 
     report = {'shot': a.shot, 'image': str(out), 'seconds': {'build': round(t1 - t0, 1), 'render': round(t2 - t1, 1)},
               'samples': int(cy.samples), 'size': [scene.render.resolution_x, scene.render.resolution_y],
-              'applied': applied, 'pending': pending, 'sets': a.sets}
+              'applied': applied, 'pending': pending, 'sets': a.sets, 'glints': glint_log, 'sun_aim': sun_aim}
 
     report['parts_2d'] = _parts_2d(scene, cam, objs, part_of)
     if a.masks:
         report['masks'] = _masks(bpy, scene, objs, part_of, out)
     S.save(sh, out.with_suffix('.shot.json'))
     out.with_suffix('.report.json').write_text(json.dumps(report, indent=1, default=str) + '\n')
+    for gl_ in glint_log:
+        if gl_.get('skipped') or gl_.get('normal_off_deg', 0) > 10:
+            print('glint', gl_)
     print(f'{out}  {report["seconds"]}  samples {report["samples"]}')
 
 

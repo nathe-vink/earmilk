@@ -146,6 +146,11 @@
    "color": "#1E1E1F",
    "roughness": 0.8,
    "fibre_strength": 0.08
+  },
+  "resin": {
+   "preset": "plastic",
+   "color": "#8C9297",
+   "roughness": 0.45
   }
  },
  "assign": [
@@ -329,6 +334,16 @@
   {
    "match": "waveguide-insert",
    "angle_deg": 20
+  }
+ ],
+ "interior": [
+  {
+   "match": "front-baffle|back-panel|side-left|side-right|gable-block",
+   "material": "birch-raw"
+  },
+  {
+   "match": "waveguide-insert",
+   "material": "resin"
   }
  ]
 }

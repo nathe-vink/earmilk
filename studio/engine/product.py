@@ -170,6 +170,45 @@ def _decal_nodes(mat, dec, img, ink_rgb, origin_mm=(0, 0, 0)):
     nt.links.new(m2.outputs['Value'], mix.inputs['Factor']); nt.links.new(outs[0], base)
 
 
+def interior_marker(templates, min_gap_mm=10.0):
+    """Which faces of a part are inside the product, the faces a build leaves unfinished: from each face's centre, a
+    ray along its normal and four tilted 30 degrees round it, against the whole assembled product; a face whose rays
+    all meet the product again, the straight one further than min_gap_mm away (so a 3 mm shadow line stays painted),
+    is inside. Returns mark(mesh, index): sets those faces' material index on a mesh in the product's frame. It is
+    run on the assembled product, before an explode or a cut opens it."""
+    from mathutils.bvhtree import BVHTree
+    verts, polys = [], []
+    for tpl in templates.values():
+        M = tpl.matrix_world; base = len(verts)
+        verts += [M @ v.co for v in tpl.data.vertices]
+        polys += [[base + i for i in p.vertices] for p in tpl.data.polygons]
+    bvh = BVHTree.FromPolygons(verts, polys)
+    gap = min_gap_mm / 1000.0
+    def tilted(n, deg):
+        t1 = n.orthogonal().normalized(); t2 = n.cross(t1)
+        c, s_ = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+        return [(n * c + t * s_).normalized() for t in (t1, -t1, t2, -t2)]
+    def mark(me, idx):
+        n_in = 0
+        for p in me.polygons:
+            c, n = p.center, p.normal
+            if n.length < 0.5:
+                continue
+            o = c + n * 1e-4
+            hit = bvh.ray_cast(o, n, 2.0)
+            if hit[0] is None:
+                continue
+            # a wall of a cavity: the product again more than min_gap away, and all round at 30 degrees
+            cavity = hit[3] > gap and all(bvh.ray_cast(o, d, 2.0)[0] is not None for d in tilted(n, 30))
+            # a face another part covers (a pocket's wall under its insert): closed even at 60 degrees, within 5 mm;
+            # a shadow line's walls fail both, its opening letting the steep rays out
+            covered = not cavity and hit[3] <= gap and all(bvh.ray_cast(o, d, 0.005)[0] is not None for d in tilted(n, 60))
+            if cavity or covered:
+                p.material_index = idx; n_in += 1
+        return n_in
+    return mark
+
+
 def place(bpy, pdef, templates, shot, root):
     """Link one copy of every part per instance, with its flavour's materials. Returns (objects, part_of) where
     part_of maps each object to its part name (for the masks)."""
@@ -179,6 +218,10 @@ def place(bpy, pdef, templates, shot, root):
     objs, part_of = [], {}
     mats_by_flavour = {}
     images = {}
+    # the inside of the product is left unfinished in a build: when it can be seen (a cutaway, an exploded view),
+    # its faces take the "interior" rules' materials (raw birch, bare resin) instead of the paint and its zones
+    inner_rules = pdef.get('interior', []) if (prod.get('cutaway') or prod.get('explode')) else []
+    mark = interior_marker(templates) if inner_rules else None
     for i, inst in enumerate(instances):
         fl = inst.get('flavour', prod.get('flavour', next(iter(pdef['flavours']))))
         if fl not in mats_by_flavour:
@@ -207,6 +250,18 @@ def place(bpy, pdef, templates, shot, root):
                 # a zone splits faces between materials: that needs this part's own mesh per flavour
                 key = f'{pname}@{fl}'
                 me = bpy.data.meshes.get(key) or _zoned_mesh(bpy, tpl.data, key, mats[mat_name], zones, mats)
+            inner = next((r for r in inner_rules if _match(pname, r['match'])), None)
+            if inner:
+                key = f'{pname}@{fl if zones else "all"}@inside'
+                if key in bpy.data.meshes:
+                    me = bpy.data.meshes[key]
+                else:
+                    me = me.copy(); me.name = key
+                    if not zones:
+                        me.materials.clear(); me.materials.append(mats[mat_name])
+                    me.materials.append(mats[inner['material']])
+                    n_in = mark(me, len(me.materials) - 1)
+                    print(f'interior: {pname} {n_in} of {len(me.polygons)} faces take {inner["material"]}')
             ob = bpy.data.objects.new(f'{pname}#{i}', me)
             bpy.context.scene.collection.objects.link(ob)
             ob['instance'] = i
@@ -283,17 +338,20 @@ def cutaway(bpy, spec, instances, objs):
             dg = bpy.context.evaluated_depsgraph_get()
             new = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
             ob.modifiers.remove(mod)
-            new.materials.clear()
-            for m in mats:
-                new.materials.append(m)
+            # set the slots in place: clearing a mesh's materials resets every face's index to the first
+            for k, m in enumerate(mats):
+                if k < len(new.materials):
+                    new.materials[k] = m
+                else:
+                    new.materials.append(m)
             sec = section_for(pname)
             if sec is None:
                 ob.data = new
                 for sl in ob.material_slots:
                     sl.link = 'DATA'
                 continue
+            si = len(new.materials)
             new.materials.append(sec)
-            si = len(new.materials) - 1
             # the cut faces lie on the box's walls and face into it (toward what was cut away)
             W = Ti @ ob.matrix_world
             R = W.to_3x3()

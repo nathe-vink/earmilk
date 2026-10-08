@@ -1,0 +1,196 @@
+{
+ "size": [
+  1800,
+  1200
+ ],
+ "product": {
+  "def": "studio/products/earmilk.json",
+  "flavour": "whole",
+  "instances": [
+   {
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "rotate_z": 0
+   }
+  ]
+ },
+ "materials": {},
+ "render": {
+  "samples": 192,
+  "adaptive": 0.015,
+  "denoise": true,
+  "clamp": 8,
+  "bounces": 12,
+  "view": "Khronos PBR Neutral",
+  "exposure": 0.6,
+  "white_balance_k": 5200
+ },
+ "title": "The family",
+ "products": [
+  {
+   "def": "studio/products/earmilk.json",
+   "flavour": "whole",
+   "instances": [
+    {
+     "position": [
+      -0.55,
+      0.0,
+      0.0
+     ],
+     "rotate_z": 10
+    }
+   ]
+  },
+  {
+   "def": "studio/products/earmilk-bookshelf.json",
+   "flavour": "two",
+   "instances": [
+    {
+     "position": [
+      0.55,
+      0.0,
+      0.56
+     ],
+     "rotate_z": -6
+    }
+   ]
+  }
+ ],
+ "set": {
+  "kind": "room",
+  "size": [
+   6.0,
+   5.0,
+   2.8
+  ],
+  "center": [
+   0.2,
+   -1.4
+  ],
+  "floor": {
+   "plank_w": 0.19,
+   "plank_l": 1.8,
+   "base": "#BC9668",
+   "dark": "#A47E52",
+   "light": "#CDA97C",
+   "plank_contrast": 0.4
+  },
+  "wall": {
+   "color": "#F1EEE8"
+  },
+  "ceiling": "#F5F3EF",
+  "skirting": {
+   "h": 0.11,
+   "color": "#F2F0EB"
+  },
+  "windows": [
+   {
+    "wall": "front",
+    "along": 2.0,
+    "sill": 0.4,
+    "size": [
+     1.8,
+     2.0
+    ],
+    "mullions": [
+     2,
+     3
+    ]
+   },
+   {
+    "wall": "left",
+    "along": 0.4,
+    "sill": 0.4,
+    "size": [
+     1.6,
+     2.0
+    ],
+    "mullions": [
+     2,
+     3
+    ]
+   }
+  ],
+  "props": [
+   {
+    "kind": "sideboard",
+    "position": [
+     0.62,
+     0.02
+    ],
+    "size": [
+     1.2,
+     0.45,
+     0.56
+    ],
+    "color": "#8A7D6F",
+    "turntable": false
+   },
+   {
+    "kind": "books",
+    "position": [
+     0.98,
+     0.02
+    ],
+    "z": 0.56
+   },
+   {
+    "kind": "vase",
+    "position": [
+     1.05,
+     0.06
+    ],
+    "z": 0.645,
+    "height": 0.22,
+    "branches": 3,
+    "seed": 7,
+    "color": "#E9E3D8"
+   },
+   {
+    "kind": "curtain",
+    "position": [
+     -2.68,
+     -0.25
+    ],
+    "size": [
+     0.8,
+     2.75
+    ],
+    "rotate_z": -90,
+    "folds": 8
+   }
+  ]
+ },
+ "camera": {
+  "position": [
+   0.75,
+   -3.15,
+   1.05
+  ],
+  "target": [
+   0.05,
+   0.0,
+   0.62
+  ],
+  "lens_mm": 40,
+  "level": true
+ },
+ "sun": {
+  "azimuth_deg": -25,
+  "elevation_deg": 15,
+  "irradiance": 2.5,
+  "angle_deg": 1.0,
+  "color": 5000
+ },
+ "sky": {
+  "kind": "gradient",
+  "strength": 3.0,
+  "zenith": "#9FB8DA",
+  "horizon": "#E4ECF3",
+  "ground": "#8A8478"
+ },
+ "lights": {}
+}

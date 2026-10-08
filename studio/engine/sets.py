@@ -91,17 +91,12 @@ def room(bpy, spec, mats):
     cx, cy = spec.get('center', [0.0, 1.0])
     x0, x1, y0, y1 = cx - w / 2, cx + w / 2, cy - d / 2, cy + d / 2
     objs = []
+    walls = room_walls(spec)
     oak = M.make(bpy, 'floor', 'oak', mats.get('oak', {}) | spec.get('floor', {}))
     objs.append(plane(bpy, 'floor', [(x0, y0, 0), (x1, y0, 0), (x1, y1, 0), (x0, y1, 0)], oak))
     plaster = M.make(bpy, 'wall', 'plaster', mats.get('plaster', {}) | spec.get('wall', {}))
     ceil = M.make(bpy, 'ceiling', 'plaster', {'color': spec.get('ceiling', '#F1EEE8'), 'bump': 0.0})
     objs.append(plane(bpy, 'ceiling', [(x0, y0, h), (x0, y1, h), (x1, y1, h), (x1, y0, h)], ceil))
-    walls = {
-        'back':  ((x0, y1), (x1, y1)),
-        'front': ((x1, y0), (x0, y0)),
-        'left':  ((x0, y0), (x0, y1)),
-        'right': ((x1, y1), (x1, y0)),
-    }
     wins = spec.get('windows', [])
     frame_mat = M.make(bpy, 'window-frame', 'satin_paint', {'color': spec.get('frame', '#EDEBE6'), 'roughness': 0.35, 'specular': 0.5})
     sill_mat = frame_mat
@@ -123,6 +118,34 @@ def room(bpy, spec, mats):
     for i, p in enumerate(spec.get('props', [])):
         objs += prop(bpy, f'prop{i}-{p["kind"]}', p, mats)
     return objs
+
+
+def room_walls(spec):
+    """Each wall's inner face as (start, end) on the floor plan, the room on its right as it runs."""
+    w, d, h = spec.get('size', [6.0, 6.0, 2.8])
+    cx, cy = spec.get('center', [0.0, 1.0])
+    x0, x1, y0, y1 = cx - w / 2, cx + w / 2, cy - d / 2, cy + d / 2
+    return {'back': ((x0, y1), (x1, y1)), 'front': ((x1, y0), (x0, y0)),
+            'left': ((x0, y0), (x0, y1)), 'right': ((x1, y1), (x1, y0))}
+
+
+def window_point(spec, index, uv=(0.5, 0.5)):
+    """A point in a room's window opening (world metres): uv[0] across its width, from the end its wall starts at
+    (as `along` runs), uv[1] up its height from the sill; (0.5, 0.5) is its centre."""
+    wi = spec['windows'][index]
+    a, b = room_walls(spec)[wi['wall']]
+    a, b = Vector((*a, 0)), Vector((*b, 0))
+    u = (b - a).normalized(); c = (b - a).length / 2 + wi.get('along', 0.0)
+    ww, wh = wi['size']; s0 = wi.get('sill', 0.9)
+    return a + u * (c - ww / 2 + uv[0] * ww) + Vector((0, 0, s0 + uv[1] * wh))
+
+
+def sun_through_window(spec, aim):
+    """The sun's azimuth and elevation (deg, the engine's convention) that send its light through a window's point
+    onto a point in the room: aim = {"at": [x, y, z], "window": 0, "through": [u, v]}."""
+    P = Vector(aim['at']); W = window_point(spec, aim.get('window', 0), aim.get('through', (0.5, 0.5)))
+    dv = W - P
+    return math.degrees(math.atan2(dv.x, -dv.y)), math.degrees(math.atan2(dv.z, math.hypot(dv.x, dv.y)))
 
 
 def _wainscot(bpy, walls, wins, wa):

@@ -1,0 +1,332 @@
+{
+ "stage1": {
+  "impression": "A clean, legible frontal render that gets the concept across right away. But the dead-on camera, even light and flat grey background press it into a 2D package illustration, the base is cropped off with no ground contact, and the port reads as a flat black disc.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The sweep reads as a lit set: a soft pool around the gable that falls at least 20 levels to the top corners (now 139 to 147 everywhere; top band [20,8,880,90] range 3.2).",
+  "The port reads as a flared tube: a highlight on the upper-left of the lip (upper-left lip mean at least 40, now 22.8; the ring is 14 to 15 all the way round) with the interior kept dark.",
+  "The roof slope reads as lacquer: a reflection gradient of at least 10 levels from under the fin to the eave (now 0.7) while its lower third stays within dE 2 of #C62828 (now 0.6).",
+  "The fin is evenly lit: no softbox reflection on its left end (now 112 against 55 along the rest; end-to-end falloff 55.9, needs to be within 15).",
+  "The port clears the bottom edge by at least 95 px with matching headroom above the fin (now 65 px under the port against 137 px above the fin).",
+  "The cast letters read as metal: a directional sheen of at least 20 levels across the wordmark (now 85 to 88 flat, falloff 2.8).",
+  "The whites are neutral: the back panel within dE 1.2 of a neutral grey of the same lightness (now 1.6 to 2.0, b* +1.3 to +1.8)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The sweep is one flat value, so it reads as a digital fill rather than a lit set, and nothing frames the gable or pulls the eye up to the label.",
+   "evidence": {
+    "region": [
+     20,
+     8,
+     880,
+     90
+    ],
+    "measured": "Top band median 141.8, p5 139.6, p95 142.8 (range 3.2); profile x across [0,8,900,90] 139.6, 140.8, 141.8, 142.6, 142.8, 141.8, 141.8, 141.8; left column [20,8,170,1105] profile y 140.6, 142.6, 144.6, 145.9, 146.8, 146.9, 146.6, 143.6. Only the product's own floor shadow at bottom right (128.9) breaks it."
+   },
+   "change": {
+    "setting": "lights.bg",
+    "from": "none",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.5,
+      0.3
+     ],
+     "target": [
+      0,
+      2.8,
+      1.15
+     ],
+     "irradiance": 0.9,
+     "color": "#FFFFFF",
+     "position": [
+      0,
+      2.256,
+      0.896
+     ]
+    },
+    "note": "The critic placed the lamp by an orbit about its target, (0, 2.26, 0.90) in world; the engine orbits the product's centre, so the same point is given as a position."
+   },
+   "expected": "A soft pool on the sweep around the gable: about 165 to 175 just above the fin, falling to about 148 to 152 in the top corners and staying about 143 to 148 at the bottom. The lamp is not visible and no sweep pixel goes above 185. The product is unchanged because the lamp faces away from it.",
+   "accept": {
+    "region": [
+     0,
+     8,
+     450,
+     90
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "<=",
+    "value": -15
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The port is a flat black disc: its lip ring is one value all the way round and its interior is pure black, so it reads as a sticker rather than a flared tube, because the existing port_lip glint lands on the white panel and lights nothing.",
+   "evidence": {
+    "region": [
+     375,
+     908,
+     525,
+     1060
+    ],
+    "measured": "part:port-tube median 6.5, p95 17.3, 45.6% crushed; the lip ring (r 60 to 76 px about (449.5, 983.1)) has radial medians 14.3 to 15.3 and upper-half octant medians 13.4 to 15.4; woofer-motor seen through the port 0.0, 99.7% crushed. The glint's at [-0.035, -0.197, 0.438] projects to about (403, 901): 94 px from the port centre, 18 px outside the ring, in the panel's shadow halo (217). Its normal points at bearing 135 degrees, which matches the lip point 25 mm lower. The frame measures the fin top at about 1.025 m against the card's 1.055 m, the same offset of about 30 mm."
+   },
+   "change": {
+    "setting": "glints.port_lip.at",
+    "from": "[-0.035, -0.197, 0.438]",
+    "to": "[-0.035, -0.197, 0.413]"
+   },
+   "expected": "The glint now lands on the lip at about (403, 935), mid-ring (r about 67 px) at the 135-degree bearing its normal already points to: a sheen or crescent on the upper-left of the lip peaking 100 to 220, with some lift on the lower-right inner wall near the mouth. The interior (woofer-motor) stays at 5 or below, so the hole keeps its depth.",
+   "accept": {
+    "region": {
+     "part": "port-tube",
+     "box": [
+      385,
+      890,
+      425,
+      950
+     ]
+    },
+    "metric": "lum_mean",
+    "op": ">=",
+    "value": 40
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The lacquered roof slope is a single flat value, so the gable reads as a matte red card; its only gloss cue is the mirrored fin text, because it mirrors the uniform sky near zenith and the set has no graduated source to give it a reflection.",
+   "evidence": {
+    "region": [
+     300,
+     225,
+     600,
+     335
+    ],
+    "measured": "Profile y 72.7, 72.7, 72.7, 72.5, 72.2, 72.2, 72.3, 72.0 (falloff 0.7, range 4.1); whole slope [200,215,700,368] median 72.3, range 6.5, RGB (195,39,39), dE 0.67 to #C62828, so the colour is right but there is no form. The slope mirrors elevations of only 71 to 75 degrees behind the product, so a uniform area lamp can only give a hard-edged band or an even pink wash."
+   },
+   "change": {
+    "setting": "lights.roof_ramp",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.2,
+      0.25
+     ],
+     "position": [
+      0,
+      0.325,
+      2.34
+     ],
+     "target": [
+      0,
+      0.325,
+      0.0
+     ],
+     "strength": 1.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       0.2,
+       0.45
+      ],
+      "values": [
+       0.0,
+       1.0
+      ]
+     },
+     "diffuse": false
+    },
+    "asked": "A horizontal overhead panel 1.2 m wide (along x) by 0.25 m deep, face down, at z 2.34, spanning world y 0.20 to 0.45 above and behind the ridge, with linear emission from 0 at its near edge (y 0.20) to full at its far edge (y 0.45). The slope from just under the fin's reflection to the eave mirrors exactly that strip (y 0.44 to 0.21), so the ramp maps onto the slope. Set the peak so that the slope just under the fin reflection reads about 92. It is out of frame, behind the back panel's and fin's planes (so it does not light them), and adds under 1% diffuse light to the roof.",
+    "note": "Built as the engine's new panel light (lights.py panel): face down, emission ramped 0 at y 0.20 to full at y 0.45, seen only in reflections (diffuse false); strength set by meter so the slope under the fin reads about 92."
+   },
+   "expected": "The roof slope runs from about 90 to 95 just under the fin reflection down to about 72 to 75 at the eave, a smooth lacquer sheen with no hard edge, plus a thin highlight along the fin's top round. Its lower third stays within dE 2 of #C62828 (now 0.6); the back panel and label are unchanged.",
+   "accept": {
+    "region": [
+     300,
+     225,
+     600,
+     335
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": ">=",
+    "value": 10
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The key softbox's inner edge mirrors in the left end of the fin as a flat pink patch with a 33 px soft edge, so the fin looks blotched and the O of OPEN sits on a pink wash while the rest of the fin is deep red.",
+   "evidence": {
+    "region": [
+     214,
+     142,
+     250,
+     194
+    ],
+    "measured": "Left end lum 111.1, RGB (211,84,84), dE 10.6 to #C62828; right end [650,142,684,194] lum 55.1, RGB (186,20,18); profile x along [214,142,686,160] 111.0, 77.9, 59.6, 58.4, 57.4, 56.8, 55.8, 55.1 (falloff 55.9); patch edge 10-90% width 32 to 34 px at about x 265 to 300."
+   },
+   "change": {
+    "setting": "lights.key.size_m",
+    "from": "[1.2, 1.6]",
+    "to": "[0.8, 1.6]"
+   },
+   "expected": "The softbox's inner edge moves about 0.2 m outward, which moves its reflection about 0.12 m (about 145 px) left along the fin, past its end. The fin's left end drops to the fin's own 55 to 65 and the fin varies 15 levels or less end to end. The panel's exposure holds within 3 levels because irradiance is set at the target, and its left-to-right modelling stays.",
+   "accept": {
+    "region": [
+     214,
+     142,
+     686,
+     160
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -15,
+     15
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "camera",
+   "problem": "The frame sits too high on the product: the port, the heaviest shape in the picture, crowds the bottom edge while the space above the fin is twice as large, so the composition sags and feels cut off.",
+   "evidence": {
+    "region": [
+     380,
+     1045,
+     520,
+     1125
+    ],
+    "measured": "The port's bottom at y 1060 leaves 65 px to the frame edge, under half the port's 152 px height; the fin top at y 137 leaves 137 px of headroom. lum_p5 14.3 in the band under the port because the port's black reaches into it."
+   },
+   "change": {
+    "setting": "camera.target",
+    "from": "[0, 0, 0.676]",
+    "to": "[0, 0, 0.648]"
+   },
+   "expected": "The camera stays level at the same position, so perspective and the label's squareness are unchanged and only the lens shift moves. Everything moves up about 34 px (2625 px x 0.028 m / 2.15 m): fin top at about 103, eave at about 338, port bottom at about 1026, with about 99 px of white panel under the port matching the about 103 px of headroom. The label centre moves to about y 632, close to the frame centre.",
+   "accept": {
+    "region": [
+     380,
+     1045,
+     520,
+     1125
+    ],
+    "metric": "lum_p5",
+    "op": ">=",
+    "value": 195
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The cast metal letters read as grey paint: the same dark value across the whole word, with no specular sheen to say metal.",
+   "evidence": {
+    "region": [
+     334,
+     413,
+     566,
+     456
+    ],
+    "measured": "part:letters-back-* median 86.0, p95 116.3, RGB (88,86,80); profile x 87.8, 85.3, 85.0, 86.0, 87.0, 85.9, 87.0, 85.0 (falloff 2.8); top to bottom 93.9 to 78.8, only the reflected floor."
+   },
+   "change": {
+    "setting": "glints.letters_sheen",
+    "from": "none",
+    "to": {
+     "at": [
+      -0.073,
+      -0.2,
+      0.781
+     ],
+     "normal": [
+      0,
+      -1,
+      0
+     ],
+     "size_m": 0.05,
+     "power_w": 2,
+     "receivers": [
+      "letters-back-0",
+      "letters-back-1",
+      "letters-back-2",
+      "letters-back-3",
+      "letters-back-4",
+      "letters-back-5",
+      "letters-back-6",
+      "letters-back-7"
+     ]
+    }
+   },
+   "expected": "A sheen peaking at about 170 to 200 on the e and falling to about 110 to 130 on the k, with no letter pixel clipped. The panel, label and port are untouched because only the letters receive it.",
+   "accept": {
+    "region": "part:letters-back-*",
+    "metric": "falloff",
+    "axis": "x",
+    "op": ">=",
+    "value": 20
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "post",
+   "problem": "The whites carry a warm cast, so the white #FFFFFF back panel and the label read creamy next to the specified white, and the sweep reads beige.",
+   "evidence": {
+    "region": [
+     200,
+     420,
+     265,
+     1000
+    ],
+    "measured": "Panel strip RGB (233,230,228), Lab b* +1.3, dE 1.6 to neutral #E6E6E6; label paper [420,805,620,835] (225,221,219), dE 2.0 to #DEDEDE; R/B in linear light 1.05 on the panel, and the sweep (151,145,136) is about 7% warmer than its own #B9B4AC."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": null,
+    "to": "6300"
+   },
+   "expected": "R/B on the whites drops about 5%: panel strip about (231,230,230) within dE 0.5 of neutral, label paper about (222,221,221), sweep about (148,145,140). The roof red stays within dE 1.5 of #C62828 (now 0.67).",
+   "accept": {
+    "region": [
+     200,
+     420,
+     265,
+     1000
+    ],
+    "metric": "delta_e",
+    "hex": "#E6E6E6",
+    "op": "<=",
+    "value": 1.2
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A three-quarter or slightly raised viewpoint that shows a side face and more of the roof",
+   "why": "The shot's purpose fixes the camera straight on and level, so the carton shows a single face and all of its volume must come from light; the form this frame cannot carry needs a companion angle."
+  },
+  {
+   "request": "Move the port further below the Nutrition Facts panel so the frame can be cropped tighter and the panel enlarged",
+   "why": "The port's place is product geometry. It sits 68 px under the panel, so any crop larger than about 1.04x cuts it, and the panel's body text stays about 11 px cap height (1% of frame height): fine on a spread, marginal on a phone-width homepage."
+  }
+ ],
+ "score_if_fixed": 7.5
+}

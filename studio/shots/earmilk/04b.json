@@ -25,8 +25,8 @@
   "clamp": 8,
   "bounces": 12,
   "view": "Standard",
-  "exposure": -0.1,
-  "white_balance_k": 5600
+  "exposure": -0.65,
+  "white_balance_k": 5800.0
  },
  "title": "The back, three-quarter",
  "set": {
@@ -50,11 +50,12 @@
    0.52
   ],
   "lens_mm": 60,
-  "level": true
+  "level": true,
+  "shift_x": -0.078
  },
  "sky": {
   "kind": "gradient",
-  "strength": 0.4,
+  "strength": 0.15,
   "zenith": "#FFFFFF",
   "horizon": "#D6D3CD",
   "ground": "#6A665F"
@@ -76,7 +77,7 @@
     0,
     0.6
    ],
-   "irradiance": 1.7,
+   "irradiance": 2.3,
    "color": 5600
   },
   "fill": {
@@ -133,6 +134,25 @@
    "color": 5600,
    "specular": 1.0,
    "diffuse": 0.3
+  },
+  "side": {
+   "type": "area",
+   "size_m": [
+    0.8,
+    1.4
+   ],
+   "orbit": {
+    "azimuth_deg": -75,
+    "elevation_deg": 40,
+    "distance_m": 2.0
+   },
+   "target": [
+    0.19,
+    -0.11,
+    0.55
+   ],
+   "irradiance": 2.3136,
+   "color": 5600
   }
  },
  "glints": [
@@ -151,8 +171,24 @@
    "power_w": 2,
    "receivers": [
     "amp-connectors",
-    "amp-rca",
     "amp-switch"
+   ]
+  },
+  {
+   "at": [
+    0.344,
+    -0.245,
+    0.22
+   ],
+   "normal": [
+    0.574,
+    -0.819,
+    0
+   ],
+   "size_m": 0.3,
+   "power_w": 1.8649,
+   "receivers": [
+    "amp-plate"
    ]
   }
  ]

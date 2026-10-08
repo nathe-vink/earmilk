@@ -88,6 +88,17 @@ target. Exposure is where a critic's prediction is most often wrong (a view tran
 white is); after applying a round, meter the faces the accept tests name and set the key or the exposure from the
 reading, not from the guess. Regions are in the critic's staged image's pixels (0.75 scale).
 
+## Exposing to the critic's tests
+
+    python3 studio/engine/render.py SHOT --apply REPLY --save-shot SHOT --no-render     # apply and save only
+    python3 studio/engine/autoexpose.py SHOT REPLY --save                              # one small EXR, then the exposure
+    python3 studio/engine/render.py SHOT --out IMG --masks                             # the one full render
+
+`autoexpose.py` reads every brightness test in a critic's reply (lum_median, lum_mean, lum_p5, lum_p95) from one
+small scene-linear render, and sets the exposure that passes the most of them by the widest margin. A critic's
+relighting is usually right in shape and wrong by a fraction of a stop; this takes the fraction out before the
+expensive render instead of after it.
+
 ## The loop
 
 `critic/round.py stage` copies the image under a neutral name with its mask and card, and writes the message for a

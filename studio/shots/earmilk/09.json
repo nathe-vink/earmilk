@@ -1,6 +1,4 @@
 {
- "extends": "base.json",
- "title": "The bookshelf pair on a sideboard",
  "size": [
   1800,
   1200
@@ -27,6 +25,18 @@
    }
   ]
  },
+ "materials": {},
+ "render": {
+  "samples": 192,
+  "adaptive": 0.015,
+  "denoise": true,
+  "clamp": 8,
+  "bounces": 12,
+  "view": "Khronos PBR Neutral",
+  "exposure": 0.6,
+  "white_balance_k": 5200
+ },
+ "title": "The bookshelf pair on a sideboard",
  "set": {
   "kind": "room",
   "size": [
@@ -47,7 +57,7 @@
    "plank_contrast": 0.4
   },
   "wall": {
-   "color": "#F1EEE8"
+   "color": "#CFC6BA"
   },
   "ceiling": "#F5F3EF",
   "skirting": {
@@ -65,7 +75,7 @@
     ],
     "mullions": [
      2,
-     3
+     1
     ]
    },
    {
@@ -100,15 +110,15 @@
    {
     "kind": "frame",
     "position": [
-     0,
-     1.0
+     -0.25,
+     1
     ],
-    "z": 1.55,
+    "z": 1.44,
     "size": [
      0.62,
      0.82
     ],
-    "art": "#3F5B6E"
+    "art": "#8C9EAB"
    },
    {
     "kind": "curtain",
@@ -142,9 +152,9 @@
  "sun": {
   "azimuth_deg": -25,
   "elevation_deg": 15,
-  "irradiance": 2.5,
+  "irradiance": 1.0,
   "angle_deg": 1.0,
-  "color": 5000
+  "color": "#FFEBCD"
  },
  "sky": {
   "kind": "gradient",
@@ -153,9 +163,46 @@
   "horizon": "#E4ECF3",
   "ground": "#8A8478"
  },
- "lights": {},
- "render": {
-  "exposure": 0.6,
-  "white_balance_k": 5200
- }
+ "lights": {
+  "key": {
+   "type": "area",
+   "size_m": [
+    2.0,
+    0.4
+   ],
+   "orbit": {
+    "azimuth_deg": 0,
+    "elevation_deg": 35,
+    "distance_m": 0.6
+   },
+   "irradiance": 1.6,
+   "color": 5200
+  }
+ },
+ "glints": [
+  {
+   "at": [
+    0.65,
+    -0.113,
+    0.589
+   ],
+   "normal": [
+    0,
+    -1,
+    0
+   ],
+   "size_m": 0.12,
+   "power_w": 2,
+   "receivers": [
+    "letters-front-0",
+    "letters-front-1",
+    "letters-front-2",
+    "letters-front-3",
+    "letters-front-4",
+    "letters-front-5",
+    "letters-front-6",
+    "letters-front-7"
+   ]
+  }
+ ]
 }

@@ -140,6 +140,11 @@
    "preset": "plastic",
    "color": "#E6E0D0",
    "roughness": 0.5
+  },
+  "resin": {
+   "preset": "plastic",
+   "color": "#8C9297",
+   "roughness": 0.45
   }
  },
  "assign": [
@@ -323,6 +328,16 @@
   {
    "match": "waveguide-insert",
    "angle_deg": 20
+  }
+ ],
+ "interior": [
+  {
+   "match": "front-baffle|back-panel|side-left|side-right|gable-block",
+   "material": "birch-raw"
+  },
+  {
+   "match": "waveguide-insert",
+   "material": "resin"
   }
  ]
 }

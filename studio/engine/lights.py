@@ -5,6 +5,10 @@ watts, so the light it puts on the subject falls with the square of its distance
 Colours are a temperature in kelvin (Blender's own blackbody, so 3000 is golden-hour amber and 6500 neutral) or an sRGB
 hex.
 
+A panel is a graduated light: an emissive rectangle the camera cannot see, lighting from one side, its brightness ramped
+along a world axis (a softbox behind a graduated scrim). A gloss surface mirrors it as a smooth ramp of light instead of
+one flat patch, the way a lacquered roof or a car's bonnet is lit in a studio.
+
 A glint is a small area lamp placed where a curved surface would mirror it into the camera (R = 2(N.V)N - V), with no
 diffuse share and invisible to the camera: a highlight on an edge or a rim exactly where it should be, lighting
 nothing else. `receivers` limits it to some parts (light linking).
@@ -78,6 +82,67 @@ def area_power(spec, distance):
     if 'irradiance' in spec:
         return spec['irradiance'] * math.pi * distance ** 2
     return spec.get('power_w', 100.0)
+
+
+def panel(bpy, name, spec, centre):
+    """A graduated panel from a shot's `lights.NAME` entry with type "panel":
+    size_m [w, h], position (or orbit) and target as an area lamp's; `strength`, the peak radiance (a white panel of
+    strength 1 reads scene-linear 1.0 seen head-on, its mirror image in a clear coat about 0.05 of that); `ramp`
+    {"axis": "x"|"y"|"z" or [x, y, z] (world), "at_m": [a, b], "values": [va, vb]}: the strength's fraction is va where
+    the world coordinate along the axis is a and vb where it is b, linear between and held beyond; without a ramp the
+    panel is even. `diffuse` false: seen only in reflections (a reflector card), lighting nothing diffusely.
+    The panel's face looks at its target; its back emits nothing; it casts no shadow."""
+    import bmesh
+    w, h = spec.get('size_m', [1.0, 0.25])
+    me = bpy.data.meshes.new(name)
+    # vertices clockwise seen from +z, so the face's normal is local -z: the direction aim() turns toward the target
+    me.from_pydata([(-w / 2, -h / 2, 0), (-w / 2, h / 2, 0), (w / 2, h / 2, 0), (w / 2, -h / 2, 0)], [], [(0, 1, 2, 3)])
+    me.update()
+    ob = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(ob)
+    ob.location = Vector(spec['position']) if 'position' in spec else orbit_point(spec.get('orbit', {}), centre)
+    target = Vector(spec.get('target', centre))
+    d = target - ob.location
+    # a panel facing straight up or down has no up direction to keep; it then keeps world +y as its local +y
+    up = 'Y' if abs(d.normalized().z) < 0.999 else None
+    if up:
+        aim(ob, target)
+    else:
+        from mathutils import Matrix
+        z = -d.normalized(); y = Vector((0, 1, 0)); x = y.cross(z)
+        ob.rotation_euler = Matrix((x, y, z)).transposed().to_euler()
+    m = bpy.data.materials.new(name); m.use_nodes = True; nt = m.node_tree; nt.nodes.clear()
+    out = nt.nodes.new('ShaderNodeOutputMaterial'); em = nt.nodes.new('ShaderNodeEmission')
+    col = spec.get('color', 5600)
+    if isinstance(col, (int, float)):
+        bb = nt.nodes.new('ShaderNodeBlackbody'); bb.inputs['Temperature'].default_value = float(col)
+        nt.links.new(bb.outputs['Color'], em.inputs['Color'])
+    else:
+        em.inputs['Color'].default_value = (*_hex_lin(col), 1)
+    peak = float(spec.get('strength', 1.0))
+    ramp = spec.get('ramp')
+    if ramp:
+        ax = ramp.get('axis', 'y')
+        ax = {'x': (1, 0, 0), 'y': (0, 1, 0), 'z': (0, 0, 1)}[ax] if isinstance(ax, str) else ax
+        geo = nt.nodes.new('ShaderNodeNewGeometry'); dot = nt.nodes.new('ShaderNodeVectorMath'); dot.operation = 'DOT_PRODUCT'
+        dot.inputs[1].default_value = Vector(ax).normalized()
+        nt.links.new(geo.outputs['Position'], dot.inputs[0])
+        a, b = ramp.get('at_m', [-h / 2, h / 2]); va, vb = ramp.get('values', [0.0, 1.0])
+        mr = nt.nodes.new('ShaderNodeMapRange'); mr.clamp = True
+        mr.inputs['From Min'].default_value = a; mr.inputs['From Max'].default_value = b
+        mr.inputs['To Min'].default_value = va * peak; mr.inputs['To Max'].default_value = vb * peak
+        nt.links.new(dot.outputs['Value'], mr.inputs['Value']); nt.links.new(mr.outputs['Result'], em.inputs['Strength'])
+    else:
+        em.inputs['Strength'].default_value = peak
+    # one-sided: the back face is transparent
+    gm = nt.nodes.new('ShaderNodeNewGeometry'); tr = nt.nodes.new('ShaderNodeBsdfTransparent'); mix = nt.nodes.new('ShaderNodeMixShader')
+    nt.links.new(gm.outputs['Backfacing'], mix.inputs['Fac'])
+    nt.links.new(em.outputs['Emission'], mix.inputs[1]); nt.links.new(tr.outputs['BSDF'], mix.inputs[2])
+    nt.links.new(mix.outputs['Shader'], out.inputs['Surface'])
+    me.materials.append(m)
+    ob.visible_camera = bool(spec.get('camera', False)); ob.visible_shadow = False
+    ob.visible_diffuse = bool(spec.get('diffuse', True)); ob.visible_glossy = bool(spec.get('specular', True))
+    ob['engine_light'] = True
+    return ob
 
 
 def spot(bpy, name, spec, centre):
@@ -159,6 +224,67 @@ def world(bpy, sky, sun_spec=None):
         nt.links.new(bg.outputs['Background'], mix.inputs[1]); nt.links.new(bg2.outputs['Background'], mix.inputs[2])
         nt.links.new(mix.outputs['Shader'], out.inputs['Surface'])
     return W
+
+
+def true_glint(bpy, spec, receivers, cam_pos, ray_m=0.05, snap_m=0.03, agree_deg=60):
+    """A glint as the surface really is. Its `at` is moved onto the surface the critic pointed at and its normal
+    replaced by that surface's own, so the lamp sits exactly where the surface mirrors it into the camera. The
+    surface is, in order: the receiving part the camera's ray through `at` hits within ray_m of it; else the nearest
+    receiving surface within snap_m that faces the camera and is within agree_deg of the normal given (a lip seen
+    beside a hole); else whatever the camera's ray hits within ray_m (the orientation of the surface there).
+    A glint whose lamp would be hidden from its point (behind the floor, inside the product) cannot exist: it is
+    skipped, with the reason (what the surface mirrors into the camera instead). Returns (spec, note)."""
+    from mathutils.bvhtree import BVHTree
+    dg = bpy.context.evaluated_depsgraph_get(); scene = bpy.context.scene
+    P0 = Vector(spec['at']); C = Vector(cam_pos); given = Vector(spec['normal']).normalized()
+    names = {o.name for o in receivers}
+    def cast(origin, d, dist):
+        hit, loc, nrm, _, hob, _ = scene.ray_cast(dg, origin, d, distance=dist)
+        while hit and hob is not None and (hob.get('engine_light') or hob.hide_render):
+            origin = loc + d * 1e-4; dist -= (loc - origin).length
+            hit, loc, nrm, _, hob, _ = scene.ray_cast(dg, origin, d, distance=dist)
+        return hit, loc, nrm, hob
+    def facing(n, loc):
+        return n if n.dot(C - loc) >= 0 else -n
+    found, nearest = None, None
+    hit, hloc, hnrm, hob = cast(C, (P0 - C).normalized(), (P0 - C).length + 1.0)
+    seen = hit and (hloc - P0).length <= ray_m
+    if seen and hob.name in names:
+        found = (hloc, facing(hnrm, hloc), f'seen surface ({hob.name})')
+    else:
+        for o in receivers:
+            if o.type != 'MESH':
+                continue
+            M = o.matrix_world; Mi = M.inverted()
+            h = BVHTree.FromObject(o, dg).find_nearest(Mi @ P0)
+            if h[0] is None:
+                continue
+            l, n = M @ h[0], (Mi.transposed().to_3x3() @ h[1]).normalized()
+            dd = (l - P0).length
+            if nearest is None or dd < nearest[0]:
+                nearest = (dd, o.name)
+            if n.dot(C - l) > 0 and math.degrees(n.angle(given)) <= agree_deg and dd <= snap_m and \
+                    (found is None or dd < (found[0] - P0).length):
+                found = (l, n, f'nearest facing surface ({o.name})')
+        if found is None and seen:
+            found = (hloc, facing(hnrm, hloc), f'seen surface ({hob.name}), not a receiver')
+    spec = dict(spec)
+    if found:
+        loc, nrm, how = found
+        note = {'on': how, 'moved_mm': round((loc - P0).length * 1000, 1),
+                'normal_off_deg': round(math.degrees(given.angle(nrm)), 1)}
+        spec['at'] = list(loc); spec['normal'] = list(nrm)
+    else:
+        note = {'on': 'no surface found; as given' + (f' (the nearest receiving surface, {nearest[1]}, is {nearest[0] * 1000:.0f} mm '
+                                                      f'from `at`)' if nearest else '')}
+    P = Vector(spec['at']); N = Vector(spec['normal']).normalized()
+    V = (C - P).normalized(); R = 2 * N.dot(V) * N - V
+    dist = spec.get('distance_m', 0.6)
+    hit, loc, _, hob = cast(P + N * 1e-3, R, dist)
+    if hit:
+        note['skipped'] = (f'the surface there mirrors {hob.name} into the camera ({(loc - P).length:.2f} m away along '
+                           f'the mirror direction), so no lamp can sit there')
+    return spec, note
 
 
 def glint(bpy, name, spec, cam_pos):
