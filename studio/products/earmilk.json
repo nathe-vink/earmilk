@@ -339,5 +339,14 @@
    "match": "waveguide-insert",
    "material": "resin"
   }
+ ],
+ "interior_ignore": "cable-*|connector-*|grommet-*|gland-*",
+ "normals_from": [
+  {
+   "match": "waveguide-insert",
+   "grid": "fab/out/render/earmilk-floorstander-horn.npy",
+   "normals": "fab/out/render/earmilk-floorstander-horn-normals.npy",
+   "within_mm": 1.5
+  }
  ]
 }

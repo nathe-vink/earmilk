@@ -163,7 +163,8 @@ def apply_changes(d, critic, only=None):
                 pending.append({'id': cid, 'why': f'no such setting: {setting!r}'}); continue
         new = resolve(cur, c.get('to'))
         # a value the setting cannot take is held back with the reason, rather than crashing the render
-        bad = (isinstance(cur, (int, float)) and not isinstance(cur, bool) and isinstance(new, str)) or \
+        hexcol = isinstance(new, str) and re.fullmatch(r'#[0-9A-Fa-f]{6}', new.strip()) is not None   # a colour: kelvin or hex
+        bad = (isinstance(cur, (int, float)) and not isinstance(cur, bool) and isinstance(new, str) and not hexcol) or \
               (isinstance(cur, (list, dict)) and isinstance(new, str)) or \
               (setting.split('.')[0] in ('glints', 'lights') and setting.count('.') == 1 and isinstance(new, str))
         if bad:

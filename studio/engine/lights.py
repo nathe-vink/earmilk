@@ -88,9 +88,9 @@ def panel(bpy, name, spec, centre):
     """A graduated panel from a shot's `lights.NAME` entry with type "panel":
     size_m [w, h], position (or orbit) and target as an area lamp's; `strength`, the peak radiance (a white panel of
     strength 1 reads scene-linear 1.0 seen head-on, its mirror image in a clear coat about 0.05 of that); `ramp`
-    {"axis": "x"|"y"|"z" or [x, y, z] (world), "at_m": [a, b], "values": [va, vb]}: the strength's fraction is va where
-    the world coordinate along the axis is a and vb where it is b, linear between and held beyond; without a ramp the
-    panel is even. `diffuse` false: seen only in reflections (a reflector card), lighting nothing diffusely.
+    {"axis": "x"|"y"|"z" or [x, y, z] (world), "at_m": [a, b, ...], "values": [va, vb, ...]}: the strength's fraction
+    is va where the world coordinate along the axis is a, vb where it is b, and so on, linear between the stops and
+    held beyond them; without a ramp the panel is even. `diffuse` false: seen only in reflections (a reflector card), lighting nothing diffusely.
     The panel's face looks at its target; its back emits nothing; it casts no shadow."""
     import bmesh
     w, h = spec.get('size_m', [1.0, 0.25])
@@ -126,11 +126,29 @@ def panel(bpy, name, spec, centre):
         geo = nt.nodes.new('ShaderNodeNewGeometry'); dot = nt.nodes.new('ShaderNodeVectorMath'); dot.operation = 'DOT_PRODUCT'
         dot.inputs[1].default_value = Vector(ax).normalized()
         nt.links.new(geo.outputs['Position'], dot.inputs[0])
-        a, b = ramp.get('at_m', [-h / 2, h / 2]); va, vb = ramp.get('values', [0.0, 1.0])
-        mr = nt.nodes.new('ShaderNodeMapRange'); mr.clamp = True
-        mr.inputs['From Min'].default_value = a; mr.inputs['From Max'].default_value = b
-        mr.inputs['To Min'].default_value = va * peak; mr.inputs['To Max'].default_value = vb * peak
-        nt.links.new(dot.outputs['Value'], mr.inputs['Value']); nt.links.new(mr.outputs['Result'], em.inputs['Strength'])
+        at = ramp.get('at_m', [-h / 2, h / 2]); vals = ramp.get('values', [0.0, 1.0])
+        if len(at) == 2:
+            mr = nt.nodes.new('ShaderNodeMapRange'); mr.clamp = True
+            mr.inputs['From Min'].default_value = at[0]; mr.inputs['From Max'].default_value = at[1]
+            mr.inputs['To Min'].default_value = vals[0] * peak; mr.inputs['To Max'].default_value = vals[1] * peak
+            nt.links.new(dot.outputs['Value'], mr.inputs['Value']); nt.links.new(mr.outputs['Result'], em.inputs['Strength'])
+        else:
+            # several stops: the coordinate mapped onto 0..1 across them, a linear colour ramp of the values (as greys)
+            lo, hi = min(at), max(at)
+            mr = nt.nodes.new('ShaderNodeMapRange'); mr.clamp = True
+            mr.inputs['From Min'].default_value = lo; mr.inputs['From Max'].default_value = hi
+            nt.links.new(dot.outputs['Value'], mr.inputs['Value'])
+            cr_ = nt.nodes.new('ShaderNodeValToRGB'); cr = cr_.color_ramp; cr.interpolation = 'LINEAR'
+            stops = sorted(zip(at, vals))
+            els = list(cr.elements)
+            while len(els) < len(stops):
+                els.append(cr.elements.new(0.5))
+            for e, (x, v) in zip(cr.elements, stops):
+                e.position = (x - lo) / (hi - lo); e.color = (v, v, v, 1.0)
+            bw = nt.nodes.new('ShaderNodeRGBToBW'); mul = nt.nodes.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'
+            mul.inputs[1].default_value = peak
+            nt.links.new(mr.outputs['Result'], cr_.inputs['Fac']); nt.links.new(cr_.outputs['Color'], bw.inputs['Color'])
+            nt.links.new(bw.outputs['Val'], mul.inputs[0]); nt.links.new(mul.outputs['Value'], em.inputs['Strength'])
     else:
         em.inputs['Strength'].default_value = peak
     # one-sided: the back face is transparent

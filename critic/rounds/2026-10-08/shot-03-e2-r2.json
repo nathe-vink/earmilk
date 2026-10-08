@@ -1,0 +1,232 @@
+{
+ "stage1": {
+  "impression": "A tight, high three-quarter detail of the red gloss gable top with its moulded horn and tweeter, cleanly rendered but lit almost flat: the big front gable plane is one red, the background a dead mid-grey and the white body a cropped sliver. The horn interior carries streaky, broken highlights with visible stair-stepping and a hard dark outline round the mouth, so the hero feature reads as CG rather than as a moulded gloss part.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Every highlight inside the waveguide has smooth edges. Now the strip streak's lower edge swings 141/99 levels with an 8 px period (x 470-530, y 485-487), and the key's throat-lip highlight (600-670 x 330-362, p95 164.5) has a 5-6 px sawtooth.",
+  "The bowl reads its depth from tone alone: the floor is brightest at the throat and falls at least 25 levels toward the mouth, and the lit and shaded walls are at least 20 levels apart. Now the floor runs 55.7-56.8 across its middle, the walls 58-65, and part:waveguide-insert lum_range is 31.2.",
+  "The mouth's rim is drawn by light: a continuous tone step or highlight of at least 15 levels along the rim, not only the 1-2 px dark seam it has now.",
+  "The front slope carries a continuous gloss gradient of at least 15 levels from ridge to eave. Now it is one value, 66.7-68.4 over 57,200 px in [780,300,1000,560]. Its least-reflective part stays within dE2000 2 of #C62828 (now 1.58).",
+  "The tweeter dome is wholly visible at the throat with a defined catchlight. Now about 30% of the dome and 35% of its surround are cut off by the waveguide's right wall; the dome median is 33.0 and p95 89.6.",
+  "The white body renders neutral: within dE2000 1.5 of a grey of its own lightness. Now the front is a* +2.2, b* -1.9 and the side a* +1.6, b* -2.3, uniform across each face, so it is a global lavender cast.",
+  "No near-tangencies: every product edge sits at least 40 px inside the frame or is cropped decisively. Now the back-right roof corner is 4 px from the right edge, the front-left corner 22 px from the left, and the mouth 14 px above the bottom.",
+  "The background is graded rather than one value (at least 10 levels across the visible sweep; now 147.7 with range 3.3 in [0,0,160,120]) and sits at least 45 levels below the white side face (now about 30)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The waveguide is drawn only by the hard-edged top strip's reflection, a thin streak whose edge breaks into facet teeth, while the bowl floor and the whole front slope each sit at one value.",
+   "evidence": {
+    "region": [
+     440,
+     455,
+     600,
+     505
+    ],
+    "measured": "Streak band: lum_p5 41.0, lum_p95 139.2. Along y 485-487, x 470-530 its edge alternates 139.6/141.0/98.6/135.0/140.9/139.6/100.1 with an 8 px period, which is the mesh's facets. Bowl floor [380,640,600,760]: median 56.4, y-profile 55.7-56.8 across its middle. Plain front slope [780,300,1000,560]: median 68.1, p5 66.7, p95 68.4, range 1.7 over 57,200 px. Box [860,360,940,620]: y-profile 68.1 to 67.6, falloff 0.8."
+   },
+   "change": {
+    "setting": "lights.top",
+    "from": {
+     "type": "area",
+     "size_m": [
+      1.6,
+      0.4
+     ],
+     "position": [
+      0.45,
+      -0.35,
+      2.3
+     ],
+     "target": [
+      0,
+      -0.05,
+      0.95
+     ],
+     "irradiance": 1.4,
+     "color": 6000
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      4.2,
+      4.2
+     ],
+     "position": [
+      0.1,
+      -0.2,
+      2.05
+     ],
+     "target": [
+      0.1,
+      -0.2,
+      0.9
+     ],
+     "strength": 1.3,
+     "color": 5700,
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -1.0,
+       -0.45,
+       0.0,
+       0.35,
+       1.2
+      ],
+      "values": [
+       0.3,
+       0.15,
+       1.0,
+       1.0,
+       0.3
+      ]
+     },
+     "diffuse": true
+    }
+   },
+   "expected": "This is an overhead graduated scrim in place of the strip. The thin streak and its teeth disappear. The front slope mirrors the ramp as a gradient from about 85 near the ridge to about 64 at the front-right eave; in [860,360,940,620] it runs about 85 at the top to about 75 at the bottom. In the bowl, the floor near the throat mirrors the bright band and rises to about 80-100, falling to about 55 toward the mouth. The right wall shows a soft bright band, and the left wall sits slightly darker, about 50-58. The ramp's ends (0.3 x 1.3, about 0.4) match the sky radiance the panel blocks, so the panel's edges should not draw hard lines in the bowl. The panel still lights from above, replacing the strip's roughly 1.1 W/m2 on the slope.",
+   "accept": {
+    "region": [
+     860,
+     360,
+     940,
+     620
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     6,
+     30
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "camera",
+   "problem": "Seen 37 degrees off the waveguide's axis, the right wall hides about 30% of the tweeter dome and the wall itself is edge-on. The frame also pins the roof against three edges: the back-right corner 4 px from the right, the front-left corner 22 px from the left, and the mouth 14 px above the bottom.",
+   "evidence": {
+    "region": [
+     1250,
+     380,
+     1350,
+     700
+    ],
+    "measured": "The roof corner and white side fill the right-edge strip: p5 60.4, p95 190.9, lum_range 130.4. The roof's back-right corner is at x 1346 and its front-left corner at x 22. The insert box is [109,318,739,886]. The tweeter-dome mask is a D shape cut straight by the right wall: 2876 px visible of about 4070 px for the ellipse its round left edge (x 641) and surround (x 627-705) imply."
+   },
+   "change": {
+    "setting": "camera.position",
+    "from": [
+     0.42,
+     -1.1,
+     1.42
+    ],
+    "to": [
+     0.15,
+     -1.27,
+     1.385
+    ]
+   },
+   "expected": "The target, lens and focus stay the same. The camera orbits about 14 degrees toward the product's front and 3 degrees lower, now 1.33 m from the target. The waveguide is then seen 23 degrees off its axis instead of 37, so most of the dome clears the right wall and both walls and the floor read. The whole roof sits inside the frame with at least 46 px clear: front-left corner about (49, 680), front-right eave about (969, 849), back-right corner about (1220, 495), fin top at least 102 px below the frame top. The insert keeps its size, about 154-834 x 329-824 px (about 206k px against 209k now), with the tweeter near (658, 431). The strip [1250,380,1350,700] becomes plain background.",
+   "accept": {
+    "region": [
+     1250,
+     380,
+     1350,
+     700
+    ],
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 20
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The key sits almost level with the roof (20 degrees about the product's centre, about 1.08 m high), so it cannot reach into the recess and leaves the bowl's floor and right wall unlit by it, while it hits the white front square-on and makes that the flattest, brightest mass in the frame.",
+   "evidence": {
+    "region": [
+     23,
+     615,
+     723,
+     900
+    ],
+    "measured": "front-baffle: median 239.2 over 93,947 px, y-profile 239.6 to 238.2 (flat), the brightest region in the frame. Bowl floor [380,640,600,760]: 56.4. Right-wall zone [600,480,700,600]: 48.3. The plain slope is 68.1, so the recess sits 12-20 levels below the plane it is cut into, with no light or shadow shape inside it."
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 20,
+    "to": 40
+   },
+   "expected": "The key rises to about 1.56 m and enters the recess about 28 degrees above it instead of about 7. It lights the floor and the right wall and throws a soft penumbra from the left rim across the bowl, a light-to-shadow shape that states the depth. The front-baffle drops 10-20 levels to about 220-230. The slope gains about 0.7 W/m2 of key light, roughly offsetting the sky light the c1 scrim blocks, so the accent's diffuse value stays near today's 68.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     212,
+     234
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "The sweep renders as one flat warm mid-grey, only about 30 levels below the white side face, so the carton's right silhouette is weak and the top band of the frame is dead.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     160,
+     120
+    ],
+    "measured": "median 147.7, lum_range 3.3. Right of the gable, [1250,300,1350,450], it is 161.8. The side-right face median is 191.8."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#B7B2AA",
+    "to": "#A29E98"
+   },
+   "expected": "The paper's reflectance drops about 24%, putting the background at about 131 top-left and about 143 on the right. The white side face separates from it by about 50 levels instead of about 30. The red roof (about 65-90) stays at least 40 levels below it, with the hue contrast intact.",
+   "accept": {
+    "region": [
+     0,
+     0,
+     160,
+     120
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     118,
+     142
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Re-tessellate or smooth-shade the waveguide insert's mesh.",
+   "why": "The teeth in its highlights are the insert's facets: 40-level swings at an 8 px period on the streak's edge (x 470-530, y 485-487) and a 5-6 px sawtooth on the throat-lip highlight (600-670 x 330-362). Geometry and sampling are fixed, so light can only soften or move them. Any hard-edged reflection left in the bowl, such as the key's on the throat lip, will still show them, and that blocks a 9."
+  },
+  {
+   "request": "Close or hide the dark hairline joint around the insert's rim.",
+   "why": "The insert and its seam are the product's geometry. At this scale the joint reads as a 1-2 px drawn outline round the whole mouth rather than a machined fit."
+  },
+  {
+   "request": "Bring the tweeter forward or make the bowl shallower so the whole dome shows from a three-quarter view.",
+   "why": "The waveguide and the tweeter's place in it are set by acoustic simulation. The camera swing in c2 is the permitted way to show more of the dome."
+  },
+  {
+   "request": "Give the tweeter dome a glossier finish for a crisp catchlight.",
+   "why": "The drivers' materials are the products' own. The dome reads as a soft dark blob (median 33.0, p95 89.6, with a 29-level edge against the surround spread over 24 px), which weakens 'close and sharp'."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

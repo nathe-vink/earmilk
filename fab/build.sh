@@ -18,4 +18,5 @@ for SIZE in ${SIZES:-floorstander bookshelf}; do
   "$PY" fab/typeset.py        # letters, the Facts print, stencils, templates
   "$PY" fab/sheets.py         # the drawings to build from (A3 sheets from the CAD)
   "$PY" fab/render_model.py   # the render model for the engine (studio/engine)
+  "$PY" fab/horn_grid.py      # the waveguide's true surface, for the render model's shading
 done

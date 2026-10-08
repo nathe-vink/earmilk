@@ -19,7 +19,10 @@ prompt files, the spec or CLAUDE.md, and never the context that made the render.
    ROUND.json --save-shot SHOT --no-render`, set the exposure from the critic's own brightness tests with
    `studio/engine/autoexpose.py SHOT ROUND.json --save` (one small scene-linear render; a critic's relighting is
    usually right in shape and off by a fraction of a stop), render once, and check the accept tests on the new
-   render with `critic/round.py check NEW.png ROUND.json`. A change the engine holds back (its "pending" list says
+   render with `critic/round.py check NEW.png ROUND.json`. Before the render, a change whose strength is a guess (a
+   lamp's irradiance, a glint's power, a panel's strength) is set by `studio/engine/tune.py` from proofs against its
+   own test (a band of your own where the critic's "expected" gives one and its test only a floor), and a highlight
+   or card that a part should mirror is checked with `render.py --probe PART` (what the part mirrors, and where). A change the engine holds back (its "pending" list says
    why) or of kind "asset" is built by hand or in the engine; everything else applies by machine.
 4. **Limits.** At most three rounds per shot per look. A new look or a new render path restarts the count.
 5. **What to act on.** Light, camera, material and composition notes are render fixes. A note that would change

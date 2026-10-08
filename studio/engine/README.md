@@ -82,8 +82,8 @@ material's colour coat, under its clear, exactly where the fab files put them.
 
     python3 studio/engine/meter.py SHOT --part back-panel --region 783 440 805 620 --target 225
 
-renders the shot three stops under with its mask, inverts the view transform, and prints each part's or region's
-true scene-linear brightness, what the final image shows there now, and the exposure change that would put it at the
+renders the shot small as a scene-linear EXR with its mask and prints each part's or region's true scene-linear
+brightness, what the final image shows there now through the view, and the exposure change that would put it at the
 target. Exposure is where a critic's prediction is most often wrong (a view transform's shoulder hides how far over a
 white is); after applying a round, meter the faces the accept tests name and set the key or the exposure from the
 reading, not from the guess. Regions are in the critic's staged image's pixels (0.75 scale).
@@ -95,9 +95,50 @@ reading, not from the guess. Regions are in the critic's staged image's pixels (
     python3 studio/engine/render.py SHOT --out IMG --masks                             # the one full render
 
 `autoexpose.py` reads every brightness test in a critic's reply (lum_median, lum_mean, lum_p5, lum_p95) from one
-small scene-linear render, and sets the exposure that passes the most of them by the widest margin. A critic's
+small scene-linear render, and sets the exposure within 1 EV of the shot's that passes the most of them without
+clipping the product's whites, by a margin of a few levels, with the smallest change. A test only a bigger change
+would pass is not exposure's (a glint that misses, a lamp too weak) and is left to fail. A critic's
 relighting is usually right in shape and wrong by a fraction of a stop; this takes the fraction out before the
 expensive render instead of after it.
+
+## Tuning one setting by proof
+
+    python3 studio/engine/tune.py SHOT REPLY c3 lights.roof_ramp.strength 0.5 1.5 --save
+    python3 studio/engine/tune.py SHOT REPLY '{"region": {"part": "woofer-cone"}, "metric": "lum_p95", "op": "between",
+        "value": [100, 150]}' glints.1.power_w,glints.2.power_w 12 24 --save
+
+A critic names the setting and the reading the next image must have; how far to move the setting is a guess until
+something is rendered. `tune.py` renders proofs at the critic's scale with the setting at two values, reads the test
+exactly as `critic/round.py check` will, and follows the secant toward a reading a margin inside the test (the middle
+of a "between"), three or four proofs in all, printing every other test of the reply on each proof. A test of your
+own can stand in for the critic's (where its "expected" gives a band and its test only a floor), and several settings
+can move together (a symmetric pair of glints).
+
+## The reflection probe
+
+    python3 studio/engine/render.py SHOT --out IMG --probe 'woofer-cone' --scale 0.75
+
+What a glossy part mirrors into the camera, from the scene itself: the camera's rays through the frame, reflected
+about the surface's own normal at each hit on the part, followed to the first thing they meet, a lamp's face, a panel,
+a surface of the set or the product, or the sky. It prints each thing's share of the part's pixels, the box of those
+pixels in the frame and the band of directions they look along, so a card or a lamp is sized and placed to cover the
+pixels that should light up (on 05 it showed the critic's 8 x 3 m card reaching 5 % of the cones, which mirror the
+open sky in front). Nothing is rendered.
+
+## What the engine makes exact
+
+- **Glints** are placed from the surface the camera sees at their point, with that surface's own normal (the camera's
+  ray through `at`, else the nearest receiving surface that faces the camera); a glint whose lamp would have to sit
+  behind the floor or inside the product is skipped, because that surface mirrors the floor there, and the render's
+  report and the next critic's card say so.
+- **The sun through a window**: `sun.aim` `{"at": [x, y, z], "window": 0, "through": [0.5, 0.5]}` sets the azimuth
+  and elevation that send the sunlight through that point of the window onto `at`.
+- **Panels**: `{"type": "panel", ...}` is an emissive rectangle the camera cannot see, its brightness ramped along a
+  world axis, lighting one side, casting no shadow, with `diffuse: false` seen only in reflections and with
+  `receivers` only in the parts named: a graduated scrim for a lacquered roof, a reflection card for a cone.
+- **The inside**: in a cutaway or an exploded view, the faces inside the product (a cavity's walls, a face another
+  part covers) take the product's `interior` materials (raw birch, bare resin), found by rays from each face against
+  the assembled product before it is opened; a shadow line's walls stay painted.
 
 ## The loop
 

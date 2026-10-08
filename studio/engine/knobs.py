@@ -65,6 +65,9 @@ KNOBS = [
     ('lights.*.diffuse', '0 to 1', (0, 1), 'the lamp\'s share in diffuse light'),
     ('lights.*.specular', '0 to 1', (0, 1), 'the lamp\'s share in reflections (0: lights without a highlight; with diffuse 0: a glint only)'),
     ('lights.*.portal', 'bool', None, 'a window portal: guides the sky\'s light through an opening, adds none'),
+    ('glints.*.distance_m', 'm', (0.05, 3), 'how far along the mirror ray the glint\'s lamp sits (0.6 by default); nearer keeps it clear of a floor or wall the ray meets'),
+    ('glints.*.size_m', 'm', (0.005, 1), 'the glint lamp\'s diameter: larger is a softer, wider highlight'),
+    ('glints.*.power_w', 'W', (0, 200), 'the glint lamp\'s power'),
     # set
     ('set.kind', 'choice', ('room', 'sweep', 'none'), 'what surrounds the product'),
     ('set.*', 'see the set\'s own keys', None, 'room: floor, walls, window, skirting, props; sweep: color, radius, depth, width'),
@@ -85,6 +88,8 @@ KNOBS = [
     ('set.windows.*.mullions', '[cols, rows]', None, 'room: glazing bars'),
     ('set.skirting.h', 'm', (0, 0.3), 'room: skirting height'),
     ('set.props.*.position', 'm [x, y]', None, 'room: a prop\'s place on the floor'),
+    ('set.flags', 'list of {center_m: [x, y, z], size_m: [w, h], normal: [x, y, z]}', None, 'black cards the camera cannot see: they cast shadows (a flag to cut sun off a wall) and soak up bounce light; out of reflections unless "glossy": true'),
+    ('set.bounces', 'list of {center_m, size_m, normal}', None, 'white cards the camera cannot see: bounce fill, and seen in reflections'),
     ('set.props.*.rotate_z', 'deg', (-180, 180), 'room: a prop\'s turn'),
     # product
     ('product.flavour', 'choice', ('whole', 'two', 'skim', 'chocolate', 'oat'), 'colourway (fixed colours per flavour)'),

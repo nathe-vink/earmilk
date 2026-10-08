@@ -1,0 +1,343 @@
+{
+ "stage1": {
+  "impression": "An instantly legible milk-carton pair under low window sun in a plausible room, but it reads as a competent CG draft rather than a homepage hero: the floorstander's white front is a flat near-white slab crossed at mid-height by a soft grey bar smear, and the small blue unit's white body half-dissolves into the sunlit wall behind it. The set has tells (a hard shadow that starts exactly on the sideboard's right door seam, a plain glossy floor, a flat taupe box), and the sun patches are as bright as the products, so the light serves the wall as much as the speakers.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "No bar, jamb or flag shadow on either product: hero front [306,440,352,500] lum_p5 >= 228 (now 191.4) and bookshelf plinth lower rows [852,484,875,491] within dE2000 2 of #1F4FCF (now 7.95).",
+  "Both units separate from the background by >= 40 levels on every side: bookshelf left edge [825,345,875,450] (now 3.9), hero right silhouette [500,380,525,450] (now 18.5).",
+  "Whites reproduce neutral-warm, not lilac: hero front [322,676,466,695] dE2000 <= 2 vs #F4F1EC (now 5.86; Lab a* +3.4, b* -1.0).",
+  "The white fronts show modelling: >= 12 levels of smooth falloff on clean white (now lum_range 1.1 on the bookshelf front [852,345,870,450] and 0-2 on the hero away from the bar). Under Khronos PBR Neutral the sunlit white sits at R 244, deep in the shoulder (slope about 0.16), so this needs the white key at or under the knee (about 226), roughly -0.5 EV on the fronts, without taking any accent past dE 2.5. The single sun cannot do that; it needs a graded key on the fronts or a relight.",
+  "Accents within dE2000 2.5 of spec on every sunlit face: red plinth [306,703,345,744] now 3.52 (216,26,32) and [440,703,484,744] now 4.25; red roof (2.36) and blue roof (2.21) must not get worse.",
+  "No light or shadow edge on furniture geometry: the window-0 jamb edge on the sideboard >= 30 px from any door seam (now about 5 px from the seam at px 1046).",
+  "The 12 in aluminium cone reads as metal: crush_pct <= 40 on the hero cone (now 69.77).",
+  "The products are the brightest whites in frame: wall sun patches >= 15 levels under the fronts (now [1000,340,1060,440] 236.0 and the left-window patch 238.8, against fronts at 239.6-240.6)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "Window 0's upper glazing bar throws a soft grey band across the hero's white front between the mid and the woofer, and its penumbra darkens the lower half of the bookshelf unit's blue plinth.",
+   "evidence": {
+    "region": [
+     306,
+     430,
+     352,
+     520
+    ],
+    "measured": "profile y (18 bins of 5 px) 239.4, 238.4, 234.6, 228.7, 212.6, 196.5, 191.5, 194.6, 208.4, 224.5, 232.7, 237.6, then 238.7-239.6: a 48-level dip centred at py 462 (z about 0.59 m, where the bar at about 1.69 m projects at 15 degrees elevation); [440,430,480,520] dips to 188.5 at py 472; lum_p5 on [306,440,352,500] = 191.4. Bookshelf plinth: top rows [852,464,875,470] (3,76,209), dE 1.13 vs #1F4FCF; bottom rows [852,484,875,491] (16,59,165), dE 7.95."
+   },
+   "change": {
+    "setting": "set.windows.0.mullions",
+    "from": [
+     2,
+     3
+    ],
+    "to": [
+     2,
+     1
+    ]
+   },
+   "expected": "No horizontal bar shadows anywhere: the hero front reads 238-241 through py 440-500 (lum_p5 >= 228, lum_range <= 8); the bookshelf plinth is even at about (3,76,208) with dE <= 2 on its lower rows; the one remaining vertical bar still marks the window as a diagonal line on the floor (px about 380-830).",
+   "accept": {
+    "region": [
+     306,
+     440,
+     352,
+     500
+    ],
+    "metric": "lum_p5",
+    "op": ">=",
+    "value": 228
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The bookshelf unit stands in front of window 0's sun patch, so its white body and the wall are the same brightness and its left silhouette vanishes; the smaller unit reads as a blue cap and a driver floating on a bright patch, which weakens the size relation the frame exists to show.",
+   "evidence": {
+    "region": [
+     825,
+     345,
+     875,
+     450
+    ],
+    "measured": "largest step across the left edge 3.9 (column profile 237.0, 237.0, 237.0, 237.0, 239.8, 240.6, 240.6...); wall [815,340,843,450] median 237.0 (245,235,233) vs front [852,345,870,450] median 240.6 (245,239,243). Both peak at R 244-245 and their scene luminance differs by under 4 %, so exposure and view transform cannot separate them; the hero's right edge and this wall point lie on the same sun ray, so no window change can shade one without the other."
+   },
+   "change": {
+    "setting": "set.flags",
+    "from": "none",
+    "to": [
+     {
+      "center_m": [
+       0.19,
+       0.65,
+       0.78
+      ],
+      "size_m": [
+       0.46,
+       0.42
+      ],
+      "normal": [
+       0,
+       -1,
+       0
+      ]
+     }
+    ],
+    "asked": {
+     "kind": "flag",
+     "material": "matte black",
+     "visible_to_camera": false,
+     "casts_shadow": true,
+     "center_m": [
+      0.19,
+      0.65,
+      0.78
+     ],
+     "size_m": [
+      0.46,
+      0.42
+     ],
+     "normal": [
+      0,
+      -1,
+      0
+     ]
+    },
+    "note": "Built as the engine's set flags (any set): a black card the camera cannot see, casting its shadow, out of reflections."
+   },
+   "expected": "Standing 0.45 m in front of the back wall, behind the sideboard, and parallel to the wall, it throws a sharp rectangle on the wall at x 0.17-0.63 m, z 0.44-0.86 m. The visible strip left of the unit (px about 800-848, py about 326-465) drops from 237 to the shaded-wall level of about 115-130, meets the hero's gable shadow at px about 800 and reads as the patch's edge. The rest of the rectangle is hidden by the unit, and neither product, the sideboard nor the floor changes.",
+   "accept": {
+    "region": [
+     825,
+     345,
+     875,
+     450
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": ">=",
+    "value": 40
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The sun renders about 5 % short of green against the 5200 K white point, so the Whole white #FFFFFF reads lilac-pink and the plaster sun patches read pink.",
+   "evidence": {
+    "region": [
+     322,
+     676,
+     466,
+     695
+    ],
+    "measured": "(243,235,239), Lab (93.8, +3.4, -1.0), dE2000 5.86 vs #F4F1EC; hero front [306,345,350,380] (244,238,243), Lab (94.7, +2.9, -1.7); bookshelf front [852,350,870,450] (245,239,243); sunlit plaster [1000,340,1060,440] (244,234,232) vs its own #F1EEE8 (241,238,232). In linear light the hero white has R/G 1.058 and B/G 1.048, with R and B both ahead of G: a magenta light. That fits a 5000 K blackbody sun under a daylight-locus white point (D50 is 4.7 % greener than the blackbody)."
+   },
+   "change": {
+    "setting": "sun.color",
+    "from": 5000,
+    "to": "#FFEBCD"
+   },
+   "expected": "The sun takes the daylight-locus colour at 5000 K (D50: 4.7 % more green and 2.3 % less blue than the 5000 K blackbody). The white front goes to about (243,240,236), with a* within +-1 and b* between +1 and +3, and the plaster patch to about (243,238,230). The blue plinth holds about (4,78,205), dE <= 1.5, and the red plinth stays about dE 3.2. If the engine scales the sun by the hex's luminance and the white front's R falls below 242, add +0.3 W/m2 to sun.irradiance.",
+   "accept": {
+    "region": [
+     322,
+     676,
+     466,
+     695
+    ],
+    "metric": "delta_e",
+    "hex": "#F4F1EC",
+    "op": "<=",
+    "value": 2.0
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "Window 0's right-jamb shadow lands on the sideboard's middle/right door seam, so the right door reads as a separately stained dark door rather than as the sun ending.",
+   "evidence": {
+    "region": [
+     1020,
+     540,
+     1080,
+     690
+    ],
+    "measured": "profile x (12 bins of 5 px) 136.0, 134.7, 129.6, 122.5, 113.4, 93.9, 86.7, 72.8, 58.5, 45.6, 42.6, 42.5: 50 % point at px 1050, 10-90 % over about 29 px, with the seam groove at px 1046 (the door at x 0.82 m projects to px 1046). Middle door [850,530,1030,700] lum 138.7 (157,135,122) vs right door [1060,530,1250,700] lum 39.7 (52,37,30)."
+   },
+   "change": {
+    "setting": "set.windows.0.along",
+    "from": 2,
+    "to": 2.08
+   },
+   "expected": "The opening moves 0.08 m toward -x, away from the sideboard and still inside the front wall. The jamb edge on the sideboard moves to px 1007 +- 10 (x about 0.75 m), about 40 px inside the middle door, so the seam at 1046 sits in full shadow and the edge reads as sunlight ending. The back-wall patch shifts about 30 px left, the hero's front-left edge gains 8 cm more clearance from the left-jamb shadow, and the vase and books stay in shade.",
+   "accept": {
+    "region": [
+     1010,
+     540,
+     1040,
+     690
+    ],
+    "metric": "lum_median",
+    "op": "<=",
+    "value": 75
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "Nothing bright lies where the hero's 12 in black anodised aluminium cone mirrors, so the cone is a featureless hole around the dust cap.",
+   "evidence": {
+    "region": [
+     340,
+     542,
+     447,
+     650
+    ],
+    "measured": "part woofer-cone inside [300,500,500,700]: lum_median 1.5, p95 21.0, crush_pct 69.77; only the cap carries a highlight (woofer-cap p95 139.3); the bookshelf unit's cone reads at median 23.1 with 0 % crushed."
+   },
+   "change": {
+    "setting": "glints.0",
+    "from": "none",
+    "to": {
+     "at": [
+      -0.59,
+      -0.16,
+      0.26
+     ],
+     "normal": [
+      0.51,
+      -0.79,
+      0.35
+     ],
+     "size_m": 0.25,
+     "power_w": 3,
+     "receivers": [
+      "woofer-cone"
+     ]
+    }
+   },
+   "expected": "A soft, radially stretched sheen on the cone's lower-left quadrant (around px 355-385, py 605-640, peak lum 90-150) that reads as satin metal, with the hero cone's crushed share at or below 50 %. The lamp sits up and to camera-right of the woofer and must be invisible to the camera; nothing but the cones changes.",
+   "accept": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      300,
+      500,
+      500,
+      700
+     ]
+    },
+    "metric": "crush_pct",
+    "op": "<=",
+    "value": 50
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The hero's right side is a dull warm grey slightly darker than the wall behind it, so the right silhouette is soft and the 390 mm depth barely reads.",
+   "evidence": {
+    "region": [
+     500,
+     380,
+     525,
+     450
+    ],
+    "measured": "largest step side to wall 18.5; hero side-right (part inside [480,300,520,700]) median 103.1, p95 109.7, rgb (113,101,97); wall [515,300,560,640] median 129.0."
+   },
+   "change": {
+    "setting": "glints.1",
+    "from": "none",
+    "to": {
+     "at": [
+      -0.4,
+      0.23,
+      0.5
+     ],
+     "normal": [
+      0.97,
+      0.24,
+      0.0
+     ],
+     "size_m": 0.8,
+     "power_w": 2,
+     "receivers": [
+      "side-right",
+      "back-panel"
+     ]
+    }
+   },
+   "expected": "A tall lamp behind and to the right of the hero, light-linked to its side and back, is mirrored by the side's lacquer at a grazing view (about 35 % reflectance) and by the back-right round. Side-right p95 rises to >= 165, brightest along the back-right edge, so the silhouette reads light against the 129 wall while the front/side corner keeps >= 60 levels. The back wall is 0.9 m from the corner along the mirror direction, so the lamp must sit within about 0.8 m. Wall, floor and the bookshelf front stay unchanged.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      480,
+      300,
+      520,
+      700
+     ]
+    },
+    "metric": "lum_p95",
+    "op": ">=",
+    "value": 165
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "A 1 degree sun disc makes every window edge and cast shadow about twice as soft as real sunlight, so the light patterns read hazy.",
+   "evidence": {
+    "region": [
+     205,
+     120,
+     255,
+     250
+    ],
+    "measured": "left-window patch edge: largest step 10.0, 10-90 % over 9 px (238.8 down to 145); the window-0 jamb edge on the sideboard spans about 29 px; the real sun subtends 0.53 degrees."
+   },
+   "change": {
+    "setting": "sun.angle_deg",
+    "from": 1,
+    "to": 0.55
+   },
+   "expected": "Penumbrae roughly halve: the left-window patch edge to about 5 px (largest step >= 15), the sideboard jamb edge to about 16 px, and the hero's floor shadow and the wall patches go crisp like direct sun; exposure and colour do not change.",
+   "accept": {
+    "region": [
+     205,
+     120,
+     255,
+     250
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": ">=",
+    "value": 15
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Slide the bookshelf unit about 0.2 m along the sideboard, or turn it, so it stands against shaded wall instead of the sun patch",
+   "why": "Its placement in this frame is fixed; c2 gets the same separation from the set side."
+  },
+  {
+   "request": "Lower the white lacquer's albedo (paint albedo 0.85) or tint it so the sunlit fronts drop below the PBR Neutral knee and show falloff",
+   "why": "That would make Whole white a different colour. The fronts sit at R 244, where the curve's slope is about 0.16, so only light or exposure can fix their flatness, and a modelled -0.3 EV already takes the roofs from dE 2.36/2.21 to about 4.6/5.2."
+  },
+  {
+   "request": "Give the 12 in cone a lighter or glossier finish so it is not crushed",
+   "why": "The drivers are named products whose materials and colours are their own (Dayton RSS315HF-4, black anodised aluminium); only light may reveal the cone, hence c5."
+  }
+ ],
+ "score_if_fixed": 7.4
+}

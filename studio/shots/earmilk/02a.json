@@ -17,7 +17,11 @@
    }
   ]
  },
- "materials": {},
+ "materials": {
+  "oak": {
+   "grain": 1.0
+  }
+ },
  "render": {
   "samples": 192,
   "adaptive": 0.015,
@@ -25,8 +29,8 @@
   "clamp": 8,
   "bounces": 12,
   "view": "Khronos PBR Neutral",
-  "exposure": 0.6,
-  "white_balance_k": 5200
+  "exposure": 0.25,
+  "white_balance_k": 5450
  },
  "title": "One speaker, bright room, morning light",
  "set": {
@@ -49,7 +53,7 @@
    "plank_contrast": 0.4
   },
   "wall": {
-   "color": "#F1EEE8"
+   "color": "#FBF7F1"
   },
   "ceiling": "#F5F3EF",
   "skirting": {
@@ -137,7 +141,8 @@
    0.56
   ],
   "lens_mm": 40,
-  "level": true
+  "level": true,
+  "shift_x": 0.1
  },
  "sun": {
   "azimuth_deg": -25,
@@ -165,7 +170,7 @@
     "elevation_deg": 12,
     "distance_m": 2.4
    },
-   "irradiance": 0.35,
+   "irradiance": 0.6,
    "color": "#FFFFFF"
   }
  },
@@ -179,10 +184,10 @@
    "normal": [
     -0.174,
     -0.985,
-    0.0
+    0
    ],
-   "size_m": 0.2,
-   "power_w": 0.5,
+   "size_m": 0.06,
+   "power_w": 0.3,
    "receivers": [
     "letters-front-0",
     "letters-front-1",
@@ -192,6 +197,24 @@
     "letters-front-5",
     "letters-front-6",
     "letters-front-7"
+   ],
+   "distance_m": 0.12
+  },
+  {
+   "at": [
+    -0.093,
+    -0.161,
+    0.254
+   ],
+   "normal": [
+    0.198,
+    -0.915,
+    0.354
+   ],
+   "size_m": 0.12,
+   "power_w": 0.15,
+   "receivers": [
+    "woofer-cone"
    ]
   }
  ]

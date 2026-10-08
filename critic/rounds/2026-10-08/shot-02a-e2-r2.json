@@ -1,0 +1,385 @@
+{
+ "stage1": {
+  "impression": "A believable sunlit-room lifestyle shot, but the carton speaker is small in a frame of mostly empty wall and floor. Its white front reads as one flat bright card, and the red-on-red 'earmilk' wordmark is nearly illegible.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Spread gutter clear: no product or wall-shadow pixels in x 625-725 (now the gutter at x 675 cuts the side face 20 px right of the front/side corner at 655; band [625,340,725,560] lum_range 65.5).",
+  "Brand red on spec: lit red within dE2000 <= 3 of #C62828 (part:gable-block now [234,60,60], dE 9.3; plinth front [239,53,55], dE 9.6).",
+  "White front with lacquer modelling: >= 6 levels of falloff or a soft window reflection across the face (now 243.2 +/- 0.1 in all 8 vertical bins and 242.2-243.1 across, a flat card pinned in the PBR Neutral shoulder).",
+  "White front neutral: dE2000 <= 2 against a neutral grey (now [241,243,250], dE 3.4 vs #F3F3F3, a cyan-blue cast next to warm [248,243,240] sun patches).",
+  "Wordmark reads as cast metal: letters median >= 170 and near-neutral (now 137, [174,129,115]: dull rose-grey print; glints.0 contributes nothing, p95 148.7).",
+  "Room stays airy after the exposure fix: shade walls >= 198 while sun patches stay >= 238 and the carton shadow stays crisp (edge width 5 px now).",
+  "White side reads white: side face >= 172 (now 182.6; drops to about 163 once exposure and white balance are corrected).",
+  "Floor reads as oak: >= 8 levels of within-plank variation (now 2.9-4.8 in single planks: laminate-flat).",
+  "Woofer cone reads as black anodised aluminium, not a void (now median 10, p95 27, 6.4% crushed).",
+  "Side table credible: edge profiles, grain and leg contact shadows (now a smooth box primitive with square posts).",
+  "Print resolution for the spread (>= 5000 px wide; the frame is 1350 px)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "composition",
+   "problem": "On a magazine spread the gutter at x 675 runs through the speaker's side face (front 524-655, side 655-745), and the grey left wall slab at x 0-100 (lum 184) dead-ends the left edge.",
+   "evidence": {
+    "region": [
+     625,
+     340,
+     725,
+     560
+    ],
+    "measured": "front-baffle box [524,325,655,712], side-right box [655,324,745,710]; band around the gutter lum_range 65.5 (p5 177.8 side face, p95 243.4 front). The speaker's back edge is at x 748 and the carton shadow's left edge at x 870-876 (edge step 18.5, 10-90 width 5 px): a 123 px gap that the gutter must fall into. The content that a 135 px move puts in the band, [760,340,860,560], is sunlit wall with lum_range 4.7."
+   },
+   "change": {
+    "setting": "camera.shift_x",
+    "from": "(default) 0",
+    "to": 0.1
+   },
+   "expected": "Everything moves 135 px left: front-baffle box about [389,325,520,712], side to x 610, so the speaker sits on the left page with 65 px to the fold; the carton shadow lands at about x 736-895 on the right page, 60 px from the fold. The room corner and the 184-grey left wall leave the frame, the table moves to about x 105-330, and the sun patch is framed by shade wall on the right. Product and shadow read as a diptych, with copy space top right for the homepage.",
+   "accept": {
+    "region": [
+     625,
+     340,
+     725,
+     560
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     0,
+     20
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "post",
+   "problem": "The brand red renders as a light scarlet because the sunlit faces sit 0.7-0.9 EV above the level at which PBR Neutral reproduces base colours; the same overexposure pins the white front in the tone curve's shoulder.",
+   "evidence": {
+    "region": [
+     530,
+     300,
+     650,
+     326
+    ],
+    "measured": "Roof front slope (gable-block in this box) [235,60,61], dE 9.5 vs #C62828; part:gable-block [234,60,60], dE 9.3; plinth front [239,53,55], dE 9.6. Inverting PBR Neutral gives the slope's scene-linear R 0.90 and the plinth's 0.98, against 0.48-0.57 for #C62828. The white front's scene-linear B is 1.87 (shoulder), so its 8-bin profile is 243.2/243.3/243.1/243.1/243.1/243.3/243.2/243.3."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.6,
+    "to": 0.25
+   },
+   "expected": "-0.35 EV: part:gable-block R median 234 to about 212 (about 216 after c3), dE vs #C62828 from 9.3 to about 3.5-4; plinth front to about [222,35,38]. The white front stays bright and unclipped at about 240. Sun patches go from 244 to about 240 and gain contrast over the shade walls, which drop from 212 to about 189 (c4 restores them). Floor 169/148 drops to about 150/131.",
+   "accept": {
+    "region": "part:gable-block",
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     205,
+     220
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "The Whole-white front carries a cyan-blue cast while the sun on it is warm: at 5200 K the sky light through the front window renders cyan and dominates the lacquer front.",
+   "evidence": {
+    "region": [
+     380,
+     520,
+     660,
+     630
+    ],
+    "measured": "front-baffle white beside the woofer [241,243,250] (G and B above R), dE 3.42 vs #F3F3F3; shade wall beside the speaker [222,225,235]; sunlit wall patch [248,243,240] warm; side [189,181,181]."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 5200,
+    "to": 5450
+   },
+   "expected": "Front white from [241,243,250] to about [246,244,246], dE vs #F3F3F3 from 3.4 (about 3.9 after c2) to about 2.3-2.5. Shade walls lose most of their blue (B-R from +8..+13 to about +2). Sun patches warm to about [249,240,231] for a morning feel. Red R rises about 4 levels (still inside c2's window). Overshooting toward 5650 K turns the front pink-beige (dE about 3.0) and fails the test.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      380,
+      520,
+      660,
+      630
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#F3F3F3",
+    "op": "<=",
+    "value": 2.8
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "Once c2 removes the overexposure, the shade walls fall from 212 to about 189, turning the bright airy room light grey; the walls need more albedo, not more light on the product.",
+   "evidence": {
+    "region": [
+     760,
+     150,
+     1300,
+     280
+    ],
+    "measured": "Shade wall now lum 211.7 [213,211,215] (scene-linear about 0.70, just under the 0.76 knee). A PBR Neutral model of this frame at -0.35 EV with c3 gives 189-190. The same region's post-shift content, [895,150,1350,280], measures 211.0, so the test region stays shade wall after c1."
+   },
+   "change": {
+    "setting": "set.wall.color",
+    "from": "#F1EEE8",
+    "to": "#FBF7F1"
+   },
+   "expected": "Tuned after c2/c3: shade wall about +10-12% radiance (direct plus the white-room bounce), from about 189 back to about 199-202, still under the sun patches (about 241) so the morning light keeps its contrast. If applied without c2 it reads about 221-223, the top of the window: above 224 the shade wall starts to compete with the sun patches. The carton shadow lifts from about 166 to about 175. The product's red gains at most 1-2 levels of R from bounce.",
+   "accept": {
+    "region": [
+     760,
+     150,
+     1300,
+     280
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     196,
+     224
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The cast-metal wordmark reads as dull rose-grey print because the existing letter glint never reaches the letters: its lamp falls below the floor.",
+   "evidence": {
+    "region": [
+     556,
+     664,
+     612,
+     686
+    ],
+    "measured": "part:letters-front-* lum_median 136.9, p95 148.7, rgb [174,129,115] (they mirror the sunlit oak 0.19 m in front); plinth around them lum 93. glints.0 at/normal are correct (at lies 3.3 mm proud of the rotated face, n = [-0.174,-0.985,0]), but from the camera its mirror direction is [-0.708,-0.655,-0.268], which meets the floor 0.187 m from the letters, so a lamp placed farther out is under the floor and occluded."
+   },
+   "change": {
+    "setting": "glints.0",
+    "from": {
+     "at": [
+      -0.047,
+      -0.193,
+      0.05
+     ],
+     "normal": [
+      -0.174,
+      -0.985,
+      0
+     ],
+     "size_m": 0.2,
+     "power_w": 0.5
+    },
+    "to": {
+     "at": [
+      -0.047,
+      -0.193,
+      0.05
+     ],
+     "normal": [
+      -0.174,
+      -0.985,
+      0
+     ],
+     "size_m": 0.06,
+     "power_w": 0.3,
+     "receivers": [
+      "letters-front-0",
+      "letters-front-1",
+      "letters-front-2",
+      "letters-front-3",
+      "letters-front-4",
+      "letters-front-5",
+      "letters-front-6",
+      "letters-front-7"
+     ],
+     "distance_m": 0.12
+    },
+    "asked": {
+     "at": [
+      -0.047,
+      -0.193,
+      0.05
+     ],
+     "normal": [
+      -0.174,
+      -0.985,
+      0
+     ],
+     "size_m": 0.06,
+     "power_w": 0.3,
+     "lamp_distance_m": 0.12,
+     "receivers": [
+      "letters-front-0",
+      "letters-front-1",
+      "letters-front-2",
+      "letters-front-3",
+      "letters-front-4",
+      "letters-front-5",
+      "letters-front-6",
+      "letters-front-7"
+     ],
+     "shadow_blockers": []
+    },
+    "note": "The engine places a glint lamp distance_m along the mirror ray (0.6 by default): 0.12 here keeps it clear of the floor 0.187 m out."
+   },
+   "expected": "Needs an engine capability the card lacks: either place the glint lamp at most 0.15 m out along its mirror ray (about [-0.132,-0.272,0.018], 0.06 m square, facing the letters), or shadow-link it so the floor cannot occlude it, keeping it light-linked to the letters only and invisible to camera. The letters then mirror a small neutral source: median from about 121 (after c2/c3) to 175-210, near-neutral silver [about 205,200,195], crisp against the red at lum about 85. Plinth and floor are untouched.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     165,
+     215
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "After c2/c3 the white side face falls to a beige-grey 163, so the white body reads grey on its second visible face.",
+   "evidence": {
+    "region": [
+     656,
+     330,
+     746,
+     620
+    ],
+    "measured": "side-right white now lum 182.6 [189,181,181], falloff 185.3 to 176.3 top to bottom; modelled at -0.35 EV with c3: about 163 [172,160,156]. fill_right (0.35 W/m2 from azimuth 90) supplies about 28% of the side's light."
+   },
+   "change": {
+    "setting": "lights.fill_right.irradiance",
+    "from": 0.35,
+    "to": 0.6
+   },
+   "expected": "After c2/c3 the side white goes from about 163 back to about 175-180 and more neutral (the white fill offsets the warm floor bounce); alone it would read about 195. Above 198 the front/side step (front about 244) gets too soft to model the box. The 9-level top-to-bottom falloff on the side is kept, and the carton shadow on the wall changes by under 3 levels.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      500,
+      330,
+      760,
+      620
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     170,
+     198
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "material",
+   "problem": "The oak floor, about 40% of the frame, is laminate-flat inside each plank, which reads as CG.",
+   "evidence": {
+    "region": [
+     200,
+     760,
+     300,
+     800
+    ],
+    "measured": "single-plank sunlit regions: lum_range 4.2 here, 2.9 at [150,770,230,795], 4.8 at [335,760,435,800] (the content this box shows after c1); the 3x crop shows uniform boards with faint streaks."
+   },
+   "change": {
+    "setting": "materials.oak.grain",
+    "from": 0.6,
+    "to": 1.0
+   },
+   "expected": "Visible grain streaks along the boards: within-plank lum_range from about 4 (about 3.9 after c2) to 8-12, with no change to the floor's median tone (+/-2) or to the sun bands. The table, if it shares the oak preset, gains grain too.",
+   "accept": {
+    "region": [
+     200,
+     760,
+     300,
+     800
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     6,
+     16
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The woofer's black anodised aluminium cone reads as a flat black hole, with no sheen to show its conical form or material.",
+   "evidence": {
+    "region": [
+     549,
+     510,
+     622,
+     609
+    ],
+    "measured": "part:woofer-cone lum_median 10.0, p95 27.0, crush_pct 6.44; profile across 7.1-18.7. Only the dust cap catches light (p95 162)."
+   },
+   "change": {
+    "setting": "glints.1",
+    "from": "none",
+    "to": {
+     "at": [
+      -0.093,
+      -0.161,
+      0.254
+     ],
+     "normal": [
+      0.198,
+      -0.915,
+      0.354
+     ],
+     "size_m": 0.12,
+     "power_w": 0.15,
+     "receivers": [
+      "woofer-cone"
+     ]
+    }
+   },
+   "expected": "A soft grey sheen on the cone's lower-left quarter (the point projects to about x 572, y 584 on the woofer-cone mask; its mirror ray rises at +28 degrees, so the lamp is clear of the floor). Cone p95 from about 22 (after c2) to 60-90 while the median stays at or below 20, so the cone still reads black.",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     45,
+     110
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Turn the speaker to face the camera; it is rotated 10 degrees away (front normal [-0.174,-0.985,0]), so the front measures 131 px against a 90 px side.",
+   "why": "Product placement is fixed. The front carries both drivers and the wordmark, and the oblique view foreshortens all three and the waveguide's mouth."
+  },
+  {
+   "request": "Move the speaker 0.5-0.8 m toward the back wall.",
+   "why": "Placement is fixed. The front is 1.3 m nearer the front window than the back wall is, so it gets about 1.8x the wall's window light plus the sun, which keeps the white front in PBR Neutral's shoulder (no modelling) at any exposure that leaves the room airy. A reflection-only panel adds only 4-6 levels there and would also mirror in the glossy floor."
+  },
+  {
+   "request": "Render the frame at 5000 px or more wide.",
+   "why": "Frame size and sampling are fixed. At 1350 px a 420 mm spread prints at about 80 ppi, and the wordmark and floor grain break down."
+  }
+ ],
+ "score_if_fixed": 7.5
+}

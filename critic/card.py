@@ -32,6 +32,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('shot_id'); ap.add_argument('--shot', required=True); ap.add_argument('--image')
     ap.add_argument('--card', default=str(ROOT / 'critic' / 'cards' / 'earmilk.yaml')); ap.add_argument('--out')
+    ap.add_argument('--report', help="the render's report (its engine notes), when --image is a staged copy")
     a = ap.parse_args()
     card = yaml.safe_load(Path(a.card).read_text())
     sc = card['shots'][a.shot_id]
@@ -96,7 +97,7 @@ def main():
                 L.append(f'| {n} | {v["pixels"]} | {v["box"]} | {v["lum_median"]} | {v["rgb_median"]} |')
             L.append('')
         # what the engine could not do in this render, in its own words: the critic's prescriptions meet the physics here
-        rp = Path(a.image).with_suffix('.report.json')
+        rp = Path(a.report) if a.report else Path(a.image).with_suffix('.report.json')
         if rp.exists():
             rep = json.loads(rp.read_text())
             notes = [f'- glint `{g["glint"]}` was skipped: {g["skipped"]}.' for g in rep.get('glints', []) if g.get('skipped')]

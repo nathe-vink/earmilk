@@ -67,6 +67,52 @@ def smooth_parts(bpy, parts, rules):
         me.set_sharp_from_angle(angle=math.radians(r.get('angle_deg', 20)))
 
 
+def normals_from(bpy, parts, rules, origin_mm, root):
+    """Shading normals from the true surface: a CAD surface tessellated into flat facets (a waveguide made as a ruled
+    loft through polygon rings) mirrors a light as stair-steps however its vertices are smoothed, because its long
+    thin triangles bend the interpolated normal. For each part a rule matches, every face corner within `within_mm` of
+    the rule's grid (the surface sampled finely: meridians x stations x 3 in the CAD's mm, with its unit normals into
+    the air) takes the grid's normal there, interpolated across the grid's quad; the rest keep their own. The geometry
+    stays the CAD's.
+
+        "normals_from": [{"match": "waveguide-insert", "grid": "fab/out/render/earmilk-floorstander-horn.npy",
+                          "normals": "fab/out/render/earmilk-floorstander-horn-normals.npy", "within_mm": 0.3}]
+    """
+    import numpy as np
+    from mathutils.bvhtree import BVHTree
+    for name, ob in parts.items():
+        r = next((r for r in rules if _match(name, r['match'])), None)
+        if r is None:
+            continue
+        G = np.load(Path(root, r['grid'])); NG = np.load(Path(root, r['normals']))
+        S, T = G.shape[:2]
+        V = ((G - np.array(origin_mm, dtype=float)) / 1000.0).reshape(-1, 3)
+        NV = NG.reshape(-1, 3)
+        quads = [((i % S) * T + j, ((i + 1) % S) * T + j, ((i + 1) % S) * T + j + 1, (i % S) * T + j + 1)
+                 for i in range(S) for j in range(T - 1)]
+        bvh = BVHTree.FromPolygons(V.tolist(), quads)
+        me = ob.data
+        corner = [Vector(c.vector) for c in me.corner_normals]
+        within = r.get('within_mm', 0.3) / 1000.0
+        at_vertex, changed = {}, 0
+        for li, loop in enumerate(me.loops):
+            vi = loop.vertex_index
+            if vi not in at_vertex:
+                loc, _, fi, _ = bvh.find_nearest(me.vertices[vi].co, within)
+                if loc is None:
+                    at_vertex[vi] = None
+                else:
+                    acc = Vector()
+                    for k in quads[fi]:
+                        acc += Vector(NV[k]) / ((Vector(V[k]) - loc).length + 1e-7)
+                    at_vertex[vi] = acc.normalized()
+            n = at_vertex[vi]
+            if n is not None and n.dot(corner[li]) > 0.5:
+                corner[li] = n; changed += 1
+        me.normals_split_custom_set([tuple(c) for c in corner])
+        print(f'normals: {name}: {changed} of {len(me.loops)} corners from {r["grid"]}')
+
+
 def import_model(bpy, glb, origin_mm, axes='gltf'):
     """Import the GLB once; return {part name: object} with the transforms baked into the meshes, in metres, in the
     CAD's frame shifted so origin_mm sits at (0, 0, 0). The objects are unlinked templates (not in the scene)."""
@@ -170,7 +216,7 @@ def _decal_nodes(mat, dec, img, ink_rgb, origin_mm=(0, 0, 0)):
     nt.links.new(m2.outputs['Value'], mix.inputs['Factor']); nt.links.new(outs[0], base)
 
 
-def interior_marker(templates, min_gap_mm=10.0):
+def interior_marker(templates, min_gap_mm=10.0, ignore=None):
     """Which faces of a part are inside the product, the faces a build leaves unfinished: from each face's centre, a
     ray along its normal and four tilted 30 degrees round it, against the whole assembled product; a face whose rays
     all meet the product again, the straight one further than min_gap_mm away (so a 3 mm shadow line stays painted),
@@ -178,7 +224,9 @@ def interior_marker(templates, min_gap_mm=10.0):
     run on the assembled product, before an explode or a cut opens it."""
     from mathutils.bvhtree import BVHTree
     verts, polys = [], []
-    for tpl in templates.values():
+    for pname, tpl in templates.items():
+        if ignore and _match(pname, ignore):
+            continue                                  # loose things in a cavity (a cable, a plug) do not make its walls
         M = tpl.matrix_world; base = len(verts)
         verts += [M @ v.co for v in tpl.data.vertices]
         polys += [[base + i for i in p.vertices] for p in tpl.data.polygons]
@@ -200,9 +248,9 @@ def interior_marker(templates, min_gap_mm=10.0):
                 continue
             # a wall of a cavity: the product again more than min_gap away, and all round at 30 degrees
             cavity = hit[3] > gap and all(bvh.ray_cast(o, d, 2.0)[0] is not None for d in tilted(n, 30))
-            # a face another part covers (a pocket's wall under its insert): closed even at 60 degrees, within 5 mm;
+            # a face another part covers (a pocket's wall under its insert): closed even at 60 degrees, within 12 mm;
             # a shadow line's walls fail both, its opening letting the steep rays out
-            covered = not cavity and hit[3] <= gap and all(bvh.ray_cast(o, d, 0.005)[0] is not None for d in tilted(n, 60))
+            covered = not cavity and hit[3] <= gap and all(bvh.ray_cast(o, d, 0.012)[0] is not None for d in tilted(n, 60))
             if cavity or covered:
                 p.material_index = idx; n_in += 1
         return n_in
@@ -221,7 +269,7 @@ def place(bpy, pdef, templates, shot, root):
     # the inside of the product is left unfinished in a build: when it can be seen (a cutaway, an exploded view),
     # its faces take the "interior" rules' materials (raw birch, bare resin) instead of the paint and its zones
     inner_rules = pdef.get('interior', []) if (prod.get('cutaway') or prod.get('explode')) else []
-    mark = interior_marker(templates) if inner_rules else None
+    mark = interior_marker(templates, ignore=pdef.get('interior_ignore')) if inner_rules else None
     for i, inst in enumerate(instances):
         fl = inst.get('flavour', prod.get('flavour', next(iter(pdef['flavours']))))
         if fl not in mats_by_flavour:

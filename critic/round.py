@@ -37,7 +37,8 @@ def stage(a):
             shutil.copy(m, img.with_suffix(suf))
     shotfile = src.with_suffix('.shot.json')
     card = d / f'card-{a.tag}.md'
-    subprocess.run([sys.executable, str(ROOT / 'critic' / 'card.py'), a.shot_id, '--shot', str(shotfile), '--image', str(img), '--out', str(card)], check=True)
+    subprocess.run([sys.executable, str(ROOT / 'critic' / 'card.py'), a.shot_id, '--shot', str(shotfile), '--image', str(img),
+                    '--report', str(src.with_suffix('.report.json')), '--out', str(card)], check=True)
     tool = d / 'measure.py'
     shutil.copy(ROOT / 'critic' / 'measure.py', tool)
     text = prompt_text().replace('TOOL', str(tool)).replace('IMAGE', str(img)).replace('SCRATCH', str(d / f'work-{a.tag}'))

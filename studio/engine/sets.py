@@ -63,23 +63,38 @@ def sweep(bpy, spec, mats):
     for p in me.polygons: p.use_smooth = True
     mat = M.make(bpy, 'sweep', 'sweep', {'color': spec.get('color', '#B9B5AE'), **mats.get('sweep', {})})
     ob = _obj(bpy, 'sweep', me, mat)
-    for i, f in enumerate(spec.get('flags', [])):
-        _card(bpy, f'flag{i}', f, '#050505')
-    for i, f in enumerate(spec.get('bounces', [])):
-        _card(bpy, f'bounce{i}', f, '#F2F2F2')
+    cards(bpy, spec)
     return [ob]
 
 
-def _card(bpy, name, f, color):
-    """A vertical card `size` [w, h] at `position` (its bottom centre), facing `target`; unseen by the camera."""
-    w, h = f.get('size', [1.0, 2.0])
-    p = Vector(f['position']); t = Vector(f.get('target', (0, 0, p.z + h / 2)))
-    d = Vector((t.x - p.x, t.y - p.y, 0)).normalized(); side = Vector((-d.y, d.x, 0))
-    c = [p - side * w / 2, p + side * w / 2, p + side * w / 2 + Vector((0, 0, h)), p - side * w / 2 + Vector((0, 0, h))]
-    m = M.make(bpy, name, 'satin_paint', {'color': color, 'roughness': 0.9, 'specular': 0.1})
+def _card(bpy, name, f, color, glossy=False):
+    """A card, unseen by the camera: either vertical, `size` [w, h] at `position` (its bottom centre) facing `target`,
+    or anywhere, `size_m` [w, h] centred on `center_m` with its face along `normal`. A flag (black) casts its shadow and
+    soaks up bounce light but stays out of reflections unless `glossy`; a bounce card (white) shows in them."""
+    if 'center_m' in f:
+        w, h = f.get('size_m', [1.0, 1.0])
+        ctr = Vector(f['center_m']); n = Vector(f.get('normal', (0, -1, 0))).normalized()
+        up = Vector((0, 0, 1)) if abs(n.z) < 0.99 else Vector((0, 1, 0))
+        side = up.cross(n).normalized(); up = n.cross(side).normalized()
+        c = [ctr - side * w / 2 - up * h / 2, ctr + side * w / 2 - up * h / 2, ctr + side * w / 2 + up * h / 2, ctr - side * w / 2 + up * h / 2]
+    else:
+        w, h = f.get('size', [1.0, 2.0])
+        p = Vector(f['position']); t = Vector(f.get('target', (0, 0, p.z + h / 2)))
+        d = Vector((t.x - p.x, t.y - p.y, 0)).normalized(); side = Vector((-d.y, d.x, 0))
+        c = [p - side * w / 2, p + side * w / 2, p + side * w / 2 + Vector((0, 0, h)), p - side * w / 2 + Vector((0, 0, h))]
+    m = M.make(bpy, name, 'satin_paint', {'color': f.get('color', color), 'roughness': 0.9, 'specular': 0.1})
     ob = plane(bpy, name, c, m)
     ob.visible_camera = f.get('camera', False)
+    ob.visible_glossy = f.get('glossy', glossy)
     return ob
+
+
+def cards(bpy, spec):
+    """A set's flags (black cards: shadow and negative fill) and bounces (white cards), for any kind of set."""
+    for i, f in enumerate(spec.get('flags', [])):
+        _card(bpy, f'flag{i}', f, '#050505')
+    for i, f in enumerate(spec.get('bounces', [])):
+        _card(bpy, f'bounce{i}', f, '#F2F2F2', glossy=True)
 
 
 # --- room ----------------------------------------------------------------------------------------------------------
@@ -117,6 +132,7 @@ def room(bpy, spec, mats):
         objs += _wainscot(bpy, walls, wins, wa)
     for i, p in enumerate(spec.get('props', [])):
         objs += prop(bpy, f'prop{i}-{p["kind"]}', p, mats)
+    cards(bpy, spec)
     return objs
 
 

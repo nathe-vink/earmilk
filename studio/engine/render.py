@@ -72,6 +72,8 @@ def main():
         templates = Pr.import_model(bpy, Path(ROOT, pdef['model']), pdef['origin_mm'], pdef.get('axes', 'gltf'))
         if pdef.get('smooth'):
             Pr.smooth_parts(bpy, templates, pdef['smooth'])
+        if pdef.get('normals_from'):
+            Pr.normals_from(bpy, templates, pdef['normals_from'], pdef['origin_mm'], ROOT)
         o_, p_ = Pr.place(bpy, pdef, templates, {**sh, 'product': blk}, ROOT)
         objs += o_; part_of.update(p_)
     if objs:

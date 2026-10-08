@@ -4,16 +4,24 @@
   1200
  ],
  "product": {
-  "def": "studio/products/earmilk.json",
+  "def": "studio/products/earmilk-bookshelf.json",
   "flavour": "whole",
   "instances": [
    {
     "position": [
-     0,
-     0,
-     0
+     -0.66,
+     0.0,
+     0.56
     ],
-    "rotate_z": 0
+    "rotate_z": 5
+   },
+   {
+    "position": [
+     0.66,
+     0.0,
+     0.56
+    ],
+    "rotate_z": -5
    }
   ]
  },
@@ -28,37 +36,7 @@
   "exposure": 0.6,
   "white_balance_k": 5200
  },
- "title": "The family",
- "products": [
-  {
-   "def": "studio/products/earmilk.json",
-   "flavour": "whole",
-   "instances": [
-    {
-     "position": [
-      -0.55,
-      0.0,
-      0.0
-     ],
-     "rotate_z": 10
-    }
-   ]
-  },
-  {
-   "def": "studio/products/earmilk-bookshelf.json",
-   "flavour": "two",
-   "instances": [
-    {
-     "position": [
-      0.55,
-      0.0,
-      0.56
-     ],
-     "rotate_z": -6
-    }
-   ]
-  }
- ],
+ "title": "The bookshelf pair on a sideboard",
  "set": {
   "kind": "room",
   "size": [
@@ -79,7 +57,7 @@
    "plank_contrast": 0.4
   },
   "wall": {
-   "color": "#F1EEE8"
+   "color": "#CFC6BA"
   },
   "ceiling": "#F5F3EF",
   "skirting": {
@@ -89,7 +67,7 @@
   "windows": [
    {
     "wall": "front",
-    "along": 2.08,
+    "along": 2.0,
     "sill": 0.4,
     "size": [
      1.8,
@@ -118,36 +96,29 @@
    {
     "kind": "sideboard",
     "position": [
-     0.62,
+     0,
      0.02
     ],
     "size": [
-     1.2,
+     1.7,
      0.45,
      0.56
     ],
     "color": "#8A7D6F",
-    "turntable": false
+    "tt_x": 0.0
    },
    {
-    "kind": "books",
+    "kind": "frame",
     "position": [
-     0.98,
-     0.02
+     -0.25,
+     1
     ],
-    "z": 0.56
-   },
-   {
-    "kind": "vase",
-    "position": [
-     1.05,
-     0.06
+    "z": 1.44,
+    "size": [
+     0.62,
+     0.82
     ],
-    "z": 0.645,
-    "height": 0.22,
-    "branches": 3,
-    "seed": 7,
-    "color": "#E9E3D8"
+    "art": "#8C9EAB"
    },
    {
     "kind": "curtain",
@@ -162,36 +133,18 @@
     "rotate_z": -90,
     "folds": 8
    }
-  ],
-  "flags": [
-   {
-    "center_m": [
-     0.19,
-     0.65,
-     0.78
-    ],
-    "size_m": [
-     0.46,
-     0.42
-    ],
-    "normal": [
-     0,
-     -1,
-     0
-    ]
-   }
   ]
  },
  "camera": {
   "position": [
-   0.75,
-   -3.15,
-   1.05
+   0.85,
+   -2.95,
+   1.12
   ],
   "target": [
-   0.05,
    0.0,
-   0.62
+   0.02,
+   0.84
   ],
   "lens_mm": 40,
   "level": true
@@ -199,8 +152,8 @@
  "sun": {
   "azimuth_deg": -25,
   "elevation_deg": 15,
-  "irradiance": 2.5,
-  "angle_deg": 0.55,
+  "irradiance": 1.0,
+  "angle_deg": 1.0,
   "color": "#FFEBCD"
  },
  "sky": {
@@ -210,41 +163,45 @@
   "horizon": "#E4ECF3",
   "ground": "#8A8478"
  },
- "lights": {},
+ "lights": {
+  "key": {
+   "type": "area",
+   "size_m": [
+    2.0,
+    0.4
+   ],
+   "orbit": {
+    "azimuth_deg": 0,
+    "elevation_deg": 35,
+    "distance_m": 0.6
+   },
+   "irradiance": 1.6,
+   "color": 5200
+  }
+ },
  "glints": [
   {
    "at": [
-    -0.59,
-    -0.16,
-    0.26
+    0.65,
+    -0.113,
+    0.589
    ],
    "normal": [
-    0.51,
-    -0.79,
-    0.35
+    0,
+    -1,
+    0
    ],
-   "size_m": 0.25,
-   "power_w": 3,
-   "receivers": [
-    "woofer-cone"
-   ]
-  },
-  {
-   "at": [
-    -0.4,
-    0.23,
-    0.5
-   ],
-   "normal": [
-    0.97,
-    0.24,
-    0.0
-   ],
-   "size_m": 0.8,
+   "size_m": 0.12,
    "power_w": 2,
    "receivers": [
-    "side-right",
-    "back-panel"
+    "letters-front-0",
+    "letters-front-1",
+    "letters-front-2",
+    "letters-front-3",
+    "letters-front-4",
+    "letters-front-5",
+    "letters-front-6",
+    "letters-front-7"
    ]
   }
  ]

@@ -5,9 +5,9 @@
 
 A critic predicts the levels its changes will give and writes accept tests for them; the prediction is most often
 wrong in exposure (a view transform's shoulder hides how far over a white is). This renders the shot once, small and
-scene-linear (meter.py's EXR), reads every brightness test's region (lum_median, lum_mean, lum_p5, lum_p95; a box in
+scene-linear (meter.py's EXR), reads every brightness test's region (lum_median, lum_mean, lum_p5, lum_p95, and r/g/b_median by channel; a box in
 the critic's 0.75-scale pixels, or a part, or a part within a box), and scans the exposure within --range EV (1) of
-the shot's for the value that passes the most of them; among those, one that clips none of the product's whites, then
+the shot's for the value that passes the most of them; among those, one that clips under 1 % of the product's pixels, then
 one that clears every test by a few levels (a margin of 8 is enough; more buys nothing), then the smallest change.
 A test that only a larger change would pass is not exposure's to fix (a glint that misses, a lamp too weak): it is
 left failing, for the render and the next round to show. It prints each test's value now and at that exposure, and
@@ -25,7 +25,9 @@ import shot as S  # noqa: E402
 import meter as Mt  # noqa: E402
 
 LUM_METRICS = {'lum_median': np.median, 'lum_mean': np.mean,
-               'lum_p5': lambda v: np.percentile(v, 5), 'lum_p95': lambda v: np.percentile(v, 95)}
+               'lum_p5': lambda v: np.percentile(v, 5), 'lum_p95': lambda v: np.percentile(v, 95),
+               'r_median': np.median, 'g_median': np.median, 'b_median': np.median}
+CHANNEL = {'r_median': 0, 'g_median': 1, 'b_median': 2}      # these read one channel, the rest the luminance
 
 
 def passes(v, op, target):
@@ -77,7 +79,8 @@ def main():
         if box:
             x0, y0, x1, y1 = [int(v * k) for v in box]
             bm = np.zeros_like(m); bm[y0:y1, x0:x1] = True; m &= bm
-        sel.append(lum[m] if m.any() else None)
+        src = px[:, :, CHANNEL[c['accept']['metric']]].astype(float) if c['accept']['metric'] in CHANNEL else lum
+        sel.append(src[m] if m.any() else None)
     # what a scene value shows as, through the view at a given exposure, for a whole array at once
     grid = np.exp(np.linspace(np.log(1e-4), np.log(64), 2000))
     shows = np.array([Mt.display_value(g, view) for g in grid])
@@ -100,9 +103,9 @@ def main():
                 n += 1
                 worst = min(worst, margin(val, acc['op'], acc['value']))
         clip = float((display(product, ev) >= 253).mean() * 100)
-        # the most tests passed; then no clipped whites on the product (under 0.2 % of its pixels); then a margin of
-        # up to 8 levels on every passed test; then the smallest change from the shot's own exposure
-        key = (n, -(round(clip, 1) if clip >= 0.2 else 0.0), min(round(worst, 1), 8.0) if n else 0.0, -abs(ev - exp0))
+        # the most tests passed; then no clipped whites on the product (a highlight's few pixels are allowed: under 1 %
+        # of its pixels); then a margin of up to 8 levels on every passed test; then the smallest change
+        key = (n, -(round(clip, 1) if clip >= 1.0 else 0.0), min(round(worst, 1), 8.0) if n else 0.0, -abs(ev - exp0))
         if best is None or key > best[0]:
             best = (key, ev)
     ev = best[1]
