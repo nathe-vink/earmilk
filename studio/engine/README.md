@@ -139,6 +139,21 @@ open sky in front). Nothing is rendered.
 - **The inside**: in a cutaway or an exploded view, the faces inside the product (a cavity's walls, a face another
   part covers) take the product's `interior` materials (raw birch, bare resin), found by rays from each face against
   the assembled product before it is opened; a shadow line's walls stay painted.
+- **Sections**: a cut face takes its rule's section material. A plywood panel's (a birch rule, a part thinner than
+  40 mm) shows its veneers: 1.4 mm each across its thickness, long and end grain alternating, a glue line between; a
+  driver cut through shows bare steel (the motor) and aluminium (the basket).
+- **True surfaces**: a part made by a ruled loft through polygon rings (the waveguide) takes its shading normals from
+  its analytic surface sampled finely (`normals_from`, the grid from `fab/horn_grid.py`), interpolated linearly across
+  each grid triangle; `refine` cuts its facets and sets the new corners on that surface, and `skin` lays the surface
+  itself over the facets a hair into the air, because a concave bowl mirrors its own far wall and its facets show in
+  reflections however its normals are set.
+- **Real blacks**: the products' black paint, rubber, plastic and anodising reflect 3 to 4 %, as real ones do; at
+  under 1 % no light can model a driver's basket or an amplifier's plate.
+
+The critic may also move and turn the product within its set (`product.instances.N.position`, `.rotate_z`), set how
+far an exploded part is drawn out along its own axis (`product.explode.N.offset_m`), and dress a room with the
+engine's props (`set.props.N`: rug, table, books, sideboard, vase, lamp, sofa, curtain, frame; `off` takes one out).
+The product's geometry, flavour, marks and what is cut stay fixed.
 
 ## The loop
 

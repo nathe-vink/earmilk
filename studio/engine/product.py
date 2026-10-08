@@ -112,7 +112,28 @@ def normals_from(bpy, parts, rules, origin_mm, root):
         bvh = BVHTree.FromPolygons(V.tolist(), quads)
         me = ob.data
         within = r.get('within_mm', 0.3) / 1000.0
-        if r.get('refine'):
+        if r.get('skin'):
+            # the true surface itself, as fine as the grid, a hair into the air over the CAD's facets: a concave bowl
+            # mirrors its own far wall, so its facets show in reflections however its normals are set
+            import bmesh
+            off = r.get('skin_offset_mm', 0.05) / 1000.0
+            bm = bmesh.new(); bm.from_mesh(me)
+            vs = [bm.verts.new(Vector(V[k]) + Vector(NV[k]) * off) for k in range(len(V))]
+            bm.verts.ensure_lookup_table()
+            nf = 0
+            for q in quads:
+                try:
+                    # wound so the face's normal points into the air, as the grid's normals do
+                    f = bm.faces.new([vs[k] for k in q])
+                except ValueError:
+                    continue
+                if f.normal.length > 0 and f.normal.dot(Vector(NV[q[0]])) < 0:
+                    f.normal_flip()
+                f.smooth = True; f.material_index = 0; nf += 1
+            bm.to_mesh(me); bm.free(); me.update()
+            print(f'normals: {name}: a skin of {nf} faces from {r["grid"]}, {off * 1000:g} mm over the facets')
+            # its own corners sit on the grid (the BVH below finds them within `within`); the facets beneath keep theirs
+        if r.get('refine') and not r.get('skin'):
             # normals alone cannot fix a long thin facet: the normal interpolated across it still kinks at its edges,
             # and a mirrored light's edge saw-tooths along them. Cut each facet on the surface into refine+1 a side
             # and set the new corners on the true surface (each one's nearest point on the grid)
