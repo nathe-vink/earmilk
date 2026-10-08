@@ -1,0 +1,35 @@
+[
+ {
+  "change": "tune",
+  "setting": "glints.1.power_w,glints.2.power_w",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    100,
+    150
+   ]
+  },
+  "proofs": [
+   [
+    12.0,
+    209.1
+   ],
+   [
+    24.0,
+    220.9
+   ],
+   [
+    8.0,
+    197.2
+   ],
+   [
+    2.6667,
+    117.3
+   ]
+  ],
+  "set": 2.6667,
+  "passes": true,
+  "moves_the_test": true
+ }
+]
