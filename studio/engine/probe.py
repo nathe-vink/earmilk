@@ -140,3 +140,43 @@ def reflection_map(bpy, scene, cam, objs, part_of, pattern, match, box, out_png)
             img[py - y0, px - x0] = pal[what]; counts[what] = counts.get(what, 0) + 1
     Image.fromarray(img).save(out_png)
     return {k: [counts[k], pal[k]] for k in counts}
+
+
+def shadow_map(bpy, scene, cam, objs, part_of, pattern, match, box, out_png):
+    """Every pixel of `box` on parts matching `pattern`, coloured by what blocks the ray from its surface to each area
+    lamp's centre (one band of the map per lamp, left to right): which object casts which shadow edge."""
+    import numpy as np
+    from PIL import Image
+    dg = bpy.context.evaluated_depsgraph_get()
+    W, H = scene.render.resolution_x, scene.render.resolution_y
+    M = cam.matrix_world; origin = M.translation
+    tr, br, bl, tl = [M @ v for v in cam.data.view_frame(scene=scene)]
+    targets = {o.name for o in objs if match(part_of[o.name], pattern)}
+    lamps = [o for o in scene.objects if o.type == 'LIGHT' and o.data.type == 'AREA' and o.data.energy > 0]
+    x0, y0, x1, y1 = box
+    bw = x1 - x0
+    img = np.zeros((y1 - y0, bw * max(1, len(lamps)), 3), np.uint8)
+    pal, counts = {'lit': (255, 255, 255)}, {}
+    colours = [(230, 60, 60), (60, 160, 230), (250, 200, 40), (90, 200, 90), (200, 90, 220), (240, 140, 40), (40, 40, 40)]
+    for py in range(y0, y1):
+        for px in range(x0, x1):
+            u, v = (px + 0.5) / W, (py + 0.5) / H
+            d = ((tl + (tr - tl) * u + (bl - tl) * v) - origin).normalized()
+            hit, loc, nrm, hob = _cast(scene, dg, origin, d, through_panels=True)
+            if not hit or hob.name not in targets:
+                continue
+            n = nrm if nrm.dot(d) < 0 else -nrm
+            for li, lob in enumerate(lamps):
+                to = lob.matrix_world.translation - loc
+                dist = to.length; dl = to / dist
+                if dl.dot(n) <= 0:
+                    what = 'facing away'
+                else:
+                    h2, l2, _, o2 = _cast(scene, dg, loc + n * 1e-4, dl, through_panels=True)
+                    what = 'lit' if not h2 or (l2 - loc).length >= dist else 'shadow of ' + _clean(o2.name)
+                key = f'{lob.name}: {what}'
+                if what not in pal:
+                    pal[what] = colours[(len(pal) - 1) % len(colours)]
+                img[py - y0, li * bw + px - x0] = pal[what]; counts[key] = counts.get(key, 0) + 1
+    Image.fromarray(img).save(out_png)
+    return {'lamps': [l.name for l in lamps], 'counts': counts, 'colours': {k: list(v) for k, v in pal.items()}}

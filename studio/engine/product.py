@@ -192,6 +192,10 @@ def import_model(bpy, glb, origin_mm, axes='gltf'):
         o.matrix_world = Matrix.Identity(4)
         for p in o.data.polygons:
             p.use_smooth = True
+        # a smooth-shaded facet at a grazing angle to a lamp shadows its neighbours in steps along the terminator (the
+        # waveguide's saw-tooth: the shadow map showed it on the key's and fill's terminators, not in a reflection);
+        # Cycles offsets such shadow rays to the smooth surface the normals describe
+        o.shadow_terminator_geometry_offset = 1.0
         o.data.materials.clear(); o.data.materials.append(None)   # one empty slot; each copy links its own material
         # a second product in the same shot arrives with Blender's ".001" on names it shares with the first
         parts[re.sub(r'\.\d{3,}$', '', o.name)] = o

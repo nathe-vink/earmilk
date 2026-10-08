@@ -92,7 +92,7 @@ KNOBS = [
     ('set.props.*.size', 'm [w, d] or [w, d, h]', None, 'room: a prop\'s size (a rug [w, d]; a table, sideboard or sofa [w, d, h]; a curtain or frame [w, h])'),
     ('set.props.*.color', 'hex', None, 'room: a prop\'s colour'),
     ('set.props.*.off', 'true/false', None, 'room: take the prop out of the set'),
-    ('set.flags', 'list of {center_m: [x, y, z], size_m: [w, h], normal: [x, y, z]}', None, 'black cards the camera cannot see: they cast shadows (a flag to cut sun off a wall) and soak up bounce light; out of reflections unless "glossy": true'),
+    ('set.flags', 'list of {center_m: [x, y, z], size_m: [w, h], normal: [x, y, z]}', None, 'black cards the camera cannot see: they cast shadows (a flag to cut sun off a wall) and soak up bounce light; out of reflections unless "glossy": true; with "reflect_only": true, seen only in reflections (no shadow, no bounce), "color" its shade'),
     ('set.bounces', 'list of {center_m, size_m, normal}', None, 'white cards the camera cannot see: bounce fill, and seen in reflections'),
     ('set.props.*.rotate_z', 'deg', (-180, 180), 'room: a prop\'s turn'),
     ('set.props.*.artwork', '{bands: [[hex, share], ...], ground: hex, seed: n}', None, 'frame: a colour-field painting in the print (bands top to bottom, soft-edged, canvas grain) instead of the flat art colour'),

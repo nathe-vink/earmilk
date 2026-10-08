@@ -87,6 +87,10 @@ def _card(bpy, name, f, color, glossy=False):
     ob = plane(bpy, name, c, m)
     ob.visible_camera = f.get('camera', False)
     ob.visible_glossy = f.get('glossy', glossy)
+    if f.get('reflect_only'):
+        # seen only in glossy reflections: no shadow, no bounce light, a card a lacquer mirrors instead of a lit floor
+        ob.visible_glossy = True; ob.visible_shadow = False; ob.visible_diffuse = False
+        ob.visible_transmission = False; ob.visible_volume_scatter = False
     return ob
 
 

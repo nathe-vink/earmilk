@@ -193,7 +193,11 @@ def main():
         import probe as Pb
         res = {}
         for pat in a.probe:
-            if '@' in pat:          # 'part@x0,y0,x1,y1': a per-pixel map of what that box of the part reflects
+            if '#' in pat:          # 'part#x0,y0,x1,y1': a per-pixel map of what shades that box of the part, per lamp
+                pp, bx = pat.split('#')
+                res[pat] = Pb.shadow_map(bpy, scene, cam, objs, part_of, pp, Pr._match, [int(v) for v in bx.split(',')],
+                                         str(out.with_suffix('.shadows.png')))
+            elif '@' in pat:        # 'part@x0,y0,x1,y1': a per-pixel map of what that box of the part reflects
                 pp, bx = pat.split('@')
                 res[pat] = Pb.reflection_map(bpy, scene, cam, objs, part_of, pp, Pr._match, [int(v) for v in bx.split(',')],
                                              str(out.with_suffix('.map.png')))
