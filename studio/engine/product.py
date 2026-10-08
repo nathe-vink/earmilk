@@ -127,7 +127,8 @@ def normals_from(bpy, parts, rules, origin_mm, root):
                     f = bm.faces.new([vs[k] for k in q])
                 except ValueError:
                     continue
-                if f.normal.length > 0 and f.normal.dot(Vector(NV[q[0]])) < 0:
+                f.normal_update()                          # a new face's normal is not computed until asked
+                if f.normal.dot(Vector(NV[q[0]])) < 0:
                     f.normal_flip()
                 f.smooth = True; f.material_index = 0; nf += 1
             bm.to_mesh(me); bm.free(); me.update()

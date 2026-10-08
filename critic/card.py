@@ -121,6 +121,16 @@ def main():
                 tried = ', '.join(f'{v:g} gave {r}' for v, r in tr['proofs'])
                 verdict = ('it was set to %g' % tr['set'] if tr.get('set') is not None else 'nothing was set') + \
                           ('' if tr['moves_the_test'] else '; the test did not move with this setting, so it is not the lever for it')
+                # a test that barely moves across the whole range tried, and still fails, is set by something else
+                rs = [r for _, r in tr['proofs'] if isinstance(r, (int, float))]
+                vs = [v for v, _ in tr['proofs'] if isinstance(v, (int, float)) and v > 0]
+                tv = tr['test'].get('value')
+                if rs and vs and tr['moves_the_test'] and not tr.get('passes') and isinstance(tv, (list, int, float)):
+                    lo_, hi_ = (tv if isinstance(tv, list) else (tv, tv))
+                    need = min(abs(r - lo_) if r < lo_ else abs(r - hi_) if r > hi_ else 0 for r in rs)
+                    if need > 0 and (max(rs) - min(rs)) < 0.25 * need and max(vs) / min(vs) >= 2:
+                        verdict += (f'; across a {max(vs) / min(vs):.0f}x range it moved the reading only '
+                                    f'{max(rs) - min(rs):.1f}, still {need:.1f} from the test, so something else sets it')
                 notes.append(f'- the engine tuned `{tr["setting"]}` for {tr["change"]} ({tr["test"].get("metric")} {tr["test"].get("op")} '
                              f'{tr["test"].get("value")}) by proof renders: {tried}; {verdict}.')
             if notes:
