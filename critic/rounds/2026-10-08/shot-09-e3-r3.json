@@ -1,0 +1,243 @@
+{
+ "stage1": {
+  "impression": "A clean, naturally lit living-room vignette (two milk-carton speakers flanking a turntable under a framed print, low sun on the wall), but the white carton bodies are flat, near-clipped slabs that look pasted onto the room rather than lit by it, and the pair sits small and static at the ends of a symmetric layout. Busy sun shapes at both frame edges (a hard window patch far left, a cut-off dark band at the right), a pinkish fin on the left speaker, sticker-white lettering, a CG-plain turntable and thin footing at the sideboard's front lip keep it at competent-draft level.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Both white fronts fall off visibly from gable to plinth: falloff >= 12 on [331,366,345,610] and [1134,372,1145,645] (now 6.2 and 6.3), the top no brighter than ~246, the white below the woofers at 222-234 (now 237).",
+  "The whites render neutral on both speakers: dE2000 <= 2.5 against #E5E5E5 on [228,485,342,610] and [1005,500,1140,645] (now 4.65 and 3.58; b* -4.7 and -2.9 against a wall at b* +2.7).",
+  "The speakers own the top of the tonal range: the turntable's sunlit front ([515,612,822,676] 238, level with the speakers' 237) and the sun patches (199, 202) sit clearly below the speakers' white.",
+  "Nothing is cut by the frame edge: the right speaker's sun shadow at x >= 1297 ([1305,470,1350,690] median 104 beside a 183 patch, a ~79-level step) lies wholly inside or wholly outside the frame.",
+  "The two fins match and read as the accent red: the left fin front [252,299,360,310] is a flat pink band (238/151/170, lum 171) mirroring the front window; the right fin [1018,297,1150,308] is 215/66/70 (lum 98).",
+  "The cartons' shadow side reads as white in shade: the left speaker's side [352,500,384,600] at 150-170 (now 132, warm 138/131/129) with the Nutrition Facts crisp, without lifting the right speaker's side into the sunlit wall behind it.",
+  "The plinth letters read as cast metal with a tonal sweep (p5-p95 >= 30) instead of flat white print (now p5 243-245, p95 249).",
+  "The accent red holds its spec after the relight: gable-block within dE 3 of #C62828 (now 2.52), plinth front [224,616,250,642] within dE 4 (now 2.62).",
+  "The room sits a touch behind the product in focus: painting edge [538,150,562,400] step <= 18 (now 27.0 in 1 px) while the speakers' silhouettes keep >= 55 ([205,500,235,600] now 67.9)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The low sun (azimuth -25, elevation 15) comes from behind the camera and lands square and even on both fronts (both speakers stand in its beam: their gable-shaped shadows form the wall patch's left edge at x~790 and the dark band at the right frame edge), so a flat frontal light lifts the whites deep into the PBR Neutral shoulder, where the fall they do have is crushed to a few levels.",
+   "evidence": {
+    "region": [
+     228,
+     485,
+     342,
+     610
+    ],
+    "measured": "White below the left woofer: median 237.0, p5-p95 234.9-239.2 (range 4.3), rgb 234/237/246; right [1005,500,1140,645] 237.4, range 4.1. Inverting PBR Neutral, the strip beside the woofer runs from scene ~1.5 under the gable to ~1.1 over the plinth (a ~30% fall, all above the 0.76 shoulder start), displayed as 241 -> 235. Sun patches: wall [830,460,940,590] 199, left window [70,120,110,360] 202, over 130-160 shade."
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 1,
+    "to": 0.5
+   },
+   "expected": "White below each woofer settles at ~226-232 (left from 237.0, right from 237.4), out of the shoulder, so the existing fall starts to read (strip [331,366,345,610] from 6.2 toward ~10-12 on its own); the turntable's sunlit front drops from 238 to ~230-234, under the speakers' tops; the wall patch eases from 199 to ~172-185 and the left window patch from 202 to ~175-188, still clearly sunlit over the 130-160 shade; the right-edge shadow's step against its patch falls from ~79 to ~60; the red plinth deepens slightly but stays within dE 4.5 of #C62828.",
+   "accept": {
+    "region": [
+     228,
+     485,
+     342,
+     610
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     222,
+     234
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The key, a 2 x 0.4 m strip only 0.6 m out at 35 deg straight ahead, spreads its light over the whole face, so even out of the shoulder the fall from gable to plinth would be a soft ~1.4:1 with nothing to say where the light comes from: the cartons have no light direction of their own.",
+   "evidence": {
+    "region": [
+     331,
+     366,
+     345,
+     610
+    ],
+    "measured": "8-bin profile 241.3, 240.6, 240.3, 239.4, 238.2, 237.2, 236.2, 235.1 (falloff 6.2); right speaker [1134,372,1145,645] 241.5 -> 235.2 (6.3); across the face below the woofer 236.3-237.2; gable-block median 70.8."
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 35,
+    "to": 55
+   },
+   "expected": "From above the cartons the key rakes down the fronts: the strip beside each woofer falls ~16-24 levels, from ~242 under the gable to ~220 over the plinth (right [1134,372,1145,645] likewise); roofs and waveguides take more light (gable-block median 71 -> ~75-90, within dE 4 of #C62828; tweeter domes pick up a top highlight); the sideboard top beside the plinths [400,625,505,650] lifts from 103 to ~110-120.",
+   "accept": {
+    "region": [
+     331,
+     366,
+     345,
+     610
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     30
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "The white renders blue against a warm room (left front b* -4.7, right -2.9, while the shaded wall renders b* +2.7 though its plaster is +7.1 and the turntable's white is neutral), so the #FFFFFF body reads cold and the room cooler than its materials.",
+   "evidence": {
+    "region": [
+     228,
+     485,
+     342,
+     610
+    ],
+    "measured": "rgb median 234/237/246, dE2000 4.65 against neutral #E5E5E5; right front [1005,500,1140,645] 237/237/243, dE 3.58; turntable front [515,612,822,676] 238/238/240; shaded wall [900,50,1300,300] 136/128/125 (b* +2.7) vs #CFC6BA (b* +7.1)."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 5200,
+    "to": 5700
+   },
+   "expected": "Both fronts go neutral (R, G, B within ~3, |b*| <= 2, dE to #E5E5E5 <= 2.5 on both speakers); the room warms ~2-3 b*, the shaded wall moving from +2.7 toward, not past, its plaster's +7.1 and the sun patches turning slightly more golden; red plinth and gable stay within dE 4 of #C62828.",
+   "accept": {
+    "region": [
+     228,
+     485,
+     342,
+     610
+    ],
+    "metric": "delta_e",
+    "hex": "#E5E5E5",
+    "op": "between",
+    "value": [
+     0,
+     2.5
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "camera",
+   "problem": "The room is exactly as sharp as the product (the painting's frame edge steps 27 levels inside 1 px, the speaker silhouette 68), so the print and the wall compete with the speakers and the frame reads as a render rather than a photograph.",
+   "evidence": {
+    "region": [
+     538,
+     150,
+     562,
+     400
+    ],
+    "measured": "Painting left frame edge: largest step 27.0, 10-90 width 1 px; left speaker silhouette [205,500,235,600]: step 67.9, width <= 1 px; camera.fstop at default (all sharp)."
+   },
+   "change": {
+    "setting": "camera.fstop",
+    "from": "(default)",
+    "to": 4
+   },
+   "expected": "Focused at the target (~3.1 m), the wall and print (~4.1 m) soften by ~2 px (painting edge step ~10-16, sun-patch edges slightly softer) while both speakers (2.85-3.3 m) stay within ~0.7 px: the left speaker's silhouette step stays >= 55, woofer and tweeter edges crisp.",
+   "accept": {
+    "region": [
+     538,
+     150,
+     562,
+     400
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     8,
+     18
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The right speaker's plinth letters are a flat 248, whiter than the white body, so they read as white print rather than cast metal, and the glint aimed at them only drives them further into the shoulder.",
+   "evidence": {
+    "region": [
+     1035,
+     658,
+     1110,
+     684
+    ],
+    "measured": "lum_p95 248.3; letter pixels median 248.0, p5/p95 244.5/249.0, rgb 246/248/254. The engine's proofs (0.333 W -> 247.8, 0.4 -> 248.6, 1 W -> 252.0) invert through PBR Neutral to a scene value ~0.83 + 1.95 x power: the glint is ~45% of the letters' light and the shoulder hides its effect, which is why tuning it seemed to do nothing."
+   },
+   "change": {
+    "setting": "glints.0.power_w",
+    "from": 0.3333,
+    "to": 0
+   },
+   "expected": "The right letters fall to ~210-232 (their own reflection of the room, lower if c1 takes sun out of it), reading as light metal just under the white body instead of the brightest marks in the frame, still >= 140 levels over the red plinth (lum ~60) so the wordmark stays crisp.",
+   "accept": {
+    "region": [
+     1035,
+     658,
+     1110,
+     684
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     205,
+     238
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The left speaker's letters are the same flat white print (249), pushed there by glints.1.",
+   "evidence": {
+    "region": [
+     250,
+     624,
+     308,
+     643
+    ],
+    "measured": "lum_p95 249.0; letter pixels median 247.8, p5/p95 243.0/249.0. Engine proofs (0.333 W -> 246.9, 0.4 -> 247.9, 1 W -> 252.0) invert to ~0.68 + 2.1 x power, so with no glint these letters would sit ~20 levels under the right ones; a small residual glint matches the pair."
+   },
+   "change": {
+    "setting": "glints.1.power_w",
+    "from": 0.3333,
+    "to": 0.05
+   },
+   "expected": "The left letters settle at ~212-232, within ~10 levels of the right speaker's, light metal rather than white print, still >= 140 levels over the red.",
+   "accept": {
+    "region": [
+     250,
+     624,
+     308,
+     643
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     205,
+     238
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A plinth-letter finish that holds a light-to-dark sweep (brushed or darker cast metal) so the wordmark reads as metal, not print",
+   "why": "The letters' finish is the product's (fixed). It matters: at 248 with p5 243 they read as stickers on a lacquered hi-fi product, and their flat faces span only ~2 deg of mirror directions, so a sweep is a finish matter more than a lamp; c5/c6 only stop the glints whitening them."
+  },
+  {
+   "request": "A less glossy or differently coloured fin top so the left speaker's fin stops showing a pink band",
+   "why": "The lacquer and the accent red are fixed. The band (238/151/170 vs the right fin's 215/66/70) is the front window mirrored in the left fin: its mirror ray meets the front wall near x -1.9, inside the 1.8 m window, the right fin's near x -0.3 on plain wall, and the symmetric moves that clear the left fin (e.g. +/-13 deg toe-in, or a camera shift) swing the window into the right one, so only re-staging the window fixes it."
+  }
+ ],
+ "score_if_fixed": 6.9
+}

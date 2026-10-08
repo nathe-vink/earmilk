@@ -34,7 +34,7 @@
   "bounces": 12,
   "view": "Khronos PBR Neutral",
   "exposure": 1.1,
-  "white_balance_k": 5200
+  "white_balance_k": 5700
  },
  "title": "The bookshelf pair on a sideboard",
  "set": {
@@ -165,12 +165,13 @@
    0.9
   ],
   "lens_mm": 50,
-  "level": true
+  "level": true,
+  "fstop": 4
  },
  "sun": {
   "azimuth_deg": -25,
   "elevation_deg": 15,
-  "irradiance": 1.0,
+  "irradiance": 0.5,
   "angle_deg": 1.0,
   "color": "#FFEBCD"
  },
@@ -190,7 +191,7 @@
    ],
    "orbit": {
     "azimuth_deg": 0,
-    "elevation_deg": 35,
+    "elevation_deg": 55,
     "distance_m": 0.6
    },
    "irradiance": 1.6,
@@ -210,7 +211,7 @@
     0
    ],
    "size_m": 0.12,
-   "power_w": 0.3333,
+   "power_w": 0,
    "receivers": [
     "letters-front-0",
     "letters-front-1",
@@ -235,7 +236,7 @@
     0
    ],
    "size_m": 0.12,
-   "power_w": 0.3333,
+   "power_w": 0.05,
    "receivers": [
     "letters-front-0",
     "letters-front-1",
