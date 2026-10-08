@@ -159,6 +159,19 @@ def bowl_cavity(n_th=96, n_t=24):
     return loft + ext
 
 
+def waveguide_cavity(sections=96):
+    """The waveguide's air (fab/waveguide.py, params.WAVEGUIDE): a ruled loft through its rings, throat to mouth, each a
+    polygon round the axis; the last ring lies on the roof, and a short extrusion along the slope's normal makes the cut
+    clean. Within 0.05 mm of the surface at 96 sections."""
+    from waveguide import Waveguide
+    wg = Waveguide(**WAVEGUIDE, sections=sections)
+    G, _ = wg.grid()
+    wires = [Wire.make_polygon([Vector(*map(float, G[k, i])) for k in range(G.shape[0])], close=True) for i in range(G.shape[1])]
+    loft = Solid.make_loft(wires, ruled=True)
+    ext = extrude(Face(wires[-1]), amount=30, dir=Vector(0, -DZ, DY))
+    return loft + ext
+
+
 def tweeter_pocket():
     """Placeholder pocket for a 1 in dome with a 62 mm faceplate: a counterbore for the faceplate at the throat, a bore for
     the body, and the wire hole down into the cabinet. Re-cut to the chosen tweeter's drawing."""
@@ -181,7 +194,7 @@ def gable_block():
     fin = box(0, RUN - FIN_T / 2, RIDGE_Z - 12, PLAN, RUN + FIN_T / 2, TOTAL)
     fin = fin.fillet(FIN_EDGE_R, [e for e in fin.edges() if e.center().Z > RIDGE_Z])
     g = prism + fin
-    g -= bowl_cavity()
+    g -= waveguide_cavity() if WAVEGUIDE else bowl_cavity()
     g -= tweeter_pocket()
     for (x, y) in dowel_points():
         g -= cyl_z(x, y, DOWEL_D, BODY - 1, BODY + DOWEL_DEPTH)

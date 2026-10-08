@@ -1,0 +1,221 @@
+{
+ "mid_sd_cm2": 118.0,
+ "candidates": {
+  "A": {
+   "waveguide": {
+    "mouth_width": 207.3,
+    "mouth_s": [
+     11.9,
+     137.2
+    ],
+    "depth_horizontal": 68.5,
+    "depth_down": 113.1,
+    "depth_up": 31.2,
+    "coverage_by_direction": {
+     "0": 45.0,
+     "45": 40.8,
+     "90": 35.0,
+     "135": 40.8,
+     "180": 45.0,
+     "225": 19.1,
+     "270": 6.7,
+     "315": 19.1
+    },
+    "eave_angle": 19.2
+   },
+   "mesh": {
+    "vertices": 8318,
+    "triangles": 16632,
+    "h_near": 6.5,
+    "h_far": 20.0,
+    "stub": 250.0
+   },
+   "by_f": {
+    "1250.0": {
+     "beamwidth_h": 78.98574299925053,
+     "beamwidth_up": null,
+     "beamwidth_down": 67.60044781689265,
+     "di": 4.364860534667969,
+     "vertical_peak": 70.0,
+     "axis_below_peak_db": 1.86
+    },
+    "2000.0": {
+     "beamwidth_h": 74.25791400072644,
+     "beamwidth_up": null,
+     "beamwidth_down": 74.1332049295873,
+     "di": 3.64269757270813,
+     "vertical_peak": 30.0,
+     "axis_below_peak_db": 3.96
+    },
+    "3150.0": {
+     "beamwidth_h": 43.05310763804361,
+     "beamwidth_up": 56.82572644088763,
+     "beamwidth_down": 35.79578794400806,
+     "di": 8.346234321594238,
+     "vertical_peak": 20.0,
+     "axis_below_peak_db": 1.99
+    },
+    "5000.0": {
+     "beamwidth_h": 36.95233564923868,
+     "beamwidth_up": 35.78858828744377,
+     "beamwidth_down": 29.74577902843602,
+     "di": 10.980778694152832,
+     "vertical_peak": 10.0,
+     "axis_below_peak_db": 1.14
+    },
+    "8000.0": {
+     "beamwidth_h": 33.68587701064671,
+     "beamwidth_up": 22.352292823753213,
+     "beamwidth_down": 22.903666554987854,
+     "di": 12.63313102722168,
+     "vertical_peak": 5.0,
+     "axis_below_peak_db": 0.46
+    }
+   }
+  },
+  "B": {
+   "waveguide": {
+    "mouth_width": 235.9,
+    "mouth_s": [
+     12.9,
+     171.1
+    ],
+    "depth_horizontal": 65.5,
+    "depth_down": 138.1,
+    "depth_up": 29.5,
+    "coverage_by_direction": {
+     "0": 45.0,
+     "45": 40.8,
+     "90": 35.0,
+     "135": 40.8,
+     "180": 45.0,
+     "225": 28.3,
+     "270": 18.6,
+     "315": 28.3
+    },
+    "eave_angle": 23.4
+   },
+   "mesh": {
+    "vertices": 8497,
+    "triangles": 16990,
+    "h_near": 6.5,
+    "h_far": 20.0,
+    "stub": 250.0
+   },
+   "by_f": {
+    "1250.0": {
+     "beamwidth_h": null,
+     "beamwidth_up": null,
+     "beamwidth_down": 71.27611495326748,
+     "di": 2.064796209335327,
+     "vertical_peak": 60.0,
+     "axis_below_peak_db": 4.5
+    },
+    "2000.0": {
+     "beamwidth_h": 51.92314691677749,
+     "beamwidth_up": 62.62007625841764,
+     "beamwidth_down": 26.963347921225385,
+     "di": 6.956587791442871,
+     "vertical_peak": 20.0,
+     "axis_below_peak_db": 1.49
+    },
+    "3150.0": {
+     "beamwidth_h": 42.03681047645147,
+     "beamwidth_up": 41.359009330150954,
+     "beamwidth_down": 33.77016902056484,
+     "di": 9.747557640075684,
+     "vertical_peak": 15.0,
+     "axis_below_peak_db": 0.85
+    },
+    "5000.0": {
+     "beamwidth_h": 36.66072099856537,
+     "beamwidth_up": 23.780673016424032,
+     "beamwidth_down": 28.648235819562306,
+     "di": 12.2300443649292,
+     "vertical_peak": 5.0,
+     "axis_below_peak_db": 0.12
+    },
+    "8000.0": {
+     "beamwidth_h": 35.92164471474945,
+     "beamwidth_up": 16.001369685377597,
+     "beamwidth_down": 23.333273912096182,
+     "di": 12.916664123535156,
+     "vertical_peak": 0.0,
+     "axis_below_peak_db": 0.0
+    }
+   }
+  },
+  "C": {
+   "waveguide": {
+    "mouth_width": 280.9,
+    "mouth_s": [
+     13.0,
+     193.7
+    ],
+    "depth_horizontal": 78.5,
+    "depth_down": 164.1,
+    "depth_up": 37.0,
+    "coverage_by_direction": {
+     "0": 45.0,
+     "45": 40.8,
+     "90": 35.0,
+     "135": 40.8,
+     "180": 45.0,
+     "225": 28.5,
+     "270": 19.2,
+     "315": 28.5
+    },
+    "eave_angle": 23.1
+   },
+   "mesh": {
+    "vertices": 8711,
+    "triangles": 17418,
+    "h_near": 6.5,
+    "h_far": 20.0,
+    "stub": 250.0
+   },
+   "by_f": {
+    "1250.0": {
+     "beamwidth_h": null,
+     "beamwidth_up": null,
+     "beamwidth_down": 65.25850438930058,
+     "di": 1.8148877620697021,
+     "vertical_peak": 45.0,
+     "axis_below_peak_db": 5.42
+    },
+    "2000.0": {
+     "beamwidth_h": 39.82827986065726,
+     "beamwidth_up": 49.2934416251628,
+     "beamwidth_down": 45.79516257184427,
+     "di": 8.642462730407715,
+     "vertical_peak": 15.0,
+     "axis_below_peak_db": 0.38
+    },
+    "3150.0": {
+     "beamwidth_h": 42.35547043332535,
+     "beamwidth_up": 35.33724965256167,
+     "beamwidth_down": 31.13317590631561,
+     "di": 10.734648704528809,
+     "vertical_peak": 15.0,
+     "axis_below_peak_db": 0.8
+    },
+    "5000.0": {
+     "beamwidth_h": 34.91440893718889,
+     "beamwidth_up": 17.459506750845335,
+     "beamwidth_down": 27.846023536658922,
+     "di": 12.847809791564941,
+     "vertical_peak": 0.0,
+     "axis_below_peak_db": 0.0
+    },
+    "8000.0": {
+     "beamwidth_h": 38.3891579828323,
+     "beamwidth_up": 25.48580751936048,
+     "beamwidth_down": 19.264768717300562,
+     "di": 12.651385307312012,
+     "vertical_peak": 0.0,
+     "axis_below_peak_db": 0.0
+    }
+   }
+  }
+ }
+}

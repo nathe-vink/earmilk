@@ -1,0 +1,75 @@
+# The shot cards' fixed part: what each frame is for, what it must show, and what the critic may not change.
+# critic/card.py joins this with the shot's current settings (the engine's shot file) into one card per round.
+
+product: >
+  earmilk, a floorstanding three-way loudspeaker built as a half-gallon gable-top milk carton: 390 x 390 mm plan,
+  1055 mm tall, Baltic birch under a lacquer finish in the flavour's colours (a colour coat under a clear), a plinth
+  band in the accent colour, cast metal letters "earmilk" on the plinth, a 12 in woofer and a 6.5 in mid flush on the
+  front under trim rings, a 1 in dome tweeter at the throat of a waveguide carved into the roof's front slope, and
+  on the back a printed Nutrition Facts panel, a port and the amplifier's connections.
+
+fixed:
+  - >-
+    The product's geometry and proportions (plan, heights, the 37.6 degree roof, the fin, the 6 mm rounds on the
+    corners and hips, the 3 mm shadow lines under the gable and over the plinth). They are the spec.
+  - >-
+    The tweeter's waveguide. Its depth, profile, mouth and the tweeter's place in it are set by acoustic simulation
+    (coverage, smooth off-axis response, a match to the midrange where the two cross over), not by looks. Light and
+    camera may change how it reads; its shape may not. Do not ask for the tweeter to move, the bowl to be shallower
+    or deeper, its rim to change, or a flange or grille to be added.
+  - >-
+    The drivers are real, named products, mounted flush under trim rings (the owner's decision). Their materials and
+    colours are the products' own.
+  - >-
+    The flavours' colours (sRGB): Whole body #FFFFFF, accent #C62828; 2% #FFFFFF / #1F4FCF; Skim #FFFFFF / #6FA5DC;
+    Chocolate #5E3A1F / #F1E3CC; Oat #D9BC92 / #2B2118. You may ask for a colour to be reproduced more accurately
+    (exposure, white balance, view transform), never for a different colour.
+  - >-
+    The marks: the wordmark's typeface, size and tight tracking; the Nutrition Facts panel's layout and copy; OPEN
+    OTHER SIDE on the fin's back; SHAKE WELL on the plinth's back; the light plinths' dark bronze letters.
+  - >-
+    What the shot's purpose below fixes about framing.
+
+shots:
+  shot-01:
+    title: Hero pair, sunlit living room
+    purpose: >
+      The deck's opening image and the homepage hero: a stereo pair in a real, lived-in room in low sun, read first as
+      a premium hi-fi product and second as a milk carton. Landscape, copy space on one side.
+    must_show: [both speakers whole, their fronts and drivers, the sun's light on the room and the cabinets, a floor and wall that read as real materials]
+  shot-02a:
+    title: One speaker, bright room
+    purpose: >-
+      Lifestyle page: one speaker in a bright, airy room in morning light; calm, clean, believable.
+    must_show: [the speaker whole, front and one side, the room's light, the floor contact]
+  shot-02b:
+    title: One speaker, older room at golden hour
+    purpose: >-
+      Mood page: low warm sun through a window, the carton's silhouette thrown on the wall beside it.
+    must_show: [the speaker whole, its silhouette on the wall reading as the carton, the warm light]
+  shot-03:
+    title: The waveguide, close
+    purpose: >
+      The engineering detail page: the roof's waveguide and the tweeter at its throat, close and sharp, as a designed,
+      machined part. A close-up by brief: the whole carton is not required.
+    must_show: [the waveguide's mouth and walls, the tweeter at its throat, the roof's slope and fin for context]
+  shot-04a:
+    title: The back's label, straight on
+    purpose: >-
+      The joke's page: the Nutrition Facts panel legible, straight on and level, the gable above it for context.
+    must_show: [the Facts panel legible, the back's letters, the fin with OPEN OTHER SIDE]
+  shot-04b:
+    title: The back, three-quarter
+    purpose: >-
+      The back as an object on a studio sweep: the label, the port and the amplifier's connections, with copy space.
+    must_show: [the back with its label, port and connections, one side, the floor contact]
+  shot-05:
+    title: Five flavours
+    purpose: >-
+      The range page: all five colourways in a row, raised three-quarter, as one product line.
+    must_show: [all five whole, their colours true, the same finish on each]
+  shot-06:
+    title: The pint crate
+    purpose: >-
+      The family page: six desk-size pints in a moulded dairy crate.
+    must_show: [the crate whole, the pints' roofs and fronts, the floor contact]

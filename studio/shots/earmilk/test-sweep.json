@@ -1,0 +1,105 @@
+{
+ "title": "engine test: one speaker on a sweep, three-quarter",
+ "size": [
+  1200,
+  1500
+ ],
+ "product": {
+  "def": "studio/products/earmilk.json",
+  "flavour": "whole",
+  "instances": [
+   {
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "rotate_z": -28
+   }
+  ]
+ },
+ "set": {
+  "kind": "sweep",
+  "color": "#B4B0A9",
+  "width": 8,
+  "front": 6,
+  "depth": 2.2,
+  "radius": 1.2,
+  "height": 5
+ },
+ "camera": {
+  "position": [
+   1.35,
+   -3.2,
+   1.05
+  ],
+  "target": [
+   0,
+   0,
+   0.53
+  ],
+  "lens_mm": 85,
+  "level": true
+ },
+ "sky": {
+  "kind": "gradient",
+  "strength": 0.35,
+  "zenith": "#FFFFFF",
+  "horizon": "#D9D6D0",
+  "ground": "#6A665F"
+ },
+ "lights": {
+  "key": {
+   "type": "area",
+   "size_m": [
+    1.2,
+    1.6
+   ],
+   "orbit": {
+    "azimuth_deg": -40,
+    "elevation_deg": 35,
+    "distance_m": 2.6
+   },
+   "irradiance": 3.0,
+   "color": 5600
+  },
+  "fill": {
+   "type": "area",
+   "size_m": [
+    2.0,
+    2.0
+   ],
+   "orbit": {
+    "azimuth_deg": 60,
+    "elevation_deg": 15,
+    "distance_m": 3.5
+   },
+   "irradiance": 0.8,
+   "color": 6500,
+   "specular": 0.3
+  },
+  "rim": {
+   "type": "area",
+   "size_m": [
+    0.3,
+    1.8
+   ],
+   "orbit": {
+    "azimuth_deg": 150,
+    "elevation_deg": 30,
+    "distance_m": 2.2
+   },
+   "irradiance": 2.0,
+   "color": 6000
+  }
+ },
+ "materials": {},
+ "render": {
+  "samples": 128,
+  "adaptive": 0.02,
+  "denoise": true,
+  "clamp": 10,
+  "view": "Khronos PBR Neutral",
+  "exposure": 0.0
+ }
+}

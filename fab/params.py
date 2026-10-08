@@ -41,6 +41,12 @@ BOWL = dict(mouth_w=211.0, mouth_l=118.0, mouth_s=79.0, throat=74.0,
             bulge=4.5)  # SPEC mouth and throat (74 since 2026-10-08, the owner; was 66: the faceplate seats on the throat's flat
                         # floor, a ring 6 wide); bulge as built in render/src/model.mjs: the floor sags 3, the ceiling arches 6
 
+# 2026-10-08, the owner: the tweeter's waveguide is shaped for what it does to sound, not for looks. Its wall is the
+# oblate-spheroidal profile in fab/waveguide.py, cut into the roof's front slope; fab/bem.py simulates the polar response
+# and fab/out/acoustics/waveguide/ holds the study that chose these numbers. BOWL above is the look it replaces.
+WAVEGUIDE = dict(throat_y=125.0, throat_z=903.5, r0=15.0, a0=12.0, a_h=45.0, a_up=35.0, a_down=30.0, k=1.4, lip_r=12.0)
+               # PROVISIONAL until the study ends: the throat where the owner put it; r0 the chosen tweeter's dome and surround
+
 PORT = dict(z=405.0, d=100.0, bore=92.0, flange=112.0)   # SPEC round port at z 405, 92 bore in a 112 flange (as drawn)
 POSTS = dict(w=128.0, h=64.0, z=175.0, post_d=24.0, spacing=64.0)  # SPEC terminal cup's flange, centre z 175 (2026-10-08, the owner; the plate at 150 before)
 TERMINAL_CUP = dict(w=112.0, h=48.0, r=5.0, wall=3.0, depth=21.0, flange_t=3.0, flange_r=7.0, recess=18.0)

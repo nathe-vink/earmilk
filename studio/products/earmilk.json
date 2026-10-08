@@ -1,0 +1,42 @@
+{
+ "_note": "earmilk floorstander for the engine (studio/engine). The model is written by fab/render_model.py from the fabrication CAD; part names are its labels. Colours are the spec's (critic/cards/earmilk.yaml, fixed).",
+ "model": "fab/out/render/earmilk-floorstander.glb",
+ "origin_mm": [195.0, 195.0, 0.0],
+ "flavours": {
+  "whole":     {"body": "#FFFFFF", "accent": "#C62828", "letters": "#C9C9C6", "letters_preset": "metal", "facts_ink": "#1E1A17"},
+  "two":       {"body": "#FFFFFF", "accent": "#1F4FCF", "letters": "#C9C9C6", "letters_preset": "metal", "facts_ink": "#1E1A17"},
+  "skim":      {"body": "#FFFFFF", "accent": "#6FA5DC", "letters": "#4A3A28", "letters_preset": "metal", "facts_ink": "#1E1A17"},
+  "chocolate": {"body": "#5E3A1F", "accent": "#F1E3CC", "letters": "#4A3A28", "letters_preset": "metal", "facts_ink": "#F1E3CC"},
+  "oat":       {"body": "#D9BC92", "accent": "#2B2118", "letters": "#C9C9C6", "letters_preset": "metal", "facts_ink": "#2B2118"}
+ },
+ "materials": {
+  "body":       {"preset": "paint", "color": "$body"},
+  "accent":     {"preset": "paint", "color": "$accent"},
+  "letters":    {"preset": "metal", "color": "$letters", "roughness": 0.12},
+  "trim":       {"preset": "gunmetal", "color": "#2C2C2E", "roughness": 0.34},
+  "frame":      {"preset": "satin_paint", "color": "#151515", "roughness": 0.5, "specular": 0.4},
+  "rubber":     {"preset": "rubber", "color": "#141414"},
+  "cone-alu":   {"preset": "metal", "color": "#9A9DA1", "roughness": 0.38, "anisotropic": 0.3},
+  "cone-paper": {"preset": "paper_cone", "color": "#1E1E1E"},
+  "dome":       {"preset": "dome", "color": "#1A1A1A"},
+  "black":      {"preset": "satin_paint", "color": "#101010", "roughness": 0.45, "specular": 0.4},
+  "motor":      {"preset": "satin_paint", "color": "#0C0C0C", "roughness": 0.4}
+ },
+ "assign": [
+  {"match": "front-baffle|back-panel|side-left|side-right", "material": "body"},
+  {"match": "gable-block", "material": "accent"},
+  {"match": "letters-*", "material": "letters"},
+  {"match": "*-ring", "material": "trim"},
+  {"match": "*-surround", "material": "rubber"},
+  {"match": "woofer-cone|woofer-cap", "material": "cone-alu"},
+  {"match": "mid-cone|mid-cap", "material": "cone-paper"},
+  {"match": "tweeter-dome", "material": "dome"},
+  {"match": "*-frame", "material": "frame"},
+  {"match": "*-motor", "material": "motor"},
+  {"match": "port-tube|terminal-cup", "material": "black"}
+ ],
+ "zones": [
+  {"match": "front-baffle|back-panel|side-left|side-right", "below_z_mm": 110.0, "material": "accent"}
+ ],
+ "decals": []
+}
