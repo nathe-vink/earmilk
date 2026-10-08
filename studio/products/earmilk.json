@@ -347,7 +347,8 @@
    "match": "waveguide-insert",
    "grid": "fab/out/render/earmilk-floorstander-horn.npy",
    "normals": "fab/out/render/earmilk-floorstander-horn-normals.npy",
-   "within_mm": 1.5
+   "within_mm": 1.5,
+   "refine": 2
   }
  ]
 }

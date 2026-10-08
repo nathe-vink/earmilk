@@ -353,7 +353,8 @@
    "match": "waveguide-insert",
    "grid": "fab/out-bookshelf/render/earmilk-bookshelf-horn.npy",
    "normals": "fab/out-bookshelf/render/earmilk-bookshelf-horn-normals.npy",
-   "within_mm": 1.5
+   "within_mm": 1.5,
+   "refine": 2
   }
  ]
 }
