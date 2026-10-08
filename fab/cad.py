@@ -76,8 +76,14 @@ def front_panel():
 def back_panel():
     p = outer_corners(box(0, PLAN - WALL, 0, PLAN, PLAN, BODY), PLAN)
     p -= cyl_y(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5, PLAN - WALL - 1, PLAN + 1)   # the tube's 100 OD, a push fit
-    tw, th = TERMINAL_CUTOUT
-    p -= box(RUN - tw / 2, PLAN - WALL - 1, POSTS['z'] - th / 2, RUN + tw / 2, PLAN + 1, POSTS['z'] + th / 2)
+    if AMP:
+        # the amplifier: its cutout through the back, and a rebate for its plate so the plate lies level with the finish
+        p -= box(RUN - AMP['cut_w'] / 2, PLAN - WALL - 1, AMP['z'] - AMP['cut_h'] / 2, RUN + AMP['cut_w'] / 2, PLAN + 1, AMP['z'] + AMP['cut_h'] / 2)
+        p -= rounded_rect_prism(RUN - AMP['plate_w'] / 2 - 0.5, PLAN - AMP['rebate'], AMP['z'] - AMP['plate_h'] / 2 - 0.5,
+                                RUN + AMP['plate_w'] / 2 + 0.5, PLAN + 1, AMP['z'] + AMP['plate_h'] / 2 + 0.5, AMP['plate_r'] + 0.5, axis='y')
+    else:
+        tw, th = TERMINAL_CUTOUT
+        p -= box(RUN - tw / 2, PLAN - WALL - 1, POSTS['z'] - th / 2, RUN + tw / 2, PLAN + 1, POSTS['z'] + th / 2)
     # 2026-10-07: no plate pocket. The Facts are printed on the finish, under the clear.
     p -= shadow_groove('back')
     p -= shadow_groove('back', GABLE_SHADOW_Z0)
@@ -124,6 +130,8 @@ def mid_divider():
 
 
 def wire_hole_y():
+    if WAVEGUIDE:   # behind the waveguide insert's boss, where the tweeter's wires come out
+        return INSERT['boss_back_y'] + 3.0
     return TWEETER['faceplate_y'] + TWEETER['faceplate_t'] + TWEETER['body_depth'] / 2
 
 
@@ -172,6 +180,93 @@ def waveguide_cavity(sections=96):
     return loft + ext
 
 
+def insert_outline(grow=0.0):
+    """The waveguide insert's outline on the roof as (u, s): the mouth (the waveguide's last ring, where its lip meets
+    the roof) grown by INSERT['margin'] + grow, and taken down to the eave where it would come within eave_clip of it
+    (a strip of block that thin would break off)."""
+    from waveguide import Waveguide, slope_coords
+    G, _ = Waveguide(**WAVEGUIDE, sections=192).grid()
+    pts = [slope_coords(P)[:2] for P in G[:, -1, :]]
+    cu = sum(u for u, _ in pts) / len(pts); cs = sum(s for _, s in pts) / len(pts)
+    out = []
+    n = len(pts)
+    for i, (u, s_) in enumerate(pts):
+        (u0, s0), (u1, s1) = pts[i - 1], pts[(i + 1) % n]
+        tu, ts = u1 - u0, s1 - s0; L = math.hypot(tu, ts)
+        nu, ns = ts / L, -tu / L
+        if nu * (u - cu) + ns * (s_ - cs) < 0: nu, ns = -nu, -ns
+        g = INSERT['margin'] + grow
+        uu, ss = u + g * nu, s_ + g * ns
+        out.append((uu, 0.0 if ss < INSERT['eave_clip'] else ss))
+    return out
+
+
+def _y_prism(outline, y0, y1, grow_z=0.0):
+    """A prism along y (front to back) from y0 to y1 whose section is the outline (u, s) seen from the front: each
+    point's x and its height on the roof, so the prism meets the roof exactly on the outline."""
+    pts = [Vector(RUN + u, y0, BODY + DZ * s_) for (u, s_) in outline]
+    return extrude(Face(Wire.make_polygon(pts, close=True)), amount=y1 - y0, dir=Vector(0, 1, 0))
+
+
+def gable_prism():
+    tri = Polygon((0, BODY), (PLAN, BODY), (RUN, RIDGE_Z), align=None)
+    return extrude(Plane.YZ * tri, amount=PLAN)
+
+
+def insert_fixings():
+    """Magnets and pins in the insert's back face (y = back_y), as (x, z): magnets inside the outline at 60 % of its
+    half-width, 25 % and 75 % of its height; the pins between them, clear of the tweeter's boss."""
+    out = insert_outline()
+    zs = [BODY + DZ * s_ for (_, s_) in out]; z0, z1 = min(zs), max(zs)
+    def half_width(z):
+        xs = [abs(u) for (u, s_) in out if abs(BODY + DZ * s_ - z) < 4.0]
+        return min(xs) if xs else 0.0
+    mags, pins = [], []
+    for f in (0.25, 0.75):
+        z = z0 + f * (z1 - z0); w = 0.6 * half_width(z)
+        mags += [(RUN - w, z), (RUN + w, z)]
+    zp = z0 + 0.5 * (z1 - z0) - 6; wp = 0.8 * half_width(zp)
+    pins = [(RUN - wp, zp), (RUN + wp, zp)]
+    return mags, pins
+
+
+def waveguide_insert():
+    """The insert: the roof inside its outline from the slope back to INSERT['back_y'] (to the top panel near the
+    eave), with a boss round the tweeter to boss_back_y; less the waveguide's air, a counterbore at the throat's back for
+    the tweeter's flange, a bore for its body, the magnets' and pins' holes in its back face."""
+    I, T = INSERT, TWEETER_PART
+    y0, zc = WAVEGUIDE['throat_y'], WAVEGUIDE['throat_z']
+    ins = _y_prism(insert_outline(), -5.0, I['back_y']) & gable_prism()
+    ins += cyl_y(RUN, zc, I['boss_d'], I['back_y'] - 1.0, I['boss_back_y'])
+    ins -= waveguide_cavity()
+    ins -= cyl_y(RUN, zc, T['flange_d'] + 0.4, y0 - 0.01, y0 + T['flange_t'] + 0.2)
+    ins -= cyl_y(RUN, zc, T['body_d'] + 1.0, y0, I['boss_back_y'] + 1.0)
+    mags, pins = insert_fixings()
+    for (x, z) in mags:
+        ins -= cyl_y(x, z, I['magnet_d'] + 0.2, I['back_y'] - I['magnet_t'] - 0.3, I['back_y'] + 1)
+    for (x, z) in pins:
+        ins -= cyl_y(x, z, I['pin_d'] + 0.1, I['back_y'] - I['pin_l'] / 2 - 0.5, I['back_y'] + 1)
+    return ins
+
+
+def insert_pocket():
+    """The insert's pocket in the gable block: its outline grown by INSERT['clear'] from the slope back to back_y,
+    the boss's bore, the magnets' and pins' holes in the pocket's back wall, and the wire channel from the boss's bore
+    down through the block to the top panel's hole."""
+    I = INSERT
+    zc = WAVEGUIDE['throat_z']
+    pk = _y_prism(insert_outline(I['clear']), -5.0, I['back_y'] + I['clear'])
+    pk += cyl_y(RUN, zc, I['boss_d'] + 2 * I['clear'], I['back_y'], I['boss_back_y'] + 6.0)   # 6 behind the boss for the wires
+    mags, pins = insert_fixings()
+    for (x, z) in mags:
+        pk += cyl_y(x, z, I['magnet_d'] + 0.2, I['back_y'], I['back_y'] + I['magnet_t'] + 0.3)
+    for (x, z) in pins:
+        pk += cyl_y(x, z, I['pin_d'] + 0.1, I['back_y'], I['back_y'] + I['pin_l'] / 2 + 0.5)
+    yw = I['boss_back_y'] + 3.0
+    pk += cyl_z(RUN, yw, WIRE_HOLE_D, BODY - 1, zc)
+    return pk
+
+
 def tweeter_pocket():
     """Placeholder pocket for a 1 in dome with a 62 mm faceplate: a counterbore for the faceplate at the throat, a bore for
     the body, and the wire hole down into the cabinet. Re-cut to the chosen tweeter's drawing."""
@@ -194,8 +289,12 @@ def gable_block():
     fin = box(0, RUN - FIN_T / 2, RIDGE_Z - 12, PLAN, RUN + FIN_T / 2, TOTAL)
     fin = fin.fillet(FIN_EDGE_R, [e for e in fin.edges() if e.center().Z > RIDGE_Z])
     g = prism + fin
-    g -= waveguide_cavity() if WAVEGUIDE else bowl_cavity()
-    g -= tweeter_pocket()
+    if WAVEGUIDE:
+        g -= insert_pocket()
+        g -= waveguide_cavity()
+    else:
+        g -= bowl_cavity()
+        g -= tweeter_pocket()
     for (x, y) in dowel_points():
         g -= cyl_z(x, y, DOWEL_D, BODY - 1, BODY + DOWEL_DEPTH)
     return g
@@ -243,6 +342,26 @@ def port_parts(length=None):
     return tube, collar
 
 
+# --- The amplifier's box ----------------------------------------------------------------------------------------------------
+def amp_box_extent():
+    """The amplifier box's clear inside, (y0, y1, z0, z1): AMP_BOX['depth'] in front of the back's inner face, the cutout's
+    height and a margin above and below."""
+    y1 = PLAN - WALL; y0 = y1 - AMP_BOX['depth']
+    z0 = AMP['z'] - AMP['cut_h'] / 2 - AMP_BOX['margin']; z1 = AMP['z'] + AMP['cut_h'] / 2 + AMP_BOX['margin']
+    return y0, y1, z0, z1
+
+
+def amp_box_panels():
+    """Three 18 mm panels between the sides make the amplifier's sealed box: a floor, a lid and a front. The lid has a
+    gland hole for the speaker leads (sealed round them after wiring)."""
+    y0, y1, z0, z1 = amp_box_extent()
+    floor = box(WALL, y0 - WALL, z0 - WALL, PLAN - WALL, y1, z0)
+    lid = box(WALL, y0 - WALL, z1, PLAN - WALL, y1, z1 + WALL)
+    lid -= cyl_z(PLAN - WALL - 40, y0 + 25, AMP_BOX['gland_d'], z1 - 1, z1 + WALL + 1)
+    front = box(WALL, y0 - WALL, z0, PLAN - WALL, y0, z1)
+    return {'amp-box-floor': floor, 'amp-box-lid': lid, 'amp-box-front': front}
+
+
 # --- The terminal cup on the back ------------------------------------------------------------------------------------------
 def terminal_cup():
     """2026-10-08, the owner: a recessed terminal cup in place of the flat plate. Printed (PETG or ASA) and sprayed satin black:
@@ -274,9 +393,13 @@ def build():
         'mid-shelf': mid_shelf(),
         'mid-divider': mid_divider(),
         'gable-block': gable_block(),
+        'waveguide-insert': waveguide_insert(),
         'port-tube': port_tube(),
-        'terminal-cup': terminal_cup(),
     }
+    if AMP:
+        parts.update(amp_box_panels())
+    else:
+        parts['terminal-cup'] = terminal_cup()
     return parts
 
 
@@ -288,6 +411,10 @@ def woofer_air(parts):
     air = inner - mid_ch
     for k in ('window-brace', 'mid-shelf', 'mid-divider', 'port-tube'):
         air -= parts[k]
+    if AMP:
+        # the amplifier's sealed box and everything inside it is not the woofer's air
+        y0, y1, z0, z1 = amp_box_extent()
+        air -= box(WALL, y0 - WALL, z0 - WALL, PLAN - WALL, y1, z1 + WALL)
     return air.volume, mid_ch.volume
 
 

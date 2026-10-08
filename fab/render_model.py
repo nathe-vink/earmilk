@@ -14,7 +14,8 @@ import components as C
 from build123d import Compound, Face, Polyline, Pos, Wire, export_gltf, extrude, Vector, Unit
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out', 'render')
-VISIBLE = ['front-baffle', 'back-panel', 'side-left', 'side-right', 'gable-block', 'port-tube', 'terminal-cup']
+VISIBLE = ['front-baffle', 'back-panel', 'side-left', 'side-right', 'gable-block', 'waveguide-insert', 'port-tube', 'terminal-cup']
+# AMP: the plate amplifier replaces the terminal cup (fab/components.amp_plate)
 
 
 def letters(face='front'):
@@ -44,14 +45,33 @@ def letters(face='front'):
     return out
 
 
+def rasterize_marks(dpi=300):
+    """The prints as images for the renders' decals, from the same vector files the printer and the vinyl cutter get:
+    the Facts panel (its crop marks left out) and the two stencilled marks, black on white."""
+    import re, subprocess, tempfile
+    src = os.path.join(os.path.dirname(OUT), 'marks'); dst = os.path.join(OUT, 'marks'); os.makedirs(dst, exist_ok=True)
+    jobs = {'facts': 'facts-print.svg', 'open-other-side': 'stencil-open-other-side.svg', 'shake-well': 'stencil-shake-well.svg'}
+    for name, fn in jobs.items():
+        svg = open(os.path.join(src, fn)).read()
+        svg = re.sub(r'<g id="marks">.*?</g>', '', svg, flags=re.S)          # the Facts sheet's crop marks
+        with tempfile.NamedTemporaryFile('w', suffix='.svg', delete=False) as t:
+            t.write(svg); tmp = t.name
+        subprocess.run(['rsvg-convert', '-d', str(dpi), '-p', str(dpi), '-b', 'white', '-o', os.path.join(dst, f'{name}.png'), tmp], check=True)
+        os.unlink(tmp)
+    return dst
+
+
 def build():
     t0 = time.time()
     fab = cad.build()
-    parts = {k: fab[k] for k in VISIBLE}
+    parts = {k: fab[k] for k in VISIBLE if k in fab}
+    if AMP:
+        parts.update(C.amp_plate(AMP, RUN, PLAN, AMP['z']))
     print(f'cabinet {time.time() - t0:.0f}s', flush=True)
     wo, _ = C.driver_parts('woofer', C.DRIVERS['dsa315-8'], (RUN, 0.0, WOOFER['z']), ring_d=WOOFER_REBATE['d'] - 1.6)
     mi, _ = C.driver_parts('mid', C.DRIVERS['sb17mfc35-8'], (RUN, 0.0, MID['z']), ring_d=MID_REBATE['d'] - 1.6)
-    tw, _ = C.driver_parts('tweeter', C.DRIVERS['tweeter-1in'], (RUN, WAVEGUIDE['throat_y'], WAVEGUIDE['throat_z']), flange_recess=0.0)
+    tspec = dict(C.DRIVERS['tweeter-1in'], **{k: TWEETER_PART[k] for k in ('dome_d', 'surround_w', 'flange_d', 'flange_t', 'body_d', 'body_depth')})
+    tw, _ = C.driver_parts('tweeter', tspec, (RUN, WAVEGUIDE['throat_y'], WAVEGUIDE['throat_z']), flange_recess=0.0)
     parts.update(wo); parts.update(mi); parts.update(tw)
     for i, s in enumerate(letters('front')):
         parts[f'letters-front-{i}'] = s
@@ -63,6 +83,7 @@ def build():
 
 def main():
     os.makedirs(OUT, exist_ok=True)
+    print('marks', rasterize_marks())
     parts = build()
     kids = []
     for name, solid in parts.items():

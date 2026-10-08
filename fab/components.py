@@ -40,8 +40,9 @@ def _arc(c, rad, a0, a1, n=16):
     return [(c[0] + rad * math.cos(a0 + (a1 - a0) * i / n), c[1] + rad * math.sin(a0 + (a1 - a0) * i / n)) for i in range(n + 1)]
 
 
-def cone_driver(spec):
-    """Local solids for a cone driver: (r, a) profiles revolved, the flange's front at a = 0, a growing into the box."""
+def cone_driver(spec, detail=24):
+    """Local solids for a cone driver: (r, a) profiles revolved, the flange's front at a = 0, a growing into the box.
+    `detail` is the points round the surround's roll (4 for line drawings, where every profile point draws a circle)."""
     R_eff = math.sqrt(spec['sd_cm2'] * 100 / math.pi)                # effective radius, mid-roll, mm
     sw = spec.get('surround_w', max(8.0, 0.08 * 2 * R_eff))           # PROPORTIONED roll width
     r_cone = R_eff - sw / 2; r_sur = R_eff + sw / 2
@@ -57,12 +58,13 @@ def cone_driver(spec):
                                      (spec['magnet_d'] / 2 + 3, spec['depth'] - spec['magnet_h'] - 7), (fi + 3, ft + 3), (fi, ft + 3)])
     # surround: a half roll, outer edge glued to the flange's front at r_sur, inner edge to the cone at r_cone
     c = ((r_cone + r_sur) / 2, 0.0); rr = sw / 2
-    outer = [(c[0] + rr * math.cos(th), -rh * math.sin(th)) for th in [math.pi * i / 24 for i in range(25)]]       # a < 0: forward
-    inner = [(c[0] + (rr - t) * math.cos(th), -(rh - t) * math.sin(th)) for th in [math.pi * (24 - i) / 24 for i in range(25)]]
+    nd = detail
+    outer = [(c[0] + rr * math.cos(th), -rh * math.sin(th)) for th in [math.pi * i / nd for i in range(nd + 1)]]       # a < 0: forward
+    inner = [(c[0] + (rr - t) * math.cos(th), -(rh - t) * math.sin(th)) for th in [math.pi * (nd - i) / nd for i in range(nd + 1)]]
     out['surround'] = _revolve_profile([(r_sur + 1.0, 0.0)] + outer[1:-1] + [(r_cone - 1.0, 0.0), (r_cone - 1.0, t * 0.6)] + inner[1:-1] + [(r_sur + 1.0, t * 0.6)])
     # cone: straight-sided (metal) or a slight curve (paper), from the roll's inner edge to the voice coil
     rc_in = cap_r * 1.08
-    if spec.get('cone') == 'paper':
+    if spec.get('cone') == 'paper' and detail > 6:
         prof = [(r_cone - (r_cone - rc_in) * u, cone_depth * (u ** 0.85)) for u in [i / 12 for i in range(13)]]
     else:
         prof = [(r_cone, 0.0), (rc_in, cone_depth)]
@@ -70,10 +72,11 @@ def cone_driver(spec):
     out['cone'] = _revolve_profile(prof + back)
     # dust cap: convex (forward) or inverted, seated where the cone meets the coil
     ch = spec.get('cap_h', 0.28 * cap_r)
+    nc = 12 if detail > 6 else 3
     if spec.get('cap') == 'inverted':
-        cap = [(cap_r * (1 - u), cone_depth - 2 + ch * math.sin(math.pi / 2 * u)) for u in [i / 12 for i in range(13)]]
+        cap = [(cap_r * (1 - u), cone_depth - 2 + ch * math.sin(math.pi / 2 * u)) for u in [i / nc for i in range(nc + 1)]]
     else:
-        cap = [(cap_r * (1 - u), cone_depth - 2 - ch * math.sin(math.pi / 2 * u)) for u in [i / 12 for i in range(13)]]
+        cap = [(cap_r * (1 - u), cone_depth - 2 - ch * math.sin(math.pi / 2 * u)) for u in [i / nc for i in range(nc + 1)]]
     capb = [(r, a + 1.0) for (r, a) in reversed(cap)]
     out['cap'] = _revolve_profile([(cap_r * 1.08, cone_depth)] + cap + capb)
     # motor: the magnet and its plates, behind the basket
@@ -121,11 +124,11 @@ def place(local, centre, axis='-y', recess=0.0):
     raise ValueError(axis)
 
 
-def driver_parts(role, spec, centre, axis='-y', ring_d=None, flange_recess=3.0):
+def driver_parts(role, spec, centre, axis='-y', ring_d=None, flange_recess=3.0, detail=24):
     """The labelled solids of one driver in place: the ring level with the finish at `centre`'s face, the driver's
     flange `flange_recess` behind it (under the ring)."""
     if spec['kind'] == 'cone':
-        local, info = cone_driver(spec)
+        local, info = cone_driver(spec, detail)
     else:
         local, info = dome_tweeter(spec)
     parts = {f'{role}-{k}': place(v, centre, axis, flange_recess) for k, v in local.items()}
@@ -134,3 +137,57 @@ def driver_parts(role, spec, centre, axis='-y', ring_d=None, flange_recess=3.0):
         r_in = max(info.get('r_surround', 0) + 1.0, r_out - RING['width'])
         parts[f'{role}-ring'] = place(trim_ring(r_in, r_out), centre, axis, 0.0)
     return parts, info
+
+
+# --- the amplifier's plate -----------------------------------------------------------------------------------------------
+def amp_plate(spec, centre_x, face_y, centre_z):
+    """A FusionAmp-style plate amplifier lying on its side on the back: the plate (black anodised aluminium, its outer
+    face at face_y), the module behind it through the cutout, and the connectors on the plate: a mains inlet with its
+    switch, XLR and RCA inputs, USB for the DSP, a status light. The connectors' positions are schematic until Hypex's
+    drawing is in hand (fab/research/amps.md); the plate's size, cutout and depth are the maker's.
+
+    Seen from behind, u runs across the plate to the viewer's right (-x) and v up."""
+    from build123d import Box, Cylinder, Pos, Rot, fillet, Axis, Align
+    W, H, T, R = spec['plate_w'], spec['plate_h'], spec['plate_t'], spec['plate_r']
+    def P(u, v, dy=0.0):            # plate-local (u, v) to the CAD's frame; dy out of the back (+y)
+        return (centre_x - u, face_y + dy, centre_z + v)
+    def boxy(u, v, w, h, y0, y1):   # a box w (across) x h (up), from y0 to y1 out of the face
+        b = Box(w, abs(y1 - y0), h)
+        x, y, z = P(u, v, (y0 + y1) / 2)
+        return Pos(x, y, z) * b
+    def cyl(u, v, d, y0, y1):
+        x, y, z = P(u, v, (y0 + y1) / 2)
+        return Pos(x, y, z) * Rot(90, 0, 0) * Cylinder(d / 2, abs(y1 - y0))
+    plate = boxy(0, 0, W, H, -T, 0)
+    plate = plate.fillet(R, plate.edges().filter_by(Axis.Y))
+    # connector positions, seen from behind
+    iec_u, xlr_u, rca_u, usb_u, led_u = W / 2 - 40, W / 2 - 92, W / 2 - 124, W / 2 - 146, W / 2 - 164
+    holes = [boxy(iec_u, 0, 46, 28, -T - 1, 1), cyl(xlr_u, 0, 24, -T - 1, 1), cyl(rca_u, 0, 11, -T - 1, 1),
+             boxy(usb_u, 0, 13, 12, -T - 1, 1), cyl(led_u, 0, 4, -T - 1, 1)]
+    for h in holes:
+        plate -= h
+    parts = {'amp-plate': plate}
+    # the module behind the plate (through the cutout)
+    parts['amp-module'] = boxy(0, 0, spec['cut_w'] - 8, spec['cut_h'] - 8, -T - spec['module_depth'], -T)
+    # connectors: bodies a little proud of the plate, their sockets recessed
+    iec = boxy(iec_u, 0, 48, 30, -6, 1.5) - boxy(iec_u + 7, 0, 24, 19, -4, 2)          # the inlet's socket
+    iec -= boxy(iec_u - 15, 0, 11, 18, -3, 2)                                           # the switch's opening
+    rocker = boxy(iec_u - 15, 0, 10, 16, -2, 1.2)
+    xlr = cyl(xlr_u, 0, 26, -10, 1.6) - cyl(xlr_u, 0, 19.5, -8, 2)
+    rca = cyl(rca_u, 0, 8.4, -8, 9.0) - cyl(rca_u, 0, 6.2, -6, 10)
+    rca_nut = cyl(rca_u, 0, 12.5, 0, 1.8)
+    usb = boxy(usb_u, 0, 15, 14, -9, 0.8) - boxy(usb_u, 0, 12, 11, -7, 1.5)
+    led = cyl(led_u, 0, 4.0, -2, 0.6)
+    parts['amp-connectors'] = iec + xlr + usb
+    parts['amp-switch'] = rocker
+    parts['amp-rca'] = rca + rca_nut
+    parts['amp-led'] = led
+    # screws: countersunk heads flush in the plate, five along each long edge
+    heads = None
+    for i in range(5):
+        u = -W / 2 + 10 + i * (W - 20) / 4
+        for v in (-H / 2 + 7, H / 2 - 7):
+            c = cyl(u, v, 7.0, -0.6, 0.02)
+            heads = c if heads is None else heads + c
+    parts['amp-screws'] = heads
+    return parts

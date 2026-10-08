@@ -91,11 +91,12 @@ def build_materials(bpy, pdef, flavour_name, shot_mats, tag):
     return out
 
 
-def _decal_nodes(mat, dec, img, ink_rgb):
+def _decal_nodes(mat, dec, img, ink_rgb, origin_mm=(0, 0, 0)):
     """Mix a print into a material's base colour: the image projected along the decal's normal in object space, only
     on faces facing that way and within 2 mm of its plane."""
     nt = mat.node_tree; b = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
-    c = Vector(dec['center_mm']) / 1000.0; N = Vector(dec['normal']).normalized(); U0 = Vector(dec.get('up', (0, 0, 1)))
+    # the parts' meshes are in metres with origin_mm at (0, 0, 0) (import_model), so the decal's centre moves the same way
+    c = (Vector(dec['center_mm']) - Vector(origin_mm)) / 1000.0; N = Vector(dec['normal']).normalized(); U0 = Vector(dec.get('up', (0, 0, 1)))
     R = U0.cross(N).normalized(); U = N.cross(R).normalized()      # R: the print's right as seen facing it
     w, h = [v / 1000.0 for v in dec['size_mm']]
     tc = nt.nodes.new('ShaderNodeTexCoord')
@@ -116,9 +117,12 @@ def _decal_nodes(mat, dec, img, ink_rgb):
         mask = tex.outputs['Alpha']
     else:
         # an opaque raster of dark ink on white: the ink's coverage is one minus its brightness
+        # (outside the image CLIP returns transparent black, so the coverage is also multiplied by the alpha)
         bw = nt.nodes.new('ShaderNodeRGBToBW'); nt.links.new(tex.outputs['Color'], bw.inputs['Color'])
         inv = nt.nodes.new('ShaderNodeMath'); inv.operation = 'SUBTRACT'; inv.inputs[0].default_value = 1.0
-        nt.links.new(bw.outputs['Val'], inv.inputs[1]); mask = inv.outputs['Value']
+        nt.links.new(bw.outputs['Val'], inv.inputs[1])
+        ia = nt.nodes.new('ShaderNodeMath'); ia.operation = 'MULTIPLY'
+        nt.links.new(inv.outputs['Value'], ia.inputs[0]); nt.links.new(tex.outputs['Alpha'], ia.inputs[1]); mask = ia.outputs['Value']
     # on the decal's plane only: |depth| < 2 mm and the face turned toward the decal's normal
     dep = nt.nodes.new('ShaderNodeMath'); dep.operation = 'ABSOLUTE'; nt.links.new(dot(N), dep.inputs[0])
     near = nt.nodes.new('ShaderNodeMath'); near.operation = 'LESS_THAN'; near.inputs[1].default_value = 0.002
@@ -161,7 +165,7 @@ def place(bpy, pdef, templates, shot, root):
                     images[ip] = bpy.data.images.load(ip, check_existing=True)
                     images[ip].colorspace_settings.name = 'sRGB'
                 ink = _resolve(dec.get('ink', '#000000'), pdef['flavours'][fl])
-                _decal_nodes(mats[dec['material']], dec, images[ip], M.hex_lin(ink)[:3])
+                _decal_nodes(mats[dec['material']], dec, images[ip], M.hex_lin(ink)[:3], pdef['origin_mm'])
             mats_by_flavour[fl] = mats
         mats = mats_by_flavour[fl]
         T = Matrix.Translation(Vector(inst.get('position', (0, 0, 0)))) @ Matrix.Rotation(math.radians(inst.get('rotate_z', 0)), 4, 'Z')

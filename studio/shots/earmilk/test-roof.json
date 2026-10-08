@@ -1,0 +1,7 @@
+{
+ "extends": "test-sweep.json",
+ "title": "engine test: the roof's waveguide, close",
+ "size": [1500, 1200],
+ "product": {"def": "studio/products/earmilk.json", "flavour": "whole", "instances": [{"position": [0, 0, 0], "rotate_z": -18}]},
+ "camera": {"position": [0.32, -0.95, 1.32], "target": [0.0, -0.02, 0.93], "lens_mm": 70, "level": false}
+}

@@ -1,42 +1,280 @@
 {
  "_note": "earmilk floorstander for the engine (studio/engine). The model is written by fab/render_model.py from the fabrication CAD; part names are its labels. Colours are the spec's (critic/cards/earmilk.yaml, fixed).",
  "model": "fab/out/render/earmilk-floorstander.glb",
- "origin_mm": [195.0, 195.0, 0.0],
+ "origin_mm": [
+  195.0,
+  195.0,
+  0.0
+ ],
  "flavours": {
-  "whole":     {"body": "#FFFFFF", "accent": "#C62828", "letters": "#C9C9C6", "letters_preset": "metal", "facts_ink": "#1E1A17"},
-  "two":       {"body": "#FFFFFF", "accent": "#1F4FCF", "letters": "#C9C9C6", "letters_preset": "metal", "facts_ink": "#1E1A17"},
-  "skim":      {"body": "#FFFFFF", "accent": "#6FA5DC", "letters": "#4A3A28", "letters_preset": "metal", "facts_ink": "#1E1A17"},
-  "chocolate": {"body": "#5E3A1F", "accent": "#F1E3CC", "letters": "#4A3A28", "letters_preset": "metal", "facts_ink": "#F1E3CC"},
-  "oat":       {"body": "#D9BC92", "accent": "#2B2118", "letters": "#C9C9C6", "letters_preset": "metal", "facts_ink": "#2B2118"}
+  "whole": {
+   "body": "#FFFFFF",
+   "accent": "#C62828",
+   "letters": "#C9C9C6",
+   "letters_preset": "metal",
+   "facts_ink": "#1E1A17"
+  },
+  "two": {
+   "body": "#FFFFFF",
+   "accent": "#1F4FCF",
+   "letters": "#C9C9C6",
+   "letters_preset": "metal",
+   "facts_ink": "#1E1A17"
+  },
+  "skim": {
+   "body": "#FFFFFF",
+   "accent": "#6FA5DC",
+   "letters": "#4A3A28",
+   "letters_preset": "metal",
+   "facts_ink": "#1E1A17"
+  },
+  "chocolate": {
+   "body": "#5E3A1F",
+   "accent": "#F1E3CC",
+   "letters": "#4A3A28",
+   "letters_preset": "metal",
+   "facts_ink": "#F1E3CC"
+  },
+  "oat": {
+   "body": "#D9BC92",
+   "accent": "#2B2118",
+   "letters": "#C9C9C6",
+   "letters_preset": "metal",
+   "facts_ink": "#2B2118"
+  }
  },
  "materials": {
-  "body":       {"preset": "paint", "color": "$body"},
-  "accent":     {"preset": "paint", "color": "$accent"},
-  "letters":    {"preset": "metal", "color": "$letters", "roughness": 0.12},
-  "trim":       {"preset": "gunmetal", "color": "#2C2C2E", "roughness": 0.34},
-  "frame":      {"preset": "satin_paint", "color": "#151515", "roughness": 0.5, "specular": 0.4},
-  "rubber":     {"preset": "rubber", "color": "#141414"},
-  "cone-alu":   {"preset": "metal", "color": "#9A9DA1", "roughness": 0.38, "anisotropic": 0.3},
-  "cone-paper": {"preset": "paper_cone", "color": "#1E1E1E"},
-  "dome":       {"preset": "dome", "color": "#1A1A1A"},
-  "black":      {"preset": "satin_paint", "color": "#101010", "roughness": 0.45, "specular": 0.4},
-  "motor":      {"preset": "satin_paint", "color": "#0C0C0C", "roughness": 0.4}
+  "body": {
+   "preset": "paint",
+   "color": "$body"
+  },
+  "accent": {
+   "preset": "paint",
+   "color": "$accent"
+  },
+  "letters": {
+   "preset": "metal",
+   "color": "$letters",
+   "roughness": 0.12
+  },
+  "trim": {
+   "preset": "gunmetal",
+   "color": "#2C2C2E",
+   "roughness": 0.34
+  },
+  "frame": {
+   "preset": "satin_paint",
+   "color": "#151515",
+   "roughness": 0.5,
+   "specular": 0.4
+  },
+  "rubber": {
+   "preset": "rubber",
+   "color": "#141414"
+  },
+  "cone-alu": {
+   "preset": "metal",
+   "color": "#9A9DA1",
+   "roughness": 0.38,
+   "anisotropic": 0.3
+  },
+  "cone-paper": {
+   "preset": "paper_cone",
+   "color": "#1E1E1E"
+  },
+  "dome": {
+   "preset": "dome",
+   "color": "#1A1A1A"
+  },
+  "black": {
+   "preset": "satin_paint",
+   "color": "#101010",
+   "roughness": 0.45,
+   "specular": 0.4
+  },
+  "motor": {
+   "preset": "satin_paint",
+   "color": "#0C0C0C",
+   "roughness": 0.4
+  },
+  "anodised": {
+   "preset": "metal",
+   "color": "#1C1C1E",
+   "roughness": 0.42
+  },
+  "connector": {
+   "preset": "plastic",
+   "color": "#141414",
+   "roughness": 0.35,
+   "specular": 0.5
+  },
+  "nickel": {
+   "preset": "metal",
+   "color": "#B9BABB",
+   "roughness": 0.22
+  },
+  "gold": {
+   "preset": "metal",
+   "color": "#D9B46A",
+   "roughness": 0.2
+  },
+  "led": {
+   "preset": "emit",
+   "color": "#7FD7FF",
+   "strength": 3.0
+  }
  },
  "assign": [
-  {"match": "front-baffle|back-panel|side-left|side-right", "material": "body"},
-  {"match": "gable-block", "material": "accent"},
-  {"match": "letters-*", "material": "letters"},
-  {"match": "*-ring", "material": "trim"},
-  {"match": "*-surround", "material": "rubber"},
-  {"match": "woofer-cone|woofer-cap", "material": "cone-alu"},
-  {"match": "mid-cone|mid-cap", "material": "cone-paper"},
-  {"match": "tweeter-dome", "material": "dome"},
-  {"match": "*-frame", "material": "frame"},
-  {"match": "*-motor", "material": "motor"},
-  {"match": "port-tube|terminal-cup", "material": "black"}
+  {
+   "match": "front-baffle|back-panel|side-left|side-right",
+   "material": "body"
+  },
+  {
+   "match": "gable-block|waveguide-insert",
+   "material": "accent"
+  },
+  {
+   "match": "letters-*",
+   "material": "letters"
+  },
+  {
+   "match": "*-ring",
+   "material": "trim"
+  },
+  {
+   "match": "*-surround",
+   "material": "rubber"
+  },
+  {
+   "match": "woofer-cone|woofer-cap",
+   "material": "cone-alu"
+  },
+  {
+   "match": "mid-cone|mid-cap",
+   "material": "cone-paper"
+  },
+  {
+   "match": "tweeter-dome",
+   "material": "dome"
+  },
+  {
+   "match": "*-frame",
+   "material": "frame"
+  },
+  {
+   "match": "*-motor",
+   "material": "motor"
+  },
+  {
+   "match": "port-tube|terminal-cup",
+   "material": "black"
+  },
+  {
+   "match": "amp-plate|amp-module",
+   "material": "anodised"
+  },
+  {
+   "match": "amp-connectors|amp-switch",
+   "material": "connector"
+  },
+  {
+   "match": "amp-screws",
+   "material": "nickel"
+  },
+  {
+   "match": "amp-rca",
+   "material": "gold"
+  },
+  {
+   "match": "amp-led",
+   "material": "led"
+  }
  ],
  "zones": [
-  {"match": "front-baffle|back-panel|side-left|side-right", "below_z_mm": 110.0, "material": "accent"}
+  {
+   "match": "front-baffle|back-panel|side-left|side-right",
+   "below_z_mm": 110.0,
+   "material": "accent"
+  }
  ],
- "decals": []
+ "decals": [
+  {
+   "name": "facts",
+   "image": "fab/out/render/marks/facts.png",
+   "center_mm": [
+    195.0,
+    390.0,
+    640.0
+   ],
+   "normal": [
+    0,
+    1,
+    0
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "size_mm": [
+    296.0,
+    290.0
+   ],
+   "ink": "$facts_ink",
+   "mode": "ink",
+   "material": "body"
+  },
+  {
+   "name": "open-other-side",
+   "image": "fab/out/render/marks/open-other-side.png",
+   "center_mm": [
+    195.0,
+    199.0,
+    1031.0
+   ],
+   "normal": [
+    0,
+    1,
+    0
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "size_mm": [
+    315.4,
+    27.17
+   ],
+   "ink": "$body",
+   "mode": "ink",
+   "material": "accent"
+  },
+  {
+   "name": "shake-well",
+   "image": "fab/out/render/marks/shake-well.png",
+   "center_mm": [
+    195.0,
+    390.0,
+    55.0
+   ],
+   "normal": [
+    0,
+    1,
+    0
+   ],
+   "up": [
+    0,
+    0,
+    1
+   ],
+   "size_mm": [
+    187.01,
+    26.46
+   ],
+   "ink": "$body",
+   "mode": "ink",
+   "material": "accent"
+  }
+ ]
 }

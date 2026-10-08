@@ -34,7 +34,7 @@ FIN_EDGE_R = 3.0        # SPEC 2026-10-08: the fin's edges 3 mm (1.5 on 2026-10-
 WOOFER = dict(z=320.0, frame=310.0)   # SPEC centre height and frame diameter (as drawn); 2026-10-08, the owner: z 320 (was 290)
 MID = dict(z=690.0, frame=170.0)      # SPEC
 
-TWEETER = dict(faceplate_y=125.0, z=903.5, faceplate=62.0, faceplate_t=6.0, apex_forward=8.0,
+TWEETER = dict(faceplate_y=176.0, z=935.0, faceplate=62.0, faceplate_t=6.0, apex_forward=8.0,
                body_d=43.0, body_depth=30.0)  # SPEC faceplate <= 62 at y = 125 (2026-10-08, the owner; was 170). Body: PLACEHOLDER sized for the shortlisted
                # Scan-Speak Illuminator (43 mm cutout behind a 62 mm faceplate), which leaves a 9 mm shoulder for its screws.
 BOWL = dict(mouth_w=211.0, mouth_l=118.0, mouth_s=79.0, throat=74.0,
@@ -44,8 +44,19 @@ BOWL = dict(mouth_w=211.0, mouth_l=118.0, mouth_s=79.0, throat=74.0,
 # 2026-10-08, the owner: the tweeter's waveguide is shaped for what it does to sound, not for looks. Its wall is the
 # oblate-spheroidal profile in fab/waveguide.py, cut into the roof's front slope; fab/bem.py simulates the polar response
 # and fab/out/acoustics/waveguide/ holds the study that chose these numbers. BOWL above is the look it replaces.
-WAVEGUIDE = dict(throat_y=125.0, throat_z=903.5, r0=15.0, a0=12.0, a_h=45.0, a_up=35.0, a_down=30.0, k=1.4, lip_r=12.0)
-               # PROVISIONAL until the study ends: the throat where the owner put it; r0 the chosen tweeter's dome and surround
+WAVEGUIDE = dict(throat_y=176.0, throat_z=935.0, r0=15.0, a0=12.0, a_h=45.0, a_up=35.0, a_down=30.0, k=1.4, lip_r=12.0)
+               # 2026-10-08, the study (fab/out/acoustics/waveguide/study.md): the throat 176 behind the front face and 935 up
+               # holds about +-40 degrees horizontally from 2 to 8 kHz with the listening axis within 0.8 dB of the loudest
+               # direction; the owner's 125 / 903.5 beamed 30 degrees up at 2 kHz, the axis 4 dB down. r0: the tweeter's
+               # dome and surround (PLACEHOLDER 30 mm until the tweeter is bought)
+# The waveguide is a separate insert in a pocket in the roof. The tweeter screws to its back (rear mount, its flange in
+# a counterbore behind the throat); the insert slides out forward, level, like a drawer, with the tweeter on it, and its
+# wires unplug at a connector. Magnets in its back hold it; two pins locate it. PROPOSAL 2026-10-08.
+INSERT = dict(margin=2.0, eave_clip=25.0, back_y=200.0, boss_d=52.0, boss_back_y=226.0, clear=0.3,
+              magnet_d=12.0, magnet_t=4.0, pin_d=6.0, pin_l=10.0)
+# The tweeter as the mount sees it. PLACEHOLDER until the tweeter is chosen (fab/research): a 1 in dome whose dome and
+# surround fill the 30 mm throat, on a 50 mm round flange 4 thick, its body 43 across and 30 deep behind the flange.
+TWEETER_PART = dict(dome_d=26.0, surround_w=2.0, flange_d=50.0, flange_t=4.0, body_d=43.0, body_depth=30.0, screws=3, bolt_circle=42.0)
 
 PORT = dict(z=405.0, d=100.0, bore=92.0, flange=112.0)   # SPEC round port at z 405, 92 bore in a 112 flange (as drawn)
 POSTS = dict(w=128.0, h=64.0, z=175.0, post_d=24.0, spacing=64.0)  # SPEC terminal cup's flange, centre z 175 (2026-10-08, the owner; the plate at 150 before)
@@ -90,6 +101,13 @@ DOWEL_D, DOWEL_DEPTH = 10.0, 20.0  # PROPOSAL four 10 mm dowels register the blo
 WOOFER_CUTOUT = 272.0     # PLACEHOLDER the shortlisted Dayton DSA315-8 / DS315-8 (fab/drivers.json); re-cut for another driver
 MID_CUTOUT = 146.0        # PLACEHOLDER the shortlisted SB Acoustics SB17MFC35-8; the Satori MR16P-8 wants 140.3
 CLEAR = 1.0               # PLACEHOLDER radial clearance for the tweeter pocket
+# 2026-10-08: active. A Hypex FusionAmp FA253 per speaker (fab/research/amps.md): 250 + 250 + 100 W into 4 ohm, the DSP
+# crossover and EQ on board, mains in on the plate. Its 360 x 135 plate lies on its side across the back's foot, flush in a
+# 3 mm rebate like the drivers' rings, centred at z 185 so it clears the shadow line at 113 (the research put it at 175).
+# FusionAmps are not airtight, so the module sits in its own sealed box behind the plate, the cabinet's sides its ends.
+AMP = dict(model='Hypex FusionAmp FA253', plate_w=360.0, plate_h=135.0, plate_t=3.0, plate_r=4.0, module_depth=55.0,
+           cut_w=336.0, cut_h=111.0, z=185.0, rebate=3.0)   # PLACEHOLDER outline radius and screw pattern: Hypex's 2D drawing
+AMP_BOX = dict(depth=90.0, margin=12.0, gland_d=20.0)       # clear depth in front of the back's inner face; space above and below the cutout
 TERMINAL_CUTOUT = (113.0, 49.0)  # DERIVED the terminal cup's body plus 0.5 a side, through the back (was 96 x 36 behind a flat plate)
 # 2026-10-08, the owner: the drivers flush. Each frame sits in a rebate as deep as its flange and the printed trim ring over it, so
 # the ring's face is level with the finish, with a 0.8 reveal round it.

@@ -1,0 +1,6 @@
+{
+ "extends": "test-sweep.json",
+ "title": "engine test: the back, three-quarter",
+ "product": {"def": "studio/products/earmilk.json", "flavour": "whole", "instances": [{"position": [0, 0, 0], "rotate_z": 205}]},
+ "camera": {"position": [1.1, -2.9, 0.75], "target": [0, 0, 0.5], "lens_mm": 85, "level": true}
+}

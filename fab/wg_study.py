@@ -82,13 +82,14 @@ def main():
     mids = [mid_piston(f, sd) for f in ff]
     ax = axs[0, 0]; ax.plot(ff, [90 if b is None else b for b, _ in mids], 'k--', lw=1, label='mid (piston)')
     ax2 = axs[0, 1]; ax2.plot(ff, [d for _, d in mids], 'k--', lw=1, label='mid (piston)')
-    for n, c in cands.items():
-        fs = sorted(c['rows']); rows = [c['rows'][f] for f in fs]
-        ax.plot(fs, [90 if r['beamwidth_h'] is None else r['beamwidth_h'] for r in rows], 'o-', label=n)
-        ax2.plot(fs, [r['di'] for r in rows], 'o-', label=n)
-        axs[1, 0].plot(fs, [90 if r['beamwidth_up'] is None else r['beamwidth_up'] for r in rows], 'o-', label=f'{n} up')
-        axs[1, 0].plot(fs, [-(90 if r['beamwidth_down'] is None else r['beamwidth_down']) for r in rows], 'o--', label=f'{n} down')
-        axs[1, 1].plot(fs, [r['vertical_peak'] for r in rows], 'o-', label=n)
+    colours = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    for i, (n, c) in enumerate(cands.items()):
+        fs = sorted(c['rows']); rows = [c['rows'][f] for f in fs]; col = colours[i % len(colours)]
+        ax.plot(fs, [90 if r['beamwidth_h'] is None else r['beamwidth_h'] for r in rows], 'o-', color=col, label=n)
+        ax2.plot(fs, [r['di'] for r in rows], 'o-', color=col, label=n)
+        axs[1, 0].plot(fs, [90 if r['beamwidth_up'] is None else r['beamwidth_up'] for r in rows], 'o-', color=col, label=f'{n} up')
+        axs[1, 0].plot(fs, [-(90 if r['beamwidth_down'] is None else r['beamwidth_down']) for r in rows], 'o--', color=col, label=f'{n} down')
+        axs[1, 1].plot(fs, [r['vertical_peak'] for r in rows], 'o-', color=col, label=n)
     for a_, t in ((ax, 'horizontal -6 dB half-angle (deg)'), (ax2, 'directivity index (dB)'),
                   (axs[1, 0], 'vertical -6 dB half-angles, up + / down - (deg)'), (axs[1, 1], 'loudest vertical direction (deg, + up)')):
         a_.set_xscale('log'); a_.set_title(t, fontsize=10); a_.grid(True, which='both', alpha=0.3); a_.legend(fontsize=7)
