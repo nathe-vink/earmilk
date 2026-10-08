@@ -1,0 +1,349 @@
+{
+ "stage1": {
+  "impression": "A correctly built line-up of five carton speakers on a mid-grey sweep, but lit like a default studio: one broad soft source, fronts and sides close in value, weak contact shadows. The grey set dulls the whites and the saturated roofs, and the group sits in a lot of empty grey, so it reads as a competent catalogue draft rather than a hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Every colourway's key-lit body and plinth within \u0394E00 3 of spec and roofs within 4 (now Oat body 8.8, Oat plinth 5.6, red plinth 5.3, blue plinth 4.8, Chocolate body 4.5, Chocolate cream roof 4.5).",
+  "Neutral whites and greys: lit white fronts with |a*| and |b*| <= 1 (now Skim front +2.7/-2.3), white sides with chroma <= 1.5 (now 2% side +1.6/-4.2), backdrop neutral (now +1.9/-1.8).",
+  "The lacquer reads the same on all five: each roof front slope carries a graded reflection (>= 8 levels eave to ridge on the dark Oat roof, >= 3 on the mid roofs; now -1 to +2) and the dark fronts show a sheen.",
+  "White sides >= 165 and within 25 levels of each other, with no neighbour shadow across their back third (now 159/153/125, and the Skim side runs 134 -> 81 front to back); the Chocolate side reads brown (now rgb 46/21/6, L* 10.5).",
+  "Cast-metal wordmarks on the red, blue and Oat plinths at >= 135 luma (now 92/98/91 on plinths of 53/63/18).",
+  "The five read at one scale and angle: the Whole's side/front pixel ratio within 1.5x of the Oat's (now 1.22 vs 0.43; heights 364 vs 418 px). That needs a longer lens from further back on the same line, about 70 mm from [1.7, -8.7, 3.15]. No luminance test can verify it, so it is not prescribed below.",
+  "Bases stay planted once the fill is raised: the floor along each front edge >= 15 levels under the floor 40 px out (now 5-10), and the key's cast shadows >= 25 levels under the open floor.",
+  "Woofer cones read as aluminium over most of the cone: <= 20% of woofer-cone pixels at L <= 3 (now 33-48%); see out_of_scope."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The fill is too weak for a white product (0.8 W/m2 against a 2.6 key), so the white sides read mid-grey and differ from carton to carton, the Chocolate side drops to near-black, and the darker colourways at the right end get less light than the whites.",
+   "evidence": {
+    "region": [
+     566,
+     245,
+     631,
+     470
+    ],
+    "measured": "2% side (side-right) lum_median 152.6, rgb 152/152/160; Whole side 158.9 and Skim side 124.9, against fronts at 230.5-232.4, so the sides sit 1.2-1.9 stops under; Chocolate side rgb 46/21/6 (L* 10.5) against its 83/44/14 front; Oat side 99.4; Oat body luma 161 against a spec of 191."
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": 0.8,
+    "to": 1.8
+   },
+   "expected": "2% side 153 -> ~182 and Whole side 159 -> ~188, still 45-55 levels under their ~236 fronts; Skim side 125 -> ~150 (its back third stays in the Chocolate carton's shadow until c5); Chocolate side -> ~62/34/11; Oat side -> ~125. The fill sits right of the row, so it adds ~10% to the Oat front and ~2% to the Whole front, which evens the light on the five fronts. The key's cast shadow right of the Oat (floor ~50 at x 1270-1300, y 600) lifts to ~60-65 and must stay at least 25 levels under the open floor.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      566,
+      245,
+      631,
+      470
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     172,
+     196
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The key is a 5600 K blackbody, which sits below the daylight locus that the 5800 K white balance renders neutral, so every key-lit white and grey comes out lilac.",
+   "evidence": {
+    "region": [
+     663,
+     263,
+     771,
+     298
+    ],
+    "measured": "Skim front above the mid: rgb 236/231/237, Lab 92.2/+2.7/-2.3, \u0394E00 4.33 against neutral #ECECEC; backdrop [675,0,825,100] 124/121/125 (a* +1.9, b* -1.8); Chocolate cream roof a* +3.5 against +1.0 in spec. A daylight-locus white balance with blackbody lamps reproduces these casts exactly, and the studio's sibling frames lit by a hex #FFFFFF key read a* +0.6 instead of +2.4."
+   },
+   "change": {
+    "setting": "lights.key.color",
+    "from": 5600,
+    "to": "#FFF3E1"
+   },
+   "expected": "#FFF3E1 is a slightly warm daylight white with no magenta. Key-lit whites turn neutral to faintly warm: Skim front ~235/234/232 (a* ~0, b* ~+1 once c6 is in; a* ~+1, b* ~-1 before it), \u0394E00 against #ECECEC 4.3 -> 1.0-1.6; backdrop 124/121/125 -> ~123/123/123; Chocolate cream roof a* +3.5 -> ~+1.3.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      663,
+      263,
+      771,
+      298
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#ECECEC",
+    "op": "<=",
+    "value": 1.8
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The lacquered roofs have nothing graded to mirror: their front slopes see plain sky dome 47-72 degrees up to the left. So every front slope is one flat value from eave to ridge, the five roofs read as matte card, and the near-black Oat roof shows no form.",
+   "evidence": {
+    "region": [
+     1218,
+     236,
+     1233,
+     300
+    ],
+    "measured": "Oat front slope (gable-block) down the slope: 20.1, 21.0, 21.1, 21.1, 21.3, 21.3, 21.3, 21.3 (falloff -1.2); 2% slope [545,205,558,262] 76.3 -> 77.0; red slope [355,208,362,248] 68.4 -> 70.4; Skim 153 -> 154; Chocolate cream 217 -> 219."
+   },
+   "change": {
+    "setting": "lights.roof_sheen",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      4.6,
+      0.7
+     ],
+     "position": [
+      -0.91,
+      0.23,
+      2.43
+     ],
+     "target": [
+      -0.81,
+      0.97,
+      1.77
+     ],
+     "strength": 0.6,
+     "color": "#FFF7EA",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       2.28,
+       2.58
+      ],
+      "values": [
+       0.1,
+       1.0
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "Ray-traced from this camera, all five front slopes mirror this tilted strip at the same heights (eaves at z ~2.30, ridges at z ~2.56), so each roof gets the same graded reflection: Oat slope ~24 at the eave to ~40 at the ridge (falloff ~15), red +10 levels toward the ridge, 2% and Skim +3-5, cream +1-2. The waveguide rims and bowls pick up the ramp. Fronts, sides and backdrop are unchanged (reflection-only, camera-invisible).",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      1218,
+      236,
+      1233,
+      300
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     8,
+     26
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The cast-metal wordmarks and the lacquered fronts mirror only the mid-grey floor in front-left of each carton. The letters on the red, blue and Oat plinths read as dull grey print, and the dark faces lose the clear-coat veil that PBR Neutral's toe subtracts, so they render darker and more saturated than spec.",
+   "evidence": {
+    "region": [
+     292,
+     486,
+     342,
+     514
+    ],
+    "measured": "Letters on the red plinth luma 91.6, rgb 111/86/88 (pink from the red-tinted floor they mirror) on a 53.3 plinth; blue-plinth letters 98.0 on 62.9; Oat letters 91.1 on 18.1. Chocolate front [875,280,995,530] 83/44/14 against 94/58/31 (\u0394E00 4.46, blue channel 14 against 31); Oat plinth 29/16/7 against 43/33/24 (\u0394E00 5.6). Inverting the view transform leaves a veil of ~0.015 on these faces against the 0.04 the toe removes."
+   },
+   "change": {
+    "setting": "lights.floor_card",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      7.1,
+      3.4
+     ],
+     "position": [
+      -2.05,
+      -1.65,
+      0.1
+     ],
+     "target": [
+      -2.05,
+      -1.6,
+      1.1
+     ],
+     "strength": 0.55,
+     "color": "#FFF7EA",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -3.35,
+       0.05
+      ],
+      "values": [
+       1.0,
+       0.6
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "Traced coverage: every point the fronts (z 0.03-0.86) and the plinth letters mirror lands on the card. Letters on the red, blue and Oat plinths 91-98 -> ~150 and read as cast metal; the fronts take a soft sheen that rises toward the top (~+0.02 linear); Chocolate front -> ~90/55/33 (\u0394E00 ~2); Oat plinth -> ~38/28/21. The dark bronze letters on the Skim and Chocolate plinths rise to ~60 but stay dark against 129/190. Floor and backdrop are unchanged.",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      292,
+      486,
+      342,
+      514
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     135,
+     175
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "At 55 degrees the fill rakes along the row, so each carton's right-hand neighbour blocks it from the back of its side, and the white sides darken toward the back. It is worst on the Skim, beside the dark Chocolate.",
+   "evidence": {
+    "region": [
+     776,
+     258,
+     833,
+     490
+    ],
+    "measured": "Skim side, front edge to back edge: 134.1, 132.1, 130.1, 126.8, 119.1, 107.9, 94.1, 81.2 (falloff 52.9); Whole 170 -> 143, 2% 164 -> 132; the Oat, with no neighbour, is flat at 101 -> 98. Traced with the cartons as occluders: the fill reaching the back third of the Whole and 2% sides is 0% of what it delivers at its target, and 9% on the Skim."
+   },
+   "change": {
+    "setting": "lights.fill.orbit.azimuth_deg",
+    "from": 55,
+    "to": 35
+   },
+   "expected": "The fill clears the neighbours (traced, back third of the sides: Whole 0 -> ~23%, 2% 0 -> ~38%, Skim 9 -> ~53% of what it delivers at its target). The Skim side runs ~160 at its front edge to ~130 at the back (falloff ~30), and the Whole and 2% sides lose their dark back edge. The fronts take more of the fill (Whole +~7%, Oat +~14%), which also lifts the right end of the row. The Oat side, which the fill used to rake, settles at ~110, and the 2% side stays inside c1's range.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      776,
+      258,
+      833,
+      490
+     ]
+    },
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     10,
+     36
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The fill is a 6300 K blackbody, magenta and blue against the 5800 K daylight white point. It is the main lamp on the white sides, which read lilac-blue, and c1 makes it stronger.",
+   "evidence": {
+    "region": [
+     566,
+     245,
+     631,
+     470
+    ],
+    "measured": "2% side rgb 152/152/160, Lab 63.1/+1.6/-4.2; Whole side 160/158/165 (+2.1/-3.4)."
+   },
+   "change": {
+    "setting": "lights.fill.color",
+    "from": 6300,
+    "to": "#FFF7EA"
+   },
+   "expected": "#FFF7EA is the sRGB of the 5800 K daylight white, so the fill renders neutral: 2% side -> ~184/184/185 (a* ~0, b* ~-1) at the lightness c1 sets, and the fronts lose the fill's +0.8 a*.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      566,
+      245,
+      631,
+      470
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#B8B8B8",
+    "op": "<=",
+    "value": 3.4
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "post",
+   "problem": "The Oat body renders 30 levels under its spec, because the paint's 0.85 albedo and the right end's slightly lower light put it below #D9BC92 at this exposure. The whites, compressed in the view transform's shoulder at 230-233, have headroom.",
+   "evidence": {
+    "region": [
+     1102,
+     296,
+     1234,
+     550
+    ],
+    "measured": "Oat body luma 161.1, rgb 188/157/123 (L* 66.7) against #D9BC92 = 217/188/146 (luma 191, L* 77.8), \u0394E00 8.84; red plinth 179/19/23 (\u0394E00 5.3); blue plinth 11/66/185 (\u0394E00 4.8); white fronts 230.5-232.4, nothing clipped."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": -0.7,
+    "to": -0.5
+   },
+   "expected": "With c1, c4 and c5 in, the Oat body should already reach ~181 (rgb ~209/176/139); this change only tops it up into range. Oat body luma 176-191 (\u0394E00 <= 3.5), red and blue plinths within ~3 of spec, white fronts ~238-241 with nothing clipped (PBR Neutral shoulder), roofs at most ~0.2 EV brighter (red roof \u0394E00 ~4). If the Oat body is already in range, leave exposure where it is.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      1102,
+      296,
+      1234,
+      550
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     176,
+     191
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A satin (rougher) anodised finish on the 12 in woofer cones, so their sheen spreads across the whole cone.",
+   "why": "33-48% of each woofer cone's pixels and 48-50% of each cap's sit at L <= 3: the upper half of the concave cone mirrors the cone's own interior, which no lamp can light. The cone's finish is the named driver's own material, which the card fixes."
+  }
+ ],
+ "score_if_fixed": 7.5
+}

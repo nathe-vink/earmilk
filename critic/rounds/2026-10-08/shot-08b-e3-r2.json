@@ -1,0 +1,331 @@
+{
+ "stage1": {
+  "impression": "A cutaway of a house-shaped wooden enclosure with a glossy red horn running from the chimney down the right roof slope, set on a flat warm-grey void and cropped through the lower rooms. It reads as a clean CAD section rather than a shippable hero: the peach faces are evenly lit with no direction or falloff, the horn's highlights are harsh, with a sawtooth glitch along a crease and streaky red noise in a pocket, the interior walls are blotchy, and nothing grounds the object or gives the frame depth.",
+  "score": 4.5
+ },
+ "blocking_9": [
+  "The product is lit from one direction, not flooded from the front: the insert's grey section shows at least 8 levels of falloff across [690,590,1000,640] (now 1.0), and no birch cap is pinned in the tone curve's shoulder (cap R at most 244; now 249 everywhere, lum 218.3 +/-0.5 in every profile)",
+  "The inside of the box recedes behind the roof: the compartments' back wall (side-right) sits at 95-165 (now 197, getting brighter toward the bottom edge, 188 to 209) and the cable's run into the box still reads; the bay's back wall is clearly darker than the cut face (now 197 against 218)",
+  "The waveguide bowl shows one soft graduated highlight on deep red: no hard-edged plateau (now lum 135, dE 18 against #C62828 on [880,465,1080,500]) and no white band or sawtooth glints (now lum 196 on [930,555,1080,592])",
+  "The accent red is within dE2000 3.5 of #C62828 where it is lit diffusely (now 7.4 on the far wall at 231/26/21 and 5.2 on the lower wall at 220/27/24)",
+  "White balance is neutral: the sweep renders in its paper's own hue (dE 2.5 or less against #8A8782 near the lamp target; now 4.56, with R-B 22 against 11 in #C9C5BE) and the white lacquer at the baffle edge is neutral (now 234/221/213)",
+  "The backdrop is graduated: 15-30 levels darker at the corners than behind the roof (now 8 levels across the whole frame, a flat warm grey)",
+  "Framing is tightened on the detail cluster (insert, tweeter, bay, channel, grommet, cable entry) once the light is right: the empty top-left triangle and the empty compartments are cut back so the connector and magnets render at 40 px or more, and the letter sliver on the left silhouette (x 174-178, y 735-797) is out of frame",
+  "Asset fixes are done: the bay and channel walls in raw birch without the red hatching, plies visible on the birch section, and the waveguide mesh smooth enough that highlights do not break into teeth"
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The bg lamp sits on the camera side (az 0, el 25) aimed at a wall 4.6 m away; with its power set to give 0.45 W/m2 there, it puts about 13x that on the product 1.3 m away, roughly twice the key's light on the cut face, so every surface facing the camera goes flat.",
+   "evidence": {
+    "region": [
+     690,
+     590,
+     1000,
+     640
+    ],
+    "measured": "The insert section's x-profile is 204.0, 205.0, 205.3, 205.0, 205.0, 204.0, 203.0, 203.0 (falloff 1.0); its top [640,325,760,350] is 212.4 against 204.1 lower down. That is 4% top to bottom and 0.5% left to right, the falloff of a lamp about 1.3 m away near camera height, not of the 0.7 m key. The gable cap is 218.3 +/-0.5 in every profile (rgb 249/214/170, so R is in the shoulder). The bay's back wall is 197 against the cap's 218, so a 25 mm pocket is lit almost as brightly as the face. The compartments' back wall is 197 and gets brighter downward, 188 to 209, under a soft top-panel shadow, which means it is lit from about 13 deg above."
+   },
+   "change": {
+    "setting": "lights.bg.orbit.elevation_deg",
+    "from": 25,
+    "to": 80
+   },
+   "expected": "Overhead, the lamp still gives its target 0.45 W/m2, so the backdrop near the target stays at about 135. It now meets the cut plane at about 83 deg and reaches the product about 68 deg off its axis, so the flood leaves the section. The key's falloff shows across the insert section (8-20 levels left to right instead of 1). The bay's back wall drops well below the cap and the bay reads as a pocket. The compartments go dark (c6 relights them). The red slope band and the fin top pick up a top light. The product's level drops about 1.5 EV until c2.",
+   "accept": {
+    "region": [
+     690,
+     590,
+     1000,
+     640
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     6,
+     45
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The product's exposure comes from that flood: the caps sit at R 249, deep in the PBR Neutral shoulder, where a 10% change in light moves the output by less than 1%; once c1 removes the flood, the key has to carry the level and give it a direction.",
+   "evidence": {
+    "region": "part:top-panel",
+    "measured": "Top-panel cap: r_median 249, lum 217.1, range 3.1. Gable cap [380,500,480,600]: rgb 249/214/170, range 1.8. Front-baffle cap: 215.3, so only 3 levels of change across 1000 px."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 2.8,
+    "to": 5.5
+   },
+   "expected": "The caps return to a bright birch, out of the deep shoulder. Top-panel R median is about 225-238. The gable cap is brightest near the ridge (R about 240) and falls off visibly toward the eaves. The waveguide's far wall gets back to R about 180-195.",
+   "accept": {
+    "region": "part:top-panel",
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     212,
+     244
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The waveguide's lower wall mirrors the rim lamp (az 160) as a near-white band, and the band's upper edge breaks into a row of sawtooth glints on the mesh facets.",
+   "evidence": {
+    "region": [
+     930,
+     555,
+     1080,
+     592
+    ],
+    "measured": "lum_median 196.3, p95 210.4, rgb 219/185/187. B is at least G, which points to the 6500 K rim, not the 5600 K key. About 20 teeth run along y 545-560 from x 940 to 1170. The lower wall's own red next to the band is lum about 57."
+   },
+   "change": {
+    "setting": "lights.rim.orbit.azimuth_deg",
+    "from": 160,
+    "to": -160
+   },
+   "expected": "Behind and to the left, the rim cannot be mirrored by the bowl's far half, because its walls flare toward +x. The band and the teeth disappear, and the lower wall shows its diffuse red at lum 55-90. The rim still edges the fin top.",
+   "accept": {
+    "region": [
+     930,
+     555,
+     1080,
+     592
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     40,
+     110
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The bowl's far wall mirrors the 1.4 m fill (az 45, specular 0.4) as a hard-edged salmon plateau that covers about a third of the hero.",
+   "evidence": {
+    "region": [
+     915,
+     440,
+     945,
+     535
+    ],
+    "measured": "y-profile 68, 72, 133, 135, 135, 136, 136, 137, 75, 63, 54, 59, with a step of 13.8 levels per pixel at its edges. On [880,465,1080,500]: rgb 239/108/103, lum 135.5, dE2000 18.25 against #C62828; the reflection is slightly warm, as the 6200 K fill would be."
+   },
+   "change": {
+    "setting": "lights.fill.specular",
+    "from": 0.4,
+    "to": 0
+   },
+   "expected": "The plateau goes and the far wall reads as deep red (lum about 60-75), still lit diffusely by the fill. The largest step across the strip falls to 8 levels per pixel or less. c7 brings the highlight back, graduated.",
+   "accept": {
+    "region": [
+     915,
+     440,
+     945,
+     535
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "<=",
+    "value": 8
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "post",
+   "problem": "The 5200-5600 K lamps are rendered against a white point of about 6500 K, so every neutral carries a warm cast and the accent red drifts toward orange.",
+   "evidence": {
+    "region": [
+     770,
+     140,
+     860,
+     230
+    ],
+    "measured": "Sweep rgb 145/133/123: R-B is 22, against 11 in the paper #C9C5BE, and dE2000 is 4.56 against #8A8782 (the paper's hue at this brightness). White lacquer at the baffle edge is 234/221/213 (x 1205, y 800). The red in the bay is 191/35/14 against #C62828 (B 14 instead of 40, dE 5.24)."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": "(default)",
+    "to": 5600
+   },
+   "expected": "The sweep renders in its paper's own hue (about 138/135/130, dE 2.8 or less against #8A8782). The white edge is neutral. The red's blue channel rises about 15 levels toward #C62828. The birch caps become paler and less orange.",
+   "accept": {
+    "region": [
+     770,
+     140,
+     860,
+     230
+    ],
+    "metric": "delta_e",
+    "hex": "#8A8782",
+    "op": "<=",
+    "value": 2.8
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "Once the flood is gone, no light will reach the compartments' back wall: the top panel shades it from any lamp more than about 24 deg above it, the inside lamp at el 35 included, so the cable's run into the box would sink into black.",
+   "evidence": {
+    "region": "part:side-right",
+    "measured": "lum_median 197 today, and only the low flood lights it: the profile on [480,705,840,900] goes 188.1 to 209.0 under a soft top-panel shadow. The visible wall spans about 0.09 m below the top panel at 0.195 m depth (atan 0.087/0.195 is about 24 deg)."
+   },
+   "change": {
+    "setting": "lights.inside.orbit.elevation_deg",
+    "from": 35,
+    "to": 10
+   },
+   "expected": "The inside lamp now reaches under the top panel. The compartments' back wall settles at 95-165, dimmer than the roof so it recedes, and the dark cable (about 30) stays clear along its run. The bay's back wall and the channel get frontal fill, so the connector and the cable read.",
+   "accept": {
+    "region": "part:side-right",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     95,
+     165
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "With both lamp reflections removed, the glossy bowl has no designed highlight to describe its curve and will read as matte plastic.",
+   "evidence": {
+    "region": [
+     860,
+     450,
+     990,
+     522
+    ],
+    "measured": "Its only reflections today are hard images of lamps: the 135 plateau in this region and the 196 band below it. The lit far wall at [775,400,900,445] is a flat 231/26/21, lum range 11.6."
+   },
+   "change": {
+    "setting": "lights.bowl_ramp",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.6,
+      0.9
+     ],
+     "position": [
+      1.075,
+      -1.05,
+      1.295
+     ],
+     "target": [
+      0.08,
+      0.04,
+      0.92
+     ],
+     "strength": 0.8,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.86,
+       1.3,
+       1.74
+      ],
+      "values": [
+       0,
+       1,
+       0
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The panel sits where the fill was (az about 42 deg, el -2 to 31 deg as seen from the bowl). The far wall mirrors it from the throat toward the mouth as one soft pink-white band that peaks at lum about 110-150 and fades into the deep red on both sides, with no hard edge (8 levels per pixel or less across [915,440,945,535]). Caps and grey section are unchanged, because the panel is not diffuse.",
+   "accept": {
+    "region": [
+     860,
+     450,
+     990,
+     522
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     95,
+     160
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "At az -40 and 0.7 m, the key's nearest point on the cut plane falls outside the left eave, so once the flood is gone the brightest cap will be the empty left triangle and the light will fall away from the insert, tweeter and bay.",
+   "evidence": {
+    "region": [
+     240,
+     600,
+     550,
+     632
+    ],
+    "measured": "The flood hides this today (profile 218.3 to 217.5, falloff 0.8). From the card's geometry (cos/d2 at d 0.43 against 0.58 m), the key puts 1.4-2.4x more light on the left eave than on the insert centre."
+   },
+   "change": {
+    "setting": "lights.key.orbit.azimuth_deg",
+    "from": -40,
+    "to": -10
+   },
+   "expected": "The hotspot moves onto the ridge, tweeter and bay, and the left eave falls off instead of leading. The cap band reads level or brighter toward the bay (falloff left minus right between -15 and +4). The bay and channel keep a small shadow from their upper-left edges.",
+   "accept": {
+    "region": [
+     240,
+     600,
+     550,
+     632
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -15,
+     4
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Show the Baltic birch plies (about 1.5 mm laminations) on the birch section caps instead of a flat fill",
+   "why": "The cap is the largest surface in the frame (gable cap 218.3 +/-0.5, rgb 249/214/170, over about 100k px) and reads as a CAD fill even when lit; ply edges are the cue that this is a cut through real plywood. How the section looks, and what is cut, are fixed under product."
+  },
+  {
+   "request": "Render the machined inner walls of the connector bay and cable channel as raw birch instead of the exterior red lacquer, and remove the hatching on them",
+   "why": "Inside the bay the walls render 191/35/14, with fan-shaped red hatching at [600,455,645,525], and red stripes flank the black cable in the channel (x 566-569 and 584-588). The bay competes with the waveguide, and the single cable reads as a red-and-black pair. The gable block's material assignment and geometry belong to the product."
+  },
+  {
+   "request": "Re-tessellate the waveguide surface or smooth its normals",
+   "why": "A row of about 20 sawtooth glints runs along the crease at [940,540,1180,600], where the edge of a highlight crosses the facets. c3 moves that reflection off the crease, but any later highlight there will break up the same way. The waveguide's shape is fixed by acoustics and its mesh is product geometry."
+  },
+  {
+   "request": "Give the connector socket a section colour that differs from the plug",
+   "why": "Plug and socket render the same cream (both lum 234.2, rgb 250/232/210), so 'plugged' reads only as a 1 px seam at y about 510. Their materials belong to the product."
+  },
+  {
+   "request": "Section the tweeter so its motor and dome profile show",
+   "why": "The TW29DN-B renders as a flat block (lum 82.5, range 9) with a solid half-disc dome: the counterbore reads, but the driver does not. The drivers and the cut are fixed."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

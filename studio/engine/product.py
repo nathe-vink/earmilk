@@ -67,6 +67,25 @@ def smooth_parts(bpy, parts, rules):
         me.set_sharp_from_angle(angle=math.radians(r.get('angle_deg', 20)))
 
 
+def _grid_normal(p, quad, V, NV):
+    """The grid's normal at p, linear across the triangle of the quad p lies on (a, b, c or a, c, d): continuous
+    across the grid, where weighting the four corners by distance spikes at each one and a mirrored edge saw-tooths
+    at the grid's spacing."""
+    a, b, c, d = (Vector(V[k]) for k in quad)
+    na, nb, nc, nd = (Vector(NV[k]) for k in quad)
+    for (t0, t1, t2), (m0, m1, m2) in (((a, b, c), (na, nb, nc)), ((a, c, d), (na, nc, nd))):
+        v0, v1, v2 = t1 - t0, t2 - t0, p - t0
+        d00, d01, d11, d20, d21 = v0.dot(v0), v0.dot(v1), v1.dot(v1), v2.dot(v0), v2.dot(v1)
+        den = d00 * d11 - d01 * d01
+        if abs(den) < 1e-18:
+            continue
+        w1 = (d11 * d20 - d01 * d21) / den; w2 = (d00 * d21 - d01 * d20) / den; w0 = 1.0 - w1 - w2
+        if min(w0, w1, w2) >= -1e-3:
+            w0, w1, w2 = max(w0, 0.0), max(w1, 0.0), max(w2, 0.0)
+            return (m0 * w0 + m1 * w1 + m2 * w2).normalized()
+    return min(((a, na), (b, nb), (c, nc), (d, nd)), key=lambda tm: (p - tm[0]).length)[1].normalized()
+
+
 def normals_from(bpy, parts, rules, origin_mm, root):
     """Shading normals from the true surface: a CAD surface tessellated into flat facets (a waveguide made as a ruled
     loft through polygon rings) mirrors a light as stair-steps however its vertices are smoothed, because its long
@@ -92,8 +111,31 @@ def normals_from(bpy, parts, rules, origin_mm, root):
                  for i in range(S) for j in range(T - 1)]
         bvh = BVHTree.FromPolygons(V.tolist(), quads)
         me = ob.data
-        corner = [Vector(c.vector) for c in me.corner_normals]
         within = r.get('within_mm', 0.3) / 1000.0
+        if r.get('refine'):
+            # normals alone cannot fix a long thin facet: the normal interpolated across it still kinks at its edges,
+            # and a mirrored light's edge saw-tooths along them. Cut each facet on the surface into refine+1 a side
+            # and set the new corners on the true surface (each one's nearest point on the grid)
+            import bmesh
+            bm = bmesh.new(); bm.from_mesh(me)
+            on = {v: bvh.find_nearest(v.co, within)[0] is not None for v in bm.verts}
+            faces = [f for f in bm.faces if all(on[v] for v in f.verts)]
+            edges = list({e for f in faces for e in f.edges})
+            res = bmesh.ops.subdivide_edges(bm, edges=edges, cuts=int(r['refine']), use_grid_fill=True)
+            moved = 0
+            for v in (g for g in res['geom'] if isinstance(g, bmesh.types.BMVert)):
+                if v in on:
+                    continue
+                loc = bvh.find_nearest(v.co, 4 * within)[0]
+                if loc is not None:
+                    v.co = loc; moved += 1
+            n0 = len(me.polygons)
+            bm.to_mesh(me); bm.free(); me.update()
+            for poly in me.polygons:
+                poly.use_smooth = True
+            print(f'normals: {name}: {len(faces)} facets on the surface refined x{int(r["refine"]) + 1} a side, '
+                  f'{n0} to {len(me.polygons)} faces, {moved} new corners set on it')
+        corner = [Vector(c.vector) for c in me.corner_normals]
         at_vertex, changed = {}, 0
         for li, loop in enumerate(me.loops):
             vi = loop.vertex_index
@@ -102,10 +144,7 @@ def normals_from(bpy, parts, rules, origin_mm, root):
                 if loc is None:
                     at_vertex[vi] = None
                 else:
-                    acc = Vector()
-                    for k in quads[fi]:
-                        acc += Vector(NV[k]) / ((Vector(V[k]) - loc).length + 1e-7)
-                    at_vertex[vi] = acc.normalized()
+                    at_vertex[vi] = _grid_normal(loc, quads[fi], V, NV)
             n = at_vertex[vi]
             if n is not None and n.dot(corner[li]) > 0.5:
                 corner[li] = n; changed += 1
