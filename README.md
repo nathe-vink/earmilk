@@ -6,8 +6,8 @@ Canvas (source of truth for layout, copy and proportions): https://claude.ai/art
 
 ## The idea in four lines
 
-- A serious passive three-way that is, unmistakably, a half gallon of milk — and a cabinet that outlives its skin.
-- The treble fires forward from the throat of a concave bowl carved into the front gable panel. The bowl is the waveguide.
+- A serious passive three-way that is, unmistakably, a half gallon of milk — and a cabinet that outlives its skin. *Amended 2026-10-08: active, with a plate amplifier in the back; and a bookshelf sibling.*
+- The treble fires forward from the throat of a concave bowl carved into the front gable panel. The bowl is the waveguide. *Amended 2026-10-08: the bowl is now a waveguide shaped by acoustic simulation, in an insert set into the roof.*
 - The cabinet is birch; the carton is a two-piece sleeve of heavy printed board (tube + lid). Swap the sleeve, keep the speaker. *Amended 2026-10-02: no sleeve. The carton is the cabinet, finished in the flavour's colours; the colour is fixed per speaker. See Amendments, 2026-10-02.*
 - Flavor is the colorway. Five flavors. One voicing.
 
@@ -114,12 +114,39 @@ Made by the owner after the v21 to v23 critic rounds on the 2026-10-07 look ("ad
 - **Two briefs change.** Shot 04a becomes a straight-on detail of the label, and shot 05 a raised three-quarter of the five with the frame's centre line between two cartons; every critic round asked for a three-quarter of each.
 - **Render polish, not product decisions** (v24 to v26): every frame through Khronos PBR Neutral rather than AgX, whose looks turned a lit red salmon and a lit blue periwinkle; the indirect light clamped against fireflies; the studio's edge strips hidden from the camera, and in the line-up gone; figure in the floorboards' colour, broad enough to read across a room; lights seen only in reflections, placed where a round or a slope mirrors them into the camera, on the cartons' corners, the slopes and the cast letters (v26: thin lines, not bands); the clear polished (roughness 0.05, was 0.1) with less orange peel, so a light draws a line rather than a pink wash; the cast letters' planes cut down to their glyphs, so the denoiser draws no rectangle round them on a dark plinth; the label detail shot from 1.9 m, so the gloss slope no longer mirrors the fin's OPEN OTHER SIDE; the close-up on a 100 mm lens; in the rooms, a cool fill from the hero's camera side, the bright room's left wall given the skirting the back wall had, and the older room's back wall nearer, so the low sun lays a silhouette that reads as the carton. Found by the critics and fixed in the model: with 6 mm rounds the birch core's square corners stood through the finish, first at the rounds, then where the gable's shadow line meets them.
 
+### Amendments, 2026-10-08 (later): active, the waveguide by simulation, the bookshelf
+
+From the owner's request of 2026-10-08: the tweeter's job is to spread sound correctly, so its shape is optimised for
+that whatever it looks like; build proofs of concept of a floorstander and a bookshelf; model the real equipment
+that goes in them, built-in amplifiers included.
+
+- **Active.** A Hypex FusionAmp plate amplifier in each speaker (FA253, three channels, in the floorstander; FA122,
+  two, in the bookshelf) drives each driver from its own channel; its DSP is the crossover, delays and EQ. The plate
+  sits flush in a rebate on the back, its module in its own sealed box. The passive network (`fab/crossover.py`) is
+  gone; the DSP's starting setup is `fab/dsp.py`. The research is in `fab/research/amps.md`.
+- **The waveguide replaces the bowl,** designed and checked by a boundary-element simulation of the whole roof
+  (`fab/bem.py`): the floorstander's throat at 176 behind the face and 935 up holds about +-40 degrees horizontally
+  from 2 to 8 kHz with the listening axis within a dB of the loudest direction; the owner's 125 / 903.5 beamed 30
+  degrees up at 2 kHz. It is a separate insert in a pocket in the roof, the tweeter rear-mounted on it, held by
+  magnets and unplugging at a connector in a bay behind it, so the tweeter can be serviced from the front.
+  `fab/out/acoustics/waveguide/README.md`.
+- **The drivers are named:** Dayton RSS315HF-4, SB Acoustics Satori MR16P-8 and TW29DN-B (its faceplate off) in the
+  floorstander; SB Acoustics SB17NRX2C35-8 and Scan-Speak Illuminator D3004/602200 in the bookshelf
+  (`fab/research/`). The renders' drivers and amplifier plates are modelled from their datasheets.
+- **The bookshelf:** the same carton at 220 x 220 plan and 594 tall, a sealed two-way with the woofer high on the
+  face, its own waveguide study (it crosses at 2.4 kHz), the Facts on its right side as on a real carton because the
+  back holds the amplifier. Built from the same `fab/params.py` with `EARMILK_SIZE=bookshelf`, into
+  `fab/out-bookshelf/`.
+- **For the owner:** the Facts' "8 ohm" and "91 dB" mean nothing on an active speaker (the inputs are line level);
+  the bookshelf's Facts already say power and inputs instead. Raising the mid to z 760 would widen the floorstander's
+  vertical window at the crossover from about 14 to 20 degrees. Both are the owner's to decide.
+
 ### Notes, 2026-10-04: tools and the family
 
 Tooling notes, not product decisions. Nothing here changes the Geometry or the Decisions.
 
 - **From scratch.** `studio/setup.sh` installs every tool the repo uses on a bare machine (render/'s node modules, Blender's `bpy`, the CAD venv) and `python3 studio/doctor.py` runs each one for real. In a Claude Code cloud session the start hook does this before work begins. `studio/README.md` lists the tools: a path tracer for any product's scene, canvas-exact typesetting, a crossover designer, a product template.
-- **Crossover, from models.** `fab/crossover.py` fits a three-way network to the shortlisted drivers (`fab/out/xover/`): Linkwitz-Riley targets at the label's 350 Hz and 2.2 kHz, 14 parts, the sum within about 2 dB from 150 Hz to 16 kHz in the model. Two numbers to carry: the tweeter, 170 mm back in the bowl, reaches a seated listener 0.37 ms after the mid; the network's impedance bottoms at 3.7 ohm, a 4 ohm speaker. *2026-10-08: 125 mm back, 0.24 ms and 3.5 ohm.* Fit the built network to measurements.
+- **Crossover, from models.** *Superseded 2026-10-08: the speakers are active and `fab/crossover.py` is gone; see the amendments above.* `fab/crossover.py` fits a three-way network to the shortlisted drivers (`fab/out/xover/`): Linkwitz-Riley targets at the label's 350 Hz and 2.2 kHz, 14 parts, the sum within about 2 dB from 150 Hz to 16 kHz in the model. Two numbers to carry: the tweeter, 170 mm back in the bowl, reaches a seated listener 0.37 ms after the mid; the network's impedance bottoms at 3.7 ohm, a 4 ohm speaker. *2026-10-08: 125 mm back, 0.24 ms and 3.5 ohm.* Fit the built network to measurements.
 - **The family.** Two spin-offs are started in `spinoffs/`, each with its own brief, model, renders and critic log: **earworm**, wired headphones whose cable is an earthworm (the saddle is the remote), and **earwig**, earbuds whose flexible tails of overlapping plates end in forceps, with a case whose lid is split like an earwig's wing covers (the wig went, 2026-10-06). Proposals for the owner; neither touches earmilk's spec.
 
 ## Geometry (mm)

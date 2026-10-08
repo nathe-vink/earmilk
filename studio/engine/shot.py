@@ -55,16 +55,26 @@ def get_path(d, path, default=KeyError):
 
 
 def set_path(d, path, value):
+    """Set a dotted path, making what is missing on the way: a dict for a name, a list for an index. An index one past
+    a list's end appends (`glints.0` on a shot with no glints adds the first)."""
     parts = _split(path)
     cur = d
     for p, nxt in zip(parts[:-1], parts[1:]):
         if isinstance(cur, list):
+            while len(cur) <= p:
+                cur.append([] if isinstance(nxt, int) else {})
+            if cur[p] is None:
+                cur[p] = [] if isinstance(nxt, int) else {}
             cur = cur[p]
             continue
         if p not in cur or cur[p] is None:
             cur[p] = [] if isinstance(nxt, int) else {}
         cur = cur[p]
-    cur[parts[-1]] = value
+    last = parts[-1]
+    if isinstance(cur, list):
+        while len(cur) <= last:
+            cur.append(None)
+    cur[last] = value
 
 
 def parse_value(text):
@@ -93,7 +103,8 @@ def resolve(current, to):
             return float(t)
         except ValueError:
             return to
-    return to
+    # an absolute value written as JSON text ("[2, 1]", "{\"at\": ...}", "0.12") becomes the value; "#897C6E" stays text
+    return parse_value(to) if isinstance(to, str) else to
 
 
 def apply_overrides(d, items):

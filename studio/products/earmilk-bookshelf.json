@@ -125,6 +125,27 @@
    "preset": "emit",
    "color": "#7FD7FF",
    "strength": 3.0
+  },
+  "birch-raw": {
+   "preset": "birch",
+   "color": "#E3CDA2",
+   "roughness": 0.62
+  },
+  "cable": {
+   "preset": "gloss_plastic",
+   "color": "#141414",
+   "roughness": 0.28
+  },
+  "nylon": {
+   "preset": "plastic",
+   "color": "#E6E0D0",
+   "roughness": 0.5
+  },
+  "cone-norex": {
+   "preset": "paper_cone",
+   "color": "#1E1E1F",
+   "roughness": 0.8,
+   "fibre_strength": 0.08
   }
  },
  "assign": [
@@ -150,7 +171,7 @@
   },
   {
    "match": "woofer-cone|woofer-cap",
-   "material": "cone-alu"
+   "material": "cone-norex"
   },
   {
    "match": "mid-cone|mid-cap",
@@ -191,6 +212,30 @@
   {
    "match": "amp-led",
    "material": "led"
+  },
+  {
+   "match": "top-panel|bottom-panel|window-brace|mid-shelf|mid-divider|amp-box-*",
+   "material": "birch-raw"
+  },
+  {
+   "match": "cable-*",
+   "material": "cable"
+  },
+  {
+   "match": "connector-*",
+   "material": "nylon"
+  },
+  {
+   "match": "grommet-top",
+   "material": "rubber"
+  },
+  {
+   "match": "gland-amp",
+   "material": "black"
+  },
+  {
+   "match": "magnets-*|pins-insert",
+   "material": "nickel"
   }
  ],
  "zones": [
@@ -203,7 +248,7 @@
  "decals": [
   {
    "name": "facts",
-   "image": "fab/out/render/marks/facts.png",
+   "image": "fab/out-bookshelf/render/marks/facts.png",
    "center_mm": [
     220.0,
     110.0,
@@ -220,8 +265,8 @@
     1
    ],
    "size_mm": [
-    166.9,
-    163.5
+    180.0,
+    177.0
    ],
    "ink": "$facts_ink",
    "mode": "ink",
@@ -229,7 +274,7 @@
   },
   {
    "name": "open-other-side",
-   "image": "fab/out/render/marks/open-other-side.png",
+   "image": "fab/out-bookshelf/render/marks/open-other-side.png",
    "center_mm": [
     110.0,
     113.0,
@@ -246,8 +291,8 @@
     1
    ],
    "size_mm": [
-    175.2,
-    15.1
+    178.77,
+    18.65
    ],
    "ink": "$body",
    "mode": "ink",
@@ -255,7 +300,7 @@
   },
   {
    "name": "shake-well",
-   "image": "fab/out/render/marks/shake-well.png",
+   "image": "fab/out-bookshelf/render/marks/shake-well.png",
    "center_mm": [
     110.0,
     220.0,
@@ -272,8 +317,8 @@
     1
    ],
    "size_mm": [
-    107.9,
-    15.3
+    111.28,
+    18.65
    ],
    "ink": "$body",
    "mode": "ink",

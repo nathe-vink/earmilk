@@ -22,8 +22,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 C_AIR = 343.0
 
 XO_LOW = None if BOOK else 300.0       # Hz, woofer to mid (the floorstander's 3-way)
-XO_HIGH = 2200.0 if BOOK else 2800.0   # Hz, to the tweeter: the floorstander's from the waveguide study's directivity match,
-                                       # the bookshelf's the research's (the Illuminator's Fs 440 allows it; see its study)
+XO_HIGH = 2400.0 if BOOK else 2800.0   # Hz, to the tweeter, where each waveguide's directivity comes nearest the cone's below
+                                       # it and the listening axis is within about 1 dB of the loudest direction (each size's
+                                       # waveguide study, out*/acoustics/waveguide/README.md)
 OUTDIR = os.path.join(HERE, 'out-bookshelf' if BOOK else 'out')
 
 # acoustic centres behind the front face (mm): a cone's is about where its voice coil drives it, a dome's at the dome
@@ -43,7 +44,8 @@ def waveguide_on_axis(name):
     """On-axis level (dB, relative) by frequency from the BEM runs for the chosen throat."""
     out = {}
     for p in glob.glob(os.path.join(OUTDIR, 'acoustics', 'waveguide', f'{name}-*.json')):
-        for r in json.load(open(p))['results']:
+        d = json.load(open(p))
+        for r in d.get('results', []):         # the runs; NAME-polar.json (fab/wg_polar.py) is a summary of them
             out[r['f']] = r['h_right'][0]
     return dict(sorted(out.items()))
 
@@ -85,7 +87,7 @@ def main():
     gains = {k: round(ref - v, 1) for k, v in S.items()}
     ac_path = os.path.join(OUTDIR, 'acoustics.json')
     ac = json.load(open(ac_path)) if os.path.exists(ac_path) else {}
-    wg = waveguide_on_axis('BkF' if BOOK else 'C22')
+    wg = waveguide_on_axis('BkD' if BOOK else 'C22')
     near = min(wg, key=lambda x: abs(x - XO_HIGH)) if wg else None
     wg_rel = {f: round(v - wg[near], 1) for f, v in wg.items()} if wg else {}
     names = {r: f'{parts[r].get("maker", "")} {parts[r].get("model", DRIVER_SET[r])}'.strip() for r in roles}

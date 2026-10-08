@@ -125,6 +125,21 @@
    "preset": "emit",
    "color": "#7FD7FF",
    "strength": 3.0
+  },
+  "birch-raw": {
+   "preset": "birch",
+   "color": "#E3CDA2",
+   "roughness": 0.62
+  },
+  "cable": {
+   "preset": "gloss_plastic",
+   "color": "#141414",
+   "roughness": 0.28
+  },
+  "nylon": {
+   "preset": "plastic",
+   "color": "#E6E0D0",
+   "roughness": 0.5
   }
  },
  "assign": [
@@ -191,6 +206,30 @@
   {
    "match": "amp-led",
    "material": "led"
+  },
+  {
+   "match": "top-panel|bottom-panel|window-brace|mid-shelf|mid-divider|amp-box-*",
+   "material": "birch-raw"
+  },
+  {
+   "match": "cable-*",
+   "material": "cable"
+  },
+  {
+   "match": "connector-*",
+   "material": "nylon"
+  },
+  {
+   "match": "grommet-top",
+   "material": "rubber"
+  },
+  {
+   "match": "gland-amp",
+   "material": "black"
+  },
+  {
+   "match": "magnets-*|pins-insert",
+   "material": "nickel"
   }
  ],
  "zones": [

@@ -363,15 +363,16 @@ def prop(bpy, name, p, mats):
                 made[-1].location = Vector((sx * (w / 2 - 0.08), sy * (d / 2 - 0.06), 0))
         if p.get('turntable', True):
             tz = hh
+            ox = p.get('tt_x', -0.355) + 0.355          # the turntable's centre along the top (default left of centre)
             plinth = M.make(bpy, name + '-tt', 'satin_paint', {'color': p.get('tt_color', '#E9E6DF'), 'roughness': 0.35, 'specular': 0.5})
-            made.append(box(bpy, name + '-tt', -0.58, -0.17, tz, -0.13, 0.17, tz + 0.09, plinth, bevel=0.006))
+            made.append(box(bpy, name + '-tt', -0.58 + ox, -0.17, tz, -0.13 + ox, 0.17, tz + 0.09, plinth, bevel=0.006))
             rec = M.make(bpy, name + '-record', 'gloss_plastic', {'color': '#0B0B0B', 'roughness': 0.25})
-            pl = _cyl(bpy, name + '-platter', 0.152, 0.012, dark, n=96); pl.location = Vector((-0.38, 0.0, tz + 0.09)); made.append(pl)
-            rc = _cyl(bpy, name + '-record', 0.150, 0.002, rec, n=96); rc.location = Vector((-0.38, 0.0, tz + 0.102)); made.append(rc)
+            pl = _cyl(bpy, name + '-platter', 0.152, 0.012, dark, n=96); pl.location = Vector((-0.38 + ox, 0.0, tz + 0.09)); made.append(pl)
+            rc = _cyl(bpy, name + '-record', 0.150, 0.002, rec, n=96); rc.location = Vector((-0.38 + ox, 0.0, tz + 0.102)); made.append(rc)
             lab = M.make(bpy, name + '-label', 'satin_paint', {'color': p.get('label', '#C62828'), 'roughness': 0.6})
-            lb = _cyl(bpy, name + '-label', 0.045, 0.0006, lab, n=48); lb.location = Vector((-0.38, 0.0, tz + 0.104)); made.append(lb)
+            lb = _cyl(bpy, name + '-label', 0.045, 0.0006, lab, n=48); lb.location = Vector((-0.38 + ox, 0.0, tz + 0.104)); made.append(lb)
             metal = M.make(bpy, name + '-arm', 'metal', {'color': '#C9C9C6', 'roughness': 0.2})
-            made.append(_tube(bpy, name + '-arm', [(-0.17, 0.12, tz + 0.12), (-0.24, 0.05, tz + 0.115), (-0.30, -0.06, tz + 0.11)], 0.004, metal))
+            made.append(_tube(bpy, name + '-arm', [(-0.17 + ox, 0.12, tz + 0.12), (-0.24 + ox, 0.05, tz + 0.115), (-0.30 + ox, -0.06, tz + 0.11)], 0.004, metal))
     elif kind == 'vase':
         h = p.get('height', 0.32); z0 = p.get('z', 0.0)
         cer = M.make(bpy, name + '-ceramic', 'satin_paint', {'color': p.get('color', '#E8E2D6'), 'roughness': 0.55, 'specular': 0.5})

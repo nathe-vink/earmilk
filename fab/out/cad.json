@@ -1,7 +1,7 @@
 {
  "parts": {
   "front-baffle": {
-   "volume_l": 4.4688,
+   "volume_l": 4.4217,
    "bbox_mm": [
     -0.0,
     -0.0,
@@ -10,10 +10,10 @@
     18.0,
     860.0
    ],
-   "mass_kg": 3.04
+   "mass_kg": 3.01
   },
   "back-panel": {
-   "volume_l": 5.7745,
+   "volume_l": 5.1675,
    "bbox_mm": [
     -0.0,
     372.0,
@@ -22,7 +22,7 @@
     390.0,
     860.0
    ],
-   "mass_kg": 3.93
+   "mass_kg": 3.51
   },
   "side-left": {
    "volume_l": 5.4735,
@@ -84,6 +84,29 @@
    ],
    "mass_kg": 0.75
   },
+  "gable-block": {
+   "volume_l": 8.1357,
+   "bbox_mm": [
+    -0.0,
+    -0.0,
+    860.0,
+    390.0,
+    390.0,
+    1055.0
+   ],
+   "mass_kg": 5.53
+  },
+  "waveguide-insert": {
+   "volume_l": 2.5418,
+   "bbox_mm": [
+    53.37,
+    0.0,
+    860.0,
+    336.63,
+    216.0,
+    983.61
+   ]
+  },
   "mid-shelf": {
    "volume_l": 0.6882,
    "bbox_mm": [
@@ -108,50 +131,60 @@
    ],
    "mass_kg": 1.09
   },
-  "gable-block": {
-   "volume_l": 10.8802,
-   "bbox_mm": [
-    -0.0,
-    -0.0,
-    860.0,
-    390.0,
-    390.0,
-    1055.0
-   ],
-   "mass_kg": 7.4
-  },
   "port-tube": {
-   "volume_l": 0.2263
+   "volume_l": 0.2495
   },
-  "terminal-cup": {
-   "volume_l": 0.0402,
+  "amp-box-floor": {
+   "volume_l": 0.6882,
    "bbox_mm": [
-    131.0,
+    18.0,
+    264.0,
+    99.5,
     372.0,
-    143.0,
-    259.0,
-    393.0,
-    207.0
+    372.0,
+    117.5
+   ]
+  },
+  "amp-box-lid": {
+   "volume_l": 0.6793,
+   "bbox_mm": [
+    18.0,
+    264.0,
+    252.5,
+    372.0,
+    372.0,
+    270.5
+   ]
+  },
+  "amp-box-front": {
+   "volume_l": 0.8602,
+   "bbox_mm": [
+    18.0,
+    264.0,
+    117.5,
+    372.0,
+    282.0,
+    252.5
    ]
   },
   "gable-print-front-left": {
-   "volume_l": 1.37,
+   "volume_l": 0.655,
    "size_mm": [
-    195.0,
+    159.8,
     150.0,
     115.4
    ]
   },
   "gable-print-front-right": {
-   "volume_l": 1.37,
+   "volume_l": 0.655,
    "size_mm": [
-    195.0,
+    159.8,
     150.0,
     115.4
    ]
   },
   "gable-print-back-left": {
-   "volume_l": 4.07,
+   "volume_l": 3.413,
    "size_mm": [
     195.0,
     240.0,
@@ -159,25 +192,20 @@
    ]
   },
   "gable-print-back-right": {
-   "volume_l": 4.07,
+   "volume_l": 3.413,
    "size_mm": [
     195.0,
     240.0,
     195.0
    ]
-  },
-  "gable-block-lower": {
-   "volume_l": 6.2206
-  },
-  "gable-block-upper": {
-   "volume_l": 4.6596
   }
  },
  "units": "mm, litres, kg",
- "woofer_chamber_air_l": 91.643,
+ "woofer_chamber_air_l": 85.082,
  "woofer_chamber_gross_l": 103.26,
  "mid_chamber_gross_l": 8.029,
- "bowl_cavity_l": 1.1665,
- "wood_mass_kg": 27.18,
- "port_tube_length_mm": 134.1
+ "waveguide_air_l": 1.6734,
+ "wood_mass_kg": 24.86,
+ "port_tube_length_mm": 153.3,
+ "size": "floorstander"
 }

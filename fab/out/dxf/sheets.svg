@@ -20,8 +20,8 @@
 <text x="1034.0" y="154.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-06</text>
 <rect x="1490.6" y="1112.0" width="16.0" height="398.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
 <text x="1498.6" y="1311.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-10</text>
-<rect x="1297.0" y="284.0" width="108.0" height="354.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
-<text x="1351.0" y="461.0" font-size="40" text-anchor="middle" font-family="sans-serif">mid-shelf</text>
+<rect x="1297.0" y="284.0" width="135.0" height="354.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1364.5" y="461.0" font-size="40" text-anchor="middle" font-family="sans-serif">amp-box-front</text>
 <rect x="1625" y="0" width="1525" height="1525" fill="#efe6d6" stroke="#999" stroke-width="4"/>
 <rect x="1640.0" y="650.0" width="354.0" height="860.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
 <text x="1817.0" y="1080.0" font-size="40" text-anchor="middle" font-family="sans-serif">side</text>
@@ -80,6 +80,18 @@
 <text x="4174.0" y="619.2" font-size="40" text-anchor="middle" font-family="sans-serif">mid-divider</text>
 <rect x="4363.0" y="493.20000000000005" width="354.0" height="252.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
 <text x="4540.0" y="619.2" font-size="40" text-anchor="middle" font-family="sans-serif">mid-divider</text>
-<rect x="3265.0" y="271.20000000000005" width="354.0" height="108.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
-<text x="3442.0" y="325.20000000000005" font-size="36.0" text-anchor="middle" font-family="sans-serif">mid-shelf</text>
+<rect x="3265.0" y="244.20000000000005" width="354.0" height="135.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3442.0" y="311.70000000000005" font-size="40" text-anchor="middle" font-family="sans-serif">amp-box-front</text>
+<rect x="3631.0" y="271.20000000000005" width="354.0" height="108.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3808.0" y="325.20000000000005" font-size="36.0" text-anchor="middle" font-family="sans-serif">mid-shelf</text>
+<rect x="3997.0" y="271.20000000000005" width="354.0" height="108.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="4174.0" y="325.20000000000005" font-size="36.0" text-anchor="middle" font-family="sans-serif">mid-shelf</text>
+<rect x="4363.0" y="271.20000000000005" width="354.0" height="108.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="4540.0" y="325.20000000000005" font-size="36.0" text-anchor="middle" font-family="sans-serif">amp-box-floor</text>
+<rect x="3265.0" y="124.20000000000005" width="354.0" height="108.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3442.0" y="178.20000000000005" font-size="36.0" text-anchor="middle" font-family="sans-serif">amp-box-floor</text>
+<rect x="3631.0" y="124.20000000000005" width="354.0" height="108.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="3808.0" y="178.20000000000005" font-size="36.0" text-anchor="middle" font-family="sans-serif">amp-box-lid</text>
+<rect x="3997.0" y="124.20000000000005" width="354.0" height="108.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="4174.0" y="178.20000000000005" font-size="36.0" text-anchor="middle" font-family="sans-serif">amp-box-lid</text>
 </svg>

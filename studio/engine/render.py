@@ -10,7 +10,7 @@
         [--masks]                                     also write NAME.mask.png (part ids) and NAME.mask.json
 
 Beside the image it writes NAME.shot.json (the resolved shot, the exact settings used) and NAME.report.json (time,
-samples, the changes applied, per-part statistics when --masks is on). critic/card.py reads the shot file to list
+samples, the changes applied, where each part lands in the frame, per-part statistics when --masks is on). critic/card.py reads the shot file to list
 the knobs and their values; critic/measure.py reads the masks to measure a part by name.
 
 Runs on the system Python with `bpy` (Blender 5). Lengths in metres, z up, the product at the origin facing -y.
@@ -56,13 +56,16 @@ def main():
     scene = bpy.context.scene
 
     # --- product -----------------------------------------------------------------------------------------------
-    prod = sh.get('product')
+    # one product ("product") or several side by side ("products": a list of product blocks, e.g. a family shot)
+    blocks = sh.get('products') or ([sh['product']] if sh.get('product') else [])
     objs, part_of = [], {}
     centre = Vector((0, 0, 0.5))
-    if prod:
-        pdef = Pr.load_def(prod['def'], ROOT)
+    for blk in blocks:
+        pdef = Pr.load_def(blk['def'], ROOT)
         templates = Pr.import_model(bpy, Path(ROOT, pdef['model']), pdef['origin_mm'], pdef.get('axes', 'gltf'))
-        objs, part_of = Pr.place(bpy, pdef, templates, sh, ROOT)
+        o_, p_ = Pr.place(bpy, pdef, templates, {**sh, 'product': blk}, ROOT)
+        objs += o_; part_of.update(p_)
+    if objs:
         lo, hi = Pr.bounds(objs)
         centre = (lo + hi) / 2
     mats = sh.get('materials', {})
@@ -163,11 +166,31 @@ def main():
               'samples': int(cy.samples), 'size': [scene.render.resolution_x, scene.render.resolution_y],
               'applied': applied, 'pending': pending, 'sets': a.sets}
 
+    report['parts_2d'] = _parts_2d(scene, cam, objs, part_of)
     if a.masks:
         report['masks'] = _masks(bpy, scene, objs, part_of, out)
     S.save(sh, out.with_suffix('.shot.json'))
     out.with_suffix('.report.json').write_text(json.dumps(report, indent=1, default=str) + '\n')
     print(f'{out}  {report["seconds"]}  samples {report["samples"]}')
+
+
+def _parts_2d(scene, cam, objs, part_of):
+    """Where each part lands in the frame, in pixels from the top left: its box's centre and the box's extent, and its
+    distance in front of the camera. For callouts and labels laid over the image (a deck, an exploded view)."""
+    from bpy_extras.object_utils import world_to_camera_view
+    from mathutils import Vector
+    W, H = scene.render.resolution_x, scene.render.resolution_y
+    out = {}
+    for ob in objs:
+        if ob.hide_render:
+            continue
+        cs = [ob.matrix_world @ Vector(c) for c in ob.bound_box]
+        pts = [world_to_camera_view(scene, cam, c) for c in cs]
+        ctr = world_to_camera_view(scene, cam, sum(cs, Vector()) / 8)
+        xs = [p.x * W for p in pts]; ys = [(1 - p.y) * H for p in pts]
+        out[ob.name] = {'part': part_of[ob.name], 'centre_px': [round(ctr.x * W, 1), round((1 - ctr.y) * H, 1)],
+                        'box_px': [round(min(xs)), round(min(ys)), round(max(xs)), round(max(ys))], 'depth_m': round(ctr.z, 3)}
+    return out
 
 
 def _masks(bpy, scene, objs, part_of, out):

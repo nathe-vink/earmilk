@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT / 'studio' / 'engine'))
 import knobs as K  # noqa: E402
 import shot as S  # noqa: E402
 
-LOCKED = ('product.def', 'product.flavour', 'product.instances', 'size', 'render.samples', 'render.adaptive', 'render.denoise')
+LOCKED = ('product', 'products', 'size', 'render.samples', 'render.adaptive', 'render.denoise')
 
 
 def fmt(v):
@@ -37,13 +37,17 @@ def main():
     sc = card['shots'][a.shot_id]
     sh = json.loads(Path(a.shot).read_text())
     L = [f'# Shot card: {sc["title"]}', '']
-    L += ['## The product', '', ' '.join(card['product'].split()), '']
+    # the product's description: the shot's own, else the one for its product file, else the card's
+    pdef_ = (sh.get('product') or (sh.get('products') or [{}])[0]).get('def', '')
+    ptext = sc.get('product') or card.get('products', {}).get(pdef_, card['product'])
+    L += ['## The product', '', ' '.join(ptext.split()), '']
     L += ['## What this frame is for', '', ' '.join(sc['purpose'].split()) if isinstance(sc['purpose'], str) else sc['purpose'], '',
           'It must show: ' + '; '.join(sc['must_show']) + '.', '']
     L += ['## Fixed: never prescribe a change to these', '']
     for f in card['fixed'] + sc.get('fixed', []):
         L.append('- ' + ' '.join(f.split()))
-    L += [f'- The product, its flavour and its placement in this frame ({", ".join(LOCKED[:3])}), the frame size and the sampling settings.', '']
+    L += ['- The product, its flavour, its placement in this frame, and any exploded or cut-away arrangement of its parts '
+          '(everything under `product`), the frame size and the sampling settings.', '']
     L += ['## Settings you may change', '',
           'Name a setting by its path. Units and ranges are the engine\'s. Lengths are metres; the product stands at the '
           'origin with its front toward -y, z up; the camera\'s position and target are world points. Relative values are '

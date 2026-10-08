@@ -1,0 +1,110 @@
+{
+ "size": [
+  1800,
+  1200
+ ],
+ "product": {
+  "def": "studio/products/earmilk.json",
+  "flavour": "whole",
+  "instances": [
+   {
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "rotate_z": 14
+   }
+  ]
+ },
+ "materials": {},
+ "render": {
+  "samples": 192,
+  "adaptive": 0.015,
+  "denoise": true,
+  "clamp": 8,
+  "bounces": 12,
+  "view": "Khronos PBR Neutral",
+  "exposure": 1.0,
+  "white_balance_k": 4300
+ },
+ "title": "One speaker, older room at golden hour",
+ "set": {
+  "kind": "room",
+  "size": [
+   4.8,
+   4.4,
+   3.0
+  ],
+  "center": [
+   -0.4,
+   -1.45
+  ],
+  "floor": {
+   "plank_w": 0.12,
+   "plank_l": 1.1,
+   "base": "#6E4B30",
+   "dark": "#523621",
+   "light": "#84603F",
+   "plank_contrast": 0.55,
+   "roughness": 0.35
+  },
+  "wall": {
+   "color": "#D8CCB8"
+  },
+  "ceiling": "#E8E2D7",
+  "skirting": {
+   "h": 0.0
+  },
+  "wainscot": {
+   "height": 0.92,
+   "color": "#5F6B5C",
+   "panel_w": 0.62
+  },
+  "windows": [
+   {
+    "wall": "right",
+    "along": 0.0,
+    "sill": 0.55,
+    "size": [
+     1.15,
+     1.9
+    ],
+    "mullions": [
+     2,
+     4
+    ]
+   }
+  ],
+  "props": []
+ },
+ "camera": {
+  "position": [
+   -1.35,
+   -3.0,
+   1.0
+  ],
+  "target": [
+   -0.4,
+   0.2,
+   0.62
+  ],
+  "lens_mm": 40,
+  "level": true
+ },
+ "sun": {
+  "azimuth_deg": 55,
+  "elevation_deg": 8,
+  "irradiance": 3.2,
+  "angle_deg": 0.7,
+  "color": 3000
+ },
+ "sky": {
+  "kind": "gradient",
+  "strength": 1.2,
+  "zenith": "#7F97BE",
+  "horizon": "#F2D3A8",
+  "ground": "#5E564C"
+ },
+ "lights": {}
+}

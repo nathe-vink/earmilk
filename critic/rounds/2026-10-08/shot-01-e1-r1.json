@@ -1,0 +1,272 @@
+{
+ "stage1": {
+  "impression": "A coherent golden-hour room with a strong window-shadow motif on the back wall, but a featureless grey rug fills the bottom third and the credenza owns the centre of the frame. The pair reads unequal (the left unit's front is dull grey with an illegible base logo while the right one is lit), and the midtones are murky with crunchy edge halos.",
+  "score": 4.5
+ },
+ "blocking_9": [
+  "The pair matches: both white fronts at 205 or above and within 20 levels of each other. Now 91.9 left vs 176.0 right; after c1-c5 still about 240 vs 201, because each unit is toed in about 12.5 degrees and the window sun reaches the left front at cos 0.63 but the right at cos 0.26.",
+  "Each white front falls off 15 to 30 levels from eave to plinth instead of reading as a card. Right-front y-profile now 174.2 to 179.6 (falloff -5.4); left 92.0 to 89.4.",
+  "Woofer and mid cones show their charcoal paper and curvature: woofer-cone crush_pct 30 or less on both units (now 75.3 right, 85.0 left). Khronos PBR Neutral's toe maps the cones' #2A2A2A to 11/255 even at unit exposure; Standard or AgX free them but, simulated on this frame, drop the sunlit red's chroma from 67 to 53-55.",
+  "The lit product fronts are the brightest large surfaces in the frame. Today the white turntable (median 199.8, p95 223.8) and the wall's sun patch (188.4) both outshine the right unit's front (176.0), and the card has no setting for the turntable.",
+  "The brand red holds on the sunlit faces of both units: plinth delta-E2000 6 or less vs #C62828 (now 9.8 right, 24.8 left).",
+  "Both wordmarks read at a glance: letters at least 40 levels off their plinth on both units (left now 21.7 on a 17.5 plinth).",
+  "A copy side at least 30% of the frame width with lum_range 30 or less. Now there is none: the pair spans x 282-1086.",
+  "No untextured surface larger than 5% of the frame. The rug is 22.3% of the frame, with lum_range 3.1 across a 100x60 patch."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The left unit stands just outside the sun: its white front is one flat value, 91.9, against 176.0 on the right unit, its red reads maroon-black, and its waveguide and wordmark disappear.",
+   "evidence": {
+    "region": [
+     282,
+     362,
+     409,
+     602
+    ],
+    "measured": "front-baffle in this box: median 91.9, RGB 91/91/102, p5-p95 86.6-95.8 (right unit 176.0, RGB 183/174/175). Left plinth 17.5 (RGB 79/1/4), delta-E2000 24.8 vs #C62828 (right unit 9.8). Left waveguide lum_range 9.2 (right 76.0). Left letters 21.7 on a 17.5 plinth. The rear half of its +x side is sunlit (side p95 165.9) and the back-wall sun patch ends at x 110-125. With the units fitted at x = +/-1.05 m, toed in 12.5 degrees, that puts window 0 at y -2.5 to -0.5 m (the patch's right end at x 990 and the dim curtain band at x 775-975 agree), while the left front's sun rays leave the right wall at y -2.66 to -2.94 m."
+   },
+   "change": {
+    "setting": "set.windows.0.along",
+    "from": "-0.5",
+    "to": "0.1"
+   },
+   "expected": "The window centre moves 0.6 m toward the camera (opening y -3.1 to -1.1 m); the right unit's rays (y -1.67 to -1.79 m) stay inside it. Both fronts in direct sun: left front median about 230-245 (from 91.9), left plinth L about 45-60 with delta-E 10 or less vs #C62828, left waveguide lum_range 40 or more, left letters 60 or more. The back-wall patch shifts left to end near x 700 (about 540 after c3), leaving the right half of the wall in shade.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      100,
+      360,
+      450,
+      602
+     ]
+    },
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 200
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "A flat, untextured grey rug covers 22.3% of the frame in the foreground. In shade it is one violet-grey value (RGB 60/56/62, Lab C 4.4 at h 315) with lum_range 3.1 across a 100x60 patch, so it reads as a card, not a material.",
+   "evidence": {
+    "region": [
+     250,
+     760,
+     750,
+     880
+    ],
+    "measured": "median 57.1, RGB 60/56/62, b_median 62. Patch [400,780,500,840] lum_range 3.1. Low-chroma pixels below y 640: 271,182 (22.3% of the frame). The sunlit wedge [850,690,1050,730] is 154.5, a hard bright shape at the right unit's foot."
+   },
+   "change": {
+    "setting": "set.props.0.position",
+    "from": "[0, -1.15]",
+    "to": "[0, -2.85]"
+   },
+   "expected": "The rug's far edge moves to y -2.0 m, below the frame's bottom edge (which meets the floor 2.39 m from the camera), so it leaves the frame. The foreground becomes oak planks crossed by the window's sun band: region [250,760,750,880] b_median about 20-35 (oak in shade), lum_range 15 or more from plank variation.",
+   "accept": {
+    "region": [
+     250,
+     760,
+     750,
+     880
+    ],
+    "metric": "b_median",
+    "op": "<=",
+    "value": 40
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "composition",
+   "problem": "The pair is centred (x 282-1086, centre 684, margins 282 and 264 px), so the frame has no copy side, which the homepage-hero brief requires.",
+   "evidence": {
+    "region": [
+     990,
+     60,
+     1340,
+     520
+    ],
+    "measured": "lum_range 134.4, because the right unit and the upper sun streak sit inside it. The wall-only strip [1100,60,1340,520] is calm: lum_range 16.8, median 113.4."
+   },
+   "change": {
+    "setting": "camera.shift_x",
+    "from": "0 (default)",
+    "to": "0.12"
+   },
+   "expected": "Content moves 162 px left: the pair spans about x 120-925, with the left unit whole and 120 px from the edge, and x 945-1350 (30% of the width) is plain shaded wall over sunlit floor. Region [990,60,1340,520] lum_range about 15-25. Verticals stay vertical, since this is lens shift, not a turn.",
+   "accept": {
+    "region": [
+     990,
+     60,
+     1340,
+     520
+    ],
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 30
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The window's upper glazing bar throws a soft 45-level band across the fronts. On the right unit it dips the margins from 170 to 125 at y 575 and from 184 to 129 at y 555. Once c1 puts the left unit in sun, the same bar lands at y 450-482, right across its white gap between mid and woofer (mid ring ends at y 444, woofer ring starts at 485).",
+   "evidence": {
+    "region": [
+     943,
+     535,
+     1081,
+     596
+    ],
+    "measured": "front-baffle margins: x 944-953 dips 170 to 125 (y 575); x 1070-1080 dips 184 to 129 (y 555). Right-front p5 is 140.9 with these rows and 171.1 without. The bar sits at 1.817 m; the sun rises 1.23-1.33 m between the left front and the wall, so its shadow falls 0.48-0.58 m up the left unit."
+   },
+   "change": {
+    "setting": "set.windows.0.mullions",
+    "from": "[2, 3]",
+    "to": "[2, 1]"
+   },
+   "expected": "Unbroken sunlit fronts. Right-front p5 about 190-196 at the new exposure (162 if the band stays); left-front p5 within 15 levels of its median. The vertical bar, whose shadow misses both fronts, keeps a two-pane window pattern on the wall and floor.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      700,
+      360,
+      1100,
+      621
+     ]
+    },
+    "metric": "lum_p5",
+    "op": ">=",
+    "value": 180
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "post",
+   "problem": "The room is murky and the hero white is not the brightest surface: frame median 72.9, shaded wall 61.4 at top left, and the right unit's sunlit front (176.0) sits below the wall's sun patch (188.4) and the turntable (199.8).",
+   "evidence": {
+    "region": [
+     943,
+     367,
+     1081,
+     621
+    ],
+    "measured": "front-baffle median 176.0 (RGB 183/174/175). Frame median 72.9, p95 182.2, clip 0.0%. Wall [0,0,500,100] 61.4. Khronos PBR Neutral subtracts a 0.04 offset from these mid-shadows and only starts rolling off above 0.76 linear, so there is headroom."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": "0.7",
+    "to": "1.1"
+   },
+   "expected": "Simulated by inverting the view transform on this frame: right front median about 201, top-left wall about 77, frame median about 89, sun patch about 213, clip 0%. The sunlit left front (c1) rolls off near 240 without clipping. The right plinth's delta-E vs #C62828 falls from 9.8 to about 5.7 at unchanged chroma (72.5).",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      700,
+      360,
+      1100,
+      621
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     190,
+     215
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The drivers' trim rings and surrounds print as black: woofer-ring median 2.1 (right) and 0.9 (left), with 68% and 82% of pixels at or below 3, so each driver's outline merges with its cone.",
+   "evidence": {
+    "region": [
+     956,
+     501,
+     1067,
+     609
+    ],
+    "measured": "woofer-ring, right: median 2.1, p95 45.5, crush 67.8%. Left: median 0.9, p95 20.1, crush 81.7%. mid-ring p95 59.2 right, 22.6 left. woofer-cone crush 75.3% right, 85.0% left."
+   },
+   "change": {
+    "setting": "glints.0",
+    "from": "none",
+    "to": "{\"at\": [1.108, -0.212, 0.437], \"normal\": [0.115, -0.942, 0.317], \"size_m\": 0.1, \"power_w\": 4, \"receivers\": [\"woofer-ring\", \"mid-ring\", \"woofer-surround\", \"mid-surround\"]}"
+   },
+   "expected": "The glint sits at the upper right of the right woofer's ring (centre z 0.334 m, ring radius about 0.145 m), on the window side so it agrees with the sun. Expect a crisp arc on the window side of every woofer and mid ring and a sheen along each surround's roll: right woofer-ring p95 100 or more (from 45.5), left 80 or more (from 20.1). Fronts and room unchanged, since only those parts receive the glint.",
+   "accept": {
+    "region": {
+     "part": "woofer-ring",
+     "box": [
+      700,
+      0,
+      1100,
+      900
+     ]
+    },
+    "metric": "lum_p95",
+    "op": ">=",
+    "value": 100
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "set",
+   "problem": "The sideboard is the most saturated surface after the red accent: an orange block between the units (Lab C 37.5 at h 62, against the red's C 67 at h 37) that competes with the brand red and bounces orange onto the cabinets.",
+   "evidence": {
+    "region": [
+     480,
+     475,
+     610,
+     575
+    ],
+    "measured": "median 95.2, RGB 140/87/45, b_median 45; Lab L 42.1, C 37.5, h 61.6. Floor in sun 135/92/63 (C 27.6) adds to the orange mass."
+   },
+   "change": {
+    "setting": "set.props.1.color",
+    "from": "#9E7650",
+    "to": "#897C6E"
+   },
+   "expected": "Same albedo lightness (L* 52.8 vs 52.7) with chroma cut from 29 to 10. Rendered front about RGB 137/110/100 (C about 13, L about 115) at the new exposure, against 161/103/60 (C 38.5) if only the exposure changed. The red becomes the only saturated colour in the frame.",
+   "accept": {
+    "region": [
+     480,
+     475,
+     610,
+     575
+    ],
+    "metric": "b_median",
+    "op": ">=",
+    "value": 85
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Reduce or mirror the pair's toe-in, or move the units, so both fronts face the window sun equally.",
+   "why": "Each unit is toed in about 12.5 degrees (fitted to the mask edges, units at x = +/-1.05 m). A side sun at azimuth 62 reaches the left front at cos 0.63 and the right at cos 0.26, so no single sun or window setting lights them equally. Placement (product.instances) is fixed."
+  },
+  {
+   "request": "Lighter or textured cone and surround materials so the drivers read in a dim room.",
+   "why": "The cones (#2A2A2A paper) and surrounds (#1A1A1A rubber) are the named drivers' own materials. They print at 0-3/255 (woofer-cone crush 75-85%), and only light or the view transform may change how they read."
+  },
+  {
+   "request": "A shallower bowl or a lighter flange on the left unit's waveguide so it reads in shade.",
+   "why": "The waveguide's depth, profile and mouth are set by acoustic simulation. On the left unit it is now a flat maroon disc (lum_range 9.2 vs 76.0 on the sunlit unit), so c1 fixes it with light instead."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

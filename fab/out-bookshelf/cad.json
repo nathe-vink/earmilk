@@ -1,0 +1,202 @@
+{
+ "parts": {
+  "front-baffle": {
+   "volume_l": 1.547,
+   "bbox_mm": [
+    -0.0,
+    -0.0,
+    0.0,
+    220.0,
+    18.0,
+    484.0
+   ],
+   "mass_kg": 1.05
+  },
+  "back-panel": {
+   "volume_l": 1.3757,
+   "bbox_mm": [
+    -0.0,
+    202.0,
+    0.0,
+    220.0,
+    220.0,
+    484.0
+   ],
+   "mass_kg": 0.94
+  },
+  "side-left": {
+   "volume_l": 1.5997,
+   "bbox_mm": [
+    0.0,
+    18.0,
+    0.0,
+    18.0,
+    202.0,
+    484.0
+   ],
+   "mass_kg": 1.09
+  },
+  "side-right": {
+   "volume_l": 1.5997,
+   "bbox_mm": [
+    202.0,
+    18.0,
+    0.0,
+    220.0,
+    202.0,
+    484.0
+   ],
+   "mass_kg": 1.09
+  },
+  "top-panel": {
+   "volume_l": 0.6035,
+   "bbox_mm": [
+    18.0,
+    18.0,
+    466.0,
+    202.0,
+    202.0,
+    484.0
+   ],
+   "mass_kg": 0.41
+  },
+  "bottom-panel": {
+   "volume_l": 0.6094,
+   "bbox_mm": [
+    18.0,
+    18.0,
+    0.0,
+    202.0,
+    202.0,
+    18.0
+   ],
+   "mass_kg": 0.41
+  },
+  "gable-block": {
+   "volume_l": 1.4421,
+   "bbox_mm": [
+    -0.0,
+    -0.0,
+    484.0,
+    220.0,
+    220.0,
+    593.6
+   ],
+   "mass_kg": 0.98
+  },
+  "waveguide-insert": {
+   "volume_l": 0.409,
+   "bbox_mm": [
+    30.37,
+    -0.0,
+    484.0,
+    189.63,
+    131.0,
+    548.77
+   ]
+  },
+  "amp-box-floor": {
+   "volume_l": 0.2915,
+   "bbox_mm": [
+    18.0,
+    114.0,
+    61.5,
+    202.0,
+    202.0,
+    79.5
+   ]
+  },
+  "amp-box-lid": {
+   "volume_l": 0.2858,
+   "bbox_mm": [
+    18.0,
+    114.0,
+    390.5,
+    202.0,
+    202.0,
+    408.5
+   ]
+  },
+  "amp-box-front": {
+   "volume_l": 1.03,
+   "bbox_mm": [
+    18.0,
+    114.0,
+    79.5,
+    202.0,
+    132.0,
+    390.5
+   ]
+  }
+ },
+ "units": "mm, litres, kg",
+ "woofer_chamber_air_l": 9.549,
+ "woofer_chamber_gross_l": 15.167,
+ "mid_chamber_gross_l": 0.0,
+ "waveguide_air_l": 0.4185,
+ "wood_mass_kg": 5.97,
+ "port_tube_length_mm": null,
+ "size": "bookshelf",
+ "checks": [
+  {
+   "check": "insert above the top panel (its lowest point to the body's top)",
+   "margin_mm": -0.0,
+   "least_mm": -0.01,
+   "ok": true
+  },
+  {
+   "check": "insert material under the tweeter's counterbore",
+   "margin_mm": 1.8,
+   "least_mm": 1.5,
+   "ok": true
+  },
+  {
+   "check": "boss above the top panel",
+   "margin_mm": 3.0,
+   "least_mm": 1.0,
+   "ok": true
+  },
+  {
+   "check": "birch over the connector bay, under the back slope (vertical)",
+   "margin_mm": 10.53,
+   "least_mm": 8.0,
+   "ok": true
+  },
+  {
+   "check": "connector bay above the top panel",
+   "margin_mm": 15.0,
+   "least_mm": 4.0,
+   "ok": true
+  },
+  {
+   "check": "woofer rebate above the plinth's shadow line",
+   "margin_mm": 228.7,
+   "least_mm": 5.0,
+   "ok": true
+  },
+  {
+   "check": "woofer rebate below the gable's shadow line",
+   "margin_mm": 14.7,
+   "least_mm": 5.0,
+   "ok": true
+  },
+  {
+   "check": "amplifier plate above the plinth's shadow line",
+   "margin_mm": 12.5,
+   "least_mm": 2.0,
+   "ok": true
+  },
+  {
+   "check": "amplifier plate inside the back, across",
+   "margin_mm": 46.0,
+   "least_mm": 2.0,
+   "ok": true
+  },
+  {
+   "check": "amplifier box above the bottom panel",
+   "margin_mm": 43.5,
+   "least_mm": 0.0,
+   "ok": true
+  }
+ ]
+}

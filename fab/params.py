@@ -66,7 +66,11 @@ WAVEGUIDE = dict(throat_y=176.0, throat_z=935.0, r0=22.5, a0=12.0, a_h=45.0, a_u
 # a counterbore behind the throat); the insert slides out forward, level, like a drawer, with the tweeter on it, and its
 # wires unplug at a connector. Magnets in its back hold it; two pins locate it. PROPOSAL 2026-10-08.
 INSERT = dict(margin=2.0, eave_clip=25.0, back_y=200.0, boss_d=86.0, boss_back_y=216.0, clear=0.3,
-              magnet_d=12.0, magnet_t=4.0, pin_d=6.0, pin_l=10.0)
+              magnet_d=12.0, magnet_t=4.0, pin_d=6.0, pin_l=10.0,
+              bay_d=36.0, bay_l=35.0, bay_dz=-8.0)
+# The connector bay: a bore behind the boss, in the block, that holds the plugged connector and a loop of slack, so the
+# insert can come forward far enough to unplug it. Its centre bay_dz below the throat's axis keeps 20 mm of birch under
+# the back slope. The cable channel leaves its floor at its middle.
 # The tweeter as the mount sees it: the SB Acoustics Satori TW29DN-B with its faceplate taken off (SB documents it: 2.5 mm
 # hex), the motor unit's front ring screwed to the insert's back with the faceplate's own screws. PLACEHOLDER sizes from
 # the research (no drawing found): the unit no wider than its 71 to 74 cutout and about 32 deep; measure one first.
@@ -124,7 +128,8 @@ CLEAR = 1.0               # PLACEHOLDER radial clearance for the tweeter pocket
 # FusionAmps are not airtight, so the module sits in its own sealed box behind the plate, the cabinet's sides its ends.
 AMP = dict(model='Hypex FusionAmp FA253', plate_w=360.0, plate_h=135.0, plate_t=3.0, plate_r=4.0, module_depth=55.0,
            cut_w=336.0, cut_h=111.0, z=185.0, rebate=3.0)   # PLACEHOLDER outline radius and screw pattern: Hypex's 2D drawing
-AMP_BOX = dict(depth=90.0, margin=12.0, gland_d=20.0)       # clear depth in front of the back's inner face; space above and below the cutout
+AMP_BOX = dict(depth=90.0, margin=12.0, gland_d=25.0)       # clear depth in front of the back's inner face; space above and below the cutout;
+                                                            # the lid's gland an M25 with a three-hole seal (woofer, mid, tweeter)
 TERMINAL_CUTOUT = (113.0, 49.0)  # DERIVED the terminal cup's body plus 0.5 a side, through the back (was 96 x 36 behind a flat plate)
 # 2026-10-08, the owner: the drivers flush. Each frame sits in a rebate as deep as its flange and the printed trim ring over it, so
 # the ring's face is level with the finish, with a 0.8 reveal round it.
@@ -157,11 +162,16 @@ def depth_at(z):
 # A quart beside the half-gallon: the same carton at 0.564 scale (220 for 390), two-way and active, sealed. Everything
 # above that depends on size is restated here; anything not restated is shared (wall, shadow lines, finishes).
 if BOOK:
-    # the waveguide: the throat moved by the bookshelf's own study (fab/out-bookshelf/acoustics/waveguide); r0 the
-    # Illuminator's 26 mm dome and its roll, 34 across
-    WAVEGUIDE = dict(throat_y=99.0, throat_z=515.0, r0=17.0, a0=12.0, a_h=45.0, a_up=35.0, a_down=30.0, k=1.4, lip_r=7.0)
-    INSERT = dict(margin=1.5, eave_clip=14.0, back_y=113.0, boss_d=70.0, boss_back_y=131.0, clear=0.3,
-                  magnet_d=8.0, magnet_t=3.0, pin_d=4.0, pin_l=8.0)
+    # the waveguide, from the bookshelf's own study (fab/out-bookshelf/acoustics/waveguide/README.md): candidate BkD,
+    # the throat 95 behind the face, r0 17 (the Illuminator's 26 mm dome and its roll, 34 across), a0 4 so the wall
+    # opens gently from the dome, s_min 10 so the mouth reaches the eave. It holds about +-56 degrees horizontally at
+    # 2.5 kHz and +-32 from 6.3 kHz, the listening axis within 0.8 dB of the loudest direction at 2.5 kHz. The
+    # simulated throat was 514 up; it is 517 here so the 62 mm faceplate clears the top panel (2 mm of insert under
+    # it), which moves nothing measurable at these wavelengths.
+    WAVEGUIDE = dict(throat_y=95.0, throat_z=517.0, r0=17.0, a0=4.0, a_h=45.0, a_up=35.0, a_down=30.0, k=1.4, lip_r=7.0, s_min=10.0)
+    INSERT = dict(margin=1.5, eave_clip=14.0, back_y=113.0, boss_d=60.0, boss_back_y=131.0, clear=0.3,   # boss 60: clears the top panel
+                  magnet_d=8.0, magnet_t=3.0, pin_d=4.0, pin_l=8.0,
+                  bay_d=26.0, bay_l=22.0, bay_dz=-5.0)
     # Scan-Speak Illuminator D3004/602200: its 62 mm faceplate screwed to the insert's back, the dome in the 34 mm throat
     TWEETER_PART = dict(model='Scan-Speak Illuminator D3004/602200', dome_d=26.0, surround_w=4.0, flange_d=62.0, flange_t=4.5,
                         body_d=48.0, body_depth=17.0, screws=3, bolt_circle=54.0)
@@ -175,7 +185,7 @@ if BOOK:
     # Hypex FusionAmp FA122 upright on the back (its 315 plate will not lie across a 220 back)
     AMP = dict(model='Hypex FusionAmp FA122', plate_w=120.0, plate_h=315.0, plate_t=3.0, plate_r=4.0, module_depth=55.0,
                cut_w=96.0, cut_h=291.0, z=235.0, rebate=3.0)
-    AMP_BOX = dict(depth=70.0, margin=10.0, gland_d=16.0)
+    AMP_BOX = dict(depth=70.0, margin=10.0, gland_d=20.0)   # an M20 with a two-hole seal
     # The back holds the amplifier, so the Facts go on the right side, as on a real carton
     LABEL = dict(w=150.0, h=147.0, top=420.0, face='right')
     BADGE = dict(type=25.0, relief=1.2, z=31.0, tracking=-0.035)
@@ -185,6 +195,7 @@ if BOOK:
     INNER = PLAN - 2 * WALL
     TOP_Z0 = BODY - WALL
     MID_CHAMBER_DEPTH = None; MID_SHELF_TOP = None
-    BRACE_Z = 210.0; BRACE_WINDOW = 120.0; BRACE_WINDOW_R = 20.0
+    BRACE_Z = None; BRACE_WINDOW = None; BRACE_WINDOW_R = None   # no window brace: the amplifier's box fills the back half from
+                                                                  # z 62 to 409 and its 18 mm front, glued to both sides, braces them
     GABLE_SPLIT_Z = None
     TRIM_RING = dict(t=3.0, width=12.0)

@@ -1,0 +1,187 @@
+{
+ "extends": "base.json",
+ "title": "How it goes together",
+ "size": [
+  1800,
+  1200
+ ],
+ "product": {
+  "def": "studio/products/earmilk.json",
+  "flavour": "whole",
+  "instances": [
+   {
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "rotate_z": 0
+   }
+  ],
+  "hide": [
+   "cable-*|connector-*|grommet-top|gland-amp"
+  ],
+  "explode": [
+   {
+    "match": "waveguide-insert|magnets-insert|pins-insert",
+    "offset_m": [
+     0,
+     -0.3,
+     0
+    ]
+   },
+   {
+    "match": "tweeter-*",
+    "offset_m": [
+     0,
+     -0.2,
+     0
+    ]
+   },
+   {
+    "match": "mid-ring",
+    "offset_m": [
+     0,
+     -0.24,
+     0
+    ]
+   },
+   {
+    "match": "mid-frame|mid-cone|mid-cap|mid-surround|mid-motor",
+    "offset_m": [
+     0,
+     -0.13,
+     0
+    ]
+   },
+   {
+    "match": "woofer-ring",
+    "offset_m": [
+     0,
+     -0.3,
+     0
+    ]
+   },
+   {
+    "match": "woofer-frame|woofer-cone|woofer-cap|woofer-surround|woofer-motor",
+    "offset_m": [
+     0,
+     -0.16,
+     0
+    ]
+   }
+  ]
+ },
+ "set": {
+  "kind": "sweep",
+  "color": "#C9C5BE",
+  "width": 20,
+  "front": 10,
+  "depth": 3.0,
+  "radius": 1.6,
+  "height": 7
+ },
+ "camera": {
+  "position": [
+   -2.2,
+   -2.95,
+   1.62
+  ],
+  "target": [
+   0.0,
+   -0.24,
+   0.6
+  ],
+  "lens_mm": 58,
+  "level": true
+ },
+ "sky": {
+  "kind": "gradient",
+  "strength": 0.55,
+  "zenith": "#FFFFFF",
+  "horizon": "#DAD7D1",
+  "ground": "#6E6A63"
+ },
+ "lights": {
+  "key": {
+   "type": "area",
+   "size_m": [
+    1.4,
+    1.4
+   ],
+   "orbit": {
+    "azimuth_deg": -55,
+    "elevation_deg": 48,
+    "distance_m": 2.4
+   },
+   "target": [
+    0,
+    -0.25,
+    0.7
+   ],
+   "irradiance": 3.2,
+   "color": 5600
+  },
+  "fill": {
+   "type": "area",
+   "size_m": [
+    2.0,
+    2.0
+   ],
+   "orbit": {
+    "azimuth_deg": 40,
+    "elevation_deg": 18,
+    "distance_m": 3.2
+   },
+   "target": [
+    0,
+    -0.2,
+    0.6
+   ],
+   "irradiance": 0.8,
+   "color": 6200,
+   "specular": 0.4
+  },
+  "top": {
+   "type": "area",
+   "size_m": [
+    2.0,
+    0.6
+   ],
+   "position": [
+    0.0,
+    -0.5,
+    2.6
+   ],
+   "target": [
+    0.0,
+    -0.25,
+    0.9
+   ],
+   "irradiance": 1.3,
+   "color": 6000
+  },
+  "rim": {
+   "type": "area",
+   "size_m": [
+    1.0,
+    1.6
+   ],
+   "orbit": {
+    "azimuth_deg": 150,
+    "elevation_deg": 30,
+    "distance_m": 2.6
+   },
+   "target": [
+    0,
+    0,
+    0.8
+   ],
+   "irradiance": 1.2,
+   "color": 6500
+  }
+ },
+ "render": {
+  "exposure": 0.0
+ }
+}

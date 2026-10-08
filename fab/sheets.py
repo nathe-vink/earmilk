@@ -457,13 +457,14 @@ def sheet2(pdf, M, W):
     S.dim((-INSERT['back_y'], 815), (0, 815), 0, f'{INSERT["back_y"]:.0f} to the insert\'s back', origin=org2, scale=k2, size=5, ext=False)
     for (y, z, t, dx, dy) in ((ty - 60, tz + 8, 'the waveguide (air)', 50, 18), (ty - 20, BODY + 18, 'insert', 55, -6),
                               (WAVEGUIDE['throat_y'] + 20, tz + 10, 'tweeter, rear-mounted', -75, 34), (cad.wire_hole_y(), 845, 'cable channel', -45, -12),
+                              (cad.wire_hole_y() + 6, tz + INSERT['bay_dz'] + 6, 'connector bay', -40, 30),
                               (PLAN - 60, 930, 'gable block (birch)', -20, 30)):
         S.ax.annotate(t, xy=(org2[0] - k2 * y, org2[1] + k2 * z), xytext=(org2[0] - k2 * y + dx, org2[1] + k2 * z + dy), fontsize=5.2,
                       ha='left' if dx > 0 else 'right', va='center', zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK))
     S.notes(250, 112, 'The roof', [
         'The waveguide insert (light blue) sits in a pocket in the gable block, 0.3 mm clear all round. It slides out forward, level, with the tweeter on it.',
         f'The tweeter is rear-mounted: its flange in a counterbore behind the throat, its dome and surround filling the {2 * WAVEGUIDE["r0"]:.0f} mm throat, so the wall runs on from the surround with no step.',
-        f'Its cable leaves through the boss\'s open back into a {WIRE_HOLE_D:.0f} mm channel down through the block and the top panel, to a connector in the woofer chamber with slack for the insert\'s travel.',
+        f'Its lead leaves the boss\'s open back into the connector bay behind it (ø{INSERT["bay_d"]:.0f} x {INSERT["bay_l"]:.0f} deep), where it plugs into the cabinet\'s lead; that runs down a {WIRE_HOLE_D:.0f} mm channel through the block and the top panel, sealed by a grommet under the top panel.',
         'Four magnets and two pins in the insert\'s back face meet their partners in the pocket\'s back wall (sheet 3).',
     ], width=150)
     S.save(pdf)
@@ -495,8 +496,8 @@ def sheet3(pdf, M, W):
     S.dim((mw.min(), ztop), (mw.max(), ztop), 4, f'mouth {mw.max() - mw.min():.0f}', origin=of, scale=k, size=5)
     S.label(of[0] + k * RUN, of[1] + k * BODY - 16, 'FRONT')
     # section on the axis (x = RUN), from the left: the insert, the tweeter and the gable round them, in an inset
-    clip = (-(INSERT['boss_back_y'] + 40 * XS), BODY - 15 * XS, 8 * XS, RIDGE_Z)
-    x0p, y0p = 250, 205 - k * 15 * XS
+    clip = (-(INSERT['boss_back_y'] + 40 * XS), BODY - 40 * XS, 8 * XS, RIDGE_Z)
+    x0p, y0p = 250, (190 if BOOK else 205) - k * 40 * XS     # the bookshelf's is drawn larger: lower, to clear the border
     os_ = (x0p - k * clip[0], y0p - k * clip[1])
     loops, bg = centre_section(M)
     sub = {n: loops[n] for n in ('gable-block', 'top-panel', 'front-baffle', 'waveguide-insert', 'tweeter-frame', 'tweeter-dome', 'tweeter-surround') if n in loops}
@@ -509,10 +510,34 @@ def sheet3(pdf, M, W):
     S.dim((-INSERT['boss_back_y'], zb), (-ty, zb), -6, f'{INSERT["boss_back_y"] - ty:.0f}', origin=os_, scale=k, size=5)
     S.dim((8 * XS, BODY), (8 * XS, tz), -6, f'{tz - BODY:.0f}', origin=os_, scale=k, size=5)
     S.ax.annotate(f'counterbore ø{TWEETER_PART["flange_d"] + 0.4:.1f} x {TWEETER_PART["flange_t"] + 0.2:.1f}\nfor the tweeter\'s flange', xy=(os_[0] - k * (ty + 2), os_[1] + k * (tz + TWEETER_PART['flange_d'] / 2 - 2)),
-                  xytext=(os_[0] - k * (ty + 2) + 18, os_[1] + k * (tz + 55)), fontsize=5, zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK))
+                  xytext=(os_[0] - k * (ty + 2) + 18, os_[1] + k * (tz + 55 * XS)), fontsize=5, zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK))
     S.ax.annotate('the waveguide (air)', xy=(os_[0] - k * (ty - 50), os_[1] + k * (tz - 5)), xytext=(os_[0] - k * (ty - 50) + 22, os_[1] + k * (tz + 28)),
                   fontsize=5, zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK))
-    S.label(os_[0] - k * 110 * XS, os_[1] + k * BODY - 16, 'SECTION ON THE AXIS (WITH THE GABLE)')
+    # the wiring in the section: the tweeter's lead into the bay, the connector at the channel's mouth, the cabinet's
+    # lead down the channel and through the grommet under the top panel (the same runs as the render model's)
+    I_, T_ = INSERT, TWEETER_PART
+    yw = cad.wire_hole_y(); zbay = tz + I_['bay_dz']; zcon = zbay - I_['bay_d'] / 2 + 2.0
+    lead = np.array([(ty + T_['flange_t'] + T_['body_depth'] - 2, tz - 6), (I_['boss_back_y'] + 4, zbay + 4),
+                     (yw + I_['bay_l'] / 2 - 6, zbay + 6), (yw + 2, zcon + 16), (yw, zcon + 11)])
+    down = np.array([(yw, zcon - 11), (yw, BODY - 38 * XS)])
+    for pth in (lead, down):
+        iax.plot(-pth[:, 0], pth[:, 1], color=RED, lw=0.9 * PT, solid_capstyle='round', zorder=6)
+    iax.add_patch(Rectangle((-(yw + 4), zcon - 12), 8, 24, fc='#f4f1e8', ec=INK, lw=0.4 * PT, zorder=7))
+    iax.plot([-(yw + 4), -(yw - 4)], [zcon, zcon], color=INK, lw=0.3 * PT, zorder=8)
+    gw = WIRE_HOLE_D / 2 + 4
+    iax.add_patch(Rectangle((-(yw + gw), TOP_Z0 - 4), 2 * gw, 4, fc='#333333', ec=INK, lw=0.3 * PT, zorder=7))
+    # labels to the left, right-aligned in the gap between the front view and this section
+    gx_ = lambda y: x0p - 7 - (os_[0] - k * y)
+    for (y, z, t, dx, dy) in ((I_['boss_back_y'] + 2, zbay + 4, f'tweeter lead, 2 x 1.0 mm2', gx_(I_['boss_back_y'] + 2), 30),
+                              (yw, zcon - 4, 'connector, 2 pole, locking\n(JST VH): plug on the lead,\nsocket on the cabinet\'s', gx_(yw), -12),
+                              (yw + I_['bay_l'] / 2 - 4, zbay + I_['bay_d'] / 2 - 4, f'connector bay ø{I_["bay_d"]:.0f}', gx_(yw + I_['bay_l'] / 2 - 4), 22),
+                              (yw, (BODY + zcon - 12) / 2, f'channel ø{WIRE_HOLE_D:.0f}', gx_(yw), -14),
+                              (yw, TOP_Z0 - 2, 'grommet, sealed,\nunder the top panel', gx_(yw), -12),
+                              (yw, BODY - 36 * XS, 'to the amplifier\n(sheet 4)', gx_(yw), -30)):
+        S.ax.annotate(t, xy=(os_[0] - k * y, os_[1] + k * z), xytext=(os_[0] - k * y + dx, os_[1] + k * z + dy), fontsize=4.8,
+                      ha='right' if dx < 0 else 'left', va='center', zorder=9, color=INK,
+                      arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
+    S.label(os_[0] - k * 110 * XS, os_[1] + k * BODY - 16 - k * 25 * XS, 'SECTION ON THE AXIS (WITH THE GABLE)')
     # back view: the insert from behind, magnets, pins, the boss
     ob = (40 + k * xmax, 70 - k * BODY)
     visb, _ = hlr([ins], 'back')
@@ -526,10 +551,10 @@ def sheet3(pdf, M, W):
         S.text(ob[0] + k * (-x), ob[1] + k * z - 4.5, f'pin ø{INSERT["pin_d"]:.0f}', size=3.8, ha='center')
     S.label(ob[0] + k * (-RUN), ob[1] + k * BODY - 14, 'BACK (THE FACE THAT MEETS THE POCKET)')
     S.notes(230, 112, 'Fitting the tweeter and the insert', [
-        'Solder the tweeter\'s lead (2 x 1.5 mm2, 450 mm) to its tabs and fit the plug half of the connector. Feed the lead through the boss from the front.',
+        'Solder the tweeter\'s lead (2 x 1.0 mm2, 120 mm) to its tabs and crimp the plug half of a two-pole locking connector (JST VH) on its end.',
         f'Seat the tweeter in the counterbore from behind, dome toward the throat, on a 0.5 mm foam gasket. Fix its {TWEETER_PART["screws"]} screws into the insert (heat-set brass inserts, M3).',
         'Glue the magnets into the insert\'s back with epoxy, polarity marked, and their partners into the pocket\'s back wall, opposite poles out. Fit the two pins in the insert.',
-        'From the front, feed the lead into the pocket\'s channel, plug it into the socket on the cabinet\'s lead (pulled up through the channel from the woofer chamber), push the slack back down.',
+        'The cabinet\'s lead ends in the socket 100 mm above the grommet. With the insert out, draw the socket forward out of the bay through the empty pocket, plug the tweeter\'s lead into it, and tuck both and the slack back into the bay.',
         'Slide the insert in, level, until the pins seat and the magnets pull it home: its face flush with the roof, the seam even.',
         'Service: lift it out with a suction lifter on its flat border (or a pull loop under its lower edge), unplug, and the tweeter comes out with it.',
     ], width=150)
@@ -606,7 +631,7 @@ def sheet4(pdf, M, W):
     if BOOK:
         S.notes(X0 - 44, 118, 'Runs, connectors and seals', [
             'Woofer (CH1): from the amplifier box\'s gland to the woofer\'s terminals, 0.4 m of 1.5 mm2.',
-            'Tweeter (CH2): up the back wall to the top panel, through the 14 mm channel in the top panel and the gable block, 0.6 m of 1.0 mm2, to a two-pole locking connector at the insert.',
+            'Tweeter (CH2): from the gland up through the brace\'s window to the top panel, through the 14 mm channel in the top panel and the gable block, 0.6 m of 1.0 mm2, ending in the socket of a two-pole locking connector (JST VH) in the bay behind the insert.',
             'Seal the tweeter cable where it passes the top panel (grommet and sealant): the box is sealed, and the insert\'s pocket is open to the room through its seam.',
             'The amplifier box\'s lid: a 16 mm gland for the two pairs; seal it.',
             'The crossover (about 2 to 2.5 kHz), the woofer\'s shelf to 45 Hz (+7.6 dB) and the delays are set in the DSP. Wire red to + throughout.',
@@ -615,7 +640,7 @@ def sheet4(pdf, M, W):
         S.notes(X0 - 44, 118, 'Runs, connectors and seals', [
             'Woofer (CH1): from the amplifier box\'s gland straight to the woofer\'s terminals, 0.6 m of 2.5 mm2. Fit 6.3 mm push-on terminals to suit the driver.',
             'Mid (CH2): up the back wall, through the 12 mm hole in the mid chamber\'s divider, 1.0 m of 1.5 mm2. Seal the hole round the cable with putty: the mid\'s chamber must stay closed.',
-            'Tweeter (CH3): up the back wall to the top panel, through the 14 mm channel in the top panel and the gable block, 1.3 m of 1.0 mm2, to a two-pole locking connector (JST VH or Molex Mini-Fit) at the insert. The supplied 1.25 m Hypex harness is too short: extend it.',
+            'Tweeter (CH3): from the gland up through the brace\'s window to the top panel, through the 14 mm channel in the top panel and the gable block, 1.3 m of 1.0 mm2, ending in the socket of a two-pole locking connector (JST VH) in the bay behind the insert. The supplied 1.25 m Hypex harness is too short: extend it.',
             'Seal the tweeter cable where it passes the top panel with a rubber grommet and sealant. The insert\'s pocket is open to the room through its 0.3 mm seam, so an unsealed channel would be a leak in the woofer\'s box.',
             'The amplifier box\'s lid: a 20 mm gland (PG11) for the three pairs; seal it. The box itself is glued and sealed; its front is the woofer chamber\'s wall.',
             'Polarity, delay and the crossover (about 2.8 kHz tweeter to mid, from the waveguide study) are set in the DSP: wire red to + throughout and let the filters do the rest.',

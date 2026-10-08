@@ -1,0 +1,20 @@
+{
+ "size": "bookshelf",
+ "box": "sealed",
+ "woofer": "sb17nrx2c35-8",
+ "Fs_hz": 36.5,
+ "Qts": 0.42,
+ "Vas_l": 27.0,
+ "Vb_net_l": 9.15,
+ "fc_hz": 72.6,
+ "Qtc": 0.83,
+ "f3_hz": 63.2,
+ "linkwitz_transform": {
+  "from_fc_hz": 72.6,
+  "from_q": 0.83,
+  "to_f0_hz": 45.0,
+  "to_q": 0.707,
+  "low_shelf_db": 8.3
+ },
+ "note": "net air from fab/cad.py less 0.4 L for the driver; T/S from fab/research/drivers-small.json. The research quotes fc 70 Hz, Qtc 0.80, f3 62.5 Hz, +7.6 dB to 45 Hz at 10.1 L."
+}

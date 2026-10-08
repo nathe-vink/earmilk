@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1625 1525" width="406.25" height="381.25">
+<rect x="0" y="0" width="1525" height="1525" fill="#efe6d6" stroke="#999" stroke-width="4"/>
+<rect x="15.0" y="1026.0" width="220.0" height="484.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="125.0" y="1268.0" font-size="40" text-anchor="middle" font-family="sans-serif">front-baffle</text>
+<rect x="247.0" y="1026.0" width="220.0" height="484.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="357.0" y="1268.0" font-size="40" text-anchor="middle" font-family="sans-serif">front-baffle</text>
+<rect x="479.0" y="1026.0" width="220.0" height="484.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="589.0" y="1268.0" font-size="40" text-anchor="middle" font-family="sans-serif">back-panel</text>
+<rect x="711.0" y="1026.0" width="220.0" height="484.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="821.0" y="1268.0" font-size="40" text-anchor="middle" font-family="sans-serif">back-panel</text>
+<rect x="943.0" y="1026.0" width="184.0" height="484.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1035.0" y="1268.0" font-size="40" text-anchor="middle" font-family="sans-serif">side</text>
+<rect x="1139.0" y="1026.0" width="184.0" height="484.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1231.0" y="1268.0" font-size="40" text-anchor="middle" font-family="sans-serif">side</text>
+<rect x="15.0" y="530.0" width="184.0" height="484.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="107.0" y="772.0" font-size="40" text-anchor="middle" font-family="sans-serif">side</text>
+<rect x="211.0" y="530.0" width="184.0" height="484.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="303.0" y="772.0" font-size="40" text-anchor="middle" font-family="sans-serif">side</text>
+<rect x="407.0" y="703.0" width="184.0" height="311.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="499.0" y="858.5" font-size="40" text-anchor="middle" font-family="sans-serif">amp-box-front</text>
+<rect x="603.0" y="703.0" width="184.0" height="311.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="695.0" y="858.5" font-size="40" text-anchor="middle" font-family="sans-serif">amp-box-front</text>
+<rect x="799.0" y="786.0" width="228.0" height="228.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="913.0" y="900.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-01</text>
+<rect x="1039.0" y="786.0" width="228.0" height="228.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1153.0" y="900.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-01</text>
+<rect x="1279.0" y="832.8" width="228.0" height="181.2" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1393.0" y="923.4" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-02</text>
+<rect x="15.0" y="336.8" width="228.0" height="181.2" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="129.0" y="427.4" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-02</text>
+<rect x="255.0" y="383.6" width="228.0" height="134.4" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="369.0" y="450.8" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-03</text>
+<rect x="495.0" y="383.6" width="228.0" height="134.4" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="609.0" y="450.8" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-03</text>
+<rect x="735.0" y="430.4" width="228.0" height="87.6" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="849.0" y="474.2" font-size="29.2" text-anchor="middle" font-family="sans-serif">gable-layer-04</text>
+<rect x="975.0" y="430.4" width="228.0" height="87.6" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1089.0" y="474.2" font-size="29.2" text-anchor="middle" font-family="sans-serif">gable-layer-04</text>
+<rect x="1215.0" y="477.2" width="228.0" height="40.8" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1329.0" y="497.6" font-size="13.6" text-anchor="middle" font-family="sans-serif">gable-layer-05</text>
+<rect x="15.0" y="283.99999999999994" width="228.0" height="40.8" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="129.0" y="304.4" font-size="13.6" text-anchor="middle" font-family="sans-serif">gable-layer-05</text>
+<rect x="255.0" y="310.79999999999995" width="228.0" height="14.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="369.0" y="317.79999999999995" font-size="4.666666666666667" text-anchor="middle" font-family="sans-serif">gable-layer-06</text>
+<rect x="495.0" y="310.79999999999995" width="228.0" height="14.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="609.0" y="317.79999999999995" font-size="4.666666666666667" text-anchor="middle" font-family="sans-serif">gable-layer-06</text>
+<rect x="735.0" y="310.79999999999995" width="228.0" height="14.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="849.0" y="317.79999999999995" font-size="4.666666666666667" text-anchor="middle" font-family="sans-serif">gable-layer-07</text>
+<rect x="975.0" y="310.79999999999995" width="228.0" height="14.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1089.0" y="317.79999999999995" font-size="4.666666666666667" text-anchor="middle" font-family="sans-serif">gable-layer-07</text>
+<rect x="15.0" y="88.0" width="184.0" height="184.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="107.0" y="180.0" font-size="40" text-anchor="middle" font-family="sans-serif">top-panel</text>
+<rect x="211.0" y="88.0" width="184.0" height="184.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="303.0" y="180.0" font-size="40" text-anchor="middle" font-family="sans-serif">top-panel</text>
+<rect x="407.0" y="88.0" width="184.0" height="184.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="499.0" y="180.0" font-size="40" text-anchor="middle" font-family="sans-serif">bottom-panel</text>
+<rect x="603.0" y="88.0" width="184.0" height="184.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="695.0" y="180.0" font-size="40" text-anchor="middle" font-family="sans-serif">bottom-panel</text>
+<rect x="799.0" y="184.0" width="184.0" height="88.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="891.0" y="228.0" font-size="29.333333333333332" text-anchor="middle" font-family="sans-serif">amp-box-floor</text>
+<rect x="995.0" y="184.0" width="184.0" height="88.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1087.0" y="228.0" font-size="29.333333333333332" text-anchor="middle" font-family="sans-serif">amp-box-floor</text>
+<rect x="1191.0" y="184.0" width="184.0" height="88.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1283.0" y="228.0" font-size="29.333333333333332" text-anchor="middle" font-family="sans-serif">amp-box-lid</text>
+<rect x="1335.0" y="1326.0" width="88.0" height="184.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="1379.0" y="1418.0" font-size="40" text-anchor="middle" font-family="sans-serif">amp-box-lid</text>
+</svg>

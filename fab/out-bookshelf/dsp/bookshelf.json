@@ -1,0 +1,57 @@
+{
+ "size": "bookshelf",
+ "amplifier": "Hypex FusionAmp FA122",
+ "channels": {
+  "CH1": "woofer, SB17NRX2C35-8",
+  "CH2": "tweeter, Illuminator D3004/602200"
+ },
+ "crossovers": [
+  {
+   "between": "woofer-tweeter",
+   "f_hz": 2400.0,
+   "type": "Linkwitz-Riley",
+   "order": 4
+  }
+ ],
+ "acoustic_centres_mm_behind_front": {
+  "woofer": 31.5,
+  "tweeter": 91.0
+ },
+ "delays_ms": {
+  "woofer": 0.173,
+  "tweeter": 0.0
+ },
+ "sensitivity_db_2v83": {
+  "woofer": 87.0,
+  "tweeter": 90.5
+ },
+ "gains_db": {
+  "woofer": 0.0,
+  "tweeter": -3.5
+ },
+ "woofer_eq": [
+  {
+   "type": "linkwitz-transform",
+   "from_fc_hz": 72.6,
+   "from_q": 0.83,
+   "to_f0_hz": 45.0,
+   "to_q": 0.707,
+   "low_shelf_db": 8.3,
+   "why": "the sealed box's corner moved down to 45 Hz (fab/acoustics.py)"
+  }
+ ],
+ "waveguide_on_axis_rel_db": {
+  "1600.0": -2.6,
+  "2500.0": 0.0,
+  "4000.0": -3.8,
+  "6300.0": -3.8,
+  "10000.0": -6.4
+ },
+ "workflow": [
+  "Load the channels and the crossovers in Hypex Filter Design (Windows), USB to the amplifier",
+  "Measure each driver alone at 1 m on the tweeter axis (REW, UMIK-1), gated",
+  "Set levels and delays from the measurements (these numbers are where to start)",
+  "Check the summed response and the reverse-null at each crossover, then EQ the system flat on axis",
+  "Save to the amplifier; it stays silent until a filter is loaded"
+ ]
+}

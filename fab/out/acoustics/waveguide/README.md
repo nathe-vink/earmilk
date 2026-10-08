@@ -71,17 +71,46 @@ How far the listening axis sits below the loudest direction (dB):
   degrees, DI about 10.5 dB). So the DSP crossover belongs at about 2.8 kHz (B's would be about 2 kHz). A 6.5 in mid
   crossed at 2.8 kHz is within normal practice, and a 1 in dome loaded by a waveguide is comfortable there.
 
+## C22: C for the chosen tweeter
+
+The tweeter is now chosen: SB Acoustics' Satori TW29DN-B with its faceplate off (fab/research/drivers-floorstander.md),
+a 29 mm dome on an 8 mm surround, about 45 mm across. So the throat's radius r0 is 22.5 (C had 15): the wall runs on
+from the surround with no flat ring. C22 is C with that throat; C22a8 tried the wall leaving it at 8 degrees instead of
+12 and changed nothing that matters, so C22 stands. Then C22 was run densely, eleven frequencies from 1 to 10 kHz:
+
+| f | H half-angle | up / down | DI | loudest vertically |
+|---|---|---|---|---|
+| 1 kHz | 82 | - / 46 | 3.2 | +45 |
+| 1.25 kHz | - | - / 63 | 2.3 | +45 |
+| 1.6 kHz | 63 | 71 / 61 | 6.1 | +40 |
+| 2 kHz | 40 | 50 / 47 | 8.7 | +15 |
+| 2.5 kHz | 40 | 43 / 32 | 9.4 | +10 |
+| 3.15 kHz | 41 | 34 / 30 | 11.2 | +10 |
+| 4 kHz | 33 | 25 / 31 | 12.5 | +5 |
+| 5 kHz | 32 | 17 / 27 | 13.4 | 0 |
+| 6.3 kHz | 36 | 15 / 24 | 13.3 | 0 |
+| 8 kHz | 31 | 16 / 19 | 14.2 | 0 |
+| 10 kHz | 28 | 10 / 19 | 15.2 | 0 |
+
+![C22's polar maps](C22-polar.png)
+
+Read the maps the way a designer does: straight, parallel -6 dB lines (the black ones) mean the pattern holds. C22's
+horizontal lines are nearly straight at about +-40 degrees from 2 to 4 kHz and +-30 above; below 1.6 kHz they flare,
+which is where the slope takes over and the sound tips up (the vertical map's dark upper corner). The crossover at
+2.8 kHz sits inside the controlled band with an octave to spare, and the DSP's 24 dB/octave slope keeps the tweeter
+out of the uncontrolled region below it.
+
 ## Decision and consequences
 
-- **The throat moves to C:** 176 mm behind the front face, the axis at 935 (`params.WAVEGUIDE`).
-- **The mouth grows** from 211 x 118 to about 281 wide and 181 up the slope. It runs from 13 mm above the eave to
-  52 mm below the ridge.
-- **The waveguide becomes a separate insert** (`params.INSERT`, `cad.waveguide_insert()`):
-  - The tweeter screws to the insert's back (rear mount): its flange sits in a counterbore behind the throat, and its
-    dome and surround fill the 30 mm throat. No flat faceplate ring lies between the surround and the wall.
-  - The insert slides out forward, level, like a drawer, with the tweeter on it.
-  - Four magnets in its back hold it and two pins locate it.
-  - The tweeter's wires drop through the gable block to a connector inside the cabinet.
+- **The throat is C22:** 176 mm behind the front face, the axis at 935, r0 22.5 (`params.WAVEGUIDE`).
+- **The mouth** is 279 wide and runs from 13 mm above the eave to 52 mm below the ridge.
+- **The waveguide is a separate insert** (`params.INSERT`, `cad.waveguide_insert()`, drawing sheet 3):
+  - The tweeter screws to the insert's back (rear mount): its flange sits in a 73.4 x 6.2 counterbore behind the
+    throat, and its dome and surround fill the 45 mm throat.
+  - The insert slides out forward, level, like a drawer, with the tweeter on it; four 12 x 4 magnets hold it and two
+    6 mm pins locate it.
+  - The tweeter's 120 mm lead plugs into the cabinet's lead in a 36 mm bay behind the insert's boss; that lead runs
+    down a 14 mm channel through the gable block and the top panel, sealed by a grommet, to the amplifier.
   - The seam runs round the mouth just outside the lip, and along the eave where the mouth comes near it.
 - **For the owner.** The mid's centre (z 690) is 245 mm below the tweeter's axis, two wavelengths at 2.8 kHz. That
   puts the first vertical nulls about 14 degrees above and below the listening axis. Raising the mid to z 760 (the
@@ -90,6 +119,5 @@ How far the listening axis sits below the loudest direction (dB):
 
 ## Still to do
 
-- The tweeter is not chosen yet (fab/research). When it is, set r0 to its dome and surround and re-run C.
-- Run C densely, 1 to 12.5 kHz in third octaves, for the polar maps.
-- Measure the printed insert with a calibrated microphone (README, step 1).
+- Measure one TW29DN-B with its faceplate off; if its diaphragm is not 45 mm across, set r0 and re-run C22.
+- Measure the printed insert with a calibrated microphone (fab/README.md, step 1) against `C22-polar.png`.

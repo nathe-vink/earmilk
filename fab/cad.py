@@ -131,8 +131,8 @@ def mid_divider():
 
 
 def wire_hole_y():
-    if WAVEGUIDE:   # behind the waveguide insert's boss, where the tweeter's wires come out
-        return INSERT['boss_back_y'] + 3.0
+    if WAVEGUIDE:   # the middle of the connector bay behind the insert's boss
+        return INSERT['boss_back_y'] + INSERT['bay_l'] / 2
     return TWEETER['faceplate_y'] + TWEETER['faceplate_t'] + TWEETER['body_depth'] / 2
 
 
@@ -252,19 +252,19 @@ def waveguide_insert():
 
 def insert_pocket():
     """The insert's pocket in the gable block: its outline grown by INSERT['clear'] from the slope back to back_y,
-    the boss's bore, the magnets' and pins' holes in the pocket's back wall, and the wire channel from the boss's bore
-    down through the block to the top panel's hole."""
+    the boss's bore, the connector bay behind it, the magnets' and pins' holes in the pocket's back wall, and the cable
+    channel from the bay's floor down through the block to the top panel's hole."""
     I = INSERT
     zc = WAVEGUIDE['throat_z']
     pk = _y_prism(insert_outline(I['clear']), -5.0, I['back_y'] + I['clear'])
-    pk += cyl_y(RUN, zc, I['boss_d'] + 2 * I['clear'], I['back_y'], I['boss_back_y'] + 6.0)   # 6 behind the boss for the wires
+    pk += cyl_y(RUN, zc, I['boss_d'] + 2 * I['clear'], I['back_y'], I['boss_back_y'] + 1.0)
+    pk += cyl_y(RUN, zc + I['bay_dz'], I['bay_d'], I['boss_back_y'], I['boss_back_y'] + I['bay_l'])   # the connector bay
     mags, pins = insert_fixings()
     for (x, z) in mags:
         pk += cyl_y(x, z, I['magnet_d'] + 0.2, I['back_y'], I['back_y'] + I['magnet_t'] + 0.3)
     for (x, z) in pins:
         pk += cyl_y(x, z, I['pin_d'] + 0.1, I['back_y'], I['back_y'] + I['pin_l'] / 2 + 0.5)
-    yw = I['boss_back_y'] + 3.0
-    pk += cyl_z(RUN, yw, WIRE_HOLE_D, BODY - 1, zc)
+    pk += cyl_z(RUN, wire_hole_y(), WIRE_HOLE_D, BODY - 1, zc + I['bay_dz'])
     return pk
 
 
@@ -390,10 +390,11 @@ def build():
         'side-right': side_panel('right'),
         'top-panel': top_panel(),
         'bottom-panel': bottom_panel(),
-        'window-brace': brace_panel(),
         'gable-block': gable_block(),
         'waveguide-insert': waveguide_insert(),
     }
+    if BRACE_Z:
+        parts['window-brace'] = brace_panel()
     if MID:
         parts['mid-shelf'] = mid_shelf(); parts['mid-divider'] = mid_divider()
     if PORT:
@@ -422,6 +423,51 @@ def woofer_air(parts):
         y0, y1, z0, z1 = amp_box_extent()
         air -= box(WALL, y0 - WALL, z0 - WALL, PLAN - WALL, y1, z1 + WALL)
     return air.volume, mid_vol
+
+
+def checks(parts):
+    """Clearances that the parameters alone do not guarantee, measured on the solids where they can be: each a name, the
+    measured margin in mm and the least it may be. A failure stops the build, the way a failing test would."""
+    out = []
+    def chk(name, margin, least):
+        out.append({'check': name, 'margin_mm': round(margin, 2), 'least_mm': least, 'ok': margin >= least})
+    tan_ = RISE / RUN
+    if WAVEGUIDE:
+        I, T = INSERT, TWEETER_PART
+        zc = WAVEGUIDE['throat_z']
+        bb = parts['waveguide-insert'].bounding_box()
+        chk('insert above the top panel (its lowest point to the body\'s top)', bb.min.Z - BODY, -0.01)
+        chk('insert material under the tweeter\'s counterbore', zc - (T['flange_d'] + 0.4) / 2 - BODY, 1.5)
+        chk('boss above the top panel', zc - I['boss_d'] / 2 - BODY, 1.0)
+        yb = I['boss_back_y'] + I['bay_l']; zt = zc + I['bay_dz'] + I['bay_d'] / 2
+        roof = RIDGE_Z - (yb - RUN) * tan_ if yb > RUN else BODY + yb * tan_
+        chk('birch over the connector bay, under the back slope (vertical)', roof - zt, 8.0)
+        chk('connector bay above the top panel', zc + I['bay_dz'] - I['bay_d'] / 2 - BODY, 4.0)
+    bot_front = PLINTH_H + SHADOW
+    w = WOOFER['z'] - WOOFER_REBATE['d'] / 2
+    chk('woofer rebate above the plinth\'s shadow line', w - bot_front, 5.0)
+    top_w = WOOFER['z'] + WOOFER_REBATE['d'] / 2
+    if MID:
+        chk('mid rebate above the woofer rebate', MID['z'] - MID_REBATE['d'] / 2 - top_w, 10.0)
+        chk('mid rebate below the gable\'s shadow line', GABLE_SHADOW_Z0 - (MID['z'] + MID_REBATE['d'] / 2), 5.0)
+        chk('mid rebate below the mid shelf\'s top (inside its chamber)', MID['z'] - MID_REBATE['d'] / 2 - MID_SHELF_TOP, 5.0)
+    else:
+        chk('woofer rebate below the gable\'s shadow line', GABLE_SHADOW_Z0 - top_w, 5.0)
+    if AMP:
+        chk('amplifier plate above the plinth\'s shadow line', AMP['z'] - AMP['plate_h'] / 2 - bot_front, 2.0)
+        chk('amplifier plate inside the back, across', (PLAN - AMP['plate_w']) / 2 - EDGE_R, 2.0)
+        y0, y1, z0, z1 = amp_box_extent()
+        chk('amplifier box above the bottom panel', z0 - WALL - WALL, 0.0)
+        if PORT:
+            chk('port clear of the amplifier box\'s lid', PORT['z'] - (PORT['bore'] + 2 * PORT_WALL) / 2 - (z1 + WALL), 5.0)
+        if BRACE_Z:
+            chk('amplifier box below the brace', BRACE_Z - (z1 + WALL), 0.0)
+    bad = [c for c in out if not c['ok']]
+    for c in out:
+        print(f"  {'ok  ' if c['ok'] else 'FAIL'} {c['check']}: {c['margin_mm']} mm (least {c['least_mm']})")
+    if bad:
+        raise SystemExit(f'{len(bad)} clearance check(s) failed: ' + '; '.join(c['check'] for c in bad))
+    return out
 
 
 def main():
@@ -495,6 +541,7 @@ def main():
     report['wood_mass_kg'] = round(wood_kg, 2)
     report['port_tube_length_mm'] = port_length_mm() if PORT else None
     report['size'] = SIZE
+    report['checks'] = checks(parts)
     json.dump(report, open(os.path.join(OUT, 'cad.json'), 'w'), indent=1)
     print(json.dumps({k: v for k, v in report.items() if k != 'parts'}, indent=1))
     print(f'{len(parts)} parts, {time.time() - t0:.1f}s')

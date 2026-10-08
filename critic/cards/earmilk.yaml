@@ -2,11 +2,21 @@
 # critic/card.py joins this with the shot's current settings (the engine's shot file) into one card per round.
 
 product: >
-  earmilk, a floorstanding three-way loudspeaker built as a half-gallon gable-top milk carton: 390 x 390 mm plan,
-  1055 mm tall, Baltic birch under a lacquer finish in the flavour's colours (a colour coat under a clear), a plinth
-  band in the accent colour, cast metal letters "earmilk" on the plinth, a 12 in woofer and a 6.5 in mid flush on the
-  front under trim rings, a 1 in dome tweeter at the throat of a waveguide carved into the roof's front slope, and
-  on the back a printed Nutrition Facts panel, a port and the amplifier's connections.
+  earmilk, a floorstanding three-way active loudspeaker built as a half-gallon gable-top milk carton: 390 x 390 mm
+  plan, 1055 mm tall, Baltic birch under a lacquer finish in the flavour's colours (a colour coat under a clear), a
+  plinth band in the accent colour, cast metal letters "earmilk" on the plinth, a 12 in woofer (Dayton RSS315HF-4,
+  black anodised aluminium cone) and a 6.5 in mid (SB Acoustics Satori MR16P-8, papyrus cone) flush on the front under
+  trim rings, a 1 in dome tweeter (SB Satori TW29DN-B) rear-mounted at the throat of a waveguide insert in the roof's
+  front slope, and on the back a printed Nutrition Facts panel, a port and a Hypex FusionAmp plate amplifier.
+
+products:
+  studio/products/earmilk-bookshelf.json: >
+    earmilk bookshelf, the floorstander's two-way active little sibling, the same gable-top carton at 220 x 220 mm
+    plan and 594 mm tall: Baltic birch under a lacquer finish in the flavour's colours, a plinth band in the accent
+    colour, cast metal letters "earmilk" on the plinth, a 6.5 in woofer (SB Acoustics SB17NRX2C35-8, black paper
+    cone) flush on the front under a trim ring, a 1 in dome tweeter (Scan-Speak Illuminator D3004/602200) at the
+    throat of a waveguide insert in the roof's front slope, the Nutrition Facts printed on its right side as on a
+    real carton, and on the back a Hypex FusionAmp FA122 plate amplifier standing upright.
 
 fixed:
   - >-
@@ -73,3 +83,39 @@ shots:
     purpose: >-
       The family page: six desk-size pints in a moulded dairy crate.
     must_show: [the crate whole, the pints' roofs and fronts, the floor contact]
+  shot-07:
+    title: How it goes together
+    purpose: >-
+      The build page: the speaker exploded along each part's own fixing axis, as an engineering illustration rendered
+      photographically. The waveguide insert drawn forward out of its pocket like a drawer, the tweeter behind it on
+      the axis of its screws, the drivers and their trim rings forward out of their rebates; the empty pocket, its
+      boss bore and magnets visible. Every part distinct, nothing overlapping, on a clean studio sweep.
+    must_show: [the insert clear of the roof with the empty pocket behind it, the tweeter between the insert and the pocket, both drivers and both trim rings separated, the whole cabinet]
+    fixed:
+      - >-
+        The parts' exploded positions are set to show the assembly order and fixing axes; do not ask for parts to
+        move. Camera, light and set may change.
+  shot-08:
+    title: The inside
+    purpose: >-
+      The inside page: the cabinet cut on its centre plane with the near half removed, showing the woofer chamber,
+      the mid's sealed chamber, the brace, the amplifier's sealed box, the waveguide insert in its pocket with the
+      tweeter rear-mounted on it, the connector bay behind it and the tweeter's cable down the channel to the
+      amplifier. Read as a technical cutaway rendered photographically.
+    must_show: [the cut face of every panel, the insert and tweeter in section, the connector and the cable's run to the amplifier box, the drivers in section, the amplifier's box]
+    fixed:
+      - >-
+        The cut's position (the centre plane) and what is cut; do not ask for parts to move or to be cut
+        differently. Camera, light, set and the section colour's reproduction may change.
+  shot-09:
+    title: The bookshelf pair on a sideboard
+    purpose: >-
+      The bookshelf's hero: a stereo pair of the small size on a sideboard in a bright, lived-in room, read first as
+      a premium hi-fi product and second as a pair of quart milk cartons. Landscape.
+    must_show: [both speakers whole, their fronts and roofs, the sideboard's top, the room's light]
+  shot-10:
+    title: The family
+    purpose: >-
+      The range page: the floorstander on the floor beside a bookshelf on a sideboard, one family in two sizes and two
+      flavours, in the same room and light.
+    must_show: [both whole, the size relation readable, their fronts and roofs]

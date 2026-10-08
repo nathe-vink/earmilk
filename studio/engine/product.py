@@ -17,7 +17,7 @@ A product definition (studio/products/NAME.json) says:
 
 Instances share mesh data, so five flavours cost one import; each flavour gets its own material copies.
 """
-import fnmatch, json, math
+import fnmatch, json, math, re
 from pathlib import Path
 
 from mathutils import Matrix, Vector
@@ -60,7 +60,8 @@ def import_model(bpy, glb, origin_mm, axes='gltf'):
         for p in o.data.polygons:
             p.use_smooth = True
         o.data.materials.clear(); o.data.materials.append(None)   # one empty slot; each copy links its own material
-        parts[o.name] = o
+        # a second product in the same shot arrives with Blender's ".001" on names it shares with the first
+        parts[re.sub(r'\.\d{3,}$', '', o.name)] = o
     for o in new:
         if o.type != 'MESH':
             bpy.data.objects.remove(o, do_unlink=True)
@@ -183,12 +184,101 @@ def place(bpy, pdef, templates, shot, root):
                 me = bpy.data.meshes.get(key) or _zoned_mesh(bpy, tpl.data, key, mats[mat_name], zones, mats)
             ob = bpy.data.objects.new(f'{pname}#{i}', me)
             bpy.context.scene.collection.objects.link(ob)
+            ob['instance'] = i
             if not zones:
                 # the mesh is shared by every copy: the material lives on the object, so flavours can differ
                 ob.material_slots[0].link = 'OBJECT'; ob.material_slots[0].material = mats[mat_name]
-            ob.matrix_world = T
+            # an exploded view: the first rule that matches moves the part, in the product's frame (metres)
+            off = next((r['offset_m'] for r in prod.get('explode', []) if _match(pname, r['match'])), None)
+            ob.matrix_world = T @ Matrix.Translation(Vector(off)) if off else T
             objs.append(ob); part_of[ob.name] = pname
+    if prod.get('cutaway'):
+        cutaway(bpy, prod['cutaway'], instances, objs)
     return objs, part_of
+
+
+def cutaway(bpy, spec, instances, objs):
+    """Cut every part that crosses a box away (a boolean difference per part, the product's frame, metres), and paint
+    the cut faces with one section material, the way a technical illustration shows the inside:
+
+        "cutaway": {"box_m": [x0, y0, z0, x1, y1, z1], "skip": "pattern",
+                    "sections": [{"match": "pattern", "color": "#D9C29B"}, ...]}
+
+    A part wholly inside the box is hidden; parts matching "skip" are left whole (a cable drawn whole in front of
+    the cut reads better than half a cable). A cut face takes the colour of the first "sections" rule its part
+    matches (wood shows wood, a printed part its resin), else the part's own material, as a bought part's would."""
+    import bmesh
+    x0, y0, z0, x1, y1, z1 = spec['box_m']
+    rules = spec.get('sections') or [{'match': '*', 'color': spec.get('color', '#D9C29B')}]
+    secs = {}
+    def section_for(pname):
+        r = next((r for r in rules if _match(pname, r['match'])), None)
+        if r is None:
+            return None
+        if r['color'] not in secs:
+            secs[r['color']] = M.make(bpy, f'section {r["color"]}', 'birch', {'color': r['color'], 'roughness': r.get('roughness', 0.7)})
+        return secs[r['color']]
+    lo, hi = Vector((x0, y0, z0)), Vector((x1, y1, z1))
+    by_inst = {}
+    for ob in objs:
+        by_inst.setdefault(ob['instance'], []).append(ob)
+    for i, inst in enumerate(instances):
+        T = Matrix.Translation(Vector(inst.get('position', (0, 0, 0)))) @ Matrix.Rotation(math.radians(inst.get('rotate_z', 0)), 4, 'Z')
+        cme = bpy.data.meshes.new(f'cutter#{i}')
+        bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0); bm.to_mesh(cme); bm.free()
+        cutter = bpy.data.objects.new(f'cutter#{i}', cme)
+        bpy.context.scene.collection.objects.link(cutter)
+        cutter.matrix_world = T @ Matrix.Translation((lo + hi) / 2) @ Matrix.Diagonal((*(hi - lo), 1.0))
+        cutter.hide_render = True; cutter.display_type = 'WIRE'
+        Ti = T.inverted()
+        for ob in by_inst.get(i, []):
+            pname = re.sub(r'#\d+(\.\d+)?$', '', ob.name)
+            if spec.get('skip') and _match(pname, spec['skip']):
+                continue
+            # the part's box in the product's frame (an exploded part is moved, so use its own matrix)
+            cs = [Ti @ (ob.matrix_world @ Vector(c)) for c in ob.bound_box]
+            plo = Vector((min(c.x for c in cs), min(c.y for c in cs), min(c.z for c in cs)))
+            phi = Vector((max(c.x for c in cs), max(c.y for c in cs), max(c.z for c in cs)))
+            if any(phi[k] <= lo[k] or plo[k] >= hi[k] for k in range(3)):
+                continue                                   # clear of the box
+            if all(plo[k] >= lo[k] and phi[k] <= hi[k] for k in range(3)):
+                ob.hide_render = True; ob.hide_viewport = True
+                continue                                   # wholly inside it
+            mats = [sl.material for sl in ob.material_slots]
+            me = ob.data.copy(); ob.data = me
+            bm = bmesh.new(); bm.from_mesh(me)
+            bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-6)
+            bm.to_mesh(me); bm.free()
+            me.set_sharp_from_angle(angle=math.radians(35))
+            mod = ob.modifiers.new('cut', 'BOOLEAN')
+            mod.operation = 'DIFFERENCE'; mod.object = cutter; mod.solver = 'EXACT'; mod.use_hole_tolerant = True
+            dg = bpy.context.evaluated_depsgraph_get()
+            new = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+            ob.modifiers.remove(mod)
+            new.materials.clear()
+            for m in mats:
+                new.materials.append(m)
+            sec = section_for(pname)
+            if sec is None:
+                ob.data = new
+                for sl in ob.material_slots:
+                    sl.link = 'DATA'
+                continue
+            new.materials.append(sec)
+            si = len(new.materials) - 1
+            # the cut faces lie on the box's walls and face into it (toward what was cut away)
+            W = Ti @ ob.matrix_world
+            R = W.to_3x3()
+            for p in new.polygons:
+                c = W @ p.center; n = (R @ p.normal).normalized()
+                for k in range(3):
+                    if (abs(c[k] - lo[k]) < 2e-5 and n[k] > 0.99) or (abs(c[k] - hi[k]) < 2e-5 and n[k] < -0.99):
+                        if all(lo[j] - 2e-5 <= c[j] <= hi[j] + 2e-5 for j in range(3) if j != k):
+                            p.material_index = si
+            ob.data = new
+            for sl in ob.material_slots:
+                sl.link = 'DATA'
+
 
 
 def _zoned_mesh(bpy, src, key, base_mat, zones, mats):

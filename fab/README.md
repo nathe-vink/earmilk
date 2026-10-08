@@ -1,132 +1,204 @@
 # Fabrication
 
-Everything needed to have a pair of earmilk floorstanders made, generated from one file of numbers (`params.py`) that copies `spec/geometry.md`. Change a number, run `build.sh`, and every cut file, model, drawing and chart follows. Started 2026-10-04.
+Everything needed to have earmilk made, in two sizes, from one file of numbers (`params.py`): the **floorstander**, a
+three-way, and the **bookshelf**, its two-way little sibling. Both are active: a Hypex FusionAmp plate amplifier in
+the back drives each driver from its own channel, and its DSP is the crossover. Change a number, run `build.sh`, and
+every cut file, model, drawing, chart and the renders' model follow. `fab/out/` holds the floorstander,
+`fab/out-bookshelf/` the bookshelf.
 
-The outside of the speaker is the spec: every outer dimension, the gable, the bowl, the plinth and its shadow line, the letters, the printed Facts, the port and the marks are where `spec/geometry.md` puts them. What is inside, and how it is put together, is this folder's **proposal**: the owner can change any of it without changing how the speaker looks. Proposals are listed below and marked `PROPOSAL` in `params.py`.
+The outside is the spec (`spec/geometry.md`; the bookshelf is the same carton at 0.564 scale with its own plinth and
+type sizes). What is inside, and how it goes together, is this folder's **proposal**, marked `PROPOSAL` in `params.py`;
+the bought parts' sizes are the research's, marked `PLACEHOLDER` until the parts are in hand.
 
-![Exploded view](out/views/exploded.png)
+![The roof in section: the waveguide insert, the tweeter rear-mounted on it, the connector bay and the cable down to the amplifier](../renders/2026-10-08/engine/08b-final.png)
+
+## The two speakers
+
+| | Floorstander | Bookshelf |
+|---|---|---|
+| Size | 390 x 390 mm, 1,055 tall | 220 x 220 mm, 594 tall |
+| Ways | three, active | two, active |
+| Woofer | Dayton Audio RSS315HF-4, 12 in, in 81 L vented to 32 Hz (port 171 mm): f3 about 28 Hz | SB Acoustics SB17NRX2C35-8, 6.5 in, in 9.2 L sealed: f3 63 Hz, a DSP shelf takes it to 45 Hz |
+| Mid | SB Acoustics Satori MR16P-8, 6.5 in, in its own 7.6 L sealed chamber | none |
+| Tweeter | SB Acoustics Satori TW29DN-B, its faceplate off, rear-mounted on the waveguide insert | Scan-Speak Illuminator D3004/602200, its 62 mm faceplate on the insert's back |
+| Waveguide | C22: throat 176 behind the face, 935 up; holds about +-40 degrees horizontally from 2 to 8 kHz | BkD: throat 95 behind the face, 517 up; about +-56 degrees at 2.5 kHz, +-32 from 6.3 kHz |
+| Amplifier | Hypex FusionAmp FA253: 250 + 250 + 100 W into 4 ohm, DSP, on its side across the back's foot | Hypex FusionAmp FA122: 2 x 125 W into 4 ohm, DSP, upright on the back |
+| Crossovers | 300 Hz and 2.8 kHz, Linkwitz-Riley 24 dB/octave | 2.4 kHz, Linkwitz-Riley 24 dB/octave |
+| Wood | 24.9 kg of 18 mm Baltic birch | 6.2 kg |
+| Drivers and amplifier, the pair | about $2,520 | about $1,330 |
+
+The figures are simulations and datasheets (below); measure the built speakers before printing the Facts.
 
 ## Read this before ordering anything
 
-- **The Facts say 91 dB, and the speaker probably won't measure it.** A 12 in woofer that reaches 32 Hz in this 88 L box is rated about 90 dB, and with its crossover set flat on a 390 mm baffle the finished speaker lands near 85 to 88 dB. The Facts are permanent once they are under the clear (printed since 2026-10-07; a bronze plate before), so print them after the speaker is measured, or decide now to state a target. The same goes for "8 ohm": every tweeter small enough for the bowl is 4 ohm, so the finished impedance may make "6 ohm" the honest label.
-- **The bowl is still an open test.** The README says so: one carved gable, one tweeter, measured against a flat baffle. That costs a print and one tweeter, so it comes first (step 1).
-- **Driver cutouts and the tweeter pocket are cut for the shortlisted drivers** (below). Buy different drivers and the holes change: edit three numbers in `params.py` and run `build.sh`.
-- **The wordmark is 172 mm wide.** At the spec's 44 mm type size Archivo Black sets 172 mm, which is also what the renders show; `spec/geometry.md` says "about 155". The files follow the type size. Say if 155 is the width that matters and the type should shrink to about 39.6 mm.
+- **Measure the bought parts first.** Every cutout, rebate and the tweeter's counterbore comes from the research
+  (`research/`), which could not open the makers' drawings from this environment: the TW29DN-B's size with its
+  faceplate off, the woofers' flanges, the FusionAmps' screw patterns. Buy one of each, measure, edit `params.py`, run
+  `build.sh`. The CAD checks its own clearances on every build (`cad.json`, "checks") and stops if a change makes two
+  parts collide.
+- **The Facts' "8 ohm" and "91 dB" mean nothing on an active speaker.** Its inputs are line level, so impedance and
+  sensitivity are not the buyer's business. The bookshelf's Facts already say power and inputs instead; the
+  floorstander's should too (an owner's decision).
+- **The floorstander's port runs out of air at full power.** At the amplifier's full 250 W near 30 Hz the port's air
+  reaches about 50 m/s and will chuff; at a loud 100 dB it is 12 m/s and silent. Set the DSP's high-pass at about
+  25 Hz and its limiter to the woofer's excursion.
+- **The bookshelf's bass shelf costs excursion.** Its +8.3 dB shelf to 45 Hz needs a 35 Hz high-pass in the DSP.
+- **Print the waveguide insert fine.** Its walls are the acoustic surface the simulation was run on: 0.1 mm layers or
+  finer (SLA resin, or MJF nylon), filled and sanded smooth before the paint.
+- **The wordmark is 172 mm wide** at the spec's 44 mm type size (the spec says "about 155"); say if 155 matters and
+  the type shrinks to 39.6 mm.
 
 ## The build, in order
 
-1. **Prove the bowl (a weekend, about $60 to $240).** Print `out/stl/gable-test-slice.stl` (250 x 240 x 150, fits a 256 mm printer; or the `-lower` and `-upper` pair, which print without supports). Buy one shortlisted tweeter and set it in the pocket. Measure it on axis and every 15 degrees off with a calibrated USB mic and REW, then the same tweeter on a flat board. If the bowl does what the README hopes, carry on; if not, the bowl's depth and mouth are the levers (deeper is narrower, wider is wider).
-2. **Choose and buy the drivers.** The shortlist is below. Confirm each datasheet's cutout against `params.py` before any wood is cut.
-3. **Cut the cabinet panels.** Send `out/dxf/front-baffle.dxf`, `back-panel.dxf`, `side.dxf` (two per speaker), `top-panel.dxf`, `bottom-panel.dxf`, `window-brace.dxf`, `mid-shelf.dxf` and `mid-divider.dxf` to a local CNC cabinet or sign shop, or cut them on a makerspace ShopBot. Each layer in the DXF names its operation. No instant online service cuts 18 mm plywood. Three 5 x 5 ft sheets of 18 mm Baltic birch cover both speakers including the gable glue-ups (`out/dxf/sheets.svg`).
-4. **Glue up the box.** Front and back run the full 390 width; the sides sit between them; top, bottom, brace, shelf and divider sit inside. Glue (Titebond II or III), clamp, square it. Then cut the shadow line across the front and back panels' edges at the two side corners (the CNC cut it on each panel's face), with a router and a 3 mm bit or a fine saw at 110 mm. *2026-10-07:* the same for the second shadow line, a 3 × 3 rebate along the top of every wall (z 857 to 860) that the gable will overhang; then round the four vertical corners with a 6 mm roundover bit (the owner, 2026-10-08: 6 mm; 3 mm on 2026-10-07 read sharp from across a room). *2026-10-08:* the drivers are flush, so the front panel's DXF carries a rebate round each cutout (its own pocket layer), as deep as the frame's flange and the printed trim ring over it; measure the bought frames and re-cut the placeholders in `params.py` first.
-5. **Make the gables.** Either:
-   - **Birch, as the spec says:** glue up 11 layers of 18 mm birch (`out/dxf/gable-layer-01.dxf` to `-11`, rough blanks) into two blocks, 3 layers and 8, and have a CNC shop mill each from its open side (`out/step/gable-block-lower.step`, `-upper.step`). The split at z 914 keeps the bowl's floor in the lower half and its ceiling in the upper; since the throat came forward (2026-10-08) the side walls overhang it by up to 1.2 mm below and 2.8 mm above (80 to 105 mm deep, just above the split), so sand those, or mill the upper half's bowl with the block tilted onto the slope.
-   - **Printed, the cheap route:** `out/stl/gable-print/` holds four pieces that fit a 256 mm printer, with 3 mm pin holes on the faces that mate. Glue, fill and paint. Painted, it looks the same; it is lighter and less inert than birch, so it is the owner's call.
-   Glue the gable to the box on four 10 mm dowels. *2026-10-08:* round the gable's four hips 6 mm and the fin's top and end edges 3 mm (a roundover bit, or a sanding block on the printed route; 3 and 1.5 on 2026-10-07); the CAD and the STEP files carry these rounds. The throat is 74 since 2026-10-08, 125 behind the front face (it was 66 at 170): the tweeter's faceplate sits flush in a counterbore in the throat's flat floor.
-6. **Print the port** (`out/stl/port-tube-with-flange.stl` and `port-flare-collar.stl`, PETG or ASA). Push the tube in from outside; glue the collar on its inner end through the woofer hole. Print it 10 mm long, measure the impedance, trim until the dip sits at 32 Hz. *2026-10-08:* print the terminal cup too (`out/stl/terminal-cup.stl`): its body goes through the back's 113 x 49 hole, flush with the inner face, the flange on four screws; the posts go through its floor. Spray it, the port's flange and the drivers' trim rings satin black. The trim rings are not drawn yet: model one to the bought frame, 3 mm thick over its screws, a friction fit in the rebate.
-7. **Finish.** Fill the grain and edges, 2K high-build primer, block-sand flat, then colour: the body colour first everywhere, then mask the marks with the vinyl stencils (`out/marks/`; OPEN OTHER SIDE on the fin's back face since 2026-10-07), then the accent colour on the plinth and gable, peel. *2026-10-07:* then print the Nutrition Facts on the back (`out/marks/facts-print.pdf`, 1:1, centred, its top border at z 770, 90 mm below the body's top edge): a screen print in a catalysed (2K) ink, or for a one-off a water-slide decal (laser decal paper, clear, on the white flavours; Chocolate's cream ink needs a screen, since a printer cannot lay a light ink on clear film). Let it cure, mist the first coats of clear on lightly so a decal does not wrinkle, then 2K clear over everything and flat it level between coats until the print's edge disappears, the way a guitar's headstock logo is sealed: a scratch has to cut through the clear to reach the ink. Test ink and clear together on a sprayed card first. RAL 9016 or 9003 for the white, RAL 3028 for Whole's red; approve a sprayed card, never the screen. An auto-body shop does the same for about $800 to $2,500 the pair.
-8. **Metal.** Letters: `out/metal/wordmark-letters.dxf`, 1.5 mm (0.060 in) sheet (2026-10-08, the owner: 1.5 proud, the sides finished like the faces; 3.18 mm before), four sets, eight pieces each (the i's dot is its own). The renders show them silver, so stainless or aluminium, polished; brass if warmer is wanted. *2026-10-06: on Chocolate's and Skim's plinths the front letters are dark bronze (bronze or brass darkened with a patina, or a dark PVD on stainless); the back letters stay polished.* The scoop's lip (2026-10-06) is withdrawn (2026-10-07, the owner): no metal at the scoop. Ease the mouth's cut edge to about 1.5 mm by hand before the primer, and paint the tweeter's faceplate ring black if it is bright. The dot is smaller than SendCutSend's minimum part, so cut it at OSHCut or Xometry or by hand. No plate since 2026-10-07: the Facts are printed under the clear (step 7). No terminal plate since 2026-10-08: the posts sit in a printed cup (step 6).
-9. **Mount the letters** with the 1:1 templates (`out/metal/wordmark-template-front.pdf` aligns to the floor line; `-back.pdf` to the body's top edge). Letters this thin are glued on in the trade; the crosses are where pins go if you want them.
-10. **Crossover.** Measure each driver in the finished cabinet (impedance with a Dayton DATS V3; response with the mic), optionally audition with a miniDSP 2x4 HD and three amp channels, then design the passive network in free VituixCAD or XSim and post the files on the Parts Express Tech Talk forum or diyAudio for a second pair of eyes. No published crossover fits, because the bowl is unique.
+The two sizes are built the same way; only the numbers differ. Drawings: `out*/drawings/earmilk-sheets.pdf`, five
+A3 sheets per size: (1) the general arrangement, (2) the centre section, (3) the waveguide insert and the tweeter's
+mount and wiring, (4) the back, the amplifier and the wiring, (5) the assembly.
+
+1. **Prove the tweeter and its waveguide (a weekend).** Print the gable (`stl/gable-print/`: four pieces for the
+   floorstander, one for the bookshelf) and the insert (`stl/waveguide-insert.stl`; the floorstander's also comes in
+   halves, `-left` and `-right`, for a 256 mm printer). Mount the tweeter on the insert (sheet 3), set the gable on a
+   box of the right plan, and measure on the axis and every 15 degrees horizontally and vertically with a calibrated
+   USB microphone and REW. Compare with `out*/acoustics/waveguide/*-polar.png`. If it holds, carry on; the
+   simulation's levers are the throat's depth and height (`WAVEGUIDE` in `params.py`, then `bem.py`).
+2. **Buy the drivers and the amplifier** (`bom.csv`) and check each against `params.py` before any wood is cut.
+3. **Cut the panels.** `out*/dxf/` to a local CNC cabinet or sign shop or a makerspace ShopBot: front, back, two
+   sides, top, bottom, the amplifier box's floor, lid and front; the floorstander adds the window brace and the mid
+   chamber's shelf and divider. Each DXF layer names its operation (through cuts, the 3 mm shadow-line and rebate
+   pockets, the drivers' and amplifier's rebates). No instant online service cuts 18 mm plywood.
+4. **Glue up the box.** Front and back run the full width; the sides sit between them; everything else sits inside.
+   Glue (Titebond II or III), clamp, square. Cut the shadow lines across the front and back panels' edges at the side
+   corners and round the four vertical corners (6 mm on the floorstander, 4 on the bookshelf). The amplifier's box
+   goes in before the top: its floor, front and lid between the sides, sealed, with the gland in its lid.
+5. **Make the gable.** Laminated birch (`dxf/gable-layer-*.dxf`), CNC-milled to `step/gable-block.step`: the insert's
+   pocket is a prism along the depth, so it mills from the front face with the block on its back. Or printed
+   (`stl/gable-print/`), filled and painted. Round the hips and the fin's edges. Glue it on four 10 mm dowels.
+6. **Fit the insert** (sheet 3). Heat-set M3 inserts for the tweeter's screws; the tweeter in its counterbore from
+   behind on a 0.5 mm gasket; the magnets in the insert's back and their partners in the pocket's back wall,
+   opposite poles out; the two pins. Its 120 mm lead ends in the plug of a two-pole locking connector (JST VH).
+7. **Wire it** (sheets 3 and 4). The cabinet's lead to the tweeter comes up from the amplifier box's gland, through
+   the brace's window (floorstander), up a 14 mm channel through the top panel and the gable block, sealed by a
+   grommet under the top panel, and ends in the connector's socket in the bay behind the insert's boss. The woofer's
+   and mid's leads run to the same gland. Seal the gland and the grommet: the woofer's box must be airtight, and the
+   insert's pocket is open to the room through its 0.3 mm seam.
+8. **The amplifier.** Its module goes through the back's cutout into its sealed box, the plate flush in its 3 mm
+   rebate; drill its screw holes to Hypex's drawing.
+9. **Finish.** Fill the grain and edges, 2K high-build primer, block flat, the body colour everywhere, mask the marks
+   with the vinyl stencils (`out*/marks/`), the accent colour on the plinth and gable, peel; then the Nutrition Facts
+   (`marks/facts-print.pdf`, on the back of the floorstander and the right side of the bookshelf) as a screen print in
+   a 2K ink or a water-slide decal, and 2K clear over everything, flatted until the print's edge disappears. The
+   insert is painted with the gable; the trim rings satin black.
+10. **Metal.** The letters (`metal/wordmark-letters.dxf`, 1.5 mm stainless or aluminium, polished; four sets of
+    eight pieces a pair) glued on with the 1:1 templates (`metal/wordmark-template-*.pdf`).
+11. **Tune it** (`out*/dsp/*.md`). Load the channels and crossovers into Hypex Filter Design over USB, then measure
+    each driver on the tweeter's axis at 1 m (REW, a UMIK-1), set levels and delays from the measurements, check the
+    reverse null at each crossover, and EQ the sum flat on axis. The files' numbers are where to start.
 
 ## Files and who gets them
 
-| File | What | Goes to |
+| File (in `out/` and `out-bookshelf/`) | What | Goes to |
 |---|---|---|
-| `out/step/earmilk-floorstander.step` | the whole speaker, every part in place | anyone who wants to look, any CAD program |
-| `out/dxf/*.dxf` | flat panels, one per file, layers named by operation; `sheet-1..3` nested | CNC router shop or makerspace |
-| `out/cutlist.csv` | every part, size and operation for a pair | the shop, and you |
-| `out/step/gable-block-*.step` | the gable, whole and split for 3-axis | CNC millwork or pattern shop |
-| `out/stl/gable-print/*.stl` | the gable in four printable pieces | a printer |
-| `out/stl/gable-test-slice*.stl` | the bowl test piece | a printer |
-| `out/stl/port-*.stl` | the port, two pieces | a printer |
-| `out/metal/wordmark-letters.dxf/.svg/.step` | the cast-letter wordmark | SendCutSend, OSHCut, Xometry, or a casting service (STEP) |
-| `out/marks/facts-print.svg/.pdf` | the Nutrition Facts, 1:1, black = ink, with crop and centre marks | a screen printer, or your laser printer and decal paper |
-| `out/stl/terminal-cup.stl` | the recessed terminal cup (2026-10-08; it replaces the plate) | a printer |
-| `out/metal/wordmark-template-*.pdf` | 1:1 placing templates | your printer, at 100 % |
-| `out/marks/stencil-*.svg` | vinyl masks for the two marks | a sign shop or a Cricut |
-| `out/drawings/earmilk-shop-drawings.pdf` | dimensioned general arrangement and gable detail | the woodworker |
-| `bom.csv` | parts, quantities for a pair, rough prices, where | you |
-| `research/drivers.md`, `research/services.md` | the sourcing research behind the shortlist and the parts list, every figure with its link | you, before ordering |
+| `step/earmilk-*.step` | the whole speaker, every part in place | anyone, any CAD program |
+| `dxf/*.dxf`, `dxf/sheet-*.dxf`, `dxf/sheets.svg` | flat panels, one per file, layers by operation; nested sheets | CNC shop or makerspace |
+| `cutlist.csv` | every panel, size and operation for a pair | the shop, and you |
+| `step/gable-block.step`, `dxf/gable-layer-*.dxf` | the gable: the milled block and its glue-up layers | CNC millwork or pattern shop |
+| `stl/gable-print/` | the gable for printing | a printer |
+| `stl/waveguide-insert*.stl`, `step/waveguide-insert.step` | the insert with the waveguide, the tweeter's counterbore, magnet and pin holes | SLA or MJF service, or CNC |
+| `stl/port-*.stl` | the floorstander's port, two pieces | a printer |
+| `drawings/earmilk-sheets.pdf` | the five A3 drawings, from the same solids | the builder |
+| `acoustics/waveguide/` | the waveguide study: candidates, polar maps, the choice | you |
+| `dsp/*.md`, `dsp/*.json` | the DSP's starting setup: channels, crossovers, delays, levels, EQ | you, at Hypex Filter Design |
+| `acoustics.json`, `acoustics/` | the box: volumes, port, simulated response | you |
+| `marks/facts-print.pdf`, `marks/stencil-*.svg` | the Facts at 1:1; vinyl masks for the two marks | a screen printer or decal paper; a sign shop or Cricut |
+| `metal/` | the letters and their 1:1 templates | SendCutSend, OSHCut, Xometry |
+| `render/` (not in git) | the renders' model, one named part each (`render_model.py`) | the studio engine |
+| `../bom.csv` | parts for a pair, both sizes, prices and sources | you |
+| `../research/` | the sourcing research behind every bought part | you, before ordering |
 
-## Proposals (not Decisions)
+## Proposals (not decisions)
 
-None of these changes the outside. Each is a choice someone had to make; change any in `params.py`.
+None of these changes the outside; each is a choice someone had to make.
 
-- **Joinery:** butt joints, all panels plain 2D cuts so any shop can make them. Mitred vertical corners would hide the plywood edges under the paint better and let the groove be cut on each panel before assembly; they need a 45 degree saw or a V-bit.
-- **Shadow line:** a 3 x 3 mm groove at z 110 to 113 in all four walls; *2026-10-07:* and a 3 x 3 rebate at z 857 to 860 along the top of every wall, under the gable.
-- **Mid chamber:** a shelf (z 572 to 590) and a divider (y 108 to 126) close an 8.0 L sealed box behind the mid, using the walls and the top. Every shortlisted mid sits happily in it (sealed resonance 71 to 83 Hz, far below a 350 Hz crossover).
-- **Brace:** one window brace at z 500, a 254 mm square opening.
-- **Gable:** laminated from 18 mm layers and split at z 914 for 3-axis milling; or printed in four pieces.
-- **Tweeter pocket:** a 64 x 6 counterbore for the 62 mm faceplate, centred in the throat's flat floor (the 74 throat leaves a 5 mm ring round it, since 2026-10-08), and a 45 x 34 bore for a 43 mm body, which leaves a 9.5 mm shoulder for the faceplate screws; a 14 mm wire hole drops into the woofer chamber. Seal it after wiring, or the woofer box leaks through the bowl.
-- **Port:** printed, two pieces, 92 bore, 100 OD (the spec's port), 112 flange outside, flared inside.
-- **Terminal cup** (2026-10-08; a 96 x 36 cutout behind a flat plate before): printed, its 112 x 48 body through a 113 x 49 hole in the back, its 128 x 64 flange 3 proud on four screws at (±58.5, ±26.5), the posts on its floor 18 in from the flange's face.
-- **Driver rebates** (2026-10-08): 315.6 across and 8 deep for the woofer, 172.6 and 6 for the mid: the shortlisted frames (314, 171) plus a 0.8 reveal each side, deep enough for each frame's flange and a 3 mm printed trim ring over its screws, so the ring's face is level with the finish. Placeholders until the frames are in hand.
+- **Joinery:** butt joints, plain 2D cuts any shop can make.
+- **The waveguide insert:** the waveguide is a separate printed part in a pocket in the roof, so the waveguide's
+  surface can be made finer than milled birch and the tweeter can be serviced: it slides out level, like a drawer,
+  held by four magnets and located by two pins, with the tweeter on it and its lead unplugging at a connector in a bay
+  behind it.
+- **The amplifier's box:** FusionAmps are not airtight, so each module sits in its own sealed box of three 18 mm
+  panels behind the plate, its leads out through a gland. In the bookshelf it also does the brace's job.
+- **The floorstander's mid chamber:** a shelf and a divider close a 7.6 L sealed box behind the mid.
+- **The brace:** one window brace in the floorstander (z 500); none in the bookshelf (above).
+- **The drivers flush:** each frame in a rebate as deep as its flange plus a 3 mm printed trim ring over its screws,
+  the ring level with the finish.
+- **The bookshelf's Facts on its right side,** as on a real carton, because its back holds the amplifier.
 
 ## Acoustics
 
-From the solids: the woofer chamber holds **91.6 L** of air after the internal panels and the port; less the woofer's own displacement, **88.1 L net**, inside the 85 to 90 L the README assumes. The cabinet's wood weighs **27 kg** (7.2 kg of it the gable), so with drivers and crossover the README's 36 kg is about right.
+**The woofers.** From the solids, the floorstander's woofer chamber holds 85.1 L of air after the inside panels, the
+port and the amplifier's box; less the driver, 81.1 L net. The RSS315HF-4 vented there at 32 Hz simulates to an f3
+of 28 Hz at 90.7 dB/2.83 V (Dayton quotes 90.3). The bookshelf's 9.5 L is 9.2 L net: the SB17NRX2C35-8 sealed in it
+has fc 73 Hz at Qtc 0.83 and f3 63 Hz, and a Linkwitz transform in the DSP moves the corner to 45 Hz (+8.3 dB).
+`acoustics.py`, results in `out*/acoustics.json`.
 
-The simulation is the standard vented-box model fed with each driver's published parameters (`acoustics.py`). It predicts the Dayton DSA315-8 at 90.8 dB where Dayton quotes 90.3, so it is in the right place.
+**The waveguides.** The tweeter's waveguide is shaped for how it spreads sound, not for its looks: a boundary-element
+simulation (`bem.py`, bempp-cl) of each candidate in the roof of the whole cabinet, at frequencies from 1 to 10 kHz,
+for the horizontal and vertical response and the directivity index (`wg_study.py` compares candidates; `wg_polar.py`
+draws the maps). The roof's slope tips the sound upward below about 2 kHz in the floorstander and 3.5 kHz in the
+bookshelf; a deeper, higher throat brings control lower, and tipping the axis down did nothing. Each size crosses
+where its waveguide's directivity comes nearest the cone below it and the listening axis is within about 1 dB of the
+loudest direction: 2.8 kHz in the floorstander, 2.4 kHz in the bookshelf. Details:
+`out/acoustics/waveguide/README.md` and `out-bookshelf/acoustics/waveguide/README.md`.
 
-| Woofer | Box | f3 | Level at 2.83 V, half space | Loudest clean, 40 Hz / 30 Hz | Note |
-|---|---|---|---|---|---|
-| Dayton DSA315-8 | 88.1 L, 32 Hz | **31.7 Hz** | 90.8 dB | 110 / 106 dB | the shortlisted woofer |
-| Dayton DS315-8 | same | 32.8 Hz | 91.4 dB | 110 / 106 dB | non-metal cone |
-| Dayton DC300-8 | same | 32.5 Hz | 90.6 dB | 108 / 104 dB | budget, less excursion |
-| Fostex FW305 | same | 47.5 Hz | 94.7 dB | 109 / 106 dB | the price of sensitivity: no deep bass |
+![Floorstander waveguide](out/acoustics/waveguide/C22-polar.png)
+![Bookshelf waveguide](out-bookshelf/acoustics/waveguide/BkD-polar.png)
 
-**The port** for the DSA315-8 is 152 mm overall for 32 Hz (the printed tube 134 mm plus the 18 mm collar). Its air peaks near 27 m/s only at the woofer's full rated power around 30 Hz; at a loud 100 dB it peaks near 8 m/s, well clear of the 17 to 25 m/s where ports start to chuff.
+The simulation treats the tweeter as a flat piston across its dome and surround, which beams more than a dome does;
+the on-axis fall above the crossover (about 7 dB to 10 kHz in the floorstander) is mostly that, and the DSP's shelf
+takes out what the measurement shows. The TW29DN-B's 96.5 dB against the mid's 88 dB leaves 8.5 dB for it.
 
-**What the label can honestly say:** 32 Hz is real. 91 dB is the woofer's own rating; the finished speaker, voiced flat, will measure lower. Decide the Facts after measuring (see the top of this page).
+## The crossover (active, a starting point)
 
-![Woofer response](out/acoustics/woofer-response.png)
-![Port air speed](out/acoustics/port-speed.png)
+`dsp.py` writes each size's starting setup from the geometry and the datasheets (`out*/dsp/`):
 
-## Crossover (a starting point from models)
+| | Floorstander: woofer / mid / tweeter | Bookshelf: woofer / tweeter |
+|---|---|---|
+| crossovers | 300 Hz, 2.8 kHz, LR4 | 2.4 kHz, LR4 |
+| acoustic centre behind the front | 53 / 32 / 172 mm | 32 / 91 mm |
+| delay to start | 0.347 / 0.407 / 0 ms | 0.173 / 0 ms |
+| gain to start | -2.3 / 0 / -8.5 dB | 0 / -3.5 dB |
+| woofer EQ | -3.3 dB at 37 Hz, Q 1.2 (the vented bump) | Linkwitz transform, 73 Hz Q 0.83 to 45 Hz Q 0.71 |
 
-`crossover.py` joins the mid set (DSA315-8, SB17MFC35-8, R3004/602200) with a textbook three-way network (third-order
-low-pass on the woofer, a band-pass and L-pad on the mid, a third-order high-pass and L-pad on the tweeter) and fits
-its 14 parts to Linkwitz-Riley targets at the label's 350 Hz and 2.2 kHz with `studio/xover/xover.py`. The drivers
-are lumped models from their datasheets in their boxes (88.1 L at 32 Hz, 7.6 L sealed, the bowl), placed where the
-spec puts them, with delays to a seated listener at 2.5 m. Results in `out/xover/`: `response.png`, `parts.csv`,
-`design.json`.
+## Rough budget, the pair
 
-- In the model the sum holds within about 2 dB from 150 Hz to 16 kHz and the impedance bottoms at 3.5 ohm (3.7 before
-  the tweeter came forward): a 4 ohm speaker, not the label's 8.
-- The bowl puts the tweeter 125 mm behind the front face (170 before 2026-10-08), so it reaches the listener 0.24 ms
-  after the mid (0.37 before). The fit absorbs it with the mid in positive polarity; measured drivers will move it.
-- The woofer's first inductor is large (about 5 mH): wind it in 14 AWG air core, or use a laminated steel core for
-  lower resistance and size.
-- **Replace with measurements before buying parts.** Measure each driver in its finished box (gated FRD on the
-  listening axis, ZMA), put the files in the design as `"frd"` and `"zma"`, and run
-  `.venv-fab/bin/python studio/xover/xover.py fab/out/xover/design.json --optimize`.
-
-![Crossover](out/xover/response.png)
-
-## Driver shortlist (a proposal for the README's open question)
-
-| Set | Woofer | Mid | Tweeter | Drivers per speaker |
-|---|---|---|---|---|
-| Budget | Dayton DSA315-8 | SB Acoustics SB17MFC35-8 | Peerless OC25SC65-04 in a printed ring | about $251 |
-| Mid | Dayton DSA315-8 | SB Acoustics SB17MFC35-8 | Scan-Speak Illuminator R3004/602200 | about $413 |
-| Premium | Dayton DSA315-8 (or DS315-8) | SB Acoustics Satori MR16P-8 | Scan-Speak Illuminator R3004/602200 | about $544 |
-
-The tweeter is the hard constraint: almost every compact 1 in dome has a 65 to 72 mm faceplate, and the spec holds it to 62 so it seats on the throat's flat floor (the throat is 74 since 2026-10-08; it was 66, the faceplate's own size plus a gap). The Scan-Speak Illuminators have 62 mm round faceplates as sold and resonate low enough (420 Hz) for the spec's 2.2 kHz crossover; the cheap faceplate-less elements need a printed ring and a crossover nearer 3 kHz. Every figure is in `drivers.json` with its source; they were gathered by web search on 2026-10-04 without opening the pages, so confirm each datasheet before buying.
-
-## Rough budget for the pair
-
-From the services research (all estimates, drivers and electronics excluded): about **$1,700** doing most of it yourself (makerspace CNC, printed gables, DIY paint), **$3,500 to $4,000** in the middle (CNC shop panels, printed gables, a body shop), about **$9,900** with everything outsourced (milled birch gables, body-shop paint, polished letters). Add the drivers ($500 to $1,100 the pair), the crossover parts ($200 to $500) and the measurement kit (about $250).
+Drivers and amplifiers: about $2,520 for the floorstanders ($1,294 of FusionAmps, $1,224 of drivers), about $1,330
+for the bookshelves ($844 and $484). The rest (birch, CNC, printing, finish, metal, hardware) from the services
+research: about $1,700 doing most of it yourself up to about $9,900 with everything outsourced for the floorstanders;
+roughly a third of that for the bookshelves. Add the measurement kit (about $110 for a UMIK-1). `bom.csv` has the
+lines.
 
 ## Regenerating
 
-The CAD tools need numpy 2 and Blender's `bpy` needs numpy 1, so the CAD tools live in their own virtual environment:
+The CAD tools need numpy 2 and Blender's `bpy` needs numpy 1, so the CAD tools live in their own environment:
 
     python3 -m venv .venv-fab && .venv-fab/bin/pip install -r fab/requirements.txt
-    FAB_PY=.venv-fab/bin/python fab/build.sh
+    fab/build.sh                      # both sizes; SIZES=bookshelf fab/build.sh for one
+    EARMILK_SIZE=bookshelf .venv-fab/bin/python fab/cad.py     # any one step, for one size
 
-`build.sh` runs `cad.py` (solids, STEP, STL, volumes), `acoustics.py` (port length, simulation, charts; it and the CAD settle the port in two passes), `crossover.py` (a starting network from driver models), `flats.py` (DXF, nesting, cut list), `typeset.py` (letters, the Facts, stencils, templates; fonts from `render/fonts`), `drawings.py` (shop drawings), then `render_views.py` with the system Python and `bpy` (exploded and section views).
+`build.sh` runs, per size: `cad.py` (solids, STEP, STL, volumes, the clearance checks), `acoustics.py` (the box;
+the floorstander's port settles in two passes with the CAD), `dsp.py` (the crossover's starting setup), `flats.py`
+(DXF, nesting, cut list), `typeset.py` (letters, the Facts, stencils, templates), `sheets.py` (the drawings) and
+`render_model.py` (the engine's model). The waveguide study is separate and slow (minutes per frequency):
+`bem.py --throat Y Z --r0 R ...`, then `wg_study.py` and `wg_polar.py`.
 
 ## Checks the files pass
 
-Overall 1,055; ridge 1,010; body 860; slope 246 at 37.6°; fin 45 x 8; mouth 211 x 118 centred 79 up the slope; throat ø74 at y 125, z 903.5; woofer at z 320, mid at 690; plinth 110 with the groove at 110 to 113; corners and hips R6, fin R3; the printed Facts 266 x 260, top at z 770; port ø100 at z 405; terminal cup's flange 128 x 64 at z 175; letters 44 mm, 1.5 proud, centred on z 55 (front) and z 813 (back), ink centred on x 195. All read from `params.py`, which reads from `spec/geometry.md`; if they disagree, the spec wins and `params.py` is wrong.
+Every build checks, on the solids: the insert above the top panel and with material under the tweeter's counterbore,
+birch over the connector bay, the drivers' rebates clear of each other and of the shadow lines, the amplifier's plate
+clear of the plinth's shadow line and inside the back, the port clear of the amplifier's box, the box clear of the
+brace (`cad.json`, "checks"; a failure stops the build).
+
+The floorstander: overall 1,055; ridge 1,010; body 860; slope 246 at 37.6 degrees; fin 45 x 8; plinth 110 with the
+groove at 110 to 113 and the gable's at 857 to 860; corners and hips R6, the fin R3; woofer at z 320, mid at 690;
+the waveguide's mouth 279 wide, the insert 283; the Facts 266 x 260, top at z 770; port 100 at z 405; the FA253's
+plate 360 x 135 at z 185. The bookshelf: overall 594, body 484, plinth 62, R4 and R2, the woofer at z 380, the mouth
+156 wide and the insert 159, the Facts 150 x 147 on the right side, the FA122's plate 120 x 315 at z 235. All from
+`params.py`, which follows `spec/geometry.md`; where they disagree, the spec wins.

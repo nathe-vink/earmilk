@@ -1,12 +1,15 @@
 part,qty per speaker,qty for a pair,width mm,height mm,thickness mm,material,operations,note
-front-baffle,1,2,390.0,860.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside; pocket 3mm; pocket 8mm; pocket 6mm,"outer face up; round the two vertical outer edges 6 mm after glue-up; cutouts sized for the shortlisted Dayton DSA315-8 (272) and SB Acoustics SB17MFC35-8 (146), rebates for their frames and the trim rings (flush): re-cut for other drivers"
-back-panel,1,2,390.0,860.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside; pocket 3mm,"outer face up (seen from behind); round the two vertical outer edges 6 mm after glue-up; the terminal cup's body goes through the 113 x 49 hole; the Facts are printed on this face after the colour coat, under the clear"
+front-baffle,1,2,390.0,860.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside; pocket 3mm; pocket 8mm; pocket 10.5mm,"outer face up; round the two vertical outer edges 6 mm after glue-up; cutouts and rebates sized for woofer rss315hf-4, mid mr16p-8, tweeter tw29dn-b (flush under trim rings): re-cut for other drivers"
+back-panel,1,2,390.0,860.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside; pocket 3mm,"outer face up (seen from behind); round the two vertical outer edges 6 mm after glue-up; the Hypex FusionAmp FA253's module goes through its 336 x 111 cutout, its plate flush in the 3 mm rebate (drill its screw holes to Hypex's drawing); the Facts are printed on this face after the colour coat, under the clear"
 side,2,4,354.0,860.0,18,"Baltic birch plywood, B/BB, 18 mm",pocket 3mm,outer face up; finish the groove across the front and back panels' edges after glue-up
-top-panel,1,2,354.0,354.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside; drill 10 deep10,upper face up (front edge at the bottom of the drawing); dowels register the gable block
+top-panel,1,2,354.0,354.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside; drill 10 deep10,upper face up (front edge at the bottom of the drawing); dowels register the gable block; the tweeter cable's hole gets a grommet
 bottom-panel,1,2,354.0,354.0,18,"Baltic birch plywood, B/BB, 18 mm",outline only,either face
 window-brace,1,2,354.0,354.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside,"sits at z 500 to 518, glued to all four walls"
 mid-shelf,1,2,354.0,108.0,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"z 572 to 590, from the baffle back to under the divider"
 mid-divider,1,2,354.0,252.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside,"y 108 to 126, z 590 to 842; seal the wire hole after wiring"
+amp-box-floor,1,2,354.0,108.0,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"the amplifier box's floor, z 99.5 to 117.5, against the back"
+amp-box-lid,1,2,354.0,108.0,18,"Baltic birch plywood, B/BB, 18 mm",cut inside,"the amplifier box's lid, z 252.5 to 270.5; the gland hole for the speaker leads, sealed after wiring"
+amp-box-front,1,2,354.0,135.0,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"the amplifier box's front, between floor and lid, 90 in front of the back's inner face; glue and seal all round"
 gable-layer-01,1,2,398.0,398.0,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 1 of 11 (z 860 to 878); centre on y = 195"
 gable-layer-02,1,2,398.0,351.2,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 2 of 11 (z 878 to 896); centre on y = 195"
 gable-layer-03,1,2,398.0,304.4,18,"Baltic birch plywood, B/BB, 18 mm",outline only,"gable glue-up, layer 3 of 11 (z 896 to 914); centre on y = 195"

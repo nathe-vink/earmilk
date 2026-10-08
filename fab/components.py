@@ -214,3 +214,61 @@ def amp_plate(spec, centre_x, face_y, centre_z):
             heads = c if heads is None else heads + c
     parts['amp-screws'] = heads
     return parts
+
+
+# --- the hardware inside: cables, the tweeter's connector, the seals, the insert's magnets and pins ------------------------
+def cable(points, d):
+    """A cable through 3D points (mm): round segments joined by spheres at the bends, one solid."""
+    from build123d import Sphere
+    r = d / 2; out = None
+    for a, b in zip(points[:-1], points[1:]):
+        A, B = Vector(*a), Vector(*b)
+        L = (B - A).length
+        if L < 1e-6:
+            continue
+        seg = Solid.make_cylinder(r, L, Plane(origin=A, z_dir=(B - A).normalized()))
+        out = seg if out is None else out + seg
+    for p in points[1:-1]:
+        out += Pos(*p) * Sphere(r)
+    return out
+
+
+def connector_2p(centre, length=24.0, w=10.0, t=8.0):
+    """A two-pole locking connector (JST VH or Molex Mini-Fit Jr. size), mated, standing along z at `centre`: the plug
+    on top (the tweeter's lead), the socket below (the cabinet's), 0.6 apart where they latch."""
+    from build123d import Box
+    x, y, z = centre; h = (length - 0.6) / 2
+    plug = Pos(x, y, z + 0.3 + h / 2) * Box(w, t, h)
+    sock = Pos(x, y, z - 0.3 - h / 2) * Box(w + 0.8, t + 0.8, h)
+    latch = Pos(x, y + t / 2 + 0.6, z + 0.3 + h * 0.35) * Box(w * 0.45, 1.2, h * 0.5)
+    return {'connector-plug': plug + latch, 'connector-socket': sock}
+
+
+def grommet(x, y, z_face, hole_d, cable_d, below=True):
+    """A rubber grommet sealing a cable where it passes a panel's hole: a flange 4 thick on the panel's face (below it
+    when `below`), a sleeve in the hole, the cable's bore through both."""
+    s = -1 if below else 1
+    fl = Solid.make_cylinder(hole_d / 2 + 4, 4, Plane(origin=(x, y, z_face + (s * 4 if below else 0)), z_dir=(0, 0, 1)))
+    sl = Solid.make_cylinder(hole_d / 2 - 0.3, 12, Plane(origin=(x, y, z_face - (0 if below else 12)), z_dir=(0, 0, 1)))
+    bore = Solid.make_cylinder(cable_d / 2, 40, Plane(origin=(x, y, z_face - 20), z_dir=(0, 0, 1)))
+    return fl + sl - bore
+
+
+def cable_gland(x, y, z_face, d=20.0, cable_d=7.0):
+    """A nylon cable gland (M20 or PG13.5) through a panel at z_face, from above: a hex body on the face and its dome
+    nut, the lock nut under the panel."""
+    from build123d import RegularPolygon, extrude as ex, Plane as Pl
+    hexb = ex(Pl.XY.offset(z_face) * Pos(x, y) * RegularPolygon(d * 0.62, 6), amount=6)
+    dome = Solid.make_cylinder(d * 0.45, 9, Plane(origin=(x, y, z_face + 6), z_dir=(0, 0, 1)))
+    nut = ex(Pl.XY.offset(z_face - 18 - 5) * Pos(x, y) * RegularPolygon(d * 0.62, 6), amount=5)
+    bore = Solid.make_cylinder(cable_d / 2, 60, Plane(origin=(x, y, z_face - 30), z_dir=(0, 0, 1)))
+    return hexb + dome + nut - bore
+
+
+def discs(points_xz, y0, y1, d):
+    """Discs (magnets, pins) along y at (x, z) points, from y0 to y1, as one solid."""
+    out = None
+    for (x, z) in points_xz:
+        c = Solid.make_cylinder(d / 2, y1 - y0, Plane(origin=(x, y0, z), z_dir=(0, 1, 0)))
+        out = c if out is None else out + c
+    return out

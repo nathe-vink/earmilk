@@ -82,10 +82,11 @@ def panel_defs():
         'DRILL_10_DEEP10': sum((circle(x - WALL, y - WALL, DOWEL_D) for (x, y) in dowels), [])},
         note='upper face up (front edge at the bottom of the drawing); dowels register the gable block; the tweeter cable\'s hole gets a grommet'))
     P.append(dict(name='bottom-panel', qty=1, w=INNER, h=INNER, layers={}, note='either face'))
-    h = BRACE_WINDOW / 2
-    P.append(dict(name='window-brace', qty=1, w=INNER, h=INNER, layers={
-        'CUT_INSIDE': rrect(INNER / 2 - h, INNER / 2 - h, INNER / 2 + h, INNER / 2 + h, BRACE_WINDOW_R)},
-        note=f'sits at z {BRACE_Z:g} to {BRACE_Z + WALL:g}, glued to all four walls'))
+    if BRACE_Z:
+        h = BRACE_WINDOW / 2
+        P.append(dict(name='window-brace', qty=1, w=INNER, h=INNER, layers={
+            'CUT_INSIDE': rrect(INNER / 2 - h, INNER / 2 - h, INNER / 2 + h, INNER / 2 + h, BRACE_WINDOW_R)},
+            note=f'sits at z {BRACE_Z:g} to {BRACE_Z + WALL:g}, glued to all four walls'))
     if MID:
         P.append(dict(name='mid-shelf', qty=1, w=INNER, h=MID_CHAMBER_DEPTH + WALL, layers={},
                       note=f'z {MID_SHELF_TOP - WALL:g} to {MID_SHELF_TOP:g}, from the baffle back to under the divider'))
