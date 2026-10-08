@@ -1,0 +1,325 @@
+{
+ "stage1": {
+  "impression": "A warm, low raking sun throws a crisp window pattern and a big carton-silhouette shadow across a dark green wainscot, a strong editorial idea in which the red-and-white speaker reads at once. But the peach patch on the upper wall is the largest bright shape and pulls the eye away from the product, the speaker sits small and to the right over a heavy dark floor, and the shaded side and red top read flat.",
+  "score": 6.5
+ },
+ "blocking_9": [
+  "The sunlit white reads as white in warm light, not peach: white band [862,690,990,698] b_median >= 185 (now 166) and CIEDE2000 colour difference (\u0394E) to the Oat body #D9BC92 >= 10 (now 7.4), with R-B still >= 40 so the light stays warm",
+  "No set line touches the carton's silhouette: lit band [318,228,722,298] has no vertical step >= 10 (now 40.7, a near-black field edge rising 92 px out of the silhouette's top at x~509 that reads as an antenna)",
+  "The speaker's lit white is the brightest large shape: upper wall patch [330,70,700,150] <= 0.78 x the front white (now 193 vs 209.6 = 0.92, over more area than the whole front face)",
+  "The white front falls off >= 12 levels from eave to plinth (strip [860,350,874,720] falloff now 1.0; the face is 209.5 +/- 0.5 outside the bar shadow)",
+  "The lacquered red roof shows a reflection ramp (front slope falloff >= 12, now 1.9) and the waveguide bowl separates from it by more than its present ~10-level dip (part:waveguide-insert lum_range >= 35, now 27.4)",
+  "The woofer cone shows its form instead of a hole: part:woofer-cone lum_p95 >= 20 (now 11) with crush below 70% (now 78.7%)",
+  "The darks carry some blue and the cast shadow keeps a little room light: floor [0,790,1350,900] b_median >= 5 (now 3), silhouette [470,340,650,580] L 14-22 with the panel visible inside it (now 9.6 and flat)",
+  "The sunlit patch's right edge clears the speaker: it now ends at x~735, 20 px from the speaker's shaded side at 755, a near-tangent"
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The sunlit white body renders peach, (246,202,166). That is \u0394E 19.8 from its spec #FFFFFF but only 7.4 from the Oat flavour's body #D9BC92, so the Whole carton reads as another flavour, and the darks have lost all blue (floor B 3, right wainscot B 1), so the shadows read orange-black.",
+   "evidence": {
+    "region": [
+     862,
+     690,
+     990,
+     698
+    ],
+    "measured": "median RGB (246,202,166), L 208.8, lum_range 1.1, \u0394E 19.82 vs #FFFFFF; the top band [870,350,1000,385] is the same (246,203,168), \u0394E 7.44 vs #D9BC92; floor [0,790,1350,900] RGB (44,20,3); wainscot right [1020,230,1340,600] RGB (8,8,1)"
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 4300,
+    "to": 3700
+   },
+   "expected": "The sunlit white goes to about (243,212,195), a warm ivory: B 185-203, \u0394E to #FFFFFF about 14-15 (about 10 of that is the lightness of a ~210 face), \u0394E to Oat >= 11, R-B still about 45 so the light reads warm. The shaded side part:side-left moves from (78,75,83) to a cooler blue-grey of about (70,75,98), which gives warm light and cool shade. Floor B rises from 3 to about 5-8. The lit fin's \u0394E to #C62828 falls from 7.5 to about 4-5.",
+   "accept": {
+    "region": [
+     862,
+     690,
+     990,
+     698
+    ],
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     185,
+     203
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "A wainscot field edge at x~509 casts a 2-3 px near-black line (L 13 between values of 101) that rises 92 px straight out of the silhouette's top (y 220-312), so the carton's shadow reads as wearing an antenna. The fields (about 0.65 m on the wall) are narrower than the ~0.69 m silhouette, so some field edge always lands inside it.",
+   "evidence": {
+    "region": [
+     318,
+     228,
+     722,
+     298
+    ],
+    "measured": "largest column step 40.7 at x~508 (1-px profile 101, 62, 13, 32, 63, 98 across x 507-512); the line is >20 darker than x=500 from y 220 to 312, ending at the silhouette top (y 311 at x 520); elsewhere in the band the largest step is 2.9 (soft jambs, diagonal bar shadows)"
+   },
+   "change": {
+    "setting": "set.wainscot.panel_w",
+    "from": 0.62,
+    "to": 1.9
+   },
+   "expected": "The field behind the silhouette grows wider than the sunlit patch (x 310-735), so no stile, and none of the crisp shadow lines their edges cast, falls in the light. The silhouette then sits on one unbroken field and its fin notches and chamfered shoulders are the only features of its outline. The lit band stays about 98 median, with no vertical step >= 10 anywhere in x 318-722.",
+   "accept": {
+    "region": [
+     318,
+     228,
+     722,
+     298
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "<",
+    "value": 10
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "The sunlit patch on the upper plaster is a flat ~370x165 px peach block at L 193. That is 0.92 of the speaker's lit white (209.6) and covers more area than the whole front face, and the top edge crops it, so the eye lands there first and is led out of the frame.",
+   "evidence": {
+    "region": [
+     330,
+     70,
+     700,
+     150
+    ],
+    "measured": "lum_median 193.1, lum_range 2.0, RGB (239,185,139); front white [870,350,1000,385] lum_median 209.6; part:front-baffle 44094 px"
+   },
+   "change": {
+    "setting": "set.wall.color",
+    "from": "#D8CCB8",
+    "to": "#A89E8F"
+   },
+   "expected": "The plaster keeps its hue at about 57% of its reflectance. The upper patch drops to about 145-160 (<= 0.75 of the product's white) and keeps its bar shadow. The shaded upper wall drops from 73 (left) and 41 (right) to about 48 and 27. The speaker's lit front becomes the brightest large area in the frame.",
+   "accept": {
+    "region": [
+     330,
+     70,
+     700,
+     150
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     135,
+     162
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "Apart from the soft bar shadow, the white front is one value from eave to plinth (about 209.5), so it reads as a flat card; it should fall off about 15-20 levels from the eave down.",
+   "evidence": {
+    "region": [
+     860,
+     350,
+     874,
+     720
+    ],
+    "measured": "y-profile 210.3, 209.6, 209.6, 178.3 (bar), 209.3, 209.5, 209.5, 209.3: falloff 1.0; upper band [870,350,1000,385] lum_range 1.1"
+   },
+   "change": {
+    "setting": "lights.facesheen",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.9,
+      0.9
+     ],
+     "position": [
+      1.47,
+      -1.57,
+      0.42
+     ],
+     "target": [
+      0.03,
+      -0.19,
+      0.6
+     ],
+     "strength": 5.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.0,
+       0.85
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The front's clear coat mirrors this panel, which sits where the face already looks (front-right of the speaker, near the window wall below its sill line), as a soft window-like ramp over the face's upper half. The strip rises from about 209 above the plinth to about 222-235 under the eave (falloff 12-26) and the top whitens (B up about 15-25). The band below the woofer, the plinth, the fin and the side face are unchanged, and part:front-baffle clip_pct stays 0.",
+   "accept": {
+    "region": [
+     860,
+     350,
+     874,
+     720
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     26
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The lacquered red roof reads as matte paint: the front slope is one value with no reflection, and the waveguide bowl separates from it only by a ~10-level dip, so neither the clear coat nor the bowl's form reads.",
+   "evidence": {
+    "region": [
+     858,
+     276,
+     1006,
+     350
+    ],
+    "measured": "gable-block pixels in this box: y-profile 51.8, 50.3, 50.1, 49.7, 49.6, 49.6, 49.6, 49.9 (falloff 1.9), lum_range 4.3, RGB (200,9,9); part:waveguide-insert x-profile 50.2, 40.8, 39.5, 40.4, 41.4, 42.7, 44.2, 48.9, lum_range 27.4"
+   },
+   "change": {
+    "setting": "lights.roofsheen",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.2,
+      1.2
+     ],
+     "position": [
+      0.66,
+      0.25,
+      1.88
+     ],
+     "target": [
+      0.02,
+      -0.1,
+      0.93
+     ],
+     "strength": 0.15,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       0.14,
+       0.35
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The front slope mirrors a ramp from about 50 at the eave to about 65-80 under the ridge (falloff 12-32). The ridge and hip rounds pick up thin highlights. The bowl's walls break the ramp, so the waveguide's mouth reads (part:waveguide-insert lum_range from 27 to >= 35). The red stays within \u0394E 6 of #C62828 where the sheen is weakest and does not wash to pink.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      858,
+      276,
+      1006,
+      350
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     32
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The 12 in woofer cone is a black hole: 78.7% of its pixels are at L <= 3, so the largest feature on the front shows no cone form; only the dust cap carries a highlight.",
+   "evidence": {
+    "region": [
+     893,
+     553,
+     977,
+     664
+    ],
+    "measured": "part:woofer-cone median L 1.6, p95 11.0, crush_pct 78.67 of 5251 px; part:woofer-cap p95 113.9"
+   },
+   "change": {
+    "setting": "glints.0",
+    "from": "none",
+    "to": {
+     "at": [
+      0.03,
+      -0.164,
+      0.255
+     ],
+     "normal": [
+      0.15,
+      -0.853,
+      0.5
+     ],
+     "size_m": 0.4,
+     "power_w": 2,
+     "receivers": [
+      "woofer-cone"
+     ]
+    }
+   },
+   "expected": "The lower part of the cone (whose normal faces up toward the window side, assuming a cone flare of about 30 degrees) shows a soft radial sheen of about 25-60 running from cap to surround. part:woofer-cone lum_p95 rises from 11 to 22-70, its median stays <= 8 so it still reads as black anodised, and nothing else in the frame changes.",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     22,
+     70
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Deepen the waveguide bowl, add a rim or flange, or bring the tweeter forward so the bowl reads at this size",
+   "why": "The bowl is the product's engineering story but separates from the slope by only a ~10-level dip. Its depth, profile, mouth and the tweeter's position are set by acoustic simulation, so c5 makes it read with light only."
+  },
+  {
+   "request": "Turn the speaker so a gable end faces the sun and the wall shows the carton's peaked side profile",
+   "why": "The 3/4 projection (flat fin top with two short notches, chamfered shoulders) reads as a carton, but less instantly than the side-on gable. The product's placement, yawed about 10 degrees toward the window, is fixed."
+  },
+  {
+   "request": "Lift or desaturate the accent red on the shaded plinth side (RGB 69,1,1, L 15) and left gable end (84,10,3)",
+   "why": "The accent #C62828 is fixed. Only its reproduction may change, which c1 addresses."
+  },
+  {
+   "request": "Replace the woofer's black cone finish so it does not read as a hole",
+   "why": "The drivers are named products, so their materials and colours are their own; c6 adds light only."
+  },
+  {
+   "request": "Brighten the cast-metal wordmark letters (L 26-50, darker than the plinth at about 65) with a lighter metal finish",
+   "why": "The letters belong to the fixed product. From this camera their front faces mirror the unlit floor just in front of the plinth, so they read as dark print."
+  }
+ ],
+ "score_if_fixed": 8.0
+}

@@ -26,7 +26,7 @@
   "bounces": 12,
   "view": "Khronos PBR Neutral",
   "exposure": 1.0,
-  "white_balance_k": 4300
+  "white_balance_k": 3700
  },
  "title": "One speaker, older room at golden hour",
  "set": {
@@ -50,7 +50,7 @@
    "roughness": 0.35
   },
   "wall": {
-   "color": "#D8CCB8"
+   "color": "#A89E8F"
   },
   "ceiling": "#E8E2D7",
   "skirting": {
@@ -59,7 +59,7 @@
   "wainscot": {
    "height": 1.25,
    "color": "#5F6B5C",
-   "panel_w": 0.62
+   "panel_w": 1.9
   },
   "windows": [
    {
@@ -120,6 +120,87 @@
    },
    "irradiance": 0.17,
    "color": 5000
+  },
+  "facesheen": {
+   "type": "panel",
+   "size_m": [
+    0.9,
+    0.9
+   ],
+   "position": [
+    1.47,
+    -1.57,
+    0.42
+   ],
+   "target": [
+    0.03,
+    -0.19,
+    0.6
+   ],
+   "strength": 5.0,
+   "color": "#FFFFFF",
+   "ramp": {
+    "axis": "z",
+    "at_m": [
+     0.0,
+     0.85
+    ],
+    "values": [
+     0,
+     1
+    ]
+   },
+   "diffuse": false
+  },
+  "roofsheen": {
+   "type": "panel",
+   "size_m": [
+    1.2,
+    1.2
+   ],
+   "position": [
+    0.66,
+    0.25,
+    1.88
+   ],
+   "target": [
+    0.02,
+    -0.1,
+    0.93
+   ],
+   "strength": 0.15,
+   "color": "#FFFFFF",
+   "ramp": {
+    "axis": "y",
+    "at_m": [
+     0.14,
+     0.35
+    ],
+    "values": [
+     0,
+     1
+    ]
+   },
+   "diffuse": false
   }
- }
+ },
+ "glints": [
+  {
+   "at": [
+    0.03,
+    -0.164,
+    0.255
+   ],
+   "normal": [
+    0.15,
+    -0.853,
+    0.5
+   ],
+   "size_m": 0.4,
+   "power_w": 2,
+   "receivers": [
+    "woofer-cone"
+   ]
+  }
+ ]
 }

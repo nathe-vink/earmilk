@@ -64,50 +64,51 @@
   },
   "frame": {
    "preset": "satin_paint",
-   "color": "#151515",
+   "color": "#383838",
    "roughness": 0.5,
    "specular": 0.4
   },
   "rubber": {
    "preset": "rubber",
-   "color": "#141414"
+   "color": "#2F2F2F"
   },
   "cone-alu": {
-   "preset": "metal",
-   "color": "#2C2D30",
-   "roughness": 0.34,
-   "anisotropic": 0.25
+   "preset": "satin_paint",
+   "color": "#303134",
+   "roughness": 0.32,
+   "specular": 0.5
   },
   "cone-paper": {
    "preset": "paper_cone",
-   "color": "#2A241F",
+   "color": "#3B342E",
    "fibre_strength": 0.18
   },
   "dome": {
    "preset": "dome",
-   "color": "#232323",
+   "color": "#333333",
    "roughness": 0.45,
    "sheen": 0.35
   },
   "black": {
    "preset": "satin_paint",
-   "color": "#101010",
+   "color": "#363636",
    "roughness": 0.45,
    "specular": 0.4
   },
   "motor": {
    "preset": "satin_paint",
-   "color": "#0C0C0C",
+   "color": "#333333",
    "roughness": 0.4
   },
   "anodised": {
-   "preset": "metal",
-   "color": "#1C1C1E",
-   "roughness": 0.42
+   "preset": "satin_paint",
+   "color": "#343538",
+   "roughness": 0.38,
+   "specular": 0.5
   },
   "connector": {
    "preset": "plastic",
-   "color": "#141414",
+   "color": "#2E2E2E",
    "roughness": 0.35,
    "specular": 0.5
   },
@@ -133,7 +134,7 @@
   },
   "cable": {
    "preset": "gloss_plastic",
-   "color": "#141414",
+   "color": "#2A2A2A",
    "roughness": 0.28
   },
   "nylon": {

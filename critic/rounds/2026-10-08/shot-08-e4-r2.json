@@ -1,0 +1,253 @@
+{
+ "stage1": {
+  "impression": "A clean, noise-free cutaway of a milk-carton speaker set left of centre on a grey sweep, with the red gable waveguide carrying a convincing glossy streak and the internal layout legible at a glance. But the section and chambers are lit flat like a CAD view, the black drivers and amp collapse into silhouettes, and the pale wood barely separates from a dull mid-grey backdrop, so it reads as a competent draft rather than a photograph.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Section modelled by a real source: 25-40 levels of falloff from the gable to the plinth and a visible gradient across the gable block (now falloff 12.2 on the back-panel cut strip; gable block p5-p95 211.1-213.5).",
+  "Chambers read deep: a soft shadow under each top panel and along each rear wall with a lit pool toward the front; upper-chamber inner wall range at least 45 levels (now 30.9, and 157 +/- 9 over most of it).",
+  "Silhouette clears the backdrop by at least 55 levels along the back edge and the gable (now 27-31: backdrop 180-187 against section 208-213).",
+  "Woofer frame, mid frame and amplifier module hold form instead of reading as holes (medians 0.3 / 1.0 / 2.4; 86 / 70 / 57 % of pixels at or below 3). This needs a physically plausible black or bare-metal cut faces, which this card does not allow.",
+  "Motor and tweeter sections show structure (plates, pole, magnet, voice coil) instead of flat black blocks (woofer-motor range 22.0, mid-motor 18.5, tweeter-frame 6.9).",
+  "The Whole white reads neutral: delta E00 at most 1.5 against a neutral of the same lightness (now 3.53; a* +1.7, b* -2.7). A Kelvin white balance cannot correct the magenta (a*) part.",
+  "Plinth red within delta E00 5 of #C62828 at this grazing view (now 8.71, rgb [164, 67, 67]).",
+  "The Baltic birch section shows its ply laminations (now one flat value)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The key grazes the cut plane: at azimuth -85 deg and elevation 42 deg only cos85 x cos42 = 6.5 % of its 6 W/m2 (0.39 W/m2) lands on the section, so the section is lit by the even front fill alone and reads as one value from the gable to the plinth.",
+   "evidence": {
+    "region": [
+     319,
+     262,
+     326,
+     790
+    ],
+    "measured": "Back-panel cut strip, profile y 212.3, 211.3, 210.3, 208.3, (port 175.4), 204.3, (amp plate 2.4), 200.1: falloff 12.2 over 530 px. Gable block [352,228,396,249] median 212.3, p5 211.1, p95 213.5. Mid-divider cut strip 210.4 to 209.3 top to bottom."
+   },
+   "change": {
+    "setting": "lights.key.orbit.azimuth_deg",
+    "from": -85,
+    "to": -40
+   },
+   "expected": "The key strikes the section at cos40 x cos42 = 0.57 instead of 0.065. The section takes a diagonal falloff from the gable and back edge (about 222) to the plinth and front edge (about 192-200), so the back-panel strip falloff is 20-40 instead of 12. The floor shadow swings behind-right.",
+   "accept": {
+    "region": [
+     319,
+     262,
+     326,
+     790
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     20,
+     40
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The key's 6 W/m2 is sized for a lamp that grazes the section: once it faces the section (c1) it would add 6 x cos40 x cos42 = 3.4 W/m2 where it now adds 0.39, roughly doubling the light on the gable block, bleaching the birch and spilling onto the floor and backdrop.",
+   "evidence": {
+    "region": [
+     352,
+     228,
+     396,
+     249
+    ],
+    "measured": "Gable block median 212.3 (rgb 238/209/170), p95 213.5, already the brightest wood in frame. The backdrop the key also lights sits at 180-187 beside it."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 6,
+    "to": 2.5
+   },
+   "expected": "The gable block settles at 215-228 as the top of the new falloff, with the plinth end near 192-200. The key's spill on floor and backdrop drops by more than half.",
+   "accept": {
+    "region": [
+     352,
+     228,
+     396,
+     249
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     215,
+     228
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Even once turned, a key at 42 deg drops tan42/cos40 = 1.18 m per metre it travels into a chamber, so it falls 0.21 m before reaching the inner wall 0.18 m behind the cut and leaves almost all of the 0.27 m upper-chamber wall in the top panel's shadow; the walls stay lit only by the frontal fill and the dome and show no light direction.",
+   "evidence": {
+    "region": [
+     400,
+     275,
+     470,
+     385
+    ],
+    "measured": "Upper-chamber inner wall median 153.8, range 30.9. Profile y 140.1, 150.0, 156.1, 159.6, 160.6, 160.4 is only the occlusion under the top panel. [335,300,385,385] reads 157.2 with a range of 17.6; [420,340,470,385] reads 156.8 with a range of 20.3."
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 42,
+    "to": 30
+   },
+   "expected": "The key drops 0.13 m across the chamber depth instead of 0.21 m. Each inner wall gets a soft shadow about 85 px deep under its top panel and about 90 px wide along its rear wall, opening into a lit pool toward the lower front. Upper-chamber wall range rises from 30.9 to 42-85, with the shadowed top-left near 120-135 and the lit corner near 175-190.",
+   "accept": {
+    "region": [
+     400,
+     275,
+     470,
+     385
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     42,
+     85
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The 0.6 gradient dome with a white zenith is light without direction: it holds the sweep at 180-187 around the product, only 26-31 levels under the section (208-213), so the gable and the long back edge barely separate, and it fills every chamber evenly.",
+   "evidence": {
+    "region": [
+     250,
+     300,
+     305,
+     500
+    ],
+    "measured": "Backdrop left of the product median 180.3 (rgb 186/179/176). Along y 370 the step from backdrop to back-panel cut is only +27 (181 to 208). Above the gable [300,60,420,140] is 186.8 against the gable block 212.3. The front-left floor [100,820,300,880] at 182.7 is the brightest backdrop in the frame."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 0.6,
+    "to": 0.3
+   },
+   "expected": "Backdrop beside the product about 150 (from 180), behind the gable about 155 (from 187), bottom-left floor about 150 (from 183), far right about 105 (from 129): 60+ levels of separation at the gable and back edge. Chamber shadows deepen. Less cool dome light reaches the white flank, and less grey veil reaches the plinth red (delta E00 from 8.7 toward 6).",
+   "accept": {
+    "region": [
+     250,
+     300,
+     305,
+     500
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     138,
+     160
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The 12 in woofer's black anodised aluminium cone has no highlight to describe its bowl, so the largest driver in section reads as a flat black cut-out.",
+   "evidence": {
+    "region": [
+     519,
+     532,
+     568,
+     683
+    ],
+    "measured": "part:woofer-cone median 8.2, p95 72.9, max 78.9. Its only sheen is a dim 20 px patch at x 530-561, y 627-648, a weak reflection of the kick."
+   },
+   "change": {
+    "setting": "glints.1",
+    "from": "none",
+    "to": {
+     "at": [
+      0.165,
+      0.07,
+      0.28
+     ],
+     "normal": [
+      0.88,
+      -0.41,
+      0.24
+     ],
+     "size_m": 0.15,
+     "power_w": 2,
+     "receivers": [
+      "woofer-cone"
+     ]
+    }
+   },
+   "expected": "A soft streak runs along the cone's lower far side from the neck to the surround (around pixel 545, 617; x 530-560, y 605-630). Its core sits at about 120-150 and describes the bowl and the metal. The cone's median stays at or below 20, so it still reads black. No other part receives it.",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     95,
+     165
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "post",
+   "problem": "The Whole white flank renders lavender rather than white.",
+   "evidence": {
+    "region": [
+     566,
+     270,
+     580,
+     490
+    ],
+    "measured": "rgb median [240, 238, 244]; Lab a* +1.7, b* -2.7; delta E00 3.53 against neutral #EBEBEB (4.75 against #FFFFFF)."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 5800,
+    "to": 6000
+   },
+   "expected": "b* rises from -2.7 to about -0.5 (b_median minus g_median from +6 to about +1), and delta E00 against #EBEBEB falls to about 2.6. The residual a* +1.7 remains, because Kelvin cannot move magenta-green. Section and backdrop warm by about 1.5 b*, and the fin red stays near its present delta E00 of 4.0 from #C62828.",
+   "accept": {
+    "region": [
+     566,
+     270,
+     580,
+     490
+    ],
+    "metric": "delta_e",
+    "hex": "#EBEBEB",
+    "op": "<=",
+    "value": 3.0
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the woofer frame, mid frame and amplifier module a physically plausible black (albedo about 0.03-0.05 under a satin coat), or show their cut faces as bare metal.",
+   "why": "They render at median 0.3, 1.0 and 2.4, with 86 %, 70 % and 57 % of pixels at or below 3. Their brightest 5 % are only edge pixels blended with the wood (rgb [76, 62, 41]), so the surfaces return almost no light from any lamp in this set. No light change can model them, and the 12 in basket and the Hypex module read as holes. The drivers' materials are the products' own and fixed."
+  },
+  {
+   "request": "Show the section structure of the woofer, mid and tweeter motors: steel top plate and pole piece, magnet ring, voice coil in its gap.",
+   "why": "woofer-motor median 15.9 with a range of 22.0, mid-motor 23.9 / 18.5, tweeter-frame 29.0 / 6.9: flat black rectangles, where the motor section is what a driver cutaway exists to show. Driver materials and what is cut are fixed."
+  },
+  {
+   "request": "Show the Baltic birch ply laminations on the cut faces.",
+   "why": "The section is the largest surface in the frame and is one flat value (gable block p5-p95 211.1-213.5), so it reads as foam board. The alternating plies tell the reader this is real plywood sawn through and would give it the fine detail a spread needs. The cabinet's material sits under product and is fixed."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

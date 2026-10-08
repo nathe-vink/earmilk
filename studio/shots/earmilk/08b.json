@@ -34,6 +34,18 @@
      "preset": "plastic"
     },
     {
+     "match": "woofer-motor|mid-motor|tweeter-frame",
+     "color": "#8C8F93",
+     "preset": "metal",
+     "roughness": 0.38
+    },
+    {
+     "match": "woofer-frame|mid-frame",
+     "color": "#A5A8AB",
+     "preset": "metal",
+     "roughness": 0.42
+    },
+    {
      "match": "front-baffle|back-panel|side-*|gable-block|top-panel|bottom-panel|window-brace|mid-shelf|mid-divider|amp-box-*",
      "color": "#DCC49A"
     },

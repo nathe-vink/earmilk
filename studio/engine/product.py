@@ -393,6 +393,13 @@ def cutaway(bpy, spec, instances, objs):
                 else:
                     new.materials.append(m)
             sec = section_for(pname)
+            rule = next((r for r in rules if _match(pname, r['match'])), None)
+            if sec is not None and rule.get('preset', 'birch') == 'birch' and rule.get('plies', True):
+                plate = _plate(ob)
+                if plate:          # a plywood panel's cut face shows its veneers
+                    axis, plo_, th_local, th_mm = plate
+                    sec = M.ply_section(bpy, f'section plies {pname}', rule['color'], rule.get('roughness', 0.7), axis, plo_,
+                                        th_local, max(3, int(round(th_mm / 1.4)) | 1))
             if sec is None:
                 ob.data = new
                 for sl in ob.material_slots:
@@ -413,6 +420,21 @@ def cutaway(bpy, spec, instances, objs):
             for sl in ob.material_slots:
                 sl.link = 'DATA'
 
+
+
+def _plate(ob):
+    """A panel's thin axis in its own coordinates: (axis, low end, thickness in its units, thickness in mm), or None
+    for a part that is not a plate (thicker than 40 mm, or not thin against its other sides)."""
+    cs = [Vector(c) for c in ob.bound_box]
+    lo = [min(c[k] for c in cs) for k in range(3)]; dims = [max(c[k] for c in cs) - lo[k] for k in range(3)]
+    order = sorted(range(3), key=lambda k: dims[k])
+    thin = order[0]
+    if dims[thin] <= 0 or dims[thin] / max(dims[order[1]], 1e-9) > 0.2:
+        return None
+    th_mm = dims[thin] * ob.matrix_world.to_scale()[thin] * 1000.0
+    if th_mm > 40:
+        return None
+    return thin, lo[thin], dims[thin], th_mm
 
 
 def _zoned_mesh(bpy, src, key, base_mat, zones, mats):

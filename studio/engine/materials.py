@@ -125,6 +125,53 @@ def make(bpy, name, preset, overrides=None, bevel_mm=0.0):
     return m
 
 
+def ply_section(bpy, name, color, roughness, axis, lo, thickness, plies):
+    """The cut face of a plywood panel: `plies` veneers across its `thickness` along object axis `axis` (0, 1, 2,
+    from `lo`, in the object's own units), alternating long grain (the colour) and end grain (darker, warmer), a
+    thin dark glue line between each, and a faint grain noise. Baltic birch is about 1.4 mm a ply (13 in 18 mm)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; b = nt.nodes['Principled BSDF']; L = nt.links
+    b.inputs['Roughness'].default_value = roughness
+    tc = nt.nodes.new('ShaderNodeTexCoord'); sep = nt.nodes.new('ShaderNodeSeparateXYZ')
+    L.new(tc.outputs['Object'], sep.inputs['Vector'])
+    def math(op, a, bval=None):
+        n = nt.nodes.new('ShaderNodeMath'); n.operation = op
+        for k, v in enumerate((a, bval)):
+            if v is None: continue
+            if isinstance(v, (int, float)): n.inputs[k].default_value = v
+            else: L.new(v, n.inputs[k])
+        return n.outputs['Value']
+    # t runs 0 to plies across the panel's thickness
+    t = math('MULTIPLY', math('SUBTRACT', sep.outputs['XYZ'[axis]], lo), plies / thickness)
+    parity = math('MODULO', math('FLOOR', t), 2.0)                     # 0 long grain, 1 end grain
+    f = math('FRACT', t)
+    edge = math('MINIMUM', f, math('SUBTRACT', 1.0, f))                 # distance to the nearest glue line, in plies
+    glue = math('SUBTRACT', 1.0, math('MINIMUM', math('DIVIDE', edge, 0.07), 1.0))
+    # colour: the long grain, the end grain 14 % darker and a little warmer, the glue line darker still
+    lin = hex_lin(color)
+    endg = (lin[0] * 0.84, lin[1] * 0.80, lin[2] * 0.72, 1.0)
+    mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'
+    ins = [x for x in mix.inputs if x.type == 'RGBA']; outs = [x for x in mix.outputs if x.type == 'RGBA']
+    ins[0].default_value = lin; ins[1].default_value = endg
+    L.new(parity, mix.inputs['Factor'])
+    dark = nt.nodes.new('ShaderNodeMix'); dark.data_type = 'RGBA'; dark.blend_type = 'MULTIPLY'
+    dins = [x for x in dark.inputs if x.type == 'RGBA']; douts = [x for x in dark.outputs if x.type == 'RGBA']
+    L.new(outs[0], dins[0]); dins[1].default_value = (0.45, 0.38, 0.30, 1.0)
+    L.new(math('MULTIPLY', glue, 0.8), dark.inputs['Factor'])
+    # a faint grain noise so each veneer is wood and not a flat band
+    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 900.0; nz.inputs['Detail'].default_value = 3.0
+    L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['To Min'].default_value = 0.93; mr.inputs['To Max'].default_value = 1.05
+    L.new(nz.outputs['Fac'], mr.inputs['Value'])
+    tone = nt.nodes.new('ShaderNodeMix'); tone.data_type = 'RGBA'; tone.blend_type = 'MULTIPLY'; tone.inputs['Factor'].default_value = 1.0
+    tins = [x for x in tone.inputs if x.type == 'RGBA']; touts = [x for x in tone.outputs if x.type == 'RGBA']
+    comb = nt.nodes.new('ShaderNodeCombineColor')
+    for ch in ('Red', 'Green', 'Blue'): L.new(mr.outputs['Result'], comb.inputs[ch])
+    L.new(douts[0], tins[0]); L.new(comb.outputs['Color'], tins[1])
+    L.new(touts[0], b.inputs['Base Color'])
+    return m
+
+
 def _wood(nt, b, color, roughness, grain=0.4, stretch=(1, 1, 10)):
     geo = nt.nodes.new('ShaderNodeNewGeometry'); mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = stretch
     nt.links.new(geo.outputs['Position'], mp.inputs['Vector'])
