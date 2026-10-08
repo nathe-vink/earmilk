@@ -7,7 +7,7 @@ change with its current value, unit and range, and the parts it can measure by n
 The fixed part comes from critic/cards/earmilk.yaml; the settings from the engine's resolved shot file (written beside
 every render as NAME.shot.json), described by studio/engine/knobs.py; the parts from the render's mask (--masks).
 """
-import argparse, json, sys
+import argparse, json, re, sys
 from pathlib import Path
 
 import yaml
@@ -18,6 +18,8 @@ import knobs as K  # noqa: E402
 import shot as S  # noqa: E402
 
 LOCKED = ('product', 'products', 'size', 'render.samples', 'render.adaptive', 'render.denoise')
+# inside the product, where it stands and how far an exploded part is drawn out are the shot's choices, not the product's
+OPEN = re.compile(r'(product|products\.\d+)\.(instances\.\d+\.(position|rotate_z)|explode\.\d+\.offset_m)')
 
 
 def fmt(v):
@@ -47,10 +49,14 @@ def main():
     L += ['## Fixed: never prescribe a change to these', '']
     for f in card['fixed'] + sc.get('fixed', []):
         L.append('- ' + ' '.join(f.split()))
-    L += ['- The product, its flavour, its placement in this frame, and any exploded or cut-away arrangement of its parts '
-          '(everything under `product`), the frame size and the sampling settings.', '']
+    L += ['- The product and its flavour, and which of its parts are hidden, cut away or exploded and along which axis '
+          '(everything under `product` but its placement and explode distances, below), the frame size and the sampling '
+          'settings.', '']
     L += ['## Settings you may change', '',
-          'Name a setting by its path. Units and ranges are the engine\'s. Lengths are metres; the product stands at the '
+          'Where the product stands and how it is turned (`product.instances.N.position`, `product.instances.N.rotate_z`) are '
+          'yours where the frame\'s purpose allows: keep it standing on its floor or furniture, a pair a mirrored pair, and '
+          'every must-show in view. So is how far an exploded part is drawn out (`product.explode.N.offset_m`), along its '
+          'own axis. Name a setting by its path. Units and ranges are the engine\'s. Lengths are metres; the product stands at the '
           'origin with its front toward -y, z up; the camera\'s position and target are world points. Relative values are '
           'allowed in "to": "+0.5", "-20", "x0.8", "+15%". To add a light, set `lights.NEWNAME` to a whole spec, e.g. '
           '`{"type": "area", "size_m": [0.6, 0.6], "orbit": {"azimuth_deg": 30, "elevation_deg": 20, "distance_m": 2}, '
@@ -65,7 +71,7 @@ def main():
           '| setting | now | unit | range | meaning |', '|---|---|---|---|---|']
     seen = set()
     for path, val in S.flatten(sh):
-        if any(path == l or path.startswith(l + '.') for l in LOCKED) or path.startswith('title'):
+        if (any(path == l or path.startswith(l + '.') for l in LOCKED) and not OPEN.fullmatch(path)) or path.startswith('title'):
             continue
         d = K.describe(path) or ('', None, '')
         unit, rng, meaning = d

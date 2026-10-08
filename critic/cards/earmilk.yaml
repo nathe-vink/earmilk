@@ -93,8 +93,9 @@ shots:
     must_show: [the insert clear of the roof with the empty pocket behind it, the tweeter between the insert and the pocket, both drivers and both trim rings separated, the whole cabinet]
     fixed:
       - >-
-        The parts' exploded positions are set to show the assembly order and fixing axes; do not ask for parts to
-        move. Camera, light and set may change.
+        Each part is drawn out along its own fixing axis, in assembly order; do not ask for a part to leave its axis
+        or its order. How far each is drawn out along it (`product.explode.N.offset_m`) is yours, and camera, light
+        and set may change.
   shot-08:
     title: The inside
     purpose: >-

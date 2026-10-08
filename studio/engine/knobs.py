@@ -96,6 +96,11 @@ KNOBS = [
     # product
     ('product.flavour', 'choice', ('whole', 'two', 'skim', 'chocolate', 'oat'), 'colourway (fixed colours per flavour)'),
     ('product.instances', 'list of {position, rotate_z}', None, 'copies of the product: position m, rotation deg about z'),
+    ('product.instances.*.position', 'm [x, y, z]', None, 'where this copy stands: x and y on the floor; z is its base\'s height (0 on the floor, the top of the furniture it stands on)'),
+    ('product.instances.*.rotate_z', 'deg', (-360, 360), 'its turn about z: 0 faces -y; + turns its front toward +x'),
+    ('products.*.instances.*.position', 'm [x, y, z]', None, 'where this copy stands: x and y on the floor; z is its base\'s height (0 on the floor, the top of the furniture it stands on)'),
+    ('products.*.instances.*.rotate_z', 'deg', (-360, 360), 'its turn about z: 0 faces -y; + turns its front toward +x'),
+    ('product.explode.*.offset_m', 'm [x, y, z]', None, 'how far the matched parts are drawn out along their own fixing axis: change the length, keep the direction'),
     # materials
     ('materials.*.*', 'see the preset', None, 'material preset overrides (studio/engine/materials.py PRESET_DEFAULTS)'),
 ]
