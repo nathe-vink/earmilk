@@ -1,0 +1,114 @@
+[
+ {
+  "change": "c6",
+  "setting": "lights.key.orbit.distance_m",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    12,
+    30
+   ]
+  },
+  "proofs": [
+   [
+    1.5,
+    8.0
+   ],
+   [
+    2.0,
+    4.7
+   ],
+   [
+    0.6667,
+    18.0
+   ]
+  ],
+  "set": 0.6667,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "lights.drivers.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    22,
+    60
+   ]
+  },
+  "proofs": [
+   [
+    1.0,
+    40.6
+   ],
+   [
+    2.0,
+    41.6
+   ]
+  ],
+  "set": 1.0,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "lights.sweep.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    170,
+    192
+   ]
+  },
+  "proofs": [
+   [
+    1.5,
+    196.2
+   ],
+   [
+    2.5,
+    214.4
+   ],
+   [
+    0.6648,
+    177.8
+   ]
+  ],
+  "set": 0.6648,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c8",
+  "setting": "lights.gloss.strength",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    115,
+    200
+   ]
+  },
+  "proofs": [
+   [
+    1.0,
+    94.2
+   ],
+   [
+    2.0,
+    118.2
+   ],
+   [
+    3.6375,
+    143.7
+   ]
+  ],
+  "set": 3.6375,
+  "passes": true,
+  "moves_the_test": true
+ }
+]
