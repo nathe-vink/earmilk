@@ -1,0 +1,118 @@
+[
+ {
+  "change": "c2",
+  "setting": "lights.sweep_wash.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    152,
+    168
+   ]
+  },
+  "proofs": [
+   [
+    0.5,
+    178.7
+   ],
+   [
+    1.0,
+    205.6
+   ],
+   [
+    0.1524,
+    155.8
+   ]
+  ],
+  "set": 0.1524,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "glints.letters_sheen.power_w",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    190,
+    218
+   ]
+  },
+  "proofs": [
+   [
+    0.3,
+    236.2
+   ],
+   [
+    0.2,
+    216.3
+   ],
+   [
+    0.1382,
+    189.0
+   ]
+  ],
+  "set": 0.2,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "glints.port_lip.power_w",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    40,
+    130
+   ]
+  },
+  "proofs": [
+   [
+    40.0,
+    146.1
+   ],
+   [
+    80.0,
+    199.5
+   ],
+   [
+    26.6667,
+    122.1
+   ]
+  ],
+  "set": 26.6667,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "lights.kicker_r.irradiance",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    234,
+    246
+   ]
+  },
+  "proofs": [
+   [
+    1.2,
+    225.7
+   ],
+   [
+    2.0,
+    234.7
+   ],
+   [
+    2.4711,
+    238.2
+   ]
+  ],
+  "set": 2.4711,
+  "passes": true,
+  "moves_the_test": true
+ }
+]
