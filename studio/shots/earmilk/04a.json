@@ -148,6 +148,44 @@
     ]
    },
    "diffuse": false
+  },
+  "sweep_wash": {
+   "type": "area",
+   "size_m": [
+    1.6,
+    0.6
+   ],
+   "position": [
+    0,
+    1.0,
+    2.0
+   ],
+   "target": [
+    0,
+    2.8,
+    1.35
+   ],
+   "irradiance": 0.5,
+   "color": "#FFFFFF"
+  },
+  "kicker_r": {
+   "type": "area",
+   "size_m": [
+    0.2,
+    1.5
+   ],
+   "position": [
+    0.9,
+    0.05,
+    0.75
+   ],
+   "target": [
+    0.195,
+    -0.19,
+    0.75
+   ],
+   "irradiance": 1.2,
+   "color": "#FFFFFF"
   }
  },
  "glints": {
@@ -163,14 +201,14 @@
     0.41
    ],
    "size_m": 0.1,
-   "power_w": 3,
+   "power_w": 40,
    "receivers": [
     "port-tube"
    ]
   },
   "letters_sheen": {
    "at": [
-    -0.073,
+    0,
     -0.2,
     0.781
    ],
@@ -180,7 +218,7 @@
     0
    ],
    "size_m": 0.3,
-   "power_w": 0.5,
+   "power_w": 0.3,
    "receivers": [
     "letters-back-0",
     "letters-back-1",

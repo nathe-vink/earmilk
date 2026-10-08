@@ -1,0 +1,231 @@
+{
+ "stage1": {
+  "impression": "A frontal red-and-white milk-carton speaker on flat warm grey: the label reads, but the white body is lit like a flat card with no side planes or ground contact, and the base is cropped just under the driver. The extruded logo turns from white to grey partway through the word, the driver is a featureless black disc, and only the glossy gable with its mirrored fin text carries any depth.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The seven back letters read as one cast-metal word. letters-back-* p5-p95 range is 30 or less (now 144.7: e, a, r, m at 243, i 228, l 145, k 107). Their median is 190 to 218, below the 231-236 panel beside them and above their own 162-173 shadows (now 242.3, so e to m sit above the panel and lose their upper-left edges).",
+  "The sweep reads as a lit set. A soft pool sits above the fin: top band [250,5,650,95] at 152-168, falling at least 12 levels to the bottom-left corner. Now: top band 142.8 (range 1.2), bottom-left 142.3, left-column falloff -2.7. The 8 W/m2 bg lamp moves the top band only +0.8 against the e3 render made before it existed.",
+  "The port reads as a moulded flare. A lip highlight lifts part:port-tube p95 to 40-130 (now 16.1; the flange is 12.6-13.3 at every radius and 12.3-14.4 in every 30-degree sector, the bore 0-3), and the woofer-motor seen through it stays at least 95% crushed so the opening keeps its depth.",
+  "The right (shadow-side) vertical round reads as a lit edge: strip [704,380,711,1100] p95 at 234-246. Now it is 224.5: the round greys 228 to 208 to 197 to 185 into the 145 sweep, while the key-side round carries a +5 highlight (243-244 against 238).",
+  "The accent is within dE 2.5 of #C62828 on the fin and the roof's lower third, and the roof keeps its 17-level lacquer falloff. Now: fin left 2.98 (205,23,24), fin right 4.25 (188,19,20), lower roof 3.3 (198,19,21). Only the band under the fin's reflection matches (197,40,42, dE 0.58)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The wordmark is split in two because its sheen glint is centred over the e (x -0.073 m): e-a-r-m render paper-white and the l and k fall off the edge of the lit disc to grey, so the word reads as two materials.",
+   "evidence": {
+    "region": [
+     334,
+     385,
+     565,
+     429
+    ],
+    "measured": "part:letters-back-* median 242.3, p5 99.6, p95 244.3 (range 144.7). Per letter: e 243.3, a 243.3, r 243.3, m 242.5, i stem 228.4, i dot 197.9, l 144.6, k 106.7. The x-profile over the letters is 243.4 for seven bins, then 241.5, 225.2, 144.6, 111.1, 97.1. The glint at x -0.073 m projects to about px 352. Measured from that centre, its lit disc is full to 0.103 m (the m's right edge), 89% at 0.11 m (the i), 31% at 0.124 m (the l) and gone by 0.14 m (the k). The word spans x -0.086 to +0.086 m around x 0."
+   },
+   "change": {
+    "setting": "glints.letters_sheen.at",
+    "from": [
+     -0.073,
+     -0.2,
+     0.781
+    ],
+    "to": [
+     0,
+     -0.2,
+     0.781
+    ]
+   },
+   "expected": "The lit disc centres on the word at px 450. Every letter pixel then lies within 0.088 m of it, inside the fully lit 0.103 m, so the l and k rise to the same value as e to m and the word reads as one metal object. letters-back-* p5-p95 range falls from 144.7 to 30 or less. The panel, the label and the letters' shadows do not change, because only the letters receive the glint.",
+   "accept": {
+    "region": "part:letters-back-*",
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 30
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The sweep is one flat value, so the carton reads as a cut-out on a digital fill, and the existing bg lamp (8 W/m2 aimed at [0, 2.8, 1.75]) does not reach the visible sweep at all.",
+   "evidence": {
+    "region": [
+     250,
+     5,
+     650,
+     95
+    ],
+    "measured": "Top band median 142.8, p5-p95 range 1.2. Top corners 139.6 (left) and 141.8 (right). Left column [20,0,170,1125] reads 139.6 at the top, 147.6 at mid-height and 141.6 at the bottom (falloff -2.7). Top band [20,8,880,90] reads 142.6 here against 141.8 in the e3 render, made before the bg lamp existed, so the lamp adds +0.8. Only the product's own floor shadow breaks the field (bottom right 125.8 against 142.3 bottom left)."
+   },
+   "change": {
+    "setting": "lights.sweep_wash",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.6,
+      0.6
+     ],
+     "position": [
+      0,
+      1.0,
+      2.0
+     ],
+     "target": [
+      0,
+      2.8,
+      1.35
+     ],
+     "irradiance": 0.5,
+     "color": "#FFFFFF"
+    }
+   },
+   "expected": "A broad wash on the sweep, peaking on the wall just above the fin (the target projects to about y 65). The lamp is 1 m behind and 1 m above the carton, its lower edge about 0.5 m above the frame's top edge at that depth, and it faces away from the product, so nothing on the carton changes. Expected values: top band about 156-164, top corners about 152-156, mid-height sides about +10, the floor at the frame bottom about +2. The field then falls at least 12 levels from the top band to the bottom-left corner, and the red gable (62) sits on a lighter ground. Once this lamp works, the ineffective bg lamp can be switched off.",
+   "accept": {
+    "region": [
+     250,
+     5,
+     650,
+     95
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     152,
+     168
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Even when the sheen is uniform, lit letters at 243 sit above the panel around them. Only their lower-right shadows hold them, so the must-show wordmark nearly vanishes white-on-white and reads as plastic, not cast metal.",
+   "evidence": {
+    "region": [
+     318,
+     385,
+     580,
+     429
+    ],
+    "measured": "Lit letters 243.3, RGB (249,242,239). The panel beside them is 236.1 left of the e and 231.3 right of the k, so e to m are 7 to 12 above it. Row y 412: each letter's lower-right shadow drops to 162-173 and recovers to about 220 within 4 px, while its upper-left edge meets panel at 234-236 with no step."
+   },
+   "change": {
+    "setting": "glints.letters_sheen.power_w",
+    "from": 0.5,
+    "to": 0.3
+   },
+   "expected": "With c1 applied, the faces settle at about 200-212, RGB about (208,202,199). That is a satin silver 20-35 below the panel around the word and 30-45 above the letters' own shadows, so every letter has an edge on both sides. No letter pixel goes above 225.",
+   "accept": {
+    "region": "part:letters-back-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     190,
+     218
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The port is a flat black disc: its flange is one value at every radius and bearing, and the 3 W port_lip glint adds nothing measurable, so it reads as a printed circle and is the heaviest, deadest shape in the frame.",
+   "evidence": {
+    "region": [
+     375,
+     880,
+     525,
+     1032
+    ],
+    "measured": "part:port-tube median 5.7, p95 16.1, crush 46.9%. Radial profile about (449.5, 955.7): bore r 44-60 px at 0-3, flange r 61-73 at 12.6-13.3 at every radius, outer anti-aliased edge r 74-76. The flange reads 12.3-14.4 in every 30-degree sector (max 17.4). woofer-motor through the port is 0.0, 99.75% crushed. The glint's point projects onto the flange at about (403, 900) but leaves no trace there."
+   },
+   "change": {
+    "setting": "glints.port_lip.power_w",
+    "from": 3,
+    "to": 40
+   },
+   "expected": "A soft highlight appears where the glint's up-left normal [-0.41,-0.82,0.41] is met: on the flange's inner edge at the lower right, or on the flange at the upper left. It peaks about 90-150 over a few hundred pixels. The rest of the flange stays 12-15, and the bore and woofer-motor stay at 3 or below, so the opening keeps its depth. part:port-tube p95 rises from 16.1 to 40-130.",
+   "accept": {
+    "region": "part:port-tube",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     40,
+     130
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The shadow-side vertical round has no edge light: it greys out into the sweep while the key side carries a highlight, so the white box loses its right edge and reads as a flat card.",
+   "evidence": {
+    "region": [
+     700,
+     345,
+     720,
+     1125
+    ],
+    "measured": "Over its last 3 px the right round falls from the panel to the sweep: 228, 208, 197, 185 (y 400, sweep 145); 223, 207, 196, 184 (y 600, sweep 145); 218, 203, 197, 182 (y 850, sweep 141); 212, 203, 197, 182 (y 1100, sweep 124). Strip [704,380,711,1100]: p95 224.5, median 209.6. The left round reads 243-244 against the panel's 238-239."
+   },
+   "change": {
+    "setting": "lights.kicker_r",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.2,
+      1.5
+     ],
+     "position": [
+      0.9,
+      0.05,
+      0.75
+     ],
+     "target": [
+      0.195,
+      -0.19,
+      0.75
+     ],
+     "irradiance": 1.2,
+     "color": "#FFFFFF"
+    }
+   },
+   "expected": "A 2-3 px line at about 238-245 runs down the right round from the eave (y 345) to the frame bottom, with a thin matching line on the roof's right hip and the fin's right end. The strip sits 0.245 m behind the back panel's plane, so the panel face, the label and the letters get none of its light, and it is about 0.5 m outside the frame at its depth. Strip [704,380,711,1100] p95 rises from 224.5 to 234-246.",
+   "accept": {
+    "region": [
+     704,
+     380,
+     711,
+     1100
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     234,
+     246
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A three-quarter or raised viewpoint that shows a side plane and more of the roof",
+   "why": "The purpose fixes the Facts panel straight on and level. With the camera at x 0 no side face can show, so the carton's volume has to come from edge light, the panel's 25-level diagonal falloff (238 top-left to 213 bottom-right) and the roof's 17-level sheen."
+  },
+  {
+   "request": "A rounded inner lip or bead on the port so a highlight can wrap round it",
+   "why": "The flange is a flat annulus (r 61-73 px, 12.6-13.3 throughout) that meets the bore in a 2 px step. That is product geometry, so light can add a sheen or a thin crescent but not a rolled edge."
+  },
+  {
+   "request": "Lower the red colour coat's chroma so the fin and lower roof match #C62828",
+   "why": "The flavour colours are fixed. Only exposure, white balance or view transform may be asked for, and none of them fits: the panel is already neutral (234,233,234) at 6300 K and R already matches (198). The excess is G/B at 17-23 against 40, wherever the clear coat mirrors nothing bright. More exposure pushes R past spec, and AgX would flatten the panel and the label."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
