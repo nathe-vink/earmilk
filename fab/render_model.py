@@ -13,7 +13,8 @@ import cad
 import components as C
 from build123d import Compound, Face, Polyline, Pos, Wire, export_gltf, extrude, Vector, Unit
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out', 'render')
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out-bookshelf' if BOOK else 'out', 'render')
+NAME = 'earmilk-bookshelf' if BOOK else 'earmilk-floorstander'
 VISIBLE = ['front-baffle', 'back-panel', 'side-left', 'side-right', 'gable-block', 'waveguide-insert', 'port-tube', 'terminal-cup']
 # AMP: the plate amplifier replaces the terminal cup (fab/components.amp_plate)
 
@@ -49,7 +50,7 @@ def rasterize_marks(dpi=300):
     """The prints as images for the renders' decals, from the same vector files the printer and the vinyl cutter get:
     the Facts panel (its crop marks left out) and the two stencilled marks, black on white."""
     import re, subprocess, tempfile
-    src = os.path.join(os.path.dirname(OUT), 'marks'); dst = os.path.join(OUT, 'marks'); os.makedirs(dst, exist_ok=True)
+    src = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out', 'marks'); dst = os.path.join(OUT, 'marks'); os.makedirs(dst, exist_ok=True)
     jobs = {'facts': 'facts-print.svg', 'open-other-side': 'stencil-open-other-side.svg', 'shake-well': 'stencil-shake-well.svg'}
     for name, fn in jobs.items():
         svg = open(os.path.join(src, fn)).read()
@@ -68,9 +69,11 @@ def build():
     if AMP:
         parts.update(C.amp_plate(AMP, RUN, PLAN, AMP['z']))
     print(f'cabinet {time.time() - t0:.0f}s', flush=True)
-    wo, _ = C.driver_parts('woofer', C.DRIVERS['dsa315-8'], (RUN, 0.0, WOOFER['z']), ring_d=WOOFER_REBATE['d'] - 1.6)
-    mi, _ = C.driver_parts('mid', C.DRIVERS['sb17mfc35-8'], (RUN, 0.0, MID['z']), ring_d=MID_REBATE['d'] - 1.6)
-    tspec = dict(C.DRIVERS['tweeter-1in'], **{k: TWEETER_PART[k] for k in ('dome_d', 'surround_w', 'flange_d', 'flange_t', 'body_d', 'body_depth')})
+    wo, _ = C.driver_parts('woofer', C.DRIVERS[DRIVER_SET['woofer']], (RUN, 0.0, WOOFER['z']), ring_d=WOOFER_REBATE['d'] - 1.6)
+    mi = {}
+    if MID:
+        mi, _ = C.driver_parts('mid', C.DRIVERS[DRIVER_SET['mid']], (RUN, 0.0, MID['z']), ring_d=MID_REBATE['d'] - 1.6)
+    tspec = dict(C.DRIVERS[DRIVER_SET['tweeter']], **{k: TWEETER_PART[k] for k in ('dome_d', 'surround_w', 'flange_d', 'flange_t', 'body_d', 'body_depth')})
     tw, _ = C.driver_parts('tweeter', tspec, (RUN, WAVEGUIDE['throat_y'], WAVEGUIDE['throat_z']), flange_recess=0.0)
     parts.update(wo); parts.update(mi); parts.update(tw)
     for i, s in enumerate(letters('front')):
@@ -89,15 +92,15 @@ def main():
     for name, solid in parts.items():
         solid.label = name
         kids.append(solid)
-    asm = Compound(children=kids); asm.label = 'earmilk-floorstander'
-    path = os.path.join(OUT, 'earmilk-floorstander.glb')
+    asm = Compound(children=kids); asm.label = NAME
+    path = os.path.join(OUT, f'{NAME}.glb')
     export_gltf(asm, path, unit=Unit.MM, binary=True, linear_deflection=0.0005, angular_deflection=0.08)
     info = {'parts': {}}
     for name, s in parts.items():
         bb = s.bounding_box()
         info['parts'][name] = [round(v, 1) for v in (bb.min.X, bb.min.Y, bb.min.Z, bb.max.X, bb.max.Y, bb.max.Z)]
     info['waveguide'] = WAVEGUIDE
-    with open(os.path.join(OUT, 'earmilk-floorstander.json'), 'w') as f:
+    with open(os.path.join(OUT, f'{NAME}.json'), 'w') as f:
         json.dump(info, f, indent=1)
     print(path, os.path.getsize(path) // 1024, 'KB,', len(parts), 'parts')
 

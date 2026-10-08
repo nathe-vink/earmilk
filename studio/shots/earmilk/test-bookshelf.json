@@ -1,0 +1,7 @@
+{
+ "extends": "test-sweep.json",
+ "title": "engine test: the bookshelf, three-quarter",
+ "size": [1200, 1500],
+ "product": {"def": "studio/products/earmilk-bookshelf.json", "flavour": "whole", "instances": [{"position": [0, 0, 0], "rotate_z": 28}]},
+ "camera": {"position": [-0.75, -1.75, 0.6], "target": [0, 0, 0.3], "lens_mm": 85, "level": true}
+}

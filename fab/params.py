@@ -8,14 +8,22 @@ Three kinds of number live here, and each is marked:
             any of them without touching the outside of the speaker. They are listed in fab/README.md under "Proposals".
   PLACEHOLDER  waits on a part that is not chosen yet (the drivers, the binding posts). Re-cut when the part is bought.
 """
-from math import atan2, degrees, hypot
+import os
+from math import atan2, degrees, hypot, tan, radians
+
+# Two sizes share these files: the floorstander (a half-gallon carton, the spec) and the bookshelf (a quart: the same
+# carton at 0.564 scale, 220 wide, PROPOSAL 2026-10-08 from fab/research/drivers-small.md). Pick one with the
+# environment: EARMILK_SIZE=bookshelf .venv-fab/bin/python fab/cad.py. Outputs go to fab/out/ and fab/out-bookshelf/.
+SIZE = os.environ.get('EARMILK_SIZE', 'floorstander')
+assert SIZE in ('floorstander', 'bookshelf'), SIZE
+BOOK = SIZE == 'bookshelf'
 
 # --- The outside (SPEC) -------------------------------------------------------------------------------------------
-PLAN = 390.0            # SPEC square plan
-BODY = 860.0            # SPEC floor to the front top edge
-RISE = 150.0            # SPEC gable rise, front top edge to ridge
-FIN_H = 45.0            # SPEC fin height above the ridge
-FIN_T = 8.0             # SPEC "~8 thick", centred on the ridge (geometry.md assumption: y 191 to 199)
+PLAN = 220.0 if BOOK else 390.0          # SPEC square plan (bookshelf: PROPOSAL, the research's W 220)
+BODY = 484.0 if BOOK else 860.0          # SPEC floor to the front top edge (bookshelf: 2.2 W, the floorstander's ratio)
+RISE = round(PLAN / 2 * 150.0 / 195.0, 1) if BOOK else 150.0   # SPEC gable rise; the bookshelf keeps the 37.6 degree pitch
+FIN_H = 25.0 if BOOK else 45.0           # SPEC fin height above the ridge
+FIN_T = 6.0 if BOOK else 8.0             # SPEC "~8 thick", centred on the ridge (geometry.md assumption: y 191 to 199)
 WALL = 18.0             # SPEC 18 mm Baltic birch
 TOTAL = BODY + RISE + FIN_H   # DERIVED 1055
 RIDGE_Z = BODY + RISE         # DERIVED 1010
@@ -24,15 +32,19 @@ SLOPE = hypot(RUN, RISE)      # DERIVED 246.0
 SLOPE_DEG = degrees(atan2(RISE, RUN))  # DERIVED 37.6
 DY, DZ = RUN / SLOPE, RISE / SLOPE     # DERIVED unit vector up the front slope is (0, DY, DZ)
 
-PLINTH_H = 110.0        # SPEC plinth z 0 to 110, accent colour
+PLINTH_H = 62.0 if BOOK else 110.0       # SPEC plinth z 0 to 110, accent colour
 SHADOW = 3.0            # SPEC shadow line z 110 to 113
 SHADOW_DEPTH = 3.0      # PROPOSAL the shadow line is a groove 3 wide and 3 deep
-GABLE_SHADOW_Z0 = 857.0 # SPEC 2026-10-07, the owner: a second 3 mm shadow line where the gable meets the body, z 857 to 860
-EDGE_R = 6.0            # SPEC 2026-10-08, the owner: the body's vertical corners and the gable's hips rounded 6 mm (3 mm on 2026-10-07)
-FIN_EDGE_R = 3.0        # SPEC 2026-10-08: the fin's edges 3 mm (1.5 on 2026-10-07)
+GABLE_SHADOW_Z0 = BODY - 3.0             # SPEC 2026-10-07, the owner: a second 3 mm shadow line where the gable meets the body, z 857 to 860
+EDGE_R = 4.0 if BOOK else 6.0            # SPEC 2026-10-08, the owner: the body's vertical corners and the gable's hips rounded 6 mm (3 mm on 2026-10-07)
+FIN_EDGE_R = 2.0 if BOOK else 3.0        # SPEC 2026-10-08: the fin's edges 3 mm (1.5 on 2026-10-07)
 
-WOOFER = dict(z=320.0, frame=310.0)   # SPEC centre height and frame diameter (as drawn); 2026-10-08, the owner: z 320 (was 290)
-MID = dict(z=690.0, frame=170.0)      # SPEC
+if BOOK:
+    WOOFER = dict(z=380.0, frame=171.0)  # PROPOSAL the bookshelf's one cone, high, near the tweeter (the research: under one wavelength apart at 2.2 kHz)
+    MID = None
+else:
+    WOOFER = dict(z=320.0, frame=310.0)   # SPEC centre height and frame diameter (as drawn); 2026-10-08, the owner: z 320 (was 290)
+    MID = dict(z=690.0, frame=170.0)      # SPEC
 
 TWEETER = dict(faceplate_y=176.0, z=935.0, faceplate=62.0, faceplate_t=6.0, apex_forward=8.0,
                body_d=43.0, body_depth=30.0)  # SPEC faceplate <= 62 at y = 125 (2026-10-08, the owner; was 170). Body: PLACEHOLDER sized for the shortlisted
@@ -44,19 +56,24 @@ BOWL = dict(mouth_w=211.0, mouth_l=118.0, mouth_s=79.0, throat=74.0,
 # 2026-10-08, the owner: the tweeter's waveguide is shaped for what it does to sound, not for looks. Its wall is the
 # oblate-spheroidal profile in fab/waveguide.py, cut into the roof's front slope; fab/bem.py simulates the polar response
 # and fab/out/acoustics/waveguide/ holds the study that chose these numbers. BOWL above is the look it replaces.
-WAVEGUIDE = dict(throat_y=176.0, throat_z=935.0, r0=15.0, a0=12.0, a_h=45.0, a_up=35.0, a_down=30.0, k=1.4, lip_r=12.0)
+WAVEGUIDE = dict(throat_y=176.0, throat_z=935.0, r0=22.5, a0=12.0, a_h=45.0, a_up=35.0, a_down=30.0, k=1.4, lip_r=12.0)
                # 2026-10-08, the study (fab/out/acoustics/waveguide/study.md): the throat 176 behind the front face and 935 up
                # holds about +-40 degrees horizontally from 2 to 8 kHz with the listening axis within 0.8 dB of the loudest
-               # direction; the owner's 125 / 903.5 beamed 30 degrees up at 2 kHz, the axis 4 dB down. r0: the tweeter's
-               # dome and surround (PLACEHOLDER 30 mm until the tweeter is bought)
+               # direction; the owner's 125 / 903.5 beamed 30 degrees up at 2 kHz, the axis 4 dB down. r0 22.5: the SB Satori
+               # TW29DN-B's 29 mm dome and 8 mm surround, 45 across (fab/research/drivers-floorstander.md; PLACEHOLDER
+               # until one is measured), so the wall runs on from the surround with no flat ring
 # The waveguide is a separate insert in a pocket in the roof. The tweeter screws to its back (rear mount, its flange in
 # a counterbore behind the throat); the insert slides out forward, level, like a drawer, with the tweeter on it, and its
 # wires unplug at a connector. Magnets in its back hold it; two pins locate it. PROPOSAL 2026-10-08.
-INSERT = dict(margin=2.0, eave_clip=25.0, back_y=200.0, boss_d=52.0, boss_back_y=226.0, clear=0.3,
+INSERT = dict(margin=2.0, eave_clip=25.0, back_y=200.0, boss_d=86.0, boss_back_y=216.0, clear=0.3,
               magnet_d=12.0, magnet_t=4.0, pin_d=6.0, pin_l=10.0)
-# The tweeter as the mount sees it. PLACEHOLDER until the tweeter is chosen (fab/research): a 1 in dome whose dome and
-# surround fill the 30 mm throat, on a 50 mm round flange 4 thick, its body 43 across and 30 deep behind the flange.
-TWEETER_PART = dict(dome_d=26.0, surround_w=2.0, flange_d=50.0, flange_t=4.0, body_d=43.0, body_depth=30.0, screws=3, bolt_circle=42.0)
+# The tweeter as the mount sees it: the SB Acoustics Satori TW29DN-B with its faceplate taken off (SB documents it: 2.5 mm
+# hex), the motor unit's front ring screwed to the insert's back with the faceplate's own screws. PLACEHOLDER sizes from
+# the research (no drawing found): the unit no wider than its 71 to 74 cutout and about 32 deep; measure one first.
+TWEETER_PART = dict(model='SB Acoustics Satori TW29DN-B', dome_d=29.0, surround_w=8.0, flange_d=73.0, flange_t=6.0, body_d=66.0,
+                    body_depth=26.0, screws=4, bolt_circle=62.0)
+# 2026-10-08, the research's recommended set for the active floorstander (fab/research/drivers-floorstander.md)
+DRIVER_SET = dict(woofer='rss315hf-4', mid='mr16p-8', tweeter='tw29dn-b')
 
 PORT = dict(z=405.0, d=100.0, bore=92.0, flange=112.0)   # SPEC round port at z 405, 92 bore in a 112 flange (as drawn)
 POSTS = dict(w=128.0, h=64.0, z=175.0, post_d=24.0, spacing=64.0)  # SPEC terminal cup's flange, centre z 175 (2026-10-08, the owner; the plate at 150 before)
@@ -98,8 +115,8 @@ WIRE_HOLE_D = 14.0        # PROPOSAL tweeter wires drop from the pocket into the
 DOWEL_D, DOWEL_DEPTH = 10.0, 20.0  # PROPOSAL four 10 mm dowels register the block on the body
 
 # --- Waits on the drivers (PLACEHOLDER) ------------------------------------------------------------------------------
-WOOFER_CUTOUT = 272.0     # PLACEHOLDER the shortlisted Dayton DSA315-8 / DS315-8 (fab/drivers.json); re-cut for another driver
-MID_CUTOUT = 146.0        # PLACEHOLDER the shortlisted SB Acoustics SB17MFC35-8; the Satori MR16P-8 wants 140.3
+WOOFER_CUTOUT = 282.0     # PLACEHOLDER the Dayton RSS315HF-4 (fab/research/drivers-floorstander.md; 272 for the DS315-8 / DSA315-8)
+MID_CUTOUT = 140.3        # PLACEHOLDER the SB Acoustics Satori MR16P-8 (146 for the SB17MFC35-8)
 CLEAR = 1.0               # PLACEHOLDER radial clearance for the tweeter pocket
 # 2026-10-08: active. A Hypex FusionAmp FA253 per speaker (fab/research/amps.md): 250 + 250 + 100 W into 4 ohm, the DSP
 # crossover and EQ on board, mains in on the plate. Its 360 x 135 plate lies on its side across the back's foot, flush in a
@@ -111,8 +128,8 @@ AMP_BOX = dict(depth=90.0, margin=12.0, gland_d=20.0)       # clear depth in fro
 TERMINAL_CUTOUT = (113.0, 49.0)  # DERIVED the terminal cup's body plus 0.5 a side, through the back (was 96 x 36 behind a flat plate)
 # 2026-10-08, the owner: the drivers flush. Each frame sits in a rebate as deep as its flange and the printed trim ring over it, so
 # the ring's face is level with the finish, with a 0.8 reveal round it.
-WOOFER_REBATE = dict(d=315.6, depth=8.0)  # PLACEHOLDER the DSA315-8's 314 frame + 2 x 0.8; depth its flange (about 5, measure it) + the 3 mm ring
-MID_REBATE = dict(d=172.6, depth=6.0)     # PLACEHOLDER the SB17MFC35-8's 171 frame + 2 x 0.8; depth its flange (about 3, measure it) + the ring
+WOOFER_REBATE = dict(d=315.6, depth=8.0)  # PLACEHOLDER the RSS315HF-4's 314 frame + 2 x 0.8; depth its flange (about 5, measure it) + the 3 mm ring
+MID_REBATE = dict(d=166.6, depth=10.5)    # PLACEHOLDER the MR16P-8's 165 frame + 2 x 0.8; depth its 7.5 front flange + the 3 mm ring
 TRIM_RING = dict(t=3.0, width=20.0)       # PROPOSAL printed trim ring over each frame and its screws, sprayed satin black, a friction fit
 POST_HOLE = 10.0          # PLACEHOLDER binding-post hole in the plate
 
@@ -134,3 +151,40 @@ def slope_point(u, s, w=0.0):
 def depth_at(z):
     """Front-to-back depth of the gable block at height z (it is a triangular prism with its ridge at y = 195)."""
     return max(0.0, PLAN * (RIDGE_Z - z) / RISE)
+
+
+# --- The bookshelf (PROPOSAL 2026-10-08, fab/research/drivers-small.md) ----------------------------------------------
+# A quart beside the half-gallon: the same carton at 0.564 scale (220 for 390), two-way and active, sealed. Everything
+# above that depends on size is restated here; anything not restated is shared (wall, shadow lines, finishes).
+if BOOK:
+    # the waveguide: the throat moved by the bookshelf's own study (fab/out-bookshelf/acoustics/waveguide); r0 the
+    # Illuminator's 26 mm dome and its roll, 34 across
+    WAVEGUIDE = dict(throat_y=99.0, throat_z=515.0, r0=17.0, a0=12.0, a_h=45.0, a_up=35.0, a_down=30.0, k=1.4, lip_r=7.0)
+    INSERT = dict(margin=1.5, eave_clip=14.0, back_y=113.0, boss_d=70.0, boss_back_y=131.0, clear=0.3,
+                  magnet_d=8.0, magnet_t=3.0, pin_d=4.0, pin_l=8.0)
+    # Scan-Speak Illuminator D3004/602200: its 62 mm faceplate screwed to the insert's back, the dome in the 34 mm throat
+    TWEETER_PART = dict(model='Scan-Speak Illuminator D3004/602200', dome_d=26.0, surround_w=4.0, flange_d=62.0, flange_t=4.5,
+                        body_d=48.0, body_depth=17.0, screws=3, bolt_circle=54.0)
+    TWEETER = dict(TWEETER, faceplate_y=WAVEGUIDE['throat_y'], z=WAVEGUIDE['throat_z'])
+    DRIVER_SET = dict(woofer='sb17nrx2c35-8', mid=None, tweeter='d3004-602200')
+    WOOFER_CUTOUT = 144.9                     # PLACEHOLDER unconfirmed in the research
+    WOOFER_REBATE = dict(d=172.6, depth=9.5)  # the 171 frame + 2 x 0.8; its 6.5 flange + the 3 mm ring
+    MID_CUTOUT = None; MID_REBATE = None
+    PORT = None                               # sealed: about 10 L net, f3 62 Hz, a DSP shelf to 45 Hz (the research)
+    POSTS = dict(POSTS, z=180.0)
+    # Hypex FusionAmp FA122 upright on the back (its 315 plate will not lie across a 220 back)
+    AMP = dict(model='Hypex FusionAmp FA122', plate_w=120.0, plate_h=315.0, plate_t=3.0, plate_r=4.0, module_depth=55.0,
+               cut_w=96.0, cut_h=291.0, z=235.0, rebate=3.0)
+    AMP_BOX = dict(depth=70.0, margin=10.0, gland_d=16.0)
+    # The back holds the amplifier, so the Facts go on the right side, as on a real carton
+    LABEL = dict(w=150.0, h=147.0, top=420.0, face='right')
+    BADGE = dict(type=25.0, relief=1.2, z=31.0, tracking=-0.035)
+    BACK_BADGE = dict(type=25.0, relief=1.2, z=440.0, tracking=-0.035)
+    MARK_OPEN = dict(text='OPEN OTHER SIDE', type=15.0, tracking=0.04, arrow=True)
+    MARK_SHAKE = dict(text='SHAKE WELL', type=15.0, tracking=0.04, z=31.0)
+    INNER = PLAN - 2 * WALL
+    TOP_Z0 = BODY - WALL
+    MID_CHAMBER_DEPTH = None; MID_SHELF_TOP = None
+    BRACE_Z = 210.0; BRACE_WINDOW = 120.0; BRACE_WINDOW_R = 20.0
+    GABLE_SPLIT_Z = None
+    TRIM_RING = dict(t=3.0, width=12.0)

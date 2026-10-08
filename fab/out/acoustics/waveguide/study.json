@@ -289,6 +289,150 @@
     }
    }
   },
+  "C22": {
+   "waveguide": {
+    "mouth_width": 281.6,
+    "mouth_s": [
+     12.7,
+     200.7
+    ],
+    "depth_horizontal": 78.5,
+    "depth_down": 164.1,
+    "depth_up": 32.7,
+    "coverage_by_direction": {
+     "0": 45.0,
+     "45": 40.8,
+     "90": 35.0,
+     "135": 40.8,
+     "180": 45.0,
+     "225": 27.4,
+     "270": 16.7,
+     "315": 27.4
+    },
+    "eave_angle": 23.1
+   },
+   "mesh": {
+    "vertices": 8720,
+    "triangles": 17436,
+    "h_near": 6.5,
+    "h_far": 20.0,
+    "stub": 250.0
+   },
+   "by_f": {
+    "1250.0": {
+     "beamwidth_h": null,
+     "beamwidth_up": null,
+     "beamwidth_down": 62.905893456958054,
+     "di": 2.3071036338806152,
+     "vertical_peak": 45.0,
+     "axis_below_peak_db": 5.07
+    },
+    "2000.0": {
+     "beamwidth_h": 39.69285266179574,
+     "beamwidth_up": 50.10721395477553,
+     "beamwidth_down": 46.81001672020064,
+     "di": 8.723227500915527,
+     "vertical_peak": 15.0,
+     "axis_below_peak_db": 0.44
+    },
+    "3150.0": {
+     "beamwidth_h": 40.60556027812289,
+     "beamwidth_up": 34.41936813308556,
+     "beamwidth_down": 30.070190724041602,
+     "di": 11.173784255981445,
+     "vertical_peak": 10.0,
+     "axis_below_peak_db": 0.61
+    },
+    "5000.0": {
+     "beamwidth_h": 31.818607681726622,
+     "beamwidth_up": 17.41004974199736,
+     "beamwidth_down": 27.149731182795698,
+     "di": 13.36567497253418,
+     "vertical_peak": 0.0,
+     "axis_below_peak_db": 0.0
+    },
+    "8000.0": {
+     "beamwidth_h": 30.56702833997509,
+     "beamwidth_up": 16.14650872249428,
+     "beamwidth_down": 18.81117055208899,
+     "di": 14.212884902954102,
+     "vertical_peak": 0.0,
+     "axis_below_peak_db": 0.0
+    }
+   }
+  },
+  "C22a8": {
+   "waveguide": {
+    "mouth_width": 276.0,
+    "mouth_s": [
+     12.9,
+     199.7
+    ],
+    "depth_horizontal": 78.5,
+    "depth_down": 164.1,
+    "depth_up": 34.1,
+    "coverage_by_direction": {
+     "0": 45.0,
+     "45": 40.8,
+     "90": 35.0,
+     "135": 40.8,
+     "180": 45.0,
+     "225": 28.6,
+     "270": 18.9,
+     "315": 28.6
+    },
+    "eave_angle": 23.1
+   },
+   "mesh": {
+    "vertices": 8703,
+    "triangles": 17402,
+    "h_near": 6.5,
+    "h_far": 20.0,
+    "stub": 250.0
+   },
+   "by_f": {
+    "1250.0": {
+     "beamwidth_h": null,
+     "beamwidth_up": null,
+     "beamwidth_down": 63.481402432246156,
+     "di": 2.0576179027557373,
+     "vertical_peak": 45.0,
+     "axis_below_peak_db": 5.25
+    },
+    "2000.0": {
+     "beamwidth_h": 40.09528552010013,
+     "beamwidth_up": 50.356053707959354,
+     "beamwidth_down": 46.39527946807242,
+     "di": 8.63180923461914,
+     "vertical_peak": 15.0,
+     "axis_below_peak_db": 0.44
+    },
+    "3150.0": {
+     "beamwidth_h": 41.08059557510954,
+     "beamwidth_up": 35.10302108054107,
+     "beamwidth_down": 30.17122492729085,
+     "di": 11.041021347045898,
+     "vertical_peak": 10.0,
+     "axis_below_peak_db": 0.67
+    },
+    "5000.0": {
+     "beamwidth_h": 32.027758912682785,
+     "beamwidth_up": 17.707136563876652,
+     "beamwidth_down": 27.351871384682354,
+     "di": 13.357586860656738,
+     "vertical_peak": 0.0,
+     "axis_below_peak_db": 0.0
+    },
+    "8000.0": {
+     "beamwidth_h": 31.181822430374506,
+     "beamwidth_up": 19.30930522335687,
+     "beamwidth_down": 19.67428282385889,
+     "di": 14.07321834564209,
+     "vertical_peak": 0.0,
+     "axis_below_peak_db": 0.0
+    }
+   }
+  },
   "C6": {
    "waveguide": {
     "mouth_width": 317.4,

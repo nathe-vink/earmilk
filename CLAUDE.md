@@ -44,7 +44,8 @@ Read `README.md` first. It is the handoff and the brief. The canvas it links to 
 
 ## Critic protocol
 
-- Runs after each render batch, never in the context that made the render. Spawn a fresh subagent and give it only the image(s) and the text of `critic/PROMPT.md`. It must not see `README.md`, the prompt files, the spec, or this file.
+- Runs after each render batch, never in the context that made the render. Spawn a fresh subagent and give it only the staged image, its shot card and the measuring tool (`critic/round.py stage` writes all three and the message), and the text of `critic/PROMPT.md`. It must not see `README.md`, the prompt files, the spec, or this file.
+- v2 (2026-10-08, the owner: the critic says exactly what to change): stage 1 is blind (the image only, a score); stage 2 reads the card (what the frame is for, what is fixed and why, every setting with its value, unit and range) and prescribes changes as setting, from, to, with a test the next render must pass. Apply them with `studio/engine/render.py --apply`, check with `critic/round.py check`. The card marks the waveguide's shape as set by acoustic simulation: never change it for a picture.
 - At most three rounds per shot per look: a change to the printed look (as on 2026-10-01) restarts the count, because the critic is judging a different object. Log every round in `critic/LOG.md` before starting the next.
 - A new render path (the path tracer, 2026-10-03) restarts the count too: the critic is judging different light and surfaces on the same object.
 - A critic note that would change geometry or a Decision is not a critic fix. It is a spec change: stop and ask.

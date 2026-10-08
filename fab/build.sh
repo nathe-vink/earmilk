@@ -1,14 +1,21 @@
 #!/usr/bin/env bash
-# Regenerates every fabrication file from fab/params.py. See fab/README.md, "Regenerating".
+# Regenerates every fabrication file from fab/params.py, for both sizes (fab/out/ the floorstander, fab/out-bookshelf/
+# the bookshelf). See fab/README.md, "Regenerating". SIZES="floorstander" to build one.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY="${FAB_PY:-.venv-fab/bin/python}"
-"$PY" fab/cad.py          # solids, STEP, STL, volumes (port at its last computed length)
-"$PY" fab/acoustics.py    # port length for 32 Hz, simulation, charts
-"$PY" fab/cad.py          # again, with the new port length
-"$PY" fab/acoustics.py    # and settle
-"$PY" fab/crossover.py    # a starting crossover from driver models (replace with measurements)
-"$PY" fab/flats.py        # DXF panels, nesting, cut list
-"$PY" fab/typeset.py      # letters, plate, stencils, templates
-"$PY" fab/drawings.py     # shop drawings
-python3 fab/render_views.py --samples "${SAMPLES:-96}"   # exploded and section views (system Python with bpy)
+for SIZE in ${SIZES:-floorstander bookshelf}; do
+  export EARMILK_SIZE=$SIZE
+  echo "== $SIZE"
+  "$PY" fab/cad.py            # solids, STEP, STL (the waveguide insert whole and halved), volumes
+  "$PY" fab/acoustics.py      # the floorstander: port length for 32 Hz, simulation, charts; the bookshelf: the sealed box
+  if [ "$SIZE" = floorstander ]; then
+    "$PY" fab/cad.py          # again, with the new port length
+    "$PY" fab/acoustics.py    # and settle
+  fi
+  "$PY" fab/dsp.py            # the active crossover's starting setup for the amplifier's DSP
+  "$PY" fab/flats.py          # DXF panels, nesting, cut list
+  "$PY" fab/typeset.py        # letters, the Facts print, stencils, templates
+  "$PY" fab/sheets.py         # the drawings to build from (A3 sheets from the CAD)
+  "$PY" fab/render_model.py   # the render model for the engine (studio/engine)
+done

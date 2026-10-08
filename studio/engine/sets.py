@@ -117,9 +117,47 @@ def room(bpy, spec, mats):
                 continue
             objs += _skirting(bpy, f'skirting-{name}', Vector((*a, 0)), Vector((*b, 0)), t, hh, skm,
                               [wi for wi in wins if wi.get('wall') == name and wi.get('sill', 1) < hh])
+    wa = spec.get('wainscot')
+    if wa:
+        objs += _wainscot(bpy, walls, wins, wa)
     for i, p in enumerate(spec.get('props', [])):
         objs += prop(bpy, f'prop{i}-{p["kind"]}', p, mats)
     return objs
+
+
+def _wainscot(bpy, walls, wins, wa):
+    """Panelling below a dado rail on each wall but the front: a painted board, raised panels and the rail, broken
+    where a window's sill comes lower than the rail."""
+    H = wa.get('height', 0.9); col = wa.get('color', '#CFC3AE')
+    paint = M.make(bpy, 'wainscot', 'satin_paint', {'color': col, 'roughness': 0.38, 'specular': 0.5})
+    out = []
+    for name, (a, b) in walls.items():
+        if name == 'front' and not wa.get('front', False):
+            continue
+        a = Vector((*a, 0)); b = Vector((*b, 0)); L = (b - a).length; u = (b - a).normalized(); n_in = Vector((u.y, -u.x, 0))
+        segs = [(0.0, L)]
+        for wi in wins:
+            if wi.get('wall') != name or wi.get('sill', 1) >= H: continue
+            ww = wi['size'][0]; c = L / 2 + wi.get('along', 0.0)
+            new = []
+            for s0, s1 in segs:
+                if c - ww / 2 - 0.05 > s0: new.append((s0, min(s1, c - ww / 2 - 0.05)))
+                if c + ww / 2 + 0.05 < s1: new.append((max(s0, c + ww / 2 + 0.05), s1))
+            segs = new
+        for k, (s0, s1) in enumerate(segs):
+            def bx(nm, t0, t1, z0, z1, d0, d1):
+                p0 = a + u * t0 + n_in * d0; p1 = a + u * t1 + n_in * d1
+                lo = Vector((min(p0.x, p1.x), min(p0.y, p1.y), z0)); hi = Vector((max(p0.x, p1.x), max(p0.y, p1.y), z1))
+                return box(bpy, nm, lo.x, lo.y, lo.z, hi.x, hi.y, hi.z, paint, bevel=0.002)
+            out.append(bx(f'wainscot-{name}{k}', s0, s1, 0.0, H, 0.0, 0.012))
+            out.append(bx(f'dado-{name}{k}', s0, s1, H - 0.02, H + 0.03, 0.0, 0.03))
+            pw = wa.get('panel_w', 0.6); n = max(1, int((s1 - s0 - 0.1) / pw))
+            step = (s1 - s0) / n
+            for i in range(n):
+                t0 = s0 + i * step + 0.07; t1 = s0 + (i + 1) * step - 0.07
+                if t1 - t0 < 0.15: continue
+                out.append(bx(f'panel-{name}{k}-{i}', t0, t1, 0.2, H - 0.1, 0.012, 0.02))
+    return out
 
 
 def _wall(bpy, name, a, b, h, holes, mat, frame_mat, sill_mat):
@@ -209,15 +247,91 @@ def _skirting(bpy, name, a, b, t, h, mat, gaps):
 
 
 # --- props ---------------------------------------------------------------------------------------------------------
+def _mat_fabric(bpy, name, color, sheen=0.6, rough=0.95, bump=0.25, weave_mm=2.0, translucent=0.0):
+    """Wool or linen: a matte base with sheen, a fine weave bump; `translucent` > 0 for sheers."""
+    m = bpy.data.materials.new(name); m.use_nodes = True; nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    b.inputs['Base Color'].default_value = M.hex_lin(color); b.inputs['Roughness'].default_value = rough
+    b.inputs['Sheen Weight'].default_value = sheen; b.inputs['Sheen Roughness'].default_value = 0.5
+    if 'Specular IOR Level' in b.inputs: b.inputs['Specular IOR Level'].default_value = 0.2
+    tc = nt.nodes.new('ShaderNodeTexCoord')
+    wv1 = nt.nodes.new('ShaderNodeTexWave'); wv1.wave_type = 'BANDS'; wv1.bands_direction = 'X'; wv1.inputs['Scale'].default_value = 1000.0 / weave_mm
+    wv2 = nt.nodes.new('ShaderNodeTexWave'); wv2.wave_type = 'BANDS'; wv2.bands_direction = 'Y'; wv2.inputs['Scale'].default_value = 1000.0 / weave_mm
+    for w in (wv1, wv2):
+        w.inputs['Distortion'].default_value = 2.0; w.inputs['Detail'].default_value = 2.0
+        nt.links.new(tc.outputs['Object'], w.inputs['Vector'])
+    mx = nt.nodes.new('ShaderNodeMath'); mx.operation = 'MAXIMUM'
+    nt.links.new(wv1.outputs['Fac'], mx.inputs[0]); nt.links.new(wv2.outputs['Fac'], mx.inputs[1])
+    bn = nt.nodes.new('ShaderNodeBump'); bn.inputs['Strength'].default_value = bump; bn.inputs['Distance'].default_value = weave_mm / 4000
+    nt.links.new(mx.outputs['Value'], bn.inputs['Height']); nt.links.new(bn.outputs['Normal'], b.inputs['Normal'])
+    if translucent > 0:
+        out = nt.nodes['Material Output']
+        tr = nt.nodes.new('ShaderNodeBsdfTranslucent'); tr.inputs['Color'].default_value = M.hex_lin(color)
+        mix = nt.nodes.new('ShaderNodeMixShader'); mix.inputs['Fac'].default_value = translucent
+        tp = nt.nodes.new('ShaderNodeBsdfTransparent')
+        mix2 = nt.nodes.new('ShaderNodeMixShader'); mix2.inputs['Fac'].default_value = 0.35
+        nt.links.new(b.outputs['BSDF'], mix.inputs[1]); nt.links.new(tr.outputs['BSDF'], mix.inputs[2])
+        nt.links.new(mix.outputs['Shader'], mix2.inputs[1]); nt.links.new(tp.outputs['BSDF'], mix2.inputs[2])
+        nt.links.new(mix2.outputs['Shader'], out.inputs['Surface'])
+    return m
+
+
+def _mesh(bpy, name, verts, faces, mat, smooth=True):
+    me = bpy.data.meshes.new(name); me.from_pydata(verts, [], faces); me.uv_layers.new()
+    if smooth:
+        for pg in me.polygons: pg.use_smooth = True
+    return _obj(bpy, name, me, mat)
+
+
+def _cyl(bpy, name, r, h, mat, n=48, z0=0.0, r_top=None, cap=True):
+    rt = r if r_top is None else r_top
+    verts = [(r * math.cos(2 * math.pi * i / n), r * math.sin(2 * math.pi * i / n), z0) for i in range(n)] + \
+            [(rt * math.cos(2 * math.pi * i / n), rt * math.sin(2 * math.pi * i / n), z0 + h) for i in range(n)]
+    faces = [(i, (i + 1) % n, n + (i + 1) % n, n + i) for i in range(n)]
+    if cap:
+        faces += [tuple(range(n))[::-1], tuple(range(n, 2 * n))]
+    return _mesh(bpy, name, verts, faces, mat)
+
+
+def _lathe(bpy, name, prof, mat, n=64):
+    """A solid of revolution about z from (r, z) points."""
+    verts, faces = [], []
+    m = len(prof)
+    for i in range(n):
+        a = 2 * math.pi * i / n
+        verts += [(r * math.cos(a), r * math.sin(a), z) for (r, z) in prof]
+    for i in range(n):
+        j = (i + 1) % n
+        for k in range(m - 1):
+            faces.append((i * m + k, j * m + k, j * m + k + 1, i * m + k + 1))
+    return _mesh(bpy, name, verts, faces, mat)
+
+
+def _tube(bpy, name, pts, r, mat, n=8):
+    """A thin tube along 3D points (a branch, a cable)."""
+    verts, faces = [], []
+    P = [Vector(p) for p in pts]
+    for i, p in enumerate(P):
+        t = (P[min(i + 1, len(P) - 1)] - P[max(i - 1, 0)]).normalized()
+        a = t.orthogonal().normalized(); b = t.cross(a)
+        rr = r * (1 - 0.7 * i / (len(P) - 1))
+        verts += [p + rr * (math.cos(2 * math.pi * k / n) * a + math.sin(2 * math.pi * k / n) * b) for k in range(n)]
+    for i in range(len(P) - 1):
+        for k in range(n):
+            faces.append((i * n + k, i * n + (k + 1) % n, (i + 1) * n + (k + 1) % n, (i + 1) * n + k))
+    return _mesh(bpy, name, verts, faces, mat)
+
+
 def prop(bpy, name, p, mats):
-    """Simple, honest props: a rug, a low table, a chair, a book stack. Each at `position` [x, y] (its centre on the
-    floor), turned `rotate_z` degrees."""
+    """Props, each at `position` [x, y] (its centre on the floor), turned `rotate_z` degrees: rug, table, books,
+    sideboard (with a turntable), vase (with branches), lamp, sofa, curtain, frame."""
+    import random
     kind = p['kind']; x, y = p['position']; rot = math.radians(p.get('rotate_z', 0))
+    rnd = random.Random(p.get('seed', 7))
     made = []
     if kind == 'rug':
         w, d = p.get('size', [2.0, 1.4])
-        m = M.make(bpy, name, 'satin_paint', {'color': p.get('color', '#C9C1B4'), 'roughness': 0.95, 'specular': 0.05})
-        made.append(box(bpy, name, -w / 2, -d / 2, 0.0, w / 2, d / 2, 0.008, m, bevel=0.003))
+        m = _mat_fabric(bpy, name, p.get('color', '#C9C1B4'), sheen=0.7, bump=0.35, weave_mm=3.5)
+        made.append(box(bpy, name, -w / 2, -d / 2, 0.0, w / 2, d / 2, 0.009, m, bevel=0.004))
     elif kind == 'table':
         w, d, hh = p.get('size', [1.0, 0.5, 0.42])
         wood = M.make(bpy, name + '-wood', 'birch', {'color': p.get('color', '#9B7653'), 'roughness': 0.45})
@@ -232,7 +346,97 @@ def prop(bpy, name, p, mats):
         for i, c in enumerate(cols):
             m = M.make(bpy, f'{name}-{i}', 'satin_paint', {'color': c, 'roughness': 0.6, 'specular': 0.3})
             bw, bd, bh = 0.24 - 0.02 * i, 0.17 - 0.01 * i, 0.025 + 0.006 * (i % 2)
-            made.append(box(bpy, f'{name}-{i}', -bw / 2, -bd / 2, z, bw / 2, bd / 2, z + bh, m, bevel=0.002)); z += bh
+            b = box(bpy, f'{name}-{i}', -bw / 2, -bd / 2, z, bw / 2, bd / 2, z + bh, m, bevel=0.002)
+            b.rotation_euler = (0, 0, math.radians(rnd.uniform(-6, 6))); made.append(b); z += bh
+    elif kind == 'sideboard':
+        w, d, hh = p.get('size', [1.6, 0.42, 0.56])
+        leg = 0.14
+        wood = M.make(bpy, name + '-oak', 'birch', {'color': p.get('color', '#A27B52'), 'roughness': 0.4})
+        dark = M.make(bpy, name + '-dark', 'satin_paint', {'color': '#151413', 'roughness': 0.5, 'specular': 0.3})
+        made.append(box(bpy, name + '-body', -w / 2, -d / 2, leg, w / 2, d / 2, hh, wood, bevel=0.005))
+        for k in range(1, 3):   # door seams
+            sx = -w / 2 + k * w / 3
+            made.append(box(bpy, f'{name}-seam{k}', sx - 0.0015, -d / 2 - 0.0005, leg + 0.02, sx + 0.0015, -d / 2 + 0.002, hh - 0.02, dark))
+        for sx in (-1, 1):
+            for sy in (-1, 1):
+                made.append(_cyl(bpy, f'{name}-leg{sx}{sy}', 0.016, leg, wood, n=16, r_top=0.02))
+                made[-1].location = Vector((sx * (w / 2 - 0.08), sy * (d / 2 - 0.06), 0))
+        if p.get('turntable', True):
+            tz = hh
+            plinth = M.make(bpy, name + '-tt', 'satin_paint', {'color': p.get('tt_color', '#E9E6DF'), 'roughness': 0.35, 'specular': 0.5})
+            made.append(box(bpy, name + '-tt', -0.58, -0.17, tz, -0.13, 0.17, tz + 0.09, plinth, bevel=0.006))
+            rec = M.make(bpy, name + '-record', 'gloss_plastic', {'color': '#0B0B0B', 'roughness': 0.25})
+            pl = _cyl(bpy, name + '-platter', 0.152, 0.012, dark, n=96); pl.location = Vector((-0.38, 0.0, tz + 0.09)); made.append(pl)
+            rc = _cyl(bpy, name + '-record', 0.150, 0.002, rec, n=96); rc.location = Vector((-0.38, 0.0, tz + 0.102)); made.append(rc)
+            lab = M.make(bpy, name + '-label', 'satin_paint', {'color': p.get('label', '#C62828'), 'roughness': 0.6})
+            lb = _cyl(bpy, name + '-label', 0.045, 0.0006, lab, n=48); lb.location = Vector((-0.38, 0.0, tz + 0.104)); made.append(lb)
+            metal = M.make(bpy, name + '-arm', 'metal', {'color': '#C9C9C6', 'roughness': 0.2})
+            made.append(_tube(bpy, name + '-arm', [(-0.17, 0.12, tz + 0.12), (-0.24, 0.05, tz + 0.115), (-0.30, -0.06, tz + 0.11)], 0.004, metal))
+    elif kind == 'vase':
+        h = p.get('height', 0.32); z0 = p.get('z', 0.0)
+        cer = M.make(bpy, name + '-ceramic', 'satin_paint', {'color': p.get('color', '#E8E2D6'), 'roughness': 0.55, 'specular': 0.5})
+        prof = [(0.0, 0.0), (0.055, 0.0), (0.075, 0.08 * h / 0.32), (0.07, 0.2 * h / 0.32), (0.035, 0.29 * h / 0.32), (0.03, h), (0.026, h), (0.026, h - 0.01)]
+        v = _lathe(bpy, name, prof, cer); v.location = Vector((0, 0, z0)); made.append(v)
+        bark = M.make(bpy, name + '-branch', 'satin_paint', {'color': '#4B3A2B', 'roughness': 0.8, 'specular': 0.2})
+        for i in range(p.get('branches', 5)):
+            a = rnd.uniform(0, 2 * math.pi); lean = rnd.uniform(0.15, 0.45); L = rnd.uniform(0.5, 0.8)
+            pts = []
+            for k in range(9):
+                t = k / 8
+                pts.append((math.cos(a) * lean * L * t ** 1.4 + 0.01 * math.sin(7 * t + i), math.sin(a) * lean * L * t ** 1.4, z0 + h - 0.05 + L * t))
+            made.append(_tube(bpy, f'{name}-b{i}', pts, 0.004, bark, n=6))
+    elif kind == 'lamp':
+        hh = p.get('height', 1.55)
+        brass = M.make(bpy, name + '-brass', 'metal', {'color': '#B79A62', 'roughness': 0.28})
+        made.append(_cyl(bpy, name + '-base', 0.13, 0.02, brass, n=64))
+        made.append(_cyl(bpy, name + '-pole', 0.009, hh - 0.25, brass, n=16, z0=0.02))
+        shade = _mat_fabric(bpy, name + '-shade', p.get('shade', '#EFE9DD'), sheen=0.3, bump=0.1, weave_mm=1.2, translucent=0.6)
+        made.append(_cyl(bpy, name + '-shade', 0.2, 0.26, shade, n=64, z0=hh - 0.3, r_top=0.17, cap=False))
+    elif kind == 'sofa':
+        w, d, hh = p.get('size', [2.1, 0.92, 0.78])
+        fab = _mat_fabric(bpy, name + '-fabric', p.get('color', '#9C9A92'), sheen=0.5, bump=0.3, weave_mm=2.5)
+        legm = M.make(bpy, name + '-legs', 'birch', {'color': '#6B4A30', 'roughness': 0.45})
+        made.append(box(bpy, name + '-base', -w / 2, -d / 2, 0.12, w / 2, d / 2, 0.4, fab, bevel=0.03))
+        made.append(box(bpy, name + '-back', -w / 2, d / 2 - 0.2, 0.4, w / 2, d / 2, hh, fab, bevel=0.05))
+        for sx in (-1, 1):
+            made.append(box(bpy, f'{name}-arm{sx}', sx * w / 2 - (0.18 if sx > 0 else 0), -d / 2, 0.4, sx * w / 2 + (0.18 if sx < 0 else 0), d / 2, 0.62, fab, bevel=0.05))
+        nseat = 2
+        for k in range(nseat):
+            x0_ = -w / 2 + 0.18 + k * (w - 0.36) / nseat; x1_ = x0_ + (w - 0.36) / nseat
+            made.append(box(bpy, f'{name}-seat{k}', x0_ + 0.005, -d / 2 + 0.02, 0.4, x1_ - 0.005, d / 2 - 0.2, 0.52, fab, bevel=0.04))
+        for sx in (-1, 1):
+            for sy in (-1, 1):
+                lg = _cyl(bpy, f'{name}-leg{sx}{sy}', 0.018, 0.12, legm, n=16, r_top=0.024)
+                lg.location = Vector((sx * (w / 2 - 0.08), sy * (d / 2 - 0.08), 0)); made.append(lg)
+    elif kind == 'curtain':
+        # a sheer panel hanging in folds; position is its centre on the floor, it faces -y before rotate_z
+        w, hh = p.get('size', [1.0, 2.6]); folds = p.get('folds', 9); amp = p.get('depth', 0.035)
+        m = _mat_fabric(bpy, name, p.get('color', '#F4F1EA'), sheen=0.4, bump=0.08, weave_mm=0.8, translucent=p.get('translucent', 0.75))
+        nx = folds * 8; verts, faces = [], []
+        for j, z in enumerate((0.01, hh * 0.5, hh)):
+            for i in range(nx + 1):
+                t = i / nx; xx = -w / 2 + w * t
+                verts.append((xx, amp * math.sin(2 * math.pi * folds * t) * (1.0 + 0.15 * j), z))
+        for j in range(2):
+            for i in range(nx):
+                a0 = j * (nx + 1) + i
+                faces.append((a0, a0 + 1, a0 + nx + 2, a0 + nx + 1))
+        made.append(_mesh(bpy, name, verts, faces, m))
+    elif kind == 'frame':
+        # a framed print on a wall: position [x, y] is its centre, z its centre height, it faces -y before rotate_z
+        w, hh = p.get('size', [0.6, 0.8]); z = p.get('z', 1.5)
+        oak = M.make(bpy, name + '-oak', 'birch', {'color': p.get('frame', '#8C6A48'), 'roughness': 0.4})
+        made.append(box(bpy, name + '-frame', -w / 2, -0.03, z - hh / 2, w / 2, 0.0, z + hh / 2, oak, bevel=0.003))
+        pm = M.make(bpy, name + '-print', 'satin_paint', {'color': p.get('print', '#D8CFC0'), 'roughness': 0.85, 'specular': 0.2})
+        made.append(box(bpy, name + '-print', -w / 2 + 0.05, -0.032, z - hh / 2 + 0.05, w / 2 - 0.05, -0.029, z + hh / 2 - 0.05, pm))
+        art = M.make(bpy, name + '-art', 'satin_paint', {'color': p.get('art', '#3F5B6E'), 'roughness': 0.85, 'specular': 0.2})
+        made.append(box(bpy, name + '-art', -w / 2 + 0.11, -0.0335, z - hh / 2 + 0.2, w / 2 - 0.11, -0.0325, z + hh / 2 - 0.12, art))
     for o in made:
-        o.rotation_euler = (0, 0, rot); o.location = Vector((x, y, 0)) + o.location
+        o.rotation_euler.z += rot
+        o.location = Matrix_rot(rot) @ o.location + Vector((x, y, 0))
     return made
+
+
+def Matrix_rot(a):
+    from mathutils import Matrix
+    return Matrix.Rotation(a, 3, 'Z')

@@ -265,6 +265,7 @@ def main():
     ap.add_argument('--ah', type=float, default=45.0); ap.add_argument('--aup', type=float, default=35.0); ap.add_argument('--adown', type=float, default=30.0)
     ap.add_argument('--k', type=float, default=1.4); ap.add_argument('--lip', type=float, default=12.0)
     ap.add_argument('--tilt', type=float, default=0.0, help='degrees the axis is tipped down')
+    ap.add_argument('--smin', type=float, default=15.0, help='the mouth\'s lowest point at least this far up the slope from the eave, mm')
     ap.add_argument('--freqs', nargs='+', type=float, default=[1000, 1600, 2500, 4000, 6300, 10000])
     ap.add_argument('--stub', type=float, default=250.0)
     ap.add_argument('--h-near', type=float, default=None); ap.add_argument('--h-far', type=float, default=28.0)
@@ -273,7 +274,7 @@ def main():
     a = ap.parse_args()
     fmax = max(a.freqs); lam = C_AIR / fmax * 1000
     h_near = a.h_near or max(3.5, lam / 6)
-    wg = Waveguide(r0=a.r0, a0=a.a0, a_h=a.ah, a_up=a.aup, a_down=a.adown, k=a.k, throat_y=a.throat[0], throat_z=a.throat[1], lip_r=a.lip, tilt=a.tilt)
+    wg = Waveguide(r0=a.r0, a0=a.a0, a_h=a.ah, a_up=a.aup, a_down=a.adown, k=a.k, throat_y=a.throat[0], throat_z=a.throat[1], lip_r=a.lip, tilt=a.tilt, s_min=a.smin)
     circ = 2 * np.pi * 160
     wg.sections = a.sections or int(max(48, min(128, circ / h_near)) // 8 * 8)
     wg.steps = a.steps or int(max(16, min(48, 180 / h_near)))

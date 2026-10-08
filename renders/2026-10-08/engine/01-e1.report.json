@@ -1,0 +1,20 @@
+{
+ "shot": "studio/shots/earmilk/01.json",
+ "image": "renders/2026-10-08/engine/01-e1.png",
+ "seconds": {
+  "build": 4.2,
+  "render": 942.4
+ },
+ "samples": 96,
+ "size": [
+  1350,
+  900
+ ],
+ "applied": [],
+ "pending": [],
+ "sets": [],
+ "masks": {
+  "image": "renders/2026-10-08/engine/01-e1.mask.png",
+  "parts": 45
+ }
+}

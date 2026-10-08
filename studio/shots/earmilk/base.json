@@ -1,0 +1,7 @@
+{
+ "_note": "Defaults every earmilk shot extends. The product stands at the origin, its front toward -y, z up, metres.",
+ "size": [1800, 1200],
+ "product": {"def": "studio/products/earmilk.json", "flavour": "whole", "instances": [{"position": [0, 0, 0], "rotate_z": 0}]},
+ "materials": {},
+ "render": {"samples": 192, "adaptive": 0.015, "denoise": true, "clamp": 8, "bounces": 12, "view": "Khronos PBR Neutral", "exposure": 0.0}
+}

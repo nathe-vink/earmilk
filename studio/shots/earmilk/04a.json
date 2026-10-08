@@ -1,0 +1,93 @@
+{
+ "extends": "base.json",
+ "title": "The back's label, straight on",
+ "size": [
+  1200,
+  1500
+ ],
+ "product": {
+  "def": "studio/products/earmilk.json",
+  "flavour": "whole",
+  "instances": [
+   {
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "rotate_z": 180
+   }
+  ]
+ },
+ "set": {
+  "kind": "sweep",
+  "color": "#B9B4AC",
+  "width": 8,
+  "front": 6,
+  "depth": 1.6,
+  "radius": 1.2,
+  "height": 5
+ },
+ "camera": {
+  "position": [
+   0.0,
+   -2.15,
+   0.83
+  ],
+  "target": [
+   0.0,
+   0.0,
+   0.83
+  ],
+  "lens_mm": 85,
+  "level": true
+ },
+ "sky": {
+  "kind": "gradient",
+  "strength": 0.45,
+  "zenith": "#FFFFFF",
+  "horizon": "#D6D3CD",
+  "ground": "#6A665F"
+ },
+ "lights": {
+  "key": {
+   "type": "area",
+   "size_m": [
+    1.2,
+    1.6
+   ],
+   "orbit": {
+    "azimuth_deg": -38,
+    "elevation_deg": 28,
+    "distance_m": 2.4
+   },
+   "target": [
+    0,
+    0,
+    0.75
+   ],
+   "irradiance": 2.8,
+   "color": 5600
+  },
+  "fill": {
+   "type": "area",
+   "size_m": [
+    2.0,
+    2.0
+   ],
+   "orbit": {
+    "azimuth_deg": 55,
+    "elevation_deg": 10,
+    "distance_m": 3.2
+   },
+   "target": [
+    0,
+    0,
+    0.6
+   ],
+   "irradiance": 0.9,
+   "color": 6200,
+   "specular": 0.3
+  }
+ }
+}

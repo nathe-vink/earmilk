@@ -25,6 +25,17 @@ DRIVERS = {
                         magnet_d=90.0, magnet_h=33.0, cone='paper', cap='convex', cap_d=36.0),
     'tweeter-1in': dict(kind='dome', dome_d=26.0, surround_w=2.5, flange_d=50.0, flange_t=4.0, body_d=43.0, body_depth=30.0,
                         dome_h=7.5),
+    # 2026-10-08, the research's set (fab/research/drivers-floorstander.md); magnet, cap and roll PROPORTIONED where unpublished
+    'rss315hf-4': dict(kind='cone', frame_od=314.0, flange_t=5.0, cutout=282.0, depth=146.0, sd_cm2=515.0, surround_w=26.0, roll_h=13.0,
+                       magnet_d=156.0, magnet_h=62.0, cone='aluminium', cap='convex', cap_d=112.0, cap_h=14.0),
+    'mr16p-8': dict(kind='cone', frame_od=165.0, flange_t=7.5, cutout=140.3, depth=75.6, sd_cm2=119.0, surround_w=11.0, roll_h=5.0,
+                    magnet_d=95.0, magnet_h=32.0, cone='paper', cap='convex', cap_d=42.0),
+    'tw29dn-b': dict(kind='dome', dome_d=29.0, surround_w=8.0, flange_d=73.0, flange_t=6.0, body_d=66.0, body_depth=26.0, dome_h=9.5),
+    # the bookshelf's (fab/research/drivers-small.md)
+    'sb17nrx2c35-8': dict(kind='cone', frame_od=171.0, flange_t=6.5, cutout=144.9, depth=75.0, sd_cm2=118.0, surround_w=12.0, roll_h=5.5,
+                          magnet_d=95.0, magnet_h=32.0, cone='paper', cap='convex', cap_d=38.0),
+    'd3004-602200': dict(kind='dome', dome_d=26.0, surround_w=4.0, flange_d=62.0, flange_t=4.5, body_d=48.0, body_depth=17.0, dome_h=7.0),
+    'nd25fn-4': dict(kind='dome', dome_d=25.0, surround_w=2.5, flange_d=41.0, flange_t=3.0, body_d=36.0, body_depth=18.0, dome_h=7.0),
 }
 RING = dict(width=20.0, t=3.0, crown=0.5, ease=1.0)    # params.TRIM_RING: printed, satin black, over the frame and its screws
 
@@ -160,24 +171,35 @@ def amp_plate(spec, centre_x, face_y, centre_z):
         return Pos(x, y, z) * Rot(90, 0, 0) * Cylinder(d / 2, abs(y1 - y0))
     plate = boxy(0, 0, W, H, -T, 0)
     plate = plate.fillet(R, plate.edges().filter_by(Axis.Y))
-    # connector positions, seen from behind
-    iec_u, xlr_u, rca_u, usb_u, led_u = W / 2 - 40, W / 2 - 92, W / 2 - 124, W / 2 - 146, W / 2 - 164
-    holes = [boxy(iec_u, 0, 46, 28, -T - 1, 1), cyl(xlr_u, 0, 24, -T - 1, 1), cyl(rca_u, 0, 11, -T - 1, 1),
-             boxy(usb_u, 0, 13, 12, -T - 1, 1), cyl(led_u, 0, 4, -T - 1, 1)]
+    # connector positions along the plate's long side (across when it lies on its side, up when it stands)
+    portrait = H > W
+    L = max(W, H)
+    def at(t):          # a distance t from the long side's far end -> (u, v)
+        return (0.0, L / 2 - t) if portrait else (W / 2 - t, 0.0)
+    (iec_u, iec_v), (xlr_u, xlr_v), (rca_u, rca_v), (usb_u, usb_v), (led_u, led_v) = at(40), at(92), at(124), at(146), at(164)
+    iw, ih = (28, 46) if portrait else (46, 28)
+    holes = [boxy(iec_u, iec_v, iw, ih, -T - 1, 1), cyl(xlr_u, xlr_v, 24, -T - 1, 1), cyl(rca_u, rca_v, 11, -T - 1, 1),
+             boxy(usb_u, usb_v, 13, 12, -T - 1, 1), cyl(led_u, led_v, 4, -T - 1, 1)]
     for h in holes:
         plate -= h
     parts = {'amp-plate': plate}
     # the module behind the plate (through the cutout)
     parts['amp-module'] = boxy(0, 0, spec['cut_w'] - 8, spec['cut_h'] - 8, -T - spec['module_depth'], -T)
     # connectors: bodies a little proud of the plate, their sockets recessed
-    iec = boxy(iec_u, 0, 48, 30, -6, 1.5) - boxy(iec_u + 7, 0, 24, 19, -4, 2)          # the inlet's socket
-    iec -= boxy(iec_u - 15, 0, 11, 18, -3, 2)                                           # the switch's opening
-    rocker = boxy(iec_u - 15, 0, 10, 16, -2, 1.2)
-    xlr = cyl(xlr_u, 0, 26, -10, 1.6) - cyl(xlr_u, 0, 19.5, -8, 2)
-    rca = cyl(rca_u, 0, 8.4, -8, 9.0) - cyl(rca_u, 0, 6.2, -6, 10)
-    rca_nut = cyl(rca_u, 0, 12.5, 0, 1.8)
-    usb = boxy(usb_u, 0, 15, 14, -9, 0.8) - boxy(usb_u, 0, 12, 11, -7, 1.5)
-    led = cyl(led_u, 0, 4.0, -2, 0.6)
+    sw = (0, 15) if portrait else (15, 0)       # the switch beside the inlet's socket, along the long side
+    if portrait:
+        iec = boxy(iec_u, iec_v, 30, 48, -6, 1.5) - boxy(iec_u, iec_v - 7, 19, 24, -4, 2)
+        iec -= boxy(iec_u, iec_v + 15, 18, 11, -3, 2)
+        rocker = boxy(iec_u, iec_v + 15, 16, 10, -2, 1.2)
+    else:
+        iec = boxy(iec_u, iec_v, 48, 30, -6, 1.5) - boxy(iec_u + 7, iec_v, 24, 19, -4, 2)   # the inlet's socket
+        iec -= boxy(iec_u - 15, iec_v, 11, 18, -3, 2)                                       # the switch's opening
+        rocker = boxy(iec_u - 15, iec_v, 10, 16, -2, 1.2)
+    xlr = cyl(xlr_u, xlr_v, 26, -10, 1.6) - cyl(xlr_u, xlr_v, 19.5, -8, 2)
+    rca = cyl(rca_u, rca_v, 8.4, -8, 9.0) - cyl(rca_u, rca_v, 6.2, -6, 10)
+    rca_nut = cyl(rca_u, rca_v, 12.5, 0, 1.8)
+    usb = boxy(usb_u, usb_v, 15, 14, -9, 0.8) - boxy(usb_u, usb_v, 12, 11, -7, 1.5)
+    led = cyl(led_u, led_v, 4.0, -2, 0.6)
     parts['amp-connectors'] = iec + xlr + usb
     parts['amp-switch'] = rocker
     parts['amp-rca'] = rca + rca_nut
@@ -185,8 +207,9 @@ def amp_plate(spec, centre_x, face_y, centre_z):
     # screws: countersunk heads flush in the plate, five along each long edge
     heads = None
     for i in range(5):
-        u = -W / 2 + 10 + i * (W - 20) / 4
-        for v in (-H / 2 + 7, H / 2 - 7):
+        t = -L / 2 + 10 + i * (L - 20) / 4
+        for e in (-1, 1):
+            u, v = ((e * (W / 2 - 7), t) if portrait else (t, e * (H / 2 - 7)))
             c = cyl(u, v, 7.0, -0.6, 0.02)
             heads = c if heads is None else heads + c
     parts['amp-screws'] = heads

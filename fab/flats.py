@@ -22,8 +22,9 @@ from params import *  # noqa: F401,F403
 import ezdxf
 from ezdxf.enums import TextEntityAlignment
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
-WOOFER_POCKET, MID_POCKET = f"POCKET_{WOOFER_REBATE['depth']:g}MM", f"POCKET_{MID_REBATE['depth']:g}MM"
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out-bookshelf' if BOOK else 'out')
+WOOFER_POCKET = f"POCKET_{WOOFER_REBATE['depth']:g}MM"
+MID_POCKET = f"POCKET_{MID_REBATE['depth']:g}MM" if MID else 'POCKET_MID'
 LAYERS = {'CUT_OUTSIDE': 7, 'CUT_INSIDE': 1, 'POCKET_3MM': 3, WOOFER_POCKET: 4, MID_POCKET: 5, 'DRILL_10_DEEP10': 6, 'NOTES': 8}
 
 
@@ -46,37 +47,59 @@ def circle(cx, cy, d):
 
 def panel_defs():
     """Each panel: name, qty per speaker, width, height (as seen from its outer face), features by layer, note."""
-    wh = TWEETER['faceplate_y'] + TWEETER['faceplate_t'] + TWEETER['body_depth'] / 2   # wire hole y (cad.wire_hole_y)
+    import cad
+    wh = cad.wire_hole_y()
     P = []
-    front = {'CUT_INSIDE': circle(RUN, WOOFER['z'], WOOFER_CUTOUT) + circle(RUN, MID['z'], MID_CUTOUT),
+    front = {'CUT_INSIDE': circle(RUN, WOOFER['z'], WOOFER_CUTOUT) + (circle(RUN, MID['z'], MID_CUTOUT) if MID else []),
              'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, PLAN, BODY)}
     front[WOOFER_POCKET] = front.get(WOOFER_POCKET, []) + circle(RUN, WOOFER['z'], WOOFER_REBATE['d'])
-    front[MID_POCKET] = front.get(MID_POCKET, []) + circle(RUN, MID['z'], MID_REBATE['d'])
+    if MID:
+        front[MID_POCKET] = front.get(MID_POCKET, []) + circle(RUN, MID['z'], MID_REBATE['d'])
+    drivers = ', '.join(f'{k} {v}' for k, v in DRIVER_SET.items() if v)
     P.append(dict(name='front-baffle', qty=1, w=PLAN, h=BODY, layers=front,
-        note=f'outer face up; round the two vertical outer edges {EDGE_R:g} mm after glue-up; cutouts sized for the shortlisted Dayton DSA315-8 (272) and SB Acoustics SB17MFC35-8 (146), rebates for their frames and the trim rings (flush): re-cut for other drivers'))
-    tw, th = TERMINAL_CUTOUT
-    P.append(dict(name='back-panel', qty=1, w=PLAN, h=BODY, layers={
-        'CUT_INSIDE': circle(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5)
-                      + rect(RUN - tw / 2, POSTS['z'] - th / 2, RUN + tw / 2, POSTS['z'] + th / 2),
-        'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, PLAN, BODY)},
-        note=f'outer face up (seen from behind); round the two vertical outer edges {EDGE_R:g} mm after glue-up; the terminal cup\'s body goes through the 113 x 49 hole; the Facts are printed on this face after the colour coat, under the clear'))
+        note=f'outer face up; round the two vertical outer edges {EDGE_R:g} mm after glue-up; cutouts and rebates sized for {drivers} (flush under trim rings): re-cut for other drivers'))
+    back = {'CUT_INSIDE': [], 'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, PLAN, BODY)}
+    if PORT:
+        back['CUT_INSIDE'] += circle(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5)
+    if AMP:
+        back['CUT_INSIDE'] += rect(RUN - AMP['cut_w'] / 2, AMP['z'] - AMP['cut_h'] / 2, RUN + AMP['cut_w'] / 2, AMP['z'] + AMP['cut_h'] / 2)
+        back['POCKET_3MM'] += rrect(RUN - AMP['plate_w'] / 2 - 0.5, AMP['z'] - AMP['plate_h'] / 2 - 0.5,
+                                    RUN + AMP['plate_w'] / 2 + 0.5, AMP['z'] + AMP['plate_h'] / 2 + 0.5, AMP['plate_r'] + 0.5)
+        what = f'the {AMP["model"]}\'s module goes through its {AMP["cut_w"]:g} x {AMP["cut_h"]:g} cutout, its plate flush in the 3 mm rebate (drill its screw holes to Hypex\'s drawing)'
+    else:
+        tw, th = TERMINAL_CUTOUT
+        back['CUT_INSIDE'] += rect(RUN - tw / 2, POSTS['z'] - th / 2, RUN + tw / 2, POSTS['z'] + th / 2)
+        what = 'the terminal cup\'s body goes through the 113 x 49 hole'
+    facts = 'the Facts are printed on this face after the colour coat, under the clear' if LABEL.get('face', 'back') == 'back' else 'the Facts go on the right side'
+    P.append(dict(name='back-panel', qty=1, w=PLAN, h=BODY, layers=back,
+        note=f'outer face up (seen from behind); round the two vertical outer edges {EDGE_R:g} mm after glue-up; {what}; {facts}'))
     P.append(dict(name='side', qty=2, w=INNER, h=BODY, layers={'POCKET_3MM': rect(0, PLINTH_H, INNER, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, INNER, BODY)},
-                  note='outer face up; finish the groove across the front and back panels\' edges after glue-up'))
-    dowels = [(60.0, 200.0), (PLAN - 60.0, 200.0), (60.0, 330.0), (PLAN - 60.0, 330.0)]
+                  note='outer face up; finish the groove across the front and back panels\' edges after glue-up' +
+                       ('; the Facts are printed on the right side\'s outer face' if LABEL.get('face') == 'right' else '')))
+    dowels = cad.dowel_points()
     P.append(dict(name='top-panel', qty=1, w=INNER, h=INNER, layers={
         'CUT_INSIDE': circle(RUN - WALL, wh - WALL, WIRE_HOLE_D),
         'DRILL_10_DEEP10': sum((circle(x - WALL, y - WALL, DOWEL_D) for (x, y) in dowels), [])},
-        note='upper face up (front edge at the bottom of the drawing); dowels register the gable block'))
+        note='upper face up (front edge at the bottom of the drawing); dowels register the gable block; the tweeter cable\'s hole gets a grommet'))
     P.append(dict(name='bottom-panel', qty=1, w=INNER, h=INNER, layers={}, note='either face'))
     h = BRACE_WINDOW / 2
     P.append(dict(name='window-brace', qty=1, w=INNER, h=INNER, layers={
         'CUT_INSIDE': rrect(INNER / 2 - h, INNER / 2 - h, INNER / 2 + h, INNER / 2 + h, BRACE_WINDOW_R)},
-        note='sits at z 500 to 518, glued to all four walls'))
-    P.append(dict(name='mid-shelf', qty=1, w=INNER, h=MID_CHAMBER_DEPTH + WALL, layers={},
-                  note='z 572 to 590, from the baffle back to under the divider'))
-    P.append(dict(name='mid-divider', qty=1, w=INNER, h=TOP_Z0 - MID_SHELF_TOP, layers={
-        'CUT_INSIDE': circle(RUN - 120 - WALL, 40, 12)},
-        note='y 108 to 126, z 590 to 842; seal the wire hole after wiring'))
+        note=f'sits at z {BRACE_Z:g} to {BRACE_Z + WALL:g}, glued to all four walls'))
+    if MID:
+        P.append(dict(name='mid-shelf', qty=1, w=INNER, h=MID_CHAMBER_DEPTH + WALL, layers={},
+                      note=f'z {MID_SHELF_TOP - WALL:g} to {MID_SHELF_TOP:g}, from the baffle back to under the divider'))
+        P.append(dict(name='mid-divider', qty=1, w=INNER, h=TOP_Z0 - MID_SHELF_TOP, layers={
+            'CUT_INSIDE': circle(RUN - 120 - WALL, 40, 12)},
+            note=f'y {WALL + MID_CHAMBER_DEPTH:g} to {2 * WALL + MID_CHAMBER_DEPTH:g}, z {MID_SHELF_TOP:g} to {TOP_Z0:g}; seal the wire hole after wiring'))
+    if AMP:
+        y0, y1, z0, z1 = cad.amp_box_extent()
+        d = y1 - y0 + WALL
+        P.append(dict(name='amp-box-floor', qty=1, w=INNER, h=d, layers={}, note=f'the amplifier box\'s floor, z {z0 - WALL:g} to {z0:g}, against the back'))
+        P.append(dict(name='amp-box-lid', qty=1, w=INNER, h=d, layers={'CUT_INSIDE': circle(INNER - 40, 25, AMP_BOX['gland_d'])},
+                      note=f'the amplifier box\'s lid, z {z1:g} to {z1 + WALL:g}; the gland hole for the speaker leads, sealed after wiring'))
+        P.append(dict(name='amp-box-front', qty=1, w=INNER, h=z1 - z0, layers={},
+                      note=f'the amplifier box\'s front, between floor and lid, {AMP_BOX["depth"]:g} in front of the back\'s inner face; glue and seal all round'))
     return P
 
 
@@ -84,12 +107,13 @@ def gable_layers():
     """Rough blanks for gluing up the gable block: 11 layers of 18 mm birch, each a rectangle a little larger than the
     block's footprint at that layer's bottom face, so the CNC has stock to carve. The top two carry only the fin."""
     out = []
-    for i in range(11):
+    n = int(math.ceil((RISE + FIN_H) / GABLE_LAYER))
+    for i in range(n):
         z0 = BODY + i * GABLE_LAYER
         d = depth_at(z0)
         d = max(d, FIN_T) + 8
         out.append(dict(name=f'gable-layer-{i + 1:02d}', qty=1, w=PLAN + 8, h=round(d, 1), layers={},
-                        note=f'gable glue-up, layer {i + 1} of 11 (z {z0:.0f} to {z0 + GABLE_LAYER:.0f}); centre on y = 195'))
+                        note=f'gable glue-up, layer {i + 1} of {n} (z {z0:.0f} to {z0 + GABLE_LAYER:.0f}); centre on y = {RUN:g}'))
     return out
 
 

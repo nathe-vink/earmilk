@@ -1,0 +1,1237 @@
+{
+  "meta": {
+    "project": "earmilk (gable-top milk-carton loudspeakers)",
+    "compiled": "2026-10-08",
+    "scope": "Built-in DSP plate amplifiers (Hypex FusionAmp and alternatives) for a 3-way floorstander, a 2-way bookshelf and a desk-size speaker",
+    "method": "Web search result snippets only. WebFetch/curl were unavailable, so no PDF drawings or datasheets were opened directly. Figures were cross-checked between the maker (hypex.nl, hypexdirect.com, minidsp.com, daytonaudio.com, icepoweraudio.com) and retailers (soundimports, audiophonics, audiohum, parts-express, madisound, masori, lautsprechershop, hifishark).",
+    "confidence_convention": "Any field named in a product's 'unconfirmed' array was found in fewer than two independent sources, or the sources conflict. Where sources conflict, the manufacturer figure is used and the conflict is noted.",
+    "units": {
+      "length": "mm",
+      "mass": "g",
+      "power": "W continuous per channel unless stated",
+      "price_eur": "incl. EU VAT (retail, 2025-2026 snapshots)",
+      "price_usd": "excl. US sales tax (Parts Express / maker snapshots)"
+    },
+    "dimension_convention": "overall_mm {h,w,d} and cutout_mm {h,w} follow the retailers' H x W x D order, where h is the long side of the plate. Plates can be rotated 90 degrees in CAD; see fit_checks for the floorstander.",
+    "fusionamp_lineup_note": "No FusionAmp model newer than the eight listed here was found. Hypex's 2026 OEM brochure lists the same eight (FA251, FA501, FA122, FA252, FA502, FA123, FA253, FA503). Newer Hypex products that did turn up (DSA254 OEM amplifier module, NCOREx NCx-MP modules) are not DSP plate amps.",
+    "not_obtained": [
+      "Hypex 2D drawings / 3D models: screw-hole pattern, hole diameter, cutout corner radii (download tab on each hypex.nl product page)",
+      "FusionAmp electrical safety class (Class I or II) and whether the IEC earth is bonded to the plate",
+      "FusionAmp idle and standby power",
+      "Hypex orientation guidance (whether a plate may be rotated 90 degrees)",
+      "Dayton KABD-4100 / KABD-430 and Wondom JAB4 board dimensions and power per load impedance"
+    ]
+  },
+  "products": [
+    {
+      "maker": "Hypex",
+      "model": "FusionAmp FA122",
+      "type": "DSP plate amplifier",
+      "channels": 2,
+      "channel_layout": "2 x NCore (ch1+ch2 bridgeable)",
+      "power_w": {
+        "per_channel_4ohm": [125, 125],
+        "per_channel_8ohm": [75, 75],
+        "bridged": "200 W @ 4 ohm / 250 W @ 8 ohm (Hypex manual R4)"
+      },
+      "dsp": {
+        "chip": "Analog Devices SigmaDSP ADAU1450 per retailer titles (some listings say ADAU1452) + AKM AK4454 DAC",
+        "filters": "IIR, 15 biquads per amplifier channel; FIR with firmware 5.x / HFD 5.1+ (depends on hardware revision); delay, volume, soft-clip limiter; 3 presets",
+        "software": "Hypex Filter Design (HFD), free, Windows only; USB mini-B is for setup only",
+        "factory_state": "No filter loaded. The amp is silent until a filter is uploaded with HFD."
+      },
+      "overall_mm": {"h": 315, "w": 120, "d": 55},
+      "cutout_mm": {"h": 291, "w": 96},
+      "flange_mm": 12,
+      "mounting": "8 or 10 screws; Hypex 'Fusion Mounting Screws' kit is 10 x 4.3 x 25 mm self-tapping. The 12 mm flange is derived (overall minus cutout = 24 mm). Hole pattern is in the Hypex 2D drawing (not obtained).",
+      "weight_g": 815,
+      "inputs": ["XLR balanced analog in", "XLR analog loop-through out", "RCA unbalanced analog in", "AES/EBU digital in (loop-through)", "S/PDIF coax in (loop-through)", "Toslink optical in", "USB mini-B (setup only)"],
+      "power_inlet": "IEC C14 on the plate; 100-120 VAC or 200-240 VAC +/-10% per Hypex spec block (some retailers list 200-240 V only)",
+      "standby_auto_on": "Signal-detect auto-on / auto-standby (wake-on-line) set in HFD; optional Fusion IR remote kit; standby wattage not published",
+      "cooling": "Passive. Heat leaves through the aluminium plate. Thermal protection and thermal regulation. No fan mentioned in any listing.",
+      "airtight": false,
+      "price": {"eur": 429.95, "eur_range": "429.00-429.95", "usd": 422.40, "usd_note": "Parts Express 221-006, back-ordered at capture"},
+      "suitability": {
+        "floorstander_3way": "No (2 channels)",
+        "bookshelf_2way": "Primary pick. Mount vertically; needs a back panel at least ~340 mm tall.",
+        "desk": "No (too large)"
+      },
+      "sources": [
+        "https://www.hypex.nl/products/amplifier-families/fusion-amplifier-family/fusionamp-fa122",
+        "https://www.hypexdirect.com/products/fusion-amplifiers/fusionamp-fa122",
+        "https://www.soundimports.eu/nl/hypex-fa122.html",
+        "https://www.audiophonics.fr/en/amplifier-boards/hypex-fusionamp-fa122-plate-ncore-amplifier-2x125w-dsp-adau1450-dac-ak4454-192khz-p-13530.html",
+        "https://www.audiohum.com/fr/composants-diy-hum/kits/kits-electroniques/hypex-fa122",
+        "https://www.parts-express.com/Hypex-Direct-FusionAmp-FA122-Mono-2-Way-Plate-Amplifier-250W-221-006",
+        "https://masori.de/en/collections/neu/products/fa122",
+        "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf"
+      ],
+      "confidence": "Power at 4 and 8 ohm, overall size and EUR price agree across 3 or more sources.",
+      "unconfirmed": ["cutout_mm.h (Soundimports 291; an Audiophonics drawing shows 293)", "weight_g (Audiophonics only)", "price.usd (Parts Express only)"]
+    },
+    {
+      "maker": "Hypex",
+      "model": "FusionAmp FA123",
+      "type": "DSP plate amplifier",
+      "channels": 3,
+      "channel_layout": "2 x 125 W NCore (bridgeable) + 1 x 100 W NCore tweeter channel",
+      "power_w": {
+        "per_channel_4ohm": [125, 125, 100],
+        "per_channel_8ohm": [75, 75, 100],
+        "per_channel_8ohm_alt": [75, 75, 75],
+        "bridged": "ch1+ch2: 200 W @ 4 ohm / 250 W @ 8 ohm",
+        "min_load_ohm": "2 (main channels), 4 (tweeter channel)"
+      },
+      "dsp": {
+        "chip": "ADAU1450 per retailer titles (some say ADAU1452) + AK4454 DAC",
+        "filters": "IIR, 15 biquads per amplifier channel; FIR with firmware 5.x / HFD 5.1+; delay, volume, soft-clip limiter; 3 presets",
+        "software": "HFD, free, Windows only; USB mini-B",
+        "factory_state": "No filter loaded (silent until configured)"
+      },
+      "overall_mm": {"h": 360, "w": 120, "d": 55},
+      "cutout_mm": {"h": 336, "w": 96},
+      "flange_mm": 12,
+      "mounting": "8 or 10 screws, 4.3 x 25 mm self-tapping (Hypex kit). Hole pattern not obtained.",
+      "weight_g": 955,
+      "inputs": ["XLR balanced analog in", "XLR analog loop-through out", "RCA unbalanced analog in", "AES/EBU digital in (loop-through)", "S/PDIF coax in (loop-through)", "Toslink optical in", "USB mini-B (setup only)"],
+      "power_inlet": "IEC C14; 100-120 / 200-240 VAC +/-10% (Hypex); one retailer lists 200-240 V only",
+      "standby_auto_on": "Signal-detect auto-on / auto-standby in HFD; optional IR remote kit",
+      "cooling": "Passive through the plate; thermal protection and regulation",
+      "airtight": false,
+      "price": {"eur": 499.95, "eur_range": "497.40-499.95", "usd": 501.60, "usd_note": "Parts Express 221-007 (its title wrongly says 2 x 250 W + 75 W); a forum post quotes Madisound at ~USD 557"},
+      "suitability": {
+        "floorstander_3way": "Budget pick. Fits only rotated 90 degrees (horizontal), same 360 x 336 mm length as the FA253.",
+        "bookshelf_2way": "Possible (two channels used) but larger than needed",
+        "desk": "No"
+      },
+      "sources": [
+        "https://hypex.nl/products/amplifier-families/fusion-amplifier-family/fusionamp-fa123",
+        "https://www.soundimports.eu/en/hypex-fa123.html",
+        "https://www.audiophonics.fr/en/amplifier-boards/hypex-fusionamp-fa123-plate-ncore-amplifier-2x125w-1x100w-dsp-adau1450-dac-ak4454-192khz-p-13531.html",
+        "https://www.audiohum.com/fr/composants-diy-hum/kits/kits-electroniques/hypex-fa123",
+        "https://www.parts-express.com/Hypex-Direct-FusionAmp-FA123-Mono-3-Way-Plate-Amplifier-2-x-250W-75W-221-007",
+        "https://www.madisoundspeakerstore.com/speaker-amps/hypex-fusionamp-fa123/",
+        "https://www.hifishark.com/model/hypex-fusion-amp-fa-123",
+        "https://kjfaudio.com/product/hypex-fusionamp-fa123/",
+        "https://lautsprechershop.de/hifi/hypex_fusion_amp_en.htm"
+      ],
+      "confidence": "4-ohm power, overall size, cutout (Soundimports + Audiophonics drawing + Hifishark) and EUR price agree across sources.",
+      "unconfirmed": ["tweeter channel at 8 ohm: 100 W (Audiohum, Madisound, Soundimports) vs 75 W (Hypex Direct, KJF)", "weight_g (Audiophonics/Audiohum listings only)", "price.usd"]
+    },
+    {
+      "maker": "Hypex",
+      "model": "FusionAmp FA251",
+      "type": "DSP plate amplifier (mono)",
+      "channels": 1,
+      "channel_layout": "1 x 250 W NCore",
+      "power_w": {
+        "per_channel_4ohm": [250],
+        "per_channel_8ohm": [130],
+        "per_channel_2ohm": [180]
+      },
+      "dsp": {
+        "chip": "ADAU1450 (retailer title) + AK4454 DAC",
+        "filters": "IIR, 15 biquads; FIR with firmware 5.x; 3 presets",
+        "software": "HFD, Windows only",
+        "factory_state": "No filter loaded"
+      },
+      "overall_mm": {"h": 280, "w": 120, "d": 55},
+      "cutout_mm": {"h": 256, "w": 96},
+      "flange_mm": 12,
+      "mounting": "8 or 10 screws (Hypex kit 4.3 x 25 mm)",
+      "weight_g": 725,
+      "inputs": ["XLR in", "XLR loop-through", "RCA in", "AES/EBU", "S/PDIF coax", "Toslink", "USB mini-B"],
+      "power_inlet": "IEC C14; 100-120 / 200-240 VAC +/-10% (Hypex)",
+      "standby_auto_on": "Signal-detect auto-on / standby (HFD)",
+      "cooling": "Passive through the plate",
+      "airtight": false,
+      "price": {"eur": 349.95, "eur_range": "349.00-352.80", "usd": 355.80, "usd_note": "Parts Express 221-008, seen only in a similar-items block"},
+      "suitability": {
+        "floorstander_3way": "No (1 channel)",
+        "bookshelf_2way": "No",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.hypex.nl/products/amplifier-families/fusion-amplifier-family/fusionamp-fa251",
+        "https://www.soundimports.eu/nl/hypex-fa251.html",
+        "https://www.audiohum.com/fr/composants-diy-hum/kits/kits-electroniques/hypex-fa251",
+        "https://www.audiophonics.fr/en/amplifier-boards/hypex-fusionamp-fa251-plate-ncore-amplifier-1x250w-dsp-adau1450-dac-ak4454-p-14542.html",
+        "https://www.parts-express.com/Hypex-Direct-FusionAmp-FA251-Mono-Plate-Amplifier-250W-221-008",
+        "https://www.diyaudio.com/community/threads/which-subwoofer-amplifier.351425/"
+      ],
+      "confidence": "Listed for completeness only. EUR price confirmed by 3 retailers.",
+      "unconfirmed": ["per_channel_8ohm (Audiohum only; Hypex gives 150 W @ 8 ohm for the same 250 W stage in the FA252/FA253)", "cutout_mm (Audiohum only)", "weight_g (forum post)", "price.usd"]
+    },
+    {
+      "maker": "Hypex",
+      "model": "FusionAmp FA252",
+      "type": "DSP plate amplifier",
+      "channels": 2,
+      "channel_layout": "2 x 250 W NCore (bridgeable)",
+      "power_w": {
+        "per_channel_4ohm": [250, 250],
+        "per_channel_8ohm": [150, 150],
+        "per_channel_8ohm_alt": [200, 200],
+        "per_channel_2ohm": [180, 180],
+        "bridged": "400 W @ 4 ohm / 500 W @ 8 ohm"
+      },
+      "dsp": {
+        "chip": "ADAU1450 (retailer title) + AK4454 DAC; up to 192 kHz in (96 kHz optical)",
+        "filters": "IIR, 15 biquads per channel; FIR with firmware 5.x; 3 presets",
+        "software": "HFD, Windows only",
+        "factory_state": "No filter loaded"
+      },
+      "overall_mm": {"h": 315, "w": 135, "d": 55},
+      "cutout_mm": {"h": 291, "w": 111},
+      "flange_mm": 12,
+      "mounting": "8 or 10 screws (Hypex kit 4.3 x 25 mm)",
+      "weight_g": 1000,
+      "inputs": ["XLR in", "XLR loop-through", "RCA in", "AES/EBU (loop-through)", "S/PDIF coax (loop-through)", "Toslink", "USB mini-B (setup only)"],
+      "power_inlet": "IEC C14; 100-120 / 200-240 VAC +/-10% (Hypex, Parts Express); Audiohum lists 200-240 V only",
+      "standby_auto_on": "Auto-standby and signal detect; thermal, clip and under/over-voltage protection",
+      "cooling": "Passive through the plate",
+      "airtight": false,
+      "price": {"eur": 569.95, "eur_range": "562.30-569.95", "usd": 567.00, "usd_note": "Parts Express 221-009"},
+      "suitability": {
+        "floorstander_3way": "No (2 channels; would need a separate tweeter amp)",
+        "bookshelf_2way": "More power than the FA122, same 315 mm height but 15 mm wider",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.hypex.nl/products/amplifier-families/fusion-amplifier-family/fusionamp-fa252",
+        "https://www.hypexdirect.com/products/fusion-amplifiers/fusionamp-fa252",
+        "https://www.soundimports.eu/de/hypex-fa252.html",
+        "https://audiophonics.fr/en/amplifier-boards/hypex-fusionamp-fa252-plate-ncore-amplifier-2x250w-dsp-adau1450-dac-ak4454-192khz-p-16206.html",
+        "https://www.audiohum.com/gb/diy-components/kits/electronics-kits/hypex-fa252",
+        "https://www.parts-express.com/Hypex-Direct-FusionAmp-FA252-Mono-2-Way-Plate-Amplifier-500W-221-009",
+        "https://www.hifishark.com/model/hypex-fusion-amp-fa-252",
+        "https://www.diyaudio.com/community/threads/hypex-plate-amps-and-4-or-8-ohm-drivers.397141/"
+      ],
+      "confidence": "4-ohm power, overall size, cutout and price agree. 8-ohm uses the Hypex figure.",
+      "unconfirmed": ["per_channel_8ohm: Hypex 150 W vs Soundimports/Audiohum 200 W", "weight_g (Audiophonics only)"]
+    },
+    {
+      "maker": "Hypex",
+      "model": "FusionAmp FA253",
+      "type": "DSP plate amplifier",
+      "channels": 3,
+      "channel_layout": "2 x 250 W NCore (bridgeable) + 1 x 100 W NCore tweeter channel",
+      "power_w": {
+        "per_channel_4ohm": [250, 250, 100],
+        "per_channel_8ohm": [150, 150, 100],
+        "per_channel_8ohm_alt": [200, 200, 100],
+        "bridged": "ch1+ch2: 400 W @ 4 ohm / 500 W @ 8 ohm (+ 100 W tweeter)",
+        "min_load_ohm": "2 (main channels), 4 (tweeter channel)"
+      },
+      "dsp": {
+        "chip": "ADAU1450 (EN retailer title) or ADAU1452 (FR listing) + AK4454 DAC",
+        "filters": "IIR, 15 biquads per amplifier channel; FIR with firmware 5.x / HFD 5.1+ (HFD 5.1 notes: output FIR uses 1500 taps per channel; v5.0 notes cite 4500 taps for one input FIR); delay, volume, soft-clip limiter; 3 presets",
+        "software": "HFD, free, Windows only; USB mini-B setup only",
+        "factory_state": "No filter loaded (silent until configured)"
+      },
+      "overall_mm": {"h": 360, "w": 135, "d": 55},
+      "cutout_mm": {"h": 336, "w": 111},
+      "flange_mm": 12,
+      "mounting": "8 or 10 screws; Hypex kit 10 x 4.3 x 25 mm self-tapping. Hole pattern not obtained.",
+      "weight_g": 1145,
+      "inputs": ["XLR balanced analog in", "XLR loop-through out", "RCA unbalanced in", "AES/EBU in (loop-through)", "S/PDIF coax in (loop-through)", "Toslink optical in", "USB mini-B (setup only)"],
+      "power_inlet": "IEC C14; 100-120 / 200-240 VAC +/-10% (Hypex spec block, StereoNET listing); Audiohum lists 200-240 V only",
+      "standby_auto_on": "Auto-standby / signal detect (HFD); optional IR remote kit; standby wattage not published",
+      "cooling": "Passive through the plate; thermal and clip protection; 92% efficiency at full power",
+      "airtight": false,
+      "price": {"eur": 649.95, "eur_range": "649.00-649.95", "usd": 646.80, "usd_note": "Parts Express 221-010"},
+      "suitability": {
+        "floorstander_3way": "Primary pick. Fits only rotated 90 degrees (horizontal), 9 mm per side to the inner walls.",
+        "bookshelf_2way": "Overkill",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.hypex.nl/products/amplifier-families/fusion-amplifier-family/fusionamp-fa253",
+        "https://www.soundimports.eu/en/hypex-fa253.html",
+        "https://www.audiophonics.fr/en/amplifier-boards/hypex-fusionamp-fa253-p-13532.html",
+        "https://www.audiohum.com/fr/composants-diy-hum/kits/kits-electroniques/hypex-fa253",
+        "https://www.parts-express.com/Hypex-Direct-FusionAmp-FA253-Mono-3-Way-Plate-Amplifier-500W-100W-221-010",
+        "https://www.madisoundspeakerstore.com/speaker-amps/hypex-fusionamp-fa253-250w-250w-100w/",
+        "https://radar.stereonet.com/listing/25261-hypex-fusion-fa253-3-channel-plate-amplifier",
+        "https://masori.de/en/products/fa253",
+        "https://www.hypex.nl/media/4f/b1/93/1759733530/ReleaseNotes%20Hypex%20Filter%20Design%20v5.2.4.pdf"
+      ],
+      "confidence": "4-ohm power, overall size, cutout (3 retailers) and EUR price agree. 8-ohm uses the Hypex figure.",
+      "unconfirmed": ["per_channel_8ohm: Hypex/StereoNET 150 W vs Madisound/Audiohum 200 W", "weight_g (Audiophonics only)", "DSP chip variant", "SNR: 121 dB (Audiohum/Masori) vs 109-111 dB AD/DA (Audiophonics)"]
+    },
+    {
+      "maker": "Hypex",
+      "model": "FusionAmp FA501",
+      "type": "DSP plate amplifier (mono)",
+      "channels": 1,
+      "channel_layout": "1 x 500 W NCore",
+      "power_w": {
+        "per_channel_4ohm": [500],
+        "per_channel_8ohm": [270],
+        "per_channel_2ohm": [400]
+      },
+      "dsp": {
+        "chip": "ADAU1450 (retailer title) + AK4454",
+        "filters": "IIR 15 biquads; FIR; 3 presets",
+        "software": "HFD, Windows only",
+        "factory_state": "No filter loaded"
+      },
+      "overall_mm": {"h": 280, "w": 135, "d": 55},
+      "cutout_mm": {"h": 256, "w": 111},
+      "flange_mm": 12,
+      "mounting": "8 or 10 screws (Hypex kit)",
+      "weight_g": null,
+      "inputs": ["XLR in", "XLR loop-through", "RCA in", "AES/EBU", "S/PDIF coax", "Toslink", "USB mini-B"],
+      "power_inlet": "IEC C14; 100-120 / 200-240 VAC +/-10% (Hypex)",
+      "standby_auto_on": "Signal-detect auto-on / standby (HFD)",
+      "cooling": "Passive through the plate; vented, active temperature control per retailer",
+      "airtight": false,
+      "price": {"eur": 499.95, "usd": 501.60, "usd_note": "Parts Express 221-011"},
+      "suitability": {
+        "floorstander_3way": "No (1 channel)",
+        "bookshelf_2way": "No",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.hypex.nl/products/amplifier-families/fusion-amplifier-family/fusionamp-fa501",
+        "https://www.audiohum.com/fr/composants-diy-hum/kits/kits-electroniques/hypex-fa501",
+        "https://www.soundimports.eu/nl/hypex-fa501.html",
+        "https://www.parts-express.com/Hypex-Direct-FusionAmp-FA501-Mono-Plate-Amplifier-500W-221-011",
+        "https://www.stereonet.com/forums/topic/314032-custom-cabinetry/"
+      ],
+      "confidence": "Listed for completeness. Cutout confirmed by Audiohum and Soundimports. An owner on StereoNET gives 280 x 135 x 60 mm.",
+      "unconfirmed": ["per_channel_8ohm (Audiohum only)", "overall_mm.d (55 vs 60)", "weight_g (not found)", "price.eur (Audiohum only)", "price.usd"]
+    },
+    {
+      "maker": "Hypex",
+      "model": "FusionAmp FA502",
+      "type": "DSP plate amplifier",
+      "channels": 2,
+      "channel_layout": "2 x 500 W NCore (bridgeable)",
+      "power_w": {
+        "per_channel_4ohm": [500, 500],
+        "per_channel_8ohm": [350, 350],
+        "bridged": "1000 W"
+      },
+      "dsp": {
+        "chip": "ADAU145x + AK4454",
+        "filters": "IIR 15 biquads/channel; FIR; 3 presets",
+        "software": "HFD, Windows only",
+        "factory_state": "No filter loaded"
+      },
+      "overall_mm": {"h": 380, "w": 150, "d": 90},
+      "cutout_mm": {"h": 356, "w": 126},
+      "flange_mm": 12,
+      "mounting": "8 or 10 screws (Hypex kit)",
+      "weight_g": 2150,
+      "inputs": ["XLR in", "XLR loop-through", "RCA in", "AES/EBU (loop-through)", "S/PDIF coax (loop-through)", "Toslink", "USB mini-B"],
+      "power_inlet": "IEC C14; 100-120 / 200-240 VAC +/-10% (Hypex)",
+      "standby_auto_on": "Signal-detect auto-on / standby (HFD)",
+      "cooling": "Passive through the plate",
+      "airtight": false,
+      "price": {"eur": 699.95, "eur_range": "699.00-708.10", "usd": 714.00, "usd_note": "Parts Express 221-012"},
+      "suitability": {
+        "floorstander_3way": "No: 2 channels, and it does not fit the 390 mm back (cutout 356 > 354 mm inner width; 380 mm too tall below the port)",
+        "bookshelf_2way": "No (too large)",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.hypex.nl/products/amplifier-families/fusion-amplifier-family/fusionamp-fa502",
+        "https://www.soundimports.eu/nl/hypex-fa502.html",
+        "https://www.audiophonics.fr/fr/modules-amplificateurs/hypex-fusionamp-fa502-module-amplificateur-ncore-btl-2x500w-4-ohm-p-15824.html",
+        "https://www.audiohum.com/gb/diy-components/kits/electronics-kits/copy-of-hypex-fa502-fusionamp-plate-amplifier",
+        "https://www.hifishark.com/model/hypex-fusion-amp-fa-502",
+        "https://www.parts-express.com/brand/Hypex-Direct"
+      ],
+      "confidence": "Power from the Hypex spec table. Size and cutout agree between Hifishark, Soundimports and Audiophonics.",
+      "unconfirmed": ["weight_g: Hifishark 2150 vs Audiophonics 2880", "price.usd (Parts Express brand page only)"]
+    },
+    {
+      "maker": "Hypex",
+      "model": "FusionAmp FA503",
+      "type": "DSP plate amplifier",
+      "channels": 3,
+      "channel_layout": "2 x 500 W NCore (bridgeable) + 1 x 100 W tweeter channel",
+      "power_w": {
+        "per_channel_4ohm": [500, 500, 100],
+        "per_channel_8ohm": [350, 350, 100],
+        "bridged": "ch1+ch2: 1000 W (Hypex); one retailer says up to 1200 W"
+      },
+      "dsp": {
+        "chip": "ADAU1450 (retailer/Hifishark) + AK4454",
+        "filters": "IIR 15 biquads/channel; FIR; 3 presets",
+        "software": "HFD, Windows only; USB setup only",
+        "factory_state": "No filter loaded"
+      },
+      "overall_mm": {"h": 420, "w": 150, "d": 90},
+      "cutout_mm": {"h": 396, "w": 126},
+      "flange_mm": 12,
+      "mounting": "8 or 10 screws (Hypex kit)",
+      "weight_g": 2275,
+      "inputs": ["XLR in", "XLR loop-through", "RCA in", "AES/EBU (loop-through)", "S/PDIF coax (loop-through)", "Toslink", "USB mini-B"],
+      "power_inlet": "IEC C14; 100-120 / 200-240 VAC +/-10% (Hypex)",
+      "standby_auto_on": "Auto shutdown, signal detection (HFD)",
+      "cooling": "Passive through the plate; clip and thermal protection",
+      "airtight": false,
+      "price": {"eur": 789.00, "eur_range": "789.00-789.95", "usd": 792.00, "usd_note": "Parts Express 221-013"},
+      "suitability": {
+        "floorstander_3way": "Electrically ideal but does NOT fit: the 420 mm plate is wider than the 390 mm back and too tall to fit below the port. Only usable if the port moves to the front baffle and the plate goes vertical, or on a wider cabinet.",
+        "bookshelf_2way": "No",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.hypex.nl/products/amplifier-families/fusion-amplifier-family/fusionamp-fa503",
+        "https://www.soundimports.eu/en/hypex-fa503.html",
+        "https://www.audiophonics.fr/en/amplifier-boards/hypex-fusionamp-fa503-ncore-amplifier-module-btl-2x500w-100w-4-ohm-p-14857.html",
+        "https://www.audiohum.com/es/componentes-diy-hum/kits/kits-de-electronica/hypex-fa503",
+        "https://www.hifishark.com/model/hypex-fusion-amp-fa-503",
+        "https://www.finn.no/453098007",
+        "https://masori.de/en/products/fa503",
+        "https://www.parts-express.com/brand/Hypex-Direct"
+      ],
+      "confidence": "Power from the Hypex spec table. Size, cutout, weight and price confirmed by 2 or more sources.",
+      "unconfirmed": ["price.usd (Parts Express brand page only)"]
+    },
+    {
+      "maker": "Hypex",
+      "model": "NC252MP / NCx252MP (amp module)",
+      "type": "Mains-powered 2-channel amp module (no DSP; pairs with DSP3-224)",
+      "channels": 2,
+      "channel_layout": "2 x NCore / NCOREx, extension port for NCx102EXT",
+      "power_w": {
+        "per_channel_4ohm": [250, 250],
+        "per_channel_8ohm": [150, 150],
+        "per_channel_2ohm": [180, 180]
+      },
+      "dsp": null,
+      "overall_mm": {"h": 170, "w": 105, "d": 42},
+      "cutout_mm": null,
+      "mounting": "Internal module on standoffs; needs a heat path and mains-safe clearances in a suitable enclosure",
+      "weight_g": 575,
+      "inputs": ["Balanced analog via header (from the DSP3-224)"],
+      "power_inlet": "Direct mains to the module (builder supplies the IEC inlet); standby <= 0.5 W (NCxxxMP series, ERP Lot 6)",
+      "standby_auto_on": "Standby control via the DSP module",
+      "cooling": "Needs cooling inside the enclosure (Soundimports warning)",
+      "airtight": false,
+      "price": {"eur": 259.95, "eur_note": "Soundimports, NC252MP board; the NCx252MP sells used at ~EUR 370"},
+      "suitability": {
+        "floorstander_3way": "Modular alternative: NCx252MP + NCx102EXT + DSP3-224 on an internal shelf with only a small connector plate on the back. Costs about the same as an FA253 or more, and you must engineer the cooling and mains wiring yourself.",
+        "bookshelf_2way": "Possible with DSP3-224",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.soundimports.eu/de/nc252mp-2x250w-amp-board.html",
+        "https://www.hypex.nl/media/7f/85/fa/1786438779/NC252MP_04xx_R16.pdf",
+        "https://www.hypex.nl/products/amplifier-families/mains-powered-ncorex-family/",
+        "https://www.audio-markt.de/en/market/hypex-hypex-ncorex-pack--ncx252mp+ncx102ext-2x250w+2x100w-new-free-cables-set-3935805538",
+        "https://audioxpress.com/news/hypex-electronics-introduces-new-ncas500mp-active-speaker-amplifier-module"
+      ],
+      "confidence": "Power and size confirmed by Soundimports and the Hypex datasheet.",
+      "unconfirmed": ["NCx revision footprint (datasheet is for NC252MP)", "NCx252MP retail price"]
+    },
+    {
+      "maker": "Hypex",
+      "model": "NCx102EXT (channel extension)",
+      "type": "Add-on amp channel for NC-MP / NCx-MP host (no DSP)",
+      "channels": "1 or 2 (sources conflict)",
+      "channel_layout": "Powered from the host module over the Channel Extension link",
+      "power_w": {
+        "per_channel_4ohm": [100],
+        "per_channel_8ohm": [100]
+      },
+      "dsp": null,
+      "overall_mm": {"h": 85, "w": 78, "d": 27},
+      "cutout_mm": null,
+      "mounting": "Internal",
+      "weight_g": 140,
+      "inputs": ["From the host via the extension link"],
+      "power_inlet": "None (powered by the host)",
+      "standby_auto_on": "Follows the host",
+      "cooling": "Internal",
+      "airtight": false,
+      "price": {"eur": null, "eur_note": "No retail price found; a used bundle implies roughly EUR 70-100"},
+      "suitability": {
+        "floorstander_3way": "Tweeter (or mid) channel in the modular Hypex alternative",
+        "bookshelf_2way": "n/a",
+        "desk": "n/a"
+      },
+      "sources": [
+        "https://www.hypex.nl/products/amplifier-families/mains-powered-ncorex-family/ncx102ext",
+        "https://www.hypex.nl/media/03/55/3e/1750836511/Datasheet%20NCx102EXT_01xx.pdf"
+      ],
+      "confidence": "Size and weight from the Hypex datasheet.",
+      "unconfirmed": ["channel count", "price"]
+    },
+    {
+      "maker": "Hypex",
+      "model": "DSP3-224",
+      "type": "DSP module (2 in / 4 out), for NC-MP / NCx-MP / NCAS amps",
+      "channels": 4,
+      "channel_layout": "4 processed outputs (up to 3-way active per Hypex's DSP line description)",
+      "power_w": null,
+      "dsp": {
+        "chip": "Analog Devices ADAU1452",
+        "filters": "15 biquads per channel; FIR per preset either 1 x 2048 taps or 3 x 1024 taps; configurable soft-clip limiter; 3 presets",
+        "software": "HFD 5.2 or newer, Windows",
+        "extras": "Automatic source switching, signal sensing, optional IR remote, optional digital input board"
+      },
+      "overall_mm": null,
+      "cutout_mm": null,
+      "mounting": "Internal",
+      "weight_g": null,
+      "inputs": ["XLR stereo", "RCA stereo", "optional digital input board"],
+      "power_inlet": "From the host amp",
+      "standby_auto_on": "Signal sensing",
+      "cooling": "n/a",
+      "airtight": false,
+      "price": {"eur": 314.95, "eur_note": "Soundimports"},
+      "suitability": {
+        "floorstander_3way": "DSP for the modular Hypex alternative",
+        "bookshelf_2way": "Possible",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.hypex.nl/products/dsp-family/dsp3-224",
+        "https://www.hypex.nl/media/ca/a3/3c/1745821824/Datasheet%20A4-R02%20DSP3-224-0102.pdf",
+        "https://www.hypex.nl/technology/dsp",
+        "https://www.soundimports.eu/nl/hypex-dsp3-224.html",
+        "https://hifi.fan/hypex-dsp3-224"
+      ],
+      "confidence": "DSP features from the Hypex datasheet and Soundimports.",
+      "unconfirmed": ["dimensions", "price.eur (Soundimports only)"]
+    },
+    {
+      "maker": "ICEpower",
+      "model": "125ASX2",
+      "type": "Amp module with built-in SMPS (no DSP)",
+      "channels": 2,
+      "channel_layout": "2 x SE or 1 x BTL",
+      "power_w": {
+        "per_channel_4ohm": [125, 125],
+        "per_channel_8ohm": [150, 150],
+        "bridged": "450 W @ 4 ohm (1% THD+N); 500-550 W at 10% THD+N",
+        "note": "Datasheet key specs say 120 W @ 4 ohm. The 150 W @ 8 ohm figure is as listed by ICEpower and Audiophonics and looks anomalous; verify. Minimum load 3 ohm."
+      },
+      "dsp": null,
+      "overall_mm": {"h": 160, "w": 80, "d": 35},
+      "cutout_mm": null,
+      "mounting": "Internal module; drill pattern in the datasheet",
+      "weight_g": null,
+      "inputs": ["Analog (header)"],
+      "power_inlet": "Universal mains 85-264 VAC to the module (builder supplies the inlet); on-board fuse and EMI filter",
+      "standby_auto_on": "No standby/mute control",
+      "cooling": "Module; needs airflow",
+      "airtight": false,
+      "price": {"eur": 229.00, "eur_range": "229.00-239.95", "usd": 229.98, "usd_note": "Parts Express; ICEpower shop lists USD 143-242"},
+      "suitability": {
+        "floorstander_3way": "Only as the amp half of a miniDSP 2x4 HD build (2 modules for 3-4 channels) on a DIY plate",
+        "bookshelf_2way": "Inside the miniDSP PWR-ICE125",
+        "desk": "No"
+      },
+      "sources": [
+        "https://shop.icepoweraudio.com/product/125asx2/",
+        "https://icepoweraudio.com/icepower125asx2-is-now-released-for-sale-december-6-2007-2/",
+        "https://parts-express.com/ICEpower-125ASX2-Class-D-Amplifier-Module-with-Built-In-Power-Supply-2-x-125W-326-268",
+        "https://audiophonics.fr/en/amplifier-boards/icepower-125asx2-class-d-stereo-mono-amplifier-module-2x215w-1x450w-4-p-17318.html",
+        "https://www.soundimports.eu/nl/icepower-125asx2.html",
+        "https://audioxpress.com/news/icepower-updates-existing-amplifier-modules-with-new-technology"
+      ],
+      "confidence": "Size (ICEpower release + 2008 brochure) and prices confirmed. ICEpower announced a 2025 update of this module to its newer Conductor topology.",
+      "unconfirmed": ["per_channel_8ohm", "4-ohm rating 120 vs 125 W"]
+    },
+    {
+      "maker": "ICEpower",
+      "model": "300A2",
+      "type": "Amp module (no DSP, needs external DC supply)",
+      "channels": 2,
+      "channel_layout": "2 x SE or 1 x BTL",
+      "power_w": {
+        "per_channel_4ohm": [300, 300],
+        "per_channel_8ohm": null,
+        "bridged": "600 W @ 8 ohm",
+        "note": "Needs +/-35 to +/-60 V DC (e.g. an ICEpower supply). Minimum load 3 ohm."
+      },
+      "dsp": null,
+      "overall_mm": {"h": 100, "w": 60, "d": 35},
+      "cutout_mm": null,
+      "mounting": "Internal, 3.5 mm holes",
+      "weight_g": null,
+      "inputs": ["Analog"],
+      "power_inlet": "External +/-35..60 V DC",
+      "standby_auto_on": "n/a",
+      "cooling": "Module",
+      "airtight": false,
+      "price": {"eur": null},
+      "suitability": {
+        "floorstander_3way": "Not recommended: no DSP, and needs a separate supply",
+        "bookshelf_2way": "No",
+        "desk": "No"
+      },
+      "sources": [
+        "https://shop.icepoweraudio.com/product/300a2/",
+        "https://shop.icepoweraudio.com/wp-content/uploads/2023/02/ICEpower-300A2-Datasheet-1.6.pdf",
+        "https://www.soundimports.eu/nl/icepower-300a2.html"
+      ],
+      "confidence": "Power from the ICEpower datasheet. No DSP version exists.",
+      "unconfirmed": ["overall_mm (one retailer)", "price"]
+    },
+    {
+      "maker": "miniDSP",
+      "model": "PWR-ICE125",
+      "type": "DSP plate amplifier (ICEpower 125ASX2 inside)",
+      "channels": 2,
+      "channel_layout": "2 x 125 W or 1 x 450 W bridged",
+      "power_w": {
+        "per_channel_4ohm": [125, 125],
+        "per_channel_8ohm": null,
+        "bridged": "450 W @ 4 ohm"
+      },
+      "dsp": {
+        "chip": "Analog Devices ADAU1445 @ 172 MHz, 28/56-bit, 24-bit/96 kHz",
+        "filters": "FIR + IIR, PEQ, crossovers, compressor/limiter, delay",
+        "software": "miniDSP plugin for Windows and macOS over Ethernet (Zero-Conf, up to 256 units); Android/iOS app"
+      },
+      "overall_mm": {"h": 216, "w": 153, "d": 75},
+      "cutout_mm": {"h": 202, "w": 139},
+      "flange_mm": 7,
+      "mounting": "4 wood screws supplied",
+      "weight_g": 900,
+      "inputs": ["2 x XLR analog", "1 x RCA analog", "AES/EBU in", "AES/EBU out (chaining)", "RJ45 Ethernet control"],
+      "power_inlet": "Mains (universal 85-264 VAC via the 125ASX2)",
+      "standby_auto_on": "Not documented",
+      "cooling": "Plate/heatsink",
+      "airtight": "unknown",
+      "price": {"eur": 449.00, "eur_range": "449.00-449.95", "usd": 399.00, "usd_note": "minidsp.com"},
+      "suitability": {
+        "floorstander_3way": "No (2 channels)",
+        "bookshelf_2way": "Alternative if the bookshelf back is shorter than ~340 mm: 216 mm tall, needs about 165 mm inner width",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.minidsp.com/products/plate-amplifiers/pwr-ice125",
+        "https://www.soundimports.eu/en/minidsp-pwr-ice125.html",
+        "https://www.audiophonics.fr/en/amplifier-boards/minidsp-pwr-ice125-asx2-amplifier-module-450w-4-ohms-dsp-p-9530.html",
+        "https://audioreview.frieve.com/products/en/minidsp-pwr-ice125/",
+        "https://www.minidsp.com/applications/plate-amplifiers/pwr-ice-for-2way-speaker"
+      ],
+      "confidence": "Size and cutout from 2 retailers. DSP from miniDSP. Prices confirmed.",
+      "unconfirmed": ["weight_g (Audiophonics only)", "airtightness", "8-ohm rating"]
+    },
+    {
+      "maker": "miniDSP",
+      "model": "PWR-ICE250",
+      "type": "DSP plate amplifier (ICEpower 250ASX2 inside)",
+      "channels": 2,
+      "channel_layout": "2 x 250 W or 1 x 500 W bridged",
+      "power_w": {
+        "per_channel_4ohm": [250, 250],
+        "per_channel_8ohm": null,
+        "bridged": "500 W @ 8 ohm (miniDSP); Audiophonics claims 630 W @ 4 ohm mono"
+      },
+      "dsp": {
+        "chip": "ADAU1445 @ 172 MHz",
+        "filters": "FIR + IIR, PEQ, crossovers, limiter, delay",
+        "software": "Windows/macOS over Ethernet or Wi-Fi"
+      },
+      "overall_mm": {"h": 267, "w": 153, "d": 75},
+      "cutout_mm": {"h": 253, "w": 139},
+      "mounting": "4 wood screws supplied",
+      "weight_g": 1500,
+      "inputs": ["XLR analog", "RCA analog", "AES/EBU-SPDIF in", "digital out (chaining)", "Ethernet"],
+      "power_inlet": "Mains",
+      "standby_auto_on": "Not documented",
+      "cooling": "Plate/heatsink",
+      "airtight": "unknown",
+      "price": {"eur": 629.95, "eur_range": "629.00-679.00", "usd": 499.00, "usd_note": "minidsp.com lists it in stock; a review site calls it discontinued"},
+      "suitability": {
+        "floorstander_3way": "No (2 channels)",
+        "bookshelf_2way": "Overkill",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.minidsp.com/products/plate-amplifiers/pwr-ice250",
+        "https://masori.de/en/collections/minidsp/products/pwr-ice250",
+        "https://www.soundimports.eu/en/minidsp-pwr-ice250.html",
+        "https://www.audiophonics.fr/fr/modules-amplificateur/minidsp-pwr-ice250-module-amplificateur-asx2-630w-4-ohm-p-9531.html"
+      ],
+      "confidence": "Overall size from miniDSP and Masori.",
+      "unconfirmed": ["cutout_mm (Masori only)", "weight_g (Audiophonics only)", "availability"]
+    },
+    {
+      "maker": "miniDSP",
+      "model": "2x4 HD",
+      "type": "DSP / crossover only (no amplifier)",
+      "channels": 4,
+      "channel_layout": "2 in (RCA analog, USB, Toslink) / 4 RCA out (2 Vrms)",
+      "power_w": null,
+      "dsp": {
+        "chip": "Analog Devices SHARC ADSP21489 @ 400 MHz, 32-bit float, 96 kHz internal",
+        "filters": "IIR (Butterworth/Linkwitz-Riley 6-48 dB/oct) + FIR, PEQ, biquad programming, delay, routing matrix; 4 presets via IR remote; optional Dirac Live",
+        "software": "Device Console, Windows and macOS"
+      },
+      "overall_mm": {"h": 27, "w": 119, "d": 107},
+      "cutout_mm": null,
+      "mounting": "Box; mount inside on a shelf or outside",
+      "weight_g": null,
+      "inputs": ["RCA analog", "USB audio", "Toslink"],
+      "power_inlet": "12 VDC, 2.5 W",
+      "standby_auto_on": "n/a",
+      "cooling": "n/a",
+      "airtight": "unknown",
+      "price": {"usd": 225.00, "usd_note": "minidsp.com"},
+      "suitability": {
+        "floorstander_3way": "DSP half of a DIY build: 2x4 HD + 2 x ICEpower 125ASX2 (~USD 685) on a DIY plate. No cheaper than an FA253, and more work.",
+        "bookshelf_2way": "Possible with any 2-ch amp",
+        "desk": "Possible but oversized"
+      },
+      "sources": [
+        "https://www.minidsp.com/products/minidsp-in-a-box/minidsp-2x4-hd",
+        "https://www.minidsp.com/aboutus/news/278-minidsp2x4hd-release",
+        "https://www.parts-express.com/miniDSP-2x4-HD-USB-DAC-Digital-Signal-Processor-230-324",
+        "https://www.minidsp.com/community/threads/3-way-plate-amplifier.10996/"
+      ],
+      "confidence": "Specs from miniDSP. miniDSP staff confirm they have no 3-way plate amp.",
+      "unconfirmed": ["internal sample rate (miniDSP 96 kHz vs Parts Express 192 kHz)"]
+    },
+    {
+      "maker": "Dayton Audio",
+      "model": "PPA800DSP",
+      "type": "2-way DSP plate amplifier",
+      "channels": 2,
+      "channel_layout": "1 x 600 W LF + 1 x 200 W HF",
+      "power_w": {
+        "per_channel_4ohm": [600, 200],
+        "per_channel_8ohm": null,
+        "note": "LF at 1% THD+N, HF at 0.1% THD+N (different conditions)"
+      },
+      "dsp": {
+        "chip": "Not stated",
+        "filters": "Adjustable crossover, PEQ, limiter, delay per channel; 5 EQ presets per output",
+        "software": "Windows GUI over USB"
+      },
+      "overall_mm": {"h": 381, "w": 160, "d": 70},
+      "cutout_mm": {"h": 355.6, "w": 139.7},
+      "mounting": "Screws supplied",
+      "weight_g": 2300,
+      "inputs": ["2 x XLR/TRS combo", "Bluetooth 5.0 (TWS)", "XLR line out"],
+      "power_inlet": "Mains 120-240 VAC",
+      "standby_auto_on": "Not documented",
+      "cooling": "Plate/heatsink",
+      "airtight": "unknown",
+      "price": {"usd": 349.98, "usd_note": "Parts Express (MSRP USD 493.99); Audiophonics FR marks it discontinued"},
+      "suitability": {
+        "floorstander_3way": "No: 2 channels, and its 355.6 mm cutout exceeds the 354 mm inner width",
+        "bookshelf_2way": "No: the 381 mm plate is too tall",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.daytonaudio.com/product/1608/ppa800dsp-2-way-plate-amplifier-800w-2-channel-with-dsp-and-bluetooth",
+        "https://parts-express.com/Dayton-Audio-PPA800DSP-2-Way-Plate-Amplifier-800W-2-Channel-with-DSP-and-Bluetooth-300-798",
+        "https://www.audiophonics.fr/en/subwoofer-modules/dayton-audio-ppa800dsp-2-way-amplifier-module-800w-dsp-bluetooth-50-tws-p-13325.html",
+        "https://masori.de/en/products/ppa800dsp"
+      ],
+      "confidence": "Power from Dayton. Overall size from Audiophonics, Parts Express and Masori.",
+      "unconfirmed": ["cutout_mm (Audiophonics only)", "weight_g (2.3 vs 2.8 kg)", "availability"]
+    },
+    {
+      "maker": "Dayton Audio",
+      "model": "SPA250DSP",
+      "type": "Subwoofer DSP plate amplifier (mono)",
+      "channels": 1,
+      "channel_layout": "1 x 250 W",
+      "power_w": {
+        "per_channel_4ohm": [250],
+        "per_channel_8ohm": null
+      },
+      "dsp": {
+        "chip": "Not stated",
+        "filters": "Low-pass, 5-7 band PEQ (10-200 Hz), limiter, delay, high-pass for mains",
+        "software": "PC GUI over USB (Windows; Soundimports also says Mac)"
+      },
+      "overall_mm": {"h": 260, "w": 184, "d": 60},
+      "cutout_mm": {"h": 235, "w": 159},
+      "mounting": "Screws",
+      "weight_g": null,
+      "inputs": ["XLR/TRS combo", "RCA", "XLR/RCA outputs to mains"],
+      "power_inlet": "Mains, 110-120 / 220-240 VAC switch (ships set to 110 V)",
+      "standby_auto_on": "Not documented",
+      "cooling": "Heatsink",
+      "airtight": "unknown",
+      "price": {"eur": 349.00, "eur_range": "349.00-369.00", "usd": null},
+      "suitability": {
+        "floorstander_3way": "Unsuitable: subwoofer-only filter range, cannot cover a 350 Hz woofer crossover",
+        "bookshelf_2way": "No",
+        "desk": "No"
+      },
+      "sources": [
+        "https://daytonaudio.com/product/1526/spa250dsp-250w-subwoofer-plate-amplifier-with-dsp",
+        "https://www.parts-express.com/Dayton-Audio-SPA250DSP-250W-Subwoofer-Plate-Amplifier-with-DSP-300-8010",
+        "https://www.decibelhifi.com.au/250w-dsp-subwoofer-plate-amplifier",
+        "https://www.soundimports.eu/en/dayton-audio-spa250dsp.html",
+        "https://audiophonics.fr/en/subwoofer-modules/dayton-audio-spa250dsp-class-d-amplifier-dsp-for-subwoofer-module-250w-p-12542.html"
+      ],
+      "confidence": "Cutout confirmed by 3 sources (Parts Express 9-1/4 x 6-1/4 in, Decibel HiFi 235 x 160, Soundimports 235 x 159).",
+      "unconfirmed": ["overall_mm.d (54-60)", "PEQ band count"]
+    },
+    {
+      "maker": "Dayton Audio",
+      "model": "KABD-4100",
+      "type": "4-channel amp board with DSP and Bluetooth (no plate)",
+      "channels": 4,
+      "channel_layout": "4 x 100 W, or 2 x 100 W + 1 x 200 W (2.1, PBTL), or 2 x 200 W",
+      "power_w": {
+        "per_channel_4ohm": null,
+        "per_channel_8ohm": null,
+        "headline": "4 x 100 W (load not stated)",
+        "estimate_8ohm": "About 60-80 W per channel at 36 V. This is an estimate from the TDA7498E's voltage swing, not a published figure. PBTL doubles current, not voltage, so the 200 W mode does not help an 8 ohm woofer."
+      },
+      "dsp": {
+        "chip": "Analog Devices ADAU1701 (SigmaDSP)",
+        "filters": "Anything SigmaStudio can build (crossovers, PEQ, delay, limiters); self-boot EEPROM",
+        "software": "Analog Devices SigmaStudio (Windows) via an ICP1 or KPX programming board, sold separately"
+      },
+      "overall_mm": null,
+      "cutout_mm": null,
+      "mounting": "Board; mount on standoffs on a DIY plate or shelf",
+      "weight_g": null,
+      "inputs": ["Bluetooth 5.0 aptX HD", "analog line in", "I2S", "DSP line out", "4 pot ports (JST)"],
+      "power_inlet": "10-39 VDC (manual; a retailer says 12-39 V); 36 V / 10 A supply for maximum output",
+      "standby_auto_on": "Standby switch input",
+      "cooling": "About 89.5% efficient; no large heatsink",
+      "airtight": false,
+      "price": {"usd": 95.98, "usd_note": "Parts Express 325-434; Dayton MSRP USD 120.99"},
+      "suitability": {
+        "floorstander_3way": "Lowest-cost DIY option: woofer, mid and tweeter on 3 of the 4 channels, powered by an external 36 V SELV brick",
+        "bookshelf_2way": "One board can run both bookshelf speakers (2 channels each)",
+        "desk": "Overkill"
+      },
+      "sources": [
+        "https://daytonaudio.com/product/1870/kabd-4100-4-x-100w-all-in-one-amplifier-board-with-dsp-and-bluetooth-5-0-aptx-hd",
+        "https://www.parts-express.com/Dayton-Audio-KABD-4100-4-x-100W-Bluetooth-Amp-Board-with-DSP-325-434",
+        "https://www.audioclub.ro/cs-content/cs-docs/Manual%20de%20utilizare%20Dayton%20Audio%20KABD-4100-20186-.pdf",
+        "https://www.soundimports.eu/nl/dayton-audio-kabd-4100.html",
+        "https://www.st.com/ja/audio-ics/tda7498e.html"
+      ],
+      "confidence": "Channel modes and supply range from the Dayton manual and product page.",
+      "unconfirmed": ["power per load impedance", "board dimensions", "price"]
+    },
+    {
+      "maker": "Dayton Audio",
+      "model": "KABD-430",
+      "type": "4-channel amp board with DSP and Bluetooth (no plate)",
+      "channels": 4,
+      "channel_layout": "4 x 30 W, or 2 x 30 W + 1 x 60 W, or 2 x 60 W (2 x TPA3118)",
+      "power_w": {
+        "per_channel_4ohm": null,
+        "per_channel_8ohm": null,
+        "headline": "4 x 30 W (load not stated)"
+      },
+      "dsp": {
+        "chip": "ADAU1701",
+        "filters": "SigmaStudio-built crossovers, PEQ, delay, limiters",
+        "software": "SigmaStudio (Windows) via ICP1/KPX, sold separately"
+      },
+      "overall_mm": {"h": 91, "w": 69, "d": 23},
+      "cutout_mm": null,
+      "mounting": "Board on standoffs",
+      "weight_g": null,
+      "inputs": ["Bluetooth 5.0 aptX HD", "line in", "I2S out", "4 pot ports"],
+      "power_inlet": "10-26 VDC (24 V typical) per the wiring guide; 12-24 V per the product page",
+      "standby_auto_on": "Standby switch input",
+      "cooling": "Low dissipation",
+      "airtight": false,
+      "price": {"usd": 69.98, "usd_range": "69.98-89.98", "eur": 109.95},
+      "suitability": {
+        "floorstander_3way": "Too little power",
+        "bookshelf_2way": "Marginal",
+        "desk": "Primary pick: one board drives both desk speakers active (2 channels each)"
+      },
+      "sources": [
+        "https://daytonaudio.com/product/1869/kabd-430-4-x-30w-all-in-one-amplifier-board-with-dsp-and-bluetooth-5-0-aptx-hd",
+        "https://www.parts-express.com/Dayton-Audio-KABD-430-4-x-30W-Bluetooth-Amp-Board-with-DSP-325-430",
+        "https://www.daytonaudio.com/images/resources/325-430--dayton-audio-kabd-430-manual.pdf",
+        "https://www.daytonaudio.com/images/resources/325-430--dayton-audio-kabd-430-quick-start-wiring-guide.pdf",
+        "https://www.soundimports.eu/de/dayton-audio-kabd-430.html"
+      ],
+      "confidence": "Channel modes from Dayton. The dimensions are inferred: the manual says it is the same compact size as earlier KAB/DSPB boards (KABD-230 is 3.6 x 2.7 x 0.9 in).",
+      "unconfirmed": ["overall_mm (inferred)", "power per load", "supply range (two Dayton documents differ)"]
+    },
+    {
+      "maker": "Dayton Audio",
+      "model": "KABD-250",
+      "type": "2-channel amp board with DSP and Bluetooth (no plate)",
+      "channels": 2,
+      "channel_layout": "2 x 50 W",
+      "power_w": {
+        "per_channel_4ohm": [50, 50],
+        "per_channel_8ohm": [30, 30],
+        "note": "4 ohm at 1% THD+N, 24 VDC (Dayton); 8 ohm from Audiophonics"
+      },
+      "dsp": {
+        "chip": "ADAU1701",
+        "filters": "SigmaStudio-built",
+        "software": "SigmaStudio via ICP1/KPX"
+      },
+      "overall_mm": {"h": 91.4, "w": 68.6, "d": 22.9},
+      "cutout_mm": null,
+      "mounting": "Board on standoffs (KABD-230 holes are 84 x 61 mm apart, 3.5 mm)",
+      "weight_g": 160,
+      "inputs": ["Bluetooth 5.0 aptX HD", "line in"],
+      "power_inlet": "12-24 VDC (Parts Express) / 12-26 V (Audiophonics)",
+      "standby_auto_on": "Standby input",
+      "cooling": "Low dissipation",
+      "airtight": false,
+      "price": {"usd": 63.98, "usd_note": "Parts Express 325-107"},
+      "suitability": {
+        "floorstander_3way": "No",
+        "bookshelf_2way": "Budget pick: one board per speaker on a small sealed DIY plate, external 24 V brick",
+        "desk": "Possible, one per speaker"
+      },
+      "sources": [
+        "https://daytonaudio.com/product/1863/kabd-250-2-x-50w-all-in-one-amplifier-board-with-dsp-and-bluetooth-5-0-aptx-hd",
+        "https://www.parts-express.com/Dayton-Audio-KABD-250-2-x-50W-DSP-Amplifier-Board-aptX-HD-Bluetooth-5.0-325-107",
+        "https://www.audiophonics.fr/fr/modules-amplificateurs/dayton-audio-kabd-250-p-21222.html",
+        "https://www.daytonaudio.com/product/1862/kabd-230-2-x-30w-all-in-one-amplifier-board-with-dsp-and-bluetooth-5-0-aptx-hd"
+      ],
+      "confidence": "4-ohm power from Dayton and Audiophonics. Footprint agrees with the Dayton KABD-230 dimensions.",
+      "unconfirmed": ["per_channel_8ohm (Audiophonics only)", "price.usd (snapshot)"]
+    },
+    {
+      "maker": "Wondom (Sure Electronics)",
+      "model": "JAB5 AA-JA33286",
+      "type": "4-channel amp board with DSP and Bluetooth (no plate)",
+      "channels": 4,
+      "channel_layout": "4 x 100 W, 2 x 100 W + 1 x 200 W, or 2 x 200 W (TDA749x)",
+      "power_w": {
+        "per_channel_4ohm": null,
+        "per_channel_8ohm": null,
+        "per_channel_6ohm": [100, 100, 100, 100],
+        "note": "Rated at 6 ohm and 36 V; Soundimports gives 6 ohm as the minimum load"
+      },
+      "dsp": {
+        "chip": "ADAU1701",
+        "filters": "SigmaStudio / Wondom AppControl",
+        "software": "Needs a Wondom ICP5 programmer (EUR 24.90, sold separately)"
+      },
+      "overall_mm": {"h": 121.92, "w": 91.44, "d": 40},
+      "cutout_mm": null,
+      "mounting": "Board",
+      "weight_g": null,
+      "inputs": ["Bluetooth 5.0 (aptX HD/LL, AAC, SBC)", "3.5 mm line in", "I2S"],
+      "power_inlet": "10-39 VDC (Soundimports DE)",
+      "standby_auto_on": "Not documented",
+      "cooling": "Board",
+      "airtight": false,
+      "price": {"eur": 69.90, "eur_note": "Audiophonics"},
+      "suitability": {
+        "floorstander_3way": "EU alternative to the KABD-4100. A user reports hiss with sensitive drivers.",
+        "bookshelf_2way": "One board per pair",
+        "desk": "Overkill"
+      },
+      "sources": [
+        "https://www.audiophonics.fr/en/amplifier-boards/wondom-jab5-aa-ja33286-amplifier-module-class-d-bluetooth-50-dsp-adau1701-4x100w-6-ohm-p-15064.html",
+        "https://www.soundimports.eu/nl/sure-electronics-aa-ja33286.html",
+        "https://www.soundimports.eu/de/sure-electronics-aa-ja33286.html",
+        "https://www.audiophonics.fr/fr/modules-dsp/wondom-icp5-programmateur-pour-jab-interface-usb-uart-application-bluetooth-p-15703.html"
+      ],
+      "confidence": "6-ohm rating from Audiophonics and Soundimports.",
+      "unconfirmed": ["overall_mm.d", "price (Audiophonics only)", "4 vs 6 ohm label inconsistency"]
+    },
+    {
+      "maker": "Wondom (Sure Electronics)",
+      "model": "JAB4 AA-JA33285",
+      "type": "4-channel amp board with DSP and Bluetooth (no plate)",
+      "channels": 4,
+      "channel_layout": "4 x 30 W, 2 x 30 W + 1 x 60 W, or 2 x 60 W (TPA3118)",
+      "power_w": {
+        "per_channel_4ohm": null,
+        "per_channel_8ohm": [30, 30, 30, 30]
+      },
+      "dsp": {
+        "chip": "ADAU1701",
+        "filters": "SigmaStudio",
+        "software": "Needs a Wondom ICP5 programmer (sold separately)"
+      },
+      "overall_mm": null,
+      "cutout_mm": null,
+      "mounting": "Board",
+      "weight_g": null,
+      "inputs": ["Bluetooth 5.0", "line in", "I2S"],
+      "power_inlet": "DC, range not found",
+      "standby_auto_on": "Not documented",
+      "cooling": "Low dissipation",
+      "airtight": false,
+      "price": {"eur": 54.90, "eur_note": "Audiophonics"},
+      "suitability": {
+        "floorstander_3way": "No",
+        "bookshelf_2way": "Marginal",
+        "desk": "Budget pick (EU)"
+      },
+      "sources": [
+        "https://www.audiophonics.fr/en/amplifier-boards/wondom-jab4-aa-ja33285-amplifier-board-4-ways-tpa3118-bluetooth-50-dsp-adau1701-4x30w-8-ohm-p-15454.html",
+        "https://www.soundimports.eu/nl/sure-electronics-aa-ja33285.html"
+      ],
+      "confidence": "Low. Specs from one retailer.",
+      "unconfirmed": ["power", "supply voltage", "dimensions", "price"]
+    },
+    {
+      "maker": "Monacor",
+      "model": "AKB-400DSP",
+      "type": "2-channel DSP plate amplifier",
+      "channels": 2,
+      "channel_layout": "2 x class D",
+      "power_w": {
+        "per_channel_4ohm": null,
+        "per_channel_8ohm": [180, 180],
+        "headline": "400 W RMS @ 4 ohm (the listing contradicts itself on per-channel vs total)"
+      },
+      "dsp": {
+        "chip": "Not stated",
+        "filters": "Biquads (bell, notch, all-pass and others), limiter, level, 4 presets",
+        "software": "Monacor software over USB (Windows XP-8 listed)"
+      },
+      "overall_mm": {"h": 330, "w": 142, "d": 55},
+      "cutout_mm": null,
+      "mounting": "Plate",
+      "weight_g": 1100,
+      "inputs": ["XLR in", "XLR out", "PowerCon in/out", "USB"],
+      "power_inlet": "PowerCon",
+      "standby_auto_on": "Not documented",
+      "cooling": "Plate",
+      "airtight": "unknown",
+      "price": {"eur": null},
+      "suitability": {
+        "floorstander_3way": "No (2 channels)",
+        "bookshelf_2way": "No advantage over the FA122 (larger)",
+        "desk": "No"
+      },
+      "sources": [
+        "https://www.conrad.com/en/p/monacor-akb-400dsp-built-in-amplifier-400-w-1331334.html",
+        "https://www.lautsprechershop.de/monacor/monacor_selbstbau_verstaerker_en.htm"
+      ],
+      "confidence": "Low. Conrad only.",
+      "unconfirmed": ["all fields"]
+    },
+    {
+      "maker": "Purifi",
+      "model": "1ET6525SA (Eigentakt module)",
+      "type": "Amp module (no DSP); no Purifi-based DSP plate amp was found",
+      "channels": 1,
+      "channel_layout": "1 x Eigentakt, analog input, low gain (~12.3 dB)",
+      "power_w": {
+        "per_channel_4ohm": [450],
+        "per_channel_8ohm": [230],
+        "note": "Purifi shop: 450 W @ 4 ohm 1% THD; Audiophonics blog: 480 W @ 4 ohm, 230 W @ 8 ohm, 510 W @ 2 ohm"
+      },
+      "dsp": null,
+      "overall_mm": {"h": 82, "w": 63, "d": 33},
+      "cutout_mm": null,
+      "mounting": "Internal module",
+      "weight_g": null,
+      "inputs": ["Analog (needs an input buffer)"],
+      "power_inlet": "+/-32 to +/-65 V DC external supply",
+      "standby_auto_on": "n/a",
+      "cooling": "Module",
+      "airtight": false,
+      "price": {"eur": null},
+      "suitability": {
+        "floorstander_3way": "Not a plate amp. It would need a DSP, three modules, a supply and buffers (cf. the Audiophonics HPA-T450ET 3-channel box amp).",
+        "bookshelf_2way": "No",
+        "desk": "No"
+      },
+      "sources": [
+        "https://purifi-audio.com/shop/1et6525sa-1et6525sa-amplifier-module-2032",
+        "https://audiophonics.fr/en/blog-diy-audio/85-discover-the-new-purifi-1et6525sa-amplifier-module.html",
+        "https://www.audiophonics.fr/en/power-amplifiers/audiophonics-hpa-t450et-p-20209.html"
+      ],
+      "confidence": "Module specs agree only roughly.",
+      "unconfirmed": ["power figures"]
+    },
+    {
+      "maker": "Orchard Audio",
+      "model": "Starkrimson DSP plate amplifier (4/3/2-channel)",
+      "type": "DSP plate amplifier (announced)",
+      "channels": 4,
+      "channel_layout": "Configurable as 2, 3 or 4 channels: Starkrimson Ultra (250 W/8 ohm, 500 W/4 ohm) and Starkrimson 25 (75/150 W) modules, ~1200 W total, Hypex DSP3-224 inside",
+      "power_w": {
+        "per_channel_4ohm": null,
+        "per_channel_8ohm": null,
+        "headline": "~1200 W total"
+      },
+      "dsp": {
+        "chip": "Hypex DSP3-224 (ADAU1452)",
+        "filters": "As DSP3-224 (FIR up to 2048 taps, 3 presets)",
+        "software": "HFD"
+      },
+      "overall_mm": null,
+      "cutout_mm": null,
+      "mounting": "Plate",
+      "weight_g": null,
+      "inputs": ["As DSP3-224: XLR, RCA, optional digital"],
+      "power_inlet": "Mains (Micro-Audio 1200 W SMPS)",
+      "standby_auto_on": "Unknown",
+      "cooling": "Unknown",
+      "airtight": "unknown",
+      "price": {"usd": null, "usd_note": "Not published (revealed Sept 2025 with Soundfield Audio)"},
+      "suitability": {
+        "floorstander_3way": "The only other 3-channel DSP plate found, but no price, dimensions or confirmed availability",
+        "bookshelf_2way": "No",
+        "desk": "No"
+      },
+      "sources": [
+        "https://audioxpress.com/news/orchard-audio-previews-upcoming-range-of-starkrimson-plate-amplifiers",
+        "https://positive-feedback.com/?p=104203",
+        "https://hifihub.ai/products/orchard-audio-1200w-4-3-2-channel-plate-amplifier-with-dsp"
+      ],
+      "confidence": "Low. Announcement coverage only.",
+      "unconfirmed": ["all specs", "availability"]
+    }
+  ],
+  "fit_checks": {
+    "floorstander_back_panel": {
+      "coordinate_system": "Back panel viewed from behind; x = 0 at the panel centre line, y = 0 at the floor (bottom edge of the back panel). All mm.",
+      "outer_width": 390,
+      "inner_width_between_side_walls": 354,
+      "wall_thickness": 18,
+      "inner_floor_y": 18,
+      "port": {"diameter": 100, "centre_y": 405, "bore_y": [355, 455], "bore_x": [-50, 50], "note": "If a flared port with a ~140 mm flange is used, it occupies about y 335-475 and x -70..70."},
+      "terminal_cup_centre_y": 175,
+      "nutrition_label": {"w": 266, "h": 260, "y": [510, 770], "x": [-133, 133]},
+      "free_band_below_port_y": "18 to 355 (bore) or about 335 (flared port): 317-337 mm for a cutout",
+      "free_band_between_port_and_label": "455-510 (or ~475-510 with a flange): 35-55 mm, unusable"
+    },
+    "results": [
+      {
+        "plate": "Hypex FA123 / FA253 (360 long; cutout 336 long)",
+        "vertical_centered": "BLOCKED. The plate needs y ~10-370 (plate 360 + floor). The free height under the port is only ~335-355, so it misses by ~15 mm (flush port) to ~35 mm (flared port). Raising the port to centre ~425 with a flush port would leave ~5 mm to the plate and ~35 mm to the label, which is too tight.",
+        "vertical_offset_beside_port": "FA123 only, and only with a flush (flangeless) port: plate x 55-175, cutout x 67-163 (14 mm to the side wall). The FA253 cutout (111 wide) would overrun the 177 mm inner wall line by ~1 mm.",
+        "horizontal_rotated_90deg": "FITS. Flange 360 on a 390 back leaves 15 mm per side. Cutout 336 inside 354 leaves 9 mm per side to the side-wall faces.",
+        "proposed_layout_FA253": {
+          "plate_x": [-180, 180],
+          "plate_y": [107.5, 242.5],
+          "cutout_x": [-168, 168],
+          "cutout_y": [119.5, 230.5],
+          "centre_y": 175,
+          "clearance_plate_top_to_port_bore_mm": 112.5,
+          "clearance_plate_top_to_label_mm": 267.5
+        },
+        "proposed_layout_FA123": {
+          "plate_x": [-180, 180],
+          "plate_y": [115, 235],
+          "cutout_x": [-168, 168],
+          "cutout_y": [127, 223],
+          "centre_y": 175
+        },
+        "amp_compartment": "Use the cabinet side walls as the compartment's ends. Lower shelf top at y ~101.5, upper shelf underside at y ~248.5, front wall ~90 mm in from the back panel's inner face. Inside: ~354 x 147 x 90 mm = ~4.7 L of air. Gross displacement ~6.2 L with 12 mm panels or ~7.0 L with 18 mm panels (7-8% of 88 L).",
+        "box_tuning_effect": "If 88 L net drops to ~81.5 L with the port unchanged, Fb rises ~4% (32 -> ~33 Hz). The simple vent formula (k = 0.732) says ~2 cm more port length (about 18.8 -> 20.9 cm) restores 32 Hz. Alternatively, enlarge the gross volume by ~6.5 L. Recheck in your box model.",
+        "to_confirm": ["Hypex 2D drawing (hole pattern, corner radii)", "that Hypex accepts the plate rotated 90 degrees (no orientation guidance found)", "woofer magnet clearance to the compartment front wall"]
+      },
+      {
+        "plate": "Hypex FA122 / FA252 (315 long; cutout 291)",
+        "vertical_centered": "Fits below the port (plate y ~12-327, cutout ~24-315) with ~8-28 mm to the port flange or bore. 2 channels only.",
+        "horizontal_rotated_90deg": "Fits easily"
+      },
+      {
+        "plate": "Hypex FA502 (380 x 150; cutout 356 x 126)",
+        "vertical_centered": "BLOCKED (380 tall)",
+        "horizontal_rotated_90deg": "BLOCKED: cutout 356 > 354 inner width (2 mm short); flange 380 leaves 5 mm per side"
+      },
+      {
+        "plate": "Hypex FA503 (420 x 150; cutout 396 x 126)",
+        "vertical_centered": "BLOCKED (420 tall)",
+        "horizontal_rotated_90deg": "BLOCKED: plate 420 is wider than the 390 back"
+      },
+      {
+        "plate": "Dayton PPA800DSP (381 x 160; cutout 355.6 x 139.7)",
+        "vertical_centered": "BLOCKED",
+        "horizontal_rotated_90deg": "BLOCKED: cutout 355.6 > 354"
+      }
+    ],
+    "bookshelf_generic": {
+      "FA122_vertical": "Needs a rectangular back at least ~340 mm tall outside (cutout 291 + walls + margin) and at least ~150 mm wide. Horizontal is impossible on a 200-250 mm wide carton (315 mm plate). A plate of this size leaves no room on the back for a Nutrition Facts label of any useful size. The compartment displaces ~3.5-4 L gross (15-25% of a typical 6.5 in 2-way box).",
+      "PWR-ICE125_vertical": "216 x 153 plate, cutout 202 x 139: fits a 200-250 mm wide back with 18 mm walls (inner 164-214), height at least ~240 mm. Deeper (75 mm). ~3.5-4 L compartment.",
+      "KABD-250_board": "91.4 x 68.6 x 22.9 mm board on a small DIY plate (e.g. 120 x 100 mm aluminium). Negligible volume, and it can be sealed (low dissipation)."
+    },
+    "desk_generic": "A 100 mm wide carton has ~64-82 mm inner width depending on wall thickness, and every FusionAmp is at least 120 mm wide. Use a KABD-430 or JAB4 board (~91 x 69 mm footprint for the KABD, inferred) in the base of the master carton or in a small external hub. Power it from an external 24 V SELV brick, so there is no mains in the speaker."
+  },
+  "recommendations": {
+    "floorstander": {
+      "primary": {
+        "model": "Hypex FusionAmp FA253",
+        "price": "EUR 649-650 / USD 646.80 each (x2 per pair)",
+        "mounting": "Rotated 90 degrees (horizontal), centred at y = 175 where the terminal cup is now. Sealed compartment behind it, spanning the full inner width.",
+        "rationale": [
+          "Three NCore channels map directly to woofer / mid / tweeter: 250/250/100 W @ 4 ohm, 150/150/100 W @ 8 ohm (Hypex).",
+          "Woofer headroom: 10*log10(150) = +21.8 dB over 1 W into 8 ohm. With a ~90 dB/W/m 12 in that is ~112 dB peak at 1 m before any DSP bass boost, about 3 dB more than the FA123. Substitute the real driver sensitivity.",
+          "The mid and tweeter channels have far more power than the drivers need. Set HFD's soft-clip / limiter to each driver's rating. HFD's default soft-clip assumes 4 ohm, so enter 8 ohm drivers' impedance and max power.",
+          "The DSP handles the planned 350 Hz / 2.2 kHz crossover, driver EQ, delay alignment for the waveguide tweeter, and 3 presets. FIR is available on current firmware.",
+          "XLR/AES/S-PDIF inputs with loop-through let one source feed both speakers. Each amp is set to L or R in HFD.",
+          "The plate fits only horizontally: 15 mm per side on the outside, 9 mm per side to the inner walls. It clears the port by 112 mm and the label by 267 mm.",
+          "Not airtight, so it needs its own sealed compartment of ~6-7 L gross."
+        ]
+      },
+      "budget": {
+        "model": "Hypex FusionAmp FA123",
+        "price": "EUR 497-500 / USD 501.60 each",
+        "mounting": "Identical CAD to the FA253: same 360 mm plate length and 336 mm cutout length, only 15 mm less tall (120 / cutout 96).",
+        "rationale": [
+          "Same DSP, inputs and software as the FA253, about EUR 150 less per speaker.",
+          "The woofer channel is 75 W @ 8 ohm (125 W @ 4 ohm), so ~3 dB less bass headroom. That is fine for domestic levels with a ~90 dB woofer, but tight if the DSP adds a big low-shelf or Linkwitz-transform boost.",
+          "Design the CAD back panel for the FA253 and drop in either plate. An FA123 in an FA253 cutout needs a 15 mm adapter strip, so cut for whichever you buy."
+        ]
+      },
+      "lowest_cost_diy_option": {
+        "model": "Dayton Audio KABD-4100 + external 36 V SELV power brick + DIY 3 mm aluminium plate",
+        "price": "~USD 96 board + ~USD 15-30 ICP1/KPX programmer + brick",
+        "notes": "Fine for proving the active crossover concept, but power per load is not published (estimated ~60-80 W into 8 ohm at 36 V). It uses SigmaStudio, which is harder to learn than HFD. Keeping the brick external keeps mains out of the cabinet. A Wondom JAB5 (EUR 69.90, 6 ohm minimum load) is the EU equivalent."
+      },
+      "do_not_fit_without_moving_the_port": ["Hypex FA503 (plate 420 wide)", "Hypex FA502 (cutout 2 mm too wide)", "Dayton PPA800DSP", "any 360 mm FusionAmp mounted vertically"]
+    },
+    "bookshelf": {
+      "primary": {
+        "model": "Hypex FusionAmp FA122",
+        "price": "EUR 429-430 / USD 422.40 each",
+        "mounting": "Vertical. Needs a rectangular back at least ~340 mm tall, which sets a minimum body height for the bookshelf carton.",
+        "rationale": [
+          "2 x 125 W @ 4 ohm / 2 x 75 W @ 8 ohm. A ~87 dB/W/m 6.5 in reaches ~106 dB peak at 1 m, plenty for a bookshelf.",
+          "Same DSP, software and workflow as the floorstander FA253, so one learning curve covers the whole range.",
+          "The 120 mm plate width suits a 200-250 mm carton. The ~3.5-4 L sealed compartment must be added to the gross box volume.",
+          "The label cannot share the back panel: move it to a side panel or shrink it. Use a front port or a sealed box, which suits DSP EQ."
+        ]
+      },
+      "budget": {
+        "model": "Dayton Audio KABD-250 (one per speaker) on a small sealed DIY plate + 24 V SELV brick",
+        "price": "~USD 64 per board + programmer (once) + brick",
+        "rationale": [
+          "2 x 50 W @ 4 ohm / 2 x 30 W @ 8 ohm. ~102 dB peak with an 87 dB driver at 8 ohm, enough for near-field and small rooms.",
+          "The tiny board (91 x 69 x 23 mm) takes almost no box volume and makes it easy to build a sealed plate.",
+          "ADAU1701 with SigmaStudio. Bluetooth input is built in.",
+          "Alternative: one KABD-4100 driving both speakers (4 channels, more power) from the master speaker."
+        ]
+      },
+      "alternative_if_back_is_short": {
+        "model": "miniDSP PWR-ICE125",
+        "price": "USD 399 / EUR 449",
+        "notes": "216 x 153 plate (cutout 202 x 139), 2 x 125 W @ 4 ohm, FIR + IIR, and the software runs on Mac too. Airtightness unknown, so give it a compartment anyway."
+      }
+    },
+    "desk": {
+      "primary": {
+        "model": "Dayton Audio KABD-430",
+        "price": "~USD 70-90 (+ programmer + 24 V brick)",
+        "rationale": [
+          "4 x 30 W runs both desk speakers active (2-way each) from one board, so only one DSP program is needed.",
+          "No plate amp fits a 100 mm carton; every FusionAmp is at least 120 mm wide.",
+          "Put the board in the base of the master carton or in a small external hub. Run 4-conductor cable to the second carton. 24 V DC only, no mains.",
+          "Set limiters in SigmaStudio. A 2.5 in driver handles only a fraction of 30 W."
+        ]
+      },
+      "budget": {
+        "model": "Wondom JAB4 AA-JA33285 + ICP5 programmer",
+        "price": "EUR 54.90 + EUR 24.90",
+        "rationale": ["Same concept (4 x 30 W @ 8 ohm, TPA3118, ADAU1701, Bluetooth 5.0). EU-sourced. Supply range and dimensions are still unconfirmed."]
+      },
+      "noise_note": "ADAU1701 boards have about 98-100 dB dynamic range. Hiss is audible at desk distance with sensitive tweeters, so add a resistive L-pad on the tweeter if needed."
+    }
+  }
+}

@@ -25,7 +25,12 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon as MPoly, Circle, FancyBboxPatch, Rectangle
 from matplotlib.backends.backend_pdf import PdfPages
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out', 'drawings')
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out-bookshelf' if BOOK else 'out', 'drawings')
+PRODUCT = 'earmilk bookshelf' if BOOK else 'earmilk floorstander'
+# drawing scales per size: the bookshelf is drawn larger so its views fill the same sheets
+K = dict(ga=1 / 3, sec=1 / 3, roof=1.0, ins=1.0, back=1 / 3, exp=0.28) if BOOK else dict(ga=0.2, sec=0.2, roof=0.5, ins=0.5, back=0.2, exp=0.16)
+SC = {k: f'1:{round(1 / v):d}' for k, v in K.items()}
+XS = PLAN / 390.0     # model offsets that were set for the floorstander scale with the plan
 A3 = (420.0, 297.0)
 INK = '#111111'; LIGHT = '#777777'; RED = '#B3261E'; CUT = '#d9d4c7'
 LW = dict(outline=0.5, thin=0.25, dim=0.18, hidden=0.25, centre=0.18)   # line weights, mm on paper
@@ -119,7 +124,7 @@ class Sheet:
         ax.add_patch(Rectangle((x0, y0), w, h, fill=False, lw=0.5 * PT, ec=INK))
         ax.plot([x0, x0 + w], [y0 + 13, y0 + 13], color=INK, lw=0.25 * PT)
         ax.plot([x0 + 110, x0 + 110], [y0, y0 + 13], color=INK, lw=0.25 * PT)
-        ax.text(x0 + 3, y0 + 19.5, f'earmilk floorstander  |  {self.title}', fontsize=9, fontweight='bold', va='center')
+        ax.text(x0 + 3, y0 + 19.5, f'{PRODUCT}  |  {self.title}', fontsize=9, fontweight='bold', va='center')
         ax.text(x0 + 3, y0 + 15.2, subtitle, fontsize=5.2, va='center', color='#333')
         ax.text(x0 + 3, y0 + 8.5, 'mm  |  first issue 2026-10-08  |  from fab/sheets.py (the CAD)', fontsize=5.5, va='center')
         ax.text(x0 + 3, y0 + 3.6, 'Check every bought part against its own drawing before cutting.', fontsize=5, va='center', color='#444')
@@ -215,13 +220,27 @@ def drawing_model():
     fin = cad.box(0, RUN - FIN_T / 2, RIDGE_Z - 12, PLAN, RUN + FIN_T / 2, TOTAL)
     fin = fin.fillet(FIN_EDGE_R, [e for e in fin.edges() if e.center().Z > RIDGE_Z])
     parts['gable-plain'] = g + fin
-    wo, _ = C.driver_parts('woofer', C.DRIVERS['dsa315-8'], (RUN, 0.0, WOOFER['z']), ring_d=WOOFER_REBATE['d'] - 1.6, detail=4)
-    mi, _ = C.driver_parts('mid', C.DRIVERS['sb17mfc35-8'], (RUN, 0.0, MID['z']), ring_d=MID_REBATE['d'] - 1.6, detail=4)
-    tspec = dict(C.DRIVERS['tweeter-1in'], **{k: TWEETER_PART[k] for k in ('dome_d', 'surround_w', 'flange_d', 'flange_t', 'body_d', 'body_depth')})
+    wo, _ = C.driver_parts('woofer', C.DRIVERS[DRIVER_SET['woofer']], (RUN, 0.0, WOOFER['z']), ring_d=WOOFER_REBATE['d'] - 1.6, detail=4)
+    mi = C.driver_parts('mid', C.DRIVERS[DRIVER_SET['mid']], (RUN, 0.0, MID['z']), ring_d=MID_REBATE['d'] - 1.6, detail=4)[0] if MID else {}
+    tspec = dict(C.DRIVERS[DRIVER_SET['tweeter']], **{k: TWEETER_PART[k] for k in ('dome_d', 'surround_w', 'flange_d', 'flange_t', 'body_d', 'body_depth')})
     tw, _ = C.driver_parts('tweeter', tspec, (RUN, WAVEGUIDE['throat_y'], WAVEGUIDE['throat_z']), flange_recess=0.0)
     parts.update(wo); parts.update(mi); parts.update(tw)
-    # the insert drawn plain too (its outline prism trimmed to the roof), for the projections; the real one for sections
-    parts['insert-plain'] = cad._y_prism(cad.insert_outline(), -5.0, INSERT['back_y']) & cad.gable_prism()
+    # the insert drawn plain too (its outline prism trimmed to the roof), for the projections; the real one for sections.
+    # A spline through the outline, so its sides project as smooth faces rather than 192 facets.
+    from build123d import Edge, Wire, Face, extrude, Vector
+    plain = None
+    try:
+        out = cad.insert_outline()[::3]
+        pts = [Vector(RUN + u, -5.0, BODY + DZ * s_) for (u, s_) in out]
+        face = Face(Wire([Edge.make_spline(pts, periodic=True)]))
+        plain = extrude(face, amount=INSERT['back_y'] + 5.0, dir=Vector(0, 1, 0)) & cad.gable_prism()
+        if plain is None or not plain.is_valid or plain.volume < 1.0:
+            plain = None
+    except Exception:
+        plain = None
+    if plain is None:      # the spline failed (a sharp eave clip): the polygon prism, facets and all
+        plain = cad._y_prism(cad.insert_outline(), -5.0, INSERT['back_y']) & cad.gable_prism()
+    parts['insert-plain'] = plain
     return parts
 
 
@@ -230,7 +249,8 @@ def driver_circles():
     (centre x, z, diameter, weight)."""
     import components as C
     out = []
-    for z, key, ring in ((WOOFER['z'], 'dsa315-8', WOOFER_REBATE['d'] - 1.6), (MID['z'], 'sb17mfc35-8', MID_REBATE['d'] - 1.6)):
+    drv = [(WOOFER['z'], DRIVER_SET['woofer'], WOOFER_REBATE['d'] - 1.6)] + ([(MID['z'], DRIVER_SET['mid'], MID_REBATE['d'] - 1.6)] if MID else [])
+    for z, key, ring in drv:
         sp = C.DRIVERS[key]; _, info = C.cone_driver(sp, 4)
         out += [(RUN, z, ring, 'outline'), (RUN, z, ring - 2 * TRIM_RING['width'], 'thin'), (RUN, z, 2 * info['r_surround'], 'thin'),
                 (RUN, z, 2 * info['r_cone'], 'thin'), (RUN, z, sp['cap_d'], 'thin')]
@@ -271,13 +291,15 @@ def view_label(S, vis, org, k, text):
 
 
 def sheet1(pdf, M, W):
-    S = Sheet(1, 'General arrangement', 'Front, left side and top at 1:5. Heights from the floor; depths from the front face.')
-    k = 0.2
-    shapes = [M[n] for n in GA_PARTS]
+    S = Sheet(1, 'General arrangement', f'Front, left side and top at {SC["ga"]}. Heights from the floor; depths from the front face.')
+    k = K['ga']
+    shapes = [M[n] for n in GA_PARTS if n in M]
+    # the drivers' frames and cones close their holes, or the front view shows the inside of the box through them
+    occl = [M[n] for n in M if n.split('-')[0] in ('woofer', 'mid') and n.split('-')[-1] in ('frame', 'cone', 'cap', 'surround')]
     places = {'front': (34, 50), 'left': (250, 50), 'top': (300, 188)}
     for view, org in places.items():
         t = time.time()
-        vis, _ = hlr(shapes, view)
+        vis, _ = hlr(shapes + (occl if view == 'front' else []), view)
         S.lines(vis, org, k)
         if view in ('front', 'top'):
             S.lines([to2d(view, W['mouth'])], org, k, lw=LW['outline'])
@@ -294,10 +316,10 @@ def sheet1(pdf, M, W):
     S.dim((0, 0), (0, TOTAL), 14, origin=o, scale=k)
     S.dim((0, 0), (0, BODY), 7, origin=o, scale=k)
     S.dim((0, 0), (0, PLINTH_H), 2.5, origin=o, scale=k, size=4.5)
-    for i, (z, lab) in enumerate(((WOOFER['z'], f'{WOOFER["z"]:.0f} woofer'), (MID['z'], f'{MID["z"]:.0f} mid'),
-                                  (WAVEGUIDE['throat_z'], f'{WAVEGUIDE["throat_z"]:.0f} tweeter axis'))):
+    heights = [(WOOFER['z'], f'{WOOFER["z"]:.0f} woofer')] + ([(MID['z'], f'{MID["z"]:.0f} mid')] if MID else []) + [(WAVEGUIDE['throat_z'], f'{WAVEGUIDE["throat_z"]:.0f} tweeter axis')]
+    for i, (z, lab) in enumerate(heights):
         S.dim((PLAN, 0), (PLAN, z), -8 - 7 * i, lab, origin=o, scale=k, size=5)
-    for z, rb, cut in ((WOOFER['z'], WOOFER_REBATE, WOOFER_CUTOUT), (MID['z'], MID_REBATE, MID_CUTOUT)):
+    for z, rb, cut in [(WOOFER['z'], WOOFER_REBATE, WOOFER_CUTOUT)] + ([(MID['z'], MID_REBATE, MID_CUTOUT)] if MID else []):
         S.text(o[0] + k * (RUN + rb['d'] / 2 + 6), o[1] + k * (z + rb['d'] / 2), f'rebate ø{rb["d"]:.1f} x {rb["depth"]:.0f} deep,\nthrough ø{cut:.0f}', size=4.2, va='bottom', color='#333')
     S.text(o[0] + k * (RUN + 150), o[1] + k * (WAVEGUIDE['throat_z'] + 50), 'waveguide insert\n(sheet 3)', size=4.5, va='bottom', color='#333')
     # left side: the depth and the throat
@@ -316,10 +338,10 @@ def sheet1(pdf, M, W):
     S.dim((PLAN, 0), (PLAN, PLAN), 6, origin=o, scale=k)
     S.text(o[0] + k * RUN, o[1] - 16, 'black: the waveguide\'s mouth, where its lip meets the roof\ngrey: the insert\'s seam', size=4.5, ha='center', va='top')
     S.notes(300, 160, 'Notes', [
-        'Cabinet: 18 mm Baltic birch, glued. The vertical corners and the gable\'s hips are rounded 6 mm, the fin\'s edges 3 mm. 3 x 3 mm shadow lines at z 110 and z 857.',
+        f'Cabinet: 18 mm Baltic birch, glued. The vertical corners and the gable\'s hips are rounded {EDGE_R:.0f} mm, the fin\'s edges {FIN_EDGE_R:.0f} mm. 3 x 3 mm shadow lines at z {PLINTH_H:.0f} and z {GABLE_SHADOW_Z0:.0f}.',
         f'The drivers sit flush: each frame in a rebate, a {TRIM_RING["t"]:.0f} mm trim ring over its flange and screws, level with the finish.',
         f'The tweeter is at the throat of a waveguide insert in the roof (sheet 3): axis z {WAVEGUIDE["throat_z"]:.0f}, {WAVEGUIDE["throat_y"]:.0f} behind the front face. The shape is set by simulation (fab/out/acoustics/waveguide).',
-        'The back (port, amplifier, label) is drawn on sheet 4 with the wiring.',
+        ('The back (the amplifier) is drawn on sheet 4 with the wiring; the Nutrition Facts are printed on the right side.' if BOOK else 'The back (port, amplifier, label) is drawn on sheet 4 with the wiring.'),
         'Finish: colour coat and 2K clear; the Facts printed between them.',
     ], width=96)
     S.save(pdf)
@@ -351,7 +373,7 @@ def centre_section(M):
             ls = section_faces(M[name], RUN, 'TOP')
             loops[name] = [(to2d('left', pts), outer) for (pts, outer) in ls]
         bg = [h for h in (half(M[n], RUN, 'TOP') for n in ('front-baffle', 'back-panel', 'side-right', 'top-panel', 'bottom-panel',
-                                                           'window-brace', 'mid-shelf', 'mid-divider', 'gable-plain', 'port-tube')) if h is not None]
+                                                           'window-brace', 'mid-shelf', 'mid-divider', 'gable-plain', 'port-tube') if n in M) if h is not None]
         vis, _ = hlr(bg, 'left')
         _SECTION_CACHE['loops'] = loops; _SECTION_CACHE['bg'] = vis
     return _SECTION_CACHE['loops'], _SECTION_CACHE['bg']
@@ -381,19 +403,21 @@ def wire_paths():
     """The cables' runs in the centre section's frame (2D 'left': x = -y, y = z): tweeter, mid, woofer to the amplifier."""
     import cad
     zt = WAVEGUIDE['throat_z']; yw = cad.wire_hole_y()
-    amp_y, amp_z = PLAN - WALL - 30, POSTS['z']
-    tweeter = [(-(WAVEGUIDE['throat_y'] + TWEETER_PART['flange_t'] + TWEETER_PART['body_depth']), zt), (-yw, zt), (-yw, TOP_Z0 - 25),
-               (-(PLAN - WALL - 15), TOP_Z0 - 25), (-(PLAN - WALL - 15), amp_z + 40), (-amp_y, amp_z + 40)]
+    amp_y, amp_z = PLAN - WALL - 30 * XS, AMP['z']
+    tweeter = [(-(WAVEGUIDE['throat_y'] + TWEETER_PART['flange_t'] + TWEETER_PART['body_depth']), zt), (-yw, zt), (-yw, TOP_Z0 - 25 * XS),
+               (-(PLAN - WALL - 15 * XS), TOP_Z0 - 25 * XS), (-(PLAN - WALL - 15 * XS), amp_z + 40 * XS), (-amp_y, amp_z + 40 * XS)]
+    woofer = [(-(WALL + 125 * XS), WOOFER['z']), (-(PLAN - WALL - 35 * XS), WOOFER['z']), (-(PLAN - WALL - 35 * XS), amp_z + 20 * XS), (-amp_y, amp_z + 20 * XS)]
+    if not MID:
+        return dict(tweeter=np.array(tweeter), woofer=np.array(woofer))
     mid = [(-(WALL + 70), MID['z']), (-(WALL + MID_CHAMBER_DEPTH + 30), MID_SHELF_TOP + 40), (-(PLAN - WALL - 25), MID_SHELF_TOP + 40),
            (-(PLAN - WALL - 25), amp_z + 30), (-amp_y, amp_z + 30)]
-    woofer = [(-(WALL + 125), WOOFER['z']), (-(PLAN - WALL - 35), WOOFER['z']), (-(PLAN - WALL - 35), amp_z + 20), (-amp_y, amp_z + 20)]
     return dict(tweeter=np.array(tweeter), mid=np.array(mid), woofer=np.array(woofer))
 
 
 def sheet2(pdf, M, W):
-    S = Sheet(2, 'Section on the centreline', 'Section A-A on the centre plane (x 195) seen from the left at 1:5, and the roof at 1:2. Cut wood hatched; the insert hatched the other way.')
+    S = Sheet(2, 'Section on the centreline', f'Section A-A on the centre plane (x {RUN:.0f}) seen from the left at {SC["sec"]}, and the roof at {SC["roof"]}. Cut wood hatched; the insert hatched the other way.')
     loops, bg = centre_section(M)
-    k = 0.2; org = (110, 48)
+    k = K['sec']; org = (110, 48)
     draw_section(S, loops, bg, org, k)
     S.label(org[0] - k * RUN, org[1] - 10, 'SECTION A-A')
     for name, path in wire_paths().items():
@@ -404,24 +428,28 @@ def sheet2(pdf, M, W):
                                                           arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0)))
     # labels, on the left of the section (the back) and right (the front)
     S.text(org[0] - k * (PLAN / 2), org[1] + k * 160, 'woofer chamber', size=5, ha='center')
-    lab(WALL + 45, MID['z'] + 70, 'mid chamber,\nsealed', dx=30)
-    lab(PLAN - WALL - 20, PORT['z'], 'port', dx=-8)
-    lab(WOOFER_REBATE['depth'] + 60, WOOFER['z'], 'woofer', dx=40)
-    lab(MID_REBATE['depth'] + 40, MID['z'], 'mid', dx=40)
+    if MID:
+        lab(WALL + 45, MID['z'] + 70, 'mid chamber,\nsealed', dx=30)
+        lab(MID_REBATE['depth'] + 40, MID['z'], 'mid', dx=40)
+    if PORT:
+        lab(PLAN - WALL - 20, PORT['z'], 'port', dx=-8)
+    lab(WOOFER_REBATE['depth'] + 60 * XS, WOOFER['z'], 'woofer', dx=40)
+    lab(PLAN - WALL - 45 * XS, AMP['z'], 'amplifier\'s sealed box', dx=-14)
     lab(WAVEGUIDE['throat_y'] - 40, WAVEGUIDE['throat_z'] + 30, 'waveguide insert\nand tweeter (detail)', dx=60, dy=12)
     lab(cad.wire_hole_y(), 880, 'tweeter cable:\n14 mm channel', dx=-30, dy=14)
     S.text(org[0] - k * PLAN, org[1] - 18, 'red dashed: the cables\' runs to the amplifier (sheet 4)', size=4.6, color=RED)
     S.dim((-PLAN, 0), (0, 0), -6, origin=org, scale=k)
-    S.dim((0, MID_SHELF_TOP), (0, TOP_Z0), 6, f'{TOP_Z0 - MID_SHELF_TOP:.0f}', origin=org, scale=k, size=4.6)
-    S.dim((-WALL, TOP_Z0), (-(WALL + MID_CHAMBER_DEPTH), TOP_Z0), 4, f'{MID_CHAMBER_DEPTH:.0f}', origin=org, scale=k, size=4.6)
+    if MID:
+        S.dim((0, MID_SHELF_TOP), (0, TOP_Z0), 6, f'{TOP_Z0 - MID_SHELF_TOP:.0f}', origin=org, scale=k, size=4.6)
+        S.dim((-WALL, TOP_Z0), (-(WALL + MID_CHAMBER_DEPTH), TOP_Z0), 4, f'{MID_CHAMBER_DEPTH:.0f}', origin=org, scale=k, size=4.6)
     # the roof at 1:2, in an inset clipped to the gable and the top of the body
-    k2 = 0.5; clip = (-PLAN - 8, 800, 12, TOTAL + 8)
-    x0p, y0p = 192, 132
+    k2 = K['roof']; clip = (-PLAN - 8 * XS, BODY - 60 * XS, 12 * XS, TOTAL + 8 * XS)
+    x0p, y0p = (160, 140) if BOOK else (192, 132)
     org2 = (x0p - k2 * clip[0], y0p - k2 * clip[1])
     iax = S.inset(x0p, y0p, clip, k2)
     draw_section(S, loops, bg, org2, k2, ax=iax)
     iax.plot(wire_paths()['tweeter'][:3, 0], wire_paths()['tweeter'][:3, 1], color=RED, lw=0.45 * PT, ls=(0, (3, 1.5)), zorder=5)
-    S.label(org2[0] - k2 * RUN, y0p - 8, 'DETAIL: THE ROOF, 1:2')
+    S.label(org2[0] - k2 * RUN, y0p - 8, f'DETAIL: THE ROOF, {SC["roof"]}')
     ty, tz = WAVEGUIDE['throat_y'], WAVEGUIDE['throat_z']
     S.centreline((-(ty + 70), tz), (12, tz), org2, k2)
     S.dim((-ty, tz), (0, tz), -5, f'{ty:.0f} to the throat', origin=org2, scale=k2, size=5)
@@ -444,11 +472,12 @@ def sheet2(pdf, M, W):
 # --- sheet 3: the insert and the tweeter's mount ----------------------------------------------------------------------------
 def sheet3(pdf, M, W):
     import cad
-    S = Sheet(3, 'Waveguide insert and tweeter mount', 'The insert at 1:2: front, section on the axis, back; the pocket; fitting and service.')
-    k = 0.5
+    S = Sheet(3, 'Waveguide insert and tweeter mount', f'The insert at {SC["ins"]}: front, section on the axis, back; the pocket; fitting and service.')
+    k = K['ins']
     ins = M['waveguide-insert']
     # front view (from the front, 'front' frame: x, z)
-    of = (40 - k * 55, 205 - k * 860)
+    xs_ = W['outline'][:, 0]; xmin, xmax = xs_.min(), xs_.max()
+    of = (40 - k * xmin, 205 - k * BODY)
     vis, _ = hlr([M['insert-plain']], 'front')
     S.lines(vis, of, k, lw=LW['thin'], color=LIGHT)
     S.lines([to2d('front', W['mouth'])], of, k)
@@ -458,15 +487,16 @@ def sheet3(pdf, M, W):
     S.lines([circle_pts(RUN, WAVEGUIDE['throat_z'], TWEETER_PART['dome_d'])], of, k, lw=LW['thin'])
     for m in W['meridians']:
         S.lines([to2d('front', m)], of, k, lw=LW['dim'], color=LIGHT)
-    S.centreline((RUN, 850), (RUN, 990), of, k); S.centreline((40, WAVEGUIDE['throat_z']), (350, WAVEGUIDE['throat_z']), of, k)
+    S.centreline((RUN, BODY - 10 * XS), (RUN, RIDGE_Z - 20 * XS), of, k); S.centreline((xmin - 15 * XS, WAVEGUIDE['throat_z']), (xmax + 15 * XS, WAVEGUIDE['throat_z']), of, k)
     xs = W['outline'][:, 0]
-    S.dim((xs.min(), 860), (xs.max(), 860), -7, f'{xs.max() - xs.min():.0f}', origin=of, scale=k)
+    S.dim((xs.min(), BODY), (xs.max(), BODY), -7, f'{xs.max() - xs.min():.0f}', origin=of, scale=k)
     mw = W['mouth'][:, 0]
-    S.dim((mw.min(), 990), (mw.max(), 990), 4, f'mouth {mw.max() - mw.min():.0f}', origin=of, scale=k, size=5)
-    S.label(of[0] + k * RUN, of[1] + k * 860 - 16, 'FRONT')
+    ztop = W['outline'][:, 2].max() + 10 * XS
+    S.dim((mw.min(), ztop), (mw.max(), ztop), 4, f'mouth {mw.max() - mw.min():.0f}', origin=of, scale=k, size=5)
+    S.label(of[0] + k * RUN, of[1] + k * BODY - 16, 'FRONT')
     # section on the axis (x = RUN), from the left: the insert, the tweeter and the gable round them, in an inset
-    clip = (-(INSERT['boss_back_y'] + 40), 845, 8, 1010)
-    x0p, y0p = 250, 205 - k * (860 - 845)
+    clip = (-(INSERT['boss_back_y'] + 40 * XS), BODY - 15 * XS, 8 * XS, RIDGE_Z)
+    x0p, y0p = 250, 205 - k * 15 * XS
     os_ = (x0p - k * clip[0], y0p - k * clip[1])
     loops, bg = centre_section(M)
     sub = {n: loops[n] for n in ('gable-block', 'top-panel', 'front-baffle', 'waveguide-insert', 'tweeter-frame', 'tweeter-dome', 'tweeter-surround') if n in loops}
@@ -474,16 +504,17 @@ def sheet3(pdf, M, W):
     draw_section(S, sub, [], os_, k, ax=iax)
     S.centreline((-(INSERT['boss_back_y'] + 20), WAVEGUIDE['throat_z']), (10, WAVEGUIDE['throat_z']), os_, k)
     ty, tz = WAVEGUIDE['throat_y'], WAVEGUIDE['throat_z']
-    S.dim((-ty, 845), (0, 845), -6, f'{ty:.0f} to the throat', origin=os_, scale=k, size=5)
-    S.dim((-INSERT['boss_back_y'], 845), (-ty, 845), -6, f'{INSERT["boss_back_y"] - ty:.0f}', origin=os_, scale=k, size=5)
-    S.dim((8, 860), (8, tz), -6, f'{tz - BODY:.0f}', origin=os_, scale=k, size=5)
+    zb = BODY - 15 * XS
+    S.dim((-ty, zb), (0, zb), -6, f'{ty:.0f} to the throat', origin=os_, scale=k, size=5)
+    S.dim((-INSERT['boss_back_y'], zb), (-ty, zb), -6, f'{INSERT["boss_back_y"] - ty:.0f}', origin=os_, scale=k, size=5)
+    S.dim((8 * XS, BODY), (8 * XS, tz), -6, f'{tz - BODY:.0f}', origin=os_, scale=k, size=5)
     S.ax.annotate(f'counterbore ø{TWEETER_PART["flange_d"] + 0.4:.1f} x {TWEETER_PART["flange_t"] + 0.2:.1f}\nfor the tweeter\'s flange', xy=(os_[0] - k * (ty + 2), os_[1] + k * (tz + TWEETER_PART['flange_d'] / 2 - 2)),
                   xytext=(os_[0] - k * (ty + 2) + 18, os_[1] + k * (tz + 55)), fontsize=5, zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK))
     S.ax.annotate('the waveguide (air)', xy=(os_[0] - k * (ty - 50), os_[1] + k * (tz - 5)), xytext=(os_[0] - k * (ty - 50) + 22, os_[1] + k * (tz + 28)),
                   fontsize=5, zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK))
-    S.label(os_[0] - k * 110, os_[1] + k * 860 - 16, 'SECTION ON THE AXIS (WITH THE GABLE)')
+    S.label(os_[0] - k * 110 * XS, os_[1] + k * BODY - 16, 'SECTION ON THE AXIS (WITH THE GABLE)')
     # back view: the insert from behind, magnets, pins, the boss
-    ob = (40 + k * 335, 70 - k * 860)
+    ob = (40 + k * xmax, 70 - k * BODY)
     visb, _ = hlr([ins], 'back')
     S.lines(visb, ob, k, lw=LW['thin'])
     mags, pins = cad.insert_fixings()
@@ -493,7 +524,7 @@ def sheet3(pdf, M, W):
     for (x, z) in pins:
         S.lines([circle_pts(-x, z, INSERT['pin_d'])], ob, k, lw=LW['outline'])
         S.text(ob[0] + k * (-x), ob[1] + k * z - 4.5, f'pin ø{INSERT["pin_d"]:.0f}', size=3.8, ha='center')
-    S.label(ob[0] + k * (-RUN), ob[1] + k * 860 - 14, 'BACK (THE FACE THAT MEETS THE POCKET)')
+    S.label(ob[0] + k * (-RUN), ob[1] + k * BODY - 14, 'BACK (THE FACE THAT MEETS THE POCKET)')
     S.notes(230, 112, 'Fitting the tweeter and the insert', [
         'Solder the tweeter\'s lead (2 x 1.5 mm2, 450 mm) to its tabs and fit the plug half of the connector. Feed the lead through the boss from the front.',
         f'Seat the tweeter in the counterbore from behind, dome toward the throat, on a 0.5 mm foam gasket. Fix its {TWEETER_PART["screws"]} screws into the insert (heat-set brass inserts, M3).',
@@ -505,13 +536,179 @@ def sheet3(pdf, M, W):
     S.save(pdf)
 
 
+# --- sheet 4: the back and the wiring ----------------------------------------------------------------------------------------
+def _box(S, x, y, w, h, title, lines=(), fc='#ffffff', ec=INK, size=5.2, bold=True):
+    S.ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle='round,pad=0,rounding_size=1.5', fc=fc, ec=ec, lw=0.4 * PT, zorder=4))
+    S.ax.text(x + 2, y + h - 2.2, title, fontsize=size + 0.6, fontweight='bold' if bold else 'normal', va='top', zorder=5)
+    for i, ln in enumerate(lines):
+        S.ax.text(x + 2, y + h - 6.4 - i * (size * 0.5), ln, fontsize=size - 0.6, va='top', zorder=5, color='#222')
+
+
+def _wire(S, pts, color, lw=0.6, label=None, at=0.5):
+    P = np.array(pts, float)
+    S.ax.plot(P[:, 0], P[:, 1], color=color, lw=lw * PT, solid_capstyle='round', zorder=3)
+    if label:
+        i = int(at * (len(P) - 1)); m = (P[i] + P[min(i + 1, len(P) - 1)]) / 2
+        S.ax.text(m[0], m[1] + 1.2, label, fontsize=4.6, ha='center', va='bottom', color=color, zorder=6,
+                  bbox=dict(fc='white', ec='none', pad=0.2))
+
+
+def sheet4(pdf, M, W):
+    import components as C
+    S = Sheet(4, 'Back and wiring', f'The back at {SC["back"]} and the amplifier, drivers, cables and connectors. Active: the amplifier\'s DSP is the crossover.')
+    k = K['back']; o = (112, 50)
+    back_parts = [M[n] for n in ('back-panel', 'gable-plain', 'side-left', 'side-right', 'port-tube') if n in M]
+    vis, _ = hlr(back_parts, 'back')
+    S.lines(vis, o, k)
+    amp = C.amp_plate(AMP, RUN, PLAN, AMP['z'])
+    va, _ = hlr([amp['amp-plate'], amp['amp-connectors'], amp['amp-rca']], 'back')
+    S.lines(va, o, k, lw=LW['thin'])
+    S.centreline((-RUN, -10), (-RUN, TOTAL + 10), o, k)
+    lx0, lx1 = -RUN - LABEL['w'] / 2, -RUN + LABEL['w'] / 2; lz1 = LABEL['top']; lz0 = lz1 - LABEL['h']
+    if LABEL.get('face', 'back') == 'back':
+        S.lines([np.array([[lx0, lz0], [lx1, lz0], [lx1, lz1], [lx0, lz1], [lx0, lz0]])], o, k, lw=LW['thin'], color=LIGHT, ls='--')
+        S.text(o[0] + k * (-RUN), o[1] + k * (lz0 + lz1) / 2, f'Nutrition Facts, printed\n{LABEL["w"]:.0f} x {LABEL["h"]:.0f}', size=4.3, ha='center', va='center', color='#555')
+    else:
+        S.text(o[0] + k * (-RUN), o[1] + k * (BODY - 20 * XS), f'(the Nutrition Facts are on the {LABEL["face"]} side: {LABEL["w"]:.0f} x {LABEL["h"]:.0f}, top at z {LABEL["top"]:.0f})', size=4.3, ha='center', color='#555')
+    S.dim((0, 0), (0, AMP['z']), -6, f'{AMP["z"]:.0f}', origin=o, scale=k, size=4.8)
+    if PORT:
+        S.dim((0, 0), (0, PORT['z']), -12, f'{PORT["z"]:.0f}', origin=o, scale=k, size=4.8)
+    if LABEL.get('face', 'back') == 'back':
+        S.dim((0, 0), (0, lz1), -18, f'{lz1:.0f}', origin=o, scale=k, size=4.8)
+    S.dim((-RUN - AMP['plate_w'] / 2, AMP['z'] - AMP['plate_h'] / 2), (-RUN + AMP['plate_w'] / 2, AMP['z'] - AMP['plate_h'] / 2), -5,
+          f'plate {AMP["plate_w"]:.0f} x {AMP["plate_h"]:.0f}, flush in a {AMP["rebate"]:.0f} mm rebate; cutout {AMP["cut_w"]:.0f} x {AMP["cut_h"]:.0f}', origin=o, scale=k, size=4.4)
+    S.dim((-PLAN, 0), (0, 0), -16, origin=o, scale=k)
+    S.label(o[0] - k * RUN, o[1] - 24, 'BACK')
+    # the schematic, right of the view
+    X0 = 182
+    red, blu, grn, gry = '#B3261E', '#1F4FCF', '#2E7D32', '#555555'
+    _box(S, X0, 205, 70, 46, AMP['model'], [
+        ('2 channels, DSP crossover and EQ' if BOOK else '3 channels, DSP crossover and EQ (ADAU1452)'),
+        ('125 + 125 W into 4 ohm' if BOOK else '250 + 250 W into 4 ohm, 100 W tweeter channel'),
+        ('upright on the back' if BOOK else 'on its side across the back\'s foot'),
+        'in its own sealed box (not airtight itself)',
+        'filters: Hypex Filter Design, over USB',
+        'mains in on the plate (IEC C14 with switch)'], fc='#f4f4f4')
+    _box(S, X0 - 2 - 40, 236, 36, 15, 'Mains', ['IEC C14 inlet, switch'], size=5)
+    _box(S, X0 - 2 - 40, 214, 36, 18, 'Signal in', ['XLR (balanced) or RCA', 'USB for the DSP'], size=5)
+    _wire(S, [(X0 - 6, 243), (X0, 243)], gry); _wire(S, [(X0 - 6, 223), (X0, 223)], gry)
+    if BOOK:
+        drivers = [('Tweeter, Scan-Speak D3004/602200', '26 mm dome, faceplate behind the insert', red, 'CH2', 1.0, 165),
+                   ('Woofer, SB Acoustics SB17NRX2C35-8', '6 in, sealed box, DSP shelf to 45 Hz', grn, 'CH1', 1.5, 135)]
+    else:
+        drivers = [('Tweeter, SB Satori TW29DN-B', '29 mm dome, faceplate off, on the insert', red, 'CH3 (100 W)', 1.0, 177),
+                   ('Midrange, SB Satori MR16P-8', '6.5 in papyrus, its own sealed chamber', blu, 'CH2', 1.5, 152),
+                   ('Woofer, Dayton Audio RSS315HF-4', '12 in, 4 ohm, vented to 32 Hz', grn, 'CH1', 2.5, 127)]
+    for (name, sub, col, ch, mm2, y) in drivers:
+        _box(S, X0 + 96, y, 66, 17, name, [sub, f'{mm2:g} mm2 pair, red +, black -'], size=4.8)
+        _wire(S, [(X0 + 70, 214 + (y - 127) / 5), (X0 + 80, 214 + (y - 127) / 5), (X0 + 80, y + 8.5), (X0 + 96, y + 8.5)], col, label=ch, at=0.7)
+    # connectors and seals
+    if BOOK:
+        S.notes(X0 - 44, 118, 'Runs, connectors and seals', [
+            'Woofer (CH1): from the amplifier box\'s gland to the woofer\'s terminals, 0.4 m of 1.5 mm2.',
+            'Tweeter (CH2): up the back wall to the top panel, through the 14 mm channel in the top panel and the gable block, 0.6 m of 1.0 mm2, to a two-pole locking connector at the insert.',
+            'Seal the tweeter cable where it passes the top panel (grommet and sealant): the box is sealed, and the insert\'s pocket is open to the room through its seam.',
+            'The amplifier box\'s lid: a 16 mm gland for the two pairs; seal it.',
+            'The crossover (about 2 to 2.5 kHz), the woofer\'s shelf to 45 Hz (+7.6 dB) and the delays are set in the DSP. Wire red to + throughout.',
+        ], width=118, size=5.2)
+    else:
+        S.notes(X0 - 44, 118, 'Runs, connectors and seals', [
+            'Woofer (CH1): from the amplifier box\'s gland straight to the woofer\'s terminals, 0.6 m of 2.5 mm2. Fit 6.3 mm push-on terminals to suit the driver.',
+            'Mid (CH2): up the back wall, through the 12 mm hole in the mid chamber\'s divider, 1.0 m of 1.5 mm2. Seal the hole round the cable with putty: the mid\'s chamber must stay closed.',
+            'Tweeter (CH3): up the back wall to the top panel, through the 14 mm channel in the top panel and the gable block, 1.3 m of 1.0 mm2, to a two-pole locking connector (JST VH or Molex Mini-Fit) at the insert. The supplied 1.25 m Hypex harness is too short: extend it.',
+            'Seal the tweeter cable where it passes the top panel with a rubber grommet and sealant. The insert\'s pocket is open to the room through its 0.3 mm seam, so an unsealed channel would be a leak in the woofer\'s box.',
+            'The amplifier box\'s lid: a 20 mm gland (PG11) for the three pairs; seal it. The box itself is glued and sealed; its front is the woofer chamber\'s wall.',
+            'Polarity, delay and the crossover (about 2.8 kHz tweeter to mid, from the waveguide study) are set in the DSP: wire red to + throughout and let the filters do the rest.',
+        ], width=118, size=5.2)
+    S.save(pdf)
+
+
+# --- sheet 5: exploded view and parts list ---------------------------------------------------------------------------------
+def sheet5(pdf, M, W):
+    from build123d import Pos
+    S = Sheet(5, 'Exploded view and parts', 'The parts pulled apart along the way they go together, and what each one is.')
+    k = K['exp']; o = (130, 92)
+    mv = {   # part: (dx, dy, dz, number)
+        'front-baffle': (0, -330, 0, 1), 'back-panel': (0, 330, 0, 2), 'side-left': (-300, 0, 0, 3), 'side-right': (300, 0, 0, 3),
+        'top-panel': (0, 0, 80, 4), 'bottom-panel': (0, 0, -120, 5), 'window-brace': (0, 0, 0, 6), 'mid-shelf': (0, 0, 0, 7),
+        'mid-divider': (0, 0, 0, 7), 'gable-plain': (0, 0, 330, 8), 'insert-plain': (0, -420, 330, 9), 'port-tube': (0, 520, 0, 10),
+        'amp-box-floor': (0, 140, 0, 11), 'amp-box-lid': (0, 140, 0, 11), 'amp-box-front': (0, 140, 0, 11),
+        'woofer-ring': (0, -560, 0, 13), 'woofer-frame': (0, -470, 0, 12), 'woofer-cone': (0, -470, 0, 12), 'woofer-surround': (0, -470, 0, 12),
+        'woofer-motor': (0, -470, 0, 12), 'mid-ring': (0, -560, 0, 13), 'mid-frame': (0, -470, 0, 14), 'mid-cone': (0, -470, 0, 14),
+        'mid-surround': (0, -470, 0, 14), 'mid-motor': (0, -470, 0, 14),
+        'tweeter-frame': (0, -330, 330, 15), 'tweeter-dome': (0, -330, 330, 15), 'tweeter-surround': (0, -330, 330, 15),
+    }
+    import components as C
+    amp = C.amp_plate(AMP, RUN, PLAN, AMP['z'])
+    shapes, anchors = [], {}
+    for name, (dx, dy, dz, n) in mv.items():
+        if name not in M: continue
+        sh = Pos(dx * XS, dy * XS, dz * XS) * M[name]
+        shapes.append(sh)
+        c = sh.center(); anchors.setdefault(n, (c.X, c.Y, c.Z))
+    for name in ('amp-plate', 'amp-module'):
+        sh = Pos(0, 600 * XS, 0) * amp[name]; shapes.append(sh); c = sh.center(); anchors.setdefault(16, (c.X, c.Y, c.Z))
+    t = time.time()
+    vis, _ = hlr(shapes, 'iso')
+    print(f'  sheet 5 iso: {len(vis)} edges, {time.time() - t:.0f}s', flush=True)
+    S.lines(vis, o, k, lw=0.3)
+    if BOOK:
+        rows = [
+            (1, 'Front baffle', '1', '18 mm Baltic birch, CNC: the woofer\'s cutout and rebate'),
+            (2, 'Back', '1', '18 mm birch: the amplifier\'s cutout and rebate'),
+            (3, 'Sides', '2', '18 mm birch; the Facts printed on the right one'),
+            (4, 'Top panel', '1', '18 mm birch, the tweeter cable\'s 14 mm hole, four dowel holes'),
+            (5, 'Bottom panel', '1', '18 mm birch'),
+            (6, 'Window brace', '1', '18 mm birch'),
+            (8, 'Gable block', '1', 'laminated birch or printed whole: the insert\'s pocket and the cable channel'),
+            (9, 'Waveguide insert', '1', 'printed (SLA, MJF) or CNC from solid; magnets, pins'),
+            (11, 'Amplifier box', '3', '18 mm birch floor, lid (gland) and front, glued and sealed'),
+            (12, 'Woofer', '1', 'SB Acoustics SB17NRX2C35-8, 6 in coated paper'),
+            (13, 'Trim ring', '1', 'printed, satin black or gunmetal, over the frame and its screws'),
+            (15, 'Tweeter', '1', 'Scan-Speak Illuminator D3004/602200, faceplate behind the insert'),
+            (16, 'Amplifier', '1', f'{AMP["model"]}, DSP, 2 channels'),
+        ]
+    else:
+        rows = [
+            (1, 'Front baffle', '1', '18 mm Baltic birch, CNC: cutouts and rebates for the drivers'),
+            (2, 'Back', '1', '18 mm birch: port hole, the amplifier\'s cutout and rebate'),
+            (3, 'Sides', '2', '18 mm birch'),
+            (4, 'Top panel', '1', '18 mm birch, the tweeter cable\'s 14 mm hole, four dowel holes'),
+            (5, 'Bottom panel', '1', '18 mm birch'),
+            (6, 'Window brace', '1', '18 mm birch'),
+            (7, 'Mid chamber shelf and divider', '2', '18 mm birch; the divider\'s 12 mm cable hole'),
+            (8, 'Gable block', '1', 'laminated birch, CNC: the insert\'s pocket and the cable channel'),
+            (9, 'Waveguide insert', '1', 'CNC from solid (MDF, HDPE) or printed (SLA, MJF); magnets, pins'),
+            (10, 'Port', '1', 'printed tube and flare collar, 92 bore'),
+            (11, 'Amplifier box', '3', '18 mm birch floor, lid (gland) and front, glued and sealed'),
+            (12, 'Woofer', '1', 'Dayton Audio RSS315HF-4, 12 in, 4 ohm, black anodised aluminium cone'),
+            (13, 'Trim rings', '2', 'printed, satin black or gunmetal, over each frame and its screws'),
+            (14, 'Midrange', '1', 'SB Acoustics Satori MR16P-8, 6.5 in papyrus cone'),
+            (15, 'Tweeter', '1', 'SB Acoustics Satori TW29DN-B, faceplate off, rear-mounted on the insert'),
+            (16, 'Amplifier', '1', f'{AMP["model"]}, DSP, 3 channels'),
+        ]
+    X, Y = 290, 262
+    S.text(X, Y + 5, 'Parts', size=7, fontweight='bold')
+    for i, (n, part, q, what) in enumerate(rows):
+        yy = Y - i * 6.0
+        S.ax.add_patch(Circle((X + 2.5, yy + 1.2), 2.2, fc='white', ec=INK, lw=0.3 * PT, zorder=6))
+        S.text(X + 2.5, yy + 1.2, str(n), size=4.6, ha='center', va='center')
+        S.text(X + 7, yy + 2.6, f'{part}  x{q}', size=5.0, fontweight='bold', va='top')
+        S.text(X + 7, yy - 0.4, what, size=4.3, va='top', color='#333')
+    for n, (x, y, z) in anchors.items():
+        p2 = to2d('iso', [(x, y, z)])[0]
+        px, py = o[0] + k * p2[0], o[1] + k * p2[1]
+        S.balloon(px + 9, py + 7, n, px, py)
+    S.save(pdf)
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--only', nargs='*', type=int)
     a = ap.parse_args()
     os.makedirs(OUT, exist_ok=True)
     t = time.time(); M = drawing_model(); W = waveguide_curves(); print(f'model {time.time() - t:.0f}s', flush=True)
     with PdfPages(os.path.join(OUT, 'earmilk-sheets.pdf')) as pdf:
-        for n, fn in ((1, sheet1), (2, sheet2), (3, sheet3)):
+        for n, fn in ((1, sheet1), (2, sheet2), (3, sheet3), (4, sheet4), (5, sheet5)):
             if a.only and n not in a.only: continue
             fn(pdf, M, W)
     print('wrote', OUT)

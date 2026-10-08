@@ -5,3 +5,4 @@ render/out/
 __pycache__/
 .venv-fab/
 fab/out/render/
+fab/out-bookshelf/render/

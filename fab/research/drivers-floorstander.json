@@ -1,0 +1,2617 @@
+{
+ "_meta": {
+  "project": "earmilk floorstander (gable-top carton, 390 x 390 x 1055 mm, 18 mm Baltic birch, ~354 mm inside)",
+  "researched": "2026-10-08",
+  "researcher_note": "Figures come from web-search extracts of maker and retailer pages; pages could not be opened directly (WebFetch/curl blocked). The session's shared web-search budget ran out before every gap could be closed, so several dimensions (bolt circles, surround diameters, some depths) are marked n/f or estimate. Open each datasheet before cutting.",
+  "confidence_legend": {
+   "confirmed": "two independent sources agree (maker + retailer, or two retailers/databases)",
+   "manufacturer": "maker's own page or datasheet only",
+   "unconfirmed": "one source only, or sources disagree; listed in each entry's 'unconfirmed' array",
+   "estimate": "my calculation or inference, never a published figure",
+   "n/f": "not found"
+  },
+  "units": "mm, Hz, L, cm2, dB (sensitivity at 2.83 V / 1 m half-space unless sens_ref says otherwise), W, ohm, mH",
+  "previous_pass": "/home/user/earmilk/fab/drivers.json and fab/research/drivers.md (2026-10-04) - used as a starting point; its 62 mm faceplate limit is replaced by the gable geometry below",
+  "design_targets": {
+   "woofer": "12 in, centre z 320, ~88 L net vented, f3 near 32 Hz; drawn frame dia ~310 (spec), flush in a rebate under a 3 mm satin black trim ring with 0.8 mm reveal; owner wants the frame ~52 mm clear of the plinth shadow line (z 113) -> frame <= ~314 mm keeps that",
+   "mid": "6.5 in, centre z 690, sealed sub-chamber (~8 L PROPOSAL, 90 mm clear depth behind the baffle); drawn frame dia ~170",
+   "tweeter": "1 in dome at the throat of an oblate-spheroidal waveguide carved into the 37.6 deg slope; axis z 903.5, faceplate plane y 125 (SPEC 2026-10-08)",
+   "crossover": "label says 350 Hz and 2.2 kHz; active (Hypex DSP plate amp) likely, tweeter crossover anywhere ~1.5-3 kHz"
+  },
+  "gable_geometry_constraint_for_tweeter": {
+   "axis_above_body_top_mm": 43.5,
+   "slope_above_axis_at_y125_mm": 52.8,
+   "rule": "anything coaxial in the throat plane (a visible faceplate, or a hidden flange just behind a thin throat ring) must stay within ~80-81 mm diameter to keep ~3 mm of birch over the body's top panel (floor-limited); the roof allows ~89 mm",
+   "consequence": "100-104 mm faceplates (SB26 family, Seas 27TBFC/G, Scan-Speak D2608/D2604, Peerless DX25/XT25BG60, Satori TW29 as sold, Purifi WG104) do not fit at the spec axis unless removed or trimmed, or unless the tweeter moves >= ~10 mm further back AND its pocket cuts ~7-9 mm into the 18 mm top panel (both spec changes)",
+   "method": "estimate from spec/geometry.md and fab/params.py: body top z 860, axis z 903.5, slope z = 860 + 0.7701 y"
+  }
+ },
+ "recommended": {
+  "label": "Active POC (Hypex FusionAmp FA253 per speaker)",
+  "woofer": "rss315hf-4",
+  "mid": "mr16p-8",
+  "tweeter": "tw29dn-b",
+  "crossover": "LR4 ~300-350 Hz and ~2.0 kHz (1.8-2.4 to taste) in the FA253's DSP; EQ the woofer's 37 Hz bump; time-align the tweeter (it sits ~0.24 ms late at 125 mm setback)",
+  "why": [
+   "woofer and mid keep the drawn frame sizes (314 vs ~310, 165 vs ~170), so the outside does not change",
+   "RSS315HF-4: ~6 dB more clean output than the DSA315-8 (Vd 736 vs 279 cm3) and a 4 ohm load that suits the FA253's 250 W channel",
+   "MR16P-8: a real midrange (Le 0.11 mH, 32-8000 Hz) with a dark papyrus cone close to the renders' charcoal paper",
+   "TW29DN-B: the only buyable 1 in-class dome found whose maker documents taking the faceplate off for a waveguide, so the carved wall meets the surround with no flat ring; Fs ~650 Hz and 80 W allow ~2 kHz"
+  ],
+  "cost_per_speaker_drivers": "about USD 240 + 207 + ~165 = ~USD 610 (plus FA253 ~USD 650)",
+  "buy_first": "one TW29DN-B for the gable test slice; design the waveguide around its measured diaphragm"
+ },
+ "alternate": {
+  "label": "Passive-capable, lower cost",
+  "woofer": "ds315-8",
+  "woofer_equivalent": "dsa315-8 (same 314/272/130 frame; aluminium cone)",
+  "mid": "sb17nrx2c35-8",
+  "tweeter": "d3004-602200",
+  "crossover": "passive 350 Hz / 2.2 kHz works (tweeter Fs 425-440 Hz); active ~1.6-2 kHz also possible",
+  "why": [
+   "no CAD change for the woofer (the 272 cutout placeholder) and the mid frame equals the drawn 170",
+   "DS315-8 is flat in 88 L at fb 32 Hz with no EQ",
+   "D3004/602200 has the lowest Fs of any tweeter that fits the gable and seats in the existing 62 mm faceplate pocket"
+  ],
+  "cost_per_speaker_drivers": "about USD 150 + ~90 + ~165 = ~USD 405"
+ },
+ "upgrade_paths": [
+  "woofer: SB34NRXL75-8 if a 346 mm frame is accepted (best passive fit); Scan-Speak 30W/4558T00 (308 frame, EQ, EUR 350)",
+  "mid: Purifi PTT6.5M08-NFA-01 (176 frame, made to order)",
+  "tweeter: Satori TW29BN (beryllium) or TW29TXN in the same carved throat; BlieSMa T25B-6"
+ ],
+ "woofers": [
+  {
+   "id": "rss315hf-4",
+   "maker": "Dayton Audio",
+   "model": "RSS315HF-4 (Reference HF subwoofer, 12 in)",
+   "nominal_ohm": 4,
+   "ts": {
+    "Re_ohm": 3.1,
+    "Le_mH": 0.96,
+    "Fs_Hz": 24.2,
+    "Qms": 2.83,
+    "Qes": 0.45,
+    "Qts": 0.39,
+    "Vas_L": 84.1,
+    "Sd_cm2": 515,
+    "Xmax_mm": 14.3,
+    "sens_dB": 90.3,
+    "sens_ref": "2.83 V/1 m (= about 86 dB/1 W into 4 ohm, loudspeakerdatabase)",
+    "power_W": "400 RMS / 800 max",
+    "usable_range_Hz": "23-1000"
+   },
+   "mechanical": {
+    "frame_od_mm": 314,
+    "cutout_mm": 282,
+    "mounting_depth_mm": 146,
+    "holes": 8,
+    "bolt_circle_mm": null,
+    "bolt_circle_estimate_mm": 298,
+    "front_flange_thickness_mm": null,
+    "weight_kg": null,
+    "voice_coil_mm": 64,
+    "effective_diameter_mm_from_Sd": 256.1
+   },
+   "construction": {
+    "frame": "steel basket",
+    "frame_finish": "black (n/f exact finish)",
+    "cone": "aluminium, black anodized",
+    "dust_cap": "n/f (inspect; render as satin black)",
+    "surround": "rubber, tall roll (subwoofer style), black (colour assumed)",
+    "magnet": "ferrite"
+   },
+   "price": [
+    {
+     "amount": 239.98,
+     "currency": "USD",
+     "vendor": "Parts Express (1-3 pcs; 226.98 at 4+; MSRP 311.99)"
+    },
+    {
+     "amount": 299,
+     "currency": "EUR",
+     "vendor": "Masori (incl. VAT)"
+    }
+   ],
+   "unconfirmed": [
+    "holes (Parts Express only)",
+    "cutout and depth (Parts Express; same as earlier pass's RSS315HFA-8 figures)",
+    "sens 90.3 dB @2.83 V vs 86 dB/1 W basis",
+    "surround colour",
+    "dust cap"
+   ],
+   "spec_fit": "frame 314 = drawn ~310 (+4); frame bottom z 163, 50 mm above the shadow line (owner wants ~52)",
+   "look_flush": "satin black anodized metal cone inside a wide black rubber roll; under the trim ring it reads as an all-black woofer with a faint metallic sheen, not the renders' charcoal ribbed paper",
+   "sources": [
+    "https://daytonaudio.com/product/121/rss315hf-4-12-reference-hf-subwoofer-4-ohm",
+    "https://www.parts-express.com/Dayton-Audio-RSS315HF-4-12-Reference-Series-HF-Subwoofer-4-Ohm-295-464",
+    "https://loudspeakerdatabase.com/Dayton/RSS315HF-4",
+    "https://masori.de/en/products/reference-rss315hf-4",
+    "https://www.audiophonics.fr/en/hautparleurs-subwoofers/dayton-audio-rss315hf-4-reference-speaker-driver-subwoofer-aluminium-400w-4-ohm-90db-23hz-1000hz-o305cm-p-4944.html",
+    "https://www.soundimports.eu/en/dayton-audio-rss315hf-4.html"
+   ],
+   "verdict": "RECOMMENDED for the active build: the largest clean output that keeps the drawn frame; Qts 0.39 / Vas 84 L is the most natural 88 L match of any candidate, and the +2.5-3.3 dB bump at 36-37 Hz from a practical 30-32 Hz tuning is one DSP PEQ.",
+   "box_88L": {
+    "my_calculation": "lumped-element vented box, 88 L net, leakage QL 7, Le ignored, SPL half-space at 1 m, port end correction 0.732 x D; tune by impedance after building",
+    "tuning_scan": {
+     "28": {
+      "f3_Hz": 25.1,
+      "peak_dB": 1.53,
+      "peak_at_Hz": 34.0,
+      "port_len_mm_101_6_ID": 276,
+      "port_len_mm_92_ID": 220,
+      "max_spl_dB_30Hz": 114.3,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 114.6,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "30": {
+      "f3_Hz": 26.3,
+      "peak_dB": 2.45,
+      "peak_at_Hz": 36.0,
+      "port_len_mm_101_6_ID": 231,
+      "port_len_mm_92_ID": 183,
+      "max_spl_dB_30Hz": 114.2,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 115.6,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "32": {
+      "f3_Hz": 27.5,
+      "peak_dB": 3.3,
+      "peak_at_Hz": 37.0,
+      "port_len_mm_101_6_ID": 194,
+      "port_len_mm_92_ID": 152,
+      "max_spl_dB_30Hz": 113.4,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 116.6,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "34": {
+      "f3_Hz": 28.8,
+      "peak_dB": 4.1,
+      "peak_at_Hz": 39.0,
+      "port_len_mm_101_6_ID": 163,
+      "port_len_mm_92_ID": 127,
+      "max_spl_dB_30Hz": 112.1,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 117.6,
+      "max_spl_limit_40Hz": "Pe"
+     }
+    },
+    "unconstrained_flattest": {
+     "fb_Hz": 22.5,
+     "f3_Hz": 23.1,
+     "port_len_mm_101_6_ID": 468.0,
+     "note": "port lengths above ~200 mm (101.6 ID) or ~185 mm (92 ID) do not fit straight in this cabinet (354 mm inside, woofer magnet in the way)"
+    },
+    "sealed_88L": {
+     "f3_Hz": 46.7,
+     "Qtc": 0.54
+    },
+    "calc_check": {
+     "Bl_Tm": 14.23,
+     "Mms_g": 193.2,
+     "Vd_cm3": 736.0,
+     "sens_2V83_halfspace_calc_dB": 90.4
+    },
+    "assumptions": null,
+    "suggestion": "88 L, fb 32 Hz with a 101.6 mm ID port ~194 mm long (or fb 30 Hz with a 92 mm bore ~183 mm); passive shape has +3.3 dB at 37 Hz -> one DSP PEQ (about -3 dB, Q ~1.4 at 37 Hz) leaves it flat to ~28 Hz (estimate). Not recommended passive in this box."
+   }
+  },
+  {
+   "id": "ds315-8",
+   "maker": "Dayton Audio",
+   "model": "DS315-8 (Designer Series, coated paper, 12 in)",
+   "nominal_ohm": 8,
+   "ts": {
+    "Re_ohm": 6.1,
+    "Le_mH": 1.43,
+    "Fs_Hz": 24.2,
+    "Qms": 1.79,
+    "Qes": 0.37,
+    "Qts": 0.31,
+    "Vas_L": 159,
+    "Sd_cm2": 506.7,
+    "Xmax_mm": 5.5,
+    "sens_dB": 91.0,
+    "sens_ref": "2.83 V/1 m",
+    "power_W": "120 RMS / 240 max",
+    "usable_range_Hz": "25-2500"
+   },
+   "mechanical": {
+    "frame_od_mm": 314,
+    "cutout_mm": 272,
+    "mounting_depth_mm": 130,
+    "holes": 5,
+    "bolt_circle_mm": null,
+    "bolt_circle_estimate_mm": 296,
+    "front_flange_thickness_mm": null,
+    "effective_diameter_mm_from_Sd": 254.0
+   },
+   "construction": {
+    "frame": "steel basket with a cosmetic low-profile front lip (front mount, no countersink needed)",
+    "frame_finish": "black",
+    "cone": "coated paper, black",
+    "dust_cap": "n/f",
+    "surround": "half-roll rubber, black",
+    "magnet": "ferrite (n/f)"
+   },
+   "price": [
+    {
+     "amount": 149.99,
+     "currency": "USD",
+     "vendor": "Dayton MSRP (earlier pass, 2026-10-04); current street price n/f"
+    }
+   ],
+   "unconfirmed": [
+    "holes = 5 (one retailer)",
+    "current price"
+   ],
+   "spec_fit": "same 314/272/130 frame as the CAD placeholder (DSA315-8); no CAD change",
+   "look_flush": "black coated paper cone and black half-roll: the closest of the 314 mm woofers to the spec's 'black paper cone' (no pressed ribs)",
+   "sources": [
+    "https://www.daytonaudio.com/product/1059/ds315-8-12-designer-series-woofer-speaker-8-ohm",
+    "https://www.parts-express.com/Dayton-Audio-DS315-8-12-Designer-Series-Woofer-295-434",
+    "https://loudspeakerdatabase.com/Dayton/DS315-8",
+    "https://www.audiophonics.fr/en/woofer/dayton-audio-ds315-8-speaker-driver-woofer-aluminum-120w-8-ohm-91db-25hz-2500hz-o305cm-p-15751.html",
+    "https://masori.de/en/products/dayton-audio-ds315-8-12-inch-mid-woofer"
+   ],
+   "verdict": "ALTERNATE (passive-capable): flat in 88 L at fb 32 Hz with no EQ (f3 ~31.6 Hz); low excursion (Vd 279 cm3) caps output ~6 dB below the RSS315HF-4.",
+   "box_88L": {
+    "my_calculation": "lumped-element vented box, 88 L net, leakage QL 7, Le ignored, SPL half-space at 1 m, port end correction 0.732 x D; tune by impedance after building",
+    "tuning_scan": {
+     "28": {
+      "f3_Hz": 31.1,
+      "peak_dB": -0.1,
+      "peak_at_Hz": 150.0,
+      "port_len_mm_101_6_ID": 276,
+      "port_len_mm_92_ID": 220,
+      "max_spl_dB_30Hz": 108.3,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 107.3,
+      "max_spl_limit_40Hz": "Xmax"
+     },
+     "30": {
+      "f3_Hz": 31.0,
+      "peak_dB": -0.08,
+      "peak_at_Hz": 150.0,
+      "port_len_mm_101_6_ID": 231,
+      "port_len_mm_92_ID": 183,
+      "max_spl_dB_30Hz": 108.1,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 108.5,
+      "max_spl_limit_40Hz": "Xmax"
+     },
+     "32": {
+      "f3_Hz": 31.6,
+      "peak_dB": 0.11,
+      "peak_at_Hz": 45.0,
+      "port_len_mm_101_6_ID": 194,
+      "port_len_mm_92_ID": 152,
+      "max_spl_dB_30Hz": 107.6,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 110.0,
+      "max_spl_limit_40Hz": "Xmax"
+     },
+     "34": {
+      "f3_Hz": 32.3,
+      "peak_dB": 0.8,
+      "peak_at_Hz": 45.0,
+      "port_len_mm_101_6_ID": 163,
+      "port_len_mm_92_ID": 127,
+      "max_spl_dB_30Hz": 106.3,
+      "max_spl_limit_30Hz": "Xmax",
+      "max_spl_dB_40Hz": 112.0,
+      "max_spl_limit_40Hz": "Xmax"
+     }
+    },
+    "unconstrained_flattest": {
+     "fb_Hz": 28.5,
+     "f3_Hz": 31.0,
+     "port_len_mm_101_6_ID": 264.0,
+     "note": "port lengths above ~200 mm (101.6 ID) or ~185 mm (92 ID) do not fit straight in this cabinet (354 mm inside, woofer magnet in the way)"
+    },
+    "sealed_88L": {
+     "f3_Hz": 58.7,
+     "Qtc": 0.51
+    },
+    "calc_check": {
+     "Bl_Tm": 15.75,
+     "Mms_g": 98.9,
+     "Vd_cm3": 279.0,
+     "sens_2V83_halfspace_calc_dB": 91.1
+    },
+    "assumptions": null,
+    "suggestion": "88 L, fb 32 Hz, port 101.6 x ~194 mm (or 92 x 152 mm): flat, f3 ~31.6 Hz, no EQ; Xmax-limited near 110 dB at 40 Hz (1 m half space)."
+   }
+  },
+  {
+   "id": "dsa315-8",
+   "maker": "Dayton Audio",
+   "model": "DSA315-8 (Designer Series, aluminium cone, 12 in)",
+   "nominal_ohm": 8,
+   "ts": {
+    "Re_ohm": 6.0,
+    "Le_mH": 1.11,
+    "Fs_Hz": 24.2,
+    "Qms": 1.89,
+    "Qes": 0.4,
+    "Qts": 0.33,
+    "Vas_L": 147,
+    "Sd_cm2": 506.7,
+    "Xmax_mm": 5.5,
+    "sens_dB": 90.3,
+    "sens_ref": "2.83 V/1 m",
+    "power_W": "120 RMS / 240 max",
+    "usable_range_Hz": "24-2000"
+   },
+   "mechanical": {
+    "frame_od_mm": 314,
+    "cutout_mm": 272,
+    "mounting_depth_mm": 130,
+    "holes": null,
+    "bolt_circle_mm": null,
+    "bolt_circle_estimate_mm": 296,
+    "front_flange_thickness_mm": null,
+    "effective_diameter_mm_from_Sd": 254.0
+   },
+   "construction": {
+    "frame": "cosmetic frame with low-profile lip (material n/f; the DS315-8 sibling is steel)",
+    "frame_finish": "black",
+    "cone": "aluminium, black anodized (Dayton: colour black)",
+    "dust_cap": "n/f",
+    "surround": "half-roll rubber, black",
+    "magnet": "n/f; vented pole"
+   },
+   "price": [
+    {
+     "amount": 128.98,
+     "currency": "USD",
+     "vendor": "Parts Express (1-3; 120.39 at 4+; MSRP 167.99)"
+    },
+    {
+     "amount": 159.0,
+     "currency": "EUR",
+     "vendor": "Audiophonics (incl. VAT)"
+    },
+    {
+     "amount": 179.95,
+     "currency": "EUR",
+     "vendor": "Soundimports (148.72 shown alongside)"
+    }
+   ],
+   "unconfirmed": [
+    "hole count (n/f)",
+    "frame material"
+   ],
+   "spec_fit": "CAD placeholder today (fab/params.py WOOFER_CUTOUT 272, rebate 315.6)",
+   "look_flush": "satin black anodized cone; same frame as DS315-8",
+   "sources": [
+    "https://daytonaudio.com/product/1317/dsa315-8-12-designer-series-aluminum-cone-woofer-8-ohm",
+    "https://www.parts-express.com/Dayton-Audio-DSA315-8-12-Designer-Series-Aluminum-Cone-Woofer-295-534",
+    "https://loudspeakerdatabase.com/Dayton/DSA315-8",
+    "https://speakerboxlite.com/es/subwoofers/dayton-audio-dsa315-8/specifications",
+    "https://audiophonics.fr/en/woofer/dayton-audio-dsa315-8-speaker-driver-woofer-aluminum-120w-8-ohm-90db-24hz-2000hz-o305cm-p-14905.html",
+    "https://www.soundimports.eu/en/dayton-audio-dsa315-8.html"
+   ],
+   "verdict": "Budget option, equivalent to the DS315-8 (choose by cone: aluminium vs coated paper).",
+   "box_88L": {
+    "my_calculation": "lumped-element vented box, 88 L net, leakage QL 7, Le ignored, SPL half-space at 1 m, port end correction 0.732 x D; tune by impedance after building",
+    "tuning_scan": {
+     "28": {
+      "f3_Hz": 29.8,
+      "peak_dB": -0.05,
+      "peak_at_Hz": 150.0,
+      "port_len_mm_101_6_ID": 276,
+      "port_len_mm_92_ID": 220,
+      "max_spl_dB_30Hz": 108.3,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 107.3,
+      "max_spl_limit_40Hz": "Xmax"
+     },
+     "30": {
+      "f3_Hz": 30.0,
+      "peak_dB": 0.06,
+      "peak_at_Hz": 46.0,
+      "port_len_mm_101_6_ID": 231,
+      "port_len_mm_92_ID": 183,
+      "max_spl_dB_30Hz": 108.2,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 108.5,
+      "max_spl_limit_40Hz": "Xmax"
+     },
+     "32": {
+      "f3_Hz": 30.7,
+      "peak_dB": 0.73,
+      "peak_at_Hz": 44.0,
+      "port_len_mm_101_6_ID": 194,
+      "port_len_mm_92_ID": 152,
+      "max_spl_dB_30Hz": 107.7,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 110.0,
+      "max_spl_limit_40Hz": "Xmax"
+     },
+     "34": {
+      "f3_Hz": 31.7,
+      "peak_dB": 1.43,
+      "peak_at_Hz": 44.0,
+      "port_len_mm_101_6_ID": 163,
+      "port_len_mm_92_ID": 127,
+      "max_spl_dB_30Hz": 106.3,
+      "max_spl_limit_30Hz": "Xmax",
+      "max_spl_dB_40Hz": 112.0,
+      "max_spl_limit_40Hz": "Xmax"
+     }
+    },
+    "unconstrained_flattest": {
+     "fb_Hz": 28.0,
+     "f3_Hz": 29.7,
+     "port_len_mm_101_6_ID": 276.0,
+     "note": "port lengths above ~200 mm (101.6 ID) or ~185 mm (92 ID) do not fit straight in this cabinet (354 mm inside, woofer magnet in the way)"
+    },
+    "sealed_88L": {
+     "f3_Hz": 54.5,
+     "Qtc": 0.54
+    },
+    "calc_check": {
+     "Bl_Tm": 15.62,
+     "Mms_g": 107.0,
+     "Vd_cm3": 279.0,
+     "sens_2V83_halfspace_calc_dB": 90.5
+    },
+    "assumptions": null,
+    "suggestion": "88 L, fb 30-32 Hz: f3 30-31 Hz with at most +0.7 dB; same port as DS315-8."
+   }
+  },
+  {
+   "id": "sb34nrx75-6",
+   "maker": "SB Acoustics",
+   "model": "SB34NRX75-6 (Norex, 12 in)",
+   "nominal_ohm": 6,
+   "ts": {
+    "Re_ohm": 4.2,
+    "Le_mH": null,
+    "Fs_Hz": 19,
+    "Qms": 5.1,
+    "Qes": 0.43,
+    "Qts": 0.4,
+    "Vas_L": 260,
+    "Sd_cm2": null,
+    "Xmax_mm": 11,
+    "sens_dB": "88-90",
+    "sens_ref": "2.83 V/1 m (SB lists 90; Willys 88; 87.7 dB/1 W loudspeakerdatabase)",
+    "power_W": "200 nominal (IEC 268-5) / 400 program"
+   },
+   "mechanical": {
+    "frame_od_mm": 346,
+    "cutout_mm": 305.2,
+    "mounting_depth_mm": 142,
+    "front_flange_thickness_mm": 14,
+    "holes": null,
+    "bolt_circle_mm": null,
+    "bolt_circle_estimate_mm": 328,
+    "weight_kg": 6.0,
+    "voice_coil_mm": 75
+   },
+   "construction": {
+    "frame": "vented cast aluminium",
+    "frame_finish": "black (assumed from photos of the NRX line; n/f)",
+    "cone": "Norex paper (wood pulp + natural fibres), colour n/f (dark)",
+    "dust_cap": "n/f",
+    "surround": "SBR rubber, single roll, black",
+    "magnet": "ferrite; copper shorting cap on the pole"
+   },
+   "price": [
+    {
+     "amount": 219.95,
+     "currency": "EUR",
+     "vendor": "Soundimports (out of stock at capture; 208.95 at 4)"
+    },
+    {
+     "amount": 196.35,
+     "currency": "EUR?",
+     "vendor": "Toutlehautparleur (currency garbled)"
+    }
+   ],
+   "unconfirmed": [
+    "Xmax 11 vs 13 mm",
+    "sensitivity",
+    "depth 142 + 14 front (one retailer)",
+    "Sd (sibling's 508 used in the sim)",
+    "Le"
+   ],
+   "spec_fit": "346 frame is 36 mm over the drawn 310: frame bottom at z 147 (34 mm above the shadow line, owner moved the woofer up for 52); a 14 mm front would need a 17 mm rebate in an 18 mm baffle -> mount proud or add a baffle doubler. Spec change.",
+   "look_flush": "large black frame ring; Norex paper cone",
+   "sources": [
+    "https://sbacoustics.com/product/12-sb34nrx75-6-norex/",
+    "https://loudspeakerdatabase.com/SB/SB34NRX75-6",
+    "https://willys-hifi.com/products/sb-acoustics-sb34nrx75-6-norex-woofer",
+    "https://en.toutlehautparleur.com/speaker-sb-acoustics-sb34nrx75-6-impedance-6-ohm-12-inch.html",
+    "https://www.soundimports.eu/sb-acoustics-sb34nrx75-6.html"
+   ],
+   "verdict": "Good woofer but wrong box and wrong frame here: Vas 260 L wants ~150-200 L; in 88 L at fb 32 Hz it has a +3.6 dB bump at 48 Hz (EQ-able when active).",
+   "box_88L": {
+    "my_calculation": "lumped-element vented box, 88 L net, leakage QL 7, Le ignored, SPL half-space at 1 m, port end correction 0.732 x D; tune by impedance after building",
+    "tuning_scan": {
+     "28": {
+      "f3_Hz": 29.7,
+      "peak_dB": 2.55,
+      "peak_at_Hz": 48.0,
+      "port_len_mm_101_6_ID": 276,
+      "port_len_mm_92_ID": 220,
+      "max_spl_dB_30Hz": 110.3,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 113.3,
+      "max_spl_limit_40Hz": "Xmax"
+     },
+     "30": {
+      "f3_Hz": 30.3,
+      "peak_dB": 3.07,
+      "peak_at_Hz": 48.0,
+      "port_len_mm_101_6_ID": 231,
+      "port_len_mm_92_ID": 183,
+      "max_spl_dB_30Hz": 109.9,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 114.5,
+      "max_spl_limit_40Hz": "Xmax"
+     },
+     "32": {
+      "f3_Hz": 31.0,
+      "peak_dB": 3.62,
+      "peak_at_Hz": 48.0,
+      "port_len_mm_101_6_ID": 194,
+      "port_len_mm_92_ID": 152,
+      "max_spl_dB_30Hz": 109.3,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 115.5,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "34": {
+      "f3_Hz": 31.8,
+      "peak_dB": 4.17,
+      "peak_at_Hz": 49.0,
+      "port_len_mm_101_6_ID": 163,
+      "port_len_mm_92_ID": 127,
+      "max_spl_dB_30Hz": 108.5,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 115.6,
+      "max_spl_limit_40Hz": "Pe"
+     }
+    },
+    "unconstrained_flattest": {
+     "fb_Hz": 22.0,
+     "f3_Hz": 29.4,
+     "port_len_mm_101_6_ID": 493.0,
+     "note": "port lengths above ~200 mm (101.6 ID) or ~185 mm (92 ID) do not fit straight in this cabinet (354 mm inside, woofer magnet in the way)"
+    },
+    "sealed_88L": {
+     "f3_Hz": 36.6,
+     "Qtc": 0.79
+    },
+    "calc_check": {
+     "Bl_Tm": 10.73,
+     "Mms_g": 98.7,
+     "Vd_cm3": 559.0,
+     "sens_2V83_halfspace_calc_dB": 91.0
+    },
+    "assumptions": "Sd 508 cm2 assumed (sibling SB34SWNRX-S75-6's figure)",
+    "suggestion": "88 L at fb 32 Hz: +3.6 dB at 48 Hz (needs EQ); its natural box is ~150-200 L."
+   }
+  },
+  {
+   "id": "sb34nrxl75-8",
+   "maker": "SB Acoustics",
+   "model": "SB34NRXL75-8 (Norex, 12 in, 8 ohm low-Qts)",
+   "nominal_ohm": 8,
+   "ts": {
+    "Re_ohm": null,
+    "Le_mH": null,
+    "Fs_Hz": 22,
+    "Qms": 5.5,
+    "Qes": 0.29,
+    "Qts": 0.28,
+    "Vas_L": 205,
+    "Sd_cm2": null,
+    "Xmax_mm": 10,
+    "sens_dB": 91,
+    "sens_ref": "2.83 V/1 m (90.2 dB/1 W loudspeakerdatabase)",
+    "power_W": "200"
+   },
+   "mechanical": {
+    "frame_od_mm": 346,
+    "cutout_mm": 305.2,
+    "mounting_depth_mm": 146,
+    "front_flange_thickness_mm": 13,
+    "holes": null,
+    "bolt_circle_mm": null,
+    "bolt_circle_estimate_mm": 328
+   },
+   "construction": {
+    "frame": "cast aluminium (NRX line)",
+    "cone": "Norex paper",
+    "surround": "rubber",
+    "dust_cap": "n/f",
+    "frame_finish": "n/f"
+   },
+   "price": [
+    {
+     "amount": 309.95,
+     "currency": "EUR",
+     "vendor": "Soundimports (294.45 at 4)"
+    },
+    {
+     "amount": 285.13,
+     "currency": "EUR",
+     "vendor": "Toutlehautparleur (list 390.29)"
+    },
+    {
+     "amount": 337.7,
+     "currency": "USD",
+     "vendor": "Madisound (earlier pass, 2026-10-04)"
+    }
+   ],
+   "unconfirmed": [
+    "T/S beyond Fs/Qts/Vas (loudspeakerdatabase only)",
+    "cutout/depth (one retailer)",
+    "Re (5.5 assumed in the sim)"
+   ],
+   "spec_fit": "same 346 frame problem as SB34NRX75-6 (spec change)",
+   "look_flush": "as SB34NRX75-6",
+   "sources": [
+    "https://loudspeakerdatabase.com/SB/SB34NRXL75-8",
+    "https://willys-hifi.com/products/sb-acoustics-sb34nrxl75-8-norex-woofer",
+    "https://en.toutlehautparleur.com/speaker-sb-acoustics-sb34nrxl75-8-impedance-8-ohm-12-inch.html",
+    "https://www.soundimports.eu/en/sb-acoustics-sb34nrxl75-8.html",
+    "https://www.madisoundspeakerstore.com/approx-12-woofers/sb-acoustics-sb34nrxl75-8-12-woofer/"
+   ],
+   "verdict": "Best PASSIVE fit of all (flat at fb 32 Hz, f3 ~32 Hz, ~+5 dB headroom over the Daytons) if the owner accepts a 346 mm frame.",
+   "box_88L": {
+    "my_calculation": "lumped-element vented box, 88 L net, leakage QL 7, Le ignored, SPL half-space at 1 m, port end correction 0.732 x D; tune by impedance after building",
+    "tuning_scan": {
+     "28": {
+      "f3_Hz": 31.9,
+      "peak_dB": -0.11,
+      "peak_at_Hz": 150.0,
+      "port_len_mm_101_6_ID": 276,
+      "port_len_mm_92_ID": 220,
+      "max_spl_dB_30Hz": 111.5,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 112.5,
+      "max_spl_limit_40Hz": "Xmax"
+     },
+     "30": {
+      "f3_Hz": 31.7,
+      "peak_dB": -0.09,
+      "peak_at_Hz": 150.0,
+      "port_len_mm_101_6_ID": 231,
+      "port_len_mm_92_ID": 183,
+      "max_spl_dB_30Hz": 111.3,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 113.7,
+      "max_spl_limit_40Hz": "Xmax"
+     },
+     "32": {
+      "f3_Hz": 32.1,
+      "peak_dB": -0.02,
+      "peak_at_Hz": 46.0,
+      "port_len_mm_101_6_ID": 194,
+      "port_len_mm_92_ID": 152,
+      "max_spl_dB_30Hz": 110.7,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 115.1,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "34": {
+      "f3_Hz": 32.9,
+      "peak_dB": 0.64,
+      "peak_at_Hz": 45.0,
+      "port_len_mm_101_6_ID": 163,
+      "port_len_mm_92_ID": 127,
+      "max_spl_dB_30Hz": 109.8,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 115.6,
+      "max_spl_limit_40Hz": "Pe"
+     }
+    },
+    "unconstrained_flattest": {
+     "fb_Hz": 29.0,
+     "f3_Hz": 31.7,
+     "port_len_mm_101_6_ID": 252.0,
+     "note": "port lengths above ~200 mm (101.6 ID) or ~185 mm (92 ID) do not fit straight in this cabinet (354 mm inside, woofer magnet in the way)"
+    },
+    "sealed_88L": {
+     "f3_Hz": 59.7,
+     "Qtc": 0.5
+    },
+    "calc_check": {
+     "Bl_Tm": 15.64,
+     "Mms_g": 93.3,
+     "Vd_cm3": 508.0,
+     "sens_2V83_halfspace_calc_dB": 92.5
+    },
+    "assumptions": "Re 5.5 ohm and Sd 508 cm2 assumed",
+    "suggestion": "88 L, fb 32 Hz: flat, f3 ~32 Hz, passive-friendly; frame too big for the drawn 310."
+   }
+  },
+  {
+   "id": "sb34swnrx-s75-6",
+   "maker": "SB Acoustics",
+   "model": "SB34SWNRX-S75-6 (Norex subwoofer, 12 in)",
+   "nominal_ohm": 6,
+   "ts": {
+    "Re_ohm": 4.5,
+    "Le_mH": 3.0,
+    "Fs_Hz": 19,
+    "Qms": 5.0,
+    "Qes": 0.34,
+    "Qts": 0.32,
+    "Vas_L": 164,
+    "Sd_cm2": 508,
+    "Xmax_mm": 11,
+    "Mms_g": 154,
+    "Bl_Tm": 15.4,
+    "sens_dB": 88,
+    "sens_ref": "2.83 V/1 m (86.8 dB/1 W)",
+    "power_W": "200 / 400 program"
+   },
+   "mechanical": {
+    "frame_od_mm": 346,
+    "cutout_mm": null,
+    "mounting_depth_mm": null,
+    "holes": null,
+    "bolt_circle_mm": null,
+    "weight_kg": 5.85,
+    "voice_coil_mm": 75.6,
+    "effective_diameter_mm_from_Sd": 254.3
+   },
+   "construction": {
+    "frame": "vented cast aluminium",
+    "cone": "Norex paper",
+    "surround": "rubber, low damping",
+    "dust_cap": "n/f",
+    "magnet": "ferrite + shorting ring"
+   },
+   "price": [
+    {
+     "amount": 229.95,
+     "currency": "EUR",
+     "vendor": "Soundimports"
+    }
+   ],
+   "unconfirmed": [
+    "Xmax 11 vs 13.25",
+    "price (one shop)"
+   ],
+   "spec_fit": "346 frame (spec change)",
+   "look_flush": "as SB34NRX75-6",
+   "sources": [
+    "https://sbacoustics.com/?p=1175",
+    "https://loudspeakerdatabase.com/SB/SB34SWNRX-S75-6",
+    "https://willys-hifi.com/products/sb-acoustics-sb34swnrx-s75-6-norex-subwoofer",
+    "https://en.toutlehautparleur.com/speaker-sb-acoustics-sb34swnrx-s75-6-impedance-6-ohm-12-inch.html",
+    "https://www.soundimports.eu/sb-acoustics-sb34swnrx-s75-6.html"
+   ],
+   "verdict": "Subwoofer voicing (Le 3 mH); no advantage over the RSS315HF-4 here and the frame is too big.",
+   "box_88L": {
+    "my_calculation": "lumped-element vented box, 88 L net, leakage QL 7, Le ignored, SPL half-space at 1 m, port end correction 0.732 x D; tune by impedance after building",
+    "tuning_scan": {
+     "28": {
+      "f3_Hz": 26.2,
+      "peak_dB": 1.5,
+      "peak_at_Hz": 37.0,
+      "port_len_mm_101_6_ID": 276,
+      "port_len_mm_92_ID": 220,
+      "max_spl_dB_30Hz": 111.6,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 112.9,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "30": {
+      "f3_Hz": 27.2,
+      "peak_dB": 2.33,
+      "peak_at_Hz": 38.0,
+      "port_len_mm_101_6_ID": 231,
+      "port_len_mm_92_ID": 183,
+      "max_spl_dB_30Hz": 111.3,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 113.8,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "32": {
+      "f3_Hz": 28.4,
+      "peak_dB": 3.13,
+      "peak_at_Hz": 39.0,
+      "port_len_mm_101_6_ID": 194,
+      "port_len_mm_92_ID": 152,
+      "max_spl_dB_30Hz": 110.4,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 114.7,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "34": {
+      "f3_Hz": 29.5,
+      "peak_dB": 3.88,
+      "peak_at_Hz": 41.0,
+      "port_len_mm_101_6_ID": 163,
+      "port_len_mm_92_ID": 127,
+      "max_spl_dB_30Hz": 109.2,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 115.5,
+      "max_spl_limit_40Hz": "Pe"
+     }
+    },
+    "unconstrained_flattest": {
+     "fb_Hz": 23.0,
+     "f3_Hz": 24.6,
+     "port_len_mm_101_6_ID": 445.0,
+     "note": "port lengths above ~200 mm (101.6 ID) or ~185 mm (92 ID) do not fit straight in this cabinet (354 mm inside, woofer magnet in the way)"
+    },
+    "sealed_88L": {
+     "f3_Hz": 45.3,
+     "Qtc": 0.54
+    },
+    "calc_check": {
+     "Bl_Tm": 15.72,
+     "Mms_g": 156.4,
+     "Vd_cm3": 559.0,
+     "sens_2V83_halfspace_calc_dB": 89.8
+    },
+    "assumptions": null,
+    "suggestion": "88 L at fb 32: +3.1 dB at 39 Hz (EQ)."
+   }
+  },
+  {
+   "id": "30w-4558t00",
+   "maker": "Scan-Speak",
+   "model": "Discovery 30W/4558T00 (12 in, aluminium cone)",
+   "nominal_ohm": 4,
+   "ts": {
+    "Re_ohm": null,
+    "Le_mH": "0.83 or 1.51 (sources disagree)",
+    "Fs_Hz": 17,
+    "Qms": null,
+    "Qes": null,
+    "Qts": 0.32,
+    "Vas_L": 197,
+    "Sd_cm2": 466,
+    "Xmax_mm": 12.5,
+    "Bl_Tm": 10.5,
+    "sens_dB": 89,
+    "sens_ref": "2.83 V/1 m",
+    "power_W": "150 / 350 program"
+   },
+   "mechanical": {
+    "frame_od_mm": 308,
+    "cutout_mm": 280,
+    "mounting_depth_mm": 144,
+    "magnet_dia_mm": 147,
+    "holes": null,
+    "bolt_circle_mm": null,
+    "bolt_circle_estimate_mm": 294,
+    "weight_kg": 6.3,
+    "effective_diameter_mm_from_Sd": 243.6
+   },
+   "construction": {
+    "frame": "n/f (Scan-Speak 12 in chassis are usually die-cast aluminium)",
+    "cone": "aluminium (finish/colour n/f)",
+    "magnet": "double ferrite",
+    "dust_cap": "n/f",
+    "surround": "n/f"
+   },
+   "price": [
+    {
+     "amount": 349.95,
+     "currency": "EUR",
+     "vendor": "Soundimports (10+ in stock; 332.45 at 4)"
+    },
+    {
+     "amount": 349.0,
+     "currency": "EUR",
+     "vendor": "Masori"
+    },
+    {
+     "amount": 349.95,
+     "currency": "EUR",
+     "vendor": "Audiohum"
+    }
+   ],
+   "unconfirmed": [
+    "Le",
+    "Qes/Qms (Qms 5 assumed in the sim)",
+    "Re",
+    "cone colour"
+   ],
+   "spec_fit": "308 frame = drawn 310; cutout 280",
+   "look_flush": "metal cone (likely natural aluminium grey, n/f): a visibly different look from the black-cone renders",
+   "sources": [
+    "https://www.scan-speak.dk/product/30w-4558t00/",
+    "https://loudspeakerdatabase.com/ScanSpeak/30W-4558T00",
+    "https://speakerboxlite.com/es/subwoofers/scan-speak-30w-4558t00/specifications",
+    "https://www.soundimports.eu/en/scan-speak-30w-4558t00.html",
+    "https://masori.de/en/products/discovery-30w-4558t00-en",
+    "https://www.audiohum.com/fr/composants-diy-hum/haut-parleurs/subgrave-subwoofers/scan-speak-30w4558t00-discovery-subwoofer"
+   ],
+   "verdict": "Scan-Speak alternative to the RSS315HF-4 for the active build (+4 dB bump at 39 Hz at fb 32 to EQ out); 46% more expensive, 150 W.",
+   "box_88L": {
+    "my_calculation": "lumped-element vented box, 88 L net, leakage QL 7, Le ignored, SPL half-space at 1 m, port end correction 0.732 x D; tune by impedance after building",
+    "tuning_scan": {
+     "28": {
+      "f3_Hz": 25.8,
+      "peak_dB": 2.4,
+      "peak_at_Hz": 37.0,
+      "port_len_mm_101_6_ID": 276,
+      "port_len_mm_92_ID": 220,
+      "max_spl_dB_30Hz": 110.1,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 111.6,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "30": {
+      "f3_Hz": 26.9,
+      "peak_dB": 3.21,
+      "peak_at_Hz": 38.0,
+      "port_len_mm_101_6_ID": 231,
+      "port_len_mm_92_ID": 183,
+      "max_spl_dB_30Hz": 109.6,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 112.5,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "32": {
+      "f3_Hz": 28.0,
+      "peak_dB": 3.98,
+      "peak_at_Hz": 39.0,
+      "port_len_mm_101_6_ID": 194,
+      "port_len_mm_92_ID": 152,
+      "max_spl_dB_30Hz": 108.7,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 113.4,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "34": {
+      "f3_Hz": 29.2,
+      "peak_dB": 4.71,
+      "peak_at_Hz": 41.0,
+      "port_len_mm_101_6_ID": 163,
+      "port_len_mm_92_ID": 127,
+      "max_spl_dB_30Hz": 107.4,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 114.1,
+      "max_spl_limit_40Hz": "Pe"
+     }
+    },
+    "unconstrained_flattest": {
+     "fb_Hz": 22.0,
+     "f3_Hz": 23.8,
+     "port_len_mm_101_6_ID": 493.0,
+     "note": "port lengths above ~200 mm (101.6 ID) or ~185 mm (92 ID) do not fit straight in this cabinet (354 mm inside, woofer magnet in the way)"
+    },
+    "sealed_88L": {
+     "f3_Hz": 40.2,
+     "Qtc": 0.58
+    },
+    "calc_check": {
+     "Bl_Tm": 11.7,
+     "Mms_g": 136.9,
+     "Vd_cm3": 582.0,
+     "sens_2V83_halfspace_calc_dB": 90.6
+    },
+    "assumptions": "Qms 5.0 assumed (Qes 0.342 then gives the listed Qts 0.32); Re 3.2 assumed",
+    "suggestion": "88 L at fb 32: +4.0 dB at 39 Hz (EQ); f3 ~28 Hz."
+   }
+  },
+  {
+   "id": "32w-4878t00",
+   "maker": "Scan-Speak",
+   "model": "Revelator 32W/4878T00 (12-13 in, paper sandwich cone)",
+   "nominal_ohm": 4,
+   "ts": {
+    "Re_ohm": 3.1,
+    "Le_mH": "0.5 (datasheet) vs 1.93 (Soundimports)",
+    "Fs_Hz": 18,
+    "Qms": 7,
+    "Qes": 0.33,
+    "Qts": 0.32,
+    "Vas_L": 207.5,
+    "Sd_cm2": 531,
+    "Xmax_mm": 14,
+    "Bl_Tm": 12.5,
+    "Mms_g": 150,
+    "sens_dB": 90,
+    "sens_ref": "2.83 V/1 m (87.1 dB/1 W)",
+    "power_W": "350 RMS / 1000 long-term"
+   },
+   "mechanical": {
+    "frame_od_mm": 320,
+    "cutout_mm": 290,
+    "mounting_depth_mm": 152,
+    "holes": 4,
+    "bolt_circle_mm": null,
+    "weight_kg": 7.5,
+    "voice_coil_mm": 75,
+    "effective_diameter_mm_from_Sd": 260.0
+   },
+   "construction": {
+    "frame": "die-cast aluminium",
+    "cone": "paper sandwich with foam filling",
+    "dust_cap": "n/f",
+    "surround": "n/f"
+   },
+   "price": [
+    {
+     "amount": 699.95,
+     "currency": "EUR",
+     "vendor": "Soundimports / Audiohum"
+    },
+    {
+     "amount": 519.95,
+     "currency": "GBP",
+     "vendor": "Falcon (ex VAT; 2024 banner)"
+    }
+   ],
+   "unconfirmed": [
+    "cutout, depth, holes (Soundimports only)",
+    "Le"
+   ],
+   "spec_fit": "320 frame (+10 over drawn)",
+   "look_flush": "paper cone, colour n/f",
+   "sources": [
+    "https://www.falconacoustics.co.uk/downloads/Scanspeak/32w-4878t00.pdf",
+    "https://www.soundimports.eu/scan-speak-32w-4878t00.html",
+    "https://www.audiohum.com/fr/composants-diy-hum/haut-parleurs/subgrave-subwoofers/scan-speak-32w4878t00-revelator-subwoofer",
+    "https://falconacoustics.co.uk/scanspeak-32w-4878t00-subwoofer-revelator-range.html"
+   ],
+   "verdict": "Premium, beyond a POC budget (EUR 1,400 a pair).",
+   "box_88L": {
+    "my_calculation": "lumped-element vented box, 88 L net, leakage QL 7, Le ignored, SPL half-space at 1 m, port end correction 0.732 x D; tune by impedance after building",
+    "tuning_scan": {
+     "28": {
+      "f3_Hz": 26.9,
+      "peak_dB": 1.55,
+      "peak_at_Hz": 39.0,
+      "port_len_mm_101_6_ID": 276,
+      "port_len_mm_92_ID": 220,
+      "max_spl_dB_30Hz": 113.7,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 115.8,
+      "max_spl_limit_40Hz": "Xmax"
+     },
+     "30": {
+      "f3_Hz": 27.8,
+      "peak_dB": 2.31,
+      "peak_at_Hz": 40.0,
+      "port_len_mm_101_6_ID": 231,
+      "port_len_mm_92_ID": 183,
+      "max_spl_dB_30Hz": 113.3,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 116.6,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "32": {
+      "f3_Hz": 28.9,
+      "peak_dB": 3.05,
+      "peak_at_Hz": 41.0,
+      "port_len_mm_101_6_ID": 194,
+      "port_len_mm_92_ID": 152,
+      "max_spl_dB_30Hz": 112.5,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 117.4,
+      "max_spl_limit_40Hz": "Pe"
+     },
+     "34": {
+      "f3_Hz": 30.0,
+      "peak_dB": 3.76,
+      "peak_at_Hz": 42.0,
+      "port_len_mm_101_6_ID": 163,
+      "port_len_mm_92_ID": 127,
+      "max_spl_dB_30Hz": 111.4,
+      "max_spl_limit_30Hz": "Pe",
+      "max_spl_dB_40Hz": 118.0,
+      "max_spl_limit_40Hz": "Pe"
+     }
+    },
+    "unconstrained_flattest": {
+     "fb_Hz": 23.0,
+     "f3_Hz": 25.8,
+     "port_len_mm_101_6_ID": 445.0,
+     "note": "port lengths above ~200 mm (101.6 ID) or ~185 mm (92 ID) do not fit straight in this cabinet (354 mm inside, woofer magnet in the way)"
+    },
+    "sealed_88L": {
+     "f3_Hz": 43.0,
+     "Qtc": 0.58
+    },
+    "calc_check": {
+     "Bl_Tm": 12.64,
+     "Mms_g": 150.5,
+     "Vd_cm3": 743.0,
+     "sens_2V83_halfspace_calc_dB": 91.8
+    },
+    "assumptions": null,
+    "suggestion": "88 L at fb 32: +3.1 dB at 41 Hz (EQ); f3 ~29 Hz."
+   }
+  }
+ ],
+ "woofers_noted": [
+  {
+   "model": "Dayton DC300-8",
+   "note": "budget (earlier pass): Fs 22.9, Qts 0.33, Vas 181.5 L, Xmax 4.3, 90.3 dB; flat in 88 L at 32 Hz but Vd only 215 cm3; frame dims n/f",
+   "url": "https://www.daytonaudio.com/product/34/dc300-8-12-classic-woofer-8-ohm"
+  },
+  {
+   "model": "Purifi PTT12",
+   "note": "does not exist; Purifi's largest is the 10 in PTT10.0X04/X08-NAB-01 (Fs 24/22, Qts 0.33/0.40, Vas 82/81 L, Xmax 14.8, 86.8/84.8 dB/1 W, 6.0 kg; Purifi's sample box 106 L, fb 20.7 Hz). Made to order, 8-12 weeks, store showed 'not available'.",
+   "url": "https://loudspeakerdatabase.com/PURIFI/PTT10.0X04-NAB-01"
+  },
+  {
+   "model": "Seas Extreme L26RO4Y (XM004-04)",
+   "note": "10 in, 4 ohm, Fs 26, Qts 0.27, Vas 40-46 L, Xmax 15, cutout ~236, frame ~269, depth ~151 (or 142), 8 holes on ~256.5 mm; too small a frame for the drawn 310 and a different box",
+   "url": "https://loudspeakerdatabase.com/SEAS/XM004-04_L26RO4Y"
+  },
+  {
+   "model": "Faital Pro 12PR320 / 12RS1066 / 12FH520",
+   "note": "pro woofers: Fs 42/42/50 Hz, Qts 0.37/0.33/0.29; cannot reach 32 Hz in 88 L without heavy EQ",
+   "url": "https://www.parts-express.com/FaitalPRO-12PR320-12-Professional-Neodymium-Woofer-8-Ohm-294-1326"
+  },
+  {
+   "model": "Fostex FW305",
+   "note": "earlier pass: Qts 0.25, Vas 254 L; over-damped in 88 L (f3 43-54 Hz)",
+   "url": "https://www.madisoundspeakerstore.com/approx-12-woofers/fostex-fw305-12-woofer/"
+  }
+ ],
+ "mids": [
+  {
+   "id": "mr16p-8",
+   "maker": "SB Acoustics",
+   "model": "Satori MR16P-8 (6.5 in dedicated midrange, papyrus)",
+   "nominal_ohm": 8,
+   "ts": {
+    "Re_ohm": 6.2,
+    "Le_mH": 0.11,
+    "Fs_Hz": 32,
+    "Qms": 5.11,
+    "Qes": 0.32,
+    "Qts": 0.3,
+    "Vas_L": 44.3,
+    "Sd_cm2": 119,
+    "Xmax_mm": "3.1 (Soundimports, linear) / 4.77 (TLHP, calculated)",
+    "sens_dB": 88,
+    "sens_ref": "2.83 V/1 m",
+    "power_W": "30 nominal / 40 max",
+    "usable_range_Hz": "32-8000 (SB, earlier pass)"
+   },
+   "mechanical": {
+    "frame_od_mm": 165,
+    "cutout_mm": 140.3,
+    "mounting_depth_mm": 75.6,
+    "front_flange_thickness_mm": 7.5,
+    "holes": null,
+    "bolt_circle_mm": null,
+    "bolt_circle_estimate_mm": 154
+   },
+   "construction": {
+    "frame": "n/f (Satori line uses cast aluminium; unconfirmed)",
+    "frame_finish": "black (n/f)",
+    "cone": "paper + Egyptian papyrus fibres, dyed dark (MR16PNW-8 is the undyed natural-colour twin)",
+    "dust_cap": "papyrus-fibre cap, same material as cone (stated for the MR16P-4)",
+    "surround": "n/f (inspect)"
+   },
+   "price": [
+    {
+     "amount": 189.95,
+     "currency": "EUR",
+     "vendor": "Soundimports DE (8 in stock at capture; 180.45 at 4)"
+    },
+    {
+     "amount": 179.65,
+     "currency": "EUR",
+     "vendor": "Toutlehautparleur (list 244.63)"
+    },
+    {
+     "amount": 206.6,
+     "currency": "USD",
+     "vendor": "Madisound (earlier pass, 2026-10-04)"
+    }
+   ],
+   "unconfirmed": [
+    "Xmax",
+    "surround",
+    "frame material",
+    "dust-cap material for the -8"
+   ],
+   "chamber": {
+    "6.0": {
+     "fc_Hz": 92.7,
+     "Qtc": 0.87
+    },
+    "8.0": {
+     "fc_Hz": 81.8,
+     "Qtc": 0.77
+    }
+   },
+   "spec_fit": "165 frame inside the drawn 170; 75.6 deep -> magnet ends ~82 mm behind the front, 26 mm clear of the 90 mm chamber's back",
+   "look_flush": "matte dark papyrus fibre cone and cap: the nearest real part to the renders' charcoal paper (no pressed ribs); the undyed MR16PNW-8 shows a light natural fibre look instead",
+   "sources": [
+    "https://sbacoustics.com/product/6%C2%BDin-satori-mr16p-8/",
+    "https://willys-hifi.com/collections/midrange-speakers/products/sb-acoustics-satori-mr16p-8-midrange-speaker",
+    "https://en.toutlehautparleur.com/speaker-sb-acoustics-satori-mr16p-8-impedance-8-ohm-6-5-inch.html",
+    "https://www.soundimports.eu/de/sb-acoustics-mr16p-8.html",
+    "https://www.madisoundspeakerstore.com/approx-6-midrange/satori-mr16p-8-6-egyptian-papyrus-cone-midrange-8-ohm/",
+    "https://loudspeakerdatabase.com/SB/MR16PNW-8"
+   ],
+   "verdict": "RECOMMENDED: a true midrange (low Le, smooth to 8 kHz) that fits the drawn frame; 8 L sealed gives fc 82 Hz, Qtc 0.77, far below a 250-350 Hz high-pass."
+  },
+  {
+   "id": "sb17nrx2c35-8",
+   "maker": "SB Acoustics",
+   "model": "SB17NRX2C35-8 (6 in Norex coated paper mid-woofer)",
+   "nominal_ohm": 8,
+   "ts": {
+    "Re_ohm": null,
+    "Le_mH": 0.15,
+    "Fs_Hz": 36.5,
+    "Qms": null,
+    "Qes": null,
+    "Qts": 0.42,
+    "Vas_L": 27,
+    "Sd_cm2": null,
+    "Xmax_mm": 5.5,
+    "sens_dB": "86.4 (1 W, LDB) / 87 (2.83 V, Willys)",
+    "sens_ref": "see value",
+    "power_W": "n/f"
+   },
+   "mechanical": {
+    "frame_od_mm": 171,
+    "cutout_mm": 144.9,
+    "mounting_depth_mm": 75,
+    "front_flange_thickness_mm": 10.9,
+    "holes": null,
+    "bolt_circle_mm": null,
+    "bolt_circle_estimate_mm": 158
+   },
+   "construction": {
+    "frame": "n/f (NRX line: cast aluminium, unconfirmed)",
+    "cone": "Norex paper, coated (black); an uncoated -UC version exists (Fs 32, Qts 0.34, Vas 44.5 L)",
+    "dust_cap": "n/f",
+    "surround": "n/f (rubber, black assumed)"
+   },
+   "price": [
+    {
+     "amount": null,
+     "currency": null,
+     "vendor": "n/f this pass (Masori lists it; earlier pass n/f) - expect roughly EUR 70-90 (estimate)"
+    }
+   ],
+   "unconfirmed": [
+    "cutout/depth (listed for SB17NRXC35-8 without the 2)",
+    "Le",
+    "Xmax",
+    "price"
+   ],
+   "chamber": {
+    "6.0": {
+     "fc_Hz": 85.6,
+     "Qtc": 0.98
+    },
+    "8.0": {
+     "fc_Hz": 76.3,
+     "Qtc": 0.88
+    }
+   },
+   "spec_fit": "171 frame = drawn 170",
+   "look_flush": "black coated paper cone, conventional cap",
+   "sources": [
+    "https://loudspeakerdatabase.com/SB/SB17NRX2C35-8",
+    "https://willys-hifi.com/products/sb-acoustics-sb17nrx2c35-8-norex-midwoofer",
+    "https://en.toutlehautparleur.com/speaker-sb-acoustics-sb17nrxc35-8-impedance-8-ohm-6-inch.html",
+    "https://masori.de/en/products/sb17nrx2c35-8-en"
+   ],
+   "verdict": "ALTERNATE (budget): good paper mid-woofer used as a mid; 8 L gives fc 76 Hz, Qtc 0.88."
+  },
+  {
+   "id": "18w-8531g00",
+   "maker": "Scan-Speak",
+   "model": "Discovery 18W/8531G00 (glass-fibre cone)",
+   "nominal_ohm": 8,
+   "ts": {
+    "Re_ohm": 5.8,
+    "Le_mH": null,
+    "Fs_Hz": 28,
+    "Qts": 0.36,
+    "Vas_L": 58.2,
+    "Xmax_mm": 6.5,
+    "sens_dB": 87,
+    "sens_ref": "2.83 V/1 m",
+    "power_W": "60 RMS (100 h)"
+   },
+   "mechanical": {
+    "frame_od_mm": 182,
+    "cutout_mm": 156,
+    "mounting_depth_mm": 78,
+    "holes": null,
+    "bolt_circle_mm": null
+   },
+   "construction": {
+    "cone": "woven glass fibre, black",
+    "frame": "n/f",
+    "dust_cap": "n/f",
+    "surround": "n/f"
+   },
+   "price": [
+    {
+     "amount": 214.95,
+     "currency": "EUR",
+     "vendor": "Soundimports (177.64 ex VAT)"
+    },
+    {
+     "amount": 192.0,
+     "currency": "GBP",
+     "vendor": "Falcon (160 ex VAT; boxed pairs)"
+    }
+   ],
+   "unconfirmed": [
+    "cutout and depth (speakerboxlite only)"
+   ],
+   "chamber": {
+    "6.0": {
+     "fc_Hz": 91.6,
+     "Qtc": 1.18
+    },
+    "8.0": {
+     "fc_Hz": 80.5,
+     "Qtc": 1.04
+    }
+   },
+   "spec_fit": "182 frame is 12 mm over the drawn 170 (spec change to the trim ring)",
+   "look_flush": "black woven glass-fibre texture",
+   "sources": [
+    "https://www.falconacoustics.co.uk/downloads/Scanspeak/18w-8531g00.pdf",
+    "https://loudspeakerdatabase.com/ScanSpeak/18W-8531G00",
+    "https://speakerboxlite.com/es/subwoofers/scan-speak-18w-8531g00/specifications",
+    "https://willys-hifi.com/products/scanspeak-18w-8531g00-bass-midrange",
+    "https://www.falconacoustics.co.uk/scanspeak-18w-8531g00-midwoofer-revelator-range.html"
+   ],
+   "verdict": "Classic and well measured, but larger than the drawn frame; Qtc 1.04 in 8 L (fine behind a 350 Hz high-pass)."
+  },
+  {
+   "id": "ptt6.5w04-nfa-01",
+   "maker": "Purifi",
+   "model": "PTT6.5W04-NFA-01 (6.5 in, 4 ohm) / PTT6.5M08-NFA-01 (dedicated mid)",
+   "nominal_ohm": 4,
+   "ts": {
+    "Fs_Hz": 33,
+    "Xmax_mm": 5.9,
+    "sens_dB": "87.5 dB/1 W, 90.3 dB/2.83 V (Purifi, 300-800 Hz)",
+    "power_W": 250,
+    "note": "PTT6.5M08-NFA-01 midrange (earlier pass): 8 ohm, Re 6.5, Le 0.39, Fs 52, Qts 0.34, Vas 12 L, Xmax 3.9, 90.9 dB @2.83 V, 56-3500 Hz, OD 176, depth 85.2"
+   },
+   "mechanical": {
+    "frame_od_mm": 176,
+    "cutout_mm": 145,
+    "mounting_depth_mm": 85,
+    "front_flange_thickness_mm": 4,
+    "holes": null,
+    "bolt_circle_mm": null,
+    "weight_kg": 1.75
+   },
+   "construction": {
+    "cone": "n/f",
+    "frame": "n/f",
+    "dust_cap": "n/f",
+    "surround": "Purifi's own low-distortion surround (n/f)"
+   },
+   "price": [
+    {
+     "amount": 429.95,
+     "currency": "EUR",
+     "vendor": "Audiohum (W04)"
+    },
+    {
+     "amount": null,
+     "currency": null,
+     "vendor": "M08: made to order, price n/f"
+    }
+   ],
+   "unconfirmed": [
+    "cutout/depth (loudspeakerdatabase only)",
+    "M08 price"
+   ],
+   "chamber": {
+    "6.0": {
+     "fc_Hz": 90.1,
+     "Qtc": 0.59
+    },
+    "8.0": {
+     "fc_Hz": 82.2,
+     "Qtc": 0.54
+    }
+   },
+   "spec_fit": "176 frame, 6 mm over the drawn 170",
+   "look_flush": "n/f",
+   "sources": [
+    "https://loudspeakerdatabase.com/PURIFI/PTT6.5W04-NFA-01",
+    "https://ptt.purifi-audio.com/shop/ptt6-5w04-nfa-01-ptt6-5w04-nfa-01-279",
+    "https://www.audiohum.com/de/diy-hum-komponenten/lautsprecher/mittel-schwer/purifi-ptt65w04-nfa-01",
+    "https://purifi-audio.com/shop/ptt6-5m08-nfa-01-ptt6-5m08-nfa-01-271",
+    "https://audioxpress.com/article/test-bench-the-ptt6-5m08-nfa-01-6-5-midrange-from-purifi-audio"
+   ],
+   "verdict": "Premium upgrade path (PTT6.5M08 as the mid); over budget for a POC and made to order."
+  },
+  {
+   "id": "18wu-8741t00",
+   "maker": "Scan-Speak",
+   "model": "Illuminator 18WU/8741T00",
+   "nominal_ohm": 8,
+   "ts": {
+    "Fs_Hz": "35 or 31 (sources disagree)",
+    "Qts": "0.39 or 0.33",
+    "Vas_L": "37 or 48.6",
+    "Sd_cm2": 154,
+    "sens_dB": 85.5,
+    "sens_ref": "2.83 V/1 m"
+   },
+   "mechanical": {
+    "frame_od_mm": 184,
+    "cutout_mm": 158,
+    "mounting_depth_mm": 105,
+    "holes": null,
+    "bolt_circle_mm": null
+   },
+   "construction": {
+    "cone": "n/f",
+    "frame": "n/f"
+   },
+   "price": [
+    {
+     "amount": 369.95,
+     "currency": "EUR",
+     "vendor": "Soundimports / Audiohum"
+    },
+    {
+     "amount": 359.1,
+     "currency": "EUR",
+     "vendor": "Lautsprechershop"
+    }
+   ],
+   "unconfirmed": [
+    "T/S set (two versions in circulation)"
+   ],
+   "chamber": {
+    "6.0": {
+     "fc_Hz": 93.7,
+     "Qtc": 1.04
+    },
+    "8.0": {
+     "fc_Hz": 83.0,
+     "Qtc": 0.92
+    }
+   },
+   "spec_fit": "184 frame and 105 mm depth: too big for the drawn 170 and deeper than the 90 mm chamber allows (needs ~95+)",
+   "look_flush": "n/f",
+   "sources": [
+    "https://loudspeakerdatabase.com/ScanSpeak/18WU-8741T00",
+    "https://www.lautsprechershop.de/hifi/scanspeak_woofer_en.htm",
+    "https://www.audiohum.com/gb/diy-components/drivers/mid-woofer/scan-speak-18wu8741t00-illuminator-midwoofer",
+    "https://www.soundimports.eu/scan-speak-18wu-8741t00.html"
+   ],
+   "verdict": "Rejected for this cabinet (size, depth, price, conflicting data)."
+  },
+  {
+   "id": "u18rnx-p",
+   "maker": "Seas",
+   "model": "Prestige U18RNX/P (H1571-08)",
+   "nominal_ohm": 8,
+   "ts": {
+    "Fs_Hz": 43,
+    "Qts": 0.37,
+    "Qes": 0.45,
+    "Qms": 2.05,
+    "Vas_L": 22,
+    "Xmax_mm": 6,
+    "sens_dB": 88,
+    "sens_ref": "2.83 V/1 m (87.7 dB/1 W)",
+    "power_W": "80 / 250 program",
+    "Sd_note": "effective diameter 127 mm"
+   },
+   "mechanical": {
+    "frame_od_mm": null,
+    "cutout_mm": null,
+    "mounting_depth_mm": null,
+    "holes": null,
+    "bolt_circle_mm": null
+   },
+   "construction": {
+    "cone": "paper (Prestige)",
+    "frame": "n/f"
+   },
+   "price": [
+    {
+     "amount": 79.02,
+     "currency": "GBP",
+     "vendor": "Falcon (ex VAT)"
+    },
+    {
+     "amount": 155,
+     "currency": "EUR",
+     "vendor": "Masori (152 special)"
+    },
+    {
+     "amount": 174.95,
+     "currency": "EUR",
+     "vendor": "Soundimports"
+    }
+   ],
+   "unconfirmed": [
+    "frame size (7 in class, likely > 170)",
+    "Vas, Xmax"
+   ],
+   "chamber": {
+    "6.0": {
+     "fc_Hz": 92.9,
+     "Qtc": 0.8
+    },
+    "8.0": {
+     "fc_Hz": 83.3,
+     "Qtc": 0.72
+    }
+   },
+   "spec_fit": "frame n/f; '18' implies an 18 cm (7 in) class chassis, likely over the drawn 170",
+   "look_flush": "n/f",
+   "sources": [
+    "https://loudspeakerdatabase.com/SEAS/H1571-08_U18RNX-P",
+    "https://www.falconacoustics.co.uk/seas-u18rnx-p-h1571-prestige-series.html",
+    "https://masori.de/en/products/prestige-u18rnx-p-h1571-08-en",
+    "https://www.soundimports.eu/de/seas-u18rnx-p.html"
+   ],
+   "verdict": "Not pursued: frame size unknown, likely too large."
+  }
+ ],
+ "mids_noted": [
+  {
+   "model": "Seas MCA17RCY",
+   "note": "not found in any catalogue; the nearest Seas Prestige midrange is the 5.5 in MCA15RCY (H1262-08): Fs 51, Qts 0.25, Vas 12 L, Xmax 1.7, 89.5 dB, 100-4000 Hz, ~146 mm frame (earlier pass), USD 120.60 (Madisound, earlier pass)",
+   "url": "https://www.falconacoustics.co.uk/drive-units-1/seas-mca15rcy-h1262-prestige-series.html"
+  },
+  {
+   "model": "SB Acoustics SB17NAC35-8",
+   "note": "aluminium cone; listed as discontinued (Fs 31.5, Qts 0.42, Vas 33 L, 85.5 dB/1 W, Xmax 5.5). The SB17NBAC35-8 sibling: 171 frame, 144.9 cutout, 75 depth, EUR 86.45 (Soundimports)",
+   "url": "https://loudspeakerdatabase.com/SB/SB17NAC35-8"
+  },
+  {
+   "model": "Dayton RS180P-8 / ES180TiA-8",
+   "note": "not re-researched this pass (search budget); the RS180-8 frame is 180.6 mm (earlier pass), over the drawn 170",
+   "url": "https://www.daytonaudio.com/product/101/rs180-8-7-reference-woofer-8-ohm"
+  }
+ ],
+ "tweeters": [
+  {
+   "rank": 1,
+   "id": "tw29dn-b",
+   "maker": "SB Acoustics",
+   "model": "Satori TW29DN-B (4 ohm) / TW29DN-B-8 (8 ohm); same chassis: TW29R-B ring dome, TW29BN beryllium, TW29TXN Textreme",
+   "dome": {
+    "diameter_mm": 29,
+    "material": "coated cloth (TW29DN); ring dome on TW29R; beryllium on TW29BN",
+    "voice_coil_mm": 29,
+    "surround": "coated cloth, 8 mm wide",
+    "radiating_od_mm_estimate": 45,
+    "radiating_od_note": "estimate = 29 mm dome + 2 x 8 mm surround (audioXpress gives the 8 mm surround width); larger than a typical 26-32 mm 1 in throat; measure on arrival"
+   },
+   "ts": {
+    "Fs_Hz": "650 (Willys) / 624 measured (audioXpress, 8 ohm unit)",
+    "Re_ohm": "3.0 (4 ohm) / 6.1-6.2 (8 ohm)",
+    "sens_dB": "96.5 (4 ohm, Willys only) / 93 (8 ohm)",
+    "sens_ref": "2.83 V/1 m",
+    "power_W": 80,
+    "recommended_xo": "2.6 kHz, 12 dB/oct (Willys)",
+    "lowest_active_xo_estimate_Hz": "1800-2200 (my estimate, LR4, with waveguide gain)"
+   },
+   "faceplate": {
+    "shape": "round",
+    "od_mm": 104,
+    "thickness_mm": null,
+    "material": "two-part aluminium, mechanically decoupled",
+    "removable": true,
+    "removable_how": "SB's WG29-187 mounting sheet (rev 0, 2026-03-18): remove the faceplate screws (2.5 mm hex key), lift the faceplate slowly (adhesive at the diaphragm rim can stick to its back), refit the same screws through SB's adapter ring; the waveguide slips into the ring and locks with 4 set screws (1.3 mm hex)",
+    "element_variant": "no separate element SKU; factory waveguide versions exist (TW29BNWG, TW29TXNWG with a 170 mm aluminium waveguide) and the WG29-187 waveguide accessory fits all TW29 models (per SB/retailers)",
+    "waveguide_ready": true
+   },
+   "mounting": {
+    "cutout_mm": "74 (Willys) or 71 (TLHP, TW29R-B)",
+    "depth_behind_front_mm": "~32 (TLHP, TW29R)",
+    "holes": "the faceplate screws (count n/f; 3 or 4)",
+    "screw": "2.5 mm hex socket -> likely M3 socket cap or M4 button head (unconfirmed)",
+    "bolt_circle_mm": null,
+    "rear_mount": "with the faceplate off the motor/diaphragm unit has the faceplate screw holes facing forward. Option A (suggested): a printed or turned throat ring that forms the first few mm of the OS wall, screwed to the motor with those screws as SB's adapter ring is, the module inserted from the front into brass inserts in the birch so the joint falls just outside the surround. Option B: SB's own adapter ring (comes with the WG29-187) seated in a counterbore. Body no wider than the 71-74 mm cutout, ~32 mm deep -> fits the <=80 mm limit at the spec axis"
+   },
+   "rear_chamber": "yes (closed back; volume n/f)",
+   "price": [
+    {
+     "amount": 149.95,
+     "currency": "EUR",
+     "vendor": "Masori (TW29DN-B, incl. VAT; impedance not shown)"
+    },
+    {
+     "amount": 151.95,
+     "currency": "EUR",
+     "vendor": "Soundimports (TW29R-B)"
+    },
+    {
+     "amount": 115.95,
+     "currency": "GBP",
+     "vendor": "Falcon (TW29R black, ex VAT)"
+    }
+   ],
+   "diy_waveguide_use": {
+    "common_in_ath_threads": false,
+    "factory": [
+     "SB Satori WG29-187 (187 mm per retailers; the sheet's table says 290 mm/0.98 kg - unresolved)",
+     "TW29BNWG / TW29TXNWG (170 mm waveguide)"
+    ],
+    "published_r0_a0": null,
+    "note": "no published Ath r0/a0 found; set r0 = measured radiating OD / 2 (~22.5 mm) and simulate a0"
+   },
+   "gable_fit": "fits once the faceplate is removed (body <= ~74 mm); as sold (104 mm) it does not",
+   "unconfirmed": [
+    "radiating OD",
+    "4 ohm sensitivity",
+    "screw size/count/bolt circle",
+    "depth",
+    "price (one listing per variant)",
+    "WG29-187 size"
+   ],
+   "acoustic_fit": "Removable faceplate documented by the maker, so the dome's surround meets the carved wall with no flat ring; Fs 600-650 Hz and 80 W allow ~2 kHz LR4 with waveguide gain; one throat geometry accepts cloth, ring, beryllium and Textreme variants (confirm each variant's diaphragm OD).",
+   "risks": [
+    "larger radiator (~45 mm) narrows the top octave slightly earlier than a 26 mm dome",
+    "faceplate removal must be done slowly (glue at the rim)",
+    "waveguide loading lifts the low end of a dome's range (a buyer of SB's own waveguide tweeter SB26STWGC-4 saw output rising below ~4.5 kHz against the datasheet) - measure in the bowl before fixing the crossover"
+   ],
+   "sources": [
+    "https://sbacoustics.com/wp-content/uploads/2026/03/SATORI-WG29-187.pdf",
+    "https://audioxpress.com/article/test-bench-the-sb-acoustics-satori-tw29dn-b-8-tweeter",
+    "https://willys-hifi.com/products/sb-acoustics-satori-tw29dn-b-tweeter",
+    "https://masori.de/en/collections/sb-acoustics/products/satori-tw29dn-b",
+    "https://www.falconacoustics.co.uk/tw29dn-b-8-satori-tweeter-by-sb-acoustics.html",
+    "https://en.toutlehautparleur.com/dome-tweeter-sb-acoustics-satori-tw29dn-b-8-impedance-8-ohm-voice-coil-29-mm-noir.html",
+    "https://willys-hifi.com/products/sb-acoustics-satori-tw29r-b-tweeter",
+    "https://www.soundimports.eu/en/sb-acoustics-tw29r-b.html",
+    "https://en.toutlehautparleur.com/sb-acoustics-satori-wg29-187-diameter-187-mm-for-all-satori-tw29.html",
+    "https://falconacoustics.co.uk/tw29bnwg-4-satori-tweeter-by-sb-acoustics.html",
+    "https://audioxpress.com/article/test-bench-the-tw29txnwg-4-textreme-tweeter-with-a-waveguide-from-the-sb-acoustics-satori-line"
+   ]
+  },
+  {
+   "rank": 2,
+   "id": "d3004-602200",
+   "maker": "Scan-Speak",
+   "model": "Illuminator D3004/602200 (successor of D3004/602000 and /602010)",
+   "dome": {
+    "diameter_mm": 26,
+    "material": "textile (soft dome), large roll surround",
+    "voice_coil_mm": null,
+    "surround": "large roll (602000 description)",
+    "radiating_od_mm_estimate": 34,
+    "radiating_od_note": "estimate: Sd 7 cm2 (602000 listing) -> 29.9 mm effective; surround OD ~33-35 mm (measure)"
+   },
+   "ts": {
+    "Fs_Hz": "440 (Falcon) / 425 (Willys)",
+    "Re_ohm": "3.0 (Scan-Speak) / 3.7 (Willys)",
+    "sens_dB": 90.5,
+    "sens_ref": "2.83 V/1 m",
+    "power_W": "50 RMS (130 'driver power' on the 602010)",
+    "recommended_xo": "2.5 kHz, 12 dB/oct (Willys)",
+    "lowest_active_xo_estimate_Hz": "1500-2000 (my estimate; Erin's Audio Corner measured the 602000 clean above ~1.3 kHz, earlier pass)"
+   },
+   "faceplate": {
+    "shape": "round",
+    "od_mm": 62,
+    "thickness_mm": null,
+    "material": "black anodised die-cast aluminium",
+    "removable": false,
+    "removable_how": "not removable (die-cast front plate is the motor housing); a protective black grille sits over the dome",
+    "element_variant": "none found (the faceplate-less question was asked of the 602010; no OEM bare unit listed)",
+    "waveguide_ready": false
+   },
+   "mounting": {
+    "cutout_mm": "48 (Willys; 50 for older 602000/602006 - unconfirmed)",
+    "depth_behind_front_mm": "~21.5 (602000 figure; 602200 n/f)",
+    "holes": 3,
+    "screw": "n/f (small, ~M3/#4)",
+    "bolt_circle_mm": null,
+    "bolt_circle_estimate_mm": 55,
+    "rear_mount": "62 mm flange fits the throat; rear-mounting behind a 1.5-3 mm lip that stops at the surround is possible only if the faceplate front is flat (n/f) - otherwise it sits flush in a 62-64 mm seat as the CAD has it now, leaving a ~14 mm flat annulus"
+   },
+   "rear_chamber": "yes, reinforced polycarbonate, optimised volume (Scan-Speak)",
+   "price": [
+    {
+     "amount": 149.95,
+     "currency": "EUR",
+     "vendor": "Soundimports (123.93 ex VAT; out of stock at capture)"
+    },
+    {
+     "amount": 123.54,
+     "currency": "GBP",
+     "vendor": "Falcon (102.95 ex VAT; out of stock)"
+    },
+    {
+     "amount": 127,
+     "currency": "EUR",
+     "vendor": "diyspeakers (pair 254 ex tax; unavailable)"
+    }
+   ],
+   "diy_waveguide_use": {
+    "common_in_ath_threads": false,
+    "factory": [],
+    "published_r0_a0": null,
+    "note": "small-flange Illuminators are used in car pillars and DIY throats; no published Ath matching found"
+   },
+   "gable_fit": "fits as sold (62 mm); it is what the current CAD seat (62 in a 74 throat) was drawn for",
+   "unconfirmed": [
+    "cutout",
+    "depth",
+    "radiating OD",
+    "faceplate flatness",
+    "US price"
+   ],
+   "acoustic_fit": "Lowest Fs of everything that fits (425-440 Hz) and a proven low-distortion SD motor: the best choice if the crossover goes down to ~1.6-2 kHz; the fixed 62 mm plate leaves a flat ring unless rear-mounted.",
+   "risks": [
+    "stock was thin in Oct 2026 (two EU shops out)",
+    "50 W RMS"
+   ],
+   "sources": [
+    "https://willys-hifi.com/products/scanspeak-d3004-602200-illuminator-range",
+    "https://www.falconacoustics.co.uk/scanspeak-d3004-602200-tweeter-illuminator-range.html",
+    "https://www.soundimports.eu/nl/scan-speak-d3004602200.html",
+    "https://scan-speak.dk/?p=1954",
+    "https://diyspeakers.odoo.com/shop/d3004-602200-scan-speak-d3004-602200-pair-1518",
+    "https://masori.de/en/products/illuminator-d3004-602000-en",
+    "https://www.audiohum.com/gb/diy-components/drivers/tweeters/scan-speak-d3004602000-illuminator-tweeter",
+    "https://www.falconacoustics.co.uk/scanspeak-d3004-602010-tweeter.html",
+    "https://www.erinsaudiocorner.com/driveunits/scanspeak-d3004-602000-tweeter/"
+   ],
+   "sibling": {
+    "model": "Illuminator R3004/602200 (ring radiator, phase plug)",
+    "Fs_Hz": 420,
+    "sens_dB": "89.5 (Willys) / 92 (Soundimports)",
+    "power_W": 50,
+    "faceplate_od_mm": 62,
+    "cutout_mm": "48 (Willys) / 43 (earlier pass)",
+    "price": "EUR 199.95 (Audiohum); USD 197.20 (Madisound, earlier pass)",
+    "sources": [
+     "https://scan-speak.dk/?p=2019",
+     "https://willys-hifi.com/products/scanspeak-r3004-602200-illuminator-range"
+    ]
+   }
+  },
+  {
+   "rank": 3,
+   "id": "t25a-6",
+   "maker": "BlieSMa",
+   "model": "T25A-6 (Al/Mg dome) / T25B-6 (beryllium)",
+   "dome": {
+    "diameter_mm": "25 (Falcon) / 24 (Lautsprechershop)",
+    "material": "aluminium-magnesium alloy (T25A) / beryllium (T25B)",
+    "surround": "flush-mounted (level with the faceplate)",
+    "radiating_od_mm_estimate": 29.7,
+    "radiating_od_note": "a diyAudio T25A waveguide profile sized its throat at 29.7 mm (single source)"
+   },
+   "ts": {
+    "Fs_Hz": "980 (Falcon) / 870 (Lautsprechershop) for T25A; 1050 / 870 for T25B",
+    "Re_ohm": 5.2,
+    "Qts": 0.51,
+    "Bl_Tm": 2.6,
+    "sens_dB": "91.5-92 (T25A) / 92.5-93 (T25B)",
+    "sens_ref": "2.83 V/1 m",
+    "power_W": null,
+    "recommended_xo": "from 2.2 kHz (Falcon) / 1.8 kHz (Lautsprechershop)",
+    "lowest_active_xo_estimate_Hz": "2000-2500"
+   },
+   "faceplate": {
+    "shape": "round",
+    "od_mm": 68,
+    "thickness_mm": null,
+    "material": "n/f",
+    "removable": false,
+    "removable_how": "no evidence it comes off; do not assume",
+    "element_variant": "none found",
+    "waveguide_ready": "partly: the flush surround means a throat can start at the surround edge if the plate is rear-mounted"
+   },
+   "mounting": {
+    "cutout_mm": 48,
+    "depth_behind_front_mm": 26,
+    "holes": null,
+    "screw": "M3 (a third-party support part taps M3 for it; unconfirmed)",
+    "bolt_circle_mm": null
+   },
+   "rear_chamber": "n/f",
+   "price": [
+    {
+     "amount": 128.95,
+     "currency": "GBP",
+     "vendor": "Falcon (ex VAT, sold in pairs)"
+    },
+    {
+     "amount": 145.0,
+     "currency": "EUR",
+     "vendor": "Lautsprechershop (ex VAT; 172.55 incl.)"
+    },
+    {
+     "amount": null,
+     "currency": null,
+     "vendor": "Soundimports: T25A-6 and T25B-6 pairs end-of-life"
+    }
+   ],
+   "diy_waveguide_use": {
+    "common_in_ath_threads": "some",
+    "factory": [],
+    "published_r0_a0": "diyAudio 'T25A simple waveguide profile': throat 29.7 mm, 104 mm OD, 6 mm deep circular arc (simulated in Ath, not built); HTGuide OLA-WG build tried 4 printed profiles on the T34B",
+    "note": "forum caution: the tall aluminium domes need a different profile to avoid very-HF cancellations"
+   },
+   "gable_fit": "fits as sold (68 mm)",
+   "unconfirmed": [
+    "Fs",
+    "dome size",
+    "screws"
+   ],
+   "acoustic_fit": "Premium metal dome whose surround is flush with the plate; higher Fs keeps the crossover >= ~2-2.2 kHz.",
+   "risks": [
+    "availability (end-of-life at one shop)",
+    "6 ohm"
+   ],
+   "sources": [
+    "https://www.falconacoustics.co.uk/drive-units-1/bliesma-t25a-6.html",
+    "https://www.falconacoustics.co.uk/drive-units-1/bliesma-t25b-6.html",
+    "https://lautsprechershop.de/hifi/bliesma_en.htm",
+    "https://www.soundimports.eu/de/bliesma-t25a-6.html",
+    "https://www.diyaudio.com/community/threads/t25a-simple-waveguide-profile.423131/",
+    "https://i.materialise.com/en/shop/item/support-tweeter-bliesma-t25",
+    "https://www.htguide.com/forum/mission-possible-diy/build-stories/42972-build-therad-ola-wg-2-5-a-2-5way-with-sb-midwoofers-and-a-bliesma-tweeter"
+   ]
+  },
+  {
+   "rank": 4,
+   "id": "xt25sc90-04",
+   "maker": "Peerless by Tymphany",
+   "model": "XT25SC90-04 (dual ring radiator, small plate)",
+   "dome": {
+    "diameter_mm": "25 mm voice coil, ring diaphragm",
+    "material": "textile ring with central phase plug",
+    "radiating_od_mm_estimate": 32,
+    "radiating_od_note": "estimate; measure"
+   },
+   "ts": {
+    "Fs_Hz": 824.75,
+    "Re_ohm": 3.13,
+    "Qts": 0.93,
+    "sens_dB": 90.14,
+    "sens_ref": "2.83 V/1 m (86.8 dB/1 W)",
+    "power_W": "100 rated noise (Tymphany) / 50 (two retailers)",
+    "recommended_xo": "3 kHz 12 dB (one listing) / 1.6 kHz minimum (another)",
+    "lowest_active_xo_estimate_Hz": "2200-2500"
+   },
+   "faceplate": {
+    "shape": "round",
+    "od_mm": 65,
+    "thickness_mm": null,
+    "material": "moulded",
+    "removable": false,
+    "removable_how": "not removable",
+    "element_variant": "none",
+    "waveguide_ready": false
+   },
+   "mounting": {
+    "cutout_mm": "46.5-48",
+    "depth_behind_front_mm": "33 (TLHP) or 25.4 (Reconing)",
+    "holes": "recessed screw holes (count n/f)",
+    "screw": "n/f",
+    "bolt_circle_mm": null
+   },
+   "rear_chamber": "yes",
+   "price": [
+    {
+     "amount": 21.29,
+     "currency": "USD",
+     "vendor": "Parts Express"
+    },
+    {
+     "amount": 18.2,
+     "currency": "GBP",
+     "vendor": "Falcon (sold in pairs)"
+    },
+    {
+     "amount": 30.0,
+     "currency": "USD",
+     "vendor": "Reconing Speakers"
+    }
+   ],
+   "diy_waveguide_use": {
+    "common_in_ath_threads": "yes (XT family)",
+    "factory": [],
+    "published_r0_a0": null,
+    "note": "diyAudio 'Waveguide for XT25'; Midwest Audio 'XT25 on a waveguide'; a printable adapter fits XT25/DX25 into the Visaton WG148R"
+   },
+   "gable_fit": "fits as sold (65 mm)",
+   "unconfirmed": [
+    "depth",
+    "cutout",
+    "power"
+   ],
+   "acoustic_fit": "Cheap, low distortion, 100 W; the central plug and fixed 65 mm plate make the throat less clean than a bare dome.",
+   "risks": [
+    "ring/plug geometry differs from a dome for the waveguide simulation"
+   ],
+   "sources": [
+    "https://www.falconacoustics.co.uk/downloads/Vifa/XT25SC90-04.pdf",
+    "https://parts-express.com/Peerless-XT25SC90-04-1-Dual-Ring-Radiator-Tweeter-264-1014",
+    "https://en.toutlehautparleur.com/dome-tweeter-vifa-xt25sc90-04-4-ohm-1-inch-voice-coil-65-mm-front-plate.html",
+    "https://willys-hifi.com/products/peerless-xt25sc90-04-tweeter",
+    "https://reconingspeakers.com/product/tymphany-xt25sc90-04-1-dual-ring-radiator-tweeter/",
+    "https://www.diyaudio.com/community/threads/waveguide-for-xt25.242093/",
+    "https://diy.midwestaudio.club/discussion/1643/beating-a-dead-horse-the-xt25-on-a-waveguide"
+   ]
+  },
+  {
+   "rank": 5,
+   "id": "27tffnc-g",
+   "maker": "Seas",
+   "model": "Prestige 27TFFNC/G (H1396-04)",
+   "dome": {
+    "diameter_mm": "~26-27 (1.02 in voice coil)",
+    "material": "textile (Sonolex)",
+    "radiating_od_mm_estimate": 33,
+    "radiating_od_note": "estimate; measure"
+   },
+   "ts": {
+    "Fs_Hz": 1170,
+    "Re_ohm": 2.7,
+    "Le_mH": 0.03,
+    "sens_dB": 91,
+    "sens_ref": "n/f",
+    "power_W": "80 nominal / 200 max",
+    "recommended_xo": "from 2.5 kHz",
+    "lowest_active_xo_estimate_Hz": "2700-3000"
+   },
+   "faceplate": {
+    "shape": "round small flange",
+    "od_mm": 53,
+    "thickness_mm": null,
+    "material": "n/f",
+    "removable": false,
+    "removable_how": "n/a - already a small flange",
+    "element_variant": "this is effectively the small-flange version (Linkwitz LX521 tweeter)",
+    "waveguide_ready": "close: only a ~10 mm ring outside the surround"
+   },
+   "mounting": {
+    "cutout_mm": 46,
+    "depth_behind_front_mm": 22,
+    "holes": null,
+    "screw": null,
+    "bolt_circle_mm": null
+   },
+   "rear_chamber": "n/f",
+   "price": [
+    {
+     "amount": 47.95,
+     "currency": "EUR",
+     "vendor": "Soundimports (39.63 ex VAT)"
+    },
+    {
+     "amount": 31.95,
+     "currency": "GBP",
+     "vendor": "Falcon"
+    },
+    {
+     "amount": 46.43,
+     "currency": "EUR",
+     "vendor": "TLHP"
+    }
+   ],
+   "diy_waveguide_use": {
+    "common_in_ath_threads": false,
+    "factory": [],
+    "published_r0_a0": null,
+    "note": "Linkwitz LX521 (open baffle, front and rear)"
+   },
+   "gable_fit": "fits as sold (53 mm)",
+   "unconfirmed": [
+    "dimensions (TLHP only)",
+    "dome/surround size"
+   ],
+   "acoustic_fit": "Small and clean at the throat, but Fs 1170 Hz pushes the crossover to ~2.7-3 kHz.",
+   "risks": [
+    "high Fs"
+   ],
+   "sources": [
+    "https://en.toutlehautparleur.com/dome-tweeter-seas-27tffnc-g-4-ohm-voice-coil-27-mm.html",
+    "https://www.falconacoustics.co.uk/seas-27tffncg-h1396-04-tweeter-prestige-series.html",
+    "https://linkwitzlab.com/LX521/LX521_4.htm"
+   ]
+  },
+  {
+   "rank": 6,
+   "id": "oc25sc65-04",
+   "maker": "Peerless by Tymphany",
+   "model": "OC25SC65-04 (element, no faceplate, twist-lock)",
+   "dome": {
+    "diameter_mm": "25 (voice coil ID 25.4)",
+    "material": "textile",
+    "radiating_od_mm_estimate": 32,
+    "radiating_od_note": "datasheet effective diameter 29.7 mm (Sd 6.9 cm2); outer surround ~32 (estimate)"
+   },
+   "ts": {
+    "Fs_Hz": 1382,
+    "Re_ohm": 3.0,
+    "sens_dB": 93.18,
+    "sens_ref": "2.83 V/1 m (89.2 dB/1 W)",
+    "power_W": "25 rated noise",
+    "min_impedance_ohm": 3.2,
+    "recommended_xo": "2.5 kHz 12 dB (Willys)",
+    "lowest_active_xo_estimate_Hz": "3000"
+   },
+   "faceplate": {
+    "shape": "none (element)",
+    "od_mm": 41.3,
+    "thickness_mm": null,
+    "material": "moulded body with bayonet lugs",
+    "removable": "n/a",
+    "removable_how": "no faceplate; twist-lock mates with a custom faceplate (Tymphany datasheet)",
+    "element_variant": "this IS the element",
+    "waveguide_ready": true
+   },
+   "mounting": {
+    "cutout_mm": 38.6,
+    "depth_behind_front_mm": 25.5,
+    "holes": "none - bayonet",
+    "screw": null,
+    "bolt_circle_mm": null,
+    "rear_mount": "print or turn a ring with the bayonet slots (dims on the datasheet drawing, n/f)"
+   },
+   "rear_chamber": "n/f",
+   "price": [
+    {
+     "amount": 35.2,
+     "currency": "USD",
+     "vendor": "Madisound (earlier pass)"
+    },
+    {
+     "amount": null,
+     "currency": null,
+     "vendor": "Parts Express lists it as CLEARANCE"
+    }
+   ],
+   "diy_waveguide_use": {
+    "common_in_ath_threads": false,
+    "factory": [],
+    "published_r0_a0": null,
+    "note": "Parts Express and Soundimports market it for waveguides; josephcrowe.com horn write-up (earlier pass)"
+   },
+   "gable_fit": "fits (41 mm element)",
+   "unconfirmed": [
+    "bayonet dimensions",
+    "continued availability"
+   ],
+   "acoustic_fit": "Dome meets the throat directly, but Fs 1382 Hz and 25 W limit it to ~3 kHz.",
+   "risks": [
+    "being cleared out",
+    "low power"
+   ],
+   "sources": [
+    "https://www.Lautsprechershop.de/pdf/peerless/peerless_oc25sc65_04.pdf",
+    "https://parts-express.com/Peerless-OC25SC65-04-1-Textile-Dome-Tweeter-264-1018",
+    "https://en.toutlehautparleur.com/dome-tweeter-peerless-oc25sc65-04-4-ohm-1-inch-voice-coil.html",
+    "https://willys-hifi.com/collections/vifa-peerless-tweeters/products/vifa-peerless-oc25sc65-04-tweeter",
+    "https://www.madisoundspeakerstore.com/soft-dome-tweeters-vifa/peerless-oc25sc65-04-1-textile-dome-tweeter-4-ohm/",
+    "https://josephcrowe.com/blogs/news/peerless-oc25sc65-04-with-horn-no-1900"
+   ]
+  },
+  {
+   "rank": 7,
+   "id": "nd25fn-4",
+   "maker": "Dayton Audio",
+   "model": "ND25FN-4 (element, faceplate-less ND25FA-4)",
+   "dome": {
+    "diameter_mm": 25,
+    "material": "silk",
+    "radiating_od_mm_estimate": 30,
+    "radiating_od_note": "estimate; Dayton publishes a 3D file - use it"
+   },
+   "ts": {
+    "Fs_Hz": "1290 (Dayton) / 1350 (Audiophonics)",
+    "Qts": "1.64 (Dayton)",
+    "sens_dB": 90,
+    "sens_ref": "2.83 V/1 m",
+    "power_W": "20 RMS / 40 max",
+    "lowest_active_xo_estimate_Hz": "3000"
+   },
+   "faceplate": {
+    "shape": "none (element)",
+    "od_mm": 41,
+    "thickness_mm": null,
+    "material": "n/f",
+    "removable": "n/a",
+    "removable_how": "no faceplate; rear mount recommended by Dayton",
+    "element_variant": "this IS the element",
+    "waveguide_ready": true
+   },
+   "mounting": {
+    "cutout_mm": 34,
+    "depth_behind_front_mm": 21,
+    "holes": 4,
+    "screw": null,
+    "bolt_circle_mm": null
+   },
+   "rear_chamber": "n/f",
+   "price": [
+    {
+     "amount": 14.99,
+     "currency": "USD",
+     "vendor": "Dayton MSRP (earlier pass)"
+    }
+   ],
+   "diy_waveguide_use": {
+    "common_in_ath_threads": false,
+    "factory": [],
+    "published_r0_a0": null,
+    "note": "budget throat-test unit"
+   },
+   "gable_fit": "fits (41 mm element)",
+   "unconfirmed": [
+    "Fs",
+    "hole spacing"
+   ],
+   "acoustic_fit": "Cheapest way to test a bare-dome throat; Fs ~1.3 kHz and 20 W keep it at >= 3 kHz.",
+   "risks": [
+    "low power"
+   ],
+   "sources": [
+    "https://www.daytonaudio.com/product/1194/nd25fn-4-1-neo-silk-dome-tweeter-element-4-ohm",
+    "https://www.parts-express.com/Dayton-Audio-ND25FN-4-1-Silk-Dome-Neodymium-Tweeter-Element-4-Ohm-275-053",
+    "https://www.audiophonics.fr/en/tweeter/dayton-audio-nd25fn-4-speaker-driver-tweeter-neodymium-20w-4-ohm-90db-2500hz-20khz-p-16533.html"
+   ]
+  }
+ ],
+ "tweeters_too_large_for_gable": [
+  {
+   "model": "SB Acoustics SB26ADC-C000-4 (aluminium dome)",
+   "data": "Fs 680, Qts 1.11, 120 W, 90 dB (IEC baffle), Sd 6.2 cm2 (~28 mm effective), 100 mm faceplate, cutout 84 or 70 (conflict); GBP 32.95 ex VAT Falcon, EUR 52.45 Soundimports, EUR 43.97 ex VAT Lautsprechershop",
+   "faceplate_removable": "conflicting forum reports; the diaphragm appears glued to the plate (see SB26STAC thread) - treat as not removable",
+   "diy_waveguides": "very common: Augerpro/Somasonus 5, 6 and 6.5 in round guides (STL files, somasonus.net/waveguides), ATH Tritonia S/XS (at-horns; an XS variant adapted to SB26; one builder reports 1.1 kHz crossovers), Ascilab guides (cloned on diyAudio)",
+   "urls": [
+    "https://cdn.shopify.com/s/files/1/0809/2387/files/SB26ADC-C000-4.pdf",
+    "https://falconacoustics.co.uk/sb-acoustics-sb26adc-c000-4-tweeter.html",
+    "https://www.soundimports.eu/en/sb-acoustics-sb26adc-c000-4.html",
+    "https://www.diyaudio.com/community/threads/high-performance-compact-active-2-way.440526/latest",
+    "https://www.diyaudio.com/community/threads/open-source-waveguides-for-cnc-3d-printing.318190/",
+    "https://www.somasonus.net/waveguides",
+    "https://at-horns.eu/img/tritonia/ATH-Tritonia-S-drawing.png",
+    "https://www.diyaudio.com/community/threads/ascilab-cloning.433038/"
+   ]
+  },
+  {
+   "model": "SB Acoustics SB26CDC-C000-4 (ceramic/aluminium dome)",
+   "data": "Fs 690, 89 dB, 100 W (120 W RMS per AVmall), Re 3.2, 100 mm faceplate, cutout 84 or 72, 2.6 kHz 12 dB recommended; datasheet rev 1 (June 2019)",
+   "faceplate_removable": "not confirmed",
+   "diy_waveguides": "HTGuide experimental waveguide (with and without phase shield); same guides as SB26ADC",
+   "urls": [
+    "https://cdn.shopify.com/s/files/1/0809/2387/files/SB26CDC-C000-4.pdf",
+    "https://willys-hifi.com/products/sb-acoustics-sb26cdc-c000-4-tweeter",
+    "https://www.htguide.com/forum/forum/mission-possible-diy/43044-an-interesting-budget-tweeter-from-sb-acoustics-for-hard-dome-fans"
+   ]
+  },
+  {
+   "model": "SB Acoustics SB26STAC-C000-4 (textile)",
+   "data": "Fs 750, 91.5 dB, 100 mm cast aluminium faceplate (front 6.5 mm thick per TLHP), depth 39.6 overall, cutout 72/74/82.8 (conflict), 2.6 kHz 12 dB",
+   "faceplate_removable": "no - photos show dome and voice coil glued to the faceplate (diyAudio)",
+   "diy_waveguides": "mounted whole behind modified throats",
+   "urls": [
+    "https://willys-hifi.com/collections/sb-acoustics-tweeters/products/sb-acoustics-sb26stac-c000-4-tweeter",
+    "https://www.diyaudio.com/community/threads/help-needed-does-sb26stac-have-a-removable-faceplate.366880/"
+   ]
+  },
+  {
+   "model": "SB Acoustics SB26STWGC-4 (textile, factory waveguide)",
+   "data": "Fs 780, Qts 1.2, 93 dB, 120 W (2.6 kHz BW HP), Sd 6.2, 100 mm aluminium waveguide faceplate, cutout 84, bolt-less adapter ring",
+   "faceplate_removable": "the faceplate IS the waveguide",
+   "diy_waveguides": "n/a",
+   "urls": [
+    "https://willys-hifi.com/products/sb-acoustics-sb26stwgc-4-tweeter",
+    "https://en.toutlehautparleur.com/dome-tweeter-sb-acoustics-sb26stwgc-4-impedance-4-ohm-voice-coil-26-mm.html"
+   ]
+  },
+  {
+   "model": "Seas Prestige 27TBFC/G (H1212-06)",
+   "data": "26 mm Al/Mg dome, wide soft polymer surround, rear chamber, 6 ohm, Fs 550 (Falcon only), 91.5 dB, 104 mm glass-fibre-reinforced moulded faceplate",
+   "faceplate_removable": "no (moulded chassis); the hexagrid and its phase plate can be prised off with care",
+   "diy_waveguides": "fits Visaton WG148R / Monacor WG-300 after opening their throat 2 mm (Soundimports blog); HTGuide grille removal for waveguide builds; Zaph's TMM used the sibling 27TDFC in an MCM horn lens",
+   "urls": [
+    "https://www.falconacoustics.co.uk/seas-27tbfc-g-h1212-tweeter-prestige-series.html",
+    "https://www.htguide.com/forum/forum/mission-possible-diy/22073-seas-h1212",
+    "https://www.soundimports.eu/nl/blogs/blog/wave-guiding-your-favourite-tweeter/",
+    "https://www.zaphaudio.com/WaveguideTMM.html"
+   ]
+  },
+  {
+   "model": "Scan-Speak Discovery D2608/913000",
+   "data": "26 mm textile, 8 ohm, Fs 700, Qts 0.29, Re 5.6, Sd 7, 91.3-91.5 dB, 80 W, 2 kHz 12 dB (Willys), 104 mm die-cast faceplate, cutout 72, depth 32.3 (one listing)",
+   "faceplate_removable": "no",
+   "diy_waveguides": "no specific published waveguide found this pass",
+   "urls": [
+    "https://willys-hifi.com/products/scanspeak-d2608-913000-tweeter",
+    "https://www.soundimports.eu/en/scan-speak-d2608-913000.html",
+    "https://www.scan-speak.dk/?p=584",
+    "https://img.audiomania.ru/data/scanspeak_d2608913000_1.pdf"
+   ]
+  },
+  {
+   "model": "Scan-Speak Discovery D2604/833000 (wide-surround silk)",
+   "data": "4 ohm, Fs 475, 93 dB (2019 sheet), Qts 0.55, Sd 8 cm2 (~32 mm effective), 100 W (100 h, 2.5 kHz HP) / 240 W long-term, 104 mm injection-moulded faceplate with 5 screws, cutout 72",
+   "faceplate_removable": "no; plastic, so it could be turned down to ~80 mm on a lathe (a mod, not a product)",
+   "diy_waveguides": "audioXpress Test Bench only",
+   "urls": [
+    "https://www.scan-speak.dk/product/d2604-833000/",
+    "https://www.falconacoustics.co.uk/downloads/Scanspeak/d2604-833000.pdf",
+    "https://willys-hifi.com/products/scanspeak-d2604-833000-tweeter"
+   ]
+  },
+  {
+   "model": "Peerless DX25BG60-04 / DX25TG59-04",
+   "data": "BG60: Fs 415 (deep rear chamber, depth 56 behind a 5 mm front plate), 91.2 dB, 80 W, 104 mm thick aluminium plate, cutout 73. TG59: Fs 640-651, 100 W, 104 mm, 5 mm front, cutout 72-73, depth 26",
+   "faceplate_removable": "no",
+   "diy_waveguides": "printable adapter into the Visaton WG148R (with XT25)",
+   "urls": [
+    "https://www.parts-express.com/Peerless-DX25BG60-04-1-Silk-Dome-Tweeter-4-Ohm-264-1478",
+    "https://parts-express.com/Peerless-DX25TG59-04-1-Fabric-Dome-Tweeter-264-1020"
+   ]
+  },
+  {
+   "model": "Peerless XT25BG60-04",
+   "data": "dual ring, Fs 589, 88.6 dB, 100 W, 104 mm profiled plate with recessed holes, cutout 72-74, 2.5 kHz",
+   "faceplate_removable": "no",
+   "diy_waveguides": "as XT family",
+   "urls": [
+    "https://www.falconacoustics.co.uk/downloads/Vifa/XT25BG60-04.pdf",
+    "https://www.parts-express.com/Peerless-XT25BG60-04-1-Dual-Ring-Radiator-Tweeter-264-1012"
+   ]
+  },
+  {
+   "model": "Purifi PTT1.3T04-HAG-01 WG104 / -HAG-10 WG147",
+   "data": "1.3 in (33 mm) hard-anodised Al dome, Sd 9.5 cm2, Fs 680, Re 3.5, Bl 2.8, Mms 0.45 g, Xmax 1.1 mm, 95 dB at 3.5 kHz, 250 W (IEC 18.2 at 2.5 kHz), datasheet example LR4 2.5 kHz (audioXpress: ~2 kHz workable). WG104: cutout 93/81, 98 mm hole circle with 3.5 mm holes, 39 mm deep, 0.66 kg. WG147: cutout 123, 138 mm circle with 4 mm holes, 52 mm deep. DKK 3,750 ex VAT (OEM, 8-12 weeks); EUR 629.95 at Soundimports",
+   "faceplate_removable": "the faceplate is the waveguide",
+   "diy_waveguides": "n/a (integral)",
+   "urls": [
+    "https://ptt.purifi-audio.com/shop/ptt1-3t04-hag-01-wg104-2969",
+    "https://ptt.purifi-audio.com/shop/ptt1-3t04-hag-01-ptt1-3t04-hag-01-wg104-2088/document/1051",
+    "https://audioxpress.com/article/test-bench-purifi-audio-s-ptt1-3t04-hag-01-wg104-1-3-aluminum-dome-home-audio-tweeter",
+    "https://www.soundimports.eu/en/brands/purifi/"
+   ]
+  },
+  {
+   "model": "Dayton ND25FW-4",
+   "data": "integrated 104 mm round waveguide, Fs 1350, 20 W RMS / 40 max, 91 dB/1 W",
+   "faceplate_removable": "no (integral waveguide)",
+   "diy_waveguides": "n/a",
+   "urls": [
+    "https://www.daytonaudio.com/product/1280/nd25fw-4-1-soft-dome-neodymium-tweeter-with-waveguide-4-ohm"
+   ]
+  }
+ ],
+ "tweeters_unsuitable": [
+  {
+   "model": "Dayton ND20FB-4 (3/4 in rear-mount)",
+   "reason": "Fs 2072 Hz, 15 W: cannot cross below ~4 kHz. OD 39.1, cutout 35.8, depth 19",
+   "url": "https://www.daytonaudio.com/product/61/nd20fb-4-rear-mount-3-4-neodymium-dome-tweeter-4-ohm"
+  },
+  {
+   "model": "Wavecor TW022WA01 / TW022WA03 (bare versions of TW022WA02/04)",
+   "reason": "OEM bulk only (full master carton); 22 mm, Fs 1150 (02) / 825 (04 chambered), 6.1 cm2",
+   "url": "https://wavecor.com/html/tw022wa01.html"
+  },
+  {
+   "model": "SB Acoustics SB21RDCN-C000-4",
+   "reason": "smaller than 1 in (21 mm ring dome): Fs 850, 89.5 dB, 40 W, 58 mm faceplate, cutout 40-41, EUR 47.45 (Masori). Fits, but a 1 in or larger dome is preferred",
+   "url": "https://en.toutlehautparleur.com/dome-tweeter-sb-acoustics-sb21rdcn-c000-4-impedance-4-ohm-voice-coil-21-mm.html"
+  },
+  {
+   "model": "SB Acoustics SB29RDC (older 29 mm ring dome)",
+   "reason": "faceplate comes off with 3 screws and a Pellegrene waveguide bolts on with studs (2014 blog) - a precedent for the TW29 approach; current data n/f",
+   "url": "https://johnr.hifizine.com/2014/04/sb29rdc-on-pellegrene-waveguide/"
+  }
+ ],
+ "waveguide_notes": {
+  "throat_matching": "set the OS throat radius r0 = measured radiating OD / 2 (dome + surround), so the wall starts at the surround's outer edge; choose a0 (initial wall angle) in the simulation; no published r0/a0 pairs were found for any candidate",
+  "ath_tool": "Ath (Advanced Transition Horn) by M. Batik, at-horns.eu, free for personal use; writes ABEC/AKABAK projects (BEM)",
+  "published_profiles": [
+   "diyAudio T25A simple profile: throat 29.7 mm, 104 x 6 mm circular arc",
+   "Purifi WG104/WG147 (integral)",
+   "SB Satori WG29-187 and TW29xNWG (factory)",
+   "Augerpro/Somasonus round guides for SB26ADC/CDC",
+   "ATH Tritonia S/XS (SB26 variant)",
+   "Visaton WG148R (+ printable XT25/DX25 adapter; 27TBFC/G after opening 2 mm)"
+  ],
+  "urls": [
+   "https://diyaudio.com/community/threads/acoustic-horn-design-the-easy-way-ath4.338806/page-363",
+   "https://at-horns.eu",
+   "https://www.diyaudio.com/community/threads/t25a-simple-waveguide-profile.423131/",
+   "https://www.somasonus.net/waveguides",
+   "https://www.soundimports.eu/de/wg-148-r.html"
+  ]
+ },
+ "hardware": {
+  "port": [
+   {
+    "id": "precision-port-4-kit",
+    "item": "Precision Port 4 in Flared Port Tube Kit, PSP4-BKHT (Parts Express 268-352)",
+    "price": "USD 20.89 (MSRP 27.99)",
+    "dims": "101.6 mm (4 in) ID; outside flare OD 7-1/4 in (184 mm) on a 6-1/4 in (159 mm) cutout, 3 in overall / 2.5 in usable (PSP-4OFH 268-376); inside flare OD 6-3/16 in (157 mm) (PSP-4IF 268-377); tube PSP-4TB 4 x 12 in (268-382, USD 11.13); joining ring PSP-4RG (268-380); ports up to 17 in long; front-side screw holes",
+    "fit": "flared both ends; for the spec's flush look rebate the 184 mm rim into the back (rim thickness n/f) - note it is much larger than the drawn 112 mm flange (owner's call)",
+    "urls": [
+     "https://www.parts-express.com/Precision-Port-4-Flared-Port-Tube-Kit-268-352",
+     "https://www.soundimports.eu/en/precision-sound-4-flared.html",
+     "https://www.parts-express.com/Precision-Port-PSP-4OFH-4-Outside-Flare-for-Port-Tube-268-376",
+     "https://www.parts-express.com/Precision-Port-PSP-4IF-4-Inside-Flare-for-Port-Tube-268-377"
+    ]
+   },
+   {
+    "id": "jet-set-100",
+    "item": "Jet Set 100 three-piece flared port (Lautsprechershop)",
+    "price": "outer flared section EUR 8.90, inner EUR 5.90 (plus the centre piece)",
+    "dims": "100 mm bore, flared both ends, 105-452 mm overall, 149 mm cutout, 6 screws",
+    "fit": "closest to a 100 mm flush flared port in the EU",
+    "urls": [
+     "https://lautsprechershop.de/hifi/rohre_en.htm"
+    ]
+   },
+   {
+    "id": "monacor-mbr-100",
+    "item": "Monacor MBR-100",
+    "price": "n/f",
+    "dims": "99 mm bore, 114 mm long, 121 mm flange; only the outlet edge rounded; glued",
+    "fit": "closest to the drawn 112 mm flange look, but not flared inside and too short alone",
+    "urls": [
+     "https://www.simplysoundandlighting.co.uk/monacor-mbr-100-100mm-bass-reflex-port-tube/",
+     "https://lautsprechershop.de/monacor/monacor_bassreflexrohre_en.htm"
+    ]
+   },
+   {
+    "id": "printed-100",
+    "item": "Printed port (fab/out/stl), re-drawn at 100 mm ID",
+    "price": "see fab/bom.csv",
+    "dims": "100 ID + 2 x 4 wall = 108 OD; flare >= 18 mm radius both ends",
+    "fit": "keeps the spec's drawn look; recommended if the Precision Port rim is too big",
+    "urls": []
+   }
+  ],
+  "port_lengths_my_calculation": {
+   "note": "88 L net; physical length incl. flares, end correction 0.732 x D; flares tune slightly lower - build long and trim to the impedance dip",
+   "ID_101_6": {
+    "fb30": 231,
+    "fb32": 194,
+    "fb34": 163
+   },
+   "ID_92": {
+    "fb30": 183,
+    "fb32": 152,
+    "fb34": 127
+   },
+   "clearance": "a 194 mm port's inner mouth ends ~196 mm from the front; the RSS315HF-4 magnet ends ~154 mm from the front (85 mm lower on the axis) -> ~40 mm gap; avoid >200 mm (101.6) or >185 mm (92)",
+   "port_noise": "at 17 m/s air speed a 101.6 mm port reaches ~105.5 dB (32 Hz, 1 m half space) vs ~103.8 dB for the 92 mm bore"
+  },
+  "terminals_if_passive": [
+   {
+    "item": "Dayton Audio BPP-G premium binding post pair (Parts Express 091-620)",
+    "price": "USD 22.98 / pair (20.68 at 10+)",
+    "dims": "keyed 11.5 mm panel hole, 25 mm thread length",
+    "urls": [
+     "https://parts-express.com/Dayton-Audio-BPP-G-Premium-Binding-Post-Pair-Gold-091-620",
+     "https://daytonaudio.com/product/272/bpp-g-premium-binding-post-pair-gold"
+    ]
+   },
+   {
+    "item": "Dayton Audio BPS-G supreme insulated pair",
+    "price": "n/f",
+    "urls": [
+     "https://www.daytonaudio.com/product/1778/bps-g-supreme-insulated-binding-post-banana-jack-pair-gold"
+    ]
+   },
+   {
+    "item": "WBT-0703 nextgen (Cu / Ag)",
+    "price": "EUR 35.30 / 69.30 per post (Audiohum)",
+    "urls": [
+     "https://www.audiohum.com/gb/marcas/wbt/30-connectors-wbt"
+    ]
+   },
+   {
+    "item": "Mundorf MConnect TPCU67OC (6 mm)",
+    "price": "CAD 290.94 per set of 4",
+    "urls": [
+     "https://partsconnexion.com/products/mundorf-connector-tpcu67oc-mconnect-binding-post-6mm"
+    ]
+   },
+   {
+    "note": "double-banana spacing convention 19 mm (3/4 in); re-drill the printed cup's 10 mm holes to the posts bought"
+   }
+  ],
+  "active_plate_amp": [
+   {
+    "item": "Hypex FusionAmp FA253",
+    "power": "2 x 250 W + 1 x 100 W at 4 ohm (2 x 200 + 100 at 8 ohm); 100 W channel = tweeter",
+    "dims": "360 x 135 x 55 mm, cutout 336 x 111 mm",
+    "price": "USD 646.80 (Parts Express); EUR 649 (Audiophonics, Audiohum)",
+    "note": "ships with no filter: load one with Hypex Filter Design over USB",
+    "urls": [
+     "https://www.hypex.nl/products/amplifier-families/fusion-amplifier-family/fusionamp-fa253",
+     "https://www.parts-express.com/Hypex-Direct-FusionAmp-FA253-Mono-3-Way-Plate-Amplifier-500W-100W-221-010",
+     "https://www.soundimports.eu/en/hypex-fa253.html"
+    ]
+   },
+   {
+    "item": "Hypex FusionAmp FA503",
+    "power": "2 x 500 W + 1 x 100 W at 4 ohm",
+    "dims": "420 x 150 x 90 mm, cutout 396 x 126 mm",
+    "price": "EUR 789.95 (Audiohum)",
+    "urls": [
+     "https://www.hypex.nl/products/amplifier-families/fusion-amplifier-family/fusionamp-fa503",
+     "https://www.soundimports.eu/en/hypex-fa503.html"
+    ]
+   },
+   {
+    "note": "the FA253 plate is wider than the drawn terminal cup and would sit horizontally between the cup and the port on the back (z ~140-310): a change to the back's layout, owner's call"
+   }
+  ],
+  "gaskets": [
+   {
+    "item": "Speaker gasketing tape 1/8 x 1/2 in x 50 ft (Parts Express 260-542)",
+    "price": "USD 13.98",
+    "use": "woofer flange (suits 10-18 in); closed-cell PVC, dark charcoal",
+    "urls": [
+     "https://parts-express.com/Speaker-Gasketing-Tape-1-8-x-1-2-x-50-ft.-Roll-260-542"
+    ]
+   },
+   {
+    "item": "Speaker gasketing tape 1/8 x 3/8 in (Parts Express 260-540)",
+    "price": "n/f",
+    "use": "mid flange; trim for the tweeter or use 1-2 mm Poron/neoprene",
+    "urls": [
+     "https://www.parts-express.com/Speaker-Gasketing-Tape-1-8-x-3-8-x-50-ft.-Roll-260-540"
+    ]
+   },
+   {
+    "note": "a soft gasket compresses unevenly on stamped baskets (~0.8 mm at screws vs ~1.6 mm between); include the compressed gasket in each rebate depth (flange + gasket + 3 mm ring)"
+   }
+  ],
+  "fasteners": [
+   {
+    "item": "Hurricane nuts #10-32 (Parts Express 081-1082, 50 pcs); #8-32 and 1/4-20 also listed; #10-24 T-nut 081-1073",
+    "use": "woofer #10-32 (or M5), mid #8-32 (or M4); from the baffle's back face; drill a test piece first",
+    "urls": [
+     "https://www.parts-express.com/speaker-components/cabinet-hardware-speaker-grill-cloth/nuts-t-nuts",
+     "https://parts-express.com/10-32-Hurricane-Nuts-50-Pcs.-081-1082"
+    ]
+   },
+   {
+    "item": "Threaded inserts (E-Z Lok / D- or E-style, M4/M5; M3 brass for the tweeter)",
+    "use": "removable, re-usable; epoxy them in; forum reports of loose inserts when undersized",
+    "urls": [
+     "https://www.htguide.com/forum/mission-possible-diy/woodworking-tools-techniques/35414-threaded-insert-best-practice",
+     "https://www.diyaudio.com/community/threads/best-nuts-for-attaching-drivers.368337/"
+    ]
+   },
+   {
+    "note": "bolt circles were not published in anything found; measure each frame, then drill. Button-head stainless screws sit under the 3 mm trim ring"
+   }
+  ],
+  "damping": [
+   {
+    "item": "Acousta-Stuf polyfill 1 lb (260-317) / 5 lb (260-330) or Acousta-Fill nylon 5 lb (260-331)",
+    "price": "USD 15.98 / 54.98 / 54.98",
+    "use": "mid chamber: loose fill at ~0.5 lb/ft3 -> ~65 g for 8 L (up to ~2x); keep it off the cone",
+    "urls": [
+     "https://parts-express.com/Acousta-Stuf-Polyfill-1-lb.-Bag-260-317",
+     "https://www.parts-express.com/Acousta-Fill-Nylon-Polyfill-5-lb.-Bag-Speaker-Cabinet-Damping-Material-260-331"
+    ]
+   },
+   {
+    "item": "Sonic Barrier Acousta-Blue denim 30 mm, 40 x 55 in (260-566) / 50 mm (260-568)",
+    "price": "USD 34.98 / 59.98",
+    "use": "line the woofer box walls (not stuffed), keep 1 port diameter clear of the port mouth",
+    "urls": [
+     "https://www.parts-express.com/Sonic-Barrier-Acousta-Blue-Speaker-Cabinet-Sound-Absorbing-Denim-30mm-x-40-x-55-15.2-Sq.-ft.-260-566"
+    ]
+   },
+   {
+    "item": "Sonic Barrier 1 in acoustic foam with PSA (260-525)",
+    "price": "USD 14.98-15.98",
+    "use": "behind the mid and on the mid chamber walls",
+    "urls": [
+     "https://parts-express.com/Sonic-Barrier-1-Acoustic-Foam-w-PSA-18-x-24-260-525"
+    ]
+   },
+   {
+    "item": "Sonic Barrier VE-1 vinyl damping sheet 27 x 40 in (268-035)",
+    "price": "USD 36.98",
+    "use": "optional on the large woofer-box panels",
+    "urls": [
+     "https://www.parts-express.com/Sonic-Barrier-Lightweight-Vinyl-Sound-Damping-Sheet-27-x-40-268-035"
+    ]
+   },
+   {
+    "note": "tweeter pocket: seal the 14 mm wire hole with putty/epoxy or the woofer box leaks through the bowl; a felt ring under any flange"
+   }
+  ]
+ },
+ "mid_chamber_my_calculation": {
+  "note": "closed box fc = Fs*sqrt(1+Vas/Vb), Qtc = Qts*sqrt(1+Vas/Vb)",
+  "results": {
+   "SB Acoustics Satori MR16P-8": {
+    "6.0": {
+     "fc_Hz": 92.7,
+     "Qtc": 0.87
+    },
+    "8.0": {
+     "fc_Hz": 81.8,
+     "Qtc": 0.77
+    }
+   },
+   "SB Acoustics SB17NRX2C35-8": {
+    "6.0": {
+     "fc_Hz": 85.6,
+     "Qtc": 0.98
+    },
+    "8.0": {
+     "fc_Hz": 76.3,
+     "Qtc": 0.88
+    }
+   },
+   "Scan-Speak 18W/8531G00": {
+    "6.0": {
+     "fc_Hz": 91.6,
+     "Qtc": 1.18
+    },
+    "8.0": {
+     "fc_Hz": 80.5,
+     "Qtc": 1.04
+    }
+   },
+   "Seas U18RNX/P (H1571-08)": {
+    "6.0": {
+     "fc_Hz": 92.9,
+     "Qtc": 0.8
+    },
+    "8.0": {
+     "fc_Hz": 83.3,
+     "Qtc": 0.72
+    }
+   },
+   "Scan-Speak 18WU/8741T00 (set 1)": {
+    "6.0": {
+     "fc_Hz": 93.7,
+     "Qtc": 1.04
+    },
+    "8.0": {
+     "fc_Hz": 83.0,
+     "Qtc": 0.92
+    }
+   },
+   "Purifi PTT6.5M08-NFA-01": {
+    "6.0": {
+     "fc_Hz": 90.1,
+     "Qtc": 0.59
+    },
+    "8.0": {
+     "fc_Hz": 82.2,
+     "Qtc": 0.54
+    }
+   },
+   "SB Acoustics SB17NAC35-8": {
+    "6.0": {
+     "fc_Hz": 80.3,
+     "Qtc": 1.07
+    },
+    "8.0": {
+     "fc_Hz": 71.3,
+     "Qtc": 0.95
+    }
+   }
+  }
+ }
+}

@@ -16,7 +16,8 @@ import params as P
 from build123d import (Align, Box, Cylinder, Edge, Face, Plane, Polygon, Pos, Rot, Solid, Vector, Wire, Compound,
                        export_step, export_stl, extrude, Axis)
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out-bookshelf' if BOOK else 'out')
+NAME = 'earmilk-bookshelf' if BOOK else 'earmilk-floorstander'
 MIN = (Align.MIN, Align.MIN, Align.MIN)
 
 
@@ -64,10 +65,10 @@ def outer_corners(p, y_face):
 def front_panel():
     p = outer_corners(box(0, 0, 0, PLAN, WALL, BODY), 0)
     p -= cyl_y(RUN, WOOFER['z'], WOOFER_CUTOUT, -1, WALL + 1)
-    p -= cyl_y(RUN, MID['z'], MID_CUTOUT, -1, WALL + 1)
+    if MID: p -= cyl_y(RUN, MID['z'], MID_CUTOUT, -1, WALL + 1)
     # 2026-10-08, the owner: the drivers flush, each frame and the trim ring over it in a rebate from the outer face
     p -= cyl_y(RUN, WOOFER['z'], WOOFER_REBATE['d'], -1, WOOFER_REBATE['depth'])
-    p -= cyl_y(RUN, MID['z'], MID_REBATE['d'], -1, MID_REBATE['depth'])
+    if MID: p -= cyl_y(RUN, MID['z'], MID_REBATE['d'], -1, MID_REBATE['depth'])
     p -= shadow_groove('front')
     p -= shadow_groove('front', GABLE_SHADOW_Z0)
     return p
@@ -75,7 +76,7 @@ def front_panel():
 
 def back_panel():
     p = outer_corners(box(0, PLAN - WALL, 0, PLAN, PLAN, BODY), PLAN)
-    p -= cyl_y(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5, PLAN - WALL - 1, PLAN + 1)   # the tube's 100 OD, a push fit
+    if PORT: p -= cyl_y(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5, PLAN - WALL - 1, PLAN + 1)   # the tube's 100 OD, a push fit
     if AMP:
         # the amplifier: its cutout through the back, and a rebate for its plate so the plate lies level with the finish
         p -= box(RUN - AMP['cut_w'] / 2, PLAN - WALL - 1, AMP['z'] - AMP['cut_h'] / 2, RUN + AMP['cut_w'] / 2, PLAN + 1, AMP['z'] + AMP['cut_h'] / 2)
@@ -136,8 +137,8 @@ def wire_hole_y():
 
 
 def dowel_points():
-    a, b = 60.0, PLAN - 60.0
-    return [(a, 200.0), (b, 200.0), (a, 330.0), (b, 330.0)]
+    a, b = 60.0 * PLAN / 390, PLAN - 60.0 * PLAN / 390
+    return [(a, 200.0 * PLAN / 390), (b, 200.0 * PLAN / 390), (a, 330.0 * PLAN / 390), (b, 330.0 * PLAN / 390)]
 
 
 # --- Gable block and bowl -----------------------------------------------------------------------------------------------
@@ -390,12 +391,13 @@ def build():
         'top-panel': top_panel(),
         'bottom-panel': bottom_panel(),
         'window-brace': brace_panel(),
-        'mid-shelf': mid_shelf(),
-        'mid-divider': mid_divider(),
         'gable-block': gable_block(),
         'waveguide-insert': waveguide_insert(),
-        'port-tube': port_tube(),
     }
+    if MID:
+        parts['mid-shelf'] = mid_shelf(); parts['mid-divider'] = mid_divider()
+    if PORT:
+        parts['port-tube'] = port_tube()
     if AMP:
         parts.update(amp_box_panels())
     else:
@@ -407,15 +409,19 @@ def woofer_air(parts):
     """The woofer chamber's air, from the solids: the inside of the box, less the mid chamber, the internal panels and
     the port tube. Driver displacement and damping are applied in fab/acoustics.py, per candidate driver."""
     inner = box(WALL, WALL, WALL, PLAN - WALL, PLAN - WALL, TOP_Z0)
-    mid_ch = box(WALL, WALL, MID_SHELF_TOP, PLAN - WALL, WALL + MID_CHAMBER_DEPTH, TOP_Z0)
-    air = inner - mid_ch
+    air = inner
+    mid_vol = 0.0
+    if MID:
+        mid_ch = box(WALL, WALL, MID_SHELF_TOP, PLAN - WALL, WALL + MID_CHAMBER_DEPTH, TOP_Z0)
+        air = inner - mid_ch; mid_vol = mid_ch.volume
     for k in ('window-brace', 'mid-shelf', 'mid-divider', 'port-tube'):
-        air -= parts[k]
+        if k in parts:
+            air -= parts[k]
     if AMP:
         # the amplifier's sealed box and everything inside it is not the woofer's air
         y0, y1, z0, z1 = amp_box_extent()
         air -= box(WALL, y0 - WALL, z0 - WALL, PLAN - WALL, y1, z1 + WALL)
-    return air.volume, mid_ch.volume
+    return air.volume, mid_vol
 
 
 def main():
@@ -440,61 +446,55 @@ def main():
         if name in wood:
             rec['mass_kg'] = round(solid.volume / 1e9 * BIRCH_DENSITY, 2)
         report['parts'][name] = rec
-    tube, collar = port_parts()
-    for nm, part in (('port-tube-with-flange', tube), ('port-flare-collar', collar)):
-        export_stl(part, os.path.join(OUT, 'stl', f'{nm}.stl'), tolerance=0.05, angular_tolerance=0.1)
-        export_step(part, os.path.join(OUT, 'step', f'{nm}.step'))
-    whole = Compound(label='earmilk floorstander', children=[s for s in parts.values()])
-    export_step(whole, os.path.join(OUT, 'step', 'earmilk-floorstander.step'))
+    if PORT:
+        tube, collar = port_parts()
+        for nm, part in (('port-tube-with-flange', tube), ('port-flare-collar', collar)):
+            export_stl(part, os.path.join(OUT, 'stl', f'{nm}.stl'), tolerance=0.05, angular_tolerance=0.1)
+            export_step(part, os.path.join(OUT, 'step', f'{nm}.step'))
+    whole = Compound(label=NAME, children=[s for s in parts.values()])
+    export_step(whole, os.path.join(OUT, 'step', f'{NAME}.step'))
 
-    # The bowl test piece: the middle of the block around the bowl, 250 x 240 x 150, which fits a 256 mm printer.
+    # The waveguide insert for printing (SLA or MJF, or FDM finely) or CNC from solid: whole, and halved at the centre
+    # plane with two 3 mm pin holes when it is wider than a 256 mm printer.
+    ins = parts['waveguide-insert']
+    export_stl(ins, os.path.join(OUT, 'stl', 'waveguide-insert.stl'), tolerance=0.02, angular_tolerance=0.05)
+    bb = ins.bounding_box()
+    if bb.max.X - bb.min.X > 250:
+        zp = WAVEGUIDE['throat_z'] - TWEETER_PART['flange_d'] / 2 - 12
+        pins = Pos(RUN, INSERT['back_y'] - 25, zp) * Rot(0, 90, 0) * Cylinder(1.6, 16)
+        pins += Pos(RUN, 25, BODY + 15) * Rot(0, 90, 0) * Cylinder(1.6, 16)
+        for nm, half in (('waveguide-insert-left', ins & box(-1, -10, BODY - 1, RUN, PLAN, TOTAL)),
+                         ('waveguide-insert-right', ins & box(RUN, -10, BODY - 1, PLAN + 1, PLAN, TOTAL))):
+            export_stl(half - pins, os.path.join(OUT, 'stl', f'{nm}.stl'), tolerance=0.02, angular_tolerance=0.05)
+    # The gable block for printing (the cheap route): the floorstander's in four pieces for a 256 mm printer, the
+    # bookshelf's whole. Painted like the rest, it looks the same.
     g = parts['gable-block']
-    slice_ = g & box(70, 0, BODY, 320, 240, RIDGE_Z + 1)
-    export_stl(slice_, os.path.join(OUT, 'stl', 'gable-test-slice.stl'), tolerance=0.05, angular_tolerance=0.1)
-    export_step(slice_, os.path.join(OUT, 'step', 'gable-test-slice.step'))
-    lower = slice_ & box(0, -1, BODY - 1, PLAN, PLAN, GABLE_SPLIT_Z)
-    upper = slice_ & box(0, -1, GABLE_SPLIT_Z, PLAN, PLAN, TOTAL + 1)
-    export_stl(lower, os.path.join(OUT, 'stl', 'gable-test-slice-lower.stl'), tolerance=0.05, angular_tolerance=0.1)
-    export_stl(upper, os.path.join(OUT, 'stl', 'gable-test-slice-upper.stl'), tolerance=0.05, angular_tolerance=0.1)
-    # The vibe route: the block printed in four pieces that fit a 256 mm printer, split at x = 195 and y = 150, with
-    # 3 mm pin holes on the faces that have solid material to spare. Painted like the rest, it looks the same.
-    pins_y150 = [(40.0, 885.0), (40.0, 930.0), (350.0, 885.0), (350.0, 930.0)]        # (x, z) on the y = 150 face
-    pins_x195 = [(200.0, 975.0), (250.0, 930.0), (300.0, 890.0)]                         # (y, z) on the back pieces' x = 195 face, all under the back slope and clear of the tweeter pocket
-    def pin_y(x, z): return cyl_y(x, z, 3.2, 150 - 8, 150 + 8)
-    def pin_x(y, z): return Pos(RUN, y, z) * Rot(0, 90, 0) * Cylinder(1.6, 16)
-    holes = None
-    for (x, z) in pins_y150:
-        holes = pin_y(x, z) if holes is None else holes + pin_y(x, z)
-    for (y, z) in pins_x195:
-        holes = holes + pin_x(y, z)
-    gp = g - holes
-    quads = {'gable-print-front-left': box(-1, -1, BODY - 1, RUN, 150, TOTAL + 1),
-             'gable-print-front-right': box(RUN, -1, BODY - 1, PLAN + 1, 150, TOTAL + 1),
-             'gable-print-back-left': box(-1, 150, BODY - 1, RUN, PLAN + 1, TOTAL + 1),
-             'gable-print-back-right': box(RUN, 150, BODY - 1, PLAN + 1, PLAN + 1, TOTAL + 1)}
     os.makedirs(os.path.join(OUT, 'stl', 'gable-print'), exist_ok=True)
-    for nm, q in quads.items():
-        piece = gp & q
-        export_stl(piece, os.path.join(OUT, 'stl', 'gable-print', f'{nm}.stl'), tolerance=0.05, angular_tolerance=0.1)
-        bb = piece.bounding_box()
-        report['parts'][nm] = {'volume_l': round(piece.volume / 1e6, 3),
-                               'size_mm': [round(bb.max.X - bb.min.X, 1), round(bb.max.Y - bb.min.Y, 1), round(bb.max.Z - bb.min.Z, 1)]}
-
-    # The block in two halves for 3-axis milling.
-    for nm, part in (('gable-block-lower', g & box(-1, -1, BODY - 1, PLAN + 1, PLAN + 1, GABLE_SPLIT_Z)),
-                     ('gable-block-upper', g & box(-1, -1, GABLE_SPLIT_Z, PLAN + 1, PLAN + 1, TOTAL + 1))):
-        export_step(part, os.path.join(OUT, 'step', f'{nm}.step'))
-        report['parts'][nm] = {'volume_l': round(part.volume / 1e6, 4)}
+    if PLAN > 256:
+        ys = 150.0
+        quads = {'gable-print-front-left': box(-1, -1, BODY - 1, RUN, ys, TOTAL + 1),
+                 'gable-print-front-right': box(RUN, -1, BODY - 1, PLAN + 1, ys, TOTAL + 1),
+                 'gable-print-back-left': box(-1, ys, BODY - 1, RUN, PLAN + 1, TOTAL + 1),
+                 'gable-print-back-right': box(RUN, ys, BODY - 1, PLAN + 1, PLAN + 1, TOTAL + 1)}
+        for nm, q in quads.items():
+            piece = g & q
+            export_stl(piece, os.path.join(OUT, 'stl', 'gable-print', f'{nm}.stl'), tolerance=0.05, angular_tolerance=0.1)
+            bb = piece.bounding_box()
+            report['parts'][nm] = {'volume_l': round(piece.volume / 1e6, 3),
+                                   'size_mm': [round(bb.max.X - bb.min.X, 1), round(bb.max.Y - bb.min.Y, 1), round(bb.max.Z - bb.min.Z, 1)]}
+    else:
+        export_stl(g, os.path.join(OUT, 'stl', 'gable-print', 'gable-print-whole.stl'), tolerance=0.05, angular_tolerance=0.1)
 
     air, mid_gross = woofer_air(parts)
-    cavity = bowl_cavity()
+    cavity = waveguide_cavity() if WAVEGUIDE else bowl_cavity()
     wood_kg = sum(r.get('mass_kg', 0) for r in report['parts'].values() if 'mass_kg' in r)
     report['woofer_chamber_air_l'] = round(air / 1e6, 3)
     report['woofer_chamber_gross_l'] = round((INNER * INNER * (TOP_Z0 - WALL)) / 1e6, 3)
     report['mid_chamber_gross_l'] = round(mid_gross / 1e6, 3)
-    report['bowl_cavity_l'] = round(cavity.volume / 1e6, 4)
+    report['waveguide_air_l'] = round(cavity.volume / 1e6, 4)
     report['wood_mass_kg'] = round(wood_kg, 2)
-    report['port_tube_length_mm'] = port_length_mm()
+    report['port_tube_length_mm'] = port_length_mm() if PORT else None
+    report['size'] = SIZE
     json.dump(report, open(os.path.join(OUT, 'cad.json'), 'w'), indent=1)
     print(json.dumps({k: v for k, v in report.items() if k != 'parts'}, indent=1))
     print(f'{len(parts)} parts, {time.time() - t0:.1f}s')

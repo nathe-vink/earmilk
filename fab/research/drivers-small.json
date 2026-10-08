@@ -1,0 +1,3882 @@
+{
+ "meta": {
+  "title": "earmilk siblings: drivers and electronics for the bookshelf and desk/pint cartons",
+  "researched": "2026-10-08",
+  "method": [
+   "WebFetch/curl were blocked, so every figure is a search-engine extract of the cited maker datasheet or retailer page. Open the datasheet before cutting metal or wood.",
+   "Marking: a field listed under confidence.confirmed agreed in two or more independent places; confidence.unconfirmed means one place only, a value I derived or inferred, or a value read from an unlabelled drawing; confidence.conflicts lists disagreements and which value was used.",
+   "Box numbers are my own Thiele-Small calculation (closed box; Small vented box with QL = 7). Vented results are the lowest f3 with peak <= +0.5 dB and response >= -1 dB above 1.6 x f3. 'dsp_boost' is the asymptotic Linkwitz-transform boost (40*log10(fc/target)). Ports: one flanged end, 17 m/s at full Xmax for the minimum diameter.",
+   "The shared web-search budget ran out before Dayton RS180/RS180P-8A could be checked; those are not in this file.",
+   "Prices are snapshots (several pages were months old); USD unless stated. Currency conversions are mine."
+  ],
+  "conventions": {
+   "Xmax": "one-way linear excursion, mm",
+   "sensitivity": "dB SPL at 2.83 V / 1 m unless stated",
+   "depth_behind_baffle_mm": "from the back of the flange to the rear of the motor (mounting depth)",
+   "effective_cone_d_mm": "2*sqrt(Sd/pi): the visible cone plus about half the surround, use for CAD"
+  }
+ },
+ "geometry": {
+  "assumptions": "Square plan W; body height 2.2 W; roof rise 0.385 W (37.6 deg pitch, matching the flagship); solid gable block on top (not counted as air volume); 18 mm birch walls for the bookshelf with separate bottom and top panels; net = gross x 0.95 (bracing, wadding) - driver - port - 3.5 L for a sealed Hypex FusionAmp sub-compartment where stated (the sibling amps research, research/amps.md, estimates 3.5-4 L).",
+  "bookshelf": [
+   {
+    "W_mm": 200,
+    "body_mm": 440,
+    "roof_rise_mm": 77,
+    "slope_length_mm": 126,
+    "internal_mm": "164 x 164 x 404",
+    "gross_L": 10.9,
+    "net_L_with_FA122": 6.0,
+    "net_L_board_amp_or_passive": 9.6
+   },
+   {
+    "W_mm": 220,
+    "body_mm": 484,
+    "roof_rise_mm": 85,
+    "slope_length_mm": 139,
+    "internal_mm": "184 x 184 x 448",
+    "gross_L": 15.2,
+    "net_L_with_FA122": 10.1,
+    "net_L_board_amp_or_passive": 13.6
+   },
+   {
+    "W_mm": 240,
+    "body_mm": 528,
+    "roof_rise_mm": 92,
+    "slope_length_mm": 151,
+    "internal_mm": "204 x 204 x 492",
+    "gross_L": 20.5,
+    "net_L_with_FA122": 15.2,
+    "net_L_board_amp_or_passive": 18.6
+   },
+   {
+    "W_mm": 250,
+    "body_mm": 550,
+    "roof_rise_mm": 96,
+    "slope_length_mm": 158,
+    "internal_mm": "214 x 214 x 514",
+    "gross_L": 23.5,
+    "net_L_with_FA122": 18.1,
+    "net_L_board_amp_or_passive": 21.5
+   }
+  ],
+  "pint": [
+   {
+    "W_mm": 100,
+    "wall_mm": 4,
+    "note": "3D print",
+    "internal_mm": "92 x 92 x 212",
+    "gross_L": 1.79
+   },
+   {
+    "W_mm": 100,
+    "wall_mm": 6,
+    "note": "6 mm birch ply",
+    "internal_mm": "88 x 88 x 208",
+    "gross_L": 1.61
+   },
+   {
+    "W_mm": 100,
+    "wall_mm": 9,
+    "note": "9 mm birch ply",
+    "internal_mm": "82 x 82 x 202",
+    "gross_L": 1.36
+   }
+  ],
+  "pint_design_volume_L": "1.3 net (range 1.0-1.6)",
+  "roof_waveguide": {
+   "mouth_width": "about 0.5 W (100 mm at W 200, 110 at 220, 125 at 250; 50 mm on the pint)",
+   "usable_length_along_slope": "slope 0.63 W minus margins: about 110 / 121 / 132 / 138 mm for W 200 / 220 / 240 / 250",
+   "oblique_axis_warning": "If the tweeter axis is horizontal (or tilted only slightly) instead of normal to the slope, the mouth on the slope is an oblique section: the effective mouth height perpendicular to the axis is only about 0.61 x the along-slope length, i.e. about 67 / 74 / 81 / 84 mm for W 200 / 220 / 240 / 250 and about 34 mm on the pint. The waveguide is then elliptical (about 110 x 74 mm at W 220).",
+   "vertical_extent_rule": "With a near-horizontal axis the faceplate's full diameter stands vertically inside the roof block: the roof is only 0.385 W tall (85 mm at W 220, 38 mm on the pint), so 100-104 mm faceplates cannot sit wholly in the bookshelf roof and must poke down into the body.",
+   "centre_to_centre": "W 220 with a 171 mm woofer frame 12 mm below the eave and the tweeter 30% up the slope: about 127 mm, against a wavelength of 156 mm at 2.2 kHz (150 mm frame: about 117 mm). Keep the woofer as high as possible."
+  }
+ },
+ "bookshelf": {
+  "woofers": [
+   {
+    "id": "sb17nrx2c35-8",
+    "make": "SB Acoustics",
+    "model": "SB17NRX2C35-8",
+    "family": "Norex (NRX)",
+    "size_class": "6.5 in class (SB names it 6 in)",
+    "impedance_ohm": 8,
+    "status": "RECOMMENDED bookshelf woofer (recommended set)",
+    "ts": {
+     "Re_ohm": 5.7,
+     "Le_mH": 0.15,
+     "Fs_Hz": 36.5,
+     "Qms": 4.55,
+     "Qes": 0.47,
+     "Qts": 0.42,
+     "Vas_L": 27.0,
+     "Sd_cm2": 118,
+     "Mms_g": 13.9,
+     "Cms_mm_per_N": 1.37,
+     "Bl_Tm": 6.25,
+     "Rms_kg_s": 0.7,
+     "Xmax_mm": 5.5,
+     "sensitivity_dB": 87.0,
+     "power_W": 50,
+     "voice_coil": "35.5 mm dia x 16 mm, 5 mm gap",
+     "datasheet_rev": "Rev.2, 28 Jan 2019"
+    },
+    "mechanical": {
+     "frame_shape": "round, vented cast aluminium",
+     "frame_od_mm": 171.0,
+     "cutout_mm": 144.9,
+     "bolt_circle_mm": 159.0,
+     "holes": "4 x 4.3 mm (drawing also shows 4 x 8.5 mm, probably a counterbore/recess)",
+     "flange_thickness_mm": 6.5,
+     "depth_behind_baffle_mm": 75.0,
+     "overall_depth_mm": 85.9,
+     "effective_cone_d_mm": 122.6,
+     "displacement_L": 0.63,
+     "weight_kg": 1.56,
+     "magnet_kg": 0.54
+    },
+    "appearance": {
+     "cone": "black Norex paper/natural-fibre cone, curvilinear profile",
+     "dust_cap": "Norex dome dust cap, about 46 mm (1.8 in) on the sibling SB17NRX2L35-8",
+     "surround": "NBR rubber positive half-roll",
+     "frame": "cast aluminium, four narrow double spokes (about 11 x 6 mm), open under the spider",
+     "colour": "black overall (cone confirmed black on the sibling)",
+     "note": "appearance details come from the audioXpress test of the SB17NRX2L35-8 sibling; the C35 shares frame and cone family"
+    },
+    "price": [
+     {
+      "vendor": "Madisound",
+      "price": "USD 76.70",
+      "note": "8 ohm out of stock in snapshot; 4 ohm version in stock at the same price"
+     },
+     {
+      "vendor": "Solen",
+      "price": "CAD 105.28"
+     },
+     {
+      "vendor": "Masori / Soundimports",
+      "price": "EUR 70.95-75.95"
+     }
+    ],
+    "box": {
+     "retailer_suggestion": "Madisound: sealed 0.25 ft3 (7.1 L) F3 80 Hz; vented 0.6 ft3 (17 L), 50% fill, 2 in x 7 in vent (51 x 178 mm), F3 45 Hz",
+     "sim": {
+      "W200_with_FA122_compartment": {
+       "net_volume_L": 6.0,
+       "sealed": {
+        "fc_Hz": 85.3,
+        "Qtc": 0.98,
+        "f3_Hz": 67.6,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 11.1
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W200_no_internal_amp": {
+       "net_volume_L": 9.5,
+       "sealed": {
+        "fc_Hz": 71.4,
+        "Qtc": 0.82,
+        "f3_Hz": 62.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 8.0
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W220_with_FA122_compartment": {
+       "net_volume_L": 10.1,
+       "sealed": {
+        "fc_Hz": 69.9,
+        "Qtc": 0.8,
+        "f3_Hz": 62.5,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 7.6
+       },
+       "vented": {
+        "fb_Hz": 22.1,
+        "f3_Hz": 59.2,
+        "peak_dB": 0.48,
+        "min_port_d_mm_at_Xmax_17ms": 26.0,
+        "port_d_mm": 35,
+        "port_length_mm": 551
+       }
+      },
+      "W220_no_internal_amp": {
+       "net_volume_L": 13.6,
+       "sealed": {
+        "fc_Hz": 63.0,
+        "Qtc": 0.73,
+        "f3_Hz": 61.5,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 5.8
+       },
+       "vented": {
+        "fb_Hz": 31.9,
+        "f3_Hz": 50.4,
+        "peak_dB": 0.48,
+        "min_port_d_mm_at_Xmax_17ms": 31.2,
+        "port_d_mm": 35,
+        "port_length_mm": 181
+       }
+      },
+      "W240_with_FA122_compartment": {
+       "net_volume_L": 15.2,
+       "sealed": {
+        "fc_Hz": 60.8,
+        "Qtc": 0.7,
+        "f3_Hz": 61.5,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 5.2
+       },
+       "vented": {
+        "fb_Hz": 34.1,
+        "f3_Hz": 47.0,
+        "peak_dB": 0.49,
+        "min_port_d_mm_at_Xmax_17ms": 32.3,
+        "port_d_mm": 35,
+        "port_length_mm": 136
+       }
+      },
+      "W240_no_internal_amp": {
+       "net_volume_L": 18.7,
+       "sealed": {
+        "fc_Hz": 57.1,
+        "Qtc": 0.66,
+        "f3_Hz": 61.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.1
+       },
+       "vented": {
+        "fb_Hz": 35.9,
+        "f3_Hz": 41.9,
+        "peak_dB": 0.43,
+        "min_port_d_mm_at_Xmax_17ms": 33.1,
+        "port_d_mm": 41,
+        "port_length_mm": 134
+       }
+      },
+      "W250_with_FA122_compartment": {
+       "net_volume_L": 18.1,
+       "sealed": {
+        "fc_Hz": 57.6,
+        "Qtc": 0.66,
+        "f3_Hz": 61.7,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.3
+       },
+       "vented": {
+        "fb_Hz": 35.6,
+        "f3_Hz": 42.7,
+        "peak_dB": 0.43,
+        "min_port_d_mm_at_Xmax_17ms": 33.0,
+        "port_d_mm": 35,
+        "port_length_mm": 99
+       }
+      },
+      "W250_no_internal_amp": {
+       "net_volume_L": 21.6,
+       "sealed": {
+        "fc_Hz": 54.8,
+        "Qtc": 0.63,
+        "f3_Hz": 62.3,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 3.4
+       },
+       "vented": {
+        "fb_Hz": 36.9,
+        "f3_Hz": 38.9,
+        "peak_dB": 0.42,
+        "min_port_d_mm_at_Xmax_17ms": 33.6,
+        "port_d_mm": 41,
+        "port_length_mm": 104
+       }
+      }
+     },
+     "summary": "Below about 14 L use it sealed with DSP (10.1 L: fc 70 Hz, Qtc 0.80, f3 62.5 Hz; +7.6 dB shelf gives f3 45 Hz). At 15.2-18.1 L (W 240-250 with the FA122) vented: fb 34-36 Hz, f3 43-47 Hz, port 35 x 99-137 mm or 41 x 142-193 mm."
+    },
+    "fit_notes": "171 mm frame = 0.78 W at W 220, the same visual ratio as the flagship's 314 mm woofer on 390 mm (0.81 W). Low Le (0.15 mH) and rated range suit a 2-2.5 kHz crossover. It is also the sibling floorstander research's alternate midrange, so the CAD model can be shared.",
+    "confidence": {
+     "confirmed": [
+      "Fs, Qts, Vas, Re, Le, Sd, Bl, sensitivity (SB page + PDF + LDB/retailers)",
+      "frame OD 171 (PDF + Madisound + Willys)",
+      "bolt circle 159 and 4 x 4.3 holes (PDF + retailer)"
+     ],
+     "unconfirmed": [
+      "cutout 144.9 (retailer listings; one says 144)",
+      "depth 75 / 85.9 and flange 6.5 (one retailer table)",
+      "appearance (sibling model)"
+     ],
+     "conflicts": [
+      "sensitivity 86.4 dB/1 W (LDB) vs 87 dB/2.83 V (SB): same thing at 5.7 ohm Re, not a real conflict"
+     ]
+    },
+    "sources": [
+     "https://sbacoustics.com/product/6in-sb17nrx2c35-8-norex/",
+     "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17NRX2C35-8.pdf",
+     "https://loudspeakerdatabase.com/SB/SB17NRX2C35-8",
+     "https://en.toutlehautparleur.com/speaker-sb-acoustics-sb17nrx2c35-8-impedance-8-ohm-6-inch.html",
+     "https://www.madisoundspeakerstore.com/approx-6-7-woofers-sb-acoustics/sb-acoustics-sb17nrx2c35-8-6-woofer-paper-cone-new-version-8-ohm/",
+     "https://solen.ca/en/products/sb-acoustics-sb17nrx2c35-8-17cm-norex-paper-cone-woofer-8ohm",
+     "https://willys-hifi.com/products/sb-acoustics-sb17nrx2c35-8-norex-midwoofer",
+     "https://masori.de/en/products/sb17nrx2c35-8-en",
+     "https://www.soundimports.eu/en/sb-acoustics-sb17nrx2c35-8.html",
+     "https://audioxpress.com/article/test-bench-the-sb17nrx2l35-8-6-woofer-from-sb-acoustics-norex-product-line"
+    ]
+   },
+   {
+    "id": "sb15nrx2c30-8",
+    "make": "SB Acoustics",
+    "model": "SB15NRX2C30-8",
+    "family": "Norex (NRX)",
+    "size_class": "5.25 in class (SB names it 5 in)",
+    "impedance_ohm": 8,
+    "status": "ALTERNATIVE woofer: best choice for W 200-220 vented; same 150 mm frame as the budget RS150P-8A",
+    "ts": {
+     "Re_ohm": 5.9,
+     "Le_mH": 0.14,
+     "Fs_Hz": 36.5,
+     "Qms": 3.48,
+     "Qes": 0.37,
+     "Qts": 0.34,
+     "Vas_L": 20.0,
+     "Sd_cm2": 82,
+     "Mms_g": 9.1,
+     "Cms_mm_per_N": 2.1,
+     "Bl_Tm": 5.75,
+     "Rms_kg_s": 0.6,
+     "Xmax_mm": 5.0,
+     "sensitivity_dB": 86.5,
+     "power_W": 50,
+     "recommended_range_Hz": "40-4500",
+     "voice_coil": "30.5 mm dia x 15 mm, 5 mm gap",
+     "datasheet_rev": "Rev.2, 26 Feb 2019"
+    },
+    "mechanical": {
+     "frame_shape": "round, vented cast aluminium",
+     "frame_od_mm": 150.0,
+     "cutout_mm": 123.9,
+     "bolt_circle_mm": 138.0,
+     "holes": "4 x 4.3 mm (+ 4 x 8.5 mm, probably counterbore)",
+     "flange_thickness_mm": 6.5,
+     "depth_behind_baffle_mm": 68.3,
+     "overall_depth_mm": 78.9,
+     "magnet_od_mm": 100.0,
+     "effective_cone_d_mm": 102.2,
+     "displacement_L": 0.59,
+     "weight_kg": 1.46,
+     "magnet_kg": 0.54
+    },
+    "appearance": {
+     "cone": "Norex natural-fibre paper cone (NRX family: black)",
+     "dust_cap": "Norex dome dust cap (NRX family)",
+     "surround": "rubber roll",
+     "frame": "vented cast aluminium, slim spokes",
+     "colour": "black",
+     "note": "family description; not checked on this exact model"
+    },
+    "price": [
+     {
+      "vendor": "Madisound",
+      "price": "USD 68.00",
+      "note": "out of stock in snapshot (also USD 68 for the 4 ohm)"
+     },
+     {
+      "vendor": "Solen",
+      "price": "CAD 93.33"
+     }
+    ],
+    "box": {
+     "sim": {
+      "W200_with_FA122_compartment": {
+       "net_volume_L": 6.1,
+       "sealed": {
+        "fc_Hz": 75.6,
+        "Qtc": 0.7,
+        "f3_Hz": 75.9,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 9.0
+       },
+       "vented": {
+        "fb_Hz": 41.6,
+        "f3_Hz": 61.3,
+        "peak_dB": 0.49,
+        "min_port_d_mm_at_Xmax_17ms": 28.3,
+        "port_d_mm": 35,
+        "port_length_mm": 246
+       }
+      },
+      "W200_no_internal_amp": {
+       "net_volume_L": 9.6,
+       "sealed": {
+        "fc_Hz": 64.1,
+        "Qtc": 0.6,
+        "f3_Hz": 78.0,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 6.2
+       },
+       "vented": {
+        "fb_Hz": 43.6,
+        "f3_Hz": 49.5,
+        "peak_dB": 0.1,
+        "min_port_d_mm_at_Xmax_17ms": 29.0,
+        "port_d_mm": 35,
+        "port_length_mm": 131
+       }
+      },
+      "W220_with_FA122_compartment": {
+       "net_volume_L": 10.2,
+       "sealed": {
+        "fc_Hz": 62.9,
+        "Qtc": 0.59,
+        "f3_Hz": 78.5,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 5.8
+       },
+       "vented": {
+        "fb_Hz": 42.6,
+        "f3_Hz": 48.4,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 28.7,
+        "port_d_mm": 35,
+        "port_length_mm": 129
+       }
+      },
+      "W220_no_internal_amp": {
+       "net_volume_L": 13.7,
+       "sealed": {
+        "fc_Hz": 57.3,
+        "Qtc": 0.53,
+        "f3_Hz": 81.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.2
+       },
+       "vented": {
+        "fb_Hz": 39.4,
+        "f3_Hz": 42.9,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 27.6,
+        "port_d_mm": 35,
+        "port_length_mm": 110
+       }
+      },
+      "W240_with_FA122_compartment": {
+       "net_volume_L": 15.2,
+       "sealed": {
+        "fc_Hz": 55.5,
+        "Qtc": 0.52,
+        "f3_Hz": 82.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 3.7
+       },
+       "vented": {
+        "fb_Hz": 39.1,
+        "f3_Hz": 41.0,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 27.5,
+        "port_d_mm": 35,
+        "port_length_mm": 97
+       }
+      },
+      "W240_no_internal_amp": {
+       "net_volume_L": 18.7,
+       "sealed": {
+        "fc_Hz": 52.5,
+        "Qtc": 0.49,
+        "f3_Hz": 84.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 2.7
+       },
+       "vented": {
+        "fb_Hz": 38.9,
+        "f3_Hz": 38.0,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 27.4,
+        "port_d_mm": 35,
+        "port_length_mm": 76
+       }
+      },
+      "W250_with_FA122_compartment": {
+       "net_volume_L": 18.1,
+       "sealed": {
+        "fc_Hz": 52.9,
+        "Qtc": 0.49,
+        "f3_Hz": 83.9,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 2.8
+       },
+       "vented": {
+        "fb_Hz": 38.9,
+        "f3_Hz": 38.5,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 27.4,
+        "port_d_mm": 35,
+        "port_length_mm": 79
+       }
+      },
+      "W250_no_internal_amp": {
+       "net_volume_L": 21.6,
+       "sealed": {
+        "fc_Hz": 50.6,
+        "Qtc": 0.47,
+        "f3_Hz": 85.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 2.1
+       },
+       "vented": {
+        "fb_Hz": 39.4,
+        "f3_Hz": 36.9,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 27.6,
+        "port_d_mm": 35,
+        "port_length_mm": 60
+       }
+      }
+     },
+     "summary": "Natural vented driver: 10.2 L (FA122) fb 43 Hz f3 48 Hz with a 35 x 129 mm port; 13.7 L (board amp) fb 39 Hz f3 43 Hz, 35 x 110 mm. Sealed is over-damped (Qtc 0.53-0.59)."
+    },
+    "fit_notes": "150 mm frame suits W 200-220 (0.68-0.75 W). Better bass than the RS150P-8A in the same box for USD 13 more.",
+    "confidence": {
+     "confirmed": [
+      "Fs 36.5, Qts 0.34, Vas 20 (SB PDF + LDB + Willys + TLHP)",
+      "frame 150 (PDF value + Willys)",
+      "cutout 123.9 (PDF value + TLHP)",
+      "depth 68.3 behind front / 78.9 overall (PDF values + TLHP)"
+     ],
+     "unconfirmed": [
+      "bolt circle 138, magnet 100 and flange 6.5 are unlabelled PDF drawing values mapped by position",
+      "Xmax 5.0 (LDB; TLHP calculates 6.67)",
+      "appearance (family description)"
+     ],
+     "conflicts": [
+      "Xmax 5 vs 6.67 mm: 5 used",
+      "audio-hi.fi PDF copy shows Fs 39 / Vas 16.9 (older revision)"
+     ]
+    },
+    "sources": [
+     "https://sbacoustics.com/product/5in-sb15nrx2c30-8-norex/",
+     "https://sbacoustics.com/wp-content/uploads/2020/02/5in-SB15NRX2C30-8.pdf",
+     "https://loudspeakerdatabase.com/SB/SB15NRX2C30-8",
+     "https://willys-hifi.com/products/sb-acoustics-sb15nrx2c30-8-norex-midwoofer",
+     "https://en.toutlehautparleur.com/speaker-sb-acoustics-sb15nrx2c30-8-impedance-8-ohm-5-inch.html",
+     "https://www.madisoundspeakerstore.com/approx-5-woofers/sb-acoustics-sb15nrx2c30-8-5-woofer-new-version/",
+     "https://solen.ca/en/products/sb-acoustics-sb15nrx2c30-8-15cm-norex-paper-cone-midwoofer-8ohm"
+    ]
+   },
+   {
+    "id": "rs150p-8a",
+    "make": "Dayton Audio",
+    "model": "RS150P-8A",
+    "family": "Reference (paper)",
+    "size_class": "6 in nominal (5.25-5.5 in class frame)",
+    "impedance_ohm": 8,
+    "status": "BUDGET bookshelf woofer (budget set)",
+    "ts": {
+     "Re_ohm": 6.7,
+     "Le_mH": 0.65,
+     "Fs_Hz": 47.1,
+     "Qms": 1.66,
+     "Qes": 0.43,
+     "Qts": 0.34,
+     "Vas_L": 16.7,
+     "Sd_cm2": 85,
+     "Mms_g": 6.9,
+     "Bl_Tm": 5.6,
+     "Xmax_mm": 4.0,
+     "sensitivity_dB": 88.7,
+     "power_W": "40 RMS / 65 max",
+     "range_Hz": "49-10000"
+    },
+    "mechanical": {
+     "frame_shape": "round cast frame",
+     "frame_od_mm": 150.0,
+     "cutout_mm": 122.0,
+     "bolt_circle_mm": null,
+     "holes": "n/f (the aluminium RS150-8 is described with a six-hole cast frame)",
+     "overall_depth_mm": 74.0,
+     "effective_cone_d_mm": 104.0
+    },
+    "appearance": {
+     "cone": "treated paper cone",
+     "dust_cap": "n/f",
+     "surround": "rubber",
+     "frame": "cast",
+     "colour": "n/f (check photos)"
+    },
+    "price": [
+     {
+      "vendor": "Parts Express",
+      "price": "USD 54.98",
+      "note": "MSRP 68.99; USD 44.52 each for 4+; in stock in snapshot"
+     },
+     {
+      "vendor": "Audiophonics",
+      "price": "EUR 69.00"
+     }
+    ],
+    "box": {
+     "maker_suggestion": "Dayton: sealed 0.37 ft3 (10.5 L) F3 85 Hz; vented 1.02 ft3 (28.9 L) F3 49 Hz",
+     "sim": {
+      "W200_with_FA122_compartment": {
+       "net_volume_L": 6.2,
+       "sealed": {
+        "fc_Hz": 90.4,
+        "Qtc": 0.65,
+        "f3_Hz": 98.6,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 12.1
+       },
+       "vented": {
+        "fb_Hz": 57.8,
+        "f3_Hz": 71.2,
+        "peak_dB": 0.45,
+        "min_port_d_mm_at_Xmax_17ms": 30.4,
+        "port_d_mm": 35,
+        "port_length_mm": 112
+       }
+      },
+      "W200_no_internal_amp": {
+       "net_volume_L": 9.7,
+       "sealed": {
+        "fc_Hz": 77.6,
+        "Qtc": 0.56,
+        "f3_Hz": 102.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 9.5
+       },
+       "vented": {
+        "fb_Hz": 54.3,
+        "f3_Hz": 58.9,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 29.5,
+        "port_d_mm": 35,
+        "port_length_mm": 75
+       }
+      },
+      "W220_with_FA122_compartment": {
+       "net_volume_L": 10.3,
+       "sealed": {
+        "fc_Hz": 76.2,
+        "Qtc": 0.55,
+        "f3_Hz": 103.5,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 9.2
+       },
+       "vented": {
+        "fb_Hz": 53.0,
+        "f3_Hz": 57.5,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 29.1,
+        "port_d_mm": 35,
+        "port_length_mm": 73
+       }
+      },
+      "W220_no_internal_amp": {
+       "net_volume_L": 13.8,
+       "sealed": {
+        "fc_Hz": 70.0,
+        "Qtc": 0.51,
+        "f3_Hz": 107.1,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 7.7
+       },
+       "vented": {
+        "fb_Hz": 50.3,
+        "f3_Hz": 51.3,
+        "peak_dB": -0.01,
+        "min_port_d_mm_at_Xmax_17ms": 28.4,
+        "port_d_mm": 35,
+        "port_length_mm": 57
+       }
+      },
+      "W240_with_FA122_compartment": {
+       "net_volume_L": 15.4,
+       "sealed": {
+        "fc_Hz": 68.1,
+        "Qtc": 0.49,
+        "f3_Hz": 108.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 7.2
+       },
+       "vented": {
+        "fb_Hz": 50.3,
+        "f3_Hz": 49.3,
+        "peak_dB": -0.01,
+        "min_port_d_mm_at_Xmax_17ms": 28.4,
+        "port_d_mm": 35,
+        "port_length_mm": 48
+       }
+      },
+      "W240_no_internal_amp": {
+       "net_volume_L": 18.9,
+       "sealed": {
+        "fc_Hz": 64.7,
+        "Qtc": 0.47,
+        "f3_Hz": 110.7,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 6.3
+       },
+       "vented": {
+        "fb_Hz": 50.8,
+        "f3_Hz": 47.3,
+        "peak_dB": -0.01,
+        "min_port_d_mm_at_Xmax_17ms": 28.5,
+        "port_d_mm": 35,
+        "port_length_mm": 33
+       }
+      },
+      "W250_with_FA122_compartment": {
+       "net_volume_L": 18.3,
+       "sealed": {
+        "fc_Hz": 65.2,
+        "Qtc": 0.47,
+        "f3_Hz": 110.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 6.4
+       },
+       "vented": {
+        "fb_Hz": 50.8,
+        "f3_Hz": 47.6,
+        "peak_dB": -0.01,
+        "min_port_d_mm_at_Xmax_17ms": 28.5,
+        "port_d_mm": 35,
+        "port_length_mm": 35
+       }
+      },
+      "W250_no_internal_amp": {
+       "net_volume_L": 21.8,
+       "sealed": {
+        "fc_Hz": 62.6,
+        "Qtc": 0.45,
+        "f3_Hz": 112.1,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 5.7
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      }
+     },
+     "summary": "Vented: 13.8 L (board amp) fb 50 Hz f3 51 Hz, port 35 x 57 mm; 10.3 L (FA122) fb 53 Hz f3 58 Hz, 35 x 73 mm."
+    },
+    "fit_notes": "Same 150 mm frame as the SB15NRX2C30-8, so one CAD frame model covers both. Higher Fs means about 8-10 Hz less bass than the SB15 in the same box.",
+    "confidence": {
+     "confirmed": [
+      "Fs, Qts, Vas, Xmax (LDB + Audiophonics/EU reseller; Dayton for Xmax)",
+      "frame 150, cutout 122 (LDB + Audiophonics 121.4), depth 74 (LDB + Audiophonics)"
+     ],
+     "unconfirmed": [
+      "hole pattern and appearance not found"
+     ],
+     "conflicts": [
+      "sensitivity 88.7 dB/2.83 V (Dayton) vs 87.5 dB/1 W (LDB)"
+     ]
+    },
+    "sources": [
+     "https://daytonaudio.com/product/1419/rs150p-8a-6-reference-paper-woofer-8-ohm",
+     "https://parts-express.com/Dayton-Audio-RS150P-8A-6-Reference-Paper-Woofer-8-Ohm-295-573",
+     "https://loudspeakerdatabase.com/Dayton/RS150P-8A",
+     "https://www.audiophonics.fr/en/woofer/dayton-audio-rs150p-8a-reference-speaker-woofer-paper-40w-8-ohm-89db-49hz-10khz-o15cm-p-8496.html"
+    ]
+   },
+   {
+    "id": "15w-8530k00",
+    "make": "Scan-Speak",
+    "model": "Revelator 15W/8530K00",
+    "family": "Revelator",
+    "size_class": "15 cm (5.25-5.5 in)",
+    "impedance_ohm": 8,
+    "status": "PREMIUM alternative (5.25 in)",
+    "ts": {
+     "current_maker_page": {
+      "Fs_Hz": 39,
+      "Qts": 0.39,
+      "Vas_L": 16,
+      "Sd_cm2": 95,
+      "Bl_Tm": 6.6,
+      "Re_ohm": 5.9,
+      "sensitivity_dB": 86
+     },
+     "older_retailer_set": {
+      "Fs_Hz": 30,
+      "Qts": 0.27,
+      "Vas_L": 27.4
+     },
+     "Xmax_mm": 6.5,
+     "Xdamage_mm": 9
+    },
+    "mechanical": {
+     "frame_shape": "round cast 'Grasshopper' chassis, 5 holes",
+     "frame_od_mm": 148,
+     "cutout_mm": 125,
+     "bolt_circle_mm": 136,
+     "holes": "5 x 5.0-5.3 mm",
+     "flange_thickness_mm": 5.5,
+     "overall_depth_mm": 77,
+     "effective_cone_d_mm": 110.0
+    },
+    "appearance": {
+     "cone": "coated sliced-paper cone, cuts filled with damping glue (radial slits visible)",
+     "dust_cap": "n/f",
+     "surround": "low-damping SBR rubber",
+     "frame": "cast 'Grasshopper' chassis (retailer); large ferrite magnet, SD-1 symmetric drive",
+     "colour": "n/f (typically dark grey/black; check photos)"
+    },
+    "price": [
+     {
+      "vendor": "Madisound",
+      "price": "USD 237.80"
+     },
+     {
+      "vendor": "Willys-Hifi",
+      "price": "USD 224"
+     },
+     {
+      "vendor": "EU",
+      "price": "EUR 188-225"
+     }
+    ],
+    "box": {
+     "sim_current_data": {
+      "W200_with_FA122_compartment": {
+       "net_volume_L": 6.2,
+       "sealed": {
+        "fc_Hz": 73.9,
+        "Qtc": 0.74,
+        "f3_Hz": 70.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 8.6
+       },
+       "vented": {
+        "fb_Hz": 35.6,
+        "f3_Hz": 60.3,
+        "peak_dB": 0.5,
+        "min_port_d_mm_at_Xmax_17ms": 32.2,
+        "port_d_mm": 35,
+        "port_length_mm": 340
+       }
+      },
+      "W200_no_internal_amp": {
+       "net_volume_L": 9.7,
+       "sealed": {
+        "fc_Hz": 63.5,
+        "Qtc": 0.64,
+        "f3_Hz": 71.5,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 6.0
+       },
+       "vented": {
+        "fb_Hz": 41.9,
+        "f3_Hz": 47.3,
+        "peak_dB": 0.38,
+        "min_port_d_mm_at_Xmax_17ms": 34.9,
+        "port_d_mm": 41,
+        "port_length_mm": 202
+       }
+      },
+      "W220_with_FA122_compartment": {
+       "net_volume_L": 10.3,
+       "sealed": {
+        "fc_Hz": 62.4,
+        "Qtc": 0.62,
+        "f3_Hz": 71.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 5.7
+       },
+       "vented": {
+        "fb_Hz": 42.9,
+        "f3_Hz": 46.0,
+        "peak_dB": 0.45,
+        "min_port_d_mm_at_Xmax_17ms": 35.3,
+        "port_d_mm": 41,
+        "port_length_mm": 178
+       }
+      },
+      "W220_no_internal_amp": {
+       "net_volume_L": 13.8,
+       "sealed": {
+        "fc_Hz": 57.4,
+        "Qtc": 0.57,
+        "f3_Hz": 73.6,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.2
+       },
+       "vented": {
+        "fb_Hz": 38.9,
+        "f3_Hz": 40.7,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 33.6,
+        "port_d_mm": 41,
+        "port_length_mm": 159
+       }
+      },
+      "W240_with_FA122_compartment": {
+       "net_volume_L": 15.3,
+       "sealed": {
+        "fc_Hz": 55.8,
+        "Qtc": 0.56,
+        "f3_Hz": 74.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 3.7
+       },
+       "vented": {
+        "fb_Hz": 36.9,
+        "f3_Hz": 39.1,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 32.7,
+        "port_d_mm": 35,
+        "port_length_mm": 112
+       }
+      },
+      "W240_no_internal_amp": {
+       "net_volume_L": 18.8,
+       "sealed": {
+        "fc_Hz": 53.1,
+        "Qtc": 0.53,
+        "f3_Hz": 75.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 2.9
+       },
+       "vented": {
+        "fb_Hz": 36.4,
+        "f3_Hz": 35.9,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 32.5,
+        "port_d_mm": 35,
+        "port_length_mm": 90
+       }
+      },
+      "W250_with_FA122_compartment": {
+       "net_volume_L": 18.2,
+       "sealed": {
+        "fc_Hz": 53.5,
+        "Qtc": 0.53,
+        "f3_Hz": 75.6,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 3.0
+       },
+       "vented": {
+        "fb_Hz": 36.4,
+        "f3_Hz": 36.3,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 32.5,
+        "port_d_mm": 35,
+        "port_length_mm": 93
+       }
+      },
+      "W250_no_internal_amp": {
+       "net_volume_L": 21.7,
+       "sealed": {
+        "fc_Hz": 51.4,
+        "Qtc": 0.51,
+        "f3_Hz": 76.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 2.3
+       },
+       "vented": {
+        "fb_Hz": 36.1,
+        "f3_Hz": 34.3,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 32.4,
+        "port_d_mm": 35,
+        "port_length_mm": 75
+       }
+      }
+     },
+     "sim_older_data": {
+      "W200_with_FA122_compartment": {
+       "net_volume_L": 6.2,
+       "sealed": {
+        "fc_Hz": 69.9,
+        "Qtc": 0.63,
+        "f3_Hz": 79.6,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 7.7
+       },
+       "vented": {
+        "fb_Hz": 46.2,
+        "f3_Hz": 57.2,
+        "peak_dB": 0.34,
+        "min_port_d_mm_at_Xmax_17ms": 36.7,
+        "port_d_mm": 41,
+        "port_length_mm": 268
+       }
+      },
+      "W200_no_internal_amp": {
+       "net_volume_L": 9.7,
+       "sealed": {
+        "fc_Hz": 58.7,
+        "Qtc": 0.53,
+        "f3_Hz": 84.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.6
+       },
+       "vented": {
+        "fb_Hz": 42.5,
+        "f3_Hz": 47.6,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 35.1,
+        "port_d_mm": 41,
+        "port_length_mm": 195
+       }
+      },
+      "W220_with_FA122_compartment": {
+       "net_volume_L": 10.3,
+       "sealed": {
+        "fc_Hz": 57.5,
+        "Qtc": 0.52,
+        "f3_Hz": 85.1,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.3
+       },
+       "vented": {
+        "fb_Hz": 41.8,
+        "f3_Hz": 46.5,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 34.8,
+        "port_d_mm": 41,
+        "port_length_mm": 190
+       }
+      },
+      "W220_no_internal_amp": {
+       "net_volume_L": 13.8,
+       "sealed": {
+        "fc_Hz": 51.9,
+        "Qtc": 0.47,
+        "f3_Hz": 88.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 2.5
+       },
+       "vented": {
+        "fb_Hz": 40.8,
+        "f3_Hz": 41.4,
+        "peak_dB": -0.01,
+        "min_port_d_mm_at_Xmax_17ms": 34.4,
+        "port_d_mm": 41,
+        "port_length_mm": 142
+       }
+      },
+      "W240_with_FA122_compartment": {
+       "net_volume_L": 15.3,
+       "sealed": {
+        "fc_Hz": 50.1,
+        "Qtc": 0.45,
+        "f3_Hz": 90.0,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 1.9
+       },
+       "vented": {
+        "fb_Hz": 41.2,
+        "f3_Hz": 40.5,
+        "peak_dB": -0.01,
+        "min_port_d_mm_at_Xmax_17ms": 34.6,
+        "port_d_mm": 41,
+        "port_length_mm": 121
+       }
+      },
+      "W240_no_internal_amp": {
+       "net_volume_L": 18.8,
+       "sealed": {
+        "fc_Hz": 47.0,
+        "Qtc": 0.42,
+        "f3_Hz": 92.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 0.8
+       },
+       "vented": {
+        "fb_Hz": 42.0,
+        "f3_Hz": 39.1,
+        "peak_dB": 0.49,
+        "min_port_d_mm_at_Xmax_17ms": 34.9,
+        "port_d_mm": 41,
+        "port_length_mm": 89
+       }
+      },
+      "W250_with_FA122_compartment": {
+       "net_volume_L": 18.2,
+       "sealed": {
+        "fc_Hz": 47.5,
+        "Qtc": 0.43,
+        "f3_Hz": 91.9,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 0.9
+       },
+       "vented": {
+        "fb_Hz": 41.8,
+        "f3_Hz": 39.4,
+        "peak_dB": 0.3,
+        "min_port_d_mm_at_Xmax_17ms": 34.8,
+        "port_d_mm": 41,
+        "port_length_mm": 94
+       }
+      },
+      "W250_no_internal_amp": {
+       "net_volume_L": 21.7,
+       "sealed": {
+        "fc_Hz": 45.1,
+        "Qtc": 0.41,
+        "f3_Hz": 93.5,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 0.0
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      }
+     },
+     "summary": "With current maker data: vented 10.3 L (FA122) fb 43 Hz f3 46 Hz (41 x 178 mm port); 13.8 L fb 39 Hz f3 41 Hz (41 x 159 mm)."
+    },
+    "fit_notes": "Excellent midrange, but three times the price of the SB15 for a similar box result. Check which parameter set your units match.",
+    "confidence": {
+     "confirmed": [
+      "frame 148 (Soundimports + Madisound)",
+      "cutout 125 (Soundimports + Madisound)",
+      "overall depth 77 (Soundimports + Wilmslow)",
+      "Xmax 6.5 (LDB + Axiomedia + Soundimports)"
+     ],
+     "unconfirmed": [
+      "bolt circle 136 and flange 5.5 (Wilmslow only)"
+     ],
+     "conflicts": [
+      "two T/S sets (39 Hz/0.39/16 L on scan-speak.dk vs 30 Hz/0.27/27.4 L at several retailers)",
+      "cutout 128 (Wilmslow)",
+      "depth 71 (Madisound)"
+     ]
+    },
+    "sources": [
+     "https://www.scan-speak.dk/product/15w-8530k00/",
+     "https://loudspeakerdatabase.com/ScanSpeak/15W-8530K00",
+     "https://www.soundimports.eu/en/scan-speak-15w-8530k00.html",
+     "https://www.madisoundspeakerstore.com/approx-5-woofers/scanspeak-15w/8530k-00-5-revelator-woofer-low-qts/",
+     "https://wilmslowaudio.co.uk/scanspeak-55/ss-revelator-15w-8530k00-diameter149mm",
+     "https://www.rumoh.eu/speakers/woofer/woofer-5-inch/705/scan-speak-15w/8530k00",
+     "https://willys-hifi.com/products/scanspeak-15w-8530k00-bass-midrange",
+     "https://www.scan-speak.dk/product-families/revelator/"
+    ]
+   },
+   {
+    "id": "l16rn-sl",
+    "make": "Seas",
+    "model": "Prestige L16RN-SL (H1480-08)",
+    "family": "Prestige (developed with S. Linkwitz for LXmini/Pluto)",
+    "size_class": "5-5.75 in (146 mm frame)",
+    "impedance_ohm": 8,
+    "status": "ALTERNATIVE: sealed + DSP woofer",
+    "ts": {
+     "Fs_Hz": 37,
+     "Qts": 0.45,
+     "Vas_L": 19,
+     "Xmax_mm": 6.0,
+     "sensitivity_dB_basis_nf": 84,
+     "power_W": "80 RMS / 250 max"
+    },
+    "mechanical": {
+     "frame_shape": "round, injection-moulded metal basket",
+     "frame_od_mm": 146,
+     "cutout_mm": 126,
+     "overall_depth_mm": 76,
+     "bolt_circle_mm": null,
+     "holes": "n/f",
+     "effective_cone_d_mm": null
+    },
+    "appearance": {
+     "cone": "aluminium cone (standard finish natural; Linkwitz Lab offered black-anodised special editions)",
+     "dust_cap": "n/f",
+     "surround": "rubber",
+     "frame": "injection-moulded metal",
+     "motor": "T-yoke"
+    },
+    "price": [
+     {
+      "vendor": "Madisound",
+      "price": "USD 148.60"
+     },
+     {
+      "vendor": "HiFi Collective",
+      "price": "GBP 112.52 + VAT"
+     },
+     {
+      "vendor": "audiohobby",
+      "price": "EUR 123 ex VAT"
+     }
+    ],
+    "box": {
+     "retailer_suggestion": "sealed 0.3 ft3 (8.5 L), 50% fill, F3 65 Hz; vented not advised (high Qts)",
+     "sim": {
+      "W200_with_FA122_compartment": {
+       "net_volume_L": 6.2,
+       "sealed": {
+        "fc_Hz": 74.5,
+        "Qtc": 0.91,
+        "f3_Hz": 61.5,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 8.8
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W200_no_internal_amp": {
+       "net_volume_L": 9.7,
+       "sealed": {
+        "fc_Hz": 63.6,
+        "Qtc": 0.77,
+        "f3_Hz": 58.6,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 6.0
+       },
+       "vented": {
+        "fb_Hz": 25.7,
+        "f3_Hz": 52.5,
+        "peak_dB": 0.49,
+        "min_port_d_mm_at_Xmax_17ms": 24.4,
+        "port_d_mm": 35,
+        "port_length_mm": 421
+       }
+      },
+      "W220_with_FA122_compartment": {
+       "net_volume_L": 10.3,
+       "sealed": {
+        "fc_Hz": 62.4,
+        "Qtc": 0.76,
+        "f3_Hz": 58.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 5.7
+       },
+       "vented": {
+        "fb_Hz": 27.2,
+        "f3_Hz": 51.0,
+        "peak_dB": 0.48,
+        "min_port_d_mm_at_Xmax_17ms": 25.1,
+        "port_d_mm": 35,
+        "port_length_mm": 350
+       }
+      },
+      "W220_no_internal_amp": {
+       "net_volume_L": 13.8,
+       "sealed": {
+        "fc_Hz": 57.0,
+        "Qtc": 0.69,
+        "f3_Hz": 58.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.1
+       },
+       "vented": {
+        "fb_Hz": 32.7,
+        "f3_Hz": 42.7,
+        "peak_dB": 0.49,
+        "min_port_d_mm_at_Xmax_17ms": 27.5,
+        "port_d_mm": 35,
+        "port_length_mm": 169
+       }
+      },
+      "W240_with_FA122_compartment": {
+       "net_volume_L": 15.4,
+       "sealed": {
+        "fc_Hz": 55.3,
+        "Qtc": 0.67,
+        "f3_Hz": 58.3,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 3.6
+       },
+       "vented": {
+        "fb_Hz": 34.0,
+        "f3_Hz": 39.8,
+        "peak_dB": 0.5,
+        "min_port_d_mm_at_Xmax_17ms": 28.0,
+        "port_d_mm": 35,
+        "port_length_mm": 136
+       }
+      },
+      "W240_no_internal_amp": {
+       "net_volume_L": 18.9,
+       "sealed": {
+        "fc_Hz": 52.4,
+        "Qtc": 0.64,
+        "f3_Hz": 58.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 2.7
+       },
+       "vented": {
+        "fb_Hz": 34.7,
+        "f3_Hz": 35.7,
+        "peak_dB": 0.42,
+        "min_port_d_mm_at_Xmax_17ms": 28.3,
+        "port_d_mm": 35,
+        "port_length_mm": 101
+       }
+      },
+      "W250_with_FA122_compartment": {
+       "net_volume_L": 18.3,
+       "sealed": {
+        "fc_Hz": 52.9,
+        "Qtc": 0.64,
+        "f3_Hz": 58.7,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 2.8
+       },
+       "vented": {
+        "fb_Hz": 34.2,
+        "f3_Hz": 36.3,
+        "peak_dB": 0.38,
+        "min_port_d_mm_at_Xmax_17ms": 28.1,
+        "port_d_mm": 35,
+        "port_length_mm": 109
+       }
+      },
+      "W250_no_internal_amp": {
+       "net_volume_L": 21.8,
+       "sealed": {
+        "fc_Hz": 50.6,
+        "Qtc": 0.62,
+        "f3_Hz": 59.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 2.1
+       },
+       "vented": {
+        "fb_Hz": 32.5,
+        "f3_Hz": 33.7,
+        "peak_dB": 0.09,
+        "min_port_d_mm_at_Xmax_17ms": 27.4,
+        "port_d_mm": 35,
+        "port_length_mm": 100
+       }
+      }
+     },
+     "summary": "Sealed 10.3 L: Qtc 0.76, f3 58 Hz, +5.7 dB to 45 Hz."
+    },
+    "fit_notes": "Proven in active DSP designs (LXmini). Aluminium cone breakup must sit well above the 2-2.5 kHz crossover; check before choosing.",
+    "confidence": {
+     "confirmed": [
+      "Fs 37, Qts 0.45, Vas 19, Xmax 6 (several retailers)",
+      "frame 146 (Seas + retailers)",
+      "cutout 126 (126-127)"
+     ],
+     "unconfirmed": [
+      "sensitivity basis",
+      "appearance colour"
+     ],
+     "conflicts": [
+      "depth 65.5 / 70.5 / 73.5 / 75.5 / 76 mm across listings: 76 used as worst case",
+      "Madisound catalogue 36 Hz / Qts 0.46"
+     ]
+    },
+    "sources": [
+     "https://www.seas.no/index.php?option=com_content&view=article&id=96%3Ah1480-l16rn-sl&catid=44&Itemid=461",
+     "https://www.madisoundspeakerstore.com/approx-5-woofers/seas-prestige-l16rn-sl-h1480-5-aluminum-cone-woofer/",
+     "https://www.falconacoustics.co.uk/seas-l16rnsl-h1480-prestige-series.html",
+     "https://www.soundimports.eu/en/seas-l16rn-sl.html",
+     "https://www.rumoh.eu/speakers/woofer/woofer-6-inch/1001/seas-l16rn-sl-h1480-08",
+     "https://en.toutlehautparleur.com/speaker-seas-l16rn-sl-8-ohm-5-75-inch.html",
+     "https://www.amazon.com/Seas-Prestige-L16RN-SL-Aluminum-H1480-08/dp/B00ZYSMK60",
+     "https://linkwitzlab.com/LXmini/Construction.htm"
+    ]
+   },
+   {
+    "id": "ptt6.5x04-nfa-01",
+    "make": "Purifi",
+    "model": "PTT6.5X04-NFA-01",
+    "family": "PTT6.5 (X = long stroke, NFA = fibre cone)",
+    "size_class": "6.5 in",
+    "impedance_ohm": 4,
+    "status": "PREMIUM option (overkill for a POC)",
+    "ts": {
+     "Fs_Hz": 30,
+     "Qts": 0.27,
+     "Qms": 5.8,
+     "Vas_L": 25.9,
+     "Xmax_mm": 10.0,
+     "Sd_cm2": "n/f (134 assumed for port sizing only)",
+     "sensitivity_dB": "n/f"
+    },
+    "mechanical": {
+     "frame_shape": "round",
+     "frame_od_mm": 176,
+     "cutout_mm": 145,
+     "overall_depth_mm": 90.2,
+     "bolt_circle_mm": 166,
+     "holes": "6 x 5.1 mm"
+    },
+    "appearance": {
+     "note": "n/f in search extracts; check photos"
+    },
+    "price": [
+     {
+      "vendor": "Purifi shop",
+      "price": "DKK 2,725"
+     },
+     {
+      "vendor": "Audiohum / Soundimports",
+      "price": "EUR 355.33 ex VAT"
+     },
+     {
+      "vendor": "Madisound",
+      "price": "USD 535.00 (unavailable in snapshot)"
+     },
+     {
+      "vendor": "Solen",
+      "price": "CAD 685.44"
+     }
+    ],
+    "box": {
+     "sim": {
+      "W200_with_FA122_compartment": {
+       "net_volume_L": 5.9,
+       "sealed": {
+        "fc_Hz": 69.8,
+        "Qtc": 0.63,
+        "f3_Hz": 79.7,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 7.6
+       },
+       "vented": {
+        "fb_Hz": 47.8,
+        "f3_Hz": 56.9,
+        "peak_dB": 0.47,
+        "min_port_d_mm_at_Xmax_17ms": 54.9,
+        "port_d_mm": 50,
+        "port_length_mm": 400
+       }
+      },
+      "W200_no_internal_amp": {
+       "net_volume_L": 9.4,
+       "sealed": {
+        "fc_Hz": 58.2,
+        "Qtc": 0.52,
+        "f3_Hz": 84.7,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.5
+       },
+       "vented": {
+        "fb_Hz": 41.2,
+        "f3_Hz": 47.3,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 51.0,
+        "port_d_mm": 50,
+        "port_length_mm": 330
+       }
+      },
+      "W220_with_FA122_compartment": {
+       "net_volume_L": 10.0,
+       "sealed": {
+        "fc_Hz": 56.9,
+        "Qtc": 0.51,
+        "f3_Hz": 85.5,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.1
+       },
+       "vented": {
+        "fb_Hz": 41.5,
+        "f3_Hz": 46.0,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 51.2,
+        "port_d_mm": 50,
+        "port_length_mm": 305
+       }
+      },
+      "W220_no_internal_amp": {
+       "net_volume_L": 13.5,
+       "sealed": {
+        "fc_Hz": 51.3,
+        "Qtc": 0.46,
+        "f3_Hz": 89.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 2.3
+       },
+       "vented": {
+        "fb_Hz": 41.0,
+        "f3_Hz": 41.2,
+        "peak_dB": -0.01,
+        "min_port_d_mm_at_Xmax_17ms": 50.8,
+        "port_d_mm": 50,
+        "port_length_mm": 222
+       }
+      },
+      "W240_with_FA122_compartment": {
+       "net_volume_L": 15.0,
+       "sealed": {
+        "fc_Hz": 49.5,
+        "Qtc": 0.45,
+        "f3_Hz": 90.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 1.7
+       },
+       "vented": {
+        "fb_Hz": 41.2,
+        "f3_Hz": 40.0,
+        "peak_dB": -0.01,
+        "min_port_d_mm_at_Xmax_17ms": 51.0,
+        "port_d_mm": 50,
+        "port_length_mm": 193
+       }
+      },
+      "W240_no_internal_amp": {
+       "net_volume_L": 18.5,
+       "sealed": {
+        "fc_Hz": 46.5,
+        "Qtc": 0.42,
+        "f3_Hz": 92.6,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 0.6
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W250_with_FA122_compartment": {
+       "net_volume_L": 17.9,
+       "sealed": {
+        "fc_Hz": 46.9,
+        "Qtc": 0.42,
+        "f3_Hz": 92.3,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 0.7
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W250_no_internal_amp": {
+       "net_volume_L": 21.4,
+       "sealed": {
+        "fc_Hz": 44.6,
+        "Qtc": 0.4,
+        "f3_Hz": 93.9,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 0.0
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      }
+     },
+     "summary": "Built for sealed + EQ in small boxes; vented 10 L needs a 50 mm port about 305 mm long."
+    },
+    "fit_notes": "Purifi's shop now lists a -06 revision (Qts 0.29, Qms 7.3) and an aluminium-cone PTT6.5X04-NAA-08. 4 ohm only; pairs naturally with the FA122 (125 W/4 ohm).",
+    "confidence": {
+     "confirmed": [
+      "Fs, Qts, Vas (Audiohum + LDB + Soundimports)",
+      "frame 176, cutout 145, depth 90.2 (Audiohum + Wavemusicshop)"
+     ],
+     "unconfirmed": [
+      "6 x 5.1 mm on 166 mm bolt circle (retailer table)"
+     ],
+     "conflicts": [
+      "Xmax 10 (Audiohum) vs 9.8 (LDB)"
+     ]
+    },
+    "sources": [
+     "https://www.madisoundspeakerstore.com/approx-6-7-woofers-purifi/purifi-audio-ptt6.5x04-nfa-01-6.5-woofer-4-ohm/",
+     "https://www.audiohum.com/gb/diy-components/drivers/mid-woofer/purifi-ptt65x04-nfa-01",
+     "https://www.soundimports.eu/en/purifi-ptt65x04-nfa-01.html",
+     "https://www.solen.ca/en/products/purifi-audio-ptt65x04-nfa-01-18cm-fiber-cone-woofer",
+     "https://www.wavemusicshop.com/product/purifi-ptt6-5x04-nfa-01-6-5%E2%80%B3-mid-woofer-4-ohm/",
+     "https://purifi-audio.com/shop/ptt6-5x04-nfa-06-ptt6-5x04-nfa-06-1920",
+     "https://www.erinsaudiocorner.com/driveunits/purifi_ptt6.5x04-naa-08/"
+    ]
+   },
+   {
+    "id": "rs150-8",
+    "make": "Dayton Audio",
+    "model": "RS150-8",
+    "family": "Reference (aluminium cone)",
+    "size_class": "6 in nominal, 150 mm frame",
+    "impedance_ohm": 8,
+    "status": "considered (aluminium version of the RS150P-8A)",
+    "ts": {
+     "Fs_Hz": 47.8,
+     "Qts": 0.34,
+     "Vas_L": 16.6,
+     "Xmax_mm": 4.0,
+     "sensitivity_dB_basis_nf": 89,
+     "power_W": 40,
+     "range_Hz": "47-4200"
+    },
+    "mechanical": {
+     "frame_od_mm": 150,
+     "cutout_mm": 122,
+     "overall_depth_mm": 74,
+     "holes": "six-hole cast frame (Dayton)"
+    },
+    "price": [
+     {
+      "vendor": "Soundimports / Audiophonics",
+      "price": "EUR 79.90-82.95"
+     },
+     {
+      "vendor": "US",
+      "price": "n/f"
+     }
+    ],
+    "box": {
+     "maker_suggestion": "Dayton: sealed 0.14 ft3 (4 L) F3 102 Hz; vented 0.41 ft3 (11.6 L) F3 56 Hz",
+     "sim": {
+      "W200_with_FA122_compartment": {
+       "net_volume_L": 6.2,
+       "sealed": {
+        "fc_Hz": 91.5,
+        "Qtc": 0.65,
+        "f3_Hz": 100.1,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 12.3
+       },
+       "vented": {
+        "fb_Hz": 58.7,
+        "f3_Hz": 72.0,
+        "peak_dB": 0.44,
+        "min_port_d_mm_at_Xmax_17ms": 30.6,
+        "port_d_mm": 35,
+        "port_length_mm": 108
+       }
+      },
+      "W200_no_internal_amp": {
+       "net_volume_L": 9.7,
+       "sealed": {
+        "fc_Hz": 78.6,
+        "Qtc": 0.56,
+        "f3_Hz": 104.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 9.7
+       },
+       "vented": {
+        "fb_Hz": 55.7,
+        "f3_Hz": 59.6,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 29.8,
+        "port_d_mm": 35,
+        "port_length_mm": 70
+       }
+      },
+      "W220_with_FA122_compartment": {
+       "net_volume_L": 10.3,
+       "sealed": {
+        "fc_Hz": 77.2,
+        "Qtc": 0.55,
+        "f3_Hz": 105.1,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 9.4
+       },
+       "vented": {
+        "fb_Hz": 54.2,
+        "f3_Hz": 58.2,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax_17ms": 29.4,
+        "port_d_mm": 35,
+        "port_length_mm": 69
+       }
+      },
+      "W220_no_internal_amp": {
+       "net_volume_L": 13.8,
+       "sealed": {
+        "fc_Hz": 70.9,
+        "Qtc": 0.5,
+        "f3_Hz": 108.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 7.9
+       },
+       "vented": {
+        "fb_Hz": 51.2,
+        "f3_Hz": 51.9,
+        "peak_dB": -0.01,
+        "min_port_d_mm_at_Xmax_17ms": 28.6,
+        "port_d_mm": 35,
+        "port_length_mm": 54
+       }
+      },
+      "W240_with_FA122_compartment": {
+       "net_volume_L": 15.4,
+       "sealed": {
+        "fc_Hz": 69.0,
+        "Qtc": 0.49,
+        "f3_Hz": 110.1,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 7.4
+       },
+       "vented": {
+        "fb_Hz": 50.9,
+        "f3_Hz": 50.1,
+        "peak_dB": -0.01,
+        "min_port_d_mm_at_Xmax_17ms": 28.5,
+        "port_d_mm": 35,
+        "port_length_mm": 46
+       }
+      },
+      "W240_no_internal_amp": {
+       "net_volume_L": 18.9,
+       "sealed": {
+        "fc_Hz": 65.5,
+        "Qtc": 0.47,
+        "f3_Hz": 112.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 6.5
+       },
+       "vented": {
+        "fb_Hz": 51.7,
+        "f3_Hz": 48.1,
+        "peak_dB": 0.05,
+        "min_port_d_mm_at_Xmax_17ms": 28.8,
+        "port_d_mm": 35,
+        "port_length_mm": 31
+       }
+      },
+      "W250_with_FA122_compartment": {
+       "net_volume_L": 18.3,
+       "sealed": {
+        "fc_Hz": 66.0,
+        "Qtc": 0.47,
+        "f3_Hz": 112.1,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 6.7
+       },
+       "vented": {
+        "fb_Hz": 51.4,
+        "f3_Hz": 48.1,
+        "peak_dB": -0.01,
+        "min_port_d_mm_at_Xmax_17ms": 28.7,
+        "port_d_mm": 35,
+        "port_length_mm": 34
+       }
+      },
+      "W250_no_internal_amp": {
+       "net_volume_L": 21.8,
+       "sealed": {
+        "fc_Hz": 63.5,
+        "Qtc": 0.45,
+        "f3_Hz": 113.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 6.0
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      }
+     }
+    },
+    "confidence": {
+     "confirmed": [
+      "Fs, Qts, Vas, Xmax (LDB + masori)",
+      "cutout 122/121.5"
+     ],
+     "unconfirmed": [
+      "depth 74 (one site)"
+     ],
+     "conflicts": []
+    },
+    "sources": [
+     "https://daytonaudio.com/product/98/rs150-8-6-reference-woofer-8-ohm",
+     "https://loudspeakerdatabase.com/Dayton/RS150-8",
+     "https://www.soundimports.eu/en/dayton-audio-rs150-8.html",
+     "https://masori.de/en/products/reference-rs150-en"
+    ]
+   },
+   {
+    "id": "sb16pfcr25-8",
+    "make": "SB Acoustics",
+    "model": "SB16PFCR25-8",
+    "size_class": "6 in paper",
+    "impedance_ohm": 8,
+    "status": "considered; dimensions not confirmed",
+    "ts": {
+     "Fs_Hz": 38,
+     "Qts": 0.4,
+     "Qes": 0.48,
+     "Qms": 2.5,
+     "Re_ohm": 5.6,
+     "Vas_L": 27,
+     "Xmax_mm": 4.5
+    },
+    "mechanical": {
+     "note": "cutout 145 / OD 160 / depth 77 come from the SB16PFC25-8 sibling; another listing gives a 176 mm chassis. Unconfirmed."
+    },
+    "price": [
+     {
+      "vendor": "n/f",
+      "price": "n/f"
+     }
+    ],
+    "box": {
+     "sim": {
+      "W200_with_FA122_compartment": {
+       "net_volume_L": 6.1,
+       "sealed": {
+        "fc_Hz": 88.7,
+        "Qtc": 0.93,
+        "f3_Hz": 72.1,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 11.8
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W200_no_internal_amp": {
+       "net_volume_L": 9.6,
+       "sealed": {
+        "fc_Hz": 74.3,
+        "Qtc": 0.78,
+        "f3_Hz": 67.8,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 8.7
+       },
+       "vented": {
+        "fb_Hz": 28.1,
+        "f3_Hz": 62.4,
+        "peak_dB": 0.48,
+        "min_port_d_mm_at_Xmax_17ms": 25.6,
+        "port_d_mm": 35,
+        "port_length_mm": 355
+       }
+      },
+      "W220_with_FA122_compartment": {
+       "net_volume_L": 10.2,
+       "sealed": {
+        "fc_Hz": 72.7,
+        "Qtc": 0.76,
+        "f3_Hz": 67.6,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 8.3
+       },
+       "vented": {
+        "fb_Hz": 30.8,
+        "f3_Hz": 60.3,
+        "peak_dB": 0.49,
+        "min_port_d_mm_at_Xmax_17ms": 26.8,
+        "port_d_mm": 35,
+        "port_length_mm": 272
+       }
+      },
+      "W220_no_internal_amp": {
+       "net_volume_L": 13.7,
+       "sealed": {
+        "fc_Hz": 65.6,
+        "Qtc": 0.69,
+        "f3_Hz": 67.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 6.5
+       },
+       "vented": {
+        "fb_Hz": 37.8,
+        "f3_Hz": 51.0,
+        "peak_dB": 0.48,
+        "min_port_d_mm_at_Xmax_17ms": 29.7,
+        "port_d_mm": 35,
+        "port_length_mm": 121
+       }
+      },
+      "W240_with_FA122_compartment": {
+       "net_volume_L": 15.2,
+       "sealed": {
+        "fc_Hz": 63.3,
+        "Qtc": 0.67,
+        "f3_Hz": 67.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 5.9
+       },
+       "vented": {
+        "fb_Hz": 39.3,
+        "f3_Hz": 47.9,
+        "peak_dB": 0.48,
+        "min_port_d_mm_at_Xmax_17ms": 30.3,
+        "port_d_mm": 35,
+        "port_length_mm": 97
+       }
+      },
+      "W240_no_internal_amp": {
+       "net_volume_L": 18.7,
+       "sealed": {
+        "fc_Hz": 59.4,
+        "Qtc": 0.63,
+        "f3_Hz": 68.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.8
+       },
+       "vented": {
+        "fb_Hz": 39.5,
+        "f3_Hz": 43.4,
+        "peak_dB": 0.31,
+        "min_port_d_mm_at_Xmax_17ms": 30.4,
+        "port_d_mm": 35,
+        "port_length_mm": 72
+       }
+      },
+      "W250_with_FA122_compartment": {
+       "net_volume_L": 18.1,
+       "sealed": {
+        "fc_Hz": 60.0,
+        "Qtc": 0.63,
+        "f3_Hz": 68.0,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 5.0
+       },
+       "vented": {
+        "fb_Hz": 40.3,
+        "f3_Hz": 43.9,
+        "peak_dB": 0.42,
+        "min_port_d_mm_at_Xmax_17ms": 30.6,
+        "port_d_mm": 35,
+        "port_length_mm": 72
+       }
+      },
+      "W250_no_internal_amp": {
+       "net_volume_L": 21.6,
+       "sealed": {
+        "fc_Hz": 57.0,
+        "Qtc": 0.6,
+        "f3_Hz": 68.9,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.1
+       },
+       "vented": {
+        "fb_Hz": 38.8,
+        "f3_Hz": 40.7,
+        "peak_dB": 0.12,
+        "min_port_d_mm_at_Xmax_17ms": 30.1,
+        "port_d_mm": 35,
+        "port_length_mm": 63
+       }
+      }
+     }
+    },
+    "confidence": {
+     "confirmed": [
+      "Fs, Qts, Vas, Qes, Qms, Re (three listings)"
+     ],
+     "unconfirmed": [
+      "all dimensions"
+     ],
+     "conflicts": [
+      "Xmax 4.5 (LDB) vs 6.17 (calculated)"
+     ]
+    },
+    "sources": [
+     "https://loudspeakerdatabase.com/SB/SB16PFCR25-8",
+     "https://willys-hifi.com/products/sb-acoustics-sb16pfcr25-8-paper-midwoofer",
+     "https://en.toutlehautparleur.com/speaker-sb-acoustics-sb16pfcr25-8-impedance-8-ohm-6-inch.html",
+     "https://loudspeakerdatabase.com/SB/SB16PFC25-8"
+    ]
+   },
+   {
+    "id": "18w-8531g00",
+    "make": "Scan-Speak",
+    "model": "Revelator 18W/8531G00",
+    "size_class": "7 in (182 mm frame)",
+    "impedance_ohm": 8,
+    "status": "considered: fits only W >= 240-250; sealed + EQ",
+    "ts": {
+     "Fs_Hz": 28,
+     "Qts": 0.36,
+     "Vas_L": 58.2,
+     "Xmax_mm": 6.5,
+     "Xdamage_mm": 11,
+     "sensitivity_dB": 87
+    },
+    "mechanical": {
+     "frame_od_mm": 182,
+     "cutout_mm": 156,
+     "depth_behind_baffle_mm": "78 (speakerboxlite) or 83.2 (Rumoh, no countersink)"
+    },
+    "price": [
+     {
+      "vendor": "Falcon Acoustics",
+      "price": "GBP 160-192 (sold as pairs)"
+     }
+    ],
+    "box": {
+     "sim": {
+      "W200_with_FA122_compartment": {
+       "net_volume_L": 5.9,
+       "sealed": {
+        "fc_Hz": 92.5,
+        "Qtc": 1.19,
+        "f3_Hz": 68.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 12.5
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W200_no_internal_amp": {
+       "net_volume_L": 9.4,
+       "sealed": {
+        "fc_Hz": 75.2,
+        "Qtc": 0.97,
+        "f3_Hz": 60.0,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 8.9
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W220_with_FA122_compartment": {
+       "net_volume_L": 10.0,
+       "sealed": {
+        "fc_Hz": 73.2,
+        "Qtc": 0.94,
+        "f3_Hz": 59.3,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 8.5
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W220_no_internal_amp": {
+       "net_volume_L": 13.5,
+       "sealed": {
+        "fc_Hz": 64.6,
+        "Qtc": 0.83,
+        "f3_Hz": 56.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 6.3
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W240_with_FA122_compartment": {
+       "net_volume_L": 15.0,
+       "sealed": {
+        "fc_Hz": 61.8,
+        "Qtc": 0.8,
+        "f3_Hz": 55.7,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 5.5
+       },
+       "vented": {
+        "fb_Hz": 21.3,
+        "f3_Hz": 52.5,
+        "peak_dB": 0.48,
+        "min_port_d_mm_at_Xmax_17ms": 31.7,
+        "port_d_mm": 35,
+        "port_length_mm": 396
+       }
+      },
+      "W240_no_internal_amp": {
+       "net_volume_L": 18.5,
+       "sealed": {
+        "fc_Hz": 57.0,
+        "Qtc": 0.73,
+        "f3_Hz": 55.1,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.1
+       },
+       "vented": {
+        "fb_Hz": 28.1,
+        "f3_Hz": 46.8,
+        "peak_dB": 0.49,
+        "min_port_d_mm_at_Xmax_17ms": 36.3,
+        "port_d_mm": 41,
+        "port_length_mm": 240
+       }
+      },
+      "W250_with_FA122_compartment": {
+       "net_volume_L": 17.9,
+       "sealed": {
+        "fc_Hz": 57.7,
+        "Qtc": 0.74,
+        "f3_Hz": 55.1,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.3
+       },
+       "vented": {
+        "fb_Hz": 26.8,
+        "f3_Hz": 47.9,
+        "peak_dB": 0.46,
+        "min_port_d_mm_at_Xmax_17ms": 35.5,
+        "port_d_mm": 41,
+        "port_length_mm": 276
+       }
+      },
+      "W250_no_internal_amp": {
+       "net_volume_L": 21.4,
+       "sealed": {
+        "fc_Hz": 54.0,
+        "Qtc": 0.69,
+        "f3_Hz": 55.0,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 3.2
+       },
+       "vented": {
+        "fb_Hz": 30.6,
+        "f3_Hz": 43.2,
+        "peak_dB": 0.47,
+        "min_port_d_mm_at_Xmax_17ms": 37.9,
+        "port_d_mm": 41,
+        "port_length_mm": 167
+       }
+      }
+     },
+     "summary": "Too much Vas for <= 20 L vented; sealed 15-18 L gives Qtc 0.74-0.80, f3 55-56 Hz."
+    },
+    "confidence": {
+     "confirmed": [
+      "Fs, Qts, Vas (several listings)",
+      "frame 182"
+     ],
+     "unconfirmed": [
+      "cutout 156"
+     ],
+     "conflicts": [
+      "depth 78 vs 83.2",
+      "Zaph measured Fs 30.4 / Qts 0.41 / Vas 49.3 L"
+     ]
+    },
+    "sources": [
+     "https://www.scan-speak.dk/product/18w-8531g00/",
+     "https://loudspeakerdatabase.com/ScanSpeak/18W-8531G00",
+     "https://www.falconacoustics.co.uk/scanspeak-18w-8531g00-midwoofer-revelator-range.html",
+     "https://speakerboxlite.com/subwoofers/scan-speak-18w-8531g00/specifications",
+     "https://www.rumoh.eu/speakers/woofer/woofer-6.5-inch/743/scan-speak-18w/8531g00",
+     "https://techtalk.parts-express.com/forum/tech-talk-forum/43577-is-there-a-way-to-make-scanspeak-revelator-18w-8531g-7-work-in-a-14-5-liter-box"
+    ]
+   },
+   {
+    "id": "15w-8434g00",
+    "make": "Scan-Speak",
+    "model": "Discovery 15W/8434G00",
+    "size_class": "15 cm",
+    "impedance_ohm": 8,
+    "status": "dropped: Qts 0.25 wants a small vented box (B4 about 3.6 L, f3 about 81 Hz, Keele estimate); no flat alignment at 10-20 L; dimensions not found",
+    "ts": {
+     "Fs_Hz": 45,
+     "Qts": 0.25,
+     "Qms": 3.74,
+     "Qes": 0.27,
+     "Vas_L": 12.8,
+     "Xmax_mm": 4.2,
+     "Xdamage_mm": 8
+    },
+    "mechanical": {
+     "note": "frame, cutout and depth n/f; displacement 0.23 L; 1.2 kg"
+    },
+    "price": [
+     {
+      "vendor": "Soundimports",
+      "price": "EUR 69.95"
+     },
+     {
+      "vendor": "Falcon",
+      "price": "GBP 51.45 ex VAT"
+     }
+    ],
+    "box": {
+     "sim": {
+      "W200_with_FA122_compartment": {
+       "net_volume_L": 6.4,
+       "sealed": {
+        "fc_Hz": 77.8,
+        "Qtc": 0.43,
+        "f3_Hz": 148.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 9.5
+       },
+       "vented": {
+        "fb_Hz": 67.5,
+        "f3_Hz": 65.3,
+        "peak_dB": -0.02,
+        "min_port_d_mm_at_Xmax_17ms": 33.9,
+        "port_d_mm": 41,
+        "port_length_mm": 104
+       }
+      },
+      "W200_no_internal_amp": {
+       "net_volume_L": 9.9,
+       "sealed": {
+        "fc_Hz": 68.1,
+        "Qtc": 0.38,
+        "f3_Hz": 155.0,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 7.2
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W220_with_FA122_compartment": {
+       "net_volume_L": 10.5,
+       "sealed": {
+        "fc_Hz": 67.0,
+        "Qtc": 0.37,
+        "f3_Hz": 155.7,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 6.9
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W220_no_internal_amp": {
+       "net_volume_L": 14.0,
+       "sealed": {
+        "fc_Hz": 62.2,
+        "Qtc": 0.35,
+        "f3_Hz": 158.9,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 5.6
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W240_with_FA122_compartment": {
+       "net_volume_L": 15.6,
+       "sealed": {
+        "fc_Hz": 60.7,
+        "Qtc": 0.34,
+        "f3_Hz": 159.9,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 5.2
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W240_no_internal_amp": {
+       "net_volume_L": 19.1,
+       "sealed": {
+        "fc_Hz": 58.2,
+        "Qtc": 0.32,
+        "f3_Hz": 161.5,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.5
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W250_with_FA122_compartment": {
+       "net_volume_L": 18.5,
+       "sealed": {
+        "fc_Hz": 58.5,
+        "Qtc": 0.33,
+        "f3_Hz": 161.2,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.6
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      },
+      "W250_no_internal_amp": {
+       "net_volume_L": 22.0,
+       "sealed": {
+        "fc_Hz": 56.6,
+        "Qtc": 0.31,
+        "f3_Hz": 162.4,
+        "dsp_boost_dB_for_f3_45Hz_Q0707": 4.0
+       },
+       "vented": "no flat vented alignment in this volume (peak <= 0.5 dB, knee rule); use sealed + DSP"
+      }
+     }
+    },
+    "confidence": {
+     "confirmed": [
+      "Fs, Qts, Vas (Scan-Speak datasheet + LDB)"
+     ],
+     "unconfirmed": [],
+     "conflicts": [
+      "Falcon web listing Fs 44 / Qts 0.21"
+     ]
+    },
+    "sources": [
+     "https://www.scan-speak.dk/product/15w-8434g00/",
+     "https://www.falconacoustics.co.uk/downloads/Scanspeak/15w-8434g00.pdf",
+     "https://loudspeakerdatabase.com/ScanSpeak/15W-8434G00",
+     "https://www.soundimports.eu/scan-speak-15w8434g00.html"
+    ]
+   }
+  ],
+  "tweeters": [
+   {
+    "id": "d3004-602200",
+    "make": "Scan-Speak",
+    "model": "Illuminator D3004/602200",
+    "role": "bookshelf_tweeter",
+    "status": "RECOMMENDED bookshelf tweeter (lowest Fs with the smallest faceplate)",
+    "impedance_ohm": 4,
+    "dome": "26 mm (Solen calls it a ring dome; check)",
+    "Fs_Hz": 440,
+    "sensitivity_dB": 90.5,
+    "power_W": "50 RMS / 130 max",
+    "used_range": "2.5-30 kHz listed; low Fs leaves margin for LR4 at 2.0-2.2 kHz in a waveguide",
+    "faceplate": {
+     "shape": "round, black anodised aluminium",
+     "od_mm": 62,
+     "cutout_mm": "48-50 (unconfirmed: 50 is the D3004/602000's; 48 from research/drivers-floorstander.md)",
+     "fixing": "3 holes, circle about 55 mm (estimate, floorstander file)",
+     "depth_mm": "about 21.5 (602000 figure, unconfirmed)"
+    },
+    "element_only_version": "no; the 62 mm faceplate is already the small version. Ring-radiator twin R3004/602200: Fs 420 Hz, 89.5 dB, 62 mm aluminium faceplate, 43 mm cutout, 3 holes, USD 197.20 (Madisound)",
+    "price": [
+     {
+      "vendor": "Solen",
+      "price": "CAD 222.71 (about USD 160, my conversion)"
+     },
+     {
+      "vendor": "EU/UK (sibling floorstander research)",
+      "price": "about EUR 150 / GBP 124"
+     },
+     {
+      "vendor": "US",
+      "price": "n/f"
+     }
+    ],
+    "family_note": "It is also the sibling floorstander research's alternate flagship tweeter (same 62 mm pocket), so one CAD model serves both.",
+    "confidence": {
+     "confirmed": [
+      "Fs, sensitivity, 62 mm faceplate (scan-speak.dk + Solen, from the 2026-10-04 flagship research)"
+     ],
+     "unconfirmed": [
+      "cutout and depth (from the 602000 predecessor)",
+      "US price"
+     ]
+    },
+    "sources": [
+     "https://www.scan-speak.dk/product/d3004-602200/",
+     "https://solen.ca/en/products/scan-speak-illuminator-d3004-602200-26mm-ring-dome-tweeter",
+     "https://www.scan-speak.dk/product/r3004-602200/",
+     "https://www.madisoundspeakerstore.com/ring-radiator-tweeters/scan-speak-r3004/602200-illuminator-ring-radiator-tweeter/"
+    ]
+   },
+   {
+    "id": "t25a-6",
+    "make": "Bliesma",
+    "model": "T25A-6 (Al-Mg) / T25B-6 (beryllium)",
+    "role": "bookshelf_tweeter",
+    "status": "PREMIUM alternative; the only flagship candidate whose faceplate leaves room for a carved flare",
+    "impedance_ohm": 6,
+    "dome": "25 mm metal dome, flush surround, rear-mounted motor",
+    "Fs_Hz": {
+     "T25A-6": "980 declared / 814 measured (HiFiCompass)",
+     "T25B-6": "1050 declared / 852 measured"
+    },
+    "sensitivity_dB": {
+     "T25A-6": 91.5,
+     "T25B-6": 92.5
+    },
+    "used_range": "T25A-6 2.2-35 kHz, T25B-6 2.2-40 kHz; users run 1.8-2 kHz actively",
+    "faceplate": {
+     "shape": "round",
+     "od_mm": 68,
+     "cutout_mm": 48,
+     "depth_mm": 26
+    },
+    "element_only_version": "no; non-removable grille. HiFiCompass publishes WG104 waveguides for the T25 family",
+    "price": [
+     {
+      "vendor": "audio-hi.fi",
+      "price": "T25A-6 EUR 148.60; T25B-6 EUR 386.80"
+     },
+     {
+      "vendor": "Falcon",
+      "price": "T25B-6 GBP 327.50"
+     },
+     {
+      "vendor": "Solen",
+      "price": "T25B-6 CAD 636.40"
+     }
+    ],
+    "confidence": {
+     "confirmed": [
+      "68 mm faceplate (Solen + Falcon)",
+      "declared Fs and sensitivity (audio-hi.fi + Falcon; Bliesma datasheet for B-6)"
+     ],
+     "unconfirmed": [
+      "48 mm cutout and 26 mm depth (one retailer table)"
+     ],
+     "conflicts": [
+      "Solen lists 93/94 dB; Soundimports 870 Hz"
+     ]
+    },
+    "sources": [
+     "https://www.bliesma.de/Datasheet%20T25B-6.pdf",
+     "https://www.solen.ca/en/products/bliesma-t25a6-25mm-aluminum-magnesium-dome-tweeter",
+     "https://audio-hi.fi/en/bliesma_t25a-6-p-4942.html",
+     "https://www.falconacoustics.co.uk/bliesma-t25a-6.html",
+     "https://www.falconacoustics.co.uk/bliesma-t25b-6.html",
+     "https://hificompass.com/en/reviews/bliesma-t25a-6-t25b-6-t25d-6-t25s-6",
+     "https://hificompass.com/en/projects/horn/waveguide-wg104-xx/25-bliesma-t25b-6-t25d-6-t25t-6-and-t25s-6-tweeters"
+    ]
+   },
+   {
+    "id": "sb26stcn-c000-4",
+    "make": "SB Acoustics",
+    "model": "SB26STCN-C000-4",
+    "role": "bookshelf_tweeter",
+    "status": "VALUE choice: small-faceplate sibling of the SB26STAC",
+    "impedance_ohm": 4,
+    "dome": "25-26 mm textile, neodymium",
+    "Fs_Hz": 960,
+    "sensitivity_dB": 92.5,
+    "Re_ohm": 3.2,
+    "Qts": 0.84,
+    "power_W": "120 max",
+    "used_range": "SB/retailer suggest 2.6 kHz 12 dB/oct; plan LR4 at 2.5 kHz",
+    "faceplate": {
+     "shape": "round",
+     "od_mm": 72,
+     "cutout_mm": "50 (Willys) or 48 (TLHP)",
+     "depth_mm": "n/f"
+    },
+    "price": [
+     {
+      "vendor": "Madisound",
+      "price": "USD 40.50 (39.30 on brand page)"
+     },
+     {
+      "vendor": "Solen",
+      "price": "CAD 59.81"
+     },
+     {
+      "vendor": "EU",
+      "price": "EUR 30.89-36.45"
+     }
+    ],
+    "confidence": {
+     "confirmed": [
+      "72 mm faceplate (Willys + Soundimports + Solen)",
+      "Fs 960 and 92.5 dB (Willys + TLHP)"
+     ],
+     "unconfirmed": [
+      "depth n/f"
+     ],
+     "conflicts": [
+      "cutout 48 vs 50"
+     ]
+    },
+    "sources": [
+     "https://www.madisoundspeakerstore.com/soft-dome-tweeters-sb-acoustics/sb-acoustics-sb26stcn-c000-4-tweeter-4-ohm/",
+     "https://willys-hifi.com/products/sb-acoustics-sb26stcn-c000-4-tweeter",
+     "https://en.toutlehautparleur.com/dome-tweeter-sb-acoustics-sb26stcn-c000-4-impedance-4-ohm-voice-coil-26-mm.html",
+     "https://solen.ca/en/products/sb-acoustics-sb26stcn-c000-4-25mm-textile-dome-neodymium-tweeter"
+    ]
+   },
+   {
+    "id": "nd25fn-4",
+    "make": "Dayton Audio",
+    "model": "ND25FN-4 (element)",
+    "role": "bookshelf_tweeter",
+    "status": "BUDGET bookshelf tweeter (budget set): faceplate-less, so the whole waveguide is carved",
+    "impedance_ohm": 4,
+    "dome": "1 in silk, neodymium",
+    "Fs_Hz": 1350,
+    "sensitivity_dB": 90,
+    "power_W": "20 RMS",
+    "used_range": "2.5-20 kHz listed; plan LR4 at 2.8-3 kHz",
+    "faceplate": {
+     "shape": "none (element)",
+     "od_mm": 41,
+     "depth_mm": 21
+    },
+    "price": [
+     {
+      "vendor": "Dayton MSRP",
+      "price": "USD 14.99"
+     }
+    ],
+    "confidence": {
+     "confirmed": [
+      "41 mm element, 21 mm depth, Fs 1350 (Dayton + Parts Express, from the flagship research)"
+     ],
+     "unconfirmed": [
+      "Re/Le not found for the element (ND25FA-4 sibling: 3.2 ohm / 0.03 mH)"
+     ]
+    },
+    "sources": [
+     "https://www.daytonaudio.com/product/1194/nd25fn-4-1-neo-silk-dome-tweeter-element-4-ohm",
+     "https://www.parts-express.com/Dayton-Audio-ND25FN-4-1-Silk-Dome-Neodymium-Tweeter-Element-4-Ohm-275-053"
+    ]
+   },
+   {
+    "id": "oc25sc65-04",
+    "make": "Peerless (Tymphany)",
+    "model": "OC25SC65-04 (element)",
+    "role": "bookshelf_tweeter",
+    "status": "alternative element (twist-lock body made for custom faceplates/waveguides)",
+    "impedance_ohm": 4,
+    "dome": "1 in textile, neodymium",
+    "Fs_Hz": 1382,
+    "sensitivity_dB": "93.1 (datasheet; PE lists 96.2)",
+    "power_W": "25 RMS",
+    "used_range": "2.5 kHz 12 dB/oct in one listing; plan 2.8-3 kHz",
+    "faceplate": {
+     "shape": "none (element, twist-lock)",
+     "od_mm": 41.3,
+     "cutout_mm": 38.6,
+     "depth_mm": 25.5
+    },
+    "price": [
+     {
+      "vendor": "Madisound",
+      "price": "USD 35.20"
+     }
+    ],
+    "sources": [
+     "https://www.madisoundspeakerstore.com/soft-dome-tweeters-vifa/peerless-oc25sc65-04-1-textile-dome-tweeter-4-ohm/",
+     "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/6167/OC25SC65-04.pdf",
+     "https://josephcrowe.com/blogs/news/peerless-oc25sc65-04-with-horn-no-1900"
+    ]
+   },
+   {
+    "id": "tw29dn-b",
+    "make": "SB Acoustics",
+    "model": "Satori TW29DN-B (faceplate removed)",
+    "role": "bookshelf_tweeter (family option)",
+    "status": "use only if the flagship adopts it (it is the sibling floorstander research's recommended tweeter); figures from that file, not re-checked here",
+    "impedance_ohm": "4 (TW29DN-B-8 is the 8 ohm version)",
+    "dome": "29 mm coated cloth, about 45 mm radiating OD with surround (estimate)",
+    "Fs_Hz": "650 (624 measured by audioXpress)",
+    "power_W": 80,
+    "crossover": "about 2 kHz with waveguide gain",
+    "faceplate": {
+     "shape": "104 mm two-part aluminium, removable per SB (2.5 mm hex screws; glued at the rim)",
+     "bare_body_mm": "about 71-74 across, about 32 deep (unconfirmed)"
+    },
+    "bookshelf_fit": "A 71-74 mm body stands taller than the roof at mid-slope; it fits the 85 mm W 220 roof only near the ridge or with the body dropping into the cabinet.",
+    "price": [
+     {
+      "vendor": "sibling research",
+      "price": "about EUR 150"
+     }
+    ],
+    "sources": [
+     "research/drivers-floorstander.md (sibling file)"
+    ]
+   },
+   {
+    "id": "27tffnc-g",
+    "make": "Seas",
+    "model": "27TFFNC/G (H1396-04)",
+    "role": "bookshelf_tweeter (Seas small-flange option)",
+    "status": "Seas's small-flange dome (Linkwitz LX521 tweeter); figures from the sibling floorstander research, not re-checked here",
+    "impedance_ohm": 4,
+    "Fs_Hz": 1170,
+    "sensitivity_dB": 91,
+    "power_W": 80,
+    "crossover": "2.5-3 kHz",
+    "faceplate": {
+     "shape": "53 mm small flange, no separate faceplate",
+     "cutout_mm": "46 (unconfirmed)",
+     "depth_mm": "22 (unconfirmed)"
+    },
+    "price": [
+     {
+      "vendor": "sibling research",
+      "price": "about EUR 48"
+     }
+    ],
+    "sources": [
+     "research/drivers-floorstander.md (sibling file)"
+    ]
+   },
+   {
+    "id": "sb26stac-c000-4",
+    "make": "SB Acoustics",
+    "model": "SB26STAC-C000-4",
+    "role": "flagship candidate checked for the bookshelf",
+    "status": "flagship-size: too large for the bookshelf mouth (use the SB26STCN-C000-4 there)",
+    "impedance_ohm": 4,
+    "dome": "26 mm textile, aluminium faceplate",
+    "Fs_Hz": 750,
+    "sensitivity_dB": 91.5,
+    "Qts": "1.12 (SB) / 1.00 (retailer)",
+    "used_range": "2.6 kHz 12 dB/oct (retailer); measured usable from 2-2.5 kHz; users run LR4 at 2 kHz",
+    "faceplate": {
+     "shape": "round, metal",
+     "od_mm": 100,
+     "bolt_circle_mm": 88.5,
+     "cutout_mm": "74 (Willys) or 72",
+     "depth_behind_front_mm": 33.2,
+     "overall_depth_mm": 39.7
+    },
+    "element_only_version": "no; small-faceplate sibling SB26STCN-C000-4 (72 mm). Waveguide sibling SB26STWGC-4: 100-103.8 mm aluminium waveguide faceplate, Fs 780 Hz, 93 dB; one user found it needs >= 5 kHz",
+    "price": [
+     {
+      "vendor": "Madisound",
+      "price": "USD 52.00"
+     },
+     {
+      "vendor": "EU",
+      "price": "EUR 37-40"
+     }
+    ],
+    "confidence": {
+     "confirmed": [
+      "100 mm faceplate (reseller table + Madisound)",
+      "Fs 750, 91.5 dB (SB page; retailers)"
+     ],
+     "unconfirmed": [
+      "bolt circle and depths (one table)"
+     ],
+     "conflicts": [
+      "cutout 72 vs 74"
+     ]
+    },
+    "sources": [
+     "https://sbacoustics.com/product/sb26stac-c000-4/",
+     "https://www.madisoundspeakerstore.com/sb-acoustics-soft-dome-tweeters/sb-acoustics-sb26stac-c000-4-1-textile-dome-tweeter/",
+     "https://willys-hifi.com/products/sb-acoustics-sb26stac-c000-4-tweeter",
+     "https://en.toutlehautparleur.com/dome-tweeter-sb-acoustics-sb26stac-c000-4-impedance-4-ohm-voice-coil-26-mm.html",
+     "https://www.audioexcite.com/?page_id=4041",
+     "https://willys-hifi.com/products/sb-acoustics-sb26stwgc-4-tweeter"
+    ]
+   },
+   {
+    "id": "d2608-913000",
+    "make": "Scan-Speak",
+    "model": "Discovery D2608/913000",
+    "role": "flagship candidate checked for the bookshelf",
+    "status": "flagship-size: 104 mm faceplate, no small or element version",
+    "impedance_ohm": 8,
+    "dome": "26 mm textile",
+    "Fs_Hz": 700,
+    "sensitivity_dB": 91.3,
+    "faceplate": {
+     "shape": "round, die-cast aluminium",
+     "od_mm": 104,
+     "thickness_mm": 4.5,
+     "cutout_mm": 72,
+     "bolt_circle_mm": 92,
+     "holes": "4 x 4.2 mm",
+     "depth_mm": "32.3 / 36.7 / 38 (conflict)"
+    },
+    "element_only_version": "no. D2604/833000 also has a 104 mm faceplate (Fs 475 per Scan-Speak; 630 per Madisound/Solen for D2604/8300), USD 58-60.90",
+    "price": [
+     {
+      "vendor": "audio-hi.fi",
+      "price": "EUR 74.60"
+     },
+     {
+      "vendor": "hifisound.de",
+      "price": "EUR 104"
+     },
+     {
+      "vendor": "Falcon",
+      "price": "GBP 59.25 ex VAT"
+     }
+    ],
+    "confidence": {
+     "confirmed": [
+      "104 mm faceplate (Willys + Wilmslow)",
+      "Fs 700 (Scan-Speak + Willys)",
+      "91.3 dB (three retailers)"
+     ],
+     "unconfirmed": [
+      "cutout 72, bolt circle 92"
+     ],
+     "conflicts": [
+      "depth",
+      "Wilmslow Fs 857"
+     ]
+    },
+    "sources": [
+     "https://www.scan-speak.dk/product/d2608-913000/",
+     "https://willys-hifi.com/products/scanspeak-d2608-913000-tweeter",
+     "https://wilmslowaudio.co.uk/detailed-tweeters/scanspeak-discovery-d2608913000",
+     "https://www.falconacoustics.co.uk/scanspeak-d2608-913000-tweeter-discovery-range.html",
+     "https://audio-hi.fi/index.php?main_page=product_info&products_id=169",
+     "https://www.scan-speak.dk/product/d2604-833000/",
+     "https://audioxpress.com/article/test-bench-scan-speak-discovery-d2604-833000-1-wide-surround-silk-dome-tweeter"
+    ]
+   },
+   {
+    "id": "27tffc",
+    "make": "Seas",
+    "model": "Prestige 27TFFC (H0881-06)",
+    "role": "flagship candidate checked for the bookshelf",
+    "status": "flagship-size: 103.8 mm faceplate, no small or element version found",
+    "impedance_ohm": 6,
+    "dome": "27 mm textile, cloth surround, rear chamber",
+    "Fs_Hz": 550,
+    "sensitivity_dB": 91,
+    "power_W": "80 long-term / 200 short-term",
+    "used_range": "2-30 kHz (Seas copy); 1.5-25 kHz (Soundimports)",
+    "faceplate": {
+     "od_mm": 103.8,
+     "cutout_mm": 85,
+     "overall_depth_mm": 42.5,
+     "front_thickness_mm": 3.5
+    },
+    "element_only_version": "no. Note: H1189 is the 27TDFC (polymer surround, Fs 550, 90 dB, same frame, can go to 1.5-1.75 kHz)",
+    "price": [
+     {
+      "vendor": "Soundimports",
+      "price": "EUR 69.95"
+     },
+     {
+      "vendor": "Falcon",
+      "price": "GBP 39.95 ex VAT"
+     }
+    ],
+    "confidence": {
+     "unconfirmed": [
+      "dimensions from TLHP (Soundimports gives 73 mm cutout, probably the magnet)"
+     ]
+    },
+    "sources": [
+     "https://en.toutlehautparleur.com/dome-tweeter-seas-27tffc-6-ohm-voice-coil-27-mm.html",
+     "https://www.soundimports.eu/en/seas-27tffc.html",
+     "https://www.falconacoustics.co.uk/seas-27tffc-h0881-tweeter-prestige-series.html",
+     "https://img.audiomania.ru/data/seas_h881-06_27tffc_3899.pdf",
+     "https://www.falconacoustics.co.uk/seas-27tdfc-h1189-tweeter-prestige-series.html",
+     "https://zaphaudio.com/SR71.html"
+    ]
+   },
+   {
+    "id": "nd25fw-4",
+    "make": "Dayton Audio",
+    "model": "ND25FW-4 (with waveguide)",
+    "role": "flagship candidate checked for the bookshelf",
+    "status": "drop-in waveguide option only if the axis can be normal to the slope; otherwise use its element sibling ND25FN-4",
+    "impedance_ohm": 4,
+    "dome": "1 in treated silk, neodymium",
+    "Fs_Hz": 1350,
+    "Re_ohm": 3.2,
+    "Le_mH": 0.04,
+    "power_W": "20 RMS / 40 max",
+    "sensitivity_dB": "91 dB/1 W or 94 dB/2.83 V (both on the retailer page)",
+    "used_range": "2.5-20 kHz; about 90 deg dispersion, directivity control to about 2 kHz",
+    "faceplate": {
+     "shape": "round waveguide faceplate",
+     "od_mm": 104,
+     "cutout_mm": "73 (2.875 in, Soundimports); conflict",
+     "depth_mm": 40
+    },
+    "element_only_version": "yes: ND25FN-4 (41 mm element)",
+    "price": [
+     {
+      "vendor": "Parts Express",
+      "price": "USD 13.98 (MSRP 18.99; 12.68 each for 4+)"
+     }
+    ],
+    "sources": [
+     "https://www.daytonaudio.com/product/1280/nd25fw-4-1-soft-dome-neodymium-tweeter-with-waveguide-4-ohm",
+     "https://www.parts-express.com/Dayton-Audio-ND25FW-4-1-Soft-Dome-Neodymium-Tweeter-with-Wa-275-051",
+     "https://www.soundimports.eu/en/dayton-audio-nd25fw-4.html"
+    ]
+   }
+  ],
+  "tweeter_family_mapping": [
+   {
+    "if_flagship_uses": "SB Acoustics SB26STAC-C000-4 (100 mm)",
+    "bookshelf_equivalent": "SB26STCN-C000-4 (72 mm, same SB textile family; Fs 960 so cross at 2.5 kHz)"
+   },
+   {
+    "if_flagship_uses": "Scan-Speak D2608/913000 (104 mm)",
+    "bookshelf_equivalent": "Scan-Speak Illuminator D3004/602200 or R3004/602200 (62 mm, Fs 420-440, crosses at 2 kHz)"
+   },
+   {
+    "if_flagship_uses": "Seas 27TFFC (103.8 mm)",
+    "bookshelf_equivalent": "Seas 27TFFNC/G small flange (53 mm, Fs 1170, cross 2.5-3 kHz), or the Illuminator D3004/602200 for a 2 kHz crossover"
+   },
+   {
+    "if_flagship_uses": "Dayton ND25FW-4 (104 mm waveguide)",
+    "bookshelf_equivalent": "Dayton ND25FN-4 element (41 mm) in a carved waveguide; cross at 2.8-3 kHz"
+   },
+   {
+    "if_flagship_uses": "Bliesma T25A-6 / T25B-6 (68 mm)",
+    "bookshelf_equivalent": "the same part (68 mm fits); cross at 2.2 kHz"
+   },
+   {
+    "if_flagship_uses": "SB Satori TW29DN-B, faceplate removed (the sibling floorstander research's recommended tweeter)",
+    "bookshelf_equivalent": "the same TW29DN-B with its faceplate removed: bare body about 71-74 mm, about 32 mm deep (unconfirmed), Fs 650 Hz; fits the 85 mm roof at W 220 only near the ridge or with the body dropping into the cabinet"
+   },
+   {
+    "if_flagship_uses": "Seas small flange",
+    "bookshelf_equivalent": "Seas 27TFFNC/G (H1396-04): 53 mm flange, cutout 46, depth 22, Fs 1170 Hz, 91 dB, EUR 48 (from the sibling floorstander research, unconfirmed); cross at 2.5-3 kHz"
+   }
+  ]
+ },
+ "pint": {
+  "woofers": [
+   {
+    "id": "nd65-4",
+    "make": "Dayton Audio",
+    "model": "ND65-4",
+    "size_class": "2.5 in full-range, aluminium cone",
+    "impedance_ohm": 4,
+    "status": "RECOMMENDED pint woofer (both pint sets)",
+    "ts": {
+     "Fs_Hz": 89.5,
+     "Qts": 0.61,
+     "Vas_L": "0.53 (LDB + EU retailers) or 0.85 (PE 0.03 ft3): conflict",
+     "Xmax_mm": 3.5,
+     "sensitivity_dB": "83 (Audiophonics title; basis n/f)",
+     "power_W": 15,
+     "Sd_cm2": "n/f (14.5 assumed for SPL estimate)"
+    },
+    "mechanical": {
+     "frame_shape": "round steel frame",
+     "frame_od_mm": 64,
+     "cutout_mm": 52,
+     "overall_depth_mm": 48,
+     "weight_g": 181,
+     "holes": "n/f"
+    },
+    "appearance": {
+     "cone": "black anodised aluminium (LDB)",
+     "surround": "rubber",
+     "frame": "steel, black",
+     "motor": "neodymium, 'Neo-Balanced', self-shielded",
+     "dust_cap": "n/f",
+     "colour": "black"
+    },
+    "price": [
+     {
+      "vendor": "Parts Express",
+      "price": "USD 23.98 (MSRP 31.99)"
+     },
+     {
+      "vendor": "EU",
+      "price": "EUR 29.90-39.95"
+     }
+    ],
+    "box": {
+     "maker_suggestion": "Dayton: sealed 0.05 ft3 (1.4 L) F3 about 102 Hz; vented 0.08 ft3 (2.3 L) F3 about 53 Hz",
+     "sim_vas_0.53": {
+      "net_1.0_L": {
+       "sealed": {
+        "fc_Hz": 110.7,
+        "Qtc": 0.75,
+        "f3_Hz": 104.2,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 5.6
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      },
+      "net_1.3_L": {
+       "sealed": {
+        "fc_Hz": 106.2,
+        "Qtc": 0.72,
+        "f3_Hz": 103.8,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 4.9
+       },
+       "vented": {
+        "fb_Hz": 55.2,
+        "f3_Hz": 63.1,
+        "peak_dB": 0.49,
+        "min_port_d_mm_at_Xmax": 11.5,
+        "port_length_mm_d20": 222,
+        "port_length_mm_d16": 140
+       }
+      },
+      "net_1.6_L": {
+       "sealed": {
+        "fc_Hz": 103.3,
+        "Qtc": 0.7,
+        "f3_Hz": 103.7,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 4.4
+       },
+       "vented": {
+        "fb_Hz": 57.2,
+        "f3_Hz": 51.3,
+        "peak_dB": 0.47,
+        "min_port_d_mm_at_Xmax": 11.7,
+        "port_length_mm_d20": 164,
+        "port_length_mm_d16": 103
+       }
+      }
+     },
+     "sim_vas_0.85": {
+      "net_1.0_L": {
+       "sealed": {
+        "fc_Hz": 121.7,
+        "Qtc": 0.83,
+        "f3_Hz": 106.3,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 7.3
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      },
+      "net_1.3_L": {
+       "sealed": {
+        "fc_Hz": 115.1,
+        "Qtc": 0.78,
+        "f3_Hz": 104.9,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 6.3
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      },
+      "net_1.6_L": {
+       "sealed": {
+        "fc_Hz": 110.8,
+        "Qtc": 0.75,
+        "f3_Hz": 104.2,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 5.7
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      }
+     },
+     "summary": "Sealed 1.3 L: fc 106 Hz, Qtc 0.72, f3 104 Hz; +4.9 dB DSP shelf gives f3 80 Hz. Excursion-limited output at 80 Hz is only about 73 dB at 1 m per pint, so high-pass at 70-80 Hz."
+    },
+    "fit_notes": "64 mm round frame on the 100 mm face (18 mm margins): visually close to the 68 mm woofer already drawn. Lowest Fs and most excursion of the 2.5 in options.",
+    "confidence": {
+     "confirmed": [
+      "Fs 89.5, Qts 0.61 (Dayton + LDB)",
+      "Xmax 3.5",
+      "OD 64, cutout 52, depth 48 (Dayton/PE + LDB + retailers)"
+     ],
+     "unconfirmed": [
+      "sensitivity basis"
+     ],
+     "conflicts": [
+      "Vas 0.53 vs 0.85 L"
+     ]
+    },
+    "sources": [
+     "https://www.daytonaudio.com/product/63/nd65-4-2-1-2-aluminum-cone-full-range-driver-4-ohm",
+     "https://www.parts-express.com/Dayton-Audio-ND65-4-2-1-2-Aluminum-Cone-Full-Range-Driver-290-204",
+     "https://loudspeakerdatabase.com/Dayton/ND65-4",
+     "https://www.audiophonics.fr/en/midrange-midbass-full-range/dayton-audio-nd65-4-speaker-driver-full-range-aluminium-15w-4-ohm-83db-85hz-20khz-o63cm-p-12827.html",
+     "https://www.soundimports.eu/dayton-audio-nd65-4.html"
+    ]
+   },
+   {
+    "id": "sb65wbac25-4",
+    "make": "SB Acoustics",
+    "model": "SB65WBAC25-4",
+    "size_class": "2.5 in wideband, aluminium cone",
+    "impedance_ohm": 4,
+    "status": "ALTERNATIVE pint woofer (square frame echoes the carton; best drawing available)",
+    "ts": {
+     "Fs_Hz": 115,
+     "Qts": 0.68,
+     "Qms": 6.0,
+     "Qes": 0.77,
+     "Vas_L": 0.43,
+     "Re_ohm": 3.6,
+     "Le_mH": 0.15,
+     "Bl_Tm": 2.9,
+     "Sd_cm2": 20,
+     "Mms_g": 2.5,
+     "Cms_mm_per_N": 0.77,
+     "Xmax_mm": 2.65,
+     "power_W": "20 RMS / 40 max",
+     "sensitivity_dB": "about 84 dB/2.83 V (my calculation from T/S)"
+    },
+    "mechanical": {
+     "frame_shape": "64 mm square polymer chassis with corners cut on a 80 mm circle (R40)",
+     "frame_square_mm": 64.0,
+     "frame_diagonal_mm": 80.0,
+     "bolt_circle_mm": 72.0,
+     "holes": "4 x 3.8 mm with 6.8 mm recesses (REV.4; REV.2: 3.3 / 6.5)",
+     "cutout_mm": "59.5 rear body (drawing) / 60.5 (Madisound)",
+     "magnet_od_mm": 38.0,
+     "overall_depth_mm": 38.0,
+     "depth_behind_baffle_mm": 32.7,
+     "effective_cone_d_mm": 50.5
+    },
+    "appearance": {
+     "cone": "aluminium",
+     "surround": "rubber",
+     "frame": "black square polymer",
+     "dust_cap": "n/f",
+     "colour": "check photos"
+    },
+    "price": [
+     {
+      "vendor": "Madisound",
+      "price": "USD 39.10"
+     },
+     {
+      "vendor": "Solen",
+      "price": "CAD 48.15"
+     },
+     {
+      "vendor": "EU",
+      "price": "EUR 24-35"
+     }
+    ],
+    "box": {
+     "sim": {
+      "net_1.0_L": {
+       "sealed": {
+        "fc_Hz": 137.5,
+        "Qtc": 0.81,
+        "f3_Hz": 121.9,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 9.4
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      },
+      "net_1.3_L": {
+       "sealed": {
+        "fc_Hz": 132.7,
+        "Qtc": 0.78,
+        "f3_Hz": 120.9,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 8.8
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      },
+      "net_1.6_L": {
+       "sealed": {
+        "fc_Hz": 129.5,
+        "Qtc": 0.77,
+        "f3_Hz": 120.3,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 8.4
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      }
+     },
+     "summary": "Sealed 1.3 L: fc 133 Hz, Qtc 0.78; +8.8 dB to reach 80 Hz, so less bass than the ND65-4."
+    },
+    "confidence": {
+     "confirmed": [
+      "T/S (multiple listings)",
+      "64 mm square, 72 bolt circle, 38 / 32.7 depth (SB REV.2 + REV.4 drawings + Madisound)"
+     ],
+     "unconfirmed": [
+      "Xmax 2.65 (derived from 5.3 mm p-p; LDB 2.7)"
+     ],
+     "conflicts": [
+      "hole size by revision",
+      "cutout 59.5 vs 60.5"
+     ]
+    },
+    "sources": [
+     "https://sbacoustics.com/product/2-5in-sb65wbac25-4/",
+     "https://sbacoustics.com/wp-content/uploads/2020/02/2%C2%BDin-SB65WBAC25-4.pdf",
+     "https://solen.ca/storage/media/oKZeDiFc0PV2D1v8jcaX2QslEfxmktJKzieMPXCl.pdf",
+     "https://www.madisoundspeakerstore.com/approx-2-fullrange/sb-acoustics-sb65wbac25-4-2.5-aluminum-full-range/",
+     "https://loudspeakerdatabase.com/SB/SB65WBAC25-4",
+     "https://www.soundimports.eu/en/sb-acoustics-sb65wbac25-4.html"
+    ]
+   },
+   {
+    "id": "dma70-4",
+    "make": "Dayton Audio",
+    "model": "DMA70-4",
+    "size_class": "2.5 in dual-magnet aluminium",
+    "impedance_ohm": 4,
+    "status": "considered (70 mm frame closest to the 68 mm drawn; dimensions single-source)",
+    "ts": {
+     "Fs_Hz": 113,
+     "Qts": 0.44,
+     "Vas_L": 0.4,
+     "Xmax_mm": 2.0,
+     "sensitivity_dB": "86.2 (Audiophonics) vs 83 (LDB)"
+    },
+    "mechanical": {
+     "frame_od_mm": 70,
+     "cutout_mm": 64,
+     "depth_mm": 38
+    },
+    "price": [
+     {
+      "vendor": "Soundimports",
+      "price": "EUR 20.95"
+     },
+     {
+      "vendor": "US",
+      "price": "n/f"
+     }
+    ],
+    "box": {
+     "sim": {
+      "net_1.0_L": {
+       "sealed": {
+        "fc_Hz": 133.7,
+        "Qtc": 0.52,
+        "f3_Hz": 196.2,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 8.9
+       },
+       "vented": {
+        "fb_Hz": 91.5,
+        "f3_Hz": 81.8,
+        "peak_dB": 0.29,
+        "min_port_d_mm_at_Xmax": 12.5,
+        "port_length_mm_d20": 97,
+        "port_length_mm_d16": 60
+       }
+      },
+      "net_1.3_L": {
+       "sealed": {
+        "fc_Hz": 129.2,
+        "Qtc": 0.5,
+        "f3_Hz": 199.0,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 8.3
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      },
+      "net_1.6_L": {
+       "sealed": {
+        "fc_Hz": 126.3,
+        "Qtc": 0.49,
+        "f3_Hz": 200.9,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 7.9
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      }
+     },
+     "summary": "Too damped for sealed; vented 1.0 L fb 92 Hz f3 82 Hz with a 16 x 60 mm port."
+    },
+    "confidence": {
+     "confirmed": [
+      "Fs, Qts, Xmax (two databases)"
+     ],
+     "unconfirmed": [
+      "Vas and all dimensions (one database)"
+     ]
+    },
+    "sources": [
+     "https://daytonaudio.com/product/1616/dma70-4-2-1-2-dual-magnet-aluminum-cone-full-range-driver-4-ohm",
+     "https://loudspeakerdatabase.com/Dayton/DMA70-4",
+     "https://www.soundimports.eu/en/dayton-audio-dma70-4.html"
+    ]
+   },
+   {
+    "id": "w3-881sjf",
+    "make": "Tang Band",
+    "model": "W3-881SJF",
+    "size_class": "3 in full-range",
+    "impedance_ohm": 8,
+    "status": "not recommended: 93 mm frame on a 100 mm face; Xmax 0.5 mm",
+    "ts": {
+     "Fs_Hz": 100,
+     "Qts": 0.39,
+     "Vas_L": 1.89,
+     "Xmax_mm": 0.5,
+     "Le_mH": 0.081,
+     "sensitivity_dB": 88,
+     "power_W": 15
+    },
+    "mechanical": {
+     "frame_od_mm": 93,
+     "cutout_mm": 75,
+     "depth_behind_baffle_mm": 59,
+     "holes": "4"
+    },
+    "price": [
+     {
+      "vendor": "Parts Express",
+      "price": "USD 34.98 clearance (MSRP 60.99)"
+     },
+     {
+      "vendor": "Audiophonics",
+      "price": "EUR 38.90"
+     }
+    ],
+    "box": {
+     "sim": {
+      "net_1.0_L": {
+       "sealed": {
+        "fc_Hz": 170.0,
+        "Qtc": 0.66,
+        "f3_Hz": 182.1,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 13.1
+       },
+       "vented": {
+        "fb_Hz": 105.8,
+        "f3_Hz": 129.6,
+        "peak_dB": 0.45,
+        "min_port_d_mm_at_Xmax": 8.0,
+        "port_length_mm_d20": 69,
+        "port_length_mm_d16": 42
+       }
+      },
+      "net_1.3_L": {
+       "sealed": {
+        "fc_Hz": 156.6,
+        "Qtc": 0.61,
+        "f3_Hz": 185.1,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 11.7
+       },
+       "vented": {
+        "fb_Hz": 105.0,
+        "f3_Hz": 114.8,
+        "peak_dB": 0.18,
+        "min_port_d_mm_at_Xmax": 8.0,
+        "port_length_mm_d20": 51,
+        "port_length_mm_d16": 30
+       }
+      },
+      "net_1.6_L": {
+       "sealed": {
+        "fc_Hz": 147.7,
+        "Qtc": 0.58,
+        "f3_Hz": 188.5,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 10.7
+       },
+       "vented": {
+        "fb_Hz": 99.0,
+        "f3_Hz": 105.3,
+        "peak_dB": -0.0,
+        "min_port_d_mm_at_Xmax": 7.8,
+        "port_length_mm_d20": 45,
+        "port_length_mm_d16": 27
+       }
+      }
+     }
+    },
+    "confidence": {
+     "confirmed": [
+      "Fs, Qts, Vas, Xmax (three listings)",
+      "cutout 75"
+     ],
+     "unconfirmed": [
+      "frame 93 and depth 59 (Audiophonics)"
+     ],
+     "conflicts": [
+      "Le 0.8 (PE) vs 0.081 mH"
+     ]
+    },
+    "sources": [
+     "https://www.parts-express.com/Tang-Band-W3-881SJF-3-Full-Range-Speaker-264-911",
+     "https://loudspeakerdatabase.com/TangBand/W3-881SJF",
+     "https://www.audiophonics.fr/en/midrange-midbass-full-range/tang-band-w3-881sjf-speaker-driver-full-range-15w-8-ohm-88db-100hz-20khz-o-76cm-p-9397.html"
+    ]
+   },
+   {
+    "id": "w2-800sl",
+    "make": "Tang Band",
+    "model": "W2-800SL",
+    "size_class": "2 in Al-Mg full-range",
+    "impedance_ohm": "n/f (blank in listing)",
+    "status": "not recommended as woofer (Fs 160, Xmax 1 mm); clearance item",
+    "ts": {
+     "Fs_Hz": 160,
+     "Qts": 0.25,
+     "Vas_L": 0.23,
+     "Xmax_mm": 1.0,
+     "Re_ohm": 3.5,
+     "Le_mH": 0.04,
+     "Bl_Tm": 3.55,
+     "Sd_cm2": 13,
+     "sensitivity_dB": 87,
+     "power_W": "10 RMS / 20 max"
+    },
+    "mechanical": {
+     "frame_od_mm": 57,
+     "cutout_mm": 52,
+     "depth_mm": 30,
+     "holes": "4",
+     "frame": "ABS/polymer",
+     "magnet": "shielded neodymium",
+     "surround": "rubber"
+    },
+    "price": [
+     {
+      "vendor": "Parts Express",
+      "price": "n/f (clearance)"
+     }
+    ],
+    "box": {
+     "sim": {
+      "net_1.0_L": {
+       "sealed": {
+        "fc_Hz": 177.4,
+        "Qtc": 0.28,
+        "f3_Hz": 591.2,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 13.8
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      },
+      "net_1.3_L": {
+       "sealed": {
+        "fc_Hz": 173.6,
+        "Qtc": 0.27,
+        "f3_Hz": 593.2,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 13.5
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      },
+      "net_1.6_L": {
+       "sealed": {
+        "fc_Hz": 171.1,
+        "Qtc": 0.27,
+        "f3_Hz": 594.5,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 13.2
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      }
+     }
+    },
+    "confidence": {
+     "unconfirmed": [
+      "everything (single Parts Express listing)"
+     ]
+    },
+    "sources": [
+     "https://parts-express.com/Tang-Band-W2-800SL-2-Aluminum-Mg-Full-Range-Speaker-Driver-264-807"
+    ]
+   },
+   {
+    "id": "tc6fd00-04",
+    "make": "Peerless (Tymphany)",
+    "model": "TC6FD00-04",
+    "size_class": "2 in full-range (not 2.5 in)",
+    "impedance_ohm": 4,
+    "status": "not recommended as woofer (Fs 175, Qts 0.98, Xmax 1 mm)",
+    "ts": {
+     "Fs_Hz": 175,
+     "Qts": 0.98,
+     "Vas_L": 0.22,
+     "Xmax_mm": 1.0,
+     "sensitivity_dB": "81.6 dB/1 W half space",
+     "power_W": 15
+    },
+    "mechanical": {
+     "frame_shape": "57 x 57 mm square",
+     "cutout_mm": 48,
+     "depth_behind_baffle_mm": 32,
+     "front_thickness_mm": 3.4
+    },
+    "price": [
+     {
+      "vendor": "EU",
+      "price": "EUR 12-19"
+     }
+    ],
+    "box": {
+     "sim": {
+      "net_1.0_L": {
+       "sealed": {
+        "fc_Hz": 193.3,
+        "Qtc": 1.08,
+        "f3_Hz": 147.1,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 15.3
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      },
+      "net_1.3_L": {
+       "sealed": {
+        "fc_Hz": 189.2,
+        "Qtc": 1.06,
+        "f3_Hz": 145.2,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 15.0
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      },
+      "net_1.6_L": {
+       "sealed": {
+        "fc_Hz": 186.6,
+        "Qtc": 1.05,
+        "f3_Hz": 144.0,
+        "dsp_boost_dB_for_f3_80Hz_Q0707": 14.7
+       },
+       "vented": "no flat vented alignment (peak <= 0.5 dB, knee rule)"
+      }
+     }
+    },
+    "confidence": {
+     "confirmed": [
+      "Fs 175, Qts 0.98, Vas 0.22 (Tymphany sheet + DigiKey)"
+     ],
+     "unconfirmed": [
+      "dimensions (TLHP)"
+     ],
+     "conflicts": [
+      "LDB 180 Hz / 1.00 / 0.192 L / 2 mm"
+     ]
+    },
+    "sources": [
+     "https://loudspeakerdatabase.com/Peerless/TC6FD00-04",
+     "https://en.toutlehautparleur.com/fullrange-speaker-peerless-tc6fd00-04-4-ohm-2-24-x-2-24-inch.html",
+     "https://www.Lautsprechershop.de/pdf/peerless/peerless_tc6fd00_04.pdf",
+     "https://azcus.digikey.com/en/products/detail/peerless-by-tymphany/TC6FD00-04/6211121"
+    ]
+   },
+   {
+    "id": "alpair-5.3",
+    "make": "Markaudio",
+    "model": "Alpair 5.3 (Gen 3)",
+    "size_class": "3 in full-range",
+    "impedance_ohm": 4,
+    "status": "does not fit: 100 mm frame equals the pint's face width",
+    "ts": {
+     "Fs_Hz": 94.5,
+     "Qts": 0.5,
+     "Vas_L": 1.78,
+     "Xmax_mm": "1.5 or 3 (conflict)",
+     "sensitivity_dB": 85.45
+    },
+    "mechanical": {
+     "frame_od_mm": 100,
+     "overall_depth_mm": 39
+    },
+    "price": [
+     {
+      "vendor": "Masori",
+      "price": "EUR 99 per pair"
+     },
+     {
+      "vendor": "TLHP",
+      "price": "84.64 per pair"
+     }
+    ],
+    "sources": [
+     "https://en.toutlehautparleur.com/pair-of-fullrange-speaker-markaudio-alpair-5-3-grey-4-ohm-100-mm.html",
+     "https://masori.de/en/collections/mitteltoner/products/alpair-5"
+    ]
+   },
+   {
+    "id": "nd90-4",
+    "make": "Dayton Audio",
+    "model": "ND90-4",
+    "size_class": "3.5 in aluminium full-range",
+    "impedance_ohm": 4,
+    "status": "does not fit: 103.5 mm frame",
+    "ts": {
+     "Fs_Hz": 90.2,
+     "Qts": 0.63,
+     "Vas_L": 1.06,
+     "Xmax_mm": 4.0
+    },
+    "mechanical": {
+     "frame_od_mm": 103.5,
+     "cutout_mm": 85,
+     "depth_behind_baffle_mm": 61
+    },
+    "price": [
+     {
+      "vendor": "Parts Express",
+      "price": "USD 25.98"
+     }
+    ],
+    "sources": [
+     "https://daytonaudio.com/product/65/nd90-4-3-1-2-aluminum-cone-full-range-driver-4-ohm",
+     "https://www.parts-express.com/Dayton-Audio-ND90-4-3-1-2-Aluminum-Cone-Full-Range-Driver-4-290-208"
+    ]
+   }
+  ],
+  "tweeters": [
+   {
+    "id": "sb14st-c000-4",
+    "make": "SB Acoustics",
+    "model": "SB14ST-C000-4",
+    "dome": "soft dome, 12.4 mm voice coil ('14' is a name)",
+    "impedance_ohm": 4,
+    "status": "RECOMMENDED pint tweeter (the smallest real dome: 24 mm face, rear M4 screw mount)",
+    "Fs_Hz": 1300,
+    "sensitivity_dB": "86 (REV.3, Oct 2025) or 87 (2018 preliminary and retailers)",
+    "crossover": "LR4 at 3.5-4 kHz",
+    "faceplate": {
+     "shape": "round",
+     "od_mm": 24.2,
+     "mounting": "rear M4 thread, max 5 mm engagement (screw from behind through the roof block)",
+     "cutout_mm": "n/f (drawing shows unlabelled 8.5 and 10.0)",
+     "depth_mm": "19 (one listing) or 37.25 (Lautsprechershop): conflict, allow 38"
+    },
+    "price": [
+     {
+      "vendor": "Soundimports",
+      "price": "EUR 28.45"
+     },
+     {
+      "vendor": "Lautsprechershop",
+      "price": "EUR 29.56"
+     },
+     {
+      "vendor": "Madisound",
+      "price": "listed ('w/grille'); price n/f"
+     }
+    ],
+    "confidence": {
+     "confirmed": [
+      "24.2 mm face (SB drawing + TLHP + Willys 24)",
+      "Fs 1300 (REV.3 + TLHP + Willys)"
+     ],
+     "conflicts": [
+      "sensitivity 86 vs 87",
+      "depth 19 vs 37.25"
+     ]
+    },
+    "sources": [
+     "https://sbacoustics.com/wp-content/uploads/2025/11/SB14ST-C000-4.pdf",
+     "https://en.toutlehautparleur.com/dome-tweeter-sb-acoustics-sb14st-c000-4-impedance-4-ohm-voice-coil-14-mm.html",
+     "https://willys-hifi.com/products/sb-acoustics-sb14st-c000-4-tweeter",
+     "https://www.soundimports.eu/en/sb-acoustics-sb14st-c000-4.html",
+     "https://www.madisoundspeakerstore.com/soft-dome-tweeters-sb-acoustics/sb-acoustics-sb14st-c000-4-1-tweeter-w/grille-4-ohm/"
+    ]
+   },
+   {
+    "id": "nd16fa-6",
+    "make": "Dayton Audio",
+    "model": "ND16FA-6",
+    "dome": "5/8 in soft dome, neodymium",
+    "impedance_ohm": 6,
+    "status": "BUDGET pint tweeter (front press-fit, flush)",
+    "Fs_Hz": 2125,
+    "Qts": 2.2,
+    "Re_ohm": 5.8,
+    "Le_mH": 0.04,
+    "sensitivity_dB": 88,
+    "power_W": "10 RMS / 20 max",
+    "range_Hz": "3500-27000",
+    "crossover": "passive: one series cap, about 4.7 uF (about 5.6 kHz on 6 ohm); active: LR4 >= 4 kHz",
+    "faceplate": {
+     "shape": "round, press-fit",
+     "od_mm": 32.5,
+     "cutout_mm": "32.3-32.5 (press fit)",
+     "depth_mm": "14.5 (one listing)"
+    },
+    "price": [
+     {
+      "vendor": "Parts Express",
+      "price": "USD 8.98 (MSRP 14.99)"
+     },
+     {
+      "vendor": "EU",
+      "price": "EUR 10.90-10.95"
+     }
+    ],
+    "confidence": {
+     "confirmed": [
+      "Fs, Qts, sensitivity (Dayton)",
+      "about 32.4 mm press-fit hole (PE + forum)"
+     ],
+     "unconfirmed": [
+      "depth"
+     ]
+    },
+    "sources": [
+     "https://www.daytonaudio.com/product/59/nd16fa-6-5-8-neodymium-dome-tweeter-6-ohm",
+     "https://www.parts-express.com/Dayton-Audio-ND16FA-6-5-8-Soft-Dome-Neodymium-Tweeter-275-025",
+     "https://www.soundimports.eu/nl/dayton-audio-nd16fa-6.html",
+     "https://diy.midwestaudio.club/discussion/comment/25815/"
+    ]
+   },
+   {
+    "id": "nd20fb-4",
+    "make": "Dayton Audio",
+    "model": "ND20FB-4 (rear mount)",
+    "dome": "3/4 in soft dome, neodymium",
+    "impedance_ohm": 4,
+    "status": "ALTERNATIVE pint tweeter: rear-mounted, so only the dome shows through a 35.8 mm hole in the scoop",
+    "Fs_Hz": 2072,
+    "sensitivity_dB": "90 (1 W or 2.83 V; sources differ)",
+    "power_W": "15 RMS / 30 max",
+    "range_Hz": "3500-25000",
+    "crossover": "LR4 >= 4 kHz",
+    "faceplate": {
+     "shape": "round frame behind the panel",
+     "frame_od_mm": 39.1,
+     "cutout_mm": 35.8,
+     "depth_mm": 19
+    },
+    "price": [
+     {
+      "vendor": "Parts Express",
+      "price": "USD 12.98 (11.78 each for 4+)"
+     },
+     {
+      "vendor": "EU",
+      "price": "EUR 14.90-15.95"
+     }
+    ],
+    "confidence": {
+     "confirmed": [
+      "Fs 2072 (Dayton + PE)",
+      "39.1 / 35.8 / 19 mm (PE/Dayton listings)"
+     ]
+    },
+    "sources": [
+     "https://www.daytonaudio.com/product/61/nd20fb-4-rear-mount-3-4-neodymium-dome-tweeter-4-ohm",
+     "https://www.parts-express.com/Dayton-Audio-ND20FB-4-Rear-Mount-3-4-Soft-Dome-Neodymium-Tweeter-275-035"
+    ]
+   },
+   {
+    "id": "tb-20-2240s",
+    "make": "Tang Band",
+    "model": "20-2240S",
+    "dome": "20 mm Al-Mg",
+    "impedance_ohm": 4,
+    "status": "single-source, listed unavailable",
+    "Fs_Hz": 850,
+    "sensitivity_dB": 86,
+    "power_W": 5,
+    "crossover": "min 1.7 kHz (listing)",
+    "faceplate": {
+     "shape": "38.5 x 38.5 mm square",
+     "cutout_mm": 31.6,
+     "overall_depth_mm": 38.9,
+     "depth_behind_front_mm": 29.2
+    },
+    "note": "The requested 'Tang Band 25-1717' was not found; nearest is 25-1719S (66 mm plate, 45.8 mm cutout, Fs 800, 90 dB), too large for the pint.",
+    "sources": [
+     "https://en.toutlehautparleur.com/dome-tweeter-tang-band-20-2240s-4-ohm-38-5-x-38-5-mm-front-plate-20-mm-voice-coil.html",
+     "https://en.toutlehautparleur.com/dome-tweeter-tang-band-25-1719s-4-ohm-66-mm-front-plate-25-mm-voice-coil.html"
+    ]
+   },
+   {
+    "id": "peerless-bc25",
+    "make": "Peerless (Tymphany)",
+    "model": "BC25 family",
+    "status": "too large for the pint scoop",
+    "note": "BC25TG15-04 is a fabric dome with a 104 mm round faceplate (Fs 1128 Hz, 70 mm cutout). BC25SC55-04 is 70 mm round with flats at 54 mm, 43 mm cutout, Fs 1401.5 Hz, 93.3 dB, USD 14.25 (flagship research).",
+    "sources": [
+     "https://willys-hifi.com/products/peerless-bc25tg15-04-tweeter",
+     "https://www.soundimports.eu/it/bc25tg15-04.html",
+     "https://www.parts-express.com/Peerless-BC25SC55-04-1-Square-Frame-Tweeter-264-1024"
+    ]
+   }
+  ]
+ },
+ "amplifiers": [
+  {
+   "id": "hypex-fa122",
+   "make": "Hypex",
+   "model": "FusionAmp FA122",
+   "status": "RECOMMENDED bookshelf amp",
+   "channels": "2 x 125 W/4 ohm, 2 x 75 W/8 ohm, 2 x 115 W/2 ohm; bridged 1 x 200 W/4 ohm or 1 x 250 W/8 ohm",
+   "dsp": "ADAU1450 (IIR, 15 biquads per amp; FIR 4500 taps input / 1500 per output), AK4454 DAC, 3 presets; Hypex Filter Design software (Windows only); ships with no filter loaded",
+   "inputs": "XLR, RCA, AES/EBU, S/PDIF, TOSLINK (to 96 kHz), USB for setup",
+   "mains": "100-120 / 200-240 VAC +-10%",
+   "performance": "THD+N 0.0015%, SNR 118 dB, 92% efficient",
+   "plate_mm": "315 H x 120 W x 55 D",
+   "weight_g": 815,
+   "cutout_or_recess_mm": "291 x 96 (Hypex manual, 12 mm screw margin per side)",
+   "mounting": "8-10 Hypex Fusion screws (4.3 x 25 mm self-tapping). Hypex advises a sealed compartment for best performance and Soundimports says the plates are not airtight; plan a separate sealed sub-box behind the plate (about 3.5-4 L displaced, per the sibling amps research). Read the Installation chapter (pp. 12-13) for venting before finalising.",
+   "price": [
+    {
+     "vendor": "Hypex Direct",
+     "price": "EUR 425.92 incl. VAT"
+    },
+    {
+     "vendor": "KJF Audio",
+     "price": "USD 397 ex VAT"
+    },
+    {
+     "vendor": "Parts Express (related listing)",
+     "price": "USD 422.40"
+    },
+    {
+     "vendor": "Wilmslow",
+     "price": "GBP 335 ex VAT"
+    }
+   ],
+   "crate_suitable": false,
+   "confidence": {
+    "confirmed": [
+     "315 x 120 x 55 and 291 x 96 recess (Hypex manual + Soundimports + Nonsolospeakers)"
+    ],
+    "conflicts": [
+     "Audiophonics drawing 293 mm"
+    ]
+   },
+   "sources": [
+    "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+    "https://www.hypexdirect.com/products/fusion-amplifiers/fusionamp-fa122",
+    "https://www.soundimports.eu/en/hypex-fa122.html",
+    "https://www.audiophonics.fr/en/amplifier-boards/hypex-fusionamp-fa122-plate-ncore-amplifier-2x125w-dsp-adau1450-dac-ak4454-192khz-p-13530.html",
+    "https://kjfaudio.com/product/hypex-fusionamp-fa122/",
+    "https://wilmslowaudio.co.uk/hypex-fusion-2-way-plate-amplifiers/hypex-fusion-fa122",
+    "https://www.nonsolospeakers.com/amplifier-modules-and-accessories/7665-hypex-fa122-2-x-125-watt-fusionamp.html",
+    "https://www.hypex.nl/FAQ-Hypex/Fusion-Amp-Family/I-want-to-build-in-one-of-the-Fusion-Amps-in-my-speaker-cabinets-how-to-do",
+    "https://hypex.nl/products/accessories/fastening-materials/fusion-mounting-screws"
+   ]
+  },
+  {
+   "id": "hypex-fa123",
+   "make": "Hypex",
+   "model": "FusionAmp FA123",
+   "status": "only if a third channel is wanted (3-way); not needed for the 2-way bookshelf",
+   "channels": "2 x 125 W/4 ohm + 1 x 100 W (tweeter channel, 4 ohm minimum); bridged mains 200 W/4 ohm or 250 W/8 ohm",
+   "plate_mm": "360 H x 120 W x 55 D",
+   "weight_g": 955,
+   "cutout_or_recess_mm": "336 x 96",
+   "price": [
+    {
+     "vendor": "Audiophonics / Audiohum / Soundimports",
+     "price": "EUR 499-499.95 incl. VAT"
+    },
+    {
+     "vendor": "Madisound (forum post, undated)",
+     "price": "USD 557"
+    }
+   ],
+   "crate_suitable": false,
+   "notes": "Parts Express's title says 2 x 250 W + 75 W, contradicting its own description; one forum poster worried the top/bottom vents mean it should not be sealed directly into the box.",
+   "sources": [
+    "https://www.audiophonics.fr/en/amplifier-boards/hypex-fusionamp-fa123-plate-ncore-amplifier-2x125w-1x100w-dsp-adau1450-dac-ak4454-192khz-p-13531.html",
+    "https://www.soundimports.eu/en/hypex-fa123.html",
+    "https://www.audiohum.com/fr/composants-diy-hum/kits/kits-electroniques/hypex-fa123",
+    "https://www.parts-express.com/Hypex-Direct-FusionAmp-FA123-Mono-3-Way-Plate-Amplifier-2-x-250W-75W-221-007",
+    "https://diy.midwestaudio.club/discussion/comment/9533"
+   ]
+  },
+  {
+   "id": "dayton-kabd-250",
+   "make": "Dayton Audio",
+   "model": "KABD-250",
+   "status": "BUDGET bookshelf amp (one board per speaker)",
+   "channels": "2 x 50 W/4 ohm at 24 V (4-8 ohm)",
+   "dsp": "ADAU1701 (SigmaStudio via KPX or DSPB-ICP1 programmer) + Bluetooth 5.0 aptX HD",
+   "supply": "12-24 V DC, 4 A recommended",
+   "performance": "SNR 88 dB, THD+N 0.06% (10 W, 1 kHz)",
+   "board_mm": "91.4 x 68.6 x 22.9 (3.6 x 2.7 x 0.9 in)",
+   "mounting_holes": "84 x 61 mm (3.32 x 2.4 in) centres, 3.5 mm holes",
+   "panel_option": "Dayton KABD-PMV4 panel mount with function kit and pots: 120 x 95 x 2.3 mm",
+   "price": [
+    {
+     "vendor": "Parts Express",
+     "price": "USD 49.98 promo / 63.98"
+    },
+    {
+     "vendor": "KPX programmer",
+     "price": "USD 37.98 (one is enough for all boards)"
+    }
+   ],
+   "crate_suitable": "no: 2 channels (enough for one passive pint pair only); use JAB4 / KABD-430 for active pints",
+   "sources": [
+    "https://daytonaudio.com/product/1863/kabd-250-2-x-50w-all-in-one-amplifier-board-with-dsp-and-bluetooth-5-0-aptx-hd",
+    "https://www.parts-express.com/Dayton-Audio-KABD-250-2-x-50W-DSP-Amplifier-Board-aptX-HD-Bluetooth-5.0-325-107?quantity=1",
+    "https://parts-express.com/promo/kabd-line",
+    "https://daytonaudio.com/product/2058/kabd-pmv4-panel-mount-with-function-kit-and-potentiometers",
+    "https://www.audiophonics.fr/en/diy-kits-and-boards/dayton-audio-kabd-pmv4-p-21221.html",
+    "https://www.parts-express.com/Dayton-Audio-KPX-In-Circuit-Programmer-USB-325-139",
+    "https://daytonaudio.com/images/resources/sigmastudio-programming-for-the-dayton-audio-kabd-series-of-amplifiers-v1.pdf"
+   ]
+  },
+  {
+   "id": "wondom-jab4",
+   "make": "Wondom (Sure Electronics)",
+   "model": "JAB4 AA-JA33285",
+   "status": "pint amp (EU source; budget pick in the sibling amps research): one board per stereo pair; three boards in the crate",
+   "channels": "4 x 30 W/8 ohm (TPA3118, 4 ohm minimum); modes 4.0, 2.1 (2 x 30 + 60 W), 2.0 (2 x 60 W)",
+   "dsp": "ADAU1701 (SigmaStudio, ICP5 programmer sold separately) + Bluetooth 5.0 aptX; I2S out",
+   "supply": "10-26 V (24 V typical); vendor suggests a 24 V 3 A adapter; about 140 W input at full 4 x 30 W",
+   "board_mm": "91.4 x 68.6 x about 20 (3.6 x 2.7 in)",
+   "price": [
+    {
+     "vendor": "Audiophonics",
+     "price": "EUR 54.90"
+    }
+   ],
+   "crate_suitable": true,
+   "confidence": {
+    "confirmed": [
+     "board size (Sure datasheet + Audiophonics)"
+    ],
+    "unconfirmed": [
+     "price/stock (old snapshot)",
+     "4 ohm vs 8 ohm rating differs between two Audiophonics listings"
+    ]
+   },
+   "sources": [
+    "https://www.audiophonics.fr/en/amplifier-boards/wondom-jab4-aa-ja33285-amplifier-board-4-ways-tpa3118-bluetooth-50-dsp-adau1701-4x30w-8-ohm-p-15454.html",
+    "https://store.sure-electronics.com/document/notice/35",
+    "https://store.sure-electronics.com/upload/download/2/Datasheet%20of%20JAB4%204%20x%2030W%20Class%20D%20Amplifier%20Board%20with%20ADAU1701%20DSP%20&%20BT.pdf",
+    "https://store.sure-electronics.com/upload/download/2/Connection%20Guide%20of%20WONDOM%20JAB4%204CH%20Amplifier%20Board%20with%20BT%20&%20ADAU1701.pdf"
+   ]
+  },
+  {
+   "id": "dayton-kabd-430",
+   "make": "Dayton Audio",
+   "model": "KABD-430",
+   "status": "RECOMMENDED pint amp (US source; primary pick in the sibling amps research): one board per stereo pair; three in the crate",
+   "channels": "4 x 30 W (2 x TPA3118); modes 4.0 / 2.1 / 2.0",
+   "dsp": "ADAU1701 + Bluetooth 5.0 aptX HD; KPX/DSPB-ICP1 for SigmaStudio",
+   "supply": "12-24 V DC (+ battery port)",
+   "board_mm": "n/f; Dayton says 'same compact size' as earlier KAB/DSPB boards (91.4 x 68.6 mm) - unconfirmed",
+   "price": [
+    {
+     "vendor": "Parts Express",
+     "price": "USD 69.98-89.98 (MSRP 94.99-116.99)"
+    }
+   ],
+   "crate_suitable": true,
+   "sources": [
+    "https://daytonaudio.com/product/1869/kabd-430-4-x-30w-all-in-one-amplifier-board-with-dsp-and-bluetooth-5-0-aptx-hd",
+    "https://www.parts-express.com/Dayton-Audio-KABD-430-4-x-30W-Bluetooth-Amp-Board-with-DSP-325-430",
+    "https://www.daytonaudio.com/images/resources/325-430--dayton-audio-kabd-430-manual.pdf",
+    "https://discourse.midwestaudio.club/t/the-dactives-using-a-dayton-audio-kabd-430-dsp-board/366"
+   ]
+  },
+  {
+   "id": "wondom-jab3plus",
+   "make": "Wondom",
+   "model": "JAB3+ AA-JA32173",
+   "status": "budget alternative to the KABD-250",
+   "channels": "2 x 50 W/4 ohm",
+   "dsp": "ADAU1701 + Bluetooth 5.0",
+   "board_mm": "91.44 x 68.58",
+   "price": [
+    {
+     "vendor": "Audiophonics",
+     "price": "EUR 48.90"
+    },
+    {
+     "vendor": "eBay",
+     "price": "about USD 43"
+    }
+   ],
+   "notes": "Check the part number: JAB3+ also exists as 1 x 60 W and 2 x 30 W boards.",
+   "sources": [
+    "https://www.audiophonics.fr/en/amplifier-boards/wondom-jab3-aa-ja32173-amplifier-module-class-d-bluetooth-50-dsp-adau1701-2x50w-4-ohm-p-15063.html"
+   ]
+  },
+  {
+   "id": "wondom-jab5",
+   "make": "Wondom",
+   "model": "JAB5 AA-JA33286",
+   "status": "more power per board; two can be cascaded to 8 x 100 W",
+   "channels": "4 x 100 W (6 ohm in one title, 4 ohm in another); 2.1 and 2.0 modes",
+   "dsp": "ADAU1701 + Bluetooth 5.0 aptX HD; ICP5 programmer not included",
+   "board_mm": "122 x 91 x 40 per the sibling amps research (unconfirmed); hiss reported there",
+   "price": [
+    {
+     "vendor": "Audiophonics",
+     "price": "EUR 69.90 (old snapshot)"
+    }
+   ],
+   "crate_suitable": "yes, but more power than six pints need",
+   "sources": [
+    "https://www.audiophonics.fr/en/amplifier-boards/wondom-jab5-aa-ja33286-amplifier-module-class-d-bluetooth-50-dsp-adau1701-4x100w-6-ohm-p-15064.html",
+    "https://files.sure-electronics.com/download/JAB5_Datasheet.pdf"
+   ]
+  },
+  {
+   "id": "dayton-kabd-4100",
+   "make": "Dayton Audio",
+   "model": "KABD-4100",
+   "status": "4 x 100 W version (bigger board, size n/f)",
+   "channels": "4 x 100 W",
+   "dsp": "ADAU1701 + Bluetooth 5.0 aptX HD",
+   "supply": "12-39 V (reseller; unconfirmed)",
+   "price": [
+    {
+     "vendor": "Parts Express",
+     "price": "USD 89.98-92.98 (MSRP 116.99-120.99)"
+    }
+   ],
+   "sources": [
+    "https://daytonaudio.com/product/1870/kabd-4100-4-x-100w-all-in-one-amplifier-board-with-dsp-and-bluetooth-5-0-aptx-hd"
+   ]
+  },
+  {
+   "id": "dayton-dsp-408",
+   "make": "Dayton Audio",
+   "model": "DSP-408",
+   "status": "crate alternative: one 4-in/8-out processor feeding plain amp boards",
+   "dsp": "ADAU1701, 4 RCA + 4 high-level in, 8 out, 10-band PEQ per output, crossover, delay, mixing",
+   "box_mm": "166 x 115 x 26",
+   "supply": "12 V 1.5 A adapter (9-17 V)",
+   "price": [
+    {
+     "vendor": "Parts Express",
+     "price": "USD 179.98 (MSRP 299.99; unconfirmed, price block near another product)"
+    },
+    {
+     "vendor": "EU",
+     "price": "EUR 219-259"
+    }
+   ],
+   "crate_suitable": true,
+   "sources": [
+    "https://parts-express.com/Dayton-Audio-DSP-408-4x8-DSP-Digital-Signal-Processor-for-Home-and-Car-Audio-230-500",
+    "https://www.audiophonics.fr/en/dsp-av-processors/dayton-audio-dsp-408-4x8-digital-audio-processor-dsp-adau1701-sigmadsp-2556bit-4-to-8-channels-p-13043.html",
+    "https://masori.de/en/products/dsp-408-en"
+   ]
+  },
+  {
+   "id": "icepower-50asx2se",
+   "make": "ICEpower",
+   "model": "50ASX2SE",
+   "status": "power only (no DSP); mains-powered module",
+   "channels": "2 x 50 W/4 ohm, 2 x 25 W/8 ohm (BTL version 1 x 170 W/4 ohm)",
+   "supply": "integrated SMPS, 85-264 VAC; fanless",
+   "board_mm": "110 x 80 x 35 (brochure)",
+   "notes": "No input buffer; forum users added one when driving it from a DSP.",
+   "price": [
+    {
+     "vendor": "Parts Express",
+     "price": "USD 129.98"
+    },
+    {
+     "vendor": "Soundimports",
+     "price": "EUR 123.93"
+    }
+   ],
+   "crate_suitable": "possible (3 modules + DSP-408 for 6 channels) but bulky and three mains feeds",
+   "sources": [
+    "https://parts-express.com/ICEpower-50ASX2SE-Class-D-Audio-Amplifier-with-Power-Supply-Module-2-x-50W-326-212",
+    "https://shop.icepoweraudio.com/product/50asx2se/",
+    "https://www.soundimports.eu/nl/icepower-50asx2se.html",
+    "https://www.diyaudio.com/community/threads/icepower-50asx2-modules.190311/post-4838804"
+   ]
+  },
+  {
+   "id": "tpa3255-boxed",
+   "make": "Fosi Audio / AIYIMA",
+   "model": "Fosi V3, AIYIMA A20 (TPA3255)",
+   "status": "stereo power amps without DSP; fine for listening tests, not for an active 2-way",
+   "notes": "Fosi V3 USD 89.99 (32 V supply) / 109.99 (48 V). AIYIMA A20: 190 x 142 x 46 mm, EUR 179, analog 60-200 Hz high-pass only. No AIYIMA/Fosi board combining TPA3255 with ADAU1701 was found; Tinysine TSA7800C (TPA3116 + ADAU1701, 2.1, 135 x 92 x 34 mm, 12-24 V) is the closest.",
+   "crate_suitable": false,
+   "sources": [
+    "https://fosiaudio.com/ja/products/fosi-audio-v3-300w-x2-2-0-channel-hi-fi-stereo-audio-amplifier-with-tpa3255-chip",
+    "https://hifi.fan/fosi-audio-v3-stereo/about",
+    "https://www.audiophonics.fr/en/integrated-amplifiers/aiyima-a20-p-21311.html",
+    "https://uk.robotshop.com/products/tinysine-2-x-50w-100w-21-channels-spdif-coaxialdsp-amplifier-board-tsa7800c"
+   ]
+  },
+  {
+   "id": "wondom-apm2",
+   "make": "Wondom",
+   "model": "APM2 (ADAU1701 DSP module, 2 in / 4 out)",
+   "status": "DSP only, EUR 19.90; one Audiophonics page marks it discontinued; needs ICP/USBi",
+   "sources": [
+    "https://www.audiophonics.fr/en/dsp-modules/wondom-adau1701-apm2-audio-digital-signal-processor-dsp-for-active-filtering-sigma-studio-p-14773.html"
+   ]
+  }
+ ],
+ "sets": {
+  "bookshelf": {
+   "recommended": {
+    "name": "Bookshelf, recommended: W 220 mm, active sealed 2-way",
+    "woofer": "SB Acoustics SB17NRX2C35-8 (171 mm frame, cutout 144.9, 4 x 4.3 on 159 PCD, 75 mm behind baffle)",
+    "tweeter": "Scan-Speak Illuminator D3004/602200 (62 mm faceplate, Fs 440 Hz) at the throat of the carved waveguide; R3004/602200 is the ring-radiator twin with a confirmed US price",
+    "amp": "Hypex FusionAmp FA122 (plate 315 x 120 mm, recess 291 x 96 mm) in a sealed sub-compartment on the rear panel (about 3.5-4 L displaced)",
+    "crossover": "LR4 at 2.0-2.2 kHz in the FA122 DSP; tweeter level and waveguide EQ from measurement",
+    "box": "W 220, body 484, 18 mm birch: 15.2 L gross, about 10.1 L net after a 3.5 L sealed FA122 compartment. Sealed: fc 70 Hz, Qtc 0.80, f3 62.5 Hz; +7.6 dB low shelf (Linkwitz transform) gives f3 45 Hz. Excursion limit at 45 Hz about 85 dB at 1 m per speaker (full space). Fill loosely with wadding.",
+    "alt_box": "W 240: about 15.2 L net, vented fb 34 Hz, port 35 x 137 mm (or 41 x 193 mm), f3 47 Hz without boost. W 250: 18.1 L, fb 36 Hz, port 41 x 142 mm, f3 43 Hz.",
+    "cost_each_usd": "about 650-690 (woofer 77, tweeter about 160-200, amp about 400-425)",
+    "why": [
+     "The 171 mm frame is 0.78 W, the same visual ratio as the flagship's 314 mm woofer on 390 mm.",
+     "The D3004/602200 has the smallest faceplate (62 mm) and the lowest Fs (440 Hz) of the realistic options, so a 2-2.2 kHz LR4 is safe even with a small, shallow waveguide.",
+     "The FA122 gives DSP crossover, baffle-step and low-shelf EQ and 125 W/4 ohm (75 W/8 ohm) per channel in a plate narrow enough for a 220 mm rear panel."
+    ]
+   },
+   "budget": {
+    "name": "Bookshelf, budget: W 220 mm, active vented 2-way, all Parts Express",
+    "woofer": "Dayton RS150P-8A (150 mm frame, cutout 122, 74 mm deep). Upgrade at the same frame size: SB15NRX2C30-8 (cutout 123.9, 78.9 deep) for about 8-10 Hz more bass",
+    "tweeter": "Dayton ND25FN-4 element (41 mm, no faceplate) at the throat of a fully carved waveguide",
+    "amp": "Dayton KABD-250 (2 x 50 W, ADAU1701) on a KABD-PMV4 panel (120 x 95 mm) + 24 V 4 A supply + one KPX programmer",
+    "crossover": "LR4 at 2.8-3 kHz (tweeter Fs 1350 Hz)",
+    "box": "About 13.6 L net (board amp takes almost no volume). RS150P-8A vented fb 50 Hz, port 35 x 57 mm, f3 51 Hz. With SB15NRX2C30-8: fb 39 Hz, port 35 x 109 mm, f3 43 Hz.",
+    "cost_each_usd": "about 190 (woofer 55, tweeter 15, amp 64, panel n/f, supply about 20; KPX 38 shared)",
+    "why": [
+     "One 150 mm frame model in CAD covers both the RS150P-8A and the SB15NRX2C30-8.",
+     "An element tweeter lets the carved roof form the whole waveguide from a 41 mm throat, which suits the small mouth best.",
+     "The KABD-250 board is about 1/7 the cost of the FA122 and still gives a programmable crossover; the trade is SigmaStudio and lower power."
+    ]
+   }
+  },
+  "pint": {
+   "recommended": {
+    "name": "Pint, recommended: active 2-way",
+    "woofer": "Dayton ND65-4 (64 mm round, cutout 52, 48 deep) - or SB65WBAC25-4 if you want a 64 mm square frame",
+    "tweeter": "SB Acoustics SB14ST-C000-4 (24.2 mm face, screwed from behind with M4) in the roof scoop",
+    "amp": "Dayton KABD-430 (or Wondom JAB4): one board per stereo pair; crate of six = three boards, 12 channels",
+    "crossover": "LR4 at 3.5-4 kHz; high-pass the woofer at 70-80 Hz",
+    "box": "Sealed, about 1.3 L net (9 mm walls give 1.36 L gross, 6 mm give 1.61 L): fc 106 Hz, Qtc 0.72, f3 104 Hz; +4.9 dB shelf gives f3 80 Hz.",
+    "why": [
+     "The ND65-4 has the lowest Fs and most excursion of the 2.5 in drivers that fit a 100 mm face.",
+     "The SB14ST is the only real dome small enough (24 mm) for the 50 x 34 mm effective scoop, and its rear M4 mount suits a solid wooden roof."
+    ]
+   },
+   "budget": {
+    "name": "Pint, budget: passive, one amp channel per pint",
+    "woofer": "Dayton ND65-4 run full-range",
+    "tweeter": "Dayton ND16FA-6 (32.5 mm press-fit) through one series capacitor (about 4.7 uF), or no tweeter",
+    "amp": "Crate of six: two JAB4 / KABD-430 boards (8 channels, 6 used). A single pair: one KABD-230 or JAB3+",
+    "box": "Same sealed 1.3 L; use the board DSP for EQ and the 70-80 Hz high-pass",
+    "why": [
+     "Halves the channel count and needs no crossover DSP; about USD 33 of drivers per pint."
+    ]
+   },
+   "crate": {
+    "fits_in_crate": [
+     "Wondom JAB4 / Dayton KABD-430 (91 x 69 x 20 mm each; three for six active pints)",
+     "Wondom JAB5 / Dayton KABD-4100 (more power than needed)",
+     "Dayton DSP-408 (166 x 115 x 26 mm) plus two 4-channel amp boards"
+    ],
+    "does_not_fit_the_idea": [
+     "Hypex FusionAmp (one 315-360 mm plate per speaker, mains)",
+     "ICEpower 50ASX2 (2 ch, mains, no DSP)",
+     "Fosi/AIYIMA boxed TPA3255 amps (stereo, no DSP)"
+    ],
+    "power": "one 24 V supply of 5-6.5 A covers three JAB4 boards at desk levels (each board draws about 31 W at quarter power)",
+    "signal": "feed all three boards the same stereo line signal (or chain via I2S); each board runs L/R woofer + tweeter for one pair"
+   }
+  }
+ },
+ "gaps": [
+  "Dayton RS180 / RS180P-8A not checked (search budget ran out).",
+  "Scan-Speak D3004/602200: no US price; cutout/depth only from the D3004/602000 predecessor.",
+  "Dayton KABD-430/4100 and Wondom JAB5 board dimensions not published in what was found.",
+  "Hypex FusionAmp venting vs sealed compartment: read the Installation chapter (User Guide R4 pp. 12-13).",
+  "Colours/finishes of several drivers (RS150P-8A, SB65WBAC25-4, Purifi, Seas) need a photo check.",
+  "ND65-4 Vas (0.53 vs 0.85 L) and SB14ST-C000-4 depth (19 vs 37.25 mm) conflict."
+ ],
+ "related_files": [
+  "scratchpad/research-drivers.md (flagship research, 2026-10-04): source of the Illuminator, OC25SC65-04, ND25FN-4 and BC25SC55-04 figures",
+  "research/drivers-floorstander.md (sibling, 2026-10-08): flagship now recommends the SB Satori TW29DN-B (faceplate removed) with the D3004/602200 as alternate, and the SB17NRX2C35-8 as alternate mid",
+  "research/amps.md (sibling, 2026-10-08): FusionAmp compartment 3.5-4 L; desk pick KABD-430, budget JAB4"
+ ]
+}

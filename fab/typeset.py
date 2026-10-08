@@ -24,7 +24,7 @@ import uharfbuzz as hb
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONTS = os.path.join(HERE, '..', 'render', 'fonts')
-OUT = os.path.join(HERE, 'out')
+OUT = os.path.join(HERE, 'out-bookshelf' if BOOK else 'out')
 
 
 import sys as _sys
@@ -147,21 +147,23 @@ def make_facts_print():
     bottom-left corner."""
     m = 15.0
     LW, LH = LABEL['w'], LABEL['h']
+    f = LW / 266.0                           # the layout was set at 266 wide; the bookshelf's panel is the same at 0.564
     W, H = LW + 2 * m, LH + 2 * m
     ox, top = m, H - m                       # panel's left edge and top edge in sheet coordinates
-    def Y(v):                                # panel y (mm down from its top) to sheet y (up)
-        return top - v
+    def Y(v):                                # panel y (mm down from its top, at the 266 layout) to sheet y (up)
+        return top - v * f
     ink = []
     # Border: 1.2 wide, its outer edge at the panel's edge.
-    t = 1.2
-    ink.append([(ox, Y(0)), (ox + LW, Y(0)), (ox + LW, Y(LH)), (ox, Y(LH))])
-    ink.append([(ox + t, Y(t)), (ox + t, Y(LH - t)), (ox + LW - t, Y(LH - t)), (ox + LW - t, Y(t))])   # hole (reverse)
-    x0, x1 = ox + 14, ox + LW - 14
+    t = 1.2 * max(f, 0.75)
+    ink.append([(ox, top), (ox + LW, top), (ox + LW, top - LH), (ox, top - LH)])
+    ink.append([(ox + t, top - t), (ox + t, top - LH + t), (ox + LW - t, top - LH + t), (ox + LW - t, top - t)])   # hole (reverse)
+    x0, x1 = ox + 14 * f, ox + LW - 14 * f
     def rule(y, th):
-        ink.append([(x0, Y(y - th / 2)), (x1, Y(y - th / 2)), (x1, Y(y + th / 2)), (x0, Y(y + th / 2))][::-1])
+        th = th * f
+        ink.append([(x0, Y(y) - th / 2), (x1, Y(y) - th / 2), (x1, Y(y) + th / 2), (x0, Y(y) + th / 2)][::-1])
     black, bold, reg = Font('ArchivoBlack-Regular.woff'), Font('Archivo-Bold.woff'), Font('Archivo-Regular.woff')
-    # Title: 34 mm Archivo Black, tracking fixed at -0.02 x 34 mm, shrunk by 3 % steps until it fits the 238 mm measure.
-    size, track_mm = 34.0, -0.02 * 34.0
+    # Title: 34 mm Archivo Black (scaled), tracking fixed at -0.02 em, shrunk by 3 % steps until it fits the measure.
+    size = 34.0 * f; track_mm = -0.02 * size
     while True:
         c, w = set_line(black, 'Nutrition Facts', size, track_mm / size, x0, Y(38))
         if w <= (x1 - x0) or size < 4:
@@ -169,15 +171,19 @@ def make_facts_print():
         size *= 0.97
     ink += c
     rule(48, 1.4); rule(72, 7.6)
-    rows = [('Sensitivity', '91 dB'), ('Frequency response', '32 Hz to 20 kHz'), ('Impedance', '8 ohm'),
-            ('Woofer', '12 in'), ('Midrange', '6.5 in'), ('Tweeter', '1 in')]
+    if BOOK:   # PROPOSAL 2026-10-08: the bookshelf's own true values (an active speaker has no sensitivity or impedance to state)
+        rows = [('Amplifier', '2 x 125 W'), ('Frequency response', '45 Hz to 20 kHz'), ('Inputs', 'XLR or RCA'),
+                ('Woofer', '6 in'), ('Tweeter', '1 in'), ('Box', 'sealed, 10 L')]
+    else:
+        rows = [('Sensitivity', '91 dB'), ('Frequency response', '32 Hz to 20 kHz'), ('Impedance', '8 ohm'),
+                ('Woofer', '12 in'), ('Midrange', '6.5 in'), ('Tweeter', '1 in')]
     for i, (k, v) in enumerate(rows):
         b = 98 + 22 * i
-        ink += set_line(bold, k, 12.0, 0.0, x0, Y(b))[0]
-        ink += set_line(bold, v, 12.0, 0.0, x1, Y(b), align='right')[0]   # 2026-10-08: the values bold like the names
+        ink += set_line(bold, k, 12.0 * f, 0.0, x0, Y(b))[0]
+        ink += set_line(bold, v, 12.0 * f, 0.0, x1, Y(b), align='right')[0]   # 2026-10-08: the values bold like the names
         rule(105 + 22 * i, 1.4)
     rule(226, 7.6)
-    ink += set_line(reg, 'Contains no milk.', 11.0, 0.0, x0, Y(244))[0]
+    ink += set_line(reg, 'Contains no milk.', 11.0 * f, 0.0, x0, Y(244))[0]
     # Crop marks (8 mm, 3 mm off the panel's corners) and centre marks, as thin filled bars outside the panel.
     marks, mw = [], 0.25
     def bar(xa, ya, xb, yb):

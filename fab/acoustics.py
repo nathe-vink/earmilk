@@ -16,7 +16,7 @@ from params import *  # noqa: F401,F403
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, 'out')
+OUT = os.path.join(HERE, 'out-bookshelf' if BOOK else 'out')
 RHO, C = 1.204, 343.0
 FB_TARGET = 32.0          # README target tuning
 QL = 7.0                  # box leakage losses, a typical well-built box
@@ -47,7 +47,7 @@ def mech(d):
     return dict(Sd=Sd, Cms=Cms, Mms=Mms, Rms=Rms, Bl=Bl, Re=d['Re'], Le=d.get('Le_mH', 0.0) * 1e-3)
 
 
-def port_length_mm(Vb_l, fb=FB_TARGET, bore_mm=PORT['bore']):
+def port_length_mm(Vb_l, fb=FB_TARGET, bore_mm=(PORT or {'bore': 92.0})['bore']):
     """Physical port length for tuning fb in Vb litres with a round port of the given bore."""
     Sp = math.pi * (bore_mm / 2000) ** 2
     w = 2 * math.pi * fb
@@ -65,7 +65,7 @@ def simulate(d, Vb_l, fb=FB_TARGET, volts=2.83, f=None):
     Map = 1.0 / ((2 * math.pi * fb) ** 2 * Cab)
     Z0 = math.sqrt(Map / Cab)
     Ral, Rap = QL * Z0, Z0 / QP
-    Sp = math.pi * (PORT['bore'] / 2000) ** 2
+    Sp = math.pi * ((PORT or {'bore': 92.0})['bore'] / 2000) ** 2
     Ze = m['Re'] + s * m['Le']
     F = m['Bl'] * volts / Ze
     Zab = 1.0 / (s * Cab + 1.0 / Ral + 1.0 / (s * Map + Rap))
@@ -104,7 +104,48 @@ def mid_box(d, Vb_l):
     return d['Qts'] * math.sqrt(1 + a), d['Fs'] * math.sqrt(1 + a)
 
 
+def sealed_main():
+    """The bookshelf's sealed box: Qtc and fc from the woofer's Thiele-Small parameters and the net air, the -3 dB point,
+    and the low shelf a Linkwitz transform needs in the DSP to reach 45 Hz at Q 0.707."""
+    cad = json.load(open(os.path.join(OUT, 'cad.json')))
+    r = json.load(open(os.path.join(HERE, 'research', 'drivers-small.json')))
+    def find(x, key):
+        if isinstance(x, dict):
+            if x.get('id') == key or (x.get('model') or '').startswith('SB17NRX2C35-8'):
+                return x
+            for v in x.values():
+                f_ = find(v, key)
+                if f_: return f_
+        elif isinstance(x, list):
+            for v in x:
+                f_ = find(v, key)
+                if f_: return f_
+        return None
+    d = find(r, DRIVER_SET['woofer']) or {}
+    ts = d.get('ts', d)
+    fs = float(ts.get('Fs_Hz') or ts.get('Fs') or 36.5); qts = float(ts.get('Qts') or 0.42); vas = float(ts.get('Vas_L') or ts.get('Vas_l') or 27.0)
+    Vb = cad['woofer_chamber_air_l'] - 0.4          # less the driver's own volume
+    a = vas / Vb
+    fc = fs * math.sqrt(1 + a); qtc = qts * math.sqrt(1 + a)
+    # -3 dB of a second-order high-pass with corner fc and Q qtc
+    w = np.logspace(math.log10(10), math.log10(500), 2000)
+    def mag(f0, q):
+        s_ = 1j * w / f0
+        return np.abs(s_ ** 2 / (s_ ** 2 + s_ / q + 1))
+    m = mag(fc, qtc); f3 = float(w[np.argmax(m >= 10 ** (-3 / 20))])
+    target = 45.0
+    boost = 20 * math.log10((fc / target) ** 2)       # the Linkwitz transform's low-frequency shelf, asymptotically
+    res = {'size': SIZE, 'box': 'sealed', 'woofer': DRIVER_SET['woofer'], 'Fs_hz': fs, 'Qts': qts, 'Vas_l': vas, 'Vb_net_l': round(Vb, 2),
+           'fc_hz': round(fc, 1), 'Qtc': round(qtc, 2), 'f3_hz': round(f3, 1),
+           'linkwitz_transform': {'from_fc_hz': round(fc, 1), 'from_q': round(qtc, 2), 'to_f0_hz': target, 'to_q': 0.707, 'low_shelf_db': round(boost, 1)},
+           'note': 'net air from fab/cad.py less 0.4 L for the driver; T/S from fab/research/drivers-small.json. The research quotes fc 70 Hz, Qtc 0.80, f3 62.5 Hz, +7.6 dB to 45 Hz at 10.1 L.'}
+    json.dump(res, open(os.path.join(OUT, 'acoustics.json'), 'w'), indent=1)
+    print(json.dumps(res, indent=1))
+
+
 def main():
+    if not PORT:
+        return sealed_main()
     cad = json.load(open(os.path.join(OUT, 'cad.json')))
     drv = load_drivers()
     air = cad['woofer_chamber_air_l']
