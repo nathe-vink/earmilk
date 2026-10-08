@@ -48,15 +48,15 @@ def panel_defs():
     P = []
     P.append(dict(name='front-baffle', qty=1, w=PLAN, h=BODY, layers={
         'CUT_INSIDE': circle(RUN, WOOFER['z'], WOOFER_CUTOUT) + circle(RUN, MID['z'], MID_CUTOUT),
-        'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW)},
-        note='outer face up; cutouts sized for the shortlisted Dayton DSA315-8 (272) and SB Acoustics SB17MFC35-8 (146): re-cut for other drivers'))
+        'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, PLAN, BODY)},
+        note='outer face up; round the two vertical outer edges 3 mm after glue-up; cutouts sized for the shortlisted Dayton DSA315-8 (272) and SB Acoustics SB17MFC35-8 (146): re-cut for other drivers'))
     tw, th = TERMINAL_CUTOUT
     P.append(dict(name='back-panel', qty=1, w=PLAN, h=BODY, layers={
         'CUT_INSIDE': circle(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5)
                       + rect(RUN - tw / 2, POSTS['z'] - th / 2, RUN + tw / 2, POSTS['z'] + th / 2),
-        'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW)},
-        note='outer face up (seen from behind); the Facts are printed on this face after the colour coat, under the clear'))
-    P.append(dict(name='side', qty=2, w=INNER, h=BODY, layers={'POCKET_3MM': rect(0, PLINTH_H, INNER, PLINTH_H + SHADOW)},
+        'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, PLAN, BODY)},
+        note='outer face up (seen from behind); round the two vertical outer edges 3 mm after glue-up; the Facts are printed on this face after the colour coat, under the clear'))
+    P.append(dict(name='side', qty=2, w=INNER, h=BODY, layers={'POCKET_3MM': rect(0, PLINTH_H, INNER, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, INNER, BODY)},
                   note='outer face up; finish the groove across the front and back panels\' edges after glue-up'))
     dowels = [(60.0, 200.0), (PLAN - 60.0, 200.0), (60.0, 330.0), (PLAN - 60.0, 330.0)]
     P.append(dict(name='top-panel', qty=1, w=INNER, h=INNER, layers={

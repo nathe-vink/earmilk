@@ -67,5 +67,5 @@ On the right side above the band. Placeholder copy from the exploration; the hea
 
 ## Marks (spec since 2026-10-02)
 
-- OPEN OTHER SIDE, with the arrow, on the back slope of the gable. It points at the bowl.
+- OPEN OTHER SIDE, with the arrow, on the back slope of the gable. It points at the bowl. *(2026-10-07, the owner: on the fin's back face, the top fold, instead of the slope.)*
 - SHAKE WELL, on the plinth's back face, reversed in the body colour.

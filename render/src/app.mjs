@@ -92,10 +92,10 @@ async function exportGLB(cfg) {
   const bytes = new Uint8Array(buf); let bin = '';
   for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
   const sidecar = {
-    room: cfg.room, size: cfg.size, exposure, toneMapping, lights, skyGlow, reflector, strips, stripAngle, backdropLight, bevelScale: cfg.bevelScale ?? 1,
+    room: cfg.room, size: cfg.size, exposure, toneMapping, lights, skyGlow, reflector, strips, stripAngle, backdropLight, bevelScale: cfg.bevelScale ?? 1, glints: cfg.glints, look: cfg.look,
     background: scene.background && scene.background.isColor ? hex(scene.background) : null,
     environmentIntensity: scene.environmentIntensity ?? 1,
-    camera: { fov: camera.fov, position: camera.position.toArray(), lookAt: cfg.camera.lookAt, focal: cfg.camera.focal },
+    camera: { fov: camera.fov, position: camera.position.toArray(), lookAt: cfg.camera.lookAt, focal: cfg.camera.focal, level: cfg.camera.level },
   };
   scene.traverse(o => { if (o.geometry) o.geometry.dispose(); });
   return { glb: btoa(bin), sidecar };

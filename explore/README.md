@@ -112,3 +112,11 @@ The owner is not sure of the metal round the tweeter ("it looks like a diner"). 
 | `r6-trim-none-*-pt.png` | No lip, as before 2026-10-06 (the critics read the bare cut as a hole); the tweeter's ring black. |
 
 The close-ups are 1800 × 1200 at 64 samples, the nearer views 900 × 600: comparisons, not finals.
+
+**Chosen 2026-10-07 by the owner: 4, no lip,** with the tweeter's ring black. It is spec now (README, Amendments 2026-10-07); the other three stay here as the record.
+
+## 2026-10-07, round 7: where OPEN OTHER SIDE goes
+
+The owner: "I think the open other side should be on the top fold rather than the angle, but I could be wrong." The round-2 three-quarter back, with the line on the back slope (`r7-open-slope-pt.png`, as spec until then) and on the fin's back face (`r7-open-fin-pt.png`), both with the back's letters centred between the edge and the Facts. **Chosen by the owner: the fin.**
+
+    cd render && node render.mjs --list explore7 --glb render/out/glb

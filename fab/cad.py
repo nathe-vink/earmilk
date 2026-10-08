@@ -41,9 +41,10 @@ def rounded_rect_prism(x0, y0, z0, x1, y1, z1, r, axis='z'):
 
 
 # --- Body panels --------------------------------------------------------------------------------------------------------
-def shadow_groove(face):
-    """The 3 x 3 shadow line on a wall's outer face, z 110 to 113, cut full length."""
-    z0, z1, d = PLINTH_H, PLINTH_H + SHADOW, SHADOW_DEPTH
+def shadow_groove(face, z0=PLINTH_H):
+    """The 3 x 3 shadow line on a wall's outer face, cut full length: z 110 to 113 above the plinth, and (2026-10-07) z 857 to
+    860 under the gable, where it is a rebate along the wall's top edge that the gable overhangs."""
+    z1, d = z0 + SHADOW, SHADOW_DEPTH
     if face == 'front':
         return box(-1, -1, z0, PLAN + 1, d, z1)
     if face == 'back':
@@ -53,21 +54,30 @@ def shadow_groove(face):
     return box(PLAN - d, -1, z0, PLAN + 1, PLAN + 1, z1)
 
 
+def outer_corners(p, y_face):
+    """2026-10-07: round the panel's two vertical edges on its outer face (the cabinet's corners) at EDGE_R. The front and back
+    run the full width, so each corner's round lies wholly in them."""
+    edges = [e for e in p.edges().filter_by(Axis.Z) if abs(e.center().Y - y_face) < 0.01 and (e.center().X < 0.01 or e.center().X > PLAN - 0.01)]
+    return p.fillet(EDGE_R, edges)
+
+
 def front_panel():
-    p = box(0, 0, 0, PLAN, WALL, BODY)
+    p = outer_corners(box(0, 0, 0, PLAN, WALL, BODY), 0)
     p -= cyl_y(RUN, WOOFER['z'], WOOFER_CUTOUT, -1, WALL + 1)
     p -= cyl_y(RUN, MID['z'], MID_CUTOUT, -1, WALL + 1)
     p -= shadow_groove('front')
+    p -= shadow_groove('front', GABLE_SHADOW_Z0)
     return p
 
 
 def back_panel():
-    p = box(0, PLAN - WALL, 0, PLAN, PLAN, BODY)
+    p = outer_corners(box(0, PLAN - WALL, 0, PLAN, PLAN, BODY), PLAN)
     p -= cyl_y(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5, PLAN - WALL - 1, PLAN + 1)   # the tube's 100 OD, a push fit
     tw, th = TERMINAL_CUTOUT
     p -= box(RUN - tw / 2, PLAN - WALL - 1, POSTS['z'] - th / 2, RUN + tw / 2, PLAN + 1, POSTS['z'] + th / 2)
     # 2026-10-07: no plate pocket. The Facts are printed on the finish, under the clear.
     p -= shadow_groove('back')
+    p -= shadow_groove('back', GABLE_SHADOW_Z0)
     return p
 
 
@@ -75,6 +85,7 @@ def side_panel(side):
     x0 = 0 if side == 'left' else PLAN - WALL
     p = box(x0, WALL, 0, x0 + WALL, PLAN - WALL, BODY)
     p -= shadow_groove(side)
+    p -= shadow_groove(side, GABLE_SHADOW_Z0)
     return p
 
 
@@ -159,7 +170,11 @@ def tweeter_pocket():
 def gable_block():
     tri = Polygon((0, BODY), (PLAN, BODY), (RUN, RIDGE_Z), align=None)
     prism = extrude(Plane.YZ * tri, amount=PLAN)
+    # 2026-10-07: the four hips (where a slope meets an end) rounded at EDGE_R, the fin's top and end edges at FIN_EDGE_R
+    hips = [e for e in prism.edges() if (abs(e.center().X) < 0.01 or abs(e.center().X - PLAN) < 0.01) and e.center().Z > BODY + 1]
+    prism = prism.fillet(EDGE_R, hips)
     fin = box(0, RUN - FIN_T / 2, RIDGE_Z - 12, PLAN, RUN + FIN_T / 2, TOTAL)
+    fin = fin.fillet(FIN_EDGE_R, [e for e in fin.edges() if e.center().Z > RIDGE_Z])
     g = prism + fin
     g -= bowl_cavity()
     g -= tweeter_pocket()

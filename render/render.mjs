@@ -10,7 +10,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
-import { shots, explore, explore2, explore3, explore4, explore5, explore6, retired, SIZE } from './src/shots.mjs';
+import { shots, explore, explore2, explore3, explore4, explore5, explore6, explore7, retired, SIZE } from './src/shots.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.resolve(here, '..');
@@ -44,7 +44,7 @@ if (initError) { console.error(initError); process.exit(1); }
 
 const date = args.date || new Date().toISOString().slice(0, 10);
 const v = args.v || '1';
-const isExplore = ['explore', 'explore2', 'explore3', 'explore4', 'explore5', 'explore6'].includes(args.list);
+const isExplore = ['explore', 'explore2', 'explore3', 'explore4', 'explore5', 'explore6', 'explore7'].includes(args.list);
 const isRetired = args.list === 'retired';
 const outDir = args.out || path.join(repo, isExplore ? 'explore' : 'renders', date);
 fs.mkdirSync(outDir, { recursive: true });
@@ -52,7 +52,7 @@ const only = args.only ? args.only.split(',').map(s => s.trim().padStart(2, '0')
 const glbDir = args.glb ? path.resolve(repo, args.glb === true ? 'render/out/glb' : args.glb) : null; // --glb [dir]: export each frame as GLB + sidecar instead of a PNG
 if (glbDir) fs.mkdirSync(glbDir, { recursive: true });
 
-const list = isExplore ? ({ explore, explore2, explore3, explore4, explore5, explore6 })[args.list].map(e => ({ id: e.id, frames: [e] })) : isRetired ? retired : shots;
+const list = isExplore ? ({ explore, explore2, explore3, explore4, explore5, explore6, explore7 })[args.list].map(e => ({ id: e.id, frames: [e] })) : isRetired ? retired : shots;
 for (const shot of list) {
   const nn = isExplore ? shot.id : shot.id.slice(5);
   if (only && !only.includes(nn)) continue;

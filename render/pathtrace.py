@@ -31,6 +31,8 @@ def main():
     ap.add_argument('--strips', type=float, default=1.0, help='studio only: strength of the two edge strips behind the subject (0 for none)')
     ap.add_argument('--surface', type=float, default=1.0, help='strength of the surface detail (orange peel, paper, plaster, grain); 0 for none')
     ap.add_argument('--bevel', type=float, default=2.0, help='eased edges on the finish, in the shader, mm (silhouette unchanged)')
+    ap.add_argument('--denoise', type=int, default=1, help='0 to skip the denoiser (for checking detail a pixel wide)')
+    ap.add_argument('--coat-normal', type=int, default=1, help='1: the finish\'s clear takes the eased edge and orange peel (v23 on); 0: as before')
     a = ap.parse_args()
     import bpy  # noqa: E402
     from mathutils import Vector  # noqa: E402
@@ -47,6 +49,17 @@ def main():
     cam.data.sensor_fit = 'VERTICAL'
     cam.data.angle_y = math.radians(side['camera']['fov'])
     cam.data.clip_start = 0.02; cam.data.clip_end = 200
+    if side['camera'].get('level'):
+        # 2026-10-07: a level camera with lens shift, as a product photographer frames a tall object, so its verticals stay
+        # vertical (tilted down, they converge: round 1 of the printed back). It looks horizontally toward the lookAt point and
+        # the frame shifts to put that point where the tilted camera had it, at the centre. With a vertical sensor fit Blender's
+        # shift is in units of the image height.
+        from mathutils import Matrix
+        C, T = side['camera']['position'], side['camera']['lookAt']
+        tilt = math.atan2(T[1] - C[1], math.hypot(T[0] - C[0], T[2] - C[2]))
+        dvec = Vector((T[0] - C[0], -(T[2] - C[2]), 0)).normalized()
+        cam.matrix_world = Matrix.Translation(Vector((C[0], -C[2], C[1]))) @ dvec.to_track_quat('-Z', 'Y').to_matrix().to_4x4()   # (x, y, z) three.js -> (x, -z, y)
+        cam.data.shift_y = math.tan(tilt) / (2 * math.tan(math.radians(side['camera']['fov']) / 2))
 
     # Lights. three.js lamps are gone from the glTF (only punctual ones survive, and those are rebuilt too), so clear and rebuild.
     # Units: a three.js DirectionalLight intensity is an irradiance, as a Cycles sun strength is (W/m²); a RectAreaLight intensity is
@@ -123,6 +136,32 @@ def main():
             if ob.type == 'MESH' and any(sl.material and sl.material.name.lower().startswith(tuple(r['receivers'])) for sl in ob.material_slots):
                 rc.objects.link(ob)
         o.light_linking.receiver_collection = rc
+    for k, gl in enumerate(side.get('glints') or []):
+        # 2026-10-07: an edge light for one rounded edge. The strip goes where that edge's middle normal mirrors it into the
+        # camera (R = 2(N.V)N - V), its long side along the edge, unseen by the camera, so the round draws a line of light.
+        # `at` is a point on the edge and `normal` its middle normal (bisector of the two faces), both in metres; `irradiance`
+        # in W/m2 at the edge; light linking keeps it to the receivers (the finish by default), so it adds no pool on the floor.
+        cp = P(side['camera']['position']); at = P(gl['at']); n = P(gl['normal']).normalized()
+        v = (cp - at).normalized(); r = (2 * n.dot(v) * n - v).normalized()
+        dist = gl.get('dist', 2.4); w, h = gl.get('size', [0.12, 1.6])
+        d, o = lamp(f'glint{k}', 'AREA', gl.get('color', '#ffffff')); d.shape = 'RECTANGLE'; d.size = w; d.size_y = h
+        d.energy = gl.get('irradiance', 4.0) * math.pi * dist * dist
+        o.location = at + r * dist
+        edge = P(gl.get('edge', [0, 1, 0])).normalized()          # the edge's direction: the strip's long side follows it
+        z = (at - o.location).normalized(); y = (edge - edge.dot(z) * z).normalized(); x = y.cross(-z)   # local Z points away from the edge (a lamp emits along -Z); X = Y x Z
+        from mathutils import Matrix
+        o.matrix_world = Matrix(((x.x, y.x, -z.x, o.location.x), (x.y, y.y, -z.y, o.location.y), (x.z, y.z, -z.z, o.location.z), (0, 0, 0, 1)))
+        o.visible_camera = False
+        if gl.get('specularOnly'):
+            # 2026-10-08: seen only in reflections, so a bright strip draws its line on a round a pixel or two wide without
+            # lifting the faces beside it (a round that small reflects a thin sliver of the strip; diffuse spill grows with it)
+            o.visible_diffuse = False; o.visible_transmission = False; o.visible_volume_scatter = False
+        rcv = gl.get('receivers', ['finish'])
+        gc = bpy.data.collections.new(f'glint{k}-receivers')
+        for ob in scene.objects:
+            if ob.type == 'MESH' and any(sl.material and sl.material.name.lower().startswith(tuple(rcv)) for sl in ob.material_slots):
+                gc.objects.link(ob)
+        o.light_linking.receiver_collection = gc
     if studio and side.get('backdropLight'):
         # A wide softbox hung above and behind the subject, out of frame and facing down the sweep, unseen by the camera: the
         # backdrop goes clean and bright behind a pale product, so a white body reads against it by its own shading.
@@ -204,6 +243,14 @@ def main():
                 # A brushed plate: fine grain along its width, so the reflector reads as a sheen across metal, not a flat swatch.
                 nrm = noise_bump(0.0004, 0.06, nrm, 0.0, 4.0, (1.0, 10.0, 10.0))
             nt.links.new(nrm, bsdf.inputs['Normal'])
+            if name.startswith('finish') and a.coat_normal and 'Coat Normal' in bsdf.inputs:
+                # v23: the clear takes the same eased edge and orange peel (unlinked, it kept the flat-shaded normal: no glint where
+                # the shader eased an arris, and a peel-free mirror over a peeled colour coat)
+                nt.links.new(nrm, bsdf.inputs['Coat Normal'])
+            if name.startswith('finish') and 'Specular IOR Level' in bsdf.inputs and bsdf.inputs['Coat Weight'].default_value >= 0.99:
+                # 2026-10-08: under a full clear the colour coat has no gloss of its own (paint against clear is no interface),
+                # so the sheen is the clear's alone; its broad lobe also washed the sides wherever an edge light shone
+                bsdf.inputs['Specular IOR Level'].default_value = 0.0
         elif name.startswith('cone'):
             nt.links.new(noise_bump(0.0004, 0.12), bsdf.inputs['Normal']); bsdf.inputs['Roughness'].default_value = 0.8   # pressed paper
         elif name.startswith('surround'):
@@ -243,11 +290,11 @@ def main():
     scene.cycles.samples = a.samples
     scene.cycles.use_adaptive_sampling = True; scene.cycles.adaptive_threshold = 0.02
     if a.time_limit: scene.cycles.time_limit = a.time_limit
-    scene.cycles.use_denoising = True
+    scene.cycles.use_denoising = bool(a.denoise)
     scene.cycles.denoiser = 'OPENIMAGEDENOISE'; scene.cycles.denoising_input_passes = 'RGB_ALBEDO_NORMAL'
     scene.cycles.max_bounces = 8; scene.cycles.transparent_max_bounces = 16; scene.cycles.caustics_reflective = False; scene.cycles.caustics_refractive = False
     scene.cycles.film_exposure = side.get('exposure', 1.0)
-    scene.view_settings.view_transform = 'AgX'; scene.view_settings.look = 'AgX - Medium High Contrast'
+    scene.view_settings.view_transform = 'AgX'; scene.view_settings.look = side.get('look') or 'AgX - Medium High Contrast'   # v23: a shot can set its look
     scene.render.resolution_x = int(side['size'][0] * a.scale); scene.render.resolution_y = int(side['size'][1] * a.scale)
     scene.render.resolution_percentage = 100
     scene.render.image_settings.file_format = 'PNG'; scene.render.image_settings.color_mode = 'RGB'

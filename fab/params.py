@@ -27,6 +27,9 @@ DY, DZ = RUN / SLOPE, RISE / SLOPE     # DERIVED unit vector up the front slope 
 PLINTH_H = 110.0        # SPEC plinth z 0 to 110, accent colour
 SHADOW = 3.0            # SPEC shadow line z 110 to 113
 SHADOW_DEPTH = 3.0      # PROPOSAL the shadow line is a groove 3 wide and 3 deep
+GABLE_SHADOW_Z0 = 857.0 # SPEC 2026-10-07, the owner: a second 3 mm shadow line where the gable meets the body, z 857 to 860
+EDGE_R = 3.0            # SPEC 2026-10-07, the owner: the body's vertical corners and the gable's hips rounded 3 mm
+FIN_EDGE_R = 1.5        # SPEC 2026-10-07: the fin's edges 1.5 mm
 
 WOOFER = dict(z=290.0, frame=310.0)   # SPEC centre height and frame diameter (as drawn)
 MID = dict(z=690.0, frame=170.0)      # SPEC
@@ -44,8 +47,8 @@ POSTS = dict(w=128.0, h=64.0, z=150.0, post_d=24.0, spacing=64.0)  # SPEC bindin
 LABEL = dict(w=266.0, h=260.0, top=770.0)  # SPEC printed Facts panel, centred on the back, 14 mm padding inside its border
 FACTS_INK = '#1E1A17'                      # SPEC on the white flavours; Chocolate cream #F1E3CC, Oat brown #2B2118
 BADGE = dict(type=44.0, relief=2.5, z=55.0, tracking=-0.035)       # SPEC cast letters on the plinth's front (Archivo Black)
-BACK_BADGE = dict(type=44.0, relief=2.5, z=826.0, tracking=-0.035)  # SPEC the same letters on the back, above the Facts
-MARK_OPEN = dict(text='OPEN OTHER SIDE', type=27.0, tracking=0.04, arrow=True)   # SPEC on the back slope, Archivo 700
+BACK_BADGE = dict(type=44.0, relief=2.5, z=813.0, tracking=-0.035)  # SPEC the same letters on the back; 2026-10-07 centred between the body's top edge (857) and the Facts (770), was 826
+MARK_OPEN = dict(text='OPEN OTHER SIDE', type=27.0, tracking=0.04, arrow=True)   # SPEC on the fin's back face (2026-10-07, the owner; was the back slope), Archivo 700
 MARK_SHAKE = dict(text='SHAKE WELL', type=26.0, tracking=0.04, z=55.0)          # SPEC on the plinth's back face, Archivo 700
 
 # --- Inside the cabinet (PROPOSAL) -----------------------------------------------------------------------------------

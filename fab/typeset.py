@@ -12,7 +12,7 @@ Writes to out/metal and out/marks:
   wordmark-template-front.pdf/svg   1:1 drilling and placing template for the plinth's front (and the back)
   facts-print.svg / .pdf            the Nutrition Facts printed on the back under the clear (2026-10-07), 266 x 260, 1:1
   terminal-plate.dxf                128 x 64 plate for the binding posts
-  stencil-open-other-side.svg       vinyl mask letters for the back slope (27 mm Archivo Bold with the arrow)
+  stencil-open-other-side.svg       vinyl mask letters for the fin's back face (2026-10-07; the back slope before), 27 mm Archivo Bold with the arrow
   stencil-shake-well.svg            vinyl mask letters for the plinth's back face (26 mm)
 """
 import io, json, math, os, sys

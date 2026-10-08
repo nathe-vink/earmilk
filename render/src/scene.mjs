@@ -144,8 +144,11 @@ const ROOMS = {
     scene.add(floorMesh(THREE, ctx.tex, { size: 10, planks: { base: '#b8905f', dark: '#ab8456', light: '#c2996a' }, roughness: 0.52 }));
     // v18 (round 1 of the v17 batch: the room's light and the cabinets' did not read as one sun): the back wall 1.3 m behind the
     // pair, so the low sun lays a band along its foot and each cabinet's shadow climbs into it, gable and all
-    const back = wallMesh(THREE, { w: 10, h: 3.0, color: 0xddd6ca }); back.position.set(0, 1.5, -1.3); scene.add(back);
-    skirting(THREE, scene, { w: 10, z: -1.3 });
+    // 2026-10-07: a shot can set the back wall's distance (v22: 2.5 m, so the far cabinet's shadow ends at its foot, not across it)
+    const wz = o.wallZ ?? -1.3;
+    const wallColor = o.wallColor ?? 0xddd6ca;   // 2026-10-08: a shot can deepen the walls, so a white cabinet stands off them
+    const back = wallMesh(THREE, { w: 10, h: 3.0, color: wallColor }); back.position.set(0, 1.5, wz); scene.add(back);
+    skirting(THREE, scene, { w: 10, z: wz, color: o.skirting ?? 0xf2efe8 });
     // v15 (refinement round 1): the beam falls across both cabinets from the right, so each throws its own long shadow
     // across the boards and the near one's lit side stands a stop above its front; no sun patch on the wall
     // v17 (refinement round 3: the sun spent itself on the blank sides while the fronts sat in fill): the window in the wall
@@ -155,15 +158,15 @@ const ROOMS = {
     // window cool, so the shade reads cold against the warm boards; a tall card at camera-left for a hairline on each corner.
     // v18: the window behind the camera nearly the width of the wall, so the sun covers the whole floor in frame and only the
     // shadows break it (a narrow beam left pools on the right that read as a light from the right)
-    windowWallZ(THREE, scene, { z: 4.5, xRange: [-5, 3.5], h: 3.0, color: 0xe8e3d9, sky: 0xc8daf4, win: { x0: -4.9, x1: 1.2, sill: 0.45, head: 2.95 } });
-    sun(THREE, scene, { color: 0xffeedb, intensity: 5.2, position: [-3.78, 3.10, 6.55], target: [0, 0.5, 0], bounds: 4.5 });   // less amber: the white reads white against the boards
+    windowWallZ(THREE, scene, { z: 4.5, xRange: [-5, 3.5], h: 3.0, color: 0xe8e3d9, sky: 0xc8daf4, win: { x0: -4.9, x1: 1.2, sill: 0.45, head: o.windowHead ?? 2.95 } });   // 2026-10-08: a shot can lower the head
+    sun(THREE, scene, { color: 0xffeedb, intensity: 5.2, position: o.sunPos || [-3.78, 3.10, 6.55], target: [0, 0.5, 0], bounds: 4.5 });   // less amber: the white reads white against the boards; 2026-10-07: a shot can turn it
     fillRect(THREE, scene, { color: 0xd2e0f4, intensity: 0.3, w: 5.6, h: 2.2, position: [-1.85, 1.7, 4.4], lookAt: [-1.85, 1.0, 0] });
-    fillRect(THREE, scene, { color: 0xffffff, intensity: 22, w: 0.3, h: 1.6, position: [-0.6, 1.1, 3.9], lookAt: [0, 0.6, 0] });
+    fillRect(THREE, scene, { color: 0xffffff, intensity: o.card ?? 22, w: 0.3, h: 1.6, position: [-0.6, 1.1, 3.9], lookAt: [0, 0.6, 0] });   // 2026-10-07: a shot can dim the card
     bounce(THREE, scene, { sky: 0xe8e4dc, ground: 0xb8905f, intensity: 0.2 });
-    enclose(THREE, scene, { x0: -5, x1: 3.5, z0: -1.3, z1: 4.5, h: 3.0, color: 0xddd6ca, window: 'front' });
+    enclose(THREE, scene, { x0: -5, x1: 3.5, z0: wz, z1: 4.5, h: 3.0, color: wallColor, window: 'front' });
     // v16 (refinement round 2): the chair turned toward the window, set down rather than posed facing the camera
     // v18: the chair against the wall left of the left cabinet, out of the middle (round 1: the centre went to the chair)
-    chair(THREE, addons, scene, { position: [-2.62, 0, -1.02], rotationY: 0.35 });   // v19: clear of the left cabinet's edge
+    chair(THREE, addons, scene, { position: o.chairPos || [-2.62, 0, -1.02], rotationY: o.chairRot ?? 0.35 });   // v19: clear of the left cabinet's edge; 2026-10-07: a shot can move it
     // v16: exposure down about half a stop, so the sunlit white sides (249 at v15) and the coral plinths stop clipping and the
     // white faces separate the way the coral ones do
     return { exposure: 0.72, skyGlow: 0.7 };  // v18: less sky, the window being over twice as wide; v19 less again // skyGlow: the path tracer's sky through this window, relative to the sun; a low sun admits little, so the shade needs more
@@ -184,12 +187,16 @@ const ROOMS = {
     // v18 (round 1 of the v17 batch: the floor followed one sun and the cabinet ignored it; its long thin shadow, cut by a narrow
     // beam, did not read as its own): a French door in a wall closer still (x -1.7), the sun higher (30 degrees, 45 off the axis),
     // so the beam is wide and the cabinet's shadow, gable and all, lies whole on the sunlit boards beside it
-    windowWall(THREE, scene, { x: -1.7, color: 0xe4dfd6, sky: 0xf6fbff, mullion: null, win: { z0: 0.9, z1: 2.9, sill: 0.05, head: 2.6 } });
-    sun(THREE, scene, { color: 0xffffff, intensity: 3.4, position: [-4.9, 4.5, 4.9], target: [0, 0.5, 0], bounds: 4.5 });
-    fillRect(THREE, scene, { color: 0xeef4ff, intensity: 1.4, w: 1.8, h: 2.3, position: [-1.65, 1.35, 1.9], lookAt: [0, 1.0, 1.9] });
+    // 2026-10-07: a shot can move the door and the sun (round 1 of the v21 look: the sun hard on the floor only, no patch on the walls)
+    const door = o.door || { z0: 0.9, z1: 2.9, sill: 0.05, head: 2.6 }, doorZ = (door.z0 + door.z1) / 2;
+    // 2026-10-08: and the sky's and the sun's colour (round 2 of the v21 look: the sun without punch, the wall's patch pale cream,
+    // the shade the same warm taupe as the sun)
+    windowWall(THREE, scene, { x: -1.7, color: 0xe4dfd6, sky: o.sky ?? 0xf6fbff, mullion: null, win: door });
+    sun(THREE, scene, { color: o.sunColor ?? 0xffffff, intensity: o.sunIntensity ?? 3.4, position: o.sunPos || [-4.9, 4.5, 4.9], target: [0, 0.5, 0], bounds: 4.5 });
+    fillRect(THREE, scene, { color: o.fillColor ?? 0xeef4ff, intensity: o.fill ?? 1.4, w: Math.min(1.8, door.z1 - door.z0 - 0.2), h: 2.3, position: [-1.65, 1.35, doorZ], lookAt: [0, 1.0, doorZ] });
     bounce(THREE, scene, { sky: 0xf4f2ee, ground: 0xd8ccb2, intensity: 0.3 });
     enclose(THREE, scene, { x0: -1.7, x1: 5, z0: -2.0, z1: 4.5, h: 2.7, color: 0xe4dfd6, window: 'left' });
-    chair(THREE, addons, scene, { position: [0.9, 0, -1.6], rotationY: -0.5, color: 0xd9c9ad }); // right of the cabinet, clear of it
+    chair(THREE, addons, scene, { position: o.chairPos || [0.9, 0, -1.6], rotationY: o.chairRot ?? -0.5, color: 0xd9c9ad }); // right of the cabinet, clear of it
     return { exposure: 0.95 };
   },
   // Older, darker room: aged plaster, dark worn floor, skirting, warm low light from the right, a dark chair.
@@ -215,13 +222,15 @@ const ROOMS = {
     // v19 (round 2: no shadow across the boards from the plinth to the wall's silhouette; the front not warm): the sun higher (18
     // degrees) and a touch warmer, the window wider and taller, so the whole cabinet stands in the beam, the sunlit boards are
     // bright enough to show its shadow running from the plinth to the wall, and the silhouette still climbs the wall
-    windowWall(THREE, scene, { x: -2.6, zRange: [-0.8, 4.5], color: 0x7a7362, sky: 0xc6d3e6, mullion: null, bars: { at: [1.75], color: 0x8c8470 }, win: { z0: 1.15, z1: 2.8, sill: 0.05, head: 2.45 } });
-    sun(THREE, scene, { color: 0xffcf9c, intensity: 2.6, position: [-5.83, 3.27, 4.89], target: [0, 0.8, 0], bounds: 4.5 });
-    fillRect(THREE, scene, { color: 0xcbd7ea, intensity: 0.8, w: 1.0, h: 1.1, position: [-2.55, 1.5, 2.2], lookAt: [0, 1.0, 2.2] });
+    windowWall(THREE, scene, { x: -2.6, zRange: [-0.8, 4.5], color: 0x7a7362, sky: 0xc6d3e6, mullion: null, bars: { at: o.barsAt || [1.75], color: 0x8c8470 }, win: { z0: 1.15, z1: 2.8, sill: 0.05, head: 2.45 } });   // 2026-10-07: a shot can move the bar
+    // 2026-10-08: a shot can warm the sun and dim the lamp (round 2 of the v21 look: the speaker's sunlit front a pale off-white
+    // beside the wall's amber patch, its shaded side one step below it; the lamp at the right lit that side)
+    sun(THREE, scene, { color: o.sunColor ?? 0xffcf9c, intensity: 2.6, position: [-5.83, 3.27, 4.89], target: [0, 0.8, 0], bounds: 4.5 });
+    fillRect(THREE, scene, { color: 0xcbd7ea, intensity: o.fill ?? 0.8, w: 1.0, h: 1.1, position: [-2.55, 1.5, 2.2], lookAt: [0, 1.0, 2.2] });
     bounce(THREE, scene, { sky: 0x8fa0bb, ground: 0x5a4330, intensity: 0.45 });
-    const lamp = new THREE.PointLight(0xffcf9e, 7, 0, 2); lamp.position.set(1.7, 1.5, 1.3); scene.add(lamp);
+    const lamp = new THREE.PointLight(0xffcf9e, o.lamp ?? 7, 0, 2); lamp.position.set(1.7, 1.5, 1.3); scene.add(lamp);
     enclose(THREE, scene, { x0: -2.6, x1: 5, z0: -0.8, z1: 4.5, h: 2.9, color: 0x7a7362, roughness: 1, window: 'left' });
-    chair(THREE, addons, scene, { position: [-1.05, 0, -0.42], rotationY: 0.5, color: 0x3d2a1c });   // v18: in the room's shade at the left
+    chair(THREE, addons, scene, { position: o.chairPos || [-1.05, 0, -0.42], rotationY: 0.5, color: 0x3d2a1c });   // v18: in the room's shade at the left
     return { exposure: 1.15, skyGlow: 2.6 };   // v16: the window's sky brighter, so the room's left side is not a void; v17: less, the window is twice as wide
   },
   // Studio: #F8F7F4 ground sweeping up into a backdrop behind the subject, horizon faded with fog. Key light per shot.
@@ -237,16 +246,19 @@ const ROOMS = {
     const back = cp[2] < 0 ? 1 : -1, ang = Math.atan2(ca[0] - cp[0], (ca[2] - cp[2]) * back);
     sweep(THREE, scene, { color: ground, roughness: o.groundRoughness ?? 0.5, sign: back, rotY: o.turnSweep ? back * ang : 0 });
     const key = o.key || 'even';
-    if (key === 'even') sun(THREE, scene, { color: 0xffffff, intensity: 2.4, position: [-5, 5, 4], target: [0, 0.5, 0], bounds: 3, mapSize: 4096 });
-    if (key === 'rake') sun(THREE, scene, { color: 0xfff8f0, intensity: 3.2, position: [-0.9, 3.4, 1.5], target: [0, 0.9, 0.1], bounds: 1.2, mapSize: 4096 });
+    // 2026-10-07: a shot can move or reshape its key without a new preset (keyPos, keyTarget, keyIntensity, keySoftbox, keySpread)
+    const K = (opts) => sun(THREE, scene, { ...opts, ...(o.keyPos ? { position: o.keyPos } : {}), ...(o.keyTarget ? { target: o.keyTarget } : {}),
+      ...(o.keyIntensity != null ? { intensity: o.keyIntensity } : {}), ...(o.keySoftbox != null ? { softbox: o.keySoftbox } : {}), ...(o.keySpread != null ? { spread: o.keySpread } : {}) });
+    if (key === 'even') K({ color: 0xffffff, intensity: 2.4, position: [-5, 5, 4], target: [0, 0.5, 0], bounds: 3, mapSize: 4096 });
+    if (key === 'rake') K({ color: 0xfff8f0, intensity: 3.2, position: [-0.9, 3.4, 1.5], target: [0, 0.9, 0.1], bounds: 1.2, mapSize: 4096 });
     // v15: a key from the front-left at about 18 degrees, the one direction that reaches a tweeter facing forward under the
     // bowl's upper lip (refinement round 1 on the close-up: the throat read as an eye socket under light from above)
     // v17 (refinement round 3): on the same axis but further and smaller (0.9 m at 3.2 m), so it reads as one source
-    if (key === 'bowl') sun(THREE, scene, { color: 0xfff6ec, intensity: 3.0, position: [-1.64, 1.85, 2.67], target: [0, 0.9, 0.09], bounds: 1.2, mapSize: 4096, softbox: 0.9 });
+    if (key === 'bowl') K({ color: 0xfff6ec, intensity: 3.0, position: [-1.64, 1.85, 2.67], target: [0, 0.9, 0.09], bounds: 1.2, mapSize: 4096, softbox: 0.9 });
     // v15 (refinement round 1 on the back): a smaller, closer softbox from the camera's right, 30 degrees up and 50 off the back
     // face, so the face falls off across its width, the posts, letters and port take an edge, and the cabinet's own shadow lands
     // in frame at its left instead of behind it
-    if (key === 'back') sun(THREE, scene, { color: 0xffffff, intensity: 2.8, position: [-1.19, 1.45, -1.0], target: [0, 0.55, 0], bounds: 2.5, mapSize: 4096, softbox: 0.6 });
+    if (key === 'back') K({ color: 0xffffff, intensity: 2.8, position: [-1.19, 1.45, -1.0], target: [0, 0.55, 0], bounds: 2.5, mapSize: 4096, softbox: 0.6 });
     // v17 (the owner, 2026-10-06: a three-quarter back view beside the straight one): the same softbox on the other side of the
     // back face, 50 degrees off it and 35 up, across from the camera, so the back takes the light, the side the camera sees falls
     // into shade, and the cabinet's shadow runs out to the right of it, in frame
@@ -254,7 +266,7 @@ const ROOMS = {
     // back): 35 degrees off the back face (was 50), so the back takes more of it, with a grid so the beam stays on the cabinet
     // v19 (round 2: the back blown nearly to clipped white, each plane one value, a long low shadow across the empty half): a stop
     // less, a larger softbox (1.2 m) for falloff down the face, and higher (50 degrees), so the shadow falls short and behind
-    if (key === 'back3q') sun(THREE, scene, { color: 0xffffff, intensity: 1.5, position: [0.75, 2.04, -1.07], target: [0, 0.55, 0], bounds: 2.5, mapSize: 4096, softbox: 1.2, spread: 60 });
+    if (key === 'back3q') K({ color: 0xffffff, intensity: 1.5, position: [0.75, 2.04, -1.07], target: [0, 0.55, 0], bounds: 2.5, mapSize: 4096, softbox: 1.2, spread: 60 });
     // v15 (refinement round 1 on the line-up): a softbox high at the front-left, 55 degrees up and 30 off the camera's axis, 3.5 m
     // out and aimed past the row's centre toward its right end so the five stay within a third of a stop: the gable slopes take the
     // most light, the fronts less, the sides the camera sees fall into shade, and the sweep, twice as far from it, a stop below the
@@ -265,8 +277,8 @@ const ROOMS = {
     // 49), so the fronts fall off toward their far edges and the sides the lens shows stay dark
     // v18 (round 1 of the v17 batch: a broad wash, soft smudges for shadows): the softbox smaller (1.0 m), so each base throws a
     // tighter shadow and contact line
-    if (key === 'lineup') sun(THREE, scene, { color: 0xffffff, intensity: 2.6, position: [-1.70, 2.94, 1.50], target: [0.35, 0.75, -0.1], bounds: 3, mapSize: 4096, softbox: 1.0, spread: 75 });
-    if (key === 'swap') sun(THREE, scene, { color: 0xfff4e6, intensity: 2.6, position: [-1.2, 7, 1.8], target: [0, 0.8, 0], bounds: 3, mapSize: 4096 });
+    if (key === 'lineup') K({ color: 0xffffff, intensity: 2.6, position: [-1.70, 2.94, 1.50], target: [0.35, 0.75, -0.1], bounds: 3, mapSize: 4096, softbox: 1.0, spread: 75 });
+    if (key === 'swap') K({ color: 0xfff4e6, intensity: 2.6, position: [-1.2, 7, 1.8], target: [0, 0.8, 0], bounds: 3, mapSize: 4096 });
     const fill = new THREE.DirectionalLight(0xffffff, o.fill ?? 0.5); fill.position.set(...(o.fillPos || [5, 3, 3])); scene.add(fill);
     if (o.fillSoftbox) fill.userData.softbox = o.fillSoftbox; // path-traced: a sized softbox where the rig puts it, not a broad 3.5 m fill ([w, h] for a strip box)
     if (o.card) fillRect(THREE, scene, o.card);             // v17: a low card in front, lighting what faces forward and down (the bowl's back wall)
@@ -279,13 +291,13 @@ const ROOMS = {
     scene.background = new THREE.Color(0xe9eaec); // neutral, so the fill is cooler than the sun and the pale cartons lift off the set (path-traced round 2)
     const top = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.03, 1.3), new THREE.MeshStandardMaterial({ map: ctx.tex.planks(o.desk || { base: '#cdb48c', dark: '#c6ac83', light: '#d3bb95' }), roughness: 0.35 }));
     top.material.name = 'desk';
-    top.material.map = top.material.map.clone(); top.material.map.repeat.set(3.9, 1.8); top.material.map.needsUpdate = true;
+    top.material.map = top.material.map.clone(); top.material.map.repeat.set(...(o.deskRepeat || [3.9, 1.8])); top.material.map.needsUpdate = true;   // 2026-10-08: a shot can lengthen the planks
     top.position.set(0, 0.72 - 0.015, 0.1); top.receiveShadow = top.castShadow = true; scene.add(top);
     const back = wallMesh(THREE, { w: 8, h: 2.7, color: o.wall ?? 0xf1eee8 }); back.position.set(0, 1.35, -0.55); scene.add(back);
     sun(THREE, scene, { color: 0xfff1dc, intensity: 3.0, position: [-3, 3.4, 2.0], target: [0, 0.75, 0], bounds: 1.5, mapSize: 4096 });
-    fillRect(THREE, scene, { color: 0xdde6f3, intensity: o.fill ?? 3.0, w: 1.5, h: 1.5, position: [-1.6, 1.4, 0.6], lookAt: [0, 0.8, 0] });
+    fillRect(THREE, scene, { color: 0xdde6f3, intensity: o.fill ?? 3.0, w: 1.5, h: 1.5, position: o.fillPos || [-1.6, 1.4, 0.6], lookAt: [0, 0.8, 0] });   // 2026-10-07: a shot can move the cool fill (onto the shaded side)
     bounce(THREE, scene, { sky: 0xf1eee8, ground: 0xcdb48c, intensity: o.bounce ?? 0.3 });
-    return { exposure: 1.0 };
+    return { exposure: o.exposure ?? 1.0 };
   },
 };
 

@@ -30,11 +30,17 @@ export const FS = {
   sleeve: { board: 1.5 },
   // 2026-10-02: no sleeve. The colour is a finish on the birch; the skin keeps the sleeve's outer dimensions.
   plinth: { height: 110, shadowLine: 3 },
+  // 2026-10-07, the owner: the arrises rounded in the model, 3 mm on the body's vertical corners and the gable's hips (the fin's
+  // edges 1.5), scaled on the pint; a 3 mm shadow line where the gable meets the body, z 857 to 860, like the plinth's; no lip at
+  // the scoop, the finish's cut edge eased and the tweeter's ring and seat black.
+  arris: 3, finArris: 1.5, gableLine: 3, scoopTrim: 'none',
   badge: { type: 44, relief: 2.5, z: 55 }, // cast metal letters, no plate: the wordmark itself in relief on the plinth's front
-  backBadge: { type: 44, relief: 2.5, z: 826, zFull: 800 }, // cast metal letters like the front, centred above the plate (or inside the full birch field)
-  // Marks that are spec since 2026-10-02: the gable's instruction on the back slope, and the carton's other line by the port.
+  backBadge: { type: 44, relief: 2.5, z: 813, zFull: 800 }, // 2026-10-07, the owner: centred between the body's top edge (the gable line's foot, 857) and the Facts (770): 27 mm of white above and below the ink (was 826)
+  // cast metal letters like the front, centred above the plate (or inside the full birch field)
+  // Marks that are spec since 2026-10-02: the gable's instruction on the back slope (on the fin's back face since 2026-10-07,
+  // the owner), and the carton's other line by the port.
   marks: ['open-other-side', 'shake-well'],
-  markSpec: { openOtherSide: { type: 27 }, shakeWell: { type: 26, z: 55, on: 'plinth' } }, // SHAKE WELL on the plinth's back face, reversed in the body colour
+  markSpec: { openOtherSide: { type: 27, on: 'fin' }, shakeWell: { type: 26, z: 55, on: 'plinth' } }, // SHAKE WELL on the plinth's back face, reversed in the body colour
   // As drawn on the Sleeves and Hero artboards.
   print: {
     front: { size: 47, baselineBelowTop: 43 },

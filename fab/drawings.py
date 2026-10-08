@@ -103,6 +103,7 @@ def general_arrangement(pdf):
     F.line([(0, BODY), (PLAN, BODY), (PLAN, RIDGE_Z), (0, RIDGE_Z)], close=True)
     F.rect(0, RIDGE_Z, PLAN, TOTAL)
     F.line([(0, PLINTH_H), (PLAN, PLINTH_H)], lw=0.3); F.line([(0, PLINTH_H + SHADOW), (PLAN, PLINTH_H + SHADOW)], lw=0.3)
+    F.line([(0, GABLE_SHADOW_Z0), (PLAN, GABLE_SHADOW_Z0)], lw=0.3)
     F.circle(RUN, WOOFER['z'], WOOFER['frame'], lw=0.35, ls='--'); F.circle(RUN, WOOFER['z'], WOOFER_CUTOUT)
     F.circle(RUN, MID['z'], MID['frame'], lw=0.35, ls='--'); F.circle(RUN, MID['z'], MID_CUTOUT)
     # mouth ellipse seen from the front: its across width is true, its height is the slope length times the vertical
@@ -121,12 +122,15 @@ def general_arrangement(pdf):
     S.line([(0, 0), (PLAN, 0), (PLAN, BODY), (RUN, RIDGE_Z), (0, BODY)], close=True)
     S.rect(RUN - FIN_T / 2, RIDGE_Z - 3, RUN + FIN_T / 2, TOTAL)
     S.line([(0, PLINTH_H), (PLAN, PLINTH_H)], lw=0.3); S.line([(0, PLINTH_H + SHADOW), (PLAN, PLINTH_H + SHADOW)], lw=0.3)
+    S.line([(0, GABLE_SHADOW_Z0), (PLAN, GABLE_SHADOW_Z0)], lw=0.3)
     S.text(4, -16, 'front', size=4.5, color=THIN); S.text(PLAN - 18, -16, 'back', size=4.5, color=THIN)
     S.dim((0, BODY), (RUN, RIDGE_Z), 18, f'slope {SLOPE:.0f}, {SLOPE_DEG:.1f}°')
     S.dim((PLAN, BODY), (PLAN, RIDGE_Z), 30, '150'); S.dim((PLAN, RIDGE_Z), (PLAN, TOTAL), 30, '45')
     S.dim((0, 0), (PLAN, 0), -60)
     S.text(RUN, TOTAL + 10, f'fin {FIN_T:.0f} thick, full width', size=4.5, ha='center')
     S.text(RUN, PLINTH_H + 12, 'shadow line 3 x 3 groove at 110', size=4.5, ha='center')
+    S.text(RUN, GABLE_SHADOW_Z0 - 14, 'shadow line 3 x 3 rebate at 857 (2026-10-07)', size=4.5, ha='center')
+    S.text(RUN, BODY / 2, 'corners and hips R3, fin R1.5', size=4.5, ha='center', color=NOTE)
 
     # BACK (seen from behind)
     B = View(ax, 36 + 2 * step, base, k)
@@ -134,6 +138,7 @@ def general_arrangement(pdf):
     B.line([(0, 0), (PLAN, 0), (PLAN, BODY), (0, BODY)], close=True)
     B.line([(0, BODY), (PLAN, BODY), (PLAN, RIDGE_Z), (0, RIDGE_Z)], close=True); B.rect(0, RIDGE_Z, PLAN, TOTAL)
     B.line([(0, PLINTH_H), (PLAN, PLINTH_H)], lw=0.3); B.line([(0, PLINTH_H + SHADOW), (PLAN, PLINTH_H + SHADOW)], lw=0.3)
+    B.line([(0, GABLE_SHADOW_Z0), (PLAN, GABLE_SHADOW_Z0)], lw=0.3)
     fx0, fz1 = RUN - LABEL['w'] / 2, LABEL['top']; fz0 = fz1 - LABEL['h']
     B.rect(fx0, fz0, fx0 + LABEL['w'], fz1, lw=0.6)
     B.text(RUN, (fz0 + fz1) / 2, 'Nutrition Facts, printed\n266 x 260, under the clear', size=4.6, ha='center', va='center')
@@ -141,8 +146,8 @@ def general_arrangement(pdf):
     B.rect(RUN - POSTS['w'] / 2, POSTS['z'] - POSTS['h'] / 2, RUN + POSTS['w'] / 2, POSTS['z'] + POSTS['h'] / 2)
     for sx in (-1, 1):
         B.circle(RUN + sx * POSTS['spacing'] / 2, POSTS['z'], POSTS['post_d'], lw=0.4)
-    B.rect(RUN - 86, 810, RUN + 86, 842.5, lw=0.3, color=NOTE)
-    B.text(RUN, (BODY + RIDGE_Z) / 2 - 4, 'OPEN OTHER SIDE ->', size=4.5, ha='center', color=NOTE)
+    B.rect(RUN - 86, BACK_BADGE['z'] - 16, RUN + 86, BACK_BADGE['z'] + 16.5, lw=0.3, color=NOTE)
+    B.text(RUN, RIDGE_Z + FIN_H / 2 - 4, 'OPEN OTHER SIDE ->', size=4.0, ha='center', color=NOTE)   # 2026-10-07: on the fin
     B.text(RUN, 50, 'SHAKE WELL', size=4.5, ha='center', color=NOTE)
     B.dim((PLAN, 0), (PLAN, PORT['z']), 35); B.dim((PLAN, 0), (PLAN, POSTS['z']), 70)
     B.dim((0, fz0), (0, fz1), -30, '260'); B.dim((0, 0), (0, fz0), -30)

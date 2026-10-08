@@ -134,12 +134,13 @@
   "rules": [
     "No sleeve: the colours are a finish on the birch cabinet, fixed per speaker.",
     "Whole, 2% and Skim carry the gable and fin in the accent colour; Chocolate and Oat stay one colour, gable included.",
-    "The bottom 110 mm is a built-in plinth in the accent colour on all four sides, with a 3 mm shadow line above it.",
+    "The bottom 110 mm is a built-in plinth in the accent colour on all four sides, with a 3 mm shadow line above it; a second 3 mm shadow line where the gable meets the body (2026-10-07).",
     "The wordmark is cast metal lettering standing on the plinth's front, no plate, and the same letters on the back above the Nutrition Facts. Nothing on the sides, nothing under the gable.",
     "Bare birch shows only in the bowl's exploded or section views.",
-    "The throat is painted, light at the mouth to dark at the throat. A polished stainless lip rings the mouth (2026-10-06).",
+    "The throat is painted, light at the mouth to dark at the throat. No lip: the mouth is the finish's cut edge, eased (2026-10-07; a polished lip from 2026-10-06 to 2026-10-07).",
+    "The body's vertical corners and the gable's hips are rounded 3 mm, the fin's edges 1.5 mm (2026-10-07).",
     "Flavor is the colorway only. One voicing.",
-    "Three printed marks are spec: OPEN OTHER SIDE on the back slope, SHAKE WELL on the plinth's back, and the Nutrition Facts on the back (2026-10-07), all sealed under the clear. Nothing else is printed."
+    "Three printed marks are spec: OPEN OTHER SIDE on the fin's back face, SHAKE WELL on the plinth's back, and the Nutrition Facts on the back (2026-10-07), all sealed under the clear. Nothing else is printed."
   ],
   "plinth": {
     "heightMm": 110,
@@ -158,10 +159,8 @@
     "onLightPlinths": "2026-10-06, the owner: dark bronze letters on the light plinths (Chocolate's cream, Skim's pale blue), set per flavour under plinth.letters; polished on the others"
   },
   "lip": {
-    "where": "round the bowl's mouth on the front slope, floorstander and pint",
-    "finish": "polished stainless, the same on every flavour",
-    "section": "half-round over the finish's cut edge and the bowl's joint: 4.8 mm wide and 1.6 mm proud on the floorstander, scaled on the pint",
-    "since": "2026-10-06, the owner"
+    "withdrawn": "2026-10-07, the owner: no lip and no bright metal at the scoop; the mouth is the finish's cut edge, eased, and the tweeter's chamfer and seat are moulded black",
+    "was": "polished stainless half-round, 4.8 mm wide and 1.6 mm proud on the floorstander, scaled on the pint (2026-10-06)"
   },
   "backPanel": {
     "default": "print",
@@ -174,11 +173,12 @@
     "type": "cast metal letters, as the front",
     "typeSizeMm": 44,
     "reliefMm": 2.5,
-    "centreZMm": 826
+    "centreZMm": 813,
+    "centreNote": "2026-10-07, the owner: centred between the body's top edge (857) and the Facts (770), 27 mm of white above and below the ink; was 826"
   },
   "marks": {
     "openOtherSide": {
-      "where": "back slope of the gable, centred",
+      "where": "the fin's back face, centred on its visible height (2026-10-07, the owner; the back slope until then)",
       "typeSizeMm": 27,
       "ink": "the gable's other colour: board on the white flavours, accent on Chocolate and Oat"
     },

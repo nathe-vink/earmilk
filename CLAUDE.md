@@ -57,7 +57,7 @@ Read `README.md` first. It is the handoff and the brief. The canvas it links to 
 ## The repo ahead of the canvas (since 2026-10-05)
 
 - The owner amended the pint and the crate in chat on 2026-10-05: the pint mirrors the floorstander's drivers (a woofer ø 68 at 67 and a mid ø 40 at 160 on its face, a small dome tweeter at its bowl's throat), and the crate is a moulded dairy crate whose windows frame the front pints' woofers (README, Amendments 2026-10-05; `spec/geometry.md`). The canvas has not been updated to match. Ask the owner before editing the canvas.
-- On 2026-10-07 the owner moved the Nutrition Facts from the bronze plate to a print on the back's finish, under the clear (README, Amendments 2026-10-07). The canvas still shows the plate.
+- On 2026-10-07 the owner moved the Nutrition Facts from the bronze plate to a print on the back's finish, under the clear; dropped the scoop's polished lip (no bright metal at the scoop); had the corners and the gable's hips rounded 3 mm in the model; added a 3 mm shadow line under the gable; moved OPEN OTHER SIDE onto the fin; and centred the back's letters between the edge and the Facts (README, Amendments 2026-10-07). The canvas shows none of this.
 
 ## Tools and the family (since 2026-10-04)
 
