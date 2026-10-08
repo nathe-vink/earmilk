@@ -40,7 +40,7 @@
       0.0,
       0.0
      ],
-     "rotate_z": 10
+     "rotate_z": 0
     }
    ]
   },
@@ -79,7 +79,7 @@
    "plank_contrast": 0.4
   },
   "wall": {
-   "color": "#F1EEE8"
+   "color": "#EDE5D8"
   },
   "ceiling": "#F5F3EF",
   "skirting": {
@@ -101,7 +101,7 @@
     ]
    },
    {
-    "wall": "left",
+    "wall": "right",
     "along": 0.4,
     "sill": 0.4,
     "size": [
@@ -210,7 +210,39 @@
   "horizon": "#E4ECF3",
   "ground": "#8A8478"
  },
- "lights": {},
+ "lights": {
+  "front_sheen": {
+   "type": "panel",
+   "size_m": [
+    1.85,
+    0.9
+   ],
+   "position": [
+    -0.575,
+    -1.6,
+    0.7
+   ],
+   "target": [
+    -0.575,
+    0.0,
+    0.7
+   ],
+   "strength": 6.0,
+   "color": "#FFFFFF",
+   "ramp": {
+    "axis": "z",
+    "at_m": [
+     0.35,
+     1.05
+    ],
+    "values": [
+     0,
+     1
+    ]
+   },
+   "diffuse": false
+  }
+ },
  "glints": [
   {
    "at": [
@@ -240,11 +272,35 @@
     0.24,
     0.0
    ],
-   "size_m": 0.8,
+   "size_m": 1.0,
    "power_w": 1.3333,
    "receivers": [
     "side-right",
     "back-panel"
+   ]
+  },
+  {
+   "at": [
+    0.538,
+    -0.119,
+    0.594
+   ],
+   "normal": [
+    -0.105,
+    -0.995,
+    0
+   ],
+   "size_m": 0.25,
+   "power_w": 1.5,
+   "receivers": [
+    "letters-front-0",
+    "letters-front-1",
+    "letters-front-2",
+    "letters-front-3",
+    "letters-front-4",
+    "letters-front-5",
+    "letters-front-6",
+    "letters-front-7"
    ]
   }
  ]

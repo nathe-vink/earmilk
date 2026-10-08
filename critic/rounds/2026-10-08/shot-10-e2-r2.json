@@ -1,0 +1,306 @@
+{
+ "stage1": {
+  "impression": "A sunlit living room with a red-capped floorstander on the floor and a blue-capped bookshelf on a sideboard: the family idea and the flavour colours read at once, and the window light gives the frame a time of day. But the hero's white front is a flat near-white field with no modelling, the 'earmilk' badges barely read, a bright sun stripe at the far left competes with the products, and the grey room with its clean CG sun patches makes this a competent draft, not yet a homepage image.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The floorstander's right side reads as one smooth lacquer face. No row-to-row step above 12 levels (now a 119-level break at y\u2248632, from 208 to 89). Median 155\u2013190, so it separates from both the wall (~131) and the front (~237). Blue cast b\u2212r \u2264 8 (now +19).",
+  "Both white fronts show a smooth gloss falloff of 6\u201312 levels down from the eave (now 0.2 on the floorstander and \u22120.7 on the bookshelf), with no channel reaching 254.",
+  "No set light at the frame edge is as bright as the products: the left-wall sun stripe (median 239, equal to the fronts) is gone or held at \u2264165.",
+  "The shaded wall reads warm-neutral and sits with the oak: \u0394E2000 \u2264 2.5 to #827D77 (now 4.36; rgb 132/130/131 reads lavender-grey).",
+  "The hero's gable end, the carton signature, reads as a red triangle at least ~40 px wide (now a 13 px grey-mauve sliver, rgb 98/73/77).",
+  "Both wordmarks read as cast metal, at least 35 levels brighter than their plinths (bookshelf now 75 on 70.5; floorstander 98 on 59 reads as flat grey paint).",
+  "The floorstander's woofer reads as a cone, not a hole: \u226420% of cone pixels at \u22643 (now 44%, median 3.6).",
+  "The pair fills more of the frame: the floorstander's front at least ~220 px wide (now 184 px in a 1350 px frame), with the sideboard and vase still whole.",
+  "The roof slopes are within \u0394E2000 3 of the flavour colours (red now 3.65 at 191/20/22, blue now 4.11 at 4/69/187)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The glint lamp's mirror image ends a quarter of the way up the floorstander's right side, so the side is a pale lavender wash over a dark band and sits only 24 levels below the front.",
+   "evidence": {
+    "region": [
+     490,
+     340,
+     508,
+     690
+    ],
+    "measured": "From y342 to y630 the side is a flat ~213\u2013215 (rgb 212/214/231, b\u2212r +19). At y631\u2013633 it drops to 89 (rgb 104/86/76) across the full width x488\u2013510: a 119-level break, largest row step 56.3, perfectly horizontal (a lamp edge, not a room reflection). Side median 213.8 against the front's 237.5. The only room surface it could mirror is the sunlit wall, which is warm (239/233/224), so the blue wash is the lamp's."
+   },
+   "change": {
+    "setting": "glints.1.size_m",
+    "from": 0.8,
+    "to": 1.0
+   },
+   "expected": "The lamp's reflection covers the side from the plinth line to the eave. The break at y\u2248632 goes (row step \u226412, now 56.3) and the side becomes one smooth tone of about 165\u2013185, since the lamp's radiance falls to ~0.64\u00d7. That keeps it \u226530 above the wall and \u226550 below the front. The blue cast roughly halves, to b\u2212r \u2248 +10.",
+   "accept": {
+    "region": [
+     492,
+     600,
+     508,
+     670
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     0,
+     12
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The sun stripe from the left window is the brightest, hardest-edged shape in the frame and stands alone at the left edge, pulling the eye off the products.",
+   "evidence": {
+    "region": [
+     155,
+     100,
+     222,
+     540
+    ],
+    "measured": "Stripe median 238.6 (p5 \u2248150 in the mullion shadows), as bright as the white fronts (237.5 and 239.4) and 98 levels above the wall beside it (140.6 at x20\u2013140). That window lights no product face: both fronts are lit through the front window."
+   },
+   "change": {
+    "setting": "set.windows.1.wall",
+    "from": "left",
+    "to": "right"
+   },
+   "expected": "The stripe and the bright floor patch at the far left go. That strip of wall reads as plain shade at ~125\u2013145, leaving the product fronts as the brightest whites. The right-wall window lets in no sun, only soft skylight onto the right-facing faces: bookshelf side about 91 \u2192 105\u2013120, the sideboard's shaded right third about 39 \u2192 50.",
+   "accept": {
+    "region": [
+     155,
+     100,
+     222,
+     540
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     110,
+     165
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Both lacquered white fronts are a single value with no gloss modelling, so they read as matte cards, not clear-coated birch.",
+   "evidence": {
+    "region": [
+     300,
+     335,
+     350,
+     515
+    ],
+    "measured": "front-baffle strip, y-profile 237.7, 237.5, 237.4, 237.4, 237.4, 237.4, 237.5, 237.5 (falloff 0.2, range 2.1); across x 237.5\u2192235.6. Bookshelf front 238.5\u2192239.4 (range 1.8). Both sit in the view transform's shoulder, where the room's 4% reflection cannot show."
+   },
+   "change": {
+    "setting": "lights.front_sheen",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.85,
+      0.9
+     ],
+     "position": [
+      -0.575,
+      -1.6,
+      0.7
+     ],
+     "target": [
+      -0.575,
+      0.0,
+      0.7
+     ],
+     "strength": 6.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.35,
+       1.05
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The panel is reflection-only and sits 1.6 m in front of the pair, at the mirror direction of both fronts; it covers the floorstander at either 10\u00b0 or 0\u00b0 turn. Each front's clear coat shows a soft top-down sheen: the floorstander's left strip runs from ~243\u2013247 under the eave to ~237.5 at mid-height (falloff 6\u201312, now 0.2), and the bookshelf's upper two-thirds does the same. No channel reaches 254, and the panel is never seen directly or as a shadow on the floor or sideboard.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      300,
+      335,
+      350,
+      515
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     6,
+     12
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "composition",
+   "problem": "From this angle the hero's gable end, the milk-carton signature, is a 13 px grey-mauve sliver, so the carton form reads only from the front.",
+   "evidence": {
+    "region": [
+     500,
+     255,
+     560,
+     345
+    ],
+    "measured": "gable-block in that box: 401 px, x500\u2013513, rgb 98/73/77 (lum 79), washed grey by the grazing view. The right side is 27 px wide (x486\u2013513) against a 184 px front."
+   },
+   "change": {
+    "setting": "products.0.instances.0.rotate_z",
+    "from": 10,
+    "to": 0
+   },
+   "expected": "The floorstander's front turns ~10\u00b0 further from camera. Its side opens from ~27 px to ~45\u201360 px, and the gable end becomes a ~45\u201355 px triangle that reads as the red flavour (g \u226445, r \u226560). The front stays dominant at \u2265165 px, with both drivers fully in view. The side is seen less obliquely, so its sheen softens; with c1 and c2 it should sit around 155\u2013180, still clear of the wall.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      500,
+      255,
+      560,
+      345
+     ]
+    },
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     10,
+     45
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "The shaded walls read neutral-to-lavender grey against the warm oak, so the room feels cold and the specified warm plaster never shows.",
+   "evidence": {
+    "region": [
+     400,
+     20,
+     800,
+     180
+    ],
+    "measured": "rgb 132/130/131 (Lab a +0.9, b \u22120.3): \u0394E2000 4.36 from a warm grey #827D77. It sits next to oak at 148/117/88 and sun patches at 239/233/224; the cool skylight cancels the plaster's warmth (#F1EEE8, Lab b +3.3)."
+   },
+   "change": {
+    "setting": "set.wall.color",
+    "from": "#F1EEE8",
+    "to": "#EDE5D8"
+   },
+   "expected": "The shaded wall shifts to a warm grey of about 130/125/119 (\u0394E2000 \u2264 2.5 to #827D77), within ~5 levels of its current luminance. The sun patches turn cream at about 237/228/212, so the products' neutral whites (238/236/236) read as the cleanest whites in the frame, and wall, oak and products form one palette.",
+   "accept": {
+    "region": [
+     400,
+     20,
+     800,
+     180
+    ],
+    "metric": "delta_e",
+    "hex": "#827D77",
+    "op": "<=",
+    "value": 2.5
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The bookshelf's cast 'earmilk' letters have almost no luminance contrast with the blue plinth, so the brand mark on the second product barely reads.",
+   "evidence": {
+    "region": [
+     860,
+     455,
+     960,
+     500
+    ],
+    "measured": "letters-front-* median 75 (rgb 74/73/98) on a plinth at 70.5 (rgb 3/77/206): 4.5 levels of contrast. The letters mirror the dim front wall 3.8 m away, so a glint lamp can sit in between. (Floorstander letters: 98 on 59.)"
+   },
+   "change": {
+    "setting": "glints.2",
+    "from": "none",
+    "to": {
+     "at": [
+      0.538,
+      -0.119,
+      0.594
+     ],
+     "normal": [
+      -0.105,
+      -0.995,
+      0
+     ],
+     "size_m": 0.25,
+     "power_w": 1.5,
+     "receivers": [
+      "letters-front-0",
+      "letters-front-1",
+      "letters-front-2",
+      "letters-front-3",
+      "letters-front-4",
+      "letters-front-5",
+      "letters-front-6",
+      "letters-front-7"
+     ]
+    }
+   },
+   "expected": "The bookshelf's letters catch the small lamp evenly and read as bright cast metal, median ~130\u2013160 against the plinth's ~71, with crisp edges and no bloom onto the blue. The floorstander's letters mirror the floor in front, so they are unchanged.",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      860,
+      455,
+      960,
+      500
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     110,
+     175
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the floorstander's woofer cone a lighter or less glossy finish so its upper half stops crushing (44% of cone pixels \u22643, median 3.6).",
+   "why": "The cone is the Dayton RSS315HF-4's own black anodised aluminium, which is fixed. Its upper half mirrors the floor just in front of the plinth, where no glint lamp can sit, so this frame's lights cannot reach it. Its lower half already shows the sheen."
+  },
+  {
+   "request": "Shift the roof lacquer colours to pull the rendered red (191/20/22, \u0394E 3.65) and blue (4/69/187, \u0394E 4.11) back toward #C62828 and #1F4FCF.",
+   "why": "The flavour colours are fixed. The drift is the view transform's toe crushing each colour's weakest channel (the blue roof's R renders as 4); the plinths already sit within \u0394E 2.5. More exposure would push the white fronts into clipping, and changing the view transform would cost the highlight roll-off."
+  },
+  {
+   "request": "Enlarge the bookshelf's wordmark or change the letters' finish so it reads at this size.",
+   "why": "The marks' typeface, size and tracking and the letters' finish are fixed; light is the in-scope route (c6)."
+  }
+ ],
+ "score_if_fixed": 7.2
+}
