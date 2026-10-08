@@ -25,7 +25,7 @@
   "clamp": 8,
   "bounces": 12,
   "view": "Standard",
-  "exposure": -0.5,
+  "exposure": 0.0,
   "white_balance_k": 5800.0
  },
  "title": "The back, three-quarter",
@@ -78,7 +78,7 @@
     0.6
    ],
    "irradiance": 2.3,
-   "color": 5600
+   "color": "#FFF7EA"
   },
   "fill": {
    "type": "area",
@@ -151,8 +151,58 @@
     -0.11,
     0.55
    ],
-   "irradiance": 2.3136,
-   "color": 5600
+   "irradiance": 1.1,
+   "color": "#FFF7EA"
+  },
+  "gloss": {
+   "type": "panel",
+   "size_m": [
+    0.6,
+    0.6
+   ],
+   "position": [
+    0.81,
+    0.44,
+    1.69
+   ],
+   "target": [
+    0.41,
+    -0.08,
+    0.94
+   ],
+   "strength": 1.0,
+   "color": "#FFF7EA",
+   "ramp": {
+    "axis": "z",
+    "at_m": [
+     1.55,
+     1.84
+    ],
+    "values": [
+     0,
+     1
+    ]
+   },
+   "diffuse": false
+  },
+  "bg": {
+   "type": "area",
+   "size_m": [
+    2.0,
+    1.2
+   ],
+   "position": [
+    -2.2,
+    1.2,
+    2.2
+   ],
+   "target": [
+    -2.0,
+    3.1,
+    0.8
+   ],
+   "irradiance": 1.0,
+   "color": "#FFF7EA"
   }
  },
  "glints": [
@@ -176,9 +226,9 @@
   },
   {
    "at": [
-    0.344,
-    -0.245,
-    0.22
+    0.487,
+    -0.147,
+    0.215
    ],
    "normal": [
     0.574,
@@ -189,6 +239,23 @@
    "power_w": 1.8649,
    "receivers": [
     "amp-plate"
+   ]
+  },
+  {
+   "at": [
+    0.435,
+    -0.19,
+    0.444
+   ],
+   "normal": [
+    0.574,
+    -0.819,
+    0
+   ],
+   "size_m": 0.04,
+   "power_w": 2,
+   "receivers": [
+    "port-tube"
    ]
   }
  ]

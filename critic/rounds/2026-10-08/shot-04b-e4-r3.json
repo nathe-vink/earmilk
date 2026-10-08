@@ -1,0 +1,376 @@
+{
+ "stage1": {
+  "impression": "A clean, legible three-quarter view of the carton speaker's back on a warm grey sweep. The product sits right of centre with a generous copy field to the left. It reads as a tidy preview render rather than a hero: the white planes sit at nearly one value, the mauve backdrop darkens heavily into the top-left, and the grounding feels faint.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The lit back face reads white: median 228-236 in [890,480,950,615] (now 199.4). Only thin speculars may reach 255.",
+  "The side face sits 20-32 levels below the back face across the corner (falloff on [800,480,950,615] is now -3.0), so the carton reads as a volume, not an outline.",
+  "Both white faces are neutral, within \u0394E2000 2.2 of a grey of their own lightness (now a* +2.6 to +2.8, about \u0394E 4.2-4.5 at the target exposure). The sweep renders its paper's yellow-grey (hue about 86\u00b0) instead of mauve (now hue 45\u00b0).",
+  "The amp connections read as objects: the plate around them measures 50-75 and the sockets 30 or less (now plate 29.4, connectors 30.4, no contrast).",
+  "The lacquer reads as gloss on a broad surface: a graduated reflection across the red roof slope (now flat at 71-73 across its whole width).",
+  "The copy field is calm: the left-to-right falloff on [0,100,700,300] is no steeper than -22 (now -38.4; the top-left corner is 115 against 143 mid-field).",
+  "The port reads as a flared tube: the lip carries a highlight and the port-tube p95 is 80 or more (now 54.4, and that comes only from anti-aliased edge pixels; the lip itself is 25).",
+  "The SHAKE WELL plinth is within \u0394E2000 4 of #C62828 on its back face (now 9.0 at rgb 154,42,42).",
+  "For a spread, the product clears the gutter. Its left edge is now 63 px (4.7% of the frame width) right of the centre line and needs to be at least 100 px away, which takes a lens-shift reframe (camera.shift_x about -0.11) with tests written on parts."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The white body renders as a light lavender-grey, not white: the lit back face is 199 and nothing on the product goes above 209 except 3-px edge highlights, so the whole frame reads underexposed and dull.",
+   "evidence": {
+    "region": [
+     890,
+     480,
+     950,
+     615
+    ],
+    "measured": "lum_median 199.4, rgb (204,197,200). Side face [750,260,865,680] 198.6. Frame p99 207.7, clip 0%. Plinth back [890,760,935,805] rgb (154,42,42), \u0394E2000 9.0 to #C62828, because the red is underexposed by the same amount as the white."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": -0.5,
+    "to": 0.0
+   },
+   "expected": "Back face 199 to ~232. Its diagonal falloff is kept: top-left 209 to ~243, bottom-right 188 to ~220. Plinth back to ~(180,51,51), \u0394E 9.0 to ~4.1. Side triangle (200,39,40) and fin (197,37,38) land within \u0394E 0.5 of #C62828 before c2. Backdrop centre 143 to ~167, floor foreground 165 to ~192. Only the 3-px corner highlight and the fin's white lettering reach 255.",
+   "accept": {
+    "region": [
+     890,
+     480,
+     950,
+     615
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     228,
+     236
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The side face and the back face are the same value, so the carton reads as a cut-out defined only by its outline and a thin corner highlight.",
+   "evidence": {
+    "region": [
+     800,
+     480,
+     950,
+     615
+    ],
+    "measured": "x-profile 194.6, 195.6, 196.6, 197.6, 201.4, 200.4, 198.7, 197.6: side-to-back falloff -3.0. Side median 198.6 against back 199.4. The corner is marked only by the edge-light line (step +10 to +11, 0-2 px wide). The side lamp (az -75, aimed at the side-face centre) puts almost exactly the key's level on the side."
+   },
+   "change": {
+    "setting": "lights.side.irradiance",
+    "from": 2.3136,
+    "to": 1.1
+   },
+   "expected": "With c1, the side face is ~206 against a ~232 back face (about 0.4 stop), giving a corner falloff of about -26. The side keeps its own falloff from ~214 at the top to ~196 at the bottom. The roof's side triangle drops with it to ~(176,33,34), so the left hip shows a clear break in value against the back slope. The floor left of the plinth darkens 5-10 levels.",
+   "accept": {
+    "region": [
+     800,
+     480,
+     950,
+     615
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -32,
+     -20
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The white renders pink-magenta. The key, like every lamp, is a Planckian 5600 K colour, while the 5800 K white point sits on the daylight locus. The cast tints the hero face and turns the sweep mauve.",
+   "evidence": {
+    "region": [
+     890,
+     480,
+     950,
+     615
+    ],
+    "measured": "rgb (204,197,200): R-G +7, B-G +3, CIELAB a* +2.6, b* -0.2. At the target exposure this is \u0394E2000 4.5 to a neutral of equal lightness. The sweep paper #B4AFA7 (a* 0.3, b* 4.7, hue 86\u00b0) renders as (150,141,138), a* 2.8, b* 2.8, hue 45\u00b0, which is the same magenta shift."
+   },
+   "change": {
+    "setting": "lights.key.color",
+    "from": 5600,
+    "to": "#FFF7EA"
+   },
+   "expected": "#FFF7EA is the D58 daylight chromaticity in sRGB, which the 5800 K white point renders neutral. At the c1 level the back face moves from ~(238,230,233) to ~(233,231,232), and \u0394E2000 to #E8E8E8 drops from 4.5 to ~1.7. The sweep is lit mostly by key spill, so it moves from mauve toward its paper's yellow-grey (a* ~2.8 to ~1.5).",
+   "accept": {
+    "region": [
+     890,
+     480,
+     950,
+     615
+    ],
+    "metric": "delta_e",
+    "hex": "#E8E8E8",
+    "op": "<=",
+    "value": 2.2
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The side face carries the same magenta cast. Once the key is corrected (c3), the side would read pinker than the back face beside it.",
+   "evidence": {
+    "region": [
+     750,
+     260,
+     865,
+     680
+    ],
+    "measured": "rgb (204,197,199), a* +2.8, \u0394E2000 4.23 to #CECECE. The side lamp is the largest direct source on this face, about 30% of its light after c2."
+   },
+   "change": {
+    "setting": "lights.side.color",
+    "from": 5600,
+    "to": "#FFF7EA"
+   },
+   "expected": "At its c2 value the side face moves from ~(211,203,205) to ~(207,205,206), and \u0394E2000 to #CECECE drops from ~4.2 to about 2.4 or less. Both faces then share one near-neutral white, with the residual cast from fill, rim and floor bounce at \u0394E 2 or less.",
+   "accept": {
+    "region": [
+     750,
+     260,
+     865,
+     680
+    ],
+    "metric": "delta_e",
+    "hex": "#CECECE",
+    "op": "<=",
+    "value": 2.8
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The amplifier's connections are a must-show and they disappear. They sit on the darkest end of the plate, because the plate's only sheen (glint 1) is centred on its empty left end, and glint 0, which was aimed at them, was skipped.",
+   "evidence": {
+    "region": [
+     1020,
+     686,
+     1062,
+     700
+    ],
+    "measured": "Plate under the round socket and IEC inlet: lum_median 29.4. amp-connectors median 30.4, amp-module 8.2, so contrast is close to zero. Plate x-profile at y 650-700 runs from 46.8 on the left (under glint 1 at px 910,671) down to 23.4 at the connector end."
+   },
+   "change": {
+    "setting": "glints.1.at",
+    "from": [
+     0.344,
+     -0.245,
+     0.22
+    ],
+    "to": [
+     0.487,
+     -0.147,
+     0.215
+    ]
+   },
+   "expected": "The new point is on the plate plane at px (1000,660), just above the connector row; the normal is unchanged and the mirror ray runs clear. The broad sheen moves there: the plate around the connectors goes from 29 to ~52-65 after c1, so the round socket, IEC inlet and optical jack read as dark shapes on a lit ground. The empty left end of the plate drops to ~38. The gold RCA and the LED are unchanged.",
+   "accept": {
+    "region": [
+     1020,
+     686,
+     1062,
+     700
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     50,
+     75
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The lacquer only reads as gloss in 3-px edge highlights. The back slope of the red roof is the largest gloss surface facing the camera, and it is a single flat value.",
+   "evidence": {
+    "region": [
+     870,
+     188,
+     1035,
+     202
+    ],
+    "measured": "x-profile 73.0, 72.7, 72.3, 72.3, 72.0, 71.8, 71.4, 71.7 (falloff 1.3). y-profile of [960,155,1010,228] stays within 71.2-72.4. rgb (181,42,44). The slope mirrors toward direction (0.41, 0.52, 0.75) at 62\u00b0 incidence, where the set has nothing to reflect."
+   },
+   "change": {
+    "setting": "lights.gloss",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.6,
+      0.6
+     ],
+     "position": [
+      0.81,
+      0.44,
+      1.69
+     ],
+     "target": [
+      0.41,
+      -0.08,
+      0.94
+     ],
+     "strength": 1.0,
+     "color": "#FFF7EA",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       1.55,
+       1.84
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The panel sits 1 m out along the slope's mirror direction and covers the slope's whole reflected footprint (z 1.55-1.84). The slope shows a graduated sheen: brightest along the left hip (+25 to +35 lum; G goes from ~51 to ~80 after c1), fading to plain accent red at its right end. Band [870,188,1035,202] reads ~110 on the left to ~89 on the right. The right third of the slope stays within \u0394E 4 of #C62828. Only the hip and eave rounds may pick up a thin line from the panel.",
+   "accept": {
+    "region": [
+     870,
+     188,
+     1035,
+     202
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     12,
+     30
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The copy field falls off heavily toward the frame edge and the top-left corner, so a headline would sit on an uneven, dirty ramp instead of a calm studio wall.",
+   "evidence": {
+    "region": [
+     0,
+     100,
+     700,
+     300
+    ],
+    "measured": "x-profile 113.3, 121.3, 128.5, 135.4, 140.7, 145.5, 148.7, 151.7 (falloff -38.4). Corner [0,0,200,200] median 115.3 against [250,250,550,550] at 142.7. After c1 alone the ramp widens to ~131 \u2192 ~176."
+   },
+   "change": {
+    "setting": "lights.bg",
+    "from": "none",
+    "to": {
+     "type": "area",
+     "size_m": [
+      2.0,
+      1.2
+     ],
+     "position": [
+      -2.2,
+      1.2,
+      2.2
+     ],
+     "target": [
+      -2.0,
+      3.1,
+      0.8
+     ],
+     "irradiance": 1.0,
+     "color": "#FFF7EA"
+    }
+   },
+   "expected": "A broad lamp above and left of the frame, aimed at the left end of the curve and wall. It lifts the far left about 3.5x more than the wall beside the product, and it reaches the product's side face only at about 86\u00b0 off its axis, so the product is unchanged. After c1, band [0,100,700,300] runs ~160 \u2192 ~177 (falloff ~-15) and the top-left corner is ~155. A gentle vignette remains.",
+   "accept": {
+    "region": [
+     0,
+     100,
+     700,
+     300
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -22,
+     -8
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The port reads as a flat black ellipse: its flared lip is as dark as the hole's edge, so nothing shows that it is a tube.",
+   "evidence": {
+    "region": [
+     960,
+     508,
+     976,
+     524
+    ],
+    "measured": "Ring body 25-31, hole 1-4. Only anti-aliased outer-edge pixels reach 58-130. port-tube median 10.0, p95 54.4."
+   },
+   "change": {
+    "setting": "glints.2",
+    "from": "none",
+    "to": {
+     "at": [
+      0.435,
+      -0.19,
+      0.444
+     ],
+     "normal": [
+      0.574,
+      -0.819,
+      0
+     ],
+     "size_m": 0.04,
+     "power_w": 2,
+     "receivers": [
+      "port-tube"
+     ]
+    }
+   },
+   "expected": "A soft crescent on the upper-left of the lip (px ~968,515), peaking at ~120-160 and tapering over about a quarter of the ring; the rubber's 0.7 roughness spreads it. port-tube p95 goes from 54 to ~90-120 and the hole stays at a median of 12 or less. The mirror ray from that point runs clear (to the right, outward and 8\u00b0 down, with the floor 3 m away), so this glint will not be skipped like glint 0.",
+   "accept": {
+    "region": "part:port-tube",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     80,
+     140
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the port flare a satin rubber so its lip holds a crisp highlight of its own.",
+   "why": "The rubber preset most likely also renders the woofer and midrange surrounds, and those materials belong to the named drivers and are fixed. c8 does this job with light instead."
+  },
+  {
+   "request": "Move the product further right, away from a spread's gutter.",
+   "why": "The product's placement is fixed. The only way is a lens-shift reframe (camera.shift_x), which moves every box these tests use, so it is left for a later pass with tests written on parts."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
