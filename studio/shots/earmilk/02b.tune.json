@@ -1,0 +1,89 @@
+[
+ {
+  "change": "c4",
+  "setting": "lights.facesheen.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    12,
+    26
+   ]
+  },
+  "proofs": [
+   [
+    5.0,
+    10.4
+   ],
+   [
+    8.0,
+    2.2
+   ],
+   [
+    1.8537,
+    8.5
+   ]
+  ],
+  "set": 5.0,
+  "passes": false,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "lights.roofsheen.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    12,
+    32
+   ]
+  },
+  "proofs": [
+   [
+    0.15,
+    8.8
+   ],
+   [
+    0.3,
+    14.5
+   ],
+   [
+    0.4974,
+    20.8
+   ]
+  ],
+  "set": 0.4974,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c6",
+  "setting": "glints.0.power_w",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    22,
+    70
+   ]
+  },
+  "proofs": [
+   [
+    2.0,
+    146.8
+   ],
+   [
+    4.0,
+    179.5
+   ],
+   [
+    1.3333,
+    121.3
+   ]
+  ],
+  "set": 1.3333,
+  "passes": false,
+  "moves_the_test": true
+ }
+]

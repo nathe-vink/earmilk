@@ -1,0 +1,89 @@
+[
+ {
+  "change": "c5",
+  "setting": "glints.0.power_w",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    165,
+    215
+   ]
+  },
+  "proofs": [
+   [
+    0.3,
+    185.8
+   ],
+   [
+    1.0,
+    238.6
+   ],
+   [
+    0.3557,
+    193.1
+   ]
+  ],
+  "set": 0.3557,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c8",
+  "setting": "glints.1.power_w",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    45,
+    110
+   ]
+  },
+  "proofs": [
+   [
+    0.15,
+    68.8
+   ],
+   [
+    0.5,
+    97.6
+   ],
+   [
+    0.2557,
+    79.0
+   ]
+  ],
+  "set": 0.2557,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c6",
+  "setting": "lights.fill_right.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    170,
+    198
+   ]
+  },
+  "proofs": [
+   [
+    0.6,
+    189.3
+   ],
+   [
+    0.9,
+    210.1
+   ],
+   [
+    0.5236,
+    183.8
+   ]
+  ],
+  "set": 0.5236,
+  "passes": true,
+  "moves_the_test": true
+ }
+]
