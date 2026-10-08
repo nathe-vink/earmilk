@@ -67,7 +67,13 @@ def main():
           '"diffuse": false}` (strength the peak radiance; the ramp along a world axis; diffuse false: seen only in '
           'reflections). A glint (a highlight exactly '
           'where a surface would mirror a small lamp into the camera) is `glints.N`: `{"at": [x, y, z], "normal": [nx, ny, nz], '
-          '"size_m": 0.05, "power_w": 2, "receivers": ["part name"]}`.', '',
+          '"size_m": 0.05, "power_w": 2, "receivers": ["part name"]}`. In a room, dress the set by adding a prop at '
+          '`set.props.N` (N one past the last), e.g. `{"kind": "rug", "position": [x, y], "rotate_z": 0, "size": [2.0, 1.4], '
+          '"color": "#C9C1B4"}`; position is its centre on the floor (a frame\'s on its wall). The kinds and their keys: '
+          'rug (size [w, d], color); table (size [w, d, h], color); books (colors [hex, ...], z: the height they lie on); '
+          'sideboard (size [w, d, h], color, turntable true/false); vase (height, z, color, branches); lamp (height, '
+          'shade); sofa (size [w, d, h], color); curtain (size [w, h], folds, depth, color, translucent); frame (size '
+          '[w, h], z, frame, art, artwork). To take one out, set `set.props.N.off` to true.', '',
           '| setting | now | unit | range | meaning |', '|---|---|---|---|---|']
     seen = set()
     for path, val in S.flatten(sh):

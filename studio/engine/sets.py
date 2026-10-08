@@ -132,7 +132,8 @@ def room(bpy, spec, mats):
     if wa:
         objs += _wainscot(bpy, walls, wins, wa)
     for i, p in enumerate(spec.get('props', [])):
-        objs += prop(bpy, f'prop{i}-{p["kind"]}', p, mats)
+        if p and not p.get('off') and p.get('kind'):    # a prop taken out (`off`) keeps its slot, so later indices hold
+            objs += prop(bpy, f'prop{i}-{p["kind"]}', p, mats)
     cards(bpy, spec)
     return objs
 
