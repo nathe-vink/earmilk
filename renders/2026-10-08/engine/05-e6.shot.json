@@ -1,0 +1,252 @@
+{
+ "size": [
+  2000,
+  1000
+ ],
+ "product": {
+  "def": "studio/products/earmilk.json",
+  "flavour": "whole",
+  "instances": [
+   {
+    "position": [
+     -1.625,
+     0.125,
+     0
+    ],
+    "rotate_z": -22,
+    "flavour": "whole"
+   },
+   {
+    "position": [
+     -0.975,
+     0.075,
+     0
+    ],
+    "rotate_z": -22,
+    "flavour": "two"
+   },
+   {
+    "position": [
+     -0.325,
+     0.025,
+     0
+    ],
+    "rotate_z": -22,
+    "flavour": "skim"
+   },
+   {
+    "position": [
+     0.325,
+     -0.025,
+     0
+    ],
+    "rotate_z": -22,
+    "flavour": "matcha"
+   },
+   {
+    "position": [
+     0.975,
+     -0.075,
+     0
+    ],
+    "rotate_z": -22,
+    "flavour": "chocolate"
+   },
+   {
+    "position": [
+     1.625,
+     -0.125,
+     0
+    ],
+    "rotate_z": -22,
+    "flavour": "oat"
+   }
+  ]
+ },
+ "materials": {},
+ "render": {
+  "samples": 192,
+  "adaptive": 0.015,
+  "denoise": true,
+  "clamp": 8,
+  "bounces": 12,
+  "view": "Khronos PBR Neutral",
+  "exposure": -0.55,
+  "white_balance_k": 5800
+ },
+ "title": "Six flavours",
+ "set": {
+  "kind": "sweep",
+  "color": "#808080",
+  "width": 12,
+  "front": 8,
+  "depth": 1.8,
+  "radius": 1.5,
+  "height": 6
+ },
+ "camera": {
+  "position": [
+   1.705,
+   -8.68,
+   3.135
+  ],
+  "target": [
+   0.0,
+   0.0,
+   0.5
+  ],
+  "lens_mm": 70,
+  "level": true
+ },
+ "sky": {
+  "kind": "gradient",
+  "strength": 0.5,
+  "zenith": "#FFFFFF",
+  "horizon": "#DAD6D0",
+  "ground": "#6A665F"
+ },
+ "lights": {
+  "key": {
+   "type": "area",
+   "size_m": [
+    3.0,
+    2.0
+   ],
+   "orbit": {
+    "azimuth_deg": -40,
+    "elevation_deg": 40,
+    "distance_m": 4.0
+   },
+   "target": [
+    0,
+    0,
+    0.6
+   ],
+   "irradiance": 2.6,
+   "color": "#FFF3E1"
+  },
+  "fill": {
+   "type": "area",
+   "size_m": [
+    3.0,
+    3.0
+   ],
+   "orbit": {
+    "azimuth_deg": 35,
+    "elevation_deg": 15,
+    "distance_m": 5.0
+   },
+   "target": [
+    0,
+    0,
+    0.5
+   ],
+   "irradiance": 1.5739,
+   "color": "#FFF7EA",
+   "specular": 0.3
+  },
+  "cone_scrim": {
+   "type": "panel",
+   "size_m": [
+    12,
+    4.6
+   ],
+   "position": [
+    0,
+    -4.0,
+    2.75
+   ],
+   "target": [
+    0,
+    0,
+    2.75
+   ],
+   "strength": 6.7,
+   "color": 5800,
+   "diffuse": false,
+   "receivers": [
+    "woofer-cone",
+    "woofer-cap"
+   ],
+   "_why": "the critic's reflection card for the cones (c4), sized from the reflection probe: the cones' lower halves mirror the front sky at azimuth -85 to 28 and elevation 2 to 58, which the 8 x 3 m card covered 4.8 % of"
+  },
+  "cone_card": {
+   "type": "area",
+   "size_m": [
+    8,
+    3
+   ],
+   "orbit": {
+    "azimuth_deg": -30,
+    "elevation_deg": 35,
+    "distance_m": 6
+   },
+   "irradiance": 3.5,
+   "color": 5800,
+   "specular": 1.0,
+   "diffuse": 0
+  },
+  "roof_sheen": {
+   "type": "panel",
+   "size_m": [
+    4.6,
+    0.7
+   ],
+   "position": [
+    -0.91,
+    0.23,
+    2.43
+   ],
+   "target": [
+    -0.81,
+    0.97,
+    1.77
+   ],
+   "strength": 1.5286,
+   "color": "#FFF7EA",
+   "ramp": {
+    "axis": "z",
+    "at_m": [
+     2.28,
+     2.58
+    ],
+    "values": [
+     0.1,
+     1.0
+    ]
+   },
+   "diffuse": false
+  },
+  "floor_card": {
+   "type": "panel",
+   "size_m": [
+    7.1,
+    3.4
+   ],
+   "position": [
+    -2.05,
+    -1.65,
+    0.1
+   ],
+   "target": [
+    -2.05,
+    -1.6,
+    1.1
+   ],
+   "strength": 1.5476,
+   "color": "#FFF7EA",
+   "ramp": {
+    "axis": "y",
+    "at_m": [
+     -3.35,
+     0.05
+    ],
+    "values": [
+     1.0,
+     0.6
+    ]
+   },
+   "diffuse": false
+  }
+ }
+}

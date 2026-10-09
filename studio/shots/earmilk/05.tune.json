@@ -1,0 +1,89 @@
+[
+ {
+  "change": "c1",
+  "setting": "lights.fill.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    172,
+    196
+   ]
+  },
+  "proofs": [
+   [
+    1.8,
+    189.2
+   ],
+   [
+    2.4,
+    203.0
+   ],
+   [
+    1.5739,
+    184.3
+   ]
+  ],
+  "set": 1.5739,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "lights.roof_sheen.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    8,
+    26
+   ]
+  },
+  "proofs": [
+   [
+    0.6,
+    4.0
+   ],
+   [
+    1.2,
+    12.4
+   ],
+   [
+    1.5286,
+    16.8
+   ]
+  ],
+  "set": 1.5286,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "lights.floor_card.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    135,
+    175
+   ]
+  },
+  "proofs": [
+   [
+    0.55,
+    81.4
+   ],
+   [
+    1.0,
+    114.6
+   ],
+   [
+    1.5476,
+    143.0
+   ]
+  ],
+  "set": 1.5476,
+  "passes": true,
+  "moves_the_test": true
+ }
+]

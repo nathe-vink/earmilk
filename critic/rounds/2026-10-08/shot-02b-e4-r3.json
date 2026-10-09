@@ -1,0 +1,264 @@
+{
+ "stage1": {
+  "impression": "A moody golden-hour frame with a strong idea: low window light rakes a teal wainscot and throws the carton's hard shadow beside it, and the render is clean. But the empty peach patch cut off by the top edge competes with the speaker, whose lit face is a flat warm white crossed by a soft smudge of a bar shadow and whose shadow side is a uniform slate-blue slab; the floor and right third sink to murk, the earmilk mark reads lavender on red, and a thin vertical moulding line sticks up out of the silhouette like an antenna.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The silhouette sits on a clean field, with no moulding line touching or crossing the carton's shadow. Now a black line 74 levels deep at x\u2248641 rises out of the right shoulder (y 222-310), and a stile seam at x\u2248590 splits the inside.",
+  "Brand colours are true under the golden light. The roof's front slope is within \u0394E 5 of #C62828 (now 16.1). The wordmark reads as warm metal, not periwinkle [127,147,205]. The white front is one warm white, with no lavender top-left (now b 246 > r 238).",
+  "The white body's shadow side reads as white in shade: b\u2212r \u2264 15 at lum ~70 (now [59,70,95], b\u2212r 36).",
+  "The window light reads as hard low sun: bar shadows on the product and the wall have a full-depth core and edges of 6 px or less. Now they are all penumbra: 11 px 10-90 on the baffle, 10-14 px on the wall with a 34-lum core.",
+  "Shadows hold detail for print. The right wainscot and the oak floor are at 18-20 lum or more, with panelling and grain visible (now 15.3 and 12.9, and the floor right of the speaker 6.5), while the silhouette keeps about 5:1 against its sunlit surround."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "A wainscot stile runs through the silhouette: its moulding casts a 3-4 px black line that rises 88 px out of the shadow's right shoulder like an antenna, and a second seam splits the inside of the shadow, so the outline no longer reads as the carton alone.",
+   "evidence": {
+    "region": [
+     620,
+     270,
+     665,
+     302
+    ],
+    "measured": "x-profile across the sunlit strip above the shoulder at x 638-644: 104.6, 91.6, 17.6, 12.3, 30.0, 85.7, 103.8; largest step -74.1/px. The line runs at x\u2248641 from y 222 to the shoulder at y 310, and the inner seam at x\u2248590 runs from y 310 to 597. Projected onto the back wall (the camera model matches the speaker's corners within 6 px), the stile spans x -0.47 to -0.33 m, centred on the wall at -0.40, inside the silhouette's span of -0.90 to -0.24 m: two panels with a centre stile."
+   },
+   "change": {
+    "setting": "set.wainscot.panel_w",
+    "from": 1.9,
+    "to": 1.5
+   },
+   "expected": "Three panels across the 4.8 m wall put the stiles near x = -1.2 m (image x\u2248300, at the window patch's left edge) and +0.4 m (behind the speaker). The whole silhouette then sits on one panel field: the strip above the shoulder reads flat at 100-106, no step is over 3/px, and there is no seam inside the shadow. If the engine always centres a stile on the wall, this test fails and the shadow has to be moved instead.",
+   "accept": {
+    "region": [
+     620,
+     270,
+     665,
+     302
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "<=",
+    "value": 10
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The face-sheen panel is D65 white under a 3700 K white balance, so everything that mirrors it renders blue: the cast-metal wordmark reads periwinkle, the top-left of the white front turns lavender against the peach below, and the mid trim ring goes blue.",
+   "evidence": {
+    "region": [
+     862,
+     355,
+     900,
+     420
+    ],
+    "measured": "Front top-left median [238,229,246] (b > r), against [242,214,201] below the bar at [862,600,878,700]. Inverting PBR Neutral to scene-linear, the excess is (0.161, 0.306, 0.627), which is the shape D65 white takes at WB 3700 K (0.31, 0.55, 1.0). Letters (part:letters-*) median [127,147,205], \u0394E2000 24.1 vs #C8C8C8; mid-ring [78,93,128]."
+   },
+   "change": {
+    "setting": "lights.facesheen.color",
+    "from": "#FFFFFF",
+    "to": 3400
+   },
+   "expected": "Front top-left about [247,224,209] (b from 246 to ~209), one warm white with the lower face. Letters turn a warm silver near [160,145,142] (b_median ~140-155) that reads as metal on the red. Mid ring turns neutral. The sheen's top-to-bottom gradient keeps its strength.",
+   "accept": {
+    "region": [
+     862,
+     355,
+     900,
+     420
+    ],
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     200,
+     226
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The roof-sheen panel is also D65 white, so the gloss on the roof's front slope lays blue over the red lacquer and the slope reads magenta-pink beside the true-red fin.",
+   "evidence": {
+    "region": [
+     845,
+     292,
+     870,
+     322
+    ],
+    "measured": "Front slope median [189,60,99], \u0394E2000 16.1 vs #C62828 (the wider [815,295,868,335] reads [187,42,78], \u0394E 12.1). Fin [810,256,940,276] reads [221,19,35], \u0394E 4.1. In scene-linear the slope fits 0.68 \u00d7 fin + 0.07 \u00d7 (D65 at WB 3700 K)."
+   },
+   "change": {
+    "setting": "lights.roofsheen.color",
+    "from": "#FFFFFF",
+    "to": 3200
+   },
+   "expected": "Slope about [195,60,55], \u0394E \u2248 3-4 vs #C62828 (~1.5 over the wider slope), the same hue as the fin. The sheen stays as a warm gradient up toward the fin.",
+   "accept": {
+    "region": [
+     845,
+     292,
+     870,
+     322
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 5
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The 5000 K fill renders strongly blue under the 3700 K white balance (b:r \u2248 2 in linear), so the white carton's shadow side reads as slate-blue plastic and the left of the room goes navy, though that side faces the sunlit back wall and would take a warm bounce.",
+   "evidence": {
+    "region": [
+     765,
+     400,
+     850,
+     650
+    ],
+    "measured": "Side-left median [59,70,95] (b\u2212r 36) at lum 69.4. Left wainscot shade [20,220,290,600] reads [5,28,37]; upper-left wall shade [0,0,290,150] reads [34,38,54]. Floor [0,780,600,900] reads [29,9,4] at lum 12.9: blue light on orange oak leaves a high minimum channel, which the PBR Neutral toe subtracts from every channel."
+   },
+   "change": {
+    "setting": "lights.fill.color",
+    "from": 5000,
+    "to": 4000
+   },
+   "expected": "Side-left about [67,72,79] at the same lum ~69 (b\u2212r from 36 to ~12): white in soft, slightly cool shade. The wainscot shade's red channel rises from 5 to ~10, and the floor in front lifts a few levels as the toe crushes it less.",
+   "accept": {
+    "region": [
+     765,
+     400,
+     850,
+     650
+    ],
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     68,
+     86
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The window-bar shadow across the baffle is all penumbra with no core, so between the drivers it reads as a soft blue smear rather than a bar; the bars on the wall are just as soft, and the low sun looks hazy rather than hard.",
+   "evidence": {
+    "region": [
+     993,
+     440,
+     999,
+     510
+    ],
+    "measured": "y-profile in 5 px bins: 218, 210, 172, 115, 64, 122, 177, 211, 217. That is ~35 px of ramp with no flat core; largest step 16.4/px, 10-90 width 11 px. Wall bars at [660,200,664,250] and [380,500,384,560] have 10-90 widths of 10-14 px, and the [380,480,384,600] core only reaches 33.7 against a sunlit 88.6."
+   },
+   "change": {
+    "setting": "sun.angle_deg",
+    "from": 0.7,
+    "to": 0.3
+   },
+   "expected": "The penumbra roughly halves. The baffle band gets a flat core at the shade level (~60-70) with 4-5 px edges (step ~30-35/px). Wall bar shadows reach full depth with ~5-7 px edges, and the silhouette's edges stay at 1-2 px. Below ~0.2\u00b0 the edges turn CG-hard (step > 48).",
+   "accept": {
+    "region": [
+     993,
+     440,
+     999,
+     510
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     24,
+     48
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "The oak floor, the bottom quarter of the frame, is a near-black red-brown with no visible grain, and the low-sun streak that should carry the warm light across it barely registers.",
+   "evidence": {
+    "region": [
+     0,
+     780,
+     600,
+     900
+    ],
+    "measured": "Floor median 12.9 [29,9,4]. Right of the speaker [1020,690,1350,760] reads 6.5 [21,3,2]; [0,700,300,780] has crush 1.1%; the streak under the patch [330,700,740,780] has a median of 24.3."
+   },
+   "change": {
+    "setting": "set.floor.base",
+    "from": "#6E4B30",
+    "to": "#8C6644"
+   },
+   "expected": "A medium-dark oak: the floor rises to ~20 with plank grain readable and the streak to ~33, while the floor stays the darkest band of the frame under the speaker.",
+   "accept": {
+    "region": [
+     0,
+     780,
+     600,
+     900
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     17,
+     26
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The sky-lit right third is a navy-black slab with its red channel at 1-2, so its panelling cannot be read and it will print as solid ink.",
+   "evidence": {
+    "region": [
+     1030,
+     220,
+     1340,
+     600
+    ],
+    "measured": "Right wainscot median 15.3 [2,18,29]; wall [1150,260,1340,450] 12.0 [1,14,24]; upper right [760,0,1350,170] 15.0."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 1.2,
+    "to": 1.7
+   },
+   "expected": "Right wainscot rises to ~21 with its mouldings faintly readable, and the glow behind the speaker goes from 38 to ~48. The silhouette interior rises from 13.4 to \u2264 19, so it stays about 5:1 against its sunlit surround (92-109). The front face gains 3 levels at most.",
+   "accept": {
+    "region": [
+     1030,
+     220,
+     1340,
+     600
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     19,
+     27
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A satin or brushed finish on the cast 'earmilk' letters",
+   "why": "Polished letters take the colour of whatever lamp falls in their reflection lobe; here that is the D65 sheen panel, giving [127,147,205]. The marks and their metal are product spec, so c2 corrects the lamp instead."
+  }
+ ],
+ "score_if_fixed": 7.5
+}

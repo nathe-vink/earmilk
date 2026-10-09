@@ -1,0 +1,4254 @@
+{
+ "materials": {
+  "pulp": {
+   "preset": "paper",
+   "color": "#b9b4a9",
+   "roughness": 0.92,
+   "sheen": 0.15,
+   "bump": {
+    "type": "noise",
+    "scale": 0.9,
+    "strength": 0.9
+   }
+  },
+  "rubber": {
+   "preset": "rubber",
+   "color": "#2a2826"
+  },
+  "glass": {
+   "preset": "glass",
+   "color": "#f6f3ec",
+   "roughness": 0.015
+  },
+  "getter": {
+   "preset": "metal_polished",
+   "color": "#a7a39c",
+   "roughness": 0.12
+  },
+  "anode": {
+   "preset": "metal_satin",
+   "color": "#55555a",
+   "roughness": 0.45
+  },
+  "mica": {
+   "preset": "satin_plastic",
+   "color": "#d8d0bd",
+   "roughness": 0.55
+  },
+  "heater": {
+   "preset": "emissive",
+   "color": "#ff7a2c",
+   "emission": 60.0
+  },
+  "bakelite": {
+   "preset": "gloss_plastic",
+   "color": "#2b1c13",
+   "roughness": 0.25
+  },
+  "egg_white": {
+   "preset": "satin_plastic",
+   "color": "#f2eee5",
+   "roughness": 0.55,
+   "sheen": 0.1
+  },
+  "egg_brown": {
+   "preset": "satin_plastic",
+   "color": "#b27a4c",
+   "roughness": 0.55,
+   "sheen": 0.1
+  }
+ },
+ "objects": [
+  {
+   "id": "crate-12",
+   "type": "mesh",
+   "file": "out/stl/crate-12.stl",
+   "material": "pulp",
+   "translate": [
+    0.0,
+    0,
+    0
+   ],
+   "smooth": 40
+  },
+  {
+   "id": "feet-12",
+   "type": "mesh",
+   "file": "out/stl/feet-12.stl",
+   "material": "rubber",
+   "translate": [
+    0.0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "v12-0-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    -185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-0-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    -185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-0-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    -185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-0-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    -185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-0-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    -185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-0-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    -185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-1-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    -111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-1-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    -111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-1-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    -111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-1-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    -111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-1-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    -111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-1-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    -111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-2-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    -37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-2-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    -37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-2-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    -37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-2-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    -37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-2-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    -37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-2-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    -37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-3-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-3-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-3-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-3-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-3-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-3-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    37.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-4-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-4-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-4-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-4-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-4-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-4-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    111.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-5-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-5-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-5-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-5-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-5-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-5-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    185.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-6-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    -185.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-6-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    -185.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-6-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    -185.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-6-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    -185.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-6-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    -185.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-6-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    -185.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-7-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    -111.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-7-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    -111.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-7-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    -111.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-7-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    -111.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-7-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    -111.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-7-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    -111.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-8-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    -37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-8-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    -37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-8-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    -37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-8-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    -37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-8-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    -37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-8-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    -37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-9-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-9-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-9-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-9-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-9-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v12-9-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    37.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "knob-12-10",
+   "type": "mesh",
+   "file": "out/stl/knob-brown.stl",
+   "material": "egg_brown",
+   "translate": [
+    111.0,
+    -37.0,
+    77.0
+   ],
+   "rotate": [
+    0,
+    0,
+    0
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "knob-12-11",
+   "type": "mesh",
+   "file": "out/stl/knob-white.stl",
+   "material": "egg_white",
+   "translate": [
+    185.0,
+    -37.0,
+    77.0
+   ],
+   "rotate": [
+    0,
+    0,
+    0
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "crate-6",
+   "type": "mesh",
+   "file": "out/stl/crate-6.stl",
+   "material": "pulp",
+   "translate": [
+    -477.0,
+    0,
+    0
+   ],
+   "smooth": 40
+  },
+  {
+   "id": "feet-6",
+   "type": "mesh",
+   "file": "out/stl/feet-6.stl",
+   "material": "rubber",
+   "translate": [
+    -477.0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "v6-0-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    -551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-0-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    -551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-0-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    -551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-0-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    -551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-0-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    -551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-0-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    -551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-1-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    -477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-1-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    -477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-1-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    -477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-1-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    -477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-1-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    -477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-1-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    -477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-2-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    -403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-2-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    -403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-2-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    -403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-2-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    -403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-2-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    -403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-2-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    -403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-3-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    -551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-3-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    -551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-3-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    -551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-3-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    -551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-3-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    -551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-3-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    -551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-4-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    -477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-4-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    -477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-4-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    -477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-4-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    -477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-4-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    -477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v6-4-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    -477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "knob-6-5",
+   "type": "mesh",
+   "file": "out/stl/knob-white.stl",
+   "material": "egg_white",
+   "translate": [
+    -403.0,
+    -37.0,
+    77.0
+   ],
+   "rotate": [
+    0,
+    0,
+    0
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "crate-24",
+   "type": "mesh",
+   "file": "out/stl/crate-24.stl",
+   "material": "pulp",
+   "translate": [
+    588.0,
+    0,
+    0
+   ],
+   "smooth": 40
+  },
+  {
+   "id": "feet-24",
+   "type": "mesh",
+   "file": "out/stl/feet-24.stl",
+   "material": "rubber",
+   "translate": [
+    588.0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "v24-0-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    403.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-0-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    403.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-0-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    403.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-0-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    403.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-0-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    403.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-0-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    403.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -45
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-1-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    477.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-1-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    477.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-1-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    477.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-1-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    477.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-1-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    477.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-1-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    477.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -8
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-2-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    551.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-2-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    551.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-2-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    551.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-2-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    551.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-2-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    551.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-2-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    551.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    29
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-3-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    625.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-3-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    625.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-3-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    625.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-3-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    625.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-3-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    625.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-3-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    625.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -24
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-4-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    699.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-4-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    699.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-4-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    699.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-4-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    699.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-4-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    699.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-4-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    699.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    13
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-5-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    773.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-5-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    773.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-5-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    773.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-5-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    773.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-5-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    773.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-5-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    773.0,
+    111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -40
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-6-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-6-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-6-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-6-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-6-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-6-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    403.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -3
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-7-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-7-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-7-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-7-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-7-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-7-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    477.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    34
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-8-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-8-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-8-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-8-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-8-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-8-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    551.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -19
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-9-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    625.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-9-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    625.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-9-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    625.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-9-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    625.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-9-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    625.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-9-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    625.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    18
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-10-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    699.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -35
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-10-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    699.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -35
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-10-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    699.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -35
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-10-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    699.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -35
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-10-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    699.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -35
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-10-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    699.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -35
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-11-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    773.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    2
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-11-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    773.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    2
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-11-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    773.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    2
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-11-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    773.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    2
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-11-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    773.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    2
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-11-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    773.0,
+    37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    2
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-12-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    403.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    39
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-12-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    403.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    39
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-12-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    403.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    39
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-12-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    403.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    39
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-12-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    403.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    39
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-12-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    403.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    39
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-13-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -14
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-13-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -14
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-13-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -14
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-13-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -14
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-13-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -14
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-13-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    477.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -14
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-14-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    23
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-14-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    23
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-14-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    23
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-14-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    23
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-14-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    23
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-14-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    551.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    23
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-15-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    625.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -30
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-15-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    625.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -30
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-15-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    625.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -30
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-15-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    625.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -30
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-15-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    625.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -30
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-15-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    625.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -30
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-16-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    699.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    7
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-16-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    699.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    7
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-16-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    699.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    7
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-16-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    699.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    7
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-16-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    699.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    7
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-16-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    699.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    7
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-17-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    773.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    44
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-17-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    773.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    44
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-17-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    773.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    44
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-17-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    773.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    44
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-17-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    773.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    44
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-17-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    773.0,
+    -37.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    44
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-18-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    403.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -9
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-18-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    403.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -9
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-18-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    403.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -9
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-18-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    403.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -9
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-18-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    403.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -9
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-18-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    403.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -9
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-19-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    477.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    28
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-19-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    477.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    28
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-19-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    477.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    28
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-19-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    477.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    28
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-19-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    477.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    28
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-19-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    477.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    28
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-20-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    551.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -25
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-20-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    551.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -25
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-20-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    551.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -25
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-20-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    551.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -25
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-20-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    551.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -25
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-20-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    551.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    -25
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-21-glass",
+   "type": "mesh",
+   "file": "out/stl/valve-glass.stl",
+   "material": "glass",
+   "translate": [
+    625.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    12
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-21-getter",
+   "type": "mesh",
+   "file": "out/stl/valve-getter.stl",
+   "material": "getter",
+   "translate": [
+    625.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    12
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-21-anode",
+   "type": "mesh",
+   "file": "out/stl/valve-anode.stl",
+   "material": "anode",
+   "translate": [
+    625.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    12
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-21-mica",
+   "type": "mesh",
+   "file": "out/stl/valve-mica.stl",
+   "material": "mica",
+   "translate": [
+    625.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    12
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-21-heater",
+   "type": "mesh",
+   "file": "out/stl/valve-heater.stl",
+   "material": "heater",
+   "translate": [
+    625.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    12
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "v24-21-base",
+   "type": "mesh",
+   "file": "out/stl/valve-base.stl",
+   "material": "bakelite",
+   "translate": [
+    625.0,
+    -111.0,
+    73.0
+   ],
+   "rotate": [
+    0,
+    0,
+    12
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "knob-24-22",
+   "type": "mesh",
+   "file": "out/stl/knob-brown.stl",
+   "material": "egg_brown",
+   "translate": [
+    699.0,
+    -111.0,
+    77.0
+   ],
+   "rotate": [
+    0,
+    0,
+    0
+   ],
+   "smooth": 60
+  },
+  {
+   "id": "knob-24-23",
+   "type": "mesh",
+   "file": "out/stl/knob-white.stl",
+   "material": "egg_white",
+   "translate": [
+    773.0,
+    -111.0,
+    77.0
+   ],
+   "rotate": [
+    0,
+    0,
+    0
+   ],
+   "smooth": 60
+  }
+ ],
+ "shots": {
+  "hero": {
+   "size": [
+    1800,
+    1200
+   ],
+   "samples": 192,
+   "rig": {
+    "type": "sweep",
+    "color": "#d9d4cb",
+    "key": {
+     "azimuth": -50,
+     "elevation": 55,
+     "power": 0.8
+    },
+    "lights": [
+     {
+      "azimuth": -150,
+      "elevation": 25,
+      "size": [
+       0.3,
+       1.6
+      ],
+      "distance": 2.2,
+      "power": 1.1
+     },
+     {
+      "azimuth": 140,
+      "elevation": 30,
+      "size": [
+       0.3,
+       1.6
+      ],
+      "distance": 2.2,
+      "power": 0.8
+     }
+    ]
+   },
+   "floor_z": -5.8,
+   "camera": {
+    "azimuth": -28,
+    "elevation": 30,
+    "lens": 85,
+    "fill": 0.78
+   },
+   "hide": [
+    "crate-6",
+    "feet-6",
+    "v6-0-glass",
+    "v6-0-getter",
+    "v6-0-anode",
+    "v6-0-mica",
+    "v6-0-heater",
+    "v6-0-base",
+    "v6-1-glass",
+    "v6-1-getter",
+    "v6-1-anode",
+    "v6-1-mica",
+    "v6-1-heater",
+    "v6-1-base",
+    "v6-2-glass",
+    "v6-2-getter",
+    "v6-2-anode",
+    "v6-2-mica",
+    "v6-2-heater",
+    "v6-2-base",
+    "v6-3-glass",
+    "v6-3-getter",
+    "v6-3-anode",
+    "v6-3-mica",
+    "v6-3-heater",
+    "v6-3-base",
+    "v6-4-glass",
+    "v6-4-getter",
+    "v6-4-anode",
+    "v6-4-mica",
+    "v6-4-heater",
+    "v6-4-base",
+    "knob-6-5",
+    "crate-24",
+    "feet-24",
+    "v24-0-glass",
+    "v24-0-getter",
+    "v24-0-anode",
+    "v24-0-mica",
+    "v24-0-heater",
+    "v24-0-base",
+    "v24-1-glass",
+    "v24-1-getter",
+    "v24-1-anode",
+    "v24-1-mica",
+    "v24-1-heater",
+    "v24-1-base",
+    "v24-2-glass",
+    "v24-2-getter",
+    "v24-2-anode",
+    "v24-2-mica",
+    "v24-2-heater",
+    "v24-2-base",
+    "v24-3-glass",
+    "v24-3-getter",
+    "v24-3-anode",
+    "v24-3-mica",
+    "v24-3-heater",
+    "v24-3-base",
+    "v24-4-glass",
+    "v24-4-getter",
+    "v24-4-anode",
+    "v24-4-mica",
+    "v24-4-heater",
+    "v24-4-base",
+    "v24-5-glass",
+    "v24-5-getter",
+    "v24-5-anode",
+    "v24-5-mica",
+    "v24-5-heater",
+    "v24-5-base",
+    "v24-6-glass",
+    "v24-6-getter",
+    "v24-6-anode",
+    "v24-6-mica",
+    "v24-6-heater",
+    "v24-6-base",
+    "v24-7-glass",
+    "v24-7-getter",
+    "v24-7-anode",
+    "v24-7-mica",
+    "v24-7-heater",
+    "v24-7-base",
+    "v24-8-glass",
+    "v24-8-getter",
+    "v24-8-anode",
+    "v24-8-mica",
+    "v24-8-heater",
+    "v24-8-base",
+    "v24-9-glass",
+    "v24-9-getter",
+    "v24-9-anode",
+    "v24-9-mica",
+    "v24-9-heater",
+    "v24-9-base",
+    "v24-10-glass",
+    "v24-10-getter",
+    "v24-10-anode",
+    "v24-10-mica",
+    "v24-10-heater",
+    "v24-10-base",
+    "v24-11-glass",
+    "v24-11-getter",
+    "v24-11-anode",
+    "v24-11-mica",
+    "v24-11-heater",
+    "v24-11-base",
+    "v24-12-glass",
+    "v24-12-getter",
+    "v24-12-anode",
+    "v24-12-mica",
+    "v24-12-heater",
+    "v24-12-base",
+    "v24-13-glass",
+    "v24-13-getter",
+    "v24-13-anode",
+    "v24-13-mica",
+    "v24-13-heater",
+    "v24-13-base",
+    "v24-14-glass",
+    "v24-14-getter",
+    "v24-14-anode",
+    "v24-14-mica",
+    "v24-14-heater",
+    "v24-14-base",
+    "v24-15-glass",
+    "v24-15-getter",
+    "v24-15-anode",
+    "v24-15-mica",
+    "v24-15-heater",
+    "v24-15-base",
+    "v24-16-glass",
+    "v24-16-getter",
+    "v24-16-anode",
+    "v24-16-mica",
+    "v24-16-heater",
+    "v24-16-base",
+    "v24-17-glass",
+    "v24-17-getter",
+    "v24-17-anode",
+    "v24-17-mica",
+    "v24-17-heater",
+    "v24-17-base",
+    "v24-18-glass",
+    "v24-18-getter",
+    "v24-18-anode",
+    "v24-18-mica",
+    "v24-18-heater",
+    "v24-18-base",
+    "v24-19-glass",
+    "v24-19-getter",
+    "v24-19-anode",
+    "v24-19-mica",
+    "v24-19-heater",
+    "v24-19-base",
+    "v24-20-glass",
+    "v24-20-getter",
+    "v24-20-anode",
+    "v24-20-mica",
+    "v24-20-heater",
+    "v24-20-base",
+    "v24-21-glass",
+    "v24-21-getter",
+    "v24-21-anode",
+    "v24-21-mica",
+    "v24-21-heater",
+    "v24-21-base",
+    "knob-24-22",
+    "knob-24-23"
+   ]
+  },
+  "family": {
+   "size": [
+    2000,
+    1000
+   ],
+   "samples": 160,
+   "rig": {
+    "type": "sweep",
+    "color": "#d9d4cb",
+    "key": {
+     "azimuth": -50,
+     "elevation": 55,
+     "power": 0.8
+    },
+    "lights": [
+     {
+      "azimuth": -150,
+      "elevation": 25,
+      "size": [
+       0.3,
+       1.6
+      ],
+      "distance": 2.2,
+      "power": 1.1
+     },
+     {
+      "azimuth": 140,
+      "elevation": 30,
+      "size": [
+       0.3,
+       1.6
+      ],
+      "distance": 2.2,
+      "power": 0.8
+     }
+    ]
+   },
+   "floor_z": -5.8,
+   "camera": {
+    "azimuth": -20,
+    "elevation": 34,
+    "lens": 70,
+    "fill": 0.85
+   }
+  }
+ }
+}

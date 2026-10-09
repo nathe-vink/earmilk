@@ -1,0 +1,265 @@
+{
+ "stage1": {
+  "impression": "A red-and-white milk-carton speaker in a sunlit, minimal room: the product reads at once and the low sun throwing its silhouette on the wall is a good story, but the white front is a flat, near-clipped slab, the floor contact looks weak and the wall shadow seems to float detached from the speaker. The set (plain plank floor, stool-like table with a twig vase, a lot of blank wall) reads as stock CG with some smearing, and the product is small in a frame that is mostly empty wall.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The white front carries a smooth sheen of at least 5 levels from eave to mid-face with no channel at 254; now it is one value, 243.4 to 241.9 down the clean strip [504,332,512,655] (falloff 1.5), so the lacquer reads as card.",
+  "All seven letters of the wordmark evenly lit and legible: letter p5 >= 150 and under 3% of letter pixels clipped; now p5 99, p95 253, 39.7% clipped, with r-m-i fused into one white blob (252, blue 255) between a dull e (129) and k (133).",
+  "The white body reads white in shade: the side within dE2000 3 of a neutral grey of its lightness; now [183,172,168], R-B +15, dE2000 5.29 vs #ACACAC.",
+  "Shade is neutral to cool against warm sun: the speaker's wall shadow within dE2000 4.5 of neutral; now [186,171,164], hue 53 deg, chroma 7.0, dE2000 7.26 vs #B4B4B4, pinker and more chromatic than the sun patch (hue 75 deg, chroma 5.6).",
+  "A bright, airy key: the unlit back wall median >= 206 (now 199.5 on [300,20,1300,200], 190.8 under the ceiling) while the sun patch stays >= 25 levels above it and the front white <= 247.",
+  "The floor reads as oak, not laminate: >= 14 levels of plank-to-plank variation in an evenly lit patch (now lum_range 9.7 on [0,740,330,800]; neighbouring planks differ by 2 to 8 levels).",
+  "The props look art-directed: the side table is a square-legged stool in the floor's own honey tone (leg median 108, top 121 against floor about 142), so it reads as a default asset."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The wordmark's 6 cm glint lamp covers only the middle letters, so r-m-i blow out into one white blob while e and k stay dull grey and the brand name does not read.",
+   "evidence": {
+    "region": [
+     421,
+     664,
+     477,
+     686
+    ],
+    "measured": "part letters-front-*: median per letter e 129, a 233, r 252, m 252, i 248, l 198, k 133 (r, m, i at blue 255); x-profile across the word 130, 178, 252, 252, 252, 209, 131; p5 99.1, p95 252.9, clip_pct 39.7"
+   },
+   "change": {
+    "setting": "glints.0.size_m",
+    "from": 0.06,
+    "to": 0.2
+   },
+   "expected": "One broad, soft highlight across all seven letters at the same power (about 11x lower radiance per area): letter medians within about 170-230, none clipped (letter clip_pct under 3), letter p5 from 99 to 150-215; the cast letters read as one satin-metal wordmark.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "lum_p5",
+    "op": "between",
+    "value": [
+     150,
+     215
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The white lacquered front is a single value from eave to plinth, so it reads as a paper card: its clear coat mirrors only the dim floor and lower left wall (mirror ray to azimuth -55 deg, 9 deg downward) and the sunlit white sits in the view transform's shoulder.",
+   "evidence": {
+    "region": [
+     504,
+     332,
+     512,
+     655
+    ],
+    "measured": "clean white strip between woofer and front/side corner: profile 243.4, 243.5, 243.5, 243.5, 242.8, 242.7, 241.9, 241.9 (falloff 1.5, p5-p95 241.1-243.8); left strip [391,330,398,630] 244.4 to 242.8; the whole white front (front-baffle in [389,325,520,650]) median 243.6, clip 0"
+   },
+   "change": {
+    "setting": "lights.lacquer_ramp",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.5,
+      0.9
+     ],
+     "position": [
+      -0.73,
+      -0.6,
+      0.45
+     ],
+     "target": [
+      -0.047,
+      -0.189,
+      0.475
+     ],
+     "strength": 4.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.1,
+       0.75
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "A sky sheen in the lacquer, brightest under the eave and gone by mid-face: on the strip the top bin rises to 247-250 while the bottom bins stay about 242 (falloff 5-8), the left strip shows the same ramp, and no front pixel reaches 254. The panel sits 0.8 m out along the front's mirror ray and is kept clear of the sunbeam that lights the front; being reflection-only it must cast no shadow anywhere in the frame.",
+   "accept": {
+    "region": [
+     504,
+     332,
+     512,
+     655
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     5,
+     8
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The white body's shaded side reads beige-pink rather than white in shade, because the neutral fill is outweighed by warm bounce from the honey floor and the sunlit wall.",
+   "evidence": {
+    "region": [
+     520,
+     330,
+     610,
+     650
+    ],
+    "measured": "side-right within this box: rgb median [183, 172, 168] (R-B +15; Lab a +3.2, b +3.5), dE2000 5.29 vs neutral #ACACAC of the same lightness, luminance median 173.8; the plinth's shaded red [530,665,600,690] has drifted orange to [141, 24, 9] (dE2000 4.6 vs the spec hue at that lightness, #8D1C1C)"
+   },
+   "change": {
+    "setting": "lights.fill_right.color",
+    "from": "#FFFFFF",
+    "to": "#D6F0FF"
+   },
+   "expected": "A cool, sky-like fill cancels the pink-orange bounce: the side within dE2000 3 of neutral, R-B within +/-5, luminance median still 165-180; the plinth side's blue channel rises from 9 toward its green, back toward the spec red's hue.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      520,
+      330,
+      610,
+      650
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#ACACAC",
+    "op": "between",
+    "value": [
+     0,
+     3.0
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The room's shade is pinker and more chromatic than its sunlight, which inverts the warm-sun, cool-shade contrast that makes light read as morning sun.",
+   "evidence": {
+    "region": [
+     760,
+     420,
+     860,
+     560
+    ],
+    "measured": "the speaker's shadow on the wall: rgb [186, 171, 164], Lab a +4.2 b +5.5 (hue 53 deg, chroma 7.0), dE2000 7.05 vs #AEAEAE and 7.26 vs #B4B4B4; the sun patch [950,380,1100,520] is [246, 237, 228], hue 75 deg, chroma 5.6; the unlit wall beside the speaker [340,330,385,500] is [210, 206, 209], a magenta grey"
+   },
+   "change": {
+    "setting": "sky.horizon",
+    "from": "#E4ECF3",
+    "to": "#D0ECF8"
+   },
+   "expected": "The skylight through the windows takes a cool, slightly cyan cast at nearly the same luminance (Y 0.80 vs 0.83) and pulls the shade toward neutral: the wall shadow's R-B from +22 to <= +8 and within dE2000 4.5 of neutral grey, while the sun patch stays cream (R-B >= +12) because the sun dominates it.",
+   "accept": {
+    "region": [
+     760,
+     420,
+     860,
+     560
+    ],
+    "metric": "delta_e",
+    "hex": "#B4B4B4",
+    "op": "between",
+    "value": [
+     0,
+     4.5
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The unlit back wall is a dull mid-light grey, so the room reads dim rather than bright and airy; exposure cannot lift it because the sunlit white front already sits at 243.6 in the shoulder, so the shade has to come up through the sky.",
+   "evidence": {
+    "region": [
+     300,
+     20,
+     1300,
+     200
+    ],
+    "measured": "upper wall median 199.5 (p5 192.7, p95 207.2), 190.8 just under the ceiling ([600,0,900,30]); sun patch 238.3; front white 243.6"
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 8,
+    "to": 9.5
+   },
+   "expected": "The shade lifts more than the sunlight: upper wall median 206-214, sun patch about 240 and still >= 25 above the wall, the speaker's wall shadow about 180 (the silhouette still >= 55 below the patch), front white <= 246.",
+   "accept": {
+    "region": [
+     300,
+     20,
+     1300,
+     200
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     206,
+     214
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "material",
+   "problem": "The oak floor reads as printed laminate: neighbouring planks differ by only 2 to 8 levels and the grain does not show at this scale.",
+   "evidence": {
+    "region": [
+     0,
+     740,
+     330,
+     800
+    ],
+    "measured": "evenly lit floor patch: lum_range 9.7 (p5 141.1, p95 150.8), profile flat at 145-148; foreground column [1180,720,1200,900] plank steps 149.8 to 141.8 to 134.6, the largest 8 levels"
+   },
+   "change": {
+    "setting": "set.floor.plank_contrast",
+    "from": 0.4,
+    "to": 0.7
+   },
+   "expected": "Visible plank-to-plank variation of about 6-14 levels without striping; the patch's lum_range 14-24 with its median unchanged at about 145.",
+   "accept": {
+    "region": [
+     0,
+     740,
+     330,
+     800
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     14,
+     24
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Widen the 3 mm shadow lines under the gable and over the plinth (or deepen them into a visible dark groove) so the gable, body and plinth read as assembled parts.",
+   "why": "At this frame's roughly 0.34 px/mm they render sub-pixel: the gable-to-white junction steps red 80 -> 191 -> 242 and the white-to-plinth junction 241 -> 168 -> 70 with no dark line, so the carton reads as one moulded block and loses its cabinet-maker detail; the lines are spec geometry, and the sun cannot be raised to shade them without dropping the speaker out of the window's beam."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

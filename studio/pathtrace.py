@@ -208,8 +208,23 @@ def main():
         o.location = (o.location.x + t[0] * MM, o.location.y + t[1] * MM, o.location.z + t[2] * MM)
         o.rotation_euler = Euler([math.radians(v) for v in r], 'XYZ')
 
+    loaded = {}
+
     def load_mesh(spec):
         f = (base / spec['file']).resolve()
+        key = (str(f), spec.get('material', 'default'), spec.get('smooth', 30))
+        if key in loaded:
+            # a file already loaded with this material and shading: linked duplicates of its objects, so a crate of 24
+            # valves holds one valve in memory and Cycles instances it
+            new = []
+            for src, (loc, rot, scl) in loaded[key]:
+                o = bpy.data.objects.new(src.name, src.data)
+                for c in src.users_collection:
+                    c.objects.link(o)
+                o.location = loc; o.rotation_euler = rot; o.scale = scl
+                place(o, spec)
+                new.append(o)
+            return new
         before = set(bpy.data.objects)
         ext = f.suffix.lower()
         if ext == '.stl':
@@ -221,6 +236,7 @@ def main():
         else:
             raise SystemExit(f'unsupported mesh file {f}')
         new = [o for o in bpy.data.objects if o not in before and o.type == 'MESH']
+        loaded[key] = []
         for o in new:
             if ext == '.stl':
                 o.scale = (MM, MM, MM)
@@ -229,6 +245,7 @@ def main():
             if spec.get('smooth', 30) is not False:
                 bpy.ops.object.shade_smooth_by_angle(angle=math.radians(spec.get('smooth', 30)))
             o.select_set(False)
+            loaded[key].append((o, (o.location.copy(), o.rotation_euler.copy(), o.scale.copy())))
             place(o, spec)
         return new
 
