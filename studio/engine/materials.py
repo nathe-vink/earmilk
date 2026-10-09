@@ -126,10 +126,11 @@ def make(bpy, name, preset, overrides=None, bevel_mm=0.0):
     return m
 
 
-def ply_section(bpy, name, color, roughness, axis, lo, thickness, plies):
+def ply_section(bpy, name, color, roughness, axis, lo, thickness, plies, per_layer=None):
     """The cut face of a plywood panel: `plies` veneers across its `thickness` along object axis `axis` (0, 1, 2,
     from `lo`, in the object's own units), alternating long grain (the colour) and end grain (darker, warmer), a
-    thin dark glue line between each, and a faint grain noise. Baltic birch is about 1.4 mm a ply (13 in 18 mm)."""
+    thin dark glue line between each, and a faint grain noise. Baltic birch is about 1.4 mm a ply (13 in 18 mm).
+    `per_layer`: a block glued up from sheets of that many plies each, every sheet starting on long grain again."""
     m = bpy.data.materials.new(name); m.use_nodes = True
     nt = m.node_tree; b = nt.nodes['Principled BSDF']; L = nt.links
     b.inputs['Roughness'].default_value = roughness
@@ -144,7 +145,10 @@ def ply_section(bpy, name, color, roughness, axis, lo, thickness, plies):
         return n.outputs['Value']
     # t runs 0 to plies across the panel's thickness
     t = math('MULTIPLY', math('SUBTRACT', sep.outputs['XYZ'[axis]], lo), plies / thickness)
-    parity = math('MODULO', math('FLOOR', t), 2.0)                     # 0 long grain, 1 end grain
+    ply = math('FLOOR', t)
+    if per_layer:
+        ply = math('MODULO', ply, float(per_layer))                     # the ply's place in its own sheet
+    parity = math('MODULO', ply, 2.0)                                   # 0 long grain, 1 end grain
     f = math('FRACT', t)
     edge = math('MINIMUM', f, math('SUBTRACT', 1.0, f))                 # distance to the nearest glue line, in plies
     glue = math('SUBTRACT', 1.0, math('MINIMUM', math('DIVIDE', edge, 0.07), 1.0))

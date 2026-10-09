@@ -426,11 +426,11 @@ def place(bpy, pdef, templates, shot, root):
             ob.matrix_world = T @ Matrix.Translation(Vector(off)) if off else T
             objs.append(ob); part_of[ob.name] = pname
     if prod.get('cutaway'):
-        cutaway(bpy, prod['cutaway'], instances, objs)
+        cutaway(bpy, prod['cutaway'], instances, objs, pdef.get('laminated', {}))
     return objs, part_of
 
 
-def cutaway(bpy, spec, instances, objs):
+def cutaway(bpy, spec, instances, objs, laminated=None):
     """Cut every part that crosses a box away (a boolean difference per part, the product's frame, metres), and paint
     the cut faces with one section material, the way a technical illustration shows the inside:
 
@@ -439,7 +439,10 @@ def cutaway(bpy, spec, instances, objs):
 
     A part wholly inside the box is hidden; parts matching "skip" are left whole (a cable drawn whole in front of
     the cut reads better than half a cable). A cut face takes the colour of the first "sections" rule its part
-    matches (wood shows wood, a printed part its resin), else the part's own material, as a bought part's would."""
+    matches (wood shows wood, a printed part its resin), else the part's own material, as a bought part's would.
+    A plywood panel's cut face shows its veneers; a block the product file lists under `laminated` ({part pattern:
+    sheet thickness, mm}) shows the plies of the sheets it was glued up from, stacked up the vertical."""
+    laminated = laminated or {}
     import bmesh
     x0, y0, z0, x1, y1, z1 = spec['box_m']
     rules = spec.get('sections') or [{'match': '*', 'color': spec.get('color', '#D9C29B')}]
@@ -501,10 +504,19 @@ def cutaway(bpy, spec, instances, objs):
             rule = next((r for r in rules if _match(pname, r['match'])), None)
             if sec is not None and rule.get('preset', 'birch') == 'birch' and rule.get('plies', True):
                 plate = _plate(ob)
+                lay = next((v for k_, v in laminated.items() if _match(pname, k_)), None)
                 if plate:          # a plywood panel's cut face shows its veneers
                     axis, plo_, th_local, th_mm = plate
                     sec = M.ply_section(bpy, f'section plies {pname}', rule['color'], rule.get('roughness', 0.7), axis, plo_,
                                         th_local, max(3, int(round(th_mm / 1.4)) | 1))
+                elif lay:          # a block glued up from plywood sheets: each sheet's 13 plies, stacked up the vertical
+                    Rm = ob.matrix_world.to_3x3()
+                    k_ = max(range(3), key=lambda j: abs(Rm.col[j].normalized().z))
+                    bb = [Vector(c) for c in ob.bound_box]
+                    lo_k = min(c[k_] for c in bb); d_k = max(c[k_] for c in bb) - lo_k
+                    th_mm = d_k * Rm.col[k_].length * 1000.0
+                    sec = M.ply_section(bpy, f'section layers {pname}', rule['color'], rule.get('roughness', 0.7), k_, lo_k,
+                                        d_k, max(13, int(round(th_mm / lay * 13))), per_layer=13)
             if sec is None:
                 ob.data = new
                 for sl in ob.material_slots:

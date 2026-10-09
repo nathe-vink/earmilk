@@ -45,7 +45,7 @@
     ]
    },
    {
-    "match": "mid-frame|mid-cone|mid-cap|mid-surround|mid-motor",
+    "match": "mid-frame|mid-cone|mid-cap|mid-surround|mid-motor|mid-magnet|mid-coil|mid-spider",
     "offset_m": [
      0,
      -0.31,
@@ -61,7 +61,7 @@
     ]
    },
    {
-    "match": "woofer-frame|woofer-cone|woofer-cap|woofer-surround|woofer-motor",
+    "match": "woofer-frame|woofer-cone|woofer-cap|woofer-surround|woofer-motor|woofer-magnet|woofer-coil|woofer-spider",
     "offset_m": [
      0,
      -0.41,

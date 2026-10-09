@@ -35,6 +35,7 @@ def main():
     ap.add_argument('--samples', type=int); ap.add_argument('--scale', type=float, default=1.0)
     ap.add_argument('--crop', type=float, nargs=4)
     ap.add_argument('--masks', action='store_true')
+    ap.add_argument('--masks-only', action='store_true', help='the report and the part masks for an image already rendered (a mask pass that died)')
     ap.add_argument('--threads', type=int, default=0)
     ap.add_argument('--no-render', action='store_true', help='apply and save the shot (--save-shot) without rendering')
     ap.add_argument('--probe', action='append', default=[], help='what a part mirrors into the camera (probe.py); no render')
@@ -215,7 +216,12 @@ def main():
         return
     scene.render.filepath = str(out.resolve())
     t1 = time.time()
-    bpy.ops.render.render(write_still=True)
+    if a.masks_only:
+        if not out.exists():
+            ap.error(f'--masks-only: {out} is not rendered yet')
+        a.masks = True
+    else:
+        bpy.ops.render.render(write_still=True)
     t2 = time.time()
 
     report = {'shot': a.shot, 'image': str(out), 'seconds': {'build': round(t1 - t0, 1), 'render': round(t2 - t1, 1)},

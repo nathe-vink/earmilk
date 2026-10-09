@@ -107,13 +107,46 @@ def cone_driver(spec, detail=24):
     out['cap'] = _revolve_profile([(cap_r * 1.08, cone_depth)] + cap + capb)
     # motor: the magnet and its plates, behind the basket
     md, mh = spec['magnet_d'] / 2, spec['magnet_h']
-    a0 = spec['depth'] - mh
-    out['motor'] = _revolve_profile([(0.0, a0), (md, a0), (md, spec['depth'] - 3), (md - 3, spec['depth']), (0.0, spec['depth'])])
+    D = spec['depth']
+    a0 = D - mh
+    if detail <= 6:     # line drawings: the motor's outline
+        out['motor'] = _revolve_profile([(0.0, a0), (md, a0), (md, D - 3), (md - 3, D), (0.0, D)])
+        return out, dict(r_eff=R_eff, r_cone=r_cone, r_surround=r_sur, roll_h=rh)
+    # the motor as it is built, so a section reads as a driver (PROPORTIONED where datasheets are silent): a steel yoke
+    # (back plate and pole piece, vented), a ferrite ring, a steel top plate, the voice coil in the gap between plate
+    # and pole on a former from the cone's neck, and a corrugated spider from the former to the basket's seat
+    r_coil = spec.get('coil_d', min(spec['cap_d'] * 0.9, spec['magnet_d'] * 0.45)) / 2
+    w, cl = 0.4, 0.35                                   # the winding's half thickness, the gap's clearance each side
+    rp, pin = r_coil - w - cl, r_coil + w + cl          # the pole's radius, the top plate's bore
+    tp = bp = max(4.0, 0.2 * mh)                        # top plate, back plate
+    rv = max(3.0, 0.28 * rp)                            # the pole's vent
+    rt = 0.82 * md                                      # the top plate, a little smaller than the magnet
+    rmi = pin + 4.0                                     # the magnet's bore
+    yoke = _revolve_profile([(rv, a0), (rp, a0), (rp, D - bp), (md, D - bp), (md, D - 2), (md - 2, D), (rv, D)])
+    plate = _revolve_profile([(pin, a0), (rt, a0), (rt, a0 + tp), (pin, a0 + tp)])
+    out['motor'] = yoke + plate
+    out['magnet'] = _revolve_profile([(rmi, a0 + tp), (md, a0 + tp), (md, D - bp), (rmi, D - bp)])
+    neck = cone_depth
+    out['coil'] = _revolve_profile([(r_coil - 0.15, neck), (rc_in, neck), (rc_in, neck + 1.0), (r_coil + 0.15, neck + 1.0),
+                                    (r_coil + 0.15, a0 - 1.5), (r_coil + w, a0 - 1.5), (r_coil + w, a0 + tp + 1.5),
+                                    (r_coil - w, a0 + tp + 1.5), (r_coil - w, a0 - 1.5), (r_coil - 0.15, a0 - 1.5)])
+    # the spider sits a little in front of the top plate; its rim on the basket's inner wall there
+    a_s = a0 - max(6.0, 0.15 * mh)
+    (r1, b1), (r2, b2) = (fi + 3, ft + 3), (md + 3, a0 - 7)
+    r_out = r1 + (r2 - r1) * (a_s - b1) / (b2 - b1) - 0.6
+    r_in = r_coil + 0.15
+    amp, th, nroll = (1.2 if spec['frame_od'] > 250 else 0.8), 0.8, 5
+    us = [i / 60 for i in range(61)]
+    front = [(r_in + (r_out - r_in) * u, a_s - th / 2 + amp * math.sin(2 * math.pi * nroll * u)) for u in us]
+    rear = [(r, a + th) for (r, a) in reversed(front)]
+    out['spider'] = _revolve_profile(front + rear)
     return out, dict(r_eff=R_eff, r_cone=r_cone, r_surround=r_sur, roll_h=rh)
 
 
-def dome_tweeter(spec):
-    """A dome tweeter as the waveguide sees it: dome and roll at the throat, a small flange, the body behind."""
+def dome_tweeter(spec, detail=24):
+    """A dome tweeter as the waveguide sees it: dome and roll at the throat, a small flange, the body behind. With
+    `detail` above 6 the body is a cup with the motor inside it (PROPORTIONED): a steel top plate behind the dome, a
+    neodymium ring, a back plate and pole piece, the voice coil in the gap, and the rear chamber behind."""
     rd = spec['dome_d'] / 2; sw = spec['surround_w']; h = spec['dome_h']
     out = {}
     dome = [(rd * math.sin(th), -h * math.cos(th)) for th in [math.pi / 2 * i / 16 for i in range(17)]]   # apex to rim
@@ -121,10 +154,24 @@ def dome_tweeter(spec):
     c = rd + sw / 2
     roll = [(c + sw / 2 * math.cos(th), -0.5 * sw * math.sin(th)) for th in [math.pi * i / 12 for i in range(13)]]   # outer to inner
     out['surround'] = _revolve_profile(roll + [(rd - 0.3, 0.8), (rd + sw + 0.5, 0.8)])
-    fo = spec['flange_d'] / 2
-    out['frame'] = _revolve_profile([(rd + sw + 0.2, 0.0), (fo, 0.0), (fo, spec['flange_t']), (spec['body_d'] / 2, spec['flange_t']),
-                                     (spec['body_d'] / 2, spec['flange_t'] + spec['body_depth']), (0.0, spec['flange_t'] + spec['body_depth']),
-                                     (0.0, 1.5), (rd + sw + 0.2, 1.5)])
+    fo, ft, bo = spec['flange_d'] / 2, spec['flange_t'], spec['body_d'] / 2
+    L = ft + spec['body_depth']; fi = rd + sw + 0.2
+    if detail <= 6:
+        out['frame'] = _revolve_profile([(fi, 0.0), (fo, 0.0), (fo, ft), (bo, ft), (bo, L), (0.0, L), (0.0, 1.5), (fi, 1.5)])
+        return out, dict(r_radiating=rd + sw)
+    wall = 1.5
+    out['frame'] = _revolve_profile([(fi, 0.0), (fo, 0.0), (fo, ft), (bo, ft), (bo, L), (0.0, L), (0.0, L - wall),
+                                     (bo - wall, L - wall), (bo - wall, ft), (fi, ft)])
+    r_coil = rd - 0.5; w, cl = 0.25, 0.2
+    rp, pin = r_coil - w - cl, r_coil + w + cl
+    rv = max(1.5, 0.25 * rp)
+    mt, bt = max(3.0, 0.25 * spec['body_depth']), max(2.0, 0.12 * spec['body_depth'])
+    ro = bo - wall - 0.5
+    out['motor'] = (_revolve_profile([(pin, 1.0), (fi - 0.5, 1.0), (fi - 0.5, ft), (pin, ft)]) +                 # top plate
+                    _revolve_profile([(rv, 1.0), (rp, 1.0), (rp, ft + mt), (ro, ft + mt), (ro, ft + mt + bt), (rv, ft + mt + bt)]))
+    out['magnet'] = _revolve_profile([(pin + 2.5, ft), (ro, ft), (ro, ft + mt), (pin + 2.5, ft + mt)])
+    out['coil'] = _revolve_profile([(r_coil - 0.15, 0.5), (r_coil + 0.15, 0.5), (r_coil + 0.15, 1.0), (r_coil + w, 1.0),
+                                    (r_coil + w, ft + 0.8), (r_coil - w, ft + 0.8), (r_coil - w, 1.0), (r_coil - 0.15, 1.0)])
     return out, dict(r_radiating=rd + sw)
 
 
@@ -156,7 +203,7 @@ def driver_parts(role, spec, centre, axis='-y', ring_d=None, flange_recess=3.0, 
     if spec['kind'] == 'cone':
         local, info = cone_driver(spec, detail)
     else:
-        local, info = dome_tweeter(spec)
+        local, info = dome_tweeter(spec, detail)
     parts = {f'{role}-{k}': place(v, centre, axis, flange_recess) for k, v in local.items()}
     if ring_d:
         r_out = ring_d / 2

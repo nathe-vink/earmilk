@@ -163,6 +163,23 @@
   "insert": {
    "preset": "paint",
    "color": "$insert"
+  },
+  "ferrite": {
+   "preset": "satin_paint",
+   "color": "#2C2C2E",
+   "roughness": 0.8,
+   "specular": 0.2
+  },
+  "spider": {
+   "preset": "satin_paint",
+   "color": "#BFA77A",
+   "roughness": 0.9,
+   "specular": 0.1
+  },
+  "copper": {
+   "preset": "metal",
+   "color": "#B87333",
+   "roughness": 0.35
   }
  },
  "assign": [
@@ -201,6 +218,22 @@
   {
    "match": "tweeter-dome",
    "material": "dome"
+  },
+  {
+   "match": "tweeter-magnet",
+   "material": "nickel"
+  },
+  {
+   "match": "*-magnet",
+   "material": "ferrite"
+  },
+  {
+   "match": "*-spider",
+   "material": "spider"
+  },
+  {
+   "match": "*-coil",
+   "material": "copper"
   },
   {
    "match": "*-frame",
@@ -371,5 +404,8 @@
    "within_mm": 1.5,
    "refine": 2
   }
- ]
+ ],
+ "laminated": {
+  "gable-block": 18.0
+ }
 }

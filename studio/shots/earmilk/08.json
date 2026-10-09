@@ -34,7 +34,7 @@
      "preset": "plastic"
     },
     {
-     "match": "woofer-motor|mid-motor|tweeter-frame",
+     "match": "woofer-motor|mid-motor|tweeter-motor|tweeter-frame",
      "color": "#8C8F93",
      "preset": "metal",
      "roughness": 0.38
