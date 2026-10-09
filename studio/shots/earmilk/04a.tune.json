@@ -201,5 +201,144 @@
   "set": 0.1667,
   "passes": false,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "camera.polariser.strength",
+  "test": {
+   "metric": "lum_range",
+   "op": "between",
+   "value": [
+    2,
+    9
+   ]
+  },
+  "proofs": [
+   [
+    0.85,
+    7.0
+   ],
+   [
+    0.97,
+    5.6
+   ]
+  ],
+  "set": 0.97,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-04a-e8-r5.json",
+  "shot_sha": "7dd415c4bd2945b016a3e7df5c62da2eabe76122"
+ },
+ {
+  "change": "c2",
+  "setting": "lights.roof_ramp.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    8,
+    18
+   ]
+  },
+  "proofs": [
+   [
+    3.0,
+    2.0
+   ],
+   [
+    6.0,
+    5.8
+   ],
+   [
+    11.6842,
+    11.4
+   ]
+  ],
+  "set": 11.6842,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-04a-e8-r5.json",
+  "shot_sha": "9af9aa9c75d028a4765e116327ca6454db626432"
+ },
+ {
+  "change": "c3",
+  "setting": "glints.letters_sheen.size_m",
+  "test": {
+   "metric": "lum_range",
+   "op": "between",
+   "value": [
+    24,
+    45
+   ]
+  },
+  "proofs": [
+   [
+    0.1,
+    153.2
+   ],
+   [
+    0.16,
+    134.6
+   ],
+   [
+    0.28,
+    14.9
+   ]
+  ],
+  "set": 0.28,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-04a-e8-r5.json",
+  "shot_sha": "0e3d437d370b5d00a905a36294fe0fa17fb86583"
+ },
+ {
+  "change": "c4",
+  "setting": "lights.kicker_l.irradiance",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    236,
+    246
+   ]
+  },
+  "proofs": [
+   [
+    1.6,
+    237.0
+   ],
+   [
+    2.8,
+    243.1
+   ],
+   [
+    2.3869,
+    241.8
+   ]
+  ],
+  "set": 2.3869,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-04a-e8-r5.json",
+  "shot_sha": "f506012e8f1905df48c2791641b77c548d4876c0"
  }
 ]
