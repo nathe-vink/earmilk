@@ -1,0 +1,237 @@
+{
+ "stage1": {
+  "impression": "A strong mood idea: the carton's crisp silhouette falls into a patch of window light on teal panelling. The frame is underlit and murky, though: the sunlit white face reads light grey, the 'golden' beam reads dull beige, and the right third and the floor sink toward black. The product is undercut by a cold blue sheen in the woofer cone, a blue-grey stripe across the face between the drivers, and a pool of light on the top-left wall that competes with the beam.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Sunlit white front face [838,600,850,690] at lum 200-222 with a visibly warm cast, R/B 1.22-1.35 (now 170.3, RGB 182/168/159, R/B 1.14); top-left of the face [840,355,875,395] no higher than 245, clip_pct 0",
+  "Woofer cone reads as black anodised metal: [885,625,935,660] b_median <= 18 and not above r_median (now RGB 16/23/42, a blue fan)",
+  "The window beam is the only light on the back wall: upper-left wall [5,5,285,150] at most 0.4x the sunlit plaster [310,80,680,140] (now 80.4 vs 118.0, 0.68x)",
+  "No hard glazing-bar shadow across the product: [893,490,907,510] within 15 levels of the face around it (now 117.3 against 178-189)",
+  "Shadows keep the room's colour: far-right wainscot [1150,250,1340,440] >= 18 with g_median > r_median (now 9.1, RGB 3/11/8); floor [0,720,700,900] >= 36 (now 30.2); below_40_pct <= 55 (now 68.1)",
+  "Sunlit reds within dE2000 5 of #C62828: front plinth [850,752,975,768] and gable front slope [790,300,845,340] (now 9.96 and 8.79)",
+  "The floor's sun streak reads as warm light: the lit band at least 1.4x the floor beside it on row y830-850 (now 31-34 vs 27-29, about 1.15x)",
+  "The lower front face [838,575,852,700] falls off 8-15 levels toward the plinth instead of holding one value (profile now 172.2 to 170.3)"
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The whole frame is underexposed: the sun-struck white face reads light grey, the sunlit reds go dark crimson, and the teal panelling and oak floor in shade sink toward black.",
+   "evidence": {
+    "region": [
+     838,
+     600,
+     850,
+     690
+    ],
+    "measured": "Sunlit white strip lum_median 170.3, RGB 182/168/159. Frame median 29.4, with 68.1% of pixels below 40 and lum_p99 186. Far-right wainscot [1150,250,1340,440] 9.1. Floor [0,720,700,900] 30.2. Sunlit reds R 153-160 (front plinth dE 9.96 to #C62828). clip_pct 0, so there is headroom."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 1.2,
+    "to": "+0.65"
+   },
+   "expected": "Front strip 170 to ~211. Sunlit plaster [310,80,680,140] 118 to ~150. Sunlit wainscot [305,330,392,520] 61 to ~87. Silhouette [420,420,630,590] 16 to ~23, so it still sits at about 3.8x below its lit surround. Floor 30 to ~37. Far-right wainscot 9 to ~14. Face top-left [840,355,875,395] 206 to at most 242 on the PBR Neutral shoulder, clip_pct 0. Sunlit reds R ~200 (dE to #C62828 from ~9 to ~4).",
+   "accept": {
+    "region": [
+     838,
+     600,
+     850,
+     690
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     200,
+     222
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Glint 0 paints a saturated blue fan on the lower woofer cone, so the black anodised aluminium cone reads as a blue cone (close to the 2% flavour's accent) and adds an off-palette cold hue to a warm frame.",
+   "evidence": {
+    "region": [
+     885,
+     625,
+     935,
+     660
+    ],
+    "measured": "RGB median 16/23/42 (b is 2.6x r), lum_p95 58.3. Glint 0 (0.4 m lamp, 0.3111 W, receivers woofer-cone, at [0.03,-0.164,0.255]) projects at about pixel (899,638), inside this fan. The upper cone [905,560,945,590] is 12/4/1."
+   },
+   "change": {
+    "setting": "glints.0.power_w",
+    "from": 0.3111,
+    "to": 0
+   },
+   "expected": "The blue fan goes: [885,625,935,660] reads about 14/9/6, b_median <= 15 with r >= b, and the cone reads as black metal. The dust-cap highlight [882,582,902,600] (lum_p95 165) stays, because the glint only reaches woofer-cone. If glints gain a colour key, a 3000 K glint at about 0.3 W would bring back a warm sheen.",
+   "accept": {
+    "region": [
+     885,
+     625,
+     935,
+     660
+    ],
+    "metric": "b_median",
+    "op": "<=",
+    "value": 18
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The low sun is only slightly warmer than the white point, so the must-show warm light reads beige on the plaster and near-neutral on the white face.",
+   "evidence": {
+    "region": [
+     838,
+     600,
+     850,
+     690
+    ],
+    "measured": "Sunlit white R/B 1.14 (182/159), dE2000 12.66 to the warm white #E8D0B5. Sunlit plaster [310,80,680,140] 134/115/100, R/B 1.34, against the plaster's own 1.17 (#A89E8F). The sun #FFBD66 (about 3070 K) is only ~55 mired warmer than the 3700 K white point. Shade side [740,360,825,420] 102/103/114 is already cool."
+   },
+   "change": {
+    "setting": "sun.color",
+    "from": "#FFBD66",
+    "to": 2600
+   },
+   "expected": "Sunlit white R/B 1.14 to ~1.27, strip ~230/207/183, dE to #E8D0B5 from 12.7 to <= 3. Sunlit plaster R/B ~1.6, amber instead of beige. The shade side keeps R/B <= 0.95, so the warm/cool split reads. Sunlit red gains G roughly equal to B instead of B > G.",
+   "accept": {
+    "region": [
+     838,
+     600,
+     850,
+     690
+    ],
+    "metric": "delta_e",
+    "hex": "#E8D0B5",
+    "op": "<=",
+    "value": 3.0
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The fill floods the back-left wall, which faces away from the window, making it the second-brightest wall area, competing with the beam and blurring the patch's left edge.",
+   "evidence": {
+    "region": [
+     5,
+     5,
+     285,
+     150
+    ],
+    "measured": "lum_median 80.4, which is 0.68x the sunlit patch (118.0). Upper-wall x-profile at y100-150: 74-80 left of the patch, 113-121 in it, 58 falling to 17.5 right of it. The patch's left edge is only an 80-to-121 step. The fill (az -65, el 45, 2.6 m) is about 1.6 m from that wall but 2.6 m from the product. A light model reproduces both the wall (79) and the side-left falloff (105 to 75)."
+   },
+   "change": {
+    "setting": "lights.fill.orbit.distance_m",
+    "from": 2.6,
+    "to": 1.75
+   },
+   "expected": "The fill keeps 0.3 W/m2 at the product, but the upper-left wall falls mostly behind its emitting face: [5,5,285,150] goes from ~108 (after c1) to ~50, and the patch's left edge becomes ~50 to ~150 (about 3:1). part:side-left runs ~143 at the top to ~95 at the bottom (now 105 to 75), still about 1.5 stops under the front.",
+   "accept": {
+    "region": [
+     5,
+     5,
+     285,
+     150
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     38,
+     62
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "The lowest glazing bar throws a single blue-grey band diagonally across the white face between the mid and the woofer; it reads as a stripe or decal and splits the face in two.",
+   "evidence": {
+    "region": [
+     893,
+     490,
+     907,
+     510
+    ],
+    "measured": "lum_median 117.3, RGB 116/116/133, a ~20 px band. Column profile x895-905, y470-540: 189, 188, 173, 128, 117, 115, 128, 171, 179. It is the shadow of the bar at 1.025 m on the window, which lands ~0.58 m up the product after the 8 degree sun's ~0.45 m drop."
+   },
+   "change": {
+    "setting": "set.windows.0.mullions",
+    "from": [
+     1,
+     4
+    ],
+    "to": [
+     1,
+     2
+    ]
+   },
+   "expected": "Only the 1.65 m bar remains. On the product's plane its shadow falls at ~1.19 m, 0.14 m above the fin. On the wall it is the bar that already crosses the wainscot above the silhouette. [893,490,907,510] goes from 117 to >= 175 (~215 with c1), and the face reads as one continuous surface between the drivers. The lower bar beside the silhouette and the top bar on the upper wall go; the patch still reads as a window by its shape and the one bar.",
+   "accept": {
+    "region": [
+     893,
+     490,
+     907,
+     510
+    ],
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 175
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The window side of the room is near-black, so the teal panelling and its moulding vanish in the right third and would print as solid ink.",
+   "evidence": {
+    "region": [
+     1150,
+     250,
+     1340,
+     440
+    ],
+    "measured": "lum_median 9.1, RGB 3/11/8, p95 13.8. Right wainscot by the product [1000,250,1150,440] 18.2. Right upper wall [720,5,1340,150] 36.1, falling from 58 to 17.5 across x 700-1350. At sky 2 this area is lit almost only by skylight through the window."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 2,
+    "to": 4.5
+   },
+   "expected": "Skylight through the window lifts the shade on the window side: far-right wainscot goes from ~14 (after c1) to 18-30 with g_median > r_median (teal kept), and the right upper wall to ~50. The front strip moves no more than 3 levels. The beam patch stays at least 2.5x the right wall, so the mood holds. The upper bound stops a repeat of the flattening seen at 11.75.",
+   "accept": {
+    "region": [
+     1150,
+     250,
+     1340,
+     440
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     18,
+     30
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Lighten or warm the red lacquer on the plinth and gable so their shade sides stop going near-black",
+   "why": "The left plinth [745,715,820,755] reads 17 luma, RGB 76/1/4, with no luminance edge against the floor beside it (edge step -0.6), and the left gusset [745,318,790,340] reads 23.5. Accent #C62828 and its finish are fixed, so only light can open the shade side; c1 lifts it to about 25."
+  },
+  {
+   "request": "Give the woofer cone a lighter or warmer finish so it holds a highlight without a lamp",
+   "why": "The RSS315HF-4 cone is black anodised aluminium by the product's spec. Only what it reflects may change, so c2 removes the blue lamp instead of recolouring the cone."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
