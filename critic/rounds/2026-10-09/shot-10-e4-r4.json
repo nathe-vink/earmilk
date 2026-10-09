@@ -1,0 +1,231 @@
+{
+ "stage1": {
+  "impression": "Two milk-carton speakers in a sunlit living-room set read clearly and the materials are plausible, but the frame is grey and low-contrast, the big red unit's white front is a flat uniform slab, and a hard-edged white wedge of sun on the floor beside it looks like a render error. The blue unit on the sideboard is small, flatly lit and half-lost against a dull taupe cabinet and a sun patch with arbitrary notched edges, so the frame has no clear hero moment or magazine polish.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The floor between the floorstander and the sideboard reads as plain oak: [575, 700, 640, 738] within 15 levels of the sunlit oak at [300, 790, 430, 810] (now 179.6, rgb [185, 178, 182], against 111, rgb [138, 106, 83]).",
+  "Every visible roof and plinth face carries its flavour colour: the red gable end [470, 305, 510, 328] has g_median <= 40 (now 115, pink-lilac [154, 115, 132], dE 25.3), and lit plinths and fins sit within dE 2.5 of spec (red plinth 3.8, red fin 3.8, blue plinth 4.7, blue fin 6.2).",
+  "The whites are neutral and clean: the red front's white median is >= 238 and within dE 2 of #F1F1F1 (now 231 and 4.9, rgb [227, 231, 240]); side faces have B-R <= +12 (now +21 on the red, +19 on the blue).",
+  "The white fronts carry a smooth lacquer ramp of 15-25 levels from top to bottom (now 10.8 on the red, 11 on the blue, and lifting exposure compresses it to about 7). That needs each front's sunlit base held below the PBR Neutral shoulder (about 0.76 linear) while a graduated reflection carries the top.",
+  "The backdrop behind the bookshelf unit is calm: no hard light edge across the sideboard front (113 to 77 inside 20 px at x 1006, mid-door) and no pale L-shaped band framing the floorstander's wall shadow (x 628-800, y 322-360, about 180 on 110).",
+  "The red roof's front slope and waveguide read as glossy red with a soft graded sheen rather than a dark slot (slope [300, 300, 380, 330] lum 47.8, rgb [168, 14, 18], dE 7.6; insert lum 43.8)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The red side-ramp panel stands on the floor (z 0 to 0.95), so the glossy oak mirrors it: its bottom edge shows as a hard white wedge and the rest as a lavender smear between the floorstander and the sideboard, and its foot also washes the top of the plinth's side face pink-white.",
+   "evidence": {
+    "region": [
+     575,
+     700,
+     640,
+     738
+    ],
+    "measured": "lum_median 179.6, p95 218, rgb [185, 178, 182], against sunlit oak 111 [138, 106, 83] at [300, 790, 430, 810] and shaded oak 90.7. The wedge's sharp upper edge runs from (566, 687) to (653, 741), which is exactly where this camera projects the panel's bottom edge, (-0.288, 0.31, 0) to (0.008, -0.03, 0). It is brightest at the +y end, where the panel's y-ramp reaches 1. The smear below, [520, 780, 660, 860], reads 140.8, rgb [154, 138, 130], against 97-105 (B 59-72) at the same depth. The plinth side's top strip [470, 690, 525, 705] reaches p95 128.5 on a 49 median."
+   },
+   "change": {
+    "setting": "lights.red_side_ramp.ramp",
+    "from": {
+     "axis": "y",
+     "at_m": [
+      0.02,
+      0.24
+     ],
+     "values": [
+      0.25,
+      1
+     ]
+    },
+    "to": {
+     "axis": "z",
+     "at_m": [
+      0.25,
+      0.75
+     ],
+     "values": [
+      0,
+      1
+     ]
+    }
+   },
+   "expected": "The floor only ever mirrors the panel's lowest 0.35 m, which goes dark, so the wedge falls to the sunlit oak around it (about 110 now, about 125 after c2) with wood colour back (B about 80 instead of 182). The smear [520, 780, 660, 860] drops to about 100-120, and the plinth's side face loses its pink top (p95 under 100). The red side face changes from a flat upper half (profile 181.5, 181.5, 181.6, 177.5, 170.7, 167.1, 166.2, 147.1) to a smooth fall of about 45-60 levels, full under the eave and darkest at the plinth line. It still stays 30 or more levels clear of the shadowed floor (71) and skirting (118) behind it.",
+   "accept": {
+    "region": [
+     575,
+     700,
+     640,
+     738
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     90,
+     140
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "post",
+   "problem": "The frame sits about a third of a stop low: the white lacquer tops out at 231 and the flavour colours render dark (red plinth dE 3.8, blue plinth dE 4.7), with highlight headroom unused.",
+   "evidence": {
+    "region": [
+     292,
+     690,
+     320,
+     726
+    ],
+    "measured": "Red plinth rgb [183, 28, 33], dE2000 3.79 to #C62828. Blue plinth [842, 462, 862, 488] rgb [4, 67, 185], dE 4.68 to #1F4FCF. Red fin [350, 250, 480, 268] rgb [185, 23, 28], dE 3.82. Red front white median 230.8. Frame median 134.2, p99 232.7, clip 0%."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.7,
+    "to": 1.0
+   },
+   "expected": "This is simulated through the inverse PBR Neutral curve. The red plinth goes to about [203, 36, 38] (dE about 1.4), the blue plinth to dE about 2.3, the red fin to about 2.3. The white fronts reach about 241 (red) and 237 (blue) with p99 about 243 and 0% clipped. The wall goes from 145 to about 160 and the frame median from 134 to about 149.",
+   "accept": {
+    "region": [
+     292,
+     690,
+     320,
+     726
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     2.2
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The same panel's top edge (z 0.95) rises above the eave (z 0.86), so the red roof's right gable end, a vertical face, mirrors it. Most of that roof face reads pink-lilac below a crisp horizontal reflection line instead of red.",
+   "evidence": {
+    "region": [
+     470,
+     305,
+     510,
+     328
+    ],
+    "measured": "rgb [154, 115, 132], lum 124.7, dE 25.3 to #C62828. The face's own apex above the line, [480, 278, 492, 289], is red [119, 13, 17]. The y-profile down the face jumps from 37.5 to 119.7 at y 290-294, where this face (which mirrors z_p about z_s - 0.01) sees the panel's top edge at z 0.95."
+   },
+   "change": {
+    "setting": "lights.red_side_ramp.size_m",
+    "from": [
+     0.45,
+     0.95
+    ],
+    "to": [
+     0.45,
+     0.72
+    ]
+   },
+   "expected": "The panel now spans z 0.115-0.835 about its kept centre (0.475). The gable end reads as shaded red, about [130-145, 15-35, 20-35] like its apex, and the reflected line at y 292 disappears. The panel's top edge now reflects at z about 0.85 on the side face, inside the 3 mm shadow line under the gable, so the white side stays bright to within about 3 px of the eave.",
+   "accept": {
+    "region": [
+     470,
+     305,
+     510,
+     328
+    ],
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     5,
+     60
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "post",
+   "problem": "With the white point at 5200 K, the #FFFFFF lamps and the sky render the Whole flavour's #FFFFFF body cyan-blue and turn the warm plaster neutral grey, so the product looks cold in a sunlit room.",
+   "evidence": {
+    "region": [
+     292,
+     460,
+     430,
+     515
+    ],
+    "measured": "Red front white rgb [227, 231, 240] (B-R +13), dE 4.88 to #F1F1F1; its top band [295, 342, 428, 378] reads [228, 235, 247]. Side faces read [166, 172, 187] and [150, 156, 169] (B-R +21 and +19). Skirting #F2F0EB renders [140, 140, 147]. Wall #EDE5D8 renders [148, 144, 144] (R-B +4, against +21 in its own colour)."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 5200,
+    "to": 5500
+   },
+   "expected": "With c2, as simulated: the red front goes to about [242, 241, 244] (dE about 1.8 to #F1F1F1) and the blue front to about [240, 237, 236], each within dE 2 of neutral. Side faces settle at B-R about +11, a natural cool shade side. The wall goes to about [167, 160, 155], reading as warm off-white, and the skirting to about [159, 155, 158].",
+   "accept": {
+    "region": [
+     292,
+     460,
+     430,
+     515
+    ],
+    "metric": "delta_e",
+    "hex": "#F1F1F1",
+    "op": "between",
+    "value": [
+     0,
+     2.2
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The sun's 0.55 degree disc cuts hard-edged light shapes right behind and under the small unit. The window jamb's shadow splits the sideboard front from 113 to 77 within 20 px in the middle of a door, and the patch's crisp outline leaves a pale L-band and a 25 px sliver around the floorstander's wall shadow.",
+   "evidence": {
+    "region": [
+     965,
+     540,
+     1040,
+     680
+    ],
+    "measured": "x-profile in 5 px bins: 114, 114, 114, 114, 113.4, 113.0, 109.0, 100.8, 91.7, 82.0, 77.6. The edge is at x 1006, 10-90 in 18 px, 39 px short of the door gap at 1045. The patch's top edge [1200, 280, 1240, 380] steps 4.1 per row (131 to 198 over about 15 px). The floorstander's shadow edge on the wall is 2 px wide (34 levels). The L-band [600, 325, 660, 350] peaks at 182.5 on a 110 shadow."
+   },
+   "change": {
+    "setting": "sun.angle_deg",
+    "from": 0.55,
+    "to": 1.5
+   },
+   "expected": "Penumbrae widen about 2.7x. The sideboard step becomes a soft fall over about 55 px. The patch's top edge drops to about 2 per row over about 45 px. The 25 px sliver at the patch's left (narrower than its new penumbra) fades to a glow and the L-band softens and dims. The floorstander's wall shadow edge goes from 2 px to about 10-12 px and stays legible. Both units stay fully sunlit: the nearest window edge lies 15 cm beyond the bookshelf's fin, against a half-penumbra of about 6 cm.",
+   "accept": {
+    "region": [
+     1200,
+     280,
+     1240,
+     380
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     1.0,
+     2.6
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Make the roof waveguide read as a smooth horn instead of a dark slot by changing the bowl: a shallower or lighter insert, a softer rim, or a flange.",
+   "why": "Its depth, profile and mouth are set by acoustic simulation. Today it reads as a dark channel (insert lum 43.8, rgb [162, 11, 15], dE 8.7 to #C62828), which hurts the must-show roofs, but only light and camera may change that read (see blocking_9)."
+  },
+  {
+   "request": "Lighter letters on the 2% plinth so its wordmark reads.",
+   "why": "The letters render 79.5 on the plinth's 62 (17 levels), while the Whole unit's read 142 on 62. The letter finish and marks are fixed, and no lamp can reach them: glint 2 was skipped because the letters mirror the unit's own bottom panel 0.10 m away."
+  }
+ ],
+ "score_if_fixed": 7.4
+}
