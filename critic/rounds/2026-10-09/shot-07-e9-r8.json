@@ -1,0 +1,370 @@
+{
+ "stage1": {
+  "impression": "A clean, logically exploded milk-carton loudspeaker on a mid-grey sweep: the drivers line up on their baffle holes, and the carton, birch and red gloss are believable. But the light is flat and grey, so the white body reads dull, the near-black drivers have little rim or specular to model them, and the floating red-and-white cap at right is hard to read.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The waveguide insert has to read as a waveguide, with its bowl rim and throat visible as a dish. The camera sees it 61 deg off its axis, so the red face shows only streaked reflections. Fixing this needs a view more onto the product's front: rotate_z toward about 60, every explode offset about 20% longer, and the frame recomposed so no part overlaps. A light that models the dish could also do it. The current part layout cannot be accept-tested for overlap, so it is not prescribed here.",
+  "The empty pocket's boss bore has to be visible, and the pocket magnets need to read as more than dots. The bore is hidden from this angle, and magnets-pocket covers 33 px.",
+  "The camera-facing white has to sit at 195-222 from eave to plinth, with a falloff of 25 or less, and stay at least 10 levels off the front baffle. Side-left now runs 218.1 to 175.6, a falloff of 42.5.",
+  "Both accent reds have to read as one colour. The side-left plinth is dE 13.8 against #C62828 and the front plinth is dE 9.5, while the gable is dE 2.4. Both plinths need dE 6 or less.",
+  "The sweep needs a deliberate light shape. Behind the parts it is 117.6 with a range of 3.2, and the whole background sits between 104 and 138 with no focus.",
+  "The white lacquer has to show reflections: a soft graduated sheen on side-left, which is now a smooth matte ramp. The frame also needs a few crisp specular accents above 235; p99 is now 217.9.",
+  "Every driver has to read as its product. The mid's papyrus cone is lum 47.8 with a range of 9.7, so it reads as a hole. The motor cylinders have no specular edge (woofer-magnet p95 48.4).",
+  "Neutrals have to be free of cast. The background is Lab a* +1.4, b* -2.6, and the insert's pale sides are b* -5.1.",
+  "The wordmark has to be legible at full size. The letters are lum 53.8 on a plinth of 47-49."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The sweep is an unlit, flat grey field, and its brightest patch is above the cabinet, not behind the exploded parts, so the parts float in a dull fog.",
+   "evidence": {
+    "region": [
+     800,
+     440,
+     900,
+     520
+    ],
+    "measured": "Behind the parts: lum_median 117.6, lum_range 3.2. Left edge [0,380,200,520] 112.5, right edge [1150,380,1350,520] 110.3, bottom-right [1100,780,1350,900] 130.6. Brightest background is 133-138, directly above the gable (75 px grid)."
+   },
+   "change": {
+    "setting": "lights.bg_pool",
+    "from": "absent",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.8,
+      0.8
+     ],
+     "position": [
+      0.8,
+      1.3,
+      1.15
+     ],
+     "target": [
+      0.78,
+      0.95,
+      0
+     ],
+     "irradiance": 1.6,
+     "color": 5800
+    }
+   },
+   "expected": "A soft glow on the floor behind the exploded parts, centred near image (864,438). Behind the parts goes from 117.6 to about 147; the right edge rises from 110 to about 125; the left edge stays about 113. The black driver frames (about 45) and the rings then stand about 100 levels off the background, and the cabinet's white edges keep at least 50 levels of contrast. The lamp sits behind and above the parts, so its shadows fall toward the camera and out of frame.",
+   "accept": {
+    "region": [
+     800,
+     440,
+     900,
+     520
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     138,
+     155
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The camera-facing white side falls 42.5 levels from eave to plinth, so its lower half prints light grey, below the 200-220 band where white lacquer reads white. The falloff carries on into the plinth.",
+   "evidence": {
+    "region": [
+     300,
+     610,
+     440,
+     680
+    ],
+    "measured": "Lower white band lum_median 177.3, rgb [177,177,181]. Side-left profile [300,270,440,690] by 8 bins: 218.1, 210.1, 203.6, 196.7, 189.7, 184.5, 179.5, 175.6. Horizontal profile flat at 193. Front-baffle strip at the same height [466,650,482,700] is 202.9."
+   },
+   "change": {
+    "setting": "lights.low_fill",
+    "from": "absent",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.6,
+      0.25
+     ],
+     "position": [
+      -0.245,
+      -0.756,
+      0.02
+     ],
+     "target": [
+      -0.06,
+      -0.185,
+      0.2
+     ],
+     "irradiance": 0.5,
+     "color": 5600,
+     "specular": 0,
+     "receivers": [
+      "side-left"
+     ]
+    }
+   },
+   "expected": "A close, floor-level fill lifts mostly the bottom third of side-left. The lower band goes from 177 to about 194. The falloff drops from 42.5 to about 28, while the upper band [300,300,430,380] (now 213.3) stays at 222 or below. The side-left plinth [340,733,400,777] goes from R 135 to about 150 (dE 13.8 to about 11). With specular 0 there is no lamp hotspot. The front baffle is not linked, so the bottom corner keeps at least 6 levels of separation plus its 229 round highlight.",
+   "accept": {
+    "region": [
+     300,
+     610,
+     440,
+     680
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     189,
+     198
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The side-left plinth prints as a flat maroon while the gable's red reads true, so the two accent bands look like two different reds. PBR Neutral's toe pushes the shaded plinth's green to 8.",
+   "evidence": {
+    "region": [
+     340,
+     733,
+     400,
+     777
+    ],
+    "measured": "rgb [135,8,12], lum 35.4, lum_range 2.5, dE2000 13.77 against #C62828. gable-block dE 2.41. Front plinth [470,760,500,805] is [155,20,25], dE 9.54."
+   },
+   "change": {
+    "setting": "lights.plinth_sheen",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.42,
+      0.12
+     ],
+     "position": [
+      -0.12,
+      -0.24,
+      0.004
+     ],
+     "target": [
+      -0.12,
+      -0.24,
+      1.0
+     ],
+     "strength": 0.4,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -0.33,
+       0.09
+      ],
+      "values": [
+       0.6,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "side-left"
+     ]
+    }
+   },
+   "expected": "The plinth's clear coat mirrors a soft card lying 0.01-0.13 m out from its foot, the floor strip only the plinth (z 0-0.12) mirrors; the white above mirrors floor beyond 0.15 m and is untouched. G goes from 8 to about 28. With c2, R reaches about 158 and dE about 8. The plinth shows a gentle sheen brightening toward the front corner instead of a flat 2.5-level band.",
+   "accept": {
+    "region": [
+     340,
+     733,
+     400,
+     777
+    ],
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     22,
+     38
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The mid's papyrus cone is a flat dark disc, darker than its own rubber surround, so it reads as a hole rather than a cone.",
+   "evidence": {
+    "region": [
+     677,
+     348,
+     700,
+     420
+    ],
+    "measured": "part:mid-cone lum_median 47.8, p5 42.2, p95 51.8 (range 9.7), rgb [56,46,42]. mid-surround 61.3."
+   },
+   "change": {
+    "setting": "lights.mid_kick",
+    "from": "absent",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.3,
+      0.3
+     ],
+     "position": [
+      0.87,
+      -0.76,
+      1.0
+     ],
+     "target": [
+      0.46,
+      -0.15,
+      0.69
+     ],
+     "irradiance": 1.5,
+     "color": 5600,
+     "specular": 0.3,
+     "receivers": [
+      "mid-cone",
+      "mid-cap"
+     ]
+    }
+   },
+   "expected": "A raking kick from 43 deg off the cone's axis, on the camera side and above, lights the cone's far wall and leaves its near wall in shade. mid-cone goes to about 78 with a range of about 25, rgb about [92,75,68]: a brown papyrus cone lighter than its surround. The light is linked to the cone and cap only and passes clear of the trim ring, so nothing else changes.",
+   "accept": {
+    "region": "part:mid-cone",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     66,
+     90
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "post",
+   "problem": "Neutrals carry a cool-violet cast: the grey sweep, the white body and especially the insert's pale sides all read blue against #FFFFFF lighting at a 6000 K white point.",
+   "evidence": {
+    "region": [
+     1100,
+     780,
+     1350,
+     900
+    ],
+    "measured": "Background rgb [131,130,135], Lab a* +1.37, b* -2.56. part:back-panel rgb [182,180,184]. Lower white [300,500,440,680] b* -1.90. Insert side [910,290,950,360] rgb [176,180,189], b* -5.05."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 6000,
+    "to": 6300
+   },
+   "expected": "Blue drops about 4-5 levels on neutrals. The back panel goes from b 184 to about 180, with r about 183. Background b* moves to about -0.5, and the insert's sides to about -2.5. The gable red stays at dE 2.5 or below. Luminance is unchanged.",
+   "accept": {
+    "region": "part:back-panel",
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     177,
+     182
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The cast earmilk letters have no luminance contrast with the plinth they sit on, so at full size the wordmark is a dark smudge. Their faces mirror the dark floor 2-6 cm in front of the plinth.",
+   "evidence": {
+    "region": [
+     502,
+     677,
+     547,
+     750
+    ],
+    "measured": "part:letters-front-* lum_median 53.8, p95 62.8, rgb [75,47,49]. Front plinth [490,740,505,790] lum 47.4, rgb [150,19,24]."
+   },
+   "change": {
+    "setting": "lights.letters_sheen",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.12,
+      0.34
+     ],
+     "position": [
+      0.25,
+      0.013,
+      0.004
+     ],
+     "target": [
+      0.25,
+      0.013,
+      1.0
+     ],
+     "strength": 0.4,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -0.15,
+       0.18
+      ],
+      "values": [
+       0.7,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "letters-front-*"
+     ]
+    }
+   },
+   "expected": "The letters mirror a card lying in their reflection zone, 0.02-0.06 m out from the plinth front. They read at about 115 with a warm metal sheen, about 65 levels above the plinth, so the wordmark is legible at 1x. The plinth and baffle are unchanged because the panel is linked to the letters only.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     95,
+     150
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Open up the waveguide (shallower bowl, wider or rounder rim) so its mouth reads from 61 deg off axis.",
+   "why": "The waveguide is the hero of this build frame, but it reads only as streaked reflections. Its depth, profile and mouth are set by acoustic simulation and are fixed."
+  },
+  {
+   "request": "Tilt the insert's draw axis toward the camera so the bowl faces the lens.",
+   "why": "This would show the bowl and throat, but each part must stay on its own fixing axis."
+  },
+  {
+   "request": "Finish the insert's pale sides in the body white or the accent.",
+   "why": "They read [176,180,189], about 25 levels below the body white, so the insert looks like a different grey part. Product materials are fixed."
+  },
+  {
+   "request": "A lighter or contrasting letter finish, or larger letters.",
+   "why": "The wordmark has almost no luminance contrast on the red plinth. The marks and the letters' metal are fixed."
+  },
+  {
+   "request": "A lighter papyrus or a contrasting dust cap on the mid.",
+   "why": "The cone reads as a dark hole (47.8). The drivers' materials are the products' own and are fixed."
+  },
+  {
+   "request": "Lighten the accent red to offset PBR Neutral's toe on the shaded plinth.",
+   "why": "The plinth prints dE 13.8 off spec, but #C62828 is fixed. Only exposure, white balance and light may bring it closer."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
