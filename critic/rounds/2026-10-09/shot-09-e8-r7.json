@@ -1,0 +1,314 @@
+{
+ "stage1": {
+  "impression": "A tidy, plausible living-room vignette for a witty milk-carton speaker pair, but the white carton fronts read as flat, near-clipped cards with almost no modelling or contact shadow, so the speakers look pasted onto the credenza. The pair is small and pushed to the outer edges of a wide, bland taupe set where the framed art and the turntable hold the centre, so the product is not the hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "White fronts out of the PBR Neutral shoulder: part:front-baffle median 200-220 (now 238.6), and the clean strip [264, 385, 278, 668] falling at least 30 levels over 8 bins with every bin distinct (now 244.9, 244.1, 243.9, 243.0, 242.0, 239.6, 233.7, 223.8: the upper 60% sits within 3 levels).",
+  "The pair dominates the frame: each speaker at least 470 px tall and the product at least 18% of the frame (now 406 px L, 460 px R, 13.1%), with the art's border at least 100 px below the frame's top edge.",
+  "The room still reads bright after the white is brought down: upper-left wall [60, 60, 420, 200] held at 168-186 (now 175.7) and the window patch on the wall at least 25 levels above the shade beside it (now 188.5 against about 155).",
+  "Brand red holds: gable-block within dE 3 of #C62828 (now 0.38, but lit mostly by the frontal key, so an exposure cut alone takes it to about 7.5), and each plinth one red from top to bottom: its lower third no more than 10 levels lighter than its upper part (now L 116.6 against 71.2, R 110.8 against 61.5).",
+  "Visible grounding: the sideboard top within 1 cm of each base at least 15% darker than 10 cm away (now 97.9 against 107.6 beside the left base, about 9%, and brighter in front of the base from reflections, 116 rising to 153).",
+  "Trim rings separated from the white front by at least 50 levels (now 203.3 against 238.6, with b - r = +25, a cold blue-white).",
+  "The cast letters read as metal rather than white print: at least 30 levels of tonal range inside the letters (now p5 to p95 of 15.5 L and 9.1 R, at 242-244)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The white lacquer fronts sit in PBR Neutral's compressed shoulder, so they print as flat card: the upper 60% of each front holds 241-245, and every column across it has the same value.",
+   "evidence": {
+    "region": [
+     264,
+     385,
+     278,
+     668
+    ],
+    "measured": "12-bin y profile of the clean strip beside the left woofer: 245.0, 244.8, 244.1, 243.9, 243.1, 243.0, 242.2, 241.1, 239.4, 235.7, 229.6, 222.8; right front [1176, 392, 1189, 706] 245.2 to 239.7 over the same 75%; across x [137, 540, 281, 640] 239.1-239.4 in 11 of 12 bins; part:front-baffle median 238.6, p95 245.1 (L 239.3, R 237.9)."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.8,
+    "to": 0.25
+   },
+   "expected": "With c2 and c8 applied, part:front-baffle median is about 212. The clean left strip runs about 227 under the eave to about 196 above the plinth, about 31 levels of falloff with every bin distinct, so the front sheen and the key's top-down fall become visible. The letters drop from 243 to about 226. On its own, the cut takes the upper-left wall to about 147 (c2 restores it) and the roofs to about [165, 24, 25] (c7 restores them). The front-facing plinth stays about 0.4 EV under its swatch, consistent with a white printed at 212.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     200,
+     220
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Because the wall is lit almost entirely by the sky, c1's cut would take the upper-left wall from 176 to about 147, and the room would stop reading as bright and lived-in.",
+   "evidence": {
+    "region": [
+     60,
+     60,
+     420,
+     200
+    ],
+    "measured": "median 175.7 (p5 169.0, p95 183.5), rgb [185, 174, 165]; the engine's sky proofs (4 gave 144.1, 5 gave 159.1 on its c6 region, near the wall's 150-155) imply about 97% sky light there; upper-right wall [850, 100, 1300, 280] 153.6."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 4.3933,
+    "to": 6.5
+   },
+   "expected": "The upper-left wall is back near 175 and the shade side of the wall near 155, so the room keeps its brightness while the product drops about 0.5 EV against it. The window patch reads about 180 against about 155 shade. The white fronts gain only about 3 levels.",
+   "accept": {
+    "region": [
+     60,
+     60,
+     420,
+     200
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     168,
+     186
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "camera",
+   "problem": "The speakers are small blocks at the frame's outer edges, with the art and the turntable holding the centre, so the frame reads as a room rather than a speaker hero.",
+   "evidence": {
+    "region": [
+     135,
+     307,
+     1212,
+     767
+    ],
+    "measured": "product mask 13.1% of the frame (L 6.1%, R 6.9%); left speaker x 135-326, y 310-715 (406 px), right x 1023-1211, y 307-766 (460 px), centres at x 230 and 1117, outside the thirds at 450 and 900; the top 300 rows are wall and art, and the doors [100, 780, 1250, 900] are a flat 127.0 (range 27.4)."
+   },
+   "change": {
+    "setting": "camera.lens_mm",
+    "from": 57,
+    "to": 66
+   },
+   "expected": "With c4 and c5, the left speaker is about 476 px tall (x about 141-362) and the right about 527 px (x about 965-1186), the product about 18% of the frame, with margins of about 140 px left and 165 px right. The sideboard's ends sit just outside the frame, and its top stays visible in front of each base. The right plinth spans about y 747-805 across x 1060-1140. Before c4 and c5 land, both speakers are still whole, about 50 px from the edges. The wall and art go a little softer at f/3.7.",
+   "accept": {
+    "region": [
+     1060,
+     772,
+     1140,
+     795
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 20
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "composition",
+   "problem": "The left speaker stands at the sideboard's end, 0.30 m from the turntable, so at 66 mm it would ride the frame's left edge unless it moves in, mirrored with c5.",
+   "evidence": {
+    "region": [
+     280,
+     560,
+     295,
+     660
+    ],
+    "measured": "today this region is the left speaker's side panel: b 131, median 141.2; its inner face is at x -0.54 against the turntable's left end at -0.24."
+   },
+   "change": {
+    "setting": "product.instances.0.position",
+    "from": [
+     -0.66,
+     0,
+     0.56
+    ],
+    "to": [
+     -0.53,
+     0,
+     0.56
+    ]
+   },
+   "expected": "The left speaker stands 0.17 m from the turntable, still 0.2 m from the sideboard's end and 0.09 m back from its front edge. In the 66 mm frame its white front (b about 215) covers [280, 560, 295, 660], below the woofer and above the plinth.",
+   "accept": {
+    "region": [
+     280,
+     560,
+     295,
+     660
+    ],
+    "metric": "b_median",
+    "op": ">=",
+    "value": 188
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "composition",
+   "problem": "The right speaker must move in by the same amount, to keep the pair mirrored and fill the 66 mm frame.",
+   "evidence": {
+    "region": [
+     985,
+     560,
+     1020,
+     680
+    ],
+    "measured": "today this region is wall in the window patch: b 165, median 181.4; the right speaker's inner face is at x 0.54 against the turntable's right end at 0.26."
+   },
+   "change": {
+    "setting": "product.instances.1.position",
+    "from": [
+     0.66,
+     0,
+     0.56
+    ],
+    "to": [
+     0.53,
+     0,
+     0.56
+    ]
+   },
+   "expected": "The right speaker stands 0.15 m from the turntable, mirroring c4 (rotations stay +5 / -5). Its white front covers [985, 560, 1020, 680], below the woofer and above the plinth, and its plinth still covers [1060, 772, 1140, 795].",
+   "accept": {
+    "region": [
+     985,
+     560,
+     1020,
+     680
+    ],
+    "metric": "b_median",
+    "op": ">=",
+    "value": 188
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "At 66 mm the art's dark top border would sit about 17 px under the frame's top edge, a tangent, and the art already hangs high, its bottom 0.38 m above the sideboard, apart from the group.",
+   "evidence": {
+    "region": [
+     520,
+     0,
+     860,
+     110
+    ],
+    "measured": "lum_p5 100.5 from the art's top border (97-102 down x=670 at y 80-104); its bottom border ends at y 425 with a drop shadow to y 450; the art's centre is at z 1.27."
+   },
+   "change": {
+    "setting": "set.props.1.z",
+    "from": 1.27,
+    "to": 1.1
+   },
+   "expected": "The art's bottom hangs about 0.2 m above the sideboard top. In the 66 mm frame its top border sits about 120 px below the frame's top edge and its bottom about 530, about 90 px above the turntable. The art, the turntable and the speakers read as one group.",
+   "accept": {
+    "region": [
+     520,
+     0,
+     860,
+     110
+    ],
+    "metric": "lum_p5",
+    "op": ">=",
+    "value": 135
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The red roofs are lit mainly by the frontal key, so c1 pulls them off the accent, while the sideboard top reads darker than its own doors and the bases cast almost no occlusion.",
+   "evidence": {
+    "region": [
+     326,
+     700,
+     466,
+     714
+    ],
+    "measured": "the sideboard top beside the left base reads 97.9 in the first bin and 107.6 from the third (only 10 levels of occlusion); in front of the base [150, 712, 270, 728] it brightens 116 to 153 from reflections, with no shadow; the top [340, 690, 460, 715] 106.4 is darker than the doors [100, 780, 1250, 900] 127.0; part:gable-block [197, 38, 39], dE 0.38 today, modelled to [165, 24, 25], dE 7.5, under c1's cut."
+   },
+   "change": {
+    "setting": "lights.top",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.6,
+      0.2
+     ],
+     "position": [
+      0,
+      -0.03,
+      2.05
+     ],
+     "target": [
+      0,
+      -0.03,
+      0.56
+     ],
+     "irradiance": 0.5,
+     "color": 5200
+    }
+   },
+   "expected": "A 1.6 m (x) by 0.2 m (y) strip 1.5 m over the sideboard, facing down. The roof slopes go back to the swatch (gable-block median about [196, 38, 40]). The sideboard top lifts about 15 levels, above its doors, and a soft occlusion about 5-8 cm wide forms in front of and outboard of each base. The strip sits behind the fronts' plane, so they are unchanged. It also lies outside the roofs' mirror path: the right roof mirrors z 2.05 at y 0.15-0.26, the left at x about -0.9, past the strip's end, so it adds no white veil to the red.",
+   "accept": {
+    "region": "part:gable-block",
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 3.0
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The 20-radiance front sheen panel paints the trim rings a cold near-white that barely separates from the white front and, seen again through the semi-gloss sideboard top, washes the lower third of each plinth pink behind a 3 px step.",
+   "evidence": {
+    "region": [
+     150,
+     702,
+     270,
+     711
+    ],
+    "measured": "left plinth's lower band: rgb [190, 96, 102], median 116.6, against 71.2 [177, 42, 49] above it (dE 15.3 vs 5.4 to #C62828); the step is 48 levels in 3 px (y 700-703 at x=160); right plinth [184, 90, 96] against [172, 31, 38] (dE 12.9 vs 6.0); part:woofer-ring median 203.3, rgb [196, 204, 221]."
+   },
+   "change": {
+    "setting": "lights.front_sheen.strength",
+    "from": 20,
+    "to": 6
+   },
+   "expected": "The rings drop to a mid satin grey of about 140-155, about 60 levels under the white front, and lose most of their blue. Each plinth reads as one red with at most a faint reflection at its foot (lower third within about 10 levels of its upper part). The fronts lose 3-6 levels of sheen, held inside c1's band.",
+   "accept": {
+    "region": "part:woofer-ring",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     125,
+     165
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the cast 'earmilk' letters a darker, more directional metal finish so they read as cast metal instead of white print.",
+   "why": "They print 242-244 with p5-p95 spans of only 15.5 (L) and 9.1 (R) and b 251, like white ink. The engine's glint proofs moved them less than 5 levels across a 3x power range, so only their finish would give them a dark body and a bright edge, and the product's materials and marks are fixed. c1 brings them down to about 226 but cannot give them range."
+  },
+  {
+   "request": "A shallower or more open waveguide bowl so the insert matches the accent red.",
+   "why": "The insert prints [187, 17, 18] (dE 4.4 L, 4.9 R to #C62828), darker than the roof because the bowl shades itself. Its depth, profile and mouth are set by acoustic simulation and are fixed. Only light can lift its lip, and c7 does a little of that."
+  }
+ ],
+ "score_if_fixed": 7.4
+}
