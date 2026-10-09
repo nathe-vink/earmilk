@@ -168,5 +168,34 @@
   "set": 1.5636,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "lights.drivers.strength",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    100,
+    160
+   ]
+  },
+  "proofs": [
+   [
+    5.0,
+    98.8
+   ],
+   [
+    10.0,
+    126.9
+   ],
+   [
+    10.5516,
+    129.9
+   ]
+  ],
+  "set": 10.5516,
+  "passes": true,
+  "moves_the_test": true
  }
 ]
