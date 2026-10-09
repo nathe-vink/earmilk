@@ -201,9 +201,10 @@ def place(local, centre, axis='-y', recess=0.0):
     raise ValueError(axis)
 
 
-def driver_parts(role, spec, centre, axis='-y', ring_d=None, flange_recess=3.0, detail=24):
+def driver_parts(role, spec, centre, axis='-y', ring_d=None, flange_recess=3.0, detail=24, ring_id=None):
     """The labelled solids of one driver in place: the ring level with the finish at `centre`'s face, the driver's
-    flange `flange_recess` behind it (under the ring)."""
+    flange `flange_recess` behind it (under the ring). `ring_id`, the ring's inner diameter from params.TRIM_RING_ID
+    (the surround at its glue line + 2), else from the drawn surround."""
     if spec['kind'] == 'cone':
         local, info = cone_driver(spec, detail)
     else:
@@ -211,7 +212,7 @@ def driver_parts(role, spec, centre, axis='-y', ring_d=None, flange_recess=3.0, 
     parts = {f'{role}-{k}': place(v, centre, axis, flange_recess) for k, v in local.items()}
     if ring_d:
         r_out = ring_d / 2
-        r_in = max(info.get('r_surround', 0) + 1.0, r_out - RING['width'])
+        r_in = ring_id / 2 if ring_id else max(info.get('r_surround', 0) + 1.0, r_out - RING['width'])
         parts[f'{role}-ring'] = place(trim_ring(r_in, r_out), centre, axis, 0.0)
     return parts, info
 

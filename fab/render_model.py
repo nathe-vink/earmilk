@@ -25,7 +25,7 @@ INSIDE = ['top-panel', 'bottom-panel', 'window-brace', 'mid-shelf', 'mid-divider
 def inside_parts():
     """The hardware inside, placed as fab/sheets.py's sheets 3 and 4 describe it: the tweeter's lead from its tabs into
     the connector bay behind the insert's boss, the connector mated in the mouth of the cable channel, the cabinet's lead
-    down the channel, through the top panel's grommet, through the brace's window and into the amplifier box's gland;
+    down the channel (sealed with silicone at the bay), through the brace's window and into the amplifier box's gland;
     the woofer's and mid's leads to the same gland; the insert's magnets and pins."""
     I, T = INSERT, TWEETER_PART
     zc, yt = WAVEGUIDE['throat_z'], WAVEGUIDE['throat_y']
@@ -43,7 +43,8 @@ def inside_parts():
                                          (xc + 2, yw + I['bay_l'] / 2 - 6, zb + 6), (xc, yw + 2, zcon + 16), (xc, yw, zcon + 11)], 5.0)
     top = TOP_Z0 - 14
     out['cable-tweeter'] = C.cable([(xc, yw, zcon - 11), (xc, yw, top), (dx, dy, top), (dx, dy, gz + 30), (gx, gy, gz + 30), (gx, gy, gz - WALL - 30)], 5.0)
-    out['grommet-top'] = C.grommet(xc, yw, TOP_Z0, WIRE_HOLE_D, 5.0)
+    # the channel sealed round the cable with 20 mm of silicone from the bay (a grommet will not seat in 18 mm: d16)
+    out['seal-channel'] = cad.cyl_z(xc, yw, WIRE_HOLE_D - 0.2, zb - I['bay_d'] / 2 - 20.0, zb - I['bay_d'] / 2)
     out['gland-amp'] = C.cable_gland(gx, gy, gz, AMP_BOX['gland_d'], 7.0)
     wf = DRIVER_SET['woofer']; ws = C.DRIVERS[wf]
     wt = (RUN + ws['frame_od'] * 0.28, WOOFER_REBATE['depth'] + ws['depth'] * 0.55, WOOFER['z'] - ws['frame_od'] * 0.28)
@@ -108,15 +109,15 @@ def rasterize_marks(dpi=300):
 def build():
     t0 = time.time()
     fab = cad.build()
-    parts = {k: fab[k] for k in VISIBLE + INSIDE if k in fab}
+    parts = {k: fab[k] for k in VISIBLE + INSIDE + ['tweeter-retainer'] if k in fab}
     parts.update(inside_parts())
     if AMP:
         parts.update(C.amp_plate(AMP, RUN, PLAN, AMP['z']))
     print(f'cabinet {time.time() - t0:.0f}s', flush=True)
-    wo, _ = C.driver_parts('woofer', C.DRIVERS[DRIVER_SET['woofer']], (RUN, 0.0, WOOFER['z']), ring_d=WOOFER_REBATE['d'] - 1.6)
+    wo, _ = C.driver_parts('woofer', C.DRIVERS[DRIVER_SET['woofer']], (RUN, 0.0, WOOFER['z']), ring_d=WOOFER_REBATE['d'] - 1.6, ring_id=TRIM_RING_ID['woofer'])
     mi = {}
     if MID:
-        mi, _ = C.driver_parts('mid', C.DRIVERS[DRIVER_SET['mid']], (RUN, 0.0, MID['z']), ring_d=MID_REBATE['d'] - 1.6)
+        mi, _ = C.driver_parts('mid', C.DRIVERS[DRIVER_SET['mid']], (RUN, 0.0, MID['z']), ring_d=MID_REBATE['d'] - 1.6, ring_id=TRIM_RING_ID['mid'])
     tspec = dict(C.DRIVERS[DRIVER_SET['tweeter']], **{k: TWEETER_PART[k] for k in ('dome_d', 'surround_w', 'flange_d', 'flange_t', 'body_d', 'body_depth')})
     tw, _ = C.driver_parts('tweeter', tspec, (RUN, WAVEGUIDE['throat_y'], WAVEGUIDE['throat_z']), flange_recess=0.0)
     parts.update(wo); parts.update(mi); parts.update(tw)

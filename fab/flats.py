@@ -26,12 +26,14 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out-bookshelf' i
 WOOFER_POCKET = f"POCKET_{WOOFER_REBATE['depth']:g}MM"
 MID_POCKET = f"POCKET_{MID_REBATE['depth']:g}MM" if MID else 'POCKET_MID'
 PLATE_POCKET = f"POCKET_{AMP['rebate']:g}MM" if AMP else 'POCKET_PLATE'
+NUT_POCKET = f"POCKET_{AMP_BOX['nut_cb'][1]:g}MM_UNDERSIDE" if AMP else 'POCKET_NUT'
 LAYERS = {'CUT_OUTSIDE': 7, 'CUT_INSIDE': 1, 'POCKET_3MM': 3, WOOFER_POCKET: 4, MID_POCKET: 5, PLATE_POCKET: 2, 'DRILL_D10_DEPTH10': 6,
-          'DRILL_D5.5_THROUGH': 30, 'NOTES': 8}
+          'DRILL_D5.5_THROUGH': 30, NUT_POCKET: 40, 'NOTES': 8}
 # what each layer asks of the shop, for the cut list
 OPS = {'CUT_INSIDE': 'cut inside', 'POCKET_3MM': 'pocket 3 mm deep', WOOFER_POCKET: f"pocket {WOOFER_REBATE['depth']:g} mm deep (woofer)",
        MID_POCKET: f"pocket {MID_REBATE['depth']:g} mm deep (mid)" if MID else '', PLATE_POCKET: f"pocket {AMP['rebate']:g} mm deep (amplifier plate)" if AMP else '',
-       'DRILL_D10_DEPTH10': 'drill ø10, 10 deep', 'DRILL_D5.5_THROUGH': 'drill ø5.5 through (M4 T-nuts from inside; measure the frame first)', 'NOTES': 'notes'}
+       'DRILL_D10_DEPTH10': 'drill ø10, 10 deep', 'DRILL_D5.5_THROUGH': 'drill ø5.5 through (M4 T-nuts from inside; measure the frame first)',
+       NUT_POCKET: f"pocket {AMP_BOX['nut_cb'][1]:g} mm deep from the underside, concentric with the gland's hole (cut the hole, turn the panel over, centre on it; before the lid goes in)" if AMP else '', 'NOTES': 'notes'}
 
 
 def rect(x0, y0, x1, y1):
@@ -97,7 +99,7 @@ def panel_defs():
     P.append(dict(name='top-panel', qty=1, w=INNER, h=INNER, layers={
         'CUT_INSIDE': circle(RUN - WALL, wh - WALL, WIRE_HOLE_D),
         'DRILL_D10_DEPTH10': sum((circle(x - WALL, y - WALL, DOWEL_D) for (x, y) in dowels), [])},
-        note='upper face up (front edge at the bottom of the drawing); dowels register the gable block; the tweeter cable\'s hole gets a grommet'))
+        note='upper face up (front edge at the bottom of the drawing); dowels register the gable block; the tweeter cable\'s hole is sealed with silicone from the bay after wiring'))
     P.append(dict(name='bottom-panel', qty=1, w=INNER, h=INNER, layers={}, note='either face'))
     if BRACE_Z:
         h = BRACE_WINDOW / 2
@@ -117,9 +119,11 @@ def panel_defs():
         gx, gy = cad.amp_gland_xy()
         P.append(dict(name='amp-box-lid', qty=1, w=INNER, h=d,
                       layers={'CUT_INSIDE': circle(gx - WALL, gy - (y0 - WALL), AMP_BOX['gland_d'] + 0.5),
+                              NUT_POCKET: circle(gx - WALL, gy - (y0 - WALL), AMP_BOX['nut_cb'][0]),
                               'NOTES': [('text', (INNER / 2, 6.0), 'FRONT EDGE', 6.0)]},
                       note=f'the amplifier box\'s lid, z {z1:g} to {z1 + WALL:g}, its front edge (the bottom of the drawing) over the box\'s front; '
-                           f'the gland\'s ø{AMP_BOX["gland_d"] + 0.5:g} hole {gx - WALL:g} from the left, {gy - (y0 - WALL):g} from the front edge; sealed after wiring'))
+                           f'the gland\'s ø{AMP_BOX["gland_d"] + 0.5:g} hole {gx - WALL:g} from the left, {gy - (y0 - WALL):g} from the front edge, its nut in a '
+                           f'ø{AMP_BOX["nut_cb"][0]:g} x {AMP_BOX["nut_cb"][1]:g} counterbore from the underside; sealed after wiring'))
         P.append(dict(name='amp-box-front', qty=1, w=INNER, h=z1 - z0, layers={},
                       note=f'the amplifier box\'s front, between floor and lid, {AMP_BOX["depth"]:g} in front of the back\'s inner face; glue and seal all round'))
     return P

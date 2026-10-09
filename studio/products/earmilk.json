@@ -244,7 +244,7 @@
    "material": "motor"
   },
   {
-   "match": "port-tube|terminal-cup",
+   "match": "port-tube|terminal-cup|tweeter-retainer",
    "material": "black"
   },
   {
@@ -280,7 +280,7 @@
    "material": "nylon"
   },
   {
-   "match": "grommet-top",
+   "match": "grommet-top|seal-*",
    "material": "rubber"
   },
   {
@@ -395,7 +395,7 @@
    "material": "resin"
   }
  ],
- "interior_ignore": "cable-*|connector-*|grommet-*|gland-*",
+ "interior_ignore": "cable-*|connector-*|grommet-*|seal-*|gland-*",
  "normals_from": [
   {
    "match": "waveguide-insert",

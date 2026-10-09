@@ -47,7 +47,7 @@ else:
     MID = dict(z=690.0, frame=170.0)      # SPEC
 
 TWEETER = dict(faceplate_y=176.0, z=935.0, faceplate=62.0, faceplate_t=6.0, apex_forward=8.0,
-               body_d=43.0, body_depth=30.0)  # SPEC faceplate <= 62 at y = 125 (2026-10-08, the owner; was 170). Body: PLACEHOLDER sized for the shortlisted
+               body_d=43.0, body_depth=30.0)  # SPEC faceplate <= 62 (2026-10-08, the owner), now at y 176, z 935 from the waveguide study (was 125). Body: PLACEHOLDER sized for the shortlisted
                # Scan-Speak Illuminator (43 mm cutout behind a 62 mm faceplate), which leaves a 9 mm shoulder for its screws.
 BOWL = dict(mouth_w=211.0, mouth_l=118.0, mouth_s=79.0, throat=74.0,
             bulge=4.5)  # SPEC mouth and throat (74 since 2026-10-08, the owner; was 66: the faceplate seats on the throat's flat
@@ -72,13 +72,19 @@ INSERT = dict(margin=2.0, eave_clip=25.0, back_y=200.0, boss_d=86.0, boss_back_y
 # insert can come forward far enough to unplug it. Its centre bay_dz below the throat's axis keeps 20 mm of birch under
 # the back slope. The cable channel leaves its floor at its middle.
 # The tweeter as the mount sees it: the SB Acoustics Satori TW29DN-B with its faceplate taken off (SB documents it: 2.5 mm
-# hex), the motor unit's front ring screwed to the insert's back with the faceplate's own screws. PLACEHOLDER sizes from
-# the research (no drawing found): the unit no wider than its 71 to 74 cutout and about 32 deep; measure one first.
+# hex), the motor unit's front ring seated on the throat's ring. PLACEHOLDER sizes from the research (no drawing found):
+# the unit no wider than its 71 to 74 cutout and about 32 deep; measure one first.
 TWEETER_PART = dict(model='SB Acoustics Satori TW29DN-B', dome_d=29.0, surround_w=8.0, flange_d=73.0, flange_t=6.0, body_d=66.0,
-                    body_depth=26.0, screws=4, bolt_circle=62.0)
-# The tweeter's screws go into heat-set brass inserts (M3 x 5.7) melted into its seat round the throat: holes 4.0 across,
-# 6 deep, on its bolt circle. PLACEHOLDER circle and count until one is measured (fab/research/drivers-floorstander.md)
-INSERT_SCREW = dict(hole_d=4.0, depth=6.0, insert='M3 x 5.7 heat-set brass')
+                    body_depth=26.0, screws=4, bolt_circle=62.0, mount='sleeve')
+# How it is held (the drawing check's d1, round 2): the faceplate's screws thread into the motor from the front, and a
+# circle of screws inside the 66 motor cannot be driven from behind, so nothing screws through the tweeter. A printed
+# retaining sleeve slides over the motor from behind and presses the front ring onto the throat's seat (on a 0.5 foam
+# gasket); its own flange, on the boss's back face, takes three screws in the boss's wall, outside the bore. Whatever
+# SB's screw circle turns out to be, it is not needed. PROPOSAL; its bore follows body_d (measure the motor first).
+RETAINER = dict(gasket=0.5, clear=0.5, fit=0.2, flange_d=84.0, flange_t=3.0, screws=3, screw_circle=79.6,
+                pilot_d=2.4, pilot_depth=10.0, hole_d=3.4,
+                screw='3.0 x 12 thread-forming screws for plastics (WN 1411 / PT K30, pan head)')
+INSERT_SCREW = None          # the bookshelf's: screws through its tweeter's faceplate into the seat (below)
 # 2026-10-08, the research's recommended set for the active floorstander (fab/research/drivers-floorstander.md)
 DRIVER_SET = dict(woofer='rss315hf-4', mid='mr16p-8', tweeter='tw29dn-b')
 
@@ -127,13 +133,15 @@ MID_CUTOUT = 140.3        # PLACEHOLDER the SB Acoustics Satori MR16P-8 (146 for
 CLEAR = 1.0               # PLACEHOLDER radial clearance for the tweeter pocket
 # 2026-10-08: active. A Hypex FusionAmp FA253 per speaker (fab/research/amps.md): 250 + 250 + 100 W into 4 ohm, the DSP
 # crossover and EQ on board, mains in on the plate. Its 360 x 135 plate lies on its side across the back's foot, flush in a
-# 3 mm rebate like the drivers' rings, centred at z 185 so it clears the shadow line at 113 (the research put it at 175).
+# 4.5 mm rebate (below), centred at z 185 so it clears the shadow line at 113 (the research put it at 175).
 # FusionAmps are not airtight, so the module sits in its own sealed box behind the plate, the cabinet's sides its ends.
 AMP = dict(model='Hypex FusionAmp FA253', plate_w=360.0, plate_h=135.0, plate_t=3.0, plate_r=4.0, module_depth=55.0,
            cut_w=336.0, cut_h=111.0, z=185.0, rebate=4.5)   # PLACEHOLDER outline radius and screw pattern: Hypex's 2D drawing
 # The plate's rebate is 4.5 deep: the 3.0 plate on 3 mm closed-cell EPDM tape compressed to 1.5, so it seals and lies flush
-# (fab/research/amps.md); it is held by ten 4.3 x 25 self-tappers in 3.5 pilot holes to Hypex's drawing.
-AMP_BOX = dict(depth=90.0, margin=12.0, gland_d=25.0)       # clear depth in front of the back's inner face; space above and below the cutout;
+# (fab/research/amps.md); it is held by ten 4.3 x 16 self-tappers in 3.5 pilot holes through the 13.5 left under the rebate,
+# where Hypex's 2D drawing puts them (not obtained: ask Hypex, or mark them from the plate in hand).
+AMP_BOX = dict(depth=90.0, margin=12.0, gland_d=25.0, nut_cb=(40.0, 8.0))   # clear depth in front of the back's inner face; space above and below the cutout;
+                                                            # the gland's lock nut in a 40 x 8 counterbore in the lid's underside (an M25 long thread is 15: 18 of lid less 8);
                                                             # the lid's gland an M25 with a three-hole seal (woofer, mid, tweeter)
 TERMINAL_CUTOUT = (113.0, 49.0)  # DERIVED the terminal cup's body plus 0.5 a side, through the back (was 96 x 36 behind a flat plate)
 # 2026-10-08, the owner: the drivers flush. Each frame sits in a rebate as deep as its flange and the printed trim ring over it, so
@@ -145,7 +153,11 @@ LEAD_ABOVE_GROMMET = 250.0   # the cabinet's tweeter lead past the grommet: 67 u
                              # in front of the bay (so the socket comes out through the empty pocket), 16 of slack
 WOOFER_REBATE = dict(d=315.6, depth=9.0)  # PLACEHOLDER the RSS315HF-4's 314 frame + 2 x 0.8; depth its flange (about 5, measure it) + 1.0 of compressed gasket + the 3 mm ring
 MID_REBATE = dict(d=166.6, depth=11.5)    # PLACEHOLDER the MR16P-8's 165 frame + 2 x 0.8; depth its 7.5 front flange + 1.0 of gasket + the 3 mm ring
-TRIM_RING = dict(t=3.0, width=20.0)       # PROPOSAL printed trim ring over each frame and its screws, sprayed satin black, a friction fit
+TRIM_RING = dict(t=3.0, width=20.0)       # PROPOSAL printed trim ring over each frame and its screws, sprayed satin black, held by three dots of neutral-cure silicone
+# Each ring's inner diameter: the driver's surround at its glue line + 2, so the ring covers the flange and its screw heads
+# and never the surround. PLACEHOLDER from the research's estimates (the RSS315HF-4's surround about 280 to 295, the
+# MR16P-8's not found, about 139 for its 140 cutout): measure each driver's surround and print the rings last.
+TRIM_RING_ID = dict(woofer=290.0, mid=141.0)
 POST_HOLE = 10.0          # PLACEHOLDER binding-post hole in the plate
 
 # --- Port (DERIVED in fab/acoustics.py; this is the length the files are cut to) ------------------------------------
@@ -153,6 +165,7 @@ PORT_WALL = 4.0           # PROPOSAL printed tube wall: 92 bore + 2 x 4 = 100 OD
 PORT_FLANGE_T = 5.0       # PROPOSAL
 PORT_FLARE_R = 18.0       # PROPOSAL inner end flared on an 18 mm radius to keep it quiet
 PORT_LENGTH = None        # filled from out/acoustics.json if present (total tube length, flange face to inner lip)
+PORT_TRIM = 10.0          # the printed tube is this much longer, trimmed to tune by measurement (fab/README.md)
 
 BIRCH_DENSITY = 680.0     # kg/m3, Baltic birch plywood, for the weight check
 
@@ -184,20 +197,27 @@ if BOOK:
                   bay_d=26.0, bay_l=22.0, bay_dz=-5.0)
     # Scan-Speak Illuminator D3004/602200: its 62 mm faceplate screwed to the insert's back, the dome in the 34 mm throat
     TWEETER_PART = dict(model='Scan-Speak Illuminator D3004/602200', dome_d=26.0, surround_w=4.0, flange_d=62.0, flange_t=4.5,
-                        body_d=48.0, body_depth=17.0, screws=3, bolt_circle=54.0)
+                        body_d=48.0, body_depth=17.0, screws=3, bolt_circle=54.0, mount='screws')
+    # Its faceplate has its own three holes (about 55 apart, the research's estimate), so it screws to the seat from behind:
+    # M2.5 low heads (ISO 7380, head 4.7 across) on the 54 circle clear the 48 body by 0.65; a body over 49 would need the
+    # floorstander's sleeve, which the 3 mm boss wall here cannot hold. Knurled brass inserts bonded with epoxy hold in
+    # any of the insert's materials (a heat-set insert will not melt into cured resin). PLACEHOLDER circle: measure first.
+    RETAINER = None
+    INSERT_SCREW = dict(hole_d=3.6, depth=5.0, insert='M2.5 x 4 knurled brass, bonded with epoxy',
+                        screw='M2.5 x 8 button head, ISO 7380, A2', head_d=4.7)
     TWEETER = dict(TWEETER, faceplate_y=WAVEGUIDE['throat_y'], z=WAVEGUIDE['throat_z'])
     DRIVER_SET = dict(woofer='sb17nrx2c35-8', mid=None, tweeter='d3004-602200')
     WOOFER_CUTOUT = 144.9                     # PLACEHOLDER unconfirmed in the research
     DRIVER_SCREWS = dict(woofer=dict(n=4, pcd=159.0, hole=5.5, start_deg=45.0))   # 4 x 4.3 on 159 (fab/research/drivers-small.md)
-    LEAD_ABOVE_GROMMET = 100.0
+    LEAD_ABOVE_GROMMET = 185.0   # 33 up the channel to the bay's floor, about 115 to the roof, 20 proud, 16 of slack (the drawing check's d14)
     WOOFER_REBATE = dict(d=172.6, depth=10.5)  # the 171 frame + 2 x 0.8; its 6.5 flange + 1.0 of gasket + the 3 mm ring
     MID_CUTOUT = None; MID_REBATE = None
-    PORT = None                               # sealed: about 10 L net, f3 62 Hz, a DSP shelf to 45 Hz (the research)
+    PORT = None                               # sealed: 9.2 L net (fab/out-bookshelf/acoustics.json), f3 63 Hz, a DSP shelf to 45 Hz
     POSTS = dict(POSTS, z=180.0)
     # Hypex FusionAmp FA122 upright on the back (its 315 plate will not lie across a 220 back)
     AMP = dict(model='Hypex FusionAmp FA122', plate_w=120.0, plate_h=315.0, plate_t=3.0, plate_r=4.0, module_depth=55.0,
-               cut_w=96.0, cut_h=291.0, z=235.0, rebate=4.5)
-    AMP_BOX = dict(depth=70.0, margin=10.0, gland_d=20.0)   # an M20 with a two-hole seal
+               cut_w=96.0, cut_h=293.0, z=235.0, rebate=4.5)   # the cut-out 291 in Hypex's data, 293 on an Audiophonics drawing: cut 293 (the 315 plate still laps 11 each end) unless the module offered to a test cut-out says otherwise
+    AMP_BOX = dict(depth=70.0, margin=10.0, gland_d=20.0, nut_cb=(32.0, 8.0))   # an M20 with a two-hole seal, its nut in a 32 x 8 counterbore
     # The back holds the amplifier, so the Facts go on the right side, as on a real carton
     LABEL = dict(w=150.0, h=147.0, top=420.0, face='right')
     BADGE = dict(type=25.0, relief=1.2, z=31.0, tracking=-0.035)
@@ -211,3 +231,4 @@ if BOOK:
                                                                   # z 62 to 409 and its 18 mm front, glued to both sides, braces them
     GABLE_SPLIT_Z = None
     TRIM_RING = dict(t=3.0, width=12.0)
+    TRIM_RING_ID = dict(woofer=147.0)      # PLACEHOLDER the SB17NRX2C35-8's surround just inside its 145 cutout (the research) + 2
