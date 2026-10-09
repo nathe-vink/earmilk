@@ -76,8 +76,10 @@ def main():
         if pdef.get('normals_from') and not a.masks_only:
             # shading normals, and the waveguide's facets refined onto its true surface (a few tenths of a millimetre):
             # nothing a flat id mask can show, and in a frame of six copies the refined mesh took the mask pass to
-            # 9.7 GB (05-e7)
-            Pr.normals_from(bpy, templates, pdef['normals_from'], pdef['origin_mm'], ROOT)
+            # 9.7 GB (05-e7). A shot whose waveguides are a few dozen pixels across keeps the normals and skips the
+            # refinement ("normals_refine": false in its product block)
+            rules = pdef['normals_from'] if blk.get('normals_refine', True) else [dict(r, refine=0) for r in pdef['normals_from']]
+            Pr.normals_from(bpy, templates, rules, pdef['origin_mm'], ROOT)
         o_, p_ = Pr.place(bpy, pdef, templates, {**sh, 'product': blk}, ROOT)
         objs += o_; part_of.update(p_)
     if objs:

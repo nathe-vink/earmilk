@@ -1,0 +1,311 @@
+{
+ "stage1": {
+  "impression": "Six milk-carton speakers in a clean diagonal row on a mid-grey sweep: geometry, drivers and colourways read cleanly, but the light is generic and flat and the drab grey backdrop dulls the whites and the palette. The glossy plinth bands look like translucent grey glass on their side faces, and the evenly spaced row with dead grey above and below reads as a competent catalogue draft rather than a hero.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Front planes modelled, not flat fields: the white front strip [362,245,368,480] falls 12-20 levels from eave to plinth (now 3.8: 240.9 -> 237.1) with its top <= 244 and nothing clipped, and the coloured fronts carry the same ~0.3 EV gradient (Oat strip [1205,320,1214,550] now 8.2).",
+  "Side faces show lacquer colour, not a mirrored floor: Oat plinth side within dE 6 of #2B2118 (now 14.8 at 76,75,74), Matcha plinth side reads British racing green (now 41,57,47), no mirrored light wedges on the lower side faces (Oat body side 134 against 108).",
+  "Accent colours true on every lit plane: roof front slopes within dE 2.5 of spec (red now 5.1, blue 3.3, BRG 3.2, light blue 3.0) while plinth fronts stay within 2 (red 0.7); white bodies neutral on their shade sides (Skim side now 163,168,158, green spill from the Matcha 0.26 m away).",
+  "All six grounded the same way: a 5-20 level contact darkening at every base (the Chocolate now sits on a +13 halo, 138.9 against 125.5 open floor; the Skim has none, 129.7).",
+  "Cast-metal wordmarks on the dark plinths read as metal: highlights p95 >= 200 with tonal variation, instead of a flat 141-148 grey.",
+  "Balanced framing: the near (right) end gets at least the far end's margin (now 117 px against 169 px), the group fills ~85% of the width (now 81%) with even top and bottom room (now 152/122 px).",
+  "A designed backdrop: brightest behind the row and falling off toward the corners, instead of a left-to-right slope (152.5 -> 131.6 across the top band) that makes the empty upper-left the brightest background.",
+  "One specular cue per carton that reads on all six colours (e.g. a crisp ridge or rake highlight on each roof), so the same lacquer finish is visible on the cream and white cartons and not only on the dark ones."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "camera",
+   "problem": "The plinth bands' side faces mirror the grey floor through the clear coat at 50-70 degrees incidence, so the darker plinths read as smoked glass and lose their colour.",
+   "evidence": {
+    "region": [
+     1356,
+     576,
+     1370,
+     588
+    ],
+    "measured": "Oat plinth side is neutral grey (76,75,74), lum 75, dE2000 14.76 to #2B2118, while its front is (42,31,22), dE 0.90, and the bottom rows of the same side, which mirror the contact shadow, show the real colour (18,11,7); Matcha plinth side (41,57,47) against (2,38,21) where unglared; Oat body side carries a mirrored wedge at 134 against 108 (x 1340-1350, y 557-580)."
+   },
+   "change": {
+    "setting": "camera.polariser",
+    "from": "(default)",
+    "to": {
+     "strength": 0.85,
+     "angle_deg": 0
+    }
+   },
+   "expected": "Glare on obliquely seen vertical faces is cut while the roof-slope sheen (horizontally polarised) stays: Oat plinth side becomes dark brown around (40-52, 32-45, 25-40), dE <= 6 to #2B2118; Matcha plinth side turns toward BRG (G minus R >= 30); the mirrored wedges on the lower side faces fall within ~8 levels of the face; white side faces lose <= 5 levels and the green reflection on the Skim side weakens; plinth fronts, seen at 30-47 degrees, lose only part of their glare and stay within dE 3 of spec (red now 0.7).",
+   "accept": {
+    "region": [
+     1356,
+     576,
+     1370,
+     588
+    ],
+    "metric": "delta_e",
+    "hex": "#2B2118",
+    "op": "between",
+    "value": [
+     0,
+     6
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The key strikes the 37.6 degree roof slopes almost square (18 degrees off normal), so every roof runs about 0.4 EV hotter than the fronts and the accents go light and off spec, while the same key parks the white fronts on the tone curve's shoulder where their gradient is crushed.",
+   "evidence": {
+    "region": [
+     262,
+     196,
+     282,
+     212
+    ],
+    "measured": "red roof slope (223,32,34), dE 5.08 to #C62828, against 0.72 on the red plinth front; roof front slopes blue dE 3.3, light blue 3.0, BRG 3.2; the white front strip [362,245,368,480] falls only 240.9 -> 237.1 while the uncompressed Matcha strip [766,280,776,515] falls 188.0 -> 178.3 under the same light."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 2.6,
+    "to": "x0.6"
+   },
+   "expected": "Roof slopes come back to spec: red slope near (198,32,35), dE <= 2.5, blue, light blue and BRG within ~2; the white fronts drop off the shoulder (top ~226-232, bottom ~216-222) so their existing falloff shows before c3 lifts the top again; side faces unchanged (~185); the backdrop's left-to-right slope eases from 20.9 to ~15 levels; cast shadows soften from ~45 to ~30 levels below the lit floor.",
+   "accept": {
+    "region": [
+     262,
+     196,
+     282,
+     212
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     2.5
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Every front is a single flat value from eave to plinth, so the six bodies read as printed cards rather than lit lacquered boxes.",
+   "evidence": {
+    "region": [
+     362,
+     245,
+     368,
+     480
+    ],
+    "measured": "inst-1 white front profile 240.9, 240.8, 240.8, 239.9, 239.8, 238.8, 237.9, 237.1 (falloff 3.8); across inst 0's front 238.7-239.8; Oat front strip [1205,320,1214,550] 195.0 -> 186.8; the fronts are lit by a key 17.3 m away (no inverse-square falloff over a 0.86 m face) and a fill at 15 degrees elevation."
+   },
+   "change": {
+    "setting": "lights.front_strip",
+    "from": "(none)",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      5.5,
+      0.5
+     ],
+     "position": [
+      -0.1,
+      -1.0,
+      2.0
+     ],
+     "target": [
+      -0.03,
+      -0.1,
+      0.5
+     ],
+     "strength": 0.6,
+     "color": "#FFF7EA",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -1.25,
+       -0.75
+      ],
+      "values": [
+       1,
+       1
+      ]
+     },
+     "diffuse": 1,
+     "receivers": [
+      "front-baffle"
+     ]
+    }
+   },
+   "expected": "A long overhead strip parallel to the row, 0.8 m in front of the fronts and 1 m above the roofs, lights the fronts about 3:1 top to bottom and evenly along the row: the inst-1 white strip runs from ~236-240 at the eave to ~220-226 at the plinth line (falloff 12-20 instead of 3.8), top <= 244, no clipping; the coloured fronts get a similar ~0.3 EV gradient (Oat strip falloff ~15-25 instead of 8.2); plinth fronts return to within dE 2.5 of spec after c2; roofs, sides, floor, drivers and letters untouched (linked to front-baffle only, invisible to camera).",
+   "accept": {
+    "region": [
+     362,
+     245,
+     368,
+     480
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     20
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "Cutting the key in c2 also takes light off the sweep, which would drop the mid-grey backdrop about 10 levels and make the whole frame heavier.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     1500,
+     140
+    ],
+    "measured": "top band lum_median 145.5 (p5 131.5, p95 156.7), sloping 152.5 -> 131.6 left to right where the key rakes the wall; bottom floor band 135.2; white side faces 183-190 now sit 40-55 levels above the floor behind them."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#808080",
+    "to": "#8E8E8E"
+   },
+   "expected": "The backdrop holds its present tone after c2: top band ~145 (138-152), floor band ~135; white side faces stay >= 25 levels above the floor behind them, which is the separation a lighter sweep would cost.",
+   "accept": {
+    "region": [
+     0,
+     0,
+     1500,
+     140
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     138,
+     152
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The cast-metal wordmarks on the dark plinths read as flat grey print because they mirror the mid-grey floor just in front of each plinth.",
+   "evidence": {
+    "region": [
+     1239,
+     587,
+     1296,
+     607
+    ],
+    "measured": "Oat wordmark letters (148,148,144), median 147.5, p95 157.8 (box p95 156.6); Whole 141.4, 2% 142.7, Matcha 148.5 - no highlight anywhere; their mirror rays land on the floor 0.1-0.3 m in front-left of each plinth, which reads ~125-140."
+   },
+   "change": {
+    "setting": "lights.letter_card",
+    "from": "(none)",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      4.6,
+      0.8
+     ],
+     "position": [
+      -0.2,
+      -0.27,
+      0.005
+     ],
+     "target": [
+      -0.2,
+      -0.22,
+      1.0
+     ],
+     "strength": 1.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -0.67,
+       0.13
+      ],
+      "values": [
+       1,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "letters-front-*"
+     ]
+    }
+   },
+   "expected": "A floor-level card under the letters' mirror points, seen only by the letters: the light-metal letters on the red, blue, BRG and dark-brown plinths rise to p95 200-230 with brighter faces against darker bevels, their contrast to the plinth growing from ~75-115 to ~150-190 levels; the dark bronze letters on the Skim and Chocolate plinths stay >= 60 levels darker than their plinths.",
+   "accept": {
+    "region": [
+     1239,
+     587,
+     1296,
+     607
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     195,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "Grounding is inconsistent: the light plinths have no contact shadow and the cream one sits on a bright halo of its own floor reflection.",
+   "evidence": {
+    "region": [
+     1046,
+     596,
+     1056,
+     600
+    ],
+    "measured": "1-7 px under the Chocolate's cream plinth the floor is 138.9 (warm 144,138,133), 13 levels above the open floor 30 px lower (125.5); directly under the Oat 109.4, Matcha 115.7, Skim 129.7 (none)."
+   },
+   "change": {
+    "setting": "materials.sweep.contact",
+    "from": 0,
+    "to": 0.5
+   },
+   "expected": "A thin contact line under all six within contact_m 0.05: under the cream plinth the floor drops from 138.9 to 104-122 (5-20 below open floor), under the Skim from 129.7 to ~110-120, under the Oat from 109 to ~90-100; nothing changes further than ~5 cm from the bases.",
+   "accept": {
+    "region": [
+     1046,
+     596,
+     1056,
+     600
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     104,
+     122
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Make the plinth and body clear coat satin or rougher so the side faces stop mirroring the floor.",
+   "why": "The paint and clear coat are the product's fixed finish; the mirrored grey floor is what turns the Oat plinth side grey (dE 14.8), so c1 removes that glare at the lens instead."
+  },
+  {
+   "request": "Reshape the tweeter waveguide (shallower bowl, softer rim) so the scoop and dome stop reading as a beak with an eye on the dark Oat and Matcha roofs.",
+   "why": "Its depth, profile, mouth and the tweeter's place in it are set by acoustic simulation; only light and camera may change how it reads, for example by keeping its rim highlight below the roof's sheen."
+  }
+ ],
+ "score_if_fixed": 7.4
+}
