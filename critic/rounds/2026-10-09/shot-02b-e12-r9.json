@@ -1,0 +1,350 @@
+{
+ "stage1": {
+  "impression": "A red-and-white milk-carton speaker stands right of centre against a dark teal wainscot, its gable silhouette thrown onto a low warm window patch beside it, and the idea reads at a glance. The product itself reads as a flat, cream-tinted CG box (even front, pinkish side, hard unbevelled edges), the bright patch running off the top-left edge competes with it and the dark foreground floor is dead weight, so it is a competent draft rather than a homepage image.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Front white (front-baffle above the plinth) at median 196-212 and within dE 2.5 of #D9C9B8 (Lab 82/+3/+10, white in warm light); now median 190.0, dE 5.15, Lab 77.1/+5.9/+10.1 (hue 60, salmon), dE 17.8 to #FFFFFF.",
+  "Red roof slope carries a lacquer reflection ramp and separates from the fin: band [745,276,931,300] (gable-block) falloff along x +15 to +35; now -20.6, the slope one value (51.4 / 51.4 / 51.0 left of, above and right of the waveguide), the fin 50.0, plus one 81-93 hot spot at the right ridge corner.",
+  "Window light closes inside the frame: [310,10,690,70] at shaded-wall level (<= 40), with no glazing-bar shadow crossing the silhouette's patch ([310,290,395,490] p5 >= 100); now that region is 116.3 and the patch runs off the top edge across x 296-705.",
+  "Woofer's shaded half holds form: lower-right cone quadrant [835,611,889,666] median 12-32; now 5.5, with 56% of the right half and 70% of the dust cap at <= 3.",
+  "Wordmark reads as metal: letters-front-* median 100-140 on the ~45 plinth; now 76.6 (p95 79.3), contrast 1.76:1.",
+  "Speaker clears the light patch: its left edge (x 742) at least 80 px from the patch's soft right edge (now x 705, a 37 px near-tangent of two verticals), with the silhouette centred in its patch (margins now 109 px left, 64 px right)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The white front is held below the 200-220 band the card gives for modelling white lacquer, so it prints as a dim beige rather than a white.",
+   "evidence": {
+    "region": [
+     743,
+     346,
+     931,
+     700
+    ],
+    "measured": "front-baffle pixels above the plinth: median 190.0, p95 206.3; top-to-bottom profile 199.6, 194.8, 191.1, 189.9, 186.9, 179.4, 174.8, 172.9; whole frame mean 52.5 with 57.1% of pixels below 40"
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 2.0634,
+    "to": "+0.2"
+   },
+   "expected": "Front white median ~203 (top ~217, bottom ~185, p95 ~218, clip 0); sunlit wainscot patch 114.6 -> ~124; shaded wainscot 38.1 -> ~43; carton shadow 21.7 -> ~25; gable 51 -> ~56.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      743,
+      346,
+      931,
+      700
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     196,
+     212
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "post",
+   "problem": "The white reads salmon, not white: its hue sits on the red side of orange, and it is pinkest low on the front.",
+   "evidence": {
+    "region": [
+     743,
+     346,
+     931,
+     700
+    ],
+    "measured": "front white median rgb [209, 186, 172] = Lab 77.1/+5.9/+10.1, hue 60; dE2000 17.84 to #FFFFFF and 5.15 to the warm-white target #D9C9B8 (Lab 81.9/+3.0/+10.3, hue 74); lower strip [752,640,790,700] rgb [197, 168, 148], a* +7.5; side-right [239, 205, 180], hue 64"
+   },
+   "change": {
+    "setting": "render.white_balance_tint",
+    "from": 1.9169,
+    "to": -6
+   },
+   "expected": "With c1: front white a* 5.9 -> ~3.9, hue 60 -> ~74 (~[221, 200, 178] before c3); dE to #D9C9B8 5.15 -> ~2.2, then ~0.5 once c3 is in; gable stays within dE 3.1 of #C62828; sunlit patches stay warm (wainscot hue ~98, chroma ~24).",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      743,
+      346,
+      931,
+      700
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#D9C9B8",
+    "op": "<=",
+    "value": 2.5
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "With the magenta taken out by the tint alone the white goes ivory (b* about +13.8, chroma 14), which reads as a cream finish rather than the Whole flavour's #FFFFFF in warm light.",
+   "evidence": {
+    "region": [
+     743,
+     346,
+     931,
+     700
+    ],
+    "measured": "front white B 172 against G 186 (b* +10.1); this frame re-mapped through PBR Neutral at tint -6, +0.2 EV gives [221, 200, 178], Lab 81.8/+3.9/+13.8; at 3550 K it gives [217, 201, 184], Lab 81.9/+3.0/+10.3"
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 3700,
+    "to": 3550
+   },
+   "expected": "With c1-c2: front white ~[217, 201, 184] (B 178 -> ~184, chroma ~14 -> ~11), dE to #D9C9B8 <= 0.5; sunlit side stays warm ~[242, 216, 189]; gable dE to #C62828 3.48 -> ~2.3; shaded wainscot slightly cooler ~[21, 50, 49].",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      743,
+      346,
+      931,
+      700
+     ]
+    },
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     179,
+     192
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The red roof slope is one flat value, so the lacquered roof reads as matte paper and merges with the fin, because the roof-sheen panel sits where only the slope's right ridge corner can mirror it.",
+   "evidence": {
+    "region": [
+     745,
+     276,
+     931,
+     346
+    ],
+    "measured": "gable-block: slope left of the waveguide [745,285,775,345] median 51.4 (range 3.4, y-profile 51.4 -> 51.9), above it [775,276,900,292] 51.4, right of it [900,280,930,345] 51.0; fin band 50.0; band [745,276,931,300] x-profile 51.2, 51.2, 51.2, 51.2, 51.3, 51.5, 54.1, 71.8 (falloff -20.6) from one 81-93 hot spot at x 903-930, y ~285. Traced from the camera: the slope's mirror rays meet the panel's plane 0.54-1.03 m from its centre (half-size 0.6), so only that corner sees it"
+   },
+   "change": {
+    "setting": "lights.roofsheen.position",
+    "from": [
+     0.66,
+     0.25,
+     1.88
+    ],
+    "to": [
+     -0.09,
+     0.23,
+     1.89
+    ]
+   },
+   "expected": "The whole slope mirrors the panel through its existing y-ramp: a diagonal sheen from ~85-95 at the upper left by the fin (rgb ~200/55/50) down to ~56 at the lower-right eave; the fin stays ~55 and reads as its own plane; the corner hot spot goes; band falloff ~+25 to +30; waveguide lip highlights stay below ~180.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      745,
+      276,
+      931,
+      300
+     ]
+    },
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     15,
+     35
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "The sun patch runs off the top edge for its full width at 5-7x the contrast of the wall around it, so the eye leaves the frame above the silhouette instead of settling on the speaker.",
+   "evidence": {
+    "region": [
+     310,
+     20,
+     690,
+     150
+    ],
+    "measured": "median 117.2, rgb [146, 112, 83] (a* +9.4, more orange than the 114.6 khaki patch below the rail), range 6.6, unbroken to y 0 between the patch edges at x 296 and 705; shaded upper wall 16.3 at [20,20,270,140] and 23.4 at [740,20,1300,150]"
+   },
+   "change": {
+    "setting": "set.windows.0.size",
+    "from": [
+     1.6,
+     2.5
+    ],
+    "to": [
+     1.6,
+     1.6
+    ]
+   },
+   "expected": "Window head at 2.0 m: the light ends at a slanted head line from about (304, 170) to (697, 90), parallel to today's bar shadow; [310,10,690,70] 116.3 -> ~20-27 (shaded-wall level); the speaker (lit through 0.46-1.51 m of the window), its silhouette, the wainscot patch below the rail and the floor pool keep their light.",
+   "accept": {
+    "region": [
+     310,
+     10,
+     690,
+     70
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     10,
+     40
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "With the shorter window (c5) the single glazing bar drops from 1.65 m to 1.2 m, and its shadow would cross the patch at the carton's mid-height (about y 460-485 left of the silhouette, y 390-400 right of it), cutting the silhouette's clean field; this change must go with c5.",
+   "evidence": {
+    "region": [
+     310,
+     290,
+     395,
+     490
+    ],
+    "measured": "bar shadow traced and seen from (318, 301) to (664, 222), just above the fin's shadow (top y ~300); in this strip p5 61.9 (bar core ~50) against p5 114.7 in clean patch [310,340,395,440]"
+   },
+   "change": {
+    "setting": "set.windows.0.mullions",
+    "from": [
+     1,
+     2
+    ],
+    "to": [
+     1,
+     1
+    ]
+   },
+   "expected": "No bar shadow anywhere in the patch, with the slanted head line from c5 carrying the window read; [310,290,395,490] p5 61.9 -> ~120 (clean patch after c1).",
+   "accept": {
+    "region": [
+     310,
+     290,
+     395,
+     490
+    ],
+    "metric": "lum_p5",
+    "op": ">=",
+    "value": 100
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The woofer's shaded half is a black hole: the low sun lights the cone's left wall, while its right half and dust cap mirror the dark floor and crush to black.",
+   "evidence": {
+    "region": [
+     835,
+     555,
+     889,
+     666
+    ],
+    "measured": "woofer-cone right half median 2.6, 56.2% at <=3 (upper-right quadrant [835,555,889,611] 94.9% at <=3; lower-right [835,611,889,666] median 5.5, 27.2% at <=3); woofer-cap median 2.1, 69.7% at <=3; lit left half median 35.4, p95 189.6. Traced: the lower-right quadrant mirrors open room up and to the left (-0.88, 0.21, 0.42), leaving the cone 0.35 forward of the baffle, so a glint can sit there; the point below projects to (865, 633) on woofer-cone"
+   },
+   "change": {
+    "setting": "glints.1",
+    "from": "none",
+    "to": {
+     "at": [
+      -0.047,
+      -0.161,
+      0.27
+     ],
+     "normal": [
+      -0.81,
+      -0.424,
+      0.406
+     ],
+     "size_m": 0.5,
+     "power_w": 0.6,
+     "receivers": [
+      "woofer-cone",
+      "woofer-cap"
+     ]
+    }
+   },
+   "expected": "A soft radial highlight across the lower-right quadrant (median 5.5 -> ~15-25, crush 27% -> under 10%) and a small soft highlight on the dust cap, so the cone reads as metal in shade; the upper-right quadrant stays dark (it mirrors the cone itself); the lit left half unchanged.",
+   "accept": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      835,
+      611,
+      889,
+      666
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     12,
+     32
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The cast-metal wordmark reads as dull grey plastic, with no highlight and little lift off the red.",
+   "evidence": {
+    "region": [
+     793,
+     732,
+     875,
+     752
+    ],
+    "measured": "letters-front-* median 76.6, p95 79.3, rgb [83, 76, 67] on a plinth of 43.6 (contrast 1.76:1); no kick line shows on the plinth at today's 0.0473 (strip [748,705,785,777] 43.6-56.9)"
+   },
+   "change": {
+    "setting": "lights.letterkick.strength",
+    "from": 0.0473,
+    "to": 0.085
+   },
+   "expected": "Letters median ~115 (p95 ~130) with brighter top faces, reading as satin metal; contrast on the ~48 plinth ~2.4:1; plinth red unchanged.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     100,
+     140
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Lift the woofer cone's upper-right quadrant (94.9% of its pixels at <=3) with a lighter or less absorbing cone surface or a shallower cone.",
+   "why": "That part of the cone mirrors the cone's own black interior, so no lamp or glint can show in it (a glint there would be skipped); the cone's material and depth are the Dayton RSS315HF-4's own and fixed. A black crescent stays in the largest feature on the front."
+  },
+  {
+   "request": "A brighter or polished metal for the 'earmilk' letters.",
+   "why": "The letters' material is part of the product's finish and fixed; c8 changes only what they reflect, so they will read as satin metal, not bright."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
