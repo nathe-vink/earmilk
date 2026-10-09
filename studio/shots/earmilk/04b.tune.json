@@ -226,5 +226,34 @@
   "set": 2.0,
   "passes": false,
   "moves_the_test": false
+ },
+ {
+  "change": "c2",
+  "setting": "lights.sidegloss.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    12,
+    22
+   ]
+  },
+  "proofs": [
+   [
+    1.4,
+    17.9
+   ],
+   [
+    2.2,
+    24.6
+   ],
+   [
+    1.2925,
+    16.9
+   ]
+  ],
+  "set": 1.2925,
+  "passes": true,
+  "moves_the_test": true
  }
 ]

@@ -291,9 +291,6 @@
    "receivers": [
     "amp-connectors",
     "amp-switch"
-   ],
-   "occlusion_ignore": [
-    "amp-module"
    ]
   },
   {
