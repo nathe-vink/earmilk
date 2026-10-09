@@ -1,0 +1,272 @@
+{
+ "stage1": {
+  "impression": "A white-and-red milk-carton speaker exploded on a mid-grey sweep: the build story reads and the reds are clean, but the light is flat and generic, the white faces barely separate, and the grey ground is dull and muddy. The black drivers sink into the grey and look pasted in, and the layout is loose, with a heavy empty top-left.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The front baffle, which carries the story, faces 63 degrees away from the camera, so the rebates read as slivers and the cones as narrow ellipses (woofer-cone is 57 px wide, woofer-cap 2 px). It needs to be seen at 50 degrees or less (rotate_z about 60), with all six explode offsets re-spaced so every gap stays at 40 px or more.",
+  "The pocket's magnets show only 15 px (magnets-pocket mask) and the boss face is about 20 px across. The brief asks for the empty pocket, its bore and magnets to be visible: at least 150 px of magnets in frame.",
+  "The floor must be one smooth gradient with no reversals: 25 levels or fewer across the whole frame, and no band behind the product darker than the frame's top edge. Now it runs 115 to 167, darkest directly behind the cabinet.",
+  "The white body and the plinth must each show at least 20 levels between the side and front planes at the shared corner. Now the white step is 3 levels and the plinth step is -13 (inverted).",
+  "The front roof slope must hold the accent: its mid-tone within dE 6 of #C62828 (now 11.5, rgb 223,80,84) while keeping a visible lacquer sheen.",
+  "The cast letters must read as metal, at least 2x the plinth's luminance (now 82 against 50-62). They mirror the shaded floor 3-6 cm in front of the plinth's base, so a glint is skipped there. The fix needs a reflection source at the base that leaves no visible patch in the plinth's clear coat.",
+  "Explode rhythm: the gaps on the three axes within +/-30% of each other, and every gap between parts on different axes larger than the gaps along an axis. After c5/c6 the roof axis runs about 154 px against 58-83 px on the driver axes.",
+  "A defined contact line under the plinth (now a soft ramp from 143 to 162 over 50 px)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The floor directly behind the product is the darkest part of the frame: a muddy band darker than both the foreground and the top edge. No lamp lights the floor in view; the sweep lamp aims above the frame and lifts only the top ~120 px.",
+   "evidence": {
+    "region": [
+     0,
+     250,
+     200,
+     550
+    ],
+    "measured": "Median 118.6. Left-column profile (x 100-300) top to bottom: 129.6, 126.6, 120.6, 118.6, 120.6, 125.6, 132.8, 139.6, 141.8. Floor cells right behind the cabinet (x 375-450, y 500-650): 110-117. Foreground under the plinth: 157.4 to 166.2. The sweep target [-0.7, 4.4, 0.7] projects about 170 px above the frame."
+   },
+   "change": {
+    "setting": "lights.floor",
+    "from": "absent",
+    "to": {
+     "type": "area",
+     "size_m": [
+      2.5,
+      2.0
+     ],
+     "position": [
+      -1.0,
+      1.6,
+      2.6
+     ],
+     "target": [
+      -0.8,
+      1.3,
+      0.0
+     ],
+     "irradiance": 1.0,
+     "color": 6000
+    }
+   },
+   "expected": "The belt rises from 118.6 to about 146 in the test box, and from 110-124 to about 140 right behind the cabinet. The foreground stays at 157-166, so the floor's range falls from about 52 to 30 levels or fewer and runs light in front, slightly darker behind. The lamp sits behind both visible white faces, so neither changes (only the 8 px back-panel sliver may gain a thin rim). Its mirror point in the front roof slope, about [1.6, 2.0, 2.6], lies outside the lamp, so the slope's red is unaffected. The test box stays floor in the c3+c4 frame.",
+   "accept": {
+    "region": [
+     0,
+     250,
+     200,
+     550
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     138,
+     158
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The key sits 0.67 m away on the bisector of the near corner and lights the side and front planes equally, so they meet at the same value, the cabinet's main edge dissolves and the box reads as a soft cylinder.",
+   "evidence": {
+    "region": [
+     580,
+     330,
+     628,
+     600
+    ],
+    "measured": "Side-left strip [580,330,606,600] is 233.4 and front strip [612,330,628,600] is 230.2, a 3-level step. The edge across the corner measures -4.9 to -7.5 at y 330-442. By the corner the plinth reads 49.4 on the side and 62.2 on the front (inverted). Both faces brighten toward the corner: side-left x-profile 208 to 229, front-baffle 230 to 176. That pattern puts the key in front of the corner."
+   },
+   "change": {
+    "setting": "lights.key.orbit.azimuth_deg",
+    "from": -40,
+    "to": -65
+   },
+   "expected": "The key swings round to the side panel (about 25 degrees off its normal instead of 50) and grazes the front. Side-left median goes from 219 to about 232, front-baffle median from 202.7 to about 187. At the corner the planes split: side about 238, front about 212, a step of about 25 instead of 3. The plinth flips to side brighter than front (about 58 against 48). Side-left p95 stays at 245 or below with no clipping, and the gable-end red stays within dE 6 of #C62828. The part-based test survives c3/c4.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     179,
+     195
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "camera",
+   "problem": "The subject is small for a build page: it fills 47% of the width and 72% of the height, so the parts the frame exists to show are illegible (the tweeter is 30x43 px, the pocket magnets 15 px).",
+   "evidence": {
+    "region": [
+     445,
+     122,
+     1079,
+     766
+    ],
+    "measured": "Group box 634x644 px. tweeter-frame 30x43 px, magnets-pocket 15 px, woofer-cap 2 px. Margins: top 122, bottom 134."
+   },
+   "change": {
+    "setting": "camera.lens_mm",
+    "from": 50,
+    "to": 57
+   },
+   "expected": "Everything scales x1.14 about the frame centre: the fin top moves from y 122 to about 81 and the plinth tip from 766 to about 819. The group fills about 82% of the height with about 81 px top and bottom margins, and the tweeter grows to about 34x49 px. The fin must stay at least 50 px below the top edge, so the lens should not exceed about 60 mm. The test band fills with gable pixels with or without c4.",
+   "accept": {
+    "region": [
+     300,
+     80,
+     700,
+     118
+    ],
+    "metric": "lum_p5",
+    "op": "between",
+    "value": [
+     30,
+     105
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "camera",
+   "problem": "The group sits 87 px right of centre (margins 445 px left, 271 px right), and c5 alone would push it to 444/206 px.",
+   "evidence": {
+    "region": [
+     445,
+     122,
+     1079,
+     766
+    ],
+    "measured": "Group centre x 762 against frame centre 675. Empty floor from x 0 to 445 on the left against 1079 to 1350 on the right."
+   },
+   "change": {
+    "setting": "camera.target",
+    "from": [
+     0.2,
+     0,
+     0.47
+    ],
+    "to": [
+     0.44,
+     0.035,
+     0.47
+    ]
+   },
+   "expected": "The level camera yaws about 3.6 degrees, which moves the content about 140 px left at 57 mm without changing what each face shows. The group (with c5) centres at x of about 672 with margins of about 273/279 px. The cabinet then spans x 273-574 and the corner lands near the left third line (x about 463), so the test box falls on the back half of the side-left.",
+   "accept": {
+    "region": [
+     330,
+     400,
+     400,
+     600
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     190,
+     245
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "composition",
+   "problem": "The drawn-out insert crowds the mid ring on the axis below (29 px, the closest pair in the frame) while sitting 120 px from its own tweeter, so the drawer reads as part of the mid driver's group instead of the roof's axis.",
+   "evidence": {
+    "region": [
+     870,
+     267,
+     1079,
+     462
+    ],
+    "measured": "Mask gaps: insert to mid ring 28.9 px, tweeter to insert 120 px, cabinet to tweeter 88 px, mid to mid ring 53 px. Projection matches explode.0 to the insert: 0.8 m along the front axis lands it at x of about 1003."
+   },
+   "change": {
+    "setting": "product.explode.0.offset_m",
+    "from": [
+     0,
+     -0.8,
+     0
+    ],
+    "to": [
+     0,
+     -0.92,
+     0
+    ]
+   },
+   "expected": "In the c3+c4 frame the insert moves to about [908, 236, 1071, 406]. Its gap to the mid ring grows from 33 px to about 110 px, and the box between them is clean floor (range 2-4). It stays about 279 px from the right edge and keeps its axis and assembly order. The test box is in the c3+c4 frame.",
+   "accept": {
+    "region": [
+     810,
+     300,
+     886,
+     395
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     0,
+     10
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "composition",
+   "problem": "Once the insert moves out, the tweeter would hug the roof (about 99 px) and float about 200 px from the insert it mounts behind, so the roof axis reads lopsided.",
+   "evidence": {
+    "region": [
+     792,
+     244,
+     822,
+     287
+    ],
+    "measured": "Now: cabinet to tweeter 88 px, tweeter to insert 120 px. The projection model for the c3+c4+c5 frame gives 99 against about 200 px. Projection matches explode.1 to the tweeter (0.5 m lands it at x of about 807)."
+   },
+   "change": {
+    "setting": "product.explode.1.offset_m",
+    "from": [
+     0,
+     -0.5,
+     0
+    ],
+    "to": [
+     0,
+     -0.6,
+     0
+    ]
+   },
+   "expected": "In the c3+c4 frame the tweeter moves to about [729, 229, 762, 275], centred between the pocket and the insert with gaps of about 154 px each. It stays more than 60 px from the mid driver and remains between the insert and the pocket, on the roof axis. The test box is in the c3+c4 frame.",
+   "accept": {
+    "region": [
+     668,
+     215,
+     712,
+     268
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     0,
+     10
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Finish the waveguide insert's flanks and back in the accent lacquer. They render as a cool blue-grey primer (rgb 154,158,167, lum 157) beside the red bowl (rgb 202,71,76).",
+   "why": "The card fixes the product's materials. It matters because the insert is the hero of the drawer story, and its grey body reads as an unfinished prototype part next to the lacquered roof it comes out of."
+  }
+ ],
+ "score_if_fixed": 6.8
+}
