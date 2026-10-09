@@ -521,5 +521,42 @@
   ],
   "reply": "critic/rounds/2026-10-09/shot-04a-e9-r6.json",
   "shot_sha": "06044014a9ac2a34e4baac6a1ae9f7d24e74e638"
+ },
+ {
+  "change": "c3",
+  "setting": "lights.port_fill.power_w",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    12,
+    45
+   ]
+  },
+  "proofs": [
+   [
+    0.02,
+    0.4
+   ],
+   [
+    0.08,
+    2.1
+   ],
+   [
+    0.2,
+    4.6
+   ]
+  ],
+  "set": 0.2,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c4",
+   "c5"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-04a-e9-r6.json",
+  "shot_sha": "2cf01490e603cf9b7eb92e8034e9f87eeb045065"
  }
 ]
