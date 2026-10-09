@@ -360,19 +360,32 @@ def retainer_screw_points():
 
 
 def retainer_y():
-    """The sleeve's front face (on the tweeter's front ring, behind its gasket) and the boss's back face."""
-    return WAVEGUIDE['throat_y'] + RETAINER['gasket'] + TWEETER_PART['flange_t'], INSERT['boss_back_y']
+    """The retainer's front face and the boss's back face: a sleeve's on the tweeter's front ring (behind its gasket), a
+    cap's on the motor's back face, `preload` further forward so the screws press the gasket by that much."""
+    T = TWEETER_PART
+    yf = WAVEGUIDE['throat_y'] + RETAINER['gasket'] + T['flange_t']
+    if RETAINER.get('mode') == 'cap':
+        yf += T['body_depth']
+    return yf - RETAINER.get('preload', 0.0), INSERT['boss_back_y']
+
+
+def retainer_rings():
+    """(outside, inside) diameters of the retainer's tube: in the bore, round the motor (a sleeve) or open in its middle
+    for the tabs and the lead, bearing on the motor's back rim (a cap)."""
+    R, T = RETAINER, TWEETER_PART
+    od = T['flange_d'] + 0.4 - 2 * R['fit']
+    idd = (T['body_d'] - 2 * R.get('rim', 6.0)) if R.get('mode') == 'cap' else (T['body_d'] + 2 * R['clear'])
+    return od, idd
 
 
 def tweeter_retainer():
-    """The floorstander's printed retaining sleeve (the drawing check's d1, round 2): a tube between the bore and the
-    motor, from the tweeter's front ring to the boss's back face, and a flange there with three holes for its screws.
-    Screwed home it presses the front ring onto its gasket on the throat's seat. Its bore is the motor's diameter plus
-    a clearance a side, so it follows TWEETER_PART['body_d'] when the tweeter is measured."""
+    """The floorstander's printed retainer: a tube in the bore from its bearing face to the boss's back face, and a
+    flange there with three holes for its screws. A cap (RETAINER mode 'cap', the default since round 7) bears on the
+    motor's back rim; a sleeve (the drawing check's d1, round 2) slides over the motor onto the front ring. Screwed home
+    either presses the front ring onto its gasket on the throat's seat; both follow TWEETER_PART when it is measured."""
     R, T, zc = RETAINER, TWEETER_PART, WAVEGUIDE['throat_z']
-    yf, yb = retainer_y()
-    od = T['flange_d'] + 0.4 - 2 * R['fit']; idd = T['body_d'] + 2 * R['clear']
-    yf -= R.get('preload', 0.0)          # the tube a little longer than its gap: the screws press the gasket (d5, round 5)
+    yf, yb = retainer_y()                # preload included: the tube a little longer than its gap (d5, round 5)
+    od, idd = retainer_rings()
     sl = cyl_y(RUN, zc, od, yf, yb) + cyl_y(RUN, zc, R['flange_d'], yb, yb + R['flange_t'])
     sl -= cyl_y(RUN, zc, idd, yf - 1, yb + R['flange_t'] + 1)
     for (x, z) in retainer_screw_points():
@@ -608,8 +621,8 @@ def features():
                                   'boss_bore_d': I['boss_d'] + 2 * I['clear'], 'boss_bore_to_y': round(I['boss_back_y'] + pocket_bore_behind_boss(), 2),
                                   'bay': {'d': I['bay_d'], 'from_y': I['boss_back_y'], 'to_y': I['boss_back_y'] + I['bay_l'], 'axis_z': WAVEGUIDE['throat_z'] + I['bay_dz']}}}
         if RETAINER:
-            R = RETAINER; yf, yb = retainer_y()
-            f['insert']['tweeter_retainer'] = {'sleeve_od': T['flange_d'] + 0.4 - 2 * R['fit'], 'sleeve_id': T['body_d'] + 2 * R['clear'],
+            R = RETAINER; yf, yb = retainer_y(); od_, id_ = retainer_rings()
+            f['insert']['tweeter_retainer'] = {'mode': R.get('mode', 'sleeve'), 'tube_od': od_, 'tube_id': id_,
                                                'from_y': yf, 'to_y': yb, 'flange_d': R['flange_d'], 'flange_t': R['flange_t'],
                                                'screws': {'n': R['screws'], 'circle_d': R['screw_circle'], 'pilot': [R['pilot_d'], R['pilot_depth']],
                                                           'hole_d': R['hole_d'], 'screw': R['screw'], 'head_h': R.get('head_h'),
@@ -659,9 +672,14 @@ def checks(parts):
         chk('pins\' holes clear of the magnets\' holes (material between)', min(math.hypot(px - mx, pz - mz) for (px, pz) in pins for (mx, mz) in mags)
             - (I['pin_d'] + 0.2) / 2 - (I['magnet_d'] + 0.2) / 2, 2.0)
         if RETAINER:
-            R = RETAINER
-            chk('retaining sleeve clear of the tweeter\'s motor (a side)', R['clear'], 0.4)
-            chk('retaining sleeve\'s wall', (T['flange_d'] + 0.4 - 2 * R['fit'] - T['body_d'] - 2 * R['clear']) / 2, 1.5)
+            R = RETAINER; od_, id_ = retainer_rings(); yf_, yb_ = retainer_y()
+            if R.get('mode') == 'cap':
+                chk('retaining cap\'s ring on the motor\'s back (its width)', (min(T['body_d'], od_) - id_) / 2, 4.0)
+                chk('retaining cap\'s wall', (od_ - id_) / 2, 1.5)
+                chk('retaining cap\'s ring at least 1 long (the motor\'s back in front of the boss\'s)', yb_ - yf_, 1.0)
+            else:
+                chk('retaining sleeve clear of the tweeter\'s motor (a side)', R['clear'], 0.4)
+                chk('retaining sleeve\'s wall', (od_ - id_) / 2, 1.5)
             chk('sleeve\'s pilots in the boss\'s wall, inside', R['screw_circle'] / 2 - R['pilot_d'] / 2 - (T['flange_d'] + 0.4) / 2, 1.5)
             chk('sleeve\'s pilots in the boss\'s wall, outside', I['boss_d'] / 2 - R['screw_circle'] / 2 - R['pilot_d'] / 2, 1.5)
             chk('sleeve\'s flange inside the pocket\'s bore (a side)', I['boss_d'] / 2 + I['clear'] - R['flange_d'] / 2, 0.5)
@@ -744,6 +762,21 @@ def checks(parts):
     return out
 
 
+
+def write_hold():
+    """stl/HOLD.txt: which prints wait on which measurement of sheet 7 (the drawing check's d4, round 7)."""
+    m_ = lambda *ks: ', '.join(f'M{M_NUM[k]}' for k in ks if k in M_NUM)
+    open(os.path.join(OUT, 'stl', 'HOLD.txt'), 'w').write(
+        f'HOLD: these prints wait on the measurements of drawings sheet 7 ("Measure first"). Enter each in fab/params.py and\n'
+        f'run fab/build.sh before printing.\n\n'
+        + (f'  waveguide-insert*.stl, tweeter-retainer.stl  the tweeter ({m_("tweeter")}): its front ring, motor and depth set the bore, the seat\n'
+           f'                                               and the retaining cap\n' if RETAINER else
+           f'  waveguide-insert.stl                         the tweeter ({m_("tweeter")}): its faceplate, body and depth set the bore and the seat\n')
+        + f'  gable-block.stl, gable-print/*.stl           the tweeter and the connector ({m_("tweeter", "connector")}): the pocket\'s bore and bay\n'
+        f'  trim-ring-*.stl                              the drivers ({m_("woofer", "mid")}): each surround at its glue line sets a ring\'s bore\n'
+        + (f'  port-tube*.stl                               printed long and trimmed to the tuning (README, step 9)\n' if PORT else '')
+        + '\nPrint the connector\'s test bay first (README, step 1).\n')
+
 def joint_pins(g, axis, val, region, margin=4.0, step=10.0):
     """Two points far apart on a joint plane (x or y = val), inside region (u0, u1, z0, z1) with u the plane's other
     horizontal axis, where a 4 mm pin has `margin` of the solid g all round it: the gable's pocket, bay and channel leave
@@ -813,6 +846,7 @@ def main():
                                                 'channel': ({'from_d': round(2 * ch[0], 1), 'to_d': round(2 * ch[1], 1), 'depth': ch[2],
                                                              'open_to_bore': ch[0] <= r_in + 1e-6} if ch else None),
                                                 'id_from': 'the surround at its glue line + 2: PLACEHOLDER, measure'}
+    write_hold()
     # a part this size has not got leaves no file behind (the bookshelf's brace)
     for stale in ([] if BRACE_Z else ['window-brace']) + ([] if MID else ['mid-shelf', 'mid-divider']):
         for f in (os.path.join(OUT, 'stl', f'{stale}.stl'), os.path.join(OUT, 'step', f'{stale}.step')):

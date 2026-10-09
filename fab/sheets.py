@@ -12,11 +12,12 @@ Sheets:
   5  Exploded view and parts list
   6  Panel details: the panels the other sheets do not detail, holes dimensioned from each one's corner; the trim
      rings' sections
-  7  Notes: what to measure first; sheets 1 and 3's notes by number (3.4 is sheet 3's fourth)
+  7  Notes: what to measure first and what may be cut now; sheet 1's notes by number (1.4 is sheet 1's fourth)
   8  Notes: sheets 2 and 4 to 6's notes; the glue-up order and the fixings
+  9  Notes: sheet 3's, fitting the tweeter and the insert
 
 Every text on every sheet is 2.5 mm high or more (MIN_PT), view titles 3.5 mm, the sheet's title 5 mm (ISO 3098 at
-A3); the long notes live on sheets 7 and 8 so the drawings keep their room (the drawing check's d22, round 3: at
+A3); the long notes live on sheets 7 to 9 so the drawings keep their room (the drawing check's d22, round 3: at
 2.5 mm they fill two sheets).
 
 Conventions: millimetres; views are named for where they are seen from; heights from the floor, depths from the front
@@ -44,8 +45,8 @@ A3 = (420.0, 297.0)
 INK = '#111111'; LIGHT = '#777777'; RED = '#B3261E'; CUT = '#d9d4c7'
 LW = dict(outline=0.5, thin=0.25, dim=0.18, hidden=0.25, centre=0.18)   # line weights, mm on paper
 PT = 72 / 25.4                                                          # points per mm
-SHEETS = 8                                                             # sheets in each size's set: six drawings and two of notes
-NOTES_ON = {1: 7, 2: 8, 3: 7, 4: 8, 5: 8, 6: 8}                        # which notes sheet holds each drawing's notes (2's moved to 8 when 7 filled: round 6)
+SHEETS = 9                                                             # sheets in each size's set: six drawings and three of notes (a third when 7 filled: round 7)
+NOTES_ON = {1: 7, 2: 8, 3: 9, 4: 8, 5: 8, 6: 8}                        # which notes sheet holds each drawing's notes (2's moved to 8, 3's to 9, as 7 filled)
 REVISION = 'D'                                                         # B after the drawing check's round 1, C after round 2, D after round 3
 MIN_PT = 10.0                                                           # the smallest text on any sheet, points: 2.5 mm caps (DejaVu Sans), ISO 3098 for A3
 VIEW_PT = 14.0                                                          # view titles, 3.5 mm caps
@@ -129,6 +130,14 @@ def section_faces(solid, plane_x, keep='TOP'):
 
 
 # --- the sheet -----------------------------------------------------------------------------------------------------------
+def sheet_status(n):
+    """The release status a sheet's title block prints: HOLD until the bought parts it fits are measured (sheet 7)."""
+    m_ = lambda *ks: ', '.join(f'M{M_NUM[k]}' for k in ks if k in M_NUM)
+    return {1: f'HOLD until {m_("woofer", "mid")} (the drivers)', 3: f'HOLD until {m_("tweeter", "connector")} (tweeter, connector)',
+            4: f'HOLD until {m_("amp")} (the amplifier)', 6: f'cut after M1; the trim rings HOLD until {m_("woofer", "mid")}'}.get(
+            n, 'for reference' if n in (2, 5) else 'notes')
+
+
 class Sheet:
     def __init__(self, number, title, subtitle=''):
         self.fig = plt.figure(figsize=(A3[0] / 25.4, A3[1] / 25.4))
@@ -151,7 +160,9 @@ class Sheet:
         sub = textwrap.wrap(f'{PRODUCT}. {subtitle}', 86)
         for i, ln in enumerate(sub[:2]):
             ax.text(x0 + 3, y0 + 26.3 - i * 4.4, ln, fontsize=MIN_PT, va='center', color=INK)
-        ax.text(x0 + 3, y0 + 11.2, 'mm  |  issue 2026-10-09  |  from fab/sheets.py (the CAD)', fontsize=MIN_PT, va='center')
+        st = sheet_status(self.number)      # what may be cut or printed from this sheet yet (the drawing check's d4, round 7)
+        ax.text(x0 + 3, y0 + 11.2, f'mm  |  issue 2026-10-09  |  {st}', fontsize=MIN_PT, va='center',
+                fontweight='bold' if st.startswith('HOLD') else 'normal', color=RED if st.startswith('HOLD') else INK)
         ax.text(x0 + 3, y0 + 5.0, 'Tolerances: panels ±0.5, pockets ±0.2, holes +0.2/0, prints ±0.15', fontsize=MIN_PT, va='center')
         ax.text(x0 + 168, y0 + 10.5, f'{self.number} of {SHEETS}', fontsize=16, fontweight='bold', ha='center', va='center')
         ax.text(x0 + 168, y0 + 3.6, f'EM-{"BS" if BOOK else "FS"}-{self.number:03d}  rev {REVISION}', fontsize=MIN_PT, ha='center', va='center')
@@ -266,6 +277,26 @@ class Sheet:
         ax.patch.set_alpha(0)
         ax.set_zorder(self.ax.get_zorder() - 1)     # under the sheet's axes, so leaders and labels drawn there cross it
         return ax
+
+    def wrap(self, text, width_mm, size=MIN_PT):
+        """Word-wrap text to a width in sheet mm, measured at the size it prints at (save() raises anything smaller to
+        MIN_PT); returns the text and its height in mm, without a bbox's pad."""
+        r_, inv = self.fig.canvas.get_renderer(), self.ax.transData.inverted()
+        probe = self.ax.text(0, 0, '', fontsize=size)
+        ext = lambda s: (probe.set_text(s), probe.get_window_extent(r_).transformed(inv))[1]
+        lines = []
+        for para in text.split('\n'):
+            cur = ''
+            for word in para.split(' '):
+                trial = (cur + ' ' + word).strip()
+                if cur and ext(trial).width > width_mm:
+                    lines.append(cur); cur = word
+                else:
+                    cur = trial
+            lines.append(cur)
+        out = '\n'.join(lines); h = ext(out).height
+        probe.remove()
+        return out, h
 
     def save(self, pdf):
         # no text under MIN_PT: the drawing check (d25) found notes down to 1 mm high at A3. 2.5 mm (10 pt) would need a
@@ -451,13 +482,21 @@ def sheet1(pdf, M, W):
         edges = sorted([PLINTH_H, BODY] + [zz + s_ * r_['d'] / 2 for (zz, r_) in [(WOOFER['z'], WOOFER_REBATE)] + ([(MID['z'], MID_REBATE)] if MID else [])
                                           if zz != z for s_ in (-1, 1)])
         up = min([e for e in edges if e > z]) - (z + rb['d'] / 2); down = (z - rb['d'] / 2) - max([e for e in edges if e < z])
-        sg = 1 if up * k >= 14 else (-1 if down * k >= 14 else (1 if up >= down else -1))   # above when 14 mm of sheet allow it
-        tx, ty_ = o[0] + k * RUN, o[1] + k * (z + sg * rb['d'] / 2) + sg * 6.5
-        # lines of 35 characters or fewer, so the note's white ground stays inside the front's outline at 1:5
-        S.ax.annotate(f'rebate ø{rb["d"]:g} x {rb["depth"]:g} deep,\nthrough ø{cut:g}' +
-                      (f'; {sc["n"]} x ø{sc["hole"]:g} on ø{sc["pcd"]:g},\nthe first {sc["start_deg"]:g}° above the horizontal,\n'
-                       f'{360.0 / sc["n"]:g}° apart, for M4 T-nuts (1.2, M{2 if role == "woofer" else 3})' if sc else ''),
-                      xy=(o[0] + k * (RUN + rb['d'] / 2 * 0.5), o[1] + k * (z + sg * rb['d'] / 2 * 0.866)), xytext=(tx, ty_), fontsize=4.6, ha='center', va='center',
+        # wrapped to the front's width at the size it prints (its white ground inside the outline), then set in the
+        # larger clear face, clear of the circles: at 1:5 a four-line note overran the 17 mm over the mid, and at 1:3
+        # the bookshelf's covered its rebate's foot
+        pad_ = 0.4 * MIN_PT / PT
+        # the screw holes' pattern is in the Driver holes block at the right: two notes of four lines met between the
+        # mid and the woofer at 1:5
+        note_, h_ = S.wrap(f'rebate ø{rb["d"]:g} x {rb["depth"]:g} deep,\nthrough ø{cut:g}' + ('; holes: Driver holes' if sc else ''),
+                           k * PLAN - 2 * pad_ - 3.0)
+        h_ += 2 * pad_
+        need = h_ + 2.0
+        sg = 1 if up * k >= need else (-1 if down * k >= need else (1 if up >= down else -1))   # above when there is room
+        off_ = min(1.5 + h_ / 2, (up if sg > 0 else down) * k / 2)           # 1.5 off the circle, or centred in a tight gap
+        tx, ty_ = o[0] + k * RUN, o[1] + k * (z + sg * rb['d'] / 2) + sg * off_
+        S.ax.annotate(note_,
+                      xy=(o[0] + k * (RUN + rb['d'] / 2 * 0.5), o[1] + k * (z + sg * rb['d'] / 2 * 0.866)), xytext=(tx, ty_), fontsize=MIN_PT, ha='center', va='center',
                       color='#333', zorder=7, bbox=dict(fc='white', ec='none', pad=0.4),
                       arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
     # the view from above (VIEW T), placed by its arrow: in first angle it would sit under the front, where the sheet ends
@@ -493,6 +532,19 @@ def sheet1(pdf, M, W):
     # section A-A (sheet 2): the centre plane, seen from the left (looking toward +x)
     S.cutting_plane((RUN, -12), (RUN, PLAN + 12), 'A', (1, 0), o, k)
     S.text(o[0] + k * RUN, o[1] - 16, 'black: the waveguide\'s mouth, where its lip meets the roof\ngrey: the insert\'s seam', size=4.5, ha='center', va='top')
+    # the drivers' holes, each pattern in full: where the front view has no room for them (above)
+    yb_ = 150.0
+    S.text(300, yb_, 'Driver holes (front baffle, from its front face)', size=MIN_PT, fontweight='bold', va='top')
+    for role, z, rb, cut, m_ in [('woofer', WOOFER['z'], WOOFER_REBATE, WOOFER_CUTOUT, 'M2')] + ([('mid', MID['z'], MID_REBATE, MID_CUTOUT, 'M3')] if MID else []):
+        sc = DRIVER_SCREWS.get(role)
+        yb_ -= 6.0 if role == 'woofer' else 3.0
+        S.text(300, yb_, f'{role.capitalize()}, centre z {z:g} on the centreline ({m_})', size=MIN_PT, fontweight='bold', va='top')
+        body_, hb_ = S.wrap(f'rebate ø{rb["d"]:g} x {rb["depth"]:g} deep; through ø{cut:g}' +
+                            (f'; {sc["n"]} x ø{sc["hole"]:g} on ø{sc["pcd"]:g}, the first {sc["start_deg"]:g}° above the horizontal, '
+                             f'{360.0 / sc["n"]:g}° apart, for M4 T-nuts (1.2).' if sc else '.'), 104.0)
+        yb_ -= 4.6
+        S.text(300, yb_, body_, size=MIN_PT, va='top', color='#222')
+        yb_ -= hb_
     S.notes(300, 160, 'Notes', [
         f'Cabinet: 18 mm Baltic birch, glued. The vertical corners and the gable\'s hips are rounded {EDGE_R:.0f} mm, the fin\'s edges {FIN_EDGE_R:.0f} mm. 3 x 3 mm shadow lines at z {PLINTH_H:.0f} and z {GABLE_SHADOW_Z0:.0f}.',
         (f'The drivers sit flush: each rebate is the measured flange + 1.0 (a 1.5 mm closed-cell foam gasket, pressed) + {TRIM_RING["t"]:.0f} (the ring): '
@@ -587,12 +639,13 @@ def runs_3d():
     xs = PLAN - WALL                                                  # the right side's inner face, 372
     yw = cad.wire_hole_y()
     zt = TOP_Z0 - 8.0                                                 # under the top panel, on its mounts
+    # none under the top panel: its mounts would have to slide over the divider's top, 0.3 below it, and their ties be
+    # closed blind 470 mm in (the drawing check's d1, round 7); the tweeter's run hangs from its channel's silicone seal
     mounts = [('the brace\'s top face', (wx1 + 12.0, yb, BRACE_Z + WALL)),
               ('the right side', (xs, yb - 2.0, zr)), ('the right side', (xs, yd + 14.0, zr)),
-              ('the divider\'s back face', (xs - 72.0, yd, zr)), ('the divider\'s back face', (xh + 75.0, yd, zr)),
-              ('the top panel\'s underside', (RUN, yw + 56.5, TOP_Z0)), ('the top panel\'s underside', (RUN, yw + 16.5, TOP_Z0))]
+              ('the divider\'s back face', (xs - 72.0, yd, zr)), ('the divider\'s back face', (xh + 75.0, yd, zr))]
     up = BRACE_Z - 20.0
-    tweeter = [(tx, gy, zl), (tx, gy, up), (xb, yb, BRACE_Z), (xb, yb, zt), (RUN, yw + 56.5, zt), (RUN, yw + 16.5, zt), (RUN, yw, zt), (RUN, yw, TOP_Z0)]
+    tweeter = [(tx, gy, zl), (tx, gy, up), (xb, yb, BRACE_Z), (xb, yb, BRACE_Z + WALL + 8.0), (RUN, yw, TOP_Z0)]
     mid = [(mx, gy, zl), (mx, gy, up), (xb, yb, BRACE_Z), (xb, yb, zr), (xs - 8.0, yb - 2.0, zr), (xs - 8.0, yd + 14.0, zr), (xs - 72.0, yd + 8.0, zr),
            (xh + 75.0, yd + 8.0, zr), (xh, yd + 8.0, zr), (xh, yd + 8.0, zh), (xh, WALL + MID_CHAMBER_DEPTH - 10.0, zh), (RUN - 60.0, WALL + 70.0, MID['z'] - 20.0)]
     woofer = [(wx, gy, zl), (wx, gy, WOOFER['z']), (RUN + 40.0, WALL + 125.0, WOOFER['z'])]
@@ -708,12 +761,11 @@ def plan_sections(S, M, org_a, k_a):
     # D-D: the port and the two runs beside it, labelled on its right (E-E's labels go on E-E's right, its hole's on its left)
     tube_r = PORT['bore'] / 2 + PORT_WALL
     (tx, gy), (mx, _) = (runs['tweeter'][0][0], runs['tweeter'][0][1]), (runs['mid'][0][0], runs['mid'][0][1])
-    S.dim(P(org_d, RUN + tube_r, 260), P(org_d, mx, 260), 0, f'{mx - RUN - tube_r:g}', size=5)
     xl = org_d[0] + k * PLAN + 4.0
     S.ax.annotate(f'port tube ø{2 * tube_r:g}', xy=P(org_d, RUN + tube_r, PLAN - 30), xytext=(xl, org_d[1] + 36.5), fontsize=5, ha='left', va='center', zorder=8,
                   arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
     for xx in (mx, tx):
-        S.ax.annotate('' if xx == tx else f'mid x {mx:g}, tweeter x {tx:g},\nrising from their glands', xy=P(org_d, xx, gy), xytext=(xl, org_d[1] + 27.0),
+        S.ax.annotate('' if xx == tx else f'mid x {mx:g}, tweeter x {tx:g}, rising\nfrom their glands, {mx - RUN - tube_r:g} and {tx - RUN - tube_r:g}\nfrom the tube', xy=P(org_d, xx, gy), xytext=(xl, org_d[1] + 26.0),
                       fontsize=5, ha='left', va='center', zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
     # E-E: the mid's run to the divider's hole, the mounts, the tweeter's rising
     xh, _, zh = runs['mid'][9]
@@ -722,8 +774,13 @@ def plan_sections(S, M, org_a, k_a):
     S.ax.annotate(f'ø12 hole, z {zh:g},\nbelow (4.3)', xy=P(org_e, xh, WALL + MID_CHAMBER_DEPTH + WALL / 2), xytext=(org_e[0] - 4.0, org_e[1] + 5.0), fontsize=5,
                   ha='right', va='center', zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
     xr = org_e[0] + k * PLAN + 4.0
-    xb, yb = runs['tweeter'][2][0], runs['tweeter'][2][1]
-    S.ax.annotate('the tweeter\'s, rising\nto the top panel', xy=P(org_e, xb, yb), xytext=(xr, org_e[1] + 35.0), fontsize=5, ha='left', va='center', zorder=8,
+    def cross(r, z_):      # where a run crosses a plane
+        for a_, b_ in zip(r[:-1], r[1:]):
+            if (a_[2] - z_) * (b_[2] - z_) < 0:
+                t = (z_ - a_[2]) / (b_[2] - a_[2]); return a_[0] + t * (b_[0] - a_[0]), a_[1] + t * (b_[1] - a_[1])
+        return r[-1][0], r[-1][1]
+    xb, yb = cross(runs['tweeter'], zE)
+    S.ax.annotate('the tweeter\'s, rising\nto its channel', xy=P(org_e, xb, yb), xytext=(xr, org_e[1] + 35.0), fontsize=5, ha='left', va='center', zorder=8,
                   arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
     S.ax.annotate('the mid\'s run on its\ncable-tie mounts (4.6)', xy=P(org_e, PLAN - WALL, WALL + MID_CHAMBER_DEPTH + WALL + 14.0), xytext=(xr, org_e[1] + 21.0),
                   fontsize=5, ha='left', va='center', zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
@@ -741,9 +798,10 @@ def _port_note():
     L_ = cad.port_length_mm()
     return (f'The port: a {PORT["bore"]:g} bore, its tube {PORT["bore"] + 2 * PORT_WALL:g} outside in a ø{PORT["bore"] + 2 * PORT_WALL + 0.5:g} hole through the back, '
             f'centre z {PORT["z"]:g}; its ø{PORT["flange"]:g} x {PORT_FLANGE_T:g} flange glued to the finish. {L_:g} from the flange\'s face, with the {PORT_FLARE_R:g} '
-            f'flare collar {L_ + PORT_FLARE_R:g} long. Printed {L_ + PORT_TRIM:g} and trimmed at its inner end until the impedance dip sits at the tuning: a DATS V3 (or a '
-            f'sound-card impedance jig) clipped to the woofer\'s terminals, its cable not yet connected; trim 2 mm at a time until the minimum between the two peaks '
-            f'is at {_fb_hz():g} Hz (README, step 8).')
+            f'flare collar {L_ + PORT_FLARE_R:g} long. Printed {L_ + PORT_TRIM:g} and trimmed at its inner end until the impedance dip sits at the tuning, measured in the '
+            f'sealed box (the glands tightened, the mid fitted, the divider\'s hole puttied, the fill in, the amplifier\'s cut-out closed by a scrap board on the EPDM): a '
+            f'DATS V3 (or a sound-card jig) clipped to the woofer cable\'s free end inside the amplifier\'s box; trim 2 mm at a time until the minimum between the two peaks '
+            f'is at {_fb_hz():g} Hz (README, step 9).')
 
 
 def _fb_hz():
@@ -801,6 +859,7 @@ def sheet2(pdf, M, W):
     draw_section(S, loops, bg, org2, k2, ax=iax)
     iax.plot(wire_paths()['tweeter'][:4, 0], wire_paths()['tweeter'][:4, 1], color=RED, lw=0.45 * PT, ls=(0, (3, 1.5)), zorder=5)
     S.label(org2[0] - k2 * RUN, y0p - 11, f'DETAIL C, {SC["roof"]}')
+    S.text(org2[0] - k2 * RUN, y0p - 17, 'the cable simplified: its connector and the tweeter\'s own lead on sheet 3', size=4.6, ha='center', va='center', color=RED)
     # the detail's boundary on section A-A, lettered (d24, round 3)
     cx0, cz0, cx1, cz1 = -PLAN - 6 * XS, BODY - 40 * XS, 8 * XS, TOTAL + 8 * XS
     S.lines([np.array([[cx0, cz0], [cx1, cz0], [cx1, cz1], [cx0, cz1], [cx0, cz0]])], org, k, lw=LW['thin'], ls=(0, (6, 1.5, 1, 1.5)))
@@ -818,12 +877,14 @@ def sheet2(pdf, M, W):
                  size=5, feet=((-INSERT['boss_back_y'], tz), (0, BODY)))
     # the waveguide named in its air under the axis, clear of the dimension lines over it (the bookshelf's label sits
     # in the air too, over the insert's floor)
-    for (y, z, t, dx, dy) in (((ty - 40, tz - 10, 'the waveguide (air)', 20, -8) if BOOK else (ty - 62, tz - 10, 'the waveguide (air)', 12, 27)),
+    cap_lab = [((cad.retainer_y()[0] + cad.retainer_y()[1]) / 2, tz - sum(cad.retainer_rings()) / 4, 'retaining cap (3.2)', -14, -40)] if RETAINER else []
+    for (y, z, t, dx, dy) in [((ty - 40, tz - 10, 'the waveguide (air)', 20, -8) if BOOK else (ty - 62, tz - 10, 'the waveguide (air)', 12, 27)),
                               (WAVEGUIDE['throat_y'] + 20, tz + 10, 'tweeter, rear-mounted', -20, 55),     # above the left slope: clear of the bay's label (cad.wire_hole_y(), BODY - 15, 'cable channel', -45, -12),
+                              ] + cap_lab + [
                               (cad.wire_hole_y() + 6, tz + INSERT['bay_dz'] + 6, 'connector bay', -40, 30),
                               # the two solids named on themselves, in white, under the waveguide's floor and in the block
                               (0.7 * ty, BODY + 0.6 * (tz - WAVEGUIDE['r0'] - BODY), 'insert', 0, 0),     # clear of the insert's back's dimension
-                              (0.73 * PLAN, BODY + 0.27 * RISE, 'gable block (birch)', 0, 0)):
+                              (0.73 * PLAN, BODY + 0.27 * RISE, 'gable block (birch)', 0, 0)]:
         xy_ = (org2[0] - k2 * y, org2[1] + k2 * z)
         if dx == 0 and dy == 0:
             S.ax.text(xy_[0], xy_[1], t, fontsize=5.2, ha='center', va='center', zorder=8, bbox=dict(fc='white', ec='none', pad=0.3))
@@ -833,7 +894,7 @@ def sheet2(pdf, M, W):
                       arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK))
     S.notes(250, 112, 'The roof', [
         f'The waveguide insert (light blue) sits in a pocket in the gable block, {INSERT["clear"]:g} mm clear all round: the pocket +0.2/0 and the insert 0/-0.15 on their widths, so {INSERT["clear"]:.2f} to {INSERT["clear"] + 0.175 + 1e-9:.2f} a side. Paint only the insert\'s face: mask its sides, base and back and the pocket\'s walls. It slides out forward, level, with the tweeter on it.',
-        (f'The tweeter is rear-mounted: it goes in from behind through a ø{TWEETER_PART["flange_d"] + 0.4:g} bore and its front ring seats on the ring round the throat, its dome and surround filling the {2 * WAVEGUIDE["r0"]:g} mm throat, so the wall runs on from the surround with no step. A printed sleeve over its motor holds it there, screwed to the boss\'s back face (sheet 3).'
+        (f'The tweeter is rear-mounted: it goes in from behind through a ø{TWEETER_PART["flange_d"] + 0.4:g} bore and its front ring seats on the ring round the throat, its dome and surround filling the {2 * WAVEGUIDE["r0"]:g} mm throat, so the wall runs on from the surround with no step. A printed cap bearing on its motor\'s back holds it there, screwed to the boss\'s back face (sheet 3).'
          if RETAINER else
          f'The tweeter is rear-mounted: it goes in from behind through a ø{TWEETER_PART["flange_d"] + 0.4:g} bore and its faceplate seats on the ring round the throat, its dome and surround filling the {2 * WAVEGUIDE["r0"]:g} mm throat, screwed from behind through its own holes (sheet 3).'),
         f'Its lead leaves the boss\'s open back into the connector bay behind it (ø{INSERT["bay_d"]:.0f} x {INSERT["bay_l"]:.0f} deep), where it plugs into the cabinet\'s lead; that runs down a {WIRE_HOLE_D:.0f} mm channel through the block and the top panel, sealed round the cable with neutral-cure silicone from the bay.',
@@ -929,6 +990,12 @@ def sheet3(pdf, M, W):
                               (yw + WIRE_HOLE_D / 2, (zbay - I_['bay_d'] / 2 - 20 + TOP_Z0) / 2, f'channel ø{WIRE_HOLE_D:.0f}', gx_(yw + WIRE_HOLE_D / 2), -32),
                               (yw, BODY - 36 * XS, 'to the amplifier\n(sheet 4)', gx_(yw), -30)):
         labs.append([y, z, t, dx, os_[1] + k * z + dy])
+    if RETAINER:     # the cap behind the motor, named (the drawing check's d14, round 7)
+        (yf_c, yb_c), (od_c, id_c) = cad.retainer_y(), cad.retainer_rings()
+        yc_, zc_ = (yf_c + yb_c) / 2, WAVEGUIDE['throat_z'] + (od_c + id_c) / 4
+        # at the head of the column, its two lines under the frame's top edge (round 7's first print had it across it)
+        labs.append([yc_, zc_, f'retaining cap (3.2), its {RETAINER["screws"]}\nscrews into the boss', gx_(yc_),
+                     min(os_[1] + k * zc_ + 30, A3[1] - 10 - 2 - 4.3)])
     # stacked from the top: a label that would overlap the one above it moves down (at 1:1 the bookshelf's silicone and
     # channel labels printed over each other)
     hgt = lambda L_: 4.3 * (L_[2].count('\n') + 1)
@@ -984,7 +1051,7 @@ def sheet3(pdf, M, W):
         # three lines from the frame's left edge, clear of the back view (two right-aligned on the pilot ran off the sheet)
         S.ax.annotate(f'{RETAINER["screws"]} x ø{RETAINER["pilot_d"]:g} x {RETAINER["pilot_depth"]:g} pilots on ø{RETAINER["screw_circle"]:g} in the boss\'s back face,\n'
                       + ("one at the top" if abs(RETAINER.get('start_deg', 0.0) - 90.0) < 1 else "one on the horizontal at the speaker's right (left here)")
-                      + f', 120° apart, for the retaining sleeve\'s\n{RETAINER["screw"]}',
+                      + f', 120° apart, for the retaining cap\'s\n{RETAINER["screw"]}',
                       xy=(ob[0] + k * (-hx), ob[1] + k * hz), xytext=(16, ob[1] + k * (WAVEGUIDE['throat_z'] + 75 * XS)),
                       fontsize=4.6, ha='left', va='center', zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
     else:
@@ -1002,19 +1069,21 @@ def sheet3(pdf, M, W):
     S.notes(230, 130, 'Fitting the tweeter and the insert', [
         (f'Solder the tweeter\'s own lead ({TWEETER_LEAD["l"]:g} mm of {TWEETER_LEAD["wire"]}) to its tabs and crimp the connector\'s plug on its end: {CONNECTOR["series"]}, '
          f'{CONNECTOR["plug"]}, pin 1 {CONNECTOR["pin1"]}. The socket on the cabinet\'s lead: {CONNECTOR["socket"]}. Mated, {CONNECTOR["mated_l"]:g} long or less.'),
-        (f'Pass the tweeter in from behind through the ø{T_["flange_d"] + 0.4:g} bore, dome first, and seat its front ring on a {RETAINER["gasket"]:g} mm foam gasket on the throat\'s seat. '
-         f'Slide the printed retaining sleeve (stl/tweeter-retainer.stl: tube ø{T_["flange_d"] + 0.4 - 2 * RETAINER["fit"]:g} / ø{T_["body_d"] + 2 * RETAINER["clear"]:g} x {INSERT["boss_back_y"] - WAVEGUIDE["throat_y"] - RETAINER["gasket"] - T_["flange_t"] + RETAINER.get("preload", 0.0):g} long, flange ø{RETAINER["flange_d"]:g} x {RETAINER["flange_t"]:g}) over its motor, '
-         f'lead through it: its flange stands {RETAINER.get("preload", 0.0):g} off the boss. Drive its {RETAINER["screws"]} {RETAINER["screw"]} into the boss until the flange seats, pressing the gasket by that much: no thread to SB\'s own screw holes is needed. Measure the motor first: the sleeve\'s bore is its diameter + {2 * RETAINER["clear"]:g}.'
+        (f'Pass the tweeter in from behind through the ø{T_["flange_d"] + 0.4:g} bore, dome first, and seat its front ring on the throat\'s seat on a {RETAINER["gasket"]:g} mm '
+         f'closed-cell foam ring, ID {2 * WAVEGUIDE["r0"] + 1:g} / OD {T_["flange_d"]:g}, punched (its ID never inside the throat). Fit the printed retaining cap '
+         f'(stl/tweeter-retainer.stl: a ring ø{cad.retainer_rings()[0]:g} / ø{cad.retainer_rings()[1]:g} x {cad.retainer_y()[1] - cad.retainer_y()[0]:g} long on a flange ø{RETAINER["flange_d"]:g} x {RETAINER["flange_t"]:g}) '
+         f'into the bore behind it, the lead through its middle: its ring bears on the motor\'s back rim and its flange stands {RETAINER.get("preload", 0.0):g} off the boss. Drive its {RETAINER["screws"]} {RETAINER["screw"]} '
+         f'into the boss until the flange seats, pressing the gasket by that much: no thread to SB\'s own screw holes is needed, and any motor up to the ring\'s diameter fits.'
          if RETAINER else
          f'Bond {T_["screws"]} {INSERT_SCREW["insert"]} inserts into the seat with {INSERT_SCREW["bond"]} (ø{INSERT_SCREW["hole_d"]:g} x {INSERT_SCREW["depth"]:g} holes on ø{T_["bolt_circle"]:g}; a heat-set insert will not melt into cured resin). '
-         f'Pass the tweeter in from behind through the ø{T_["flange_d"] + 0.4:g} bore, dome first, seat its faceplate on a 0.5 mm foam gasket and screw it to the inserts with {INSERT_SCREW["screw"]} through its own holes. '
+         f'Pass the tweeter in from behind through the ø{T_["flange_d"] + 0.4:g} bore, dome first, seat its faceplate on a 0.5 mm closed-cell foam ring, ID {2 * WAVEGUIDE["r0"] + 1:g} / OD {T_["flange_d"]:g}, punched (its ID never inside the throat), and screw it to the inserts with {INSERT_SCREW["screw"]} through its own holes. '
          f'Measure first: the heads need 0.5 clear of the body (the circle at least the body + {INSERT_SCREW["head_d"] + 1:g}).'),
         f'Glue the magnets into the insert\'s back with epoxy, polarity marked, and their partners into the pocket\'s back wall, opposite poles out. Bond the two pins into the insert with epoxy.',
         (f'The cabinet\'s lead is fed down the channel from the bay, through the empty pocket, and caught through the woofer\'s cut-out (it cannot be pushed up from inside). '
          f'Its socket stands on the bay\'s floor, the lead\'s end {LEAD_ABOVE_GROMMET:g} mm above the top panel\'s underside (10 past the floor); seal the channel round it with '
          f'20 mm of neutral-cure silicone from the bay before the first fitting. To fit: hold the insert just clear of its pocket, reach in and plug the tweeter\'s lead into the '
          f'socket (its {TWEETER_LEAD["l"]:g} mm reaches with a hand in the pocket), then slide the insert home, feeding the spare into the bay as a loop, '
-         + ('clear of the 1.1 mm between the sleeve\'s screw heads and the bore\'s floor.' if RETAINER else 'behind the tweeter\'s body in the boss\'s bore and the bay.')),
+         + ('clear of the 1.1 mm between the cap\'s screw heads and the bore\'s floor.' if RETAINER else 'behind the tweeter\'s body in the boss\'s bore and the bay.')),
         f'Slide the insert in, level, until the pins seat and the magnets pull it home: its face flush with the roof, the seam even. Fit: the pocket +0.2/0 and the insert 0/-0.15 on their widths ({INSERT["clear"]:.2f} to {INSERT["clear"] + 0.175 + 1e-9:.2f} a side; the boss in its bore the same); paint only the insert\'s face.',
         f'Service: pull it out by a ribbon loop glued at the back of the {PULL_GROOVE_NOTE} groove under its front edge, unplug, and the tweeter comes out with it. Between times the loop folds back into its groove: only its end shows, under the insert\'s front edge.',
         pocket_note(cad),
@@ -1088,7 +1157,7 @@ def fixings_list():
             (f'fluted dowels {DOWEL_D:g} x 28 (F3)', f'{len(cad.dowel_points())}'),
             ('Molex Mini-Fit Jr. 2-circuit plug and socket (3.1)', '1 pair')]
     if RETAINER:
-        rows.append((f'{RETAINER["screw"].split(" (")[0]} (sleeve)', f'{RETAINER["screws"]}'))
+        rows.append((f'{RETAINER["screw"].split(" (")[0]} (cap)', f'{RETAINER["screws"]}'))
     if INSERT_SCREW:
         rows.append((f'{INSERT_SCREW["insert"]} inserts and {INSERT_SCREW["screw"].split(" (")[0]}', f'{TWEETER_PART["screws"]}'))
     gp = sum(len(j['pins']) for j in _gable_pins())
@@ -1260,7 +1329,7 @@ def sheet4(pdf, M, W):
             'Seal the tweeter cable in its channel with 20 mm of neutral-cure silicone from the bay (sheet 3): the box is sealed, and the insert\'s pocket is open to the room through its seam.',
             'Round-sheathed cable (H05VV-F 2 x 1.5 and 2 x 1.0 mm2, about 8.0 and 6.4 across), so each gland grips its cable and the silicone seals round the tweeter\'s. Inside the amplifier\'s box cut each of Hypex\'s harness pairs to about 150 mm and butt-splice it to its round cable (woofer 1.5, tweeter 1.0 mm2; crimped splices under heat-shrink): only round cable passes the glands. Tie the woofer\'s run to the amplifier box\'s lid beside its gland and to the box\'s front face at z 380 (adhesive cable-tie mounts); the tweeter\'s run is about 60 mm long and needs no tie.',
             gland_note(),
-            f'The crossover (2.4 kHz, LR4), the woofer\'s shelf to 45 Hz (+{shelf_db():g} dB) and the delays are set in the DSP. Wire red to + throughout.',
+            f'The crossover (2.4 kHz, LR4), the woofer\'s shelf to 45 Hz (+{shelf_db():g} dB) with a 35 Hz high-pass under it, a limiter and the delays are set in the DSP (out-bookshelf/dsp/). Wire red to + throughout.',
             _stencils_note(),
         ], width=118, size=5.2)
     else:
@@ -1269,10 +1338,10 @@ def sheet4(pdf, M, W):
             'Woofer (CH1): from its gland in the amplifier box\'s lid straight to the woofer\'s terminals, 0.6 m of 2.5 mm2. Fit 6.3 mm push-on terminals to suit the driver.',
             'Mid (CH2): from its gland up through the brace\'s window, 30 mm in from its back edge, then through the 12 mm hole in the mid chamber\'s divider (x 75, z 630), 1.0 m of 1.5 mm2. Seal the hole round the cable with putty: the mid\'s chamber must stay closed.',
             f'Tweeter (CH3): from its gland up through the brace\'s window to the top panel, through the 14 mm channel in the top panel and the gable block, 1.2 m of 1.0 mm2, ending {LEAD_ABOVE_GROMMET:g} above the top panel\'s underside in the socket of the connector (3.1, sheet 3) standing on the bay\'s floor, fed down from the bay (3.4).',
-            'Seal the tweeter cable in its channel with 20 mm of neutral-cure silicone from the bay (sheet 3). The insert\'s pocket is open to the room through its 0.3 mm seam, so an unsealed channel would be a leak in the woofer\'s box.',
-            'Round-sheathed cable (H05VV-F 2 x 2.5, 2 x 1.5 and 2 x 1.0 mm2, about 9.0, 8.0 and 6.4 across), so each gland grips its cable and the silicone seals round the tweeter\'s. Inside the amplifier\'s box cut each of Hypex\'s harness pairs to about 150 mm and butt-splice it to its round cable (woofer 2.5, mid 1.5, tweeter 1.0 mm2; crimped splices under heat-shrink): only round cable passes the glands. The glands, from the right: the tweeter\'s (x 332), the mid\'s (x 297), the woofer\'s (x 262). Hold the runs with adhesive cable-tie mounts (black squares on section A-A and E-E, sheet 2), each stuck on its panel before that panel goes in, a tie threaded loose through it (G1, G3, G4, G6): one on the lid beside each gland; one on the brace\'s top face beside its window\'s right edge at (x 334, y 292), for the tweeter\'s and the mid\'s together; the mid\'s on the right side\'s inner face at (y 290, z 640) and (y 140, z 640) and on the divider\'s back face at (x 300, z 640) and (x 150, z 640), then down to its hole at (x 75, z 630); the tweeter\'s on the top panel\'s underside at (x 195, y 290) and (x 195, y 250), then up its channel at y 233.5. At step 9 feed each run through its loose ties and pull them tight, reaching in through the woofer\'s cut-out and the brace\'s window; keep every run 20 mm clear of the port\'s flare (ø' + f'{PORT["bore"] + 2 * PORT_FLARE_R:g} round z {PORT["z"]:g}' + ').',
+            'Seal the tweeter cable in its channel with 20 mm of neutral-cure silicone from the bay (sheet 3). The insert\'s pocket is open to the room through its 0.3 mm seam, so an unsealed channel would be a leak in the woofer\'s box. Fill the woofer chamber lightly (about 150 g of polyester fibre), a port\'s diameter from its inner end and off the amplifier\'s box.',
+            'Round-sheathed cable (H05VV-F 2 x 2.5, 2 x 1.5 and 2 x 1.0 mm2, about 9.0, 8.0 and 6.4 across), so each gland grips its cable and the silicone seals round the tweeter\'s. Inside the amplifier\'s box cut each of Hypex\'s harness pairs to about 150 mm and butt-splice it to its round cable (woofer 2.5, mid 1.5, tweeter 1.0 mm2; crimped splices under heat-shrink): only round cable passes the glands. The glands, from the right: the tweeter\'s (x 332), the mid\'s (x 297), the woofer\'s (x 262). Hold the runs with adhesive cable-tie mounts (black squares on section A-A and E-E, sheet 2), each stuck on its panel before that panel goes in, a tie threaded loose through it (G1, G3, G4): one on the lid beside each gland; one on the brace\'s top face beside its window\'s right edge at (x 334, y 292), for the tweeter\'s and the mid\'s together; the mid\'s on the right side\'s inner face at (y 290, z 640) and (y 140, z 640) and on the divider\'s back face at (x 300, z 640) and (x 150, z 640), then down to its hole at (x 75, z 630); the tweeter\'s rises from the brace\'s mount straight to its channel at (x 195, y 233.5), held there by the channel\'s silicone seal (4.5) and pulled taut from below, no mount under the top panel. At step 9 feed each run through its loose ties and pull them tight, reaching in through the woofer\'s cut-out and the brace\'s window (the highest, on the side and the divider at z 640, about 180 above the cut-out); keep every run 20 mm clear of the port\'s flare (ø' + f'{PORT["bore"] + 2 * PORT_FLARE_R:g} round z {PORT["z"]:g}' + ').',
             gland_note() + ' The box itself is glued and sealed; its front is the woofer chamber\'s wall.',
-            'Polarity, delay and the crossover (about 2.8 kHz tweeter to mid, from the waveguide study) are set in the DSP: wire red to + throughout and let the filters do the rest.',
+            'Polarity, delay, the crossover (about 2.8 kHz tweeter to mid, from the waveguide study), the woofer\'s 25 Hz high-pass and a limiter set to its excursion are set in the DSP (out/dsp/): wire red to + throughout and let the filters do the rest.',
             _stencils_note(),
         ], width=118, size=5.2)
     S.save(pdf)
@@ -1344,7 +1413,7 @@ def sheet5(pdf, M, W):
         7: ('mid-shelf', (RUN + 0.3 * PLAN, (MID_CHAMBER_DEPTH or 0) / 2 + WALL, MID_SHELF_TOP or 0)),
         8: ('gable-pocket', (PLAN - 0.12 * PLAN, 0.5 * RUN, BODY + 0.5 * RISE)),
         9: ('insert-plain', (RUN + 0.15 * PLAN, 0.2 * RUN, BODY + 0.3 * RISE)),
-        10: ('port-tube', (RUN + 0.35 * PORT['flange'], PLAN + PORT_FLANGE_T, PORT['z'] + 0.35 * PORT['flange']) if PORT else (0, 0, 0)),   # its flange, outside
+        10: ('port-tube', (RUN + 0.35 * PORT['flange'], PLAN + PORT_FLANGE_T, PORT['z'] - 0.35 * PORT['flange']) if PORT else (0, 0, 0)),   # its flange's lower half, outside: the upper hid behind the side's corner (d13, round 7)
         11: ('amp-box-front', (WALL + 0.15 * PLAN, y0b - WALL, (z0b + z1b) / 2)),     # its front face, left of the side's shadow
         12: ('woofer-frame', (RUN + 0.45 * C.DRIVERS[DRIVER_SET['woofer']]['frame_od'] / 2, 3.0, WOOFER['z'] + 0.45 * C.DRIVERS[DRIVER_SET['woofer']]['frame_od'] / 2)),
         13: ('woofer-ring', (RUN - 0.96 * (WOOFER_REBATE['d'] - 1.6) / 2, 0.0, WOOFER['z'] - 0.28 * (WOOFER_REBATE['d'] - 1.6) / 2)),   # its lower left
@@ -1404,7 +1473,7 @@ def sheet5(pdf, M, W):
             (14, 'Midrange', '1', 'SB Acoustics Satori MR16P-8, 6.5 in'),
             (15, 'Tweeter', '1', 'SB Acoustics Satori TW29DN-B, faceplate off'),
             (16, 'Amplifier', '1', f'{AMP["model"]}, DSP, 3 channels'),
-            (17, 'Tweeter retainer', '1', f'printed sleeve over the motor, {RETAINER["screws"]} screws'),
+            (17, 'Tweeter retainer', '1', f'printed cap on the motor\'s back, {RETAINER["screws"]} screws'),
         ]
     # the bookshelf's parts numbered 1 to 12 without gaps (d24, round 3), the balloons with them
     renum = {old: i + 1 for i, (old, *_r) in enumerate(rows)}
@@ -1549,16 +1618,17 @@ def measure_first():
     for role, rb, cut, name in [('woofer', WOOFER_REBATE, WOOFER_CUTOUT, 'woofer')] + ([('mid', MID_REBATE, MID_CUTOUT, 'mid')] if MID else []):
         sc = DRIVER_SCREWS.get(role); fl = rb['depth'] - 1.0 - TRIM_RING['t']
         drv = C_DRIVER_NAME.get(DRIVER_SET[role], DRIVER_SET[role])
-        alt = ' (SB\'s drawing; a shop\'s 10.9 includes the surround)' if (BOOK and role == 'woofer') else ''
+        alt = (' (SB\'s drawing, its labels not seen: measure the flange at its screw holes and anything standing above it; over 6.5 at the rim, stop: '
+               'a flush rebate would leave 3.1 of birch, too little for any T-nut)' if (BOOK and role == 'woofer') else '')
         src = ' (Audiophonics\' figure)' if (not BOOK and role == 'woofer') else ''
         rows.append(f'{drv}: flange {fl:g} thick{alt} sets the rebate, {rb["depth"]:g} deep; the frame\'s diameter + 1.6 sets the rebate\'s ø{rb["d"]:g}; '
                     f'the cut-out ø{cut:g}' + (f'; {sc["n"]} holes on ø{sc["pcd"]:g}{src}' if sc else '') + f'; the surround at its glue line + 2 sets the trim ring\'s bore, ø{TRIM_RING_ID[role]:g}.')
     if RETAINER:
-        L_ = INSERT['boss_back_y'] - WAVEGUIDE['throat_y'] - RETAINER['gasket'] + RETAINER.get('preload', 0.0)
-        rows.append(f'{T["model"]}: the front ring ø{T["flange_d"]:g} sets the bore, ø{T["flange_d"] + 0.4:g}; its thickness t ({T["flange_t"]:g}) sets the sleeve\'s tube, '
-                    f'{L_:g} - t ({L_ - T["flange_t"]:g}) long ({RETAINER.get("preload", 0.0):g} over its gap, so the screws press the gasket), flange {RETAINER["flange_t"]:g}; the motor ø{T["body_d"]:g} sets the sleeve\'s bore, '
-                    f'ø{T["body_d"] + 2 * RETAINER["clear"]:g}; the dome and surround, {2 * WAVEGUIDE["r0"]:g} across, set the throat. SB\'s drawing shows ø70.0 behind the faceplate, likely the '
-                    f'motor: over ø{T["flange_d"] + 0.4 - 2 * RETAINER["fit"] - 3.0 - 2 * RETAINER["clear"]:g} the sleeve fails a CAD check (README: a cup). Print nothing until it is measured.')
+        od_, id_ = cad.retainer_rings(); yf_, yb_ = cad.retainer_y()
+        rows.append(f'{T["model"]}, its faceplate off: the front ring ø{T["flange_d"]:g} sets the bore, ø{T["flange_d"] + 0.4:g}, and the cap\'s ring, ø{od_:g}; its thickness t ({T["flange_t"]:g}) '
+                    f'and the motor\'s depth d ({T["body_d"]:g} across, {T["body_depth"]:g} deep) set the cap\'s length, the boss\'s back less t + d ({yb_ - yf_:g}, {RETAINER.get("preload", 0.0):g} over its gap); '
+                    f'the motor\'s back needs a flat rim {RETAINER.get("rim", 6.0):g} wide round its edge, its tabs inside ø{id_:g} or on its side. Any motor up to the ring\'s diameter fits '
+                    f'(SB\'s faceplate drawing shows ø70.0 behind it). The dome and surround, {2 * WAVEGUIDE["r0"]:g} across, set the throat. Print nothing until it is measured.')
     else:
         rows.append(f'{T["model"]}: the faceplate ø{T["flange_d"]:g} sets the bore, ø{T["flange_d"] + 0.4:g}; its hole circle, ø{T["bolt_circle"]:g}, and its body, '
                     f'ø{T["body_d"] + 0.3:g} or less, set the seat\'s screws; its thickness t ({T["flange_t"]:g}) sets their length, M2.5 x (t + 3.5); its front must be flat from '
@@ -1571,6 +1641,9 @@ def measure_first():
                 f'sets the rebate\'s corners, R = r + 0.5 (R{AMP["plate_r"] + 0.5:g} for r {AMP["plate_r"]:g}: a square corner, or one under R2.8, will not seat); '
                 f'its thickness t ({AMP["plate_t"]:g}) sets the rebate\'s depth, t + 1.5 ({AMP["plate_t"] + 1.5:g}, over the EPDM pressed), and the screws\' length, '
                 f't + 13 ({AMP["plate_t"] + 13:g}); the module sets the cut-out, {AMP["cut_w"]:g} x {AMP["cut_h"]:g}; the screw holes come from the plate in hand.')
+    rows.append(f'{CONNECTOR["series"]} pair (39-01-2020 and 39-01-2021): its mated length L ({CONNECTOR["mated_l"]:g} drawn, from no maker\'s drawing: Molex SD-5557-003 '
+                f'and 55590020-SD give it) sets the bay, ø{INSERT["bay_d"]:g}, which leaves {INSERT["bay_d"] - CONNECTOR["mated_l"]:g} over the mated pair for the lead\'s bend. '
+                f'Print the test bay first (README, step 1) and mate and unlatch the pair in it by hand.')
     return rows
 
 
@@ -1591,7 +1664,7 @@ def general_notes():
                 f'clamp across the sides. Plane the divider\'s top {WALL + 0.3:g} below the sides\' top edges (a rule across them), so the top panel slides over it.',
                 'Line the mid chamber with 10 mm wool or polyester felt (spray adhesive): the divider\'s front face, stopping 15 short of its top edge; the shelf\'s top; '
                 'the sides between them; and the top panel\'s underside over the chamber before it goes in, stopping 15 short of the divider. Leave the front\'s back face bare.'] if MID else [])
-            + ['The top panel, dowel holes up and its FRONT EDGE to the open front (sheet 6)' + (', its two cable-tie mounts on its underside (4.6),' if MID else ',')
+            + ['The top panel, dowel holes up and its FRONT EDGE to the open front (sheet 6), nothing on its underside,'
                + ' slid in from the front and glued to the sides and the back' + (', dry over the divider' if MID else '') + '; clamp across the sides.'
                + (f' Then, with the front still off, run a 5 mm fillet of PU sealant along the corner between the divider\'s front face and the top panel\'s underside, '
                   f'x {WALL:g} to {PLAN - WALL:g}: the mid\'s chamber\'s fourth wall (check it after G7 through the mid\'s cut-out).' if MID else ''),
@@ -1603,7 +1676,7 @@ def general_notes():
         ('Fixings and the pocket\'s floor', [
             f'Drivers: {DRIVER_SCREW["thread"]} {DRIVER_SCREW["head"]}, the head {DRIVER_SCREW["head_h"]:g} high or less and {DRIVER_SCREW["head_d"]:g} across or less '
             '(ISO 7380 is 2.2 high: the trim ring\'s channel is 2 deep). M4 T-nuts, flange ' +
-            ', '.join(f'{v:g} or less across ({k_})' for k_, v in DRIVER_SCREW['tnut_flange'].items()) + ', barrel ' +
+            ', '.join(f'{v:g} or less across ({k_})' for k_, v in DRIVER_SCREW['tnut_flange'].items()) + ' (DIN 1624\'s M4 is 15: grind each flange flat 6.0 from its centre on the side facing the cut-out), barrel ' +
             ', '.join(f'{v:g} or less ({k_})' for k_, v in DRIVER_SCREW['tnut_barrel'].items()) + ', pressed in before the glue-up.',
             'Before the gable block goes on, sand the front panel\'s top edge flush with the top panel to 0.1: the insert sits on both. '
             'Mask the pocket\'s floor with the insert\'s sides, base and back when you spray: paint only the insert\'s face.',
@@ -1688,9 +1761,19 @@ def _sheets_text(on):
 
 def sheet7(pdf, M, W):
     """Notes 1: what to measure before cutting or printing (M1, M2, ...), then the notes of the drawings NOTES_ON puts here."""
-    blocks = [('h', 'Measure first')] + [('p', f'M{i + 1}', t) for i, t in enumerate(measure_first())]
+    m_ = lambda *ks: ', '.join(f'M{M_NUM[k]}' for k in ks if k in M_NUM)
+    rel = (f'Cut once M1 is entered: the sides, the bottom and top panels' + (', the window brace, the mid shelf and the divider' if MID else '') +
+           f' and the amplifier box\'s panels (sheet 6). On hold until measured (HOLD in their title blocks and DXFs, stl/HOLD.txt): the front ({m_("woofer", "mid")}), '
+           f'the back ({m_("amp")}), and every print: the insert, the gable, ' + ('the cap, ' if RETAINER else '') + 'the trim rings and the port.')
+    blocks = [('h', 'Measure first')] + [('p', f'M{i + 1}', t) for i, t in enumerate(measure_first())] + [('p', 'Cut', rel)]
     blocks += _sheet_blocks([n for n, on in NOTES_ON.items() if on == 7])
     notes_sheet(pdf, 7, f'Notes: measure first; {_sheets_text(7)}', f'What to measure before cutting or printing, and the notes {_sheets_text(7)} point to by number.', blocks)
+
+
+def sheet9(pdf, M, W):
+    """Notes 3: the notes of the drawings NOTES_ON puts here (sheet 3's: the tweeter and the insert)."""
+    notes_sheet(pdf, 9, f'Notes: {_sheets_text(9)}', f'The notes {_sheets_text(9)} points to by number: fitting the tweeter and the insert, printing it.',
+                _sheet_blocks([n for n, on in NOTES_ON.items() if on == 9]))
 
 
 def sheet8(pdf, M, W):
@@ -1708,7 +1791,7 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     t = time.time(); M = drawing_model(); W = waveguide_curves(); print(f'model {time.time() - t:.0f}s', flush=True)
     with PdfPages(os.path.join(OUT, 'earmilk-sheets.pdf')) as pdf:
-        for n, fn in ((1, sheet1), (2, sheet2), (3, sheet3), (4, sheet4), (5, sheet5), (6, sheet6), (7, sheet7), (8, sheet8)):
+        for n, fn in ((1, sheet1), (2, sheet2), (3, sheet3), (4, sheet4), (5, sheet5), (6, sheet6), (7, sheet7), (8, sheet8), (9, sheet9)):
             if a.only and n not in a.only: continue
             fn(pdf, M, W)
     print('wrote', OUT)

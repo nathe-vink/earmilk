@@ -13,7 +13,7 @@
    "mass_kg": 1.05
   },
   "back-panel": {
-   "volume_l": 1.3578,
+   "volume_l": 1.3604,
    "bbox_mm": [
     -0.0,
     202.0,
@@ -22,7 +22,7 @@
     220.0,
     484.0
    ],
-   "mass_kg": 0.92
+   "mass_kg": 0.93
   },
   "side-left": {
    "volume_l": 1.5997,
@@ -100,10 +100,10 @@
    "bbox_mm": [
     18.0,
     114.0,
-    60.5,
+    61.5,
     202.0,
     202.0,
-    78.5
+    79.5
    ]
   },
   "amp-box-lid": {
@@ -111,21 +111,21 @@
    "bbox_mm": [
     18.0,
     114.0,
-    391.5,
+    390.5,
     202.0,
     202.0,
-    409.5
+    408.5
    ]
   },
   "amp-box-front": {
-   "volume_l": 1.0367,
+   "volume_l": 1.03,
    "bbox_mm": [
     18.0,
     114.0,
-    78.5,
+    79.5,
     202.0,
     132.0,
-    391.5
+    390.5
    ]
   },
   "trim-ring-woofer": {
@@ -232,11 +232,11 @@
    ]
   }
  ],
- "woofer_chamber_air_l": 9.516,
+ "woofer_chamber_air_l": 9.549,
  "woofer_chamber_gross_l": 15.167,
  "mid_chamber_gross_l": 0.0,
  "waveguide_air_l": 0.4193,
- "wood_mass_kg": 5.95,
+ "wood_mass_kg": 5.96,
  "port_tube_length_mm": null,
  "size": "bookshelf",
  "features": {
@@ -362,7 +362,7 @@
   "amp": {
    "cutout": [
     96.0,
-    293.0
+    291.0
    ],
    "cutout_corner_r": 3.0,
    "rebate": [
@@ -377,8 +377,8 @@
      202.0
     ],
     "z": [
-     78.5,
-     391.5
+     79.5,
+     390.5
     ]
    },
    "glands": {
@@ -572,7 +572,7 @@
   },
   {
    "check": "amplifier box above the bottom panel",
-   "margin_mm": 42.5,
+   "margin_mm": 43.5,
    "least_mm": 0.0,
    "ok": true
   },

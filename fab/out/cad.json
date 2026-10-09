@@ -96,10 +96,10 @@
    ]
   },
   "tweeter-retainer": {
-   "volume_l": 0.0286,
+   "volume_l": 0.0248,
    "bbox_mm": [
     152.5,
-    182.25,
+    208.25,
     892.5,
     237.5,
     219.0,
@@ -483,9 +483,10 @@
     }
    },
    "tweeter_retainer": {
-    "sleeve_od": 73.0,
-    "sleeve_id": 67.0,
-    "from_y": 182.5,
+    "mode": "cap",
+    "tube_od": 73.0,
+    "tube_id": 54.0,
+    "from_y": 208.25,
     "to_y": 216.0,
     "flange_d": 85.0,
     "flange_t": 3.0,
@@ -654,15 +655,21 @@
    "ok": true
   },
   {
-   "check": "retaining sleeve clear of the tweeter's motor (a side)",
-   "margin_mm": 0.5,
-   "least_mm": 0.4,
+   "check": "retaining cap's ring on the motor's back (its width)",
+   "margin_mm": 6.0,
+   "least_mm": 4.0,
    "ok": true
   },
   {
-   "check": "retaining sleeve's wall",
-   "margin_mm": 3.0,
+   "check": "retaining cap's wall",
+   "margin_mm": 9.5,
    "least_mm": 1.5,
+   "ok": true
+  },
+  {
+   "check": "retaining cap's ring at least 1 long (the motor's back in front of the boss's)",
+   "margin_mm": 7.75,
+   "least_mm": 1.0,
    "ok": true
   },
   {

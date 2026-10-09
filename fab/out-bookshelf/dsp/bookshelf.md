@@ -5,13 +5,15 @@ Amplifier: Hypex FusionAmp FA122. Channels: CH1 woofer, SB17NRX2C35-8; CH2 tweet
 | | woofer | tweeter |
 |---|---|---|
 | acoustic centre behind the front (mm) | 32 | 91 |
-| delay (ms) | 0.173 | 0.0 |
+| delay (ms) | 0.171 | 0.0 |
 | sensitivity, 2.83 V (dB) | 87.0 | 90.5 |
 | gain to start (dB) | 0.0 | -3.5 |
 
 Crossovers: woofer-tweeter 2400 Hz, Linkwitz-Riley 24 dB/octave.
 
 Woofer EQ: [{"type": "linkwitz-transform", "from_fc_hz": 72.6, "from_q": 0.83, "to_f0_hz": 45.0, "to_q": 0.707, "low_shelf_db": 8.3, "why": "the sealed box's corner moved down to 45 Hz (fab/acoustics.py)"}]
+
+Woofer protection: a 35 Hz high-pass (Butterworth, order 2: under the +8.3 dB shelf to 45 Hz) and a limiter set to the SB17NRX2C35-8's 5.5 mm Xmax at the shelf's frequencies.
 
 The waveguide's on-axis level against its level at the crossover (from the simulation): 1600 Hz -2.6 dB, 2500 Hz +0.0 dB, 4000 Hz -3.8 dB, 6300 Hz -3.8 dB, 10000 Hz -6.4 dB. Flatten it with a shelf after measuring.
 

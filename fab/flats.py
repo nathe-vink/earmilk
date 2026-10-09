@@ -36,7 +36,7 @@ LAYERS = {'CUT_OUTSIDE': 7, 'CUT_INSIDE': 1, 'POCKET_3MM': 3, WOOFER_POCKET: 4, 
 OPS = {'CUT_INSIDE': 'cut inside', 'POCKET_3MM': 'pocket 3 mm deep', WOOFER_POCKET: f"pocket {WOOFER_REBATE['depth']:g} mm deep (woofer)",
        MID_POCKET: f"pocket {MID_REBATE['depth']:g} mm deep (mid)" if MID else '', PLATE_POCKET: f"pocket {AMP['rebate']:g} mm deep (amplifier plate)" if AMP else '',
        'DRILL_D10_DEPTH10': 'drill ø10, 10 deep', 'DRILL_D5.5_THROUGH': 'drill ø5.5 through (M4 T-nuts from inside; measure the frame first)',
-       NUT_POCKET: f"then pocket {AMP_BOX['nut_cb'][1]:g} mm deep from the underside with amp-box-lid-underside.dxf: turn the panel over left to right (its FRONT EDGE still nearest you) and centre each pocket on its hole; before the lid goes in" if AMP else '',
+       NUT_POCKET: f"then pocket {AMP_BOX['nut_cb'][1]:g} mm deep from the underside with amp-box-lid-underside.dxf: turn the panel over left to right (its FRONT EDGE still nearest you) and centre each pocket on its hole; cut both before the lid goes in (G2 epoxies the gland nuts into these counterbores)" if AMP else '',
        'REF_HOLES_CUT_FROM_TOP': 'the holes already cut from the top, drawn to register on (not cut)', 'NOTES': 'notes'}
 
 
@@ -78,8 +78,12 @@ def panel_defs():
     if holes:
         front['DRILL_D5.5_THROUGH'] = holes
     drivers = ', '.join(f'{k} {v}' for k, v in DRIVER_SET.items() if v)
+    # on hold until the bought parts it fits are measured (the drawing check's d4, round 7): the M numbers of sheet 7
+    m_drv, m_amp = ', '.join(f'M{M_NUM[k]}' for k in ('woofer', 'mid') if k in M_NUM), f'M{M_NUM["amp"]}'
+    front['NOTES'] = [('text', (PLAN / 2, BODY - 40.0), f'HOLD: MEASURE THE DRIVERS FIRST ({m_drv}, SHEET 7)', 8.0)]
     P.append(dict(name='front-baffle', qty=1, w=PLAN, h=BODY, layers=front,
-        note=f'outer face up; round the two vertical outer edges {EDGE_R:g} mm after glue-up; cutouts and rebates sized for {drivers} (flush under trim rings): re-cut for other drivers'))
+        note=f'HOLD until the drivers are measured ({m_drv}, sheet 7); outer face up; round the two vertical outer edges {EDGE_R:g} mm after glue-up; '
+             f'cutouts and rebates sized for {drivers} (flush under trim rings): re-cut for other drivers'))
     back = {'CUT_INSIDE': [], 'POCKET_3MM': rect(0, PLINTH_H, PLAN, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, PLAN, BODY)}
     if PORT:
         back['CUT_INSIDE'] += circle(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5)
@@ -95,8 +99,11 @@ def panel_defs():
         back['CUT_INSIDE'] += rect(RUN - tw / 2, POSTS['z'] - th / 2, RUN + tw / 2, POSTS['z'] + th / 2)
         what = 'the terminal cup\'s body goes through the 113 x 49 hole'
     facts = 'the Facts are printed on this face after the colour coat, under the clear' if LABEL.get('face', 'back') == 'back' else 'the Facts go on the right side'
+    if AMP:
+        back['NOTES'] = [('text', (PLAN / 2, BODY - 40.0), f'HOLD: MEASURE THE AMPLIFIER FIRST ({m_amp}, SHEET 7)', 8.0)]
     P.append(dict(name='back-panel', qty=1, w=PLAN, h=BODY, layers=back,
-        note=f'outer face up (seen from behind); round the two vertical outer edges {EDGE_R:g} mm after glue-up; {what}; {facts}'))
+        note=(f'HOLD until the amplifier is measured ({m_amp}, sheet 7); ' if AMP else '') +
+             f'outer face up (seen from behind); round the two vertical outer edges {EDGE_R:g} mm after glue-up; {what}; {facts}'))
     P.append(dict(name='side', qty=2, w=INNER, h=BODY, layers={'POCKET_3MM': rect(0, PLINTH_H, INNER, PLINTH_H + SHADOW) + rect(0, GABLE_SHADOW_Z0, INNER, BODY)},
                   note='outer face up; finish the groove across the front and back panels\' edges after glue-up' +
                        ('; the Facts are printed on the right side\'s outer face' if LABEL.get('face') == 'right' else '')))

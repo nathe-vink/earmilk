@@ -81,9 +81,14 @@ TWEETER_PART = dict(model='SB Acoustics Satori TW29DN-B', dome_d=29.0, surround_
 # retaining sleeve slides over the motor from behind and presses the front ring onto the throat's seat (on a 0.5 foam
 # gasket); its own flange, on the boss's back face, takes three screws in the boss's wall, outside the bore. Whatever
 # SB's screw circle turns out to be, it is not needed. PROPOSAL; its bore follows body_d (measure the motor first).
-RETAINER = dict(gasket=0.5, preload=0.25, clear=0.5, fit=0.2, flange_d=85.0, flange_t=3.0, screws=3, screw_circle=78.8,
-                pilot_d=2.4, pilot_depth=10.0, hole_d=3.2, head_h=2.4, start_deg=0.0,
+RETAINER = dict(mode='cap', gasket=0.5, preload=0.25, clear=0.5, fit=0.2, rim=6.0, flange_d=85.0, flange_t=3.0, screws=3,
+                screw_circle=78.8, pilot_d=2.4, pilot_depth=10.0, hole_d=3.2, head_h=2.4, start_deg=0.0,
                 screw='3.0 x 12 thread-forming screws for plastics (WN 1411 / PT K30, pan head)')
+# mode 'cap' (the drawing check's d2, round 7): a printed ring in the bore behind the tweeter, bearing on its motor's back
+# face (a rim `rim` wide round the motor's edge; its tabs and lead pass the centre hole), its flange screwed to the boss's
+# back face. It holds whatever the front ring and the motor measure, ring over motor or one cylinder (SB's faceplate
+# drawing shows ø70.0 behind the faceplate, where the 'sleeve' mode, a tube over the motor pressing a ring that stands
+# past it, needs the motor 3 + 2 x clear under the ring and failed at a 70 motor in a 73 ring).
 # The heads stand head_h proud of the flange (a 3 mm pan head is 1.8 to 2.4): the pocket's bore runs that and 1.1 more
 # behind the flange, or the insert stops short of home (the drawing check's d3, round 3). The circle starts on the
 # horizontal (start_deg 0, the speaker's right), so no pilot lies on the insert's split at the centre plane (d5).
@@ -256,7 +261,7 @@ if BOOK:
     POSTS = dict(POSTS, z=180.0)
     # Hypex FusionAmp FA122 upright on the back (its 315 plate will not lie across a 220 back)
     AMP = dict(model='Hypex FusionAmp FA122', plate_w=120.0, plate_h=315.0, plate_t=3.0, plate_r=4.0, module_depth=55.0,
-               cut_w=96.0, cut_h=293.0, z=235.0, rebate=4.5)   # the cut-out 291 in Hypex's data, 293 on an Audiophonics drawing: cut 293 (the 315 plate still laps 11 each end) unless the module offered to a test cut-out says otherwise
+               cut_w=96.0, cut_h=291.0, z=235.0, rebate=4.5)   # SPEC 291: Hypex's manual (R4; an Audiophonics drawing shows 293): offer the module to the 291 slot cut in scrap, and open it to 293 only if it binds (the drawing check's d10, round 7)
     AMP_BOX = dict(depth=70.0, margin=10.0, glands=2, gland='M16 x 1.5', gland_hole=16.5, gland_pitch=35.0, nut_cb=(24.0, 8.0))   # one M16 per cable
     # The back holds the amplifier, so the Facts go on the right side, as on a real carton
     LABEL = dict(w=150.0, h=147.0, top=420.0, face='right')
@@ -272,3 +277,7 @@ if BOOK:
     GABLE_SPLIT_Z = None
     TRIM_RING = dict(t=3.0, width=12.0)
     TRIM_RING_ID = dict(woofer=147.0)      # PLACEHOLDER the SB17NRX2C35-8's surround just inside its 145 cutout (the research) + 2
+
+# Sheet 7's 'Measure first' numbers, one per bought part the drawings wait on (the HOLD marks on the sheets, the DXFs
+# and stl/HOLD.txt use them): the ply, each driver, the tweeter, the amplifier, the connector
+M_NUM = {'ply': 1, 'woofer': 2, **({'mid': 3} if MID else {}), 'tweeter': 3 + bool(MID), 'amp': 4 + bool(MID), 'connector': 5 + bool(MID)}

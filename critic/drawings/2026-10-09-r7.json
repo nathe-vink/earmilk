@@ -1,0 +1,202 @@
+{
+ "verdict": "Not today. The set is unusually thorough and internally consistent: every dimension I checked on the 16 sheets agrees with cad.json, cutlist.csv, params.py, the DXFs (opened with ezdxf) and the STLs (bounding boxes and sections sliced); text measures 2.54 mm cap height; every section has its cutting plane on another view and every view a scale; glue-up, fixings and fits are written down; the acoustic numbers on the sheets match the README (81.1 L, 32 Hz, port 171.3, 7.6 L mid chamber, 9.2 L sealed, 2.8 and 2.4 kHz). What stops the build is that nothing is released. Every bought-part interface (rebates, cut-outs, bolt circles, trim-ring bores, both tweeter mounts, the amplifier plate's corners, even the ply thickness) is a PLACEHOLDER, and the sheets themselves say to measure each one and regenerate with fab/build.sh. Two of those are already contradicted by the makers' data, with no drawn fallback: SB's drawing shows \u00f870 behind the TW29DN-B's faceplate, where the floorstander's sleeve is drawn on \u00f866; and the D3004/602200 is listed 45.3 deep, where the bookshelf's bore holds 26 and the roof has no room to go deeper. There are four more problems. The floorstander's glue-up step G6 cannot be done as written: the top panel's cable-tie mounts have to pass over the divider with 0.3 mm clearance. The port is tuned while the woofer box is still open to the room through four holes. The woofer's T-nut flange is 12 mm on the drawing but 15 in the BOM and README, and a 15 mm flange overhangs all three cut-outs. The connector bays are sized on a 24 mm mated length that no source confirms. Once the parts are measured, those points fixed and a rev E issued, a competent builder could make the pair with a few phone calls.",
+ "buildable_score": 5.0,
+ "findings": [
+  {
+   "id": "d1",
+   "size": "floorstander",
+   "sheet": "sheet-8 (G4, G6, 4.6), sheet-2, README step 3",
+   "where": "sheet-8 note G6 (third column, about x 2254-3200, y 660-940 px on EM-FS-008) against G4 and 4.6; sheet-2 section A-A, the two black squares under the top panel behind the divider (about x 583 and 646, y 640 px)",
+   "severity": "blocks",
+   "problem": "The top panel cannot be slid in from the front 'dry over the divider' with its two cable-tie mounts already stuck on its underside: both mounts sit behind the divider and must pass over its top edge, which G4 planes to only 0.3 mm below the top panel.",
+   "evidence": "G4: 'Plane the divider's top 18.3 below the sides' top edges ... so the top panel slides over it'. The top panel's underside is at z 842, so that leaves 0.3 clear (cad.json mid-divider bbox y 108-126, z 590-842). G6: 'its two cable-tie mounts on its underside (4.6), slid in from the front and glued to the sides and the back, dry over the divider'. 4.6: 'on the top panel's underside at (x 195, y 290) and (x 195, y 250)', 'each stuck on its panel before that panel goes in, a tie threaded loose through it'. A 20 x 20 adhesive mount (bom.csv) stands about 5 mm proud. The mounts are 124 and 164 behind the divider's back face, so each one crosses the divider's top edge on the way in. README step 3 repeats 'the top panel, slid in from the front'.",
+   "fix": "In G6, leave the top panel's two mounts off. Stick them at (x 195, y 250) and (x 195, y 290) after G6 and before G7, with the front still off, reaching up through the brace's window. Change 4.6 ('each stuck on its panel before that panel goes in') and README step 3 to match. The alternative is to slide the top panel in from the open top end of the box, held flush with the sides' top edges."
+  },
+  {
+   "id": "d2",
+   "size": "floorstander",
+   "sheet": "sheet-7 (M4, 3.2), sheet-3, stl/tweeter-retainer.stl",
+   "where": "sheet-7 M4 (first column, about x 126-1080, y 796-1064 px on EM-FS-007); sheet-3 section B-B, the stippled sleeve round the motor (about x 2116-2260, y 260-600 px)",
+   "severity": "blocks",
+   "problem": "The retaining sleeve, the insert's \u00f873.4 bore and its boss are drawn for a \u00f866 motor behind a \u00f873 front ring. SB's own TW29DN-B drawing shows \u00f870.0 behind the faceplate, which the sheet admits would fail the sleeve, and the only fallback ('README: a cup') is an open question, not a drawing.",
+   "evidence": "Sheet 7 M4: 'the motor \u00f866 sets the sleeve's bore, \u00f867 ... SB's drawing shows \u00f870.0 behind the faceplate, likely the motor: over \u00f869 the sleeve fails a CAD check (README: a cup). Print nothing until it is measured.' 3.2 gives the sleeve as 'tube \u00f873 / \u00f867 x 33.75 long, flange \u00f885 x 3'. params.py TWEETER_PART has flange_d 73 and body_d 66, both PLACEHOLDER. research/datasheets-2026-10-09.json gives the rear body as \u00f870.0 (SB drawing, label inferred) and the faceplate cut-out as 71 (toutlehautparleur) or 74 (Willy's), with nothing for the bare unit. A \u00f871 bore (70 + 1, per 3.2) in the \u00f873 tube leaves a 1.0 wall, below cad.json's 1.5 minimum. If the unit is a single \u00f870 cylinder, there is no ring for the sleeve to press on. The README lists the cup only under 'Questions for the owner'.",
+   "fix": "Before printing anything for the floorstander's roof, measure a bare TW29DN-B: front ring OD and thickness, motor OD, whether any ring stands proud of the motor, and the dome-plus-surround OD. If the motor is \u00f869 or more, draw the alternative mount on sheet 3 with its own STL, for example a cup bearing on the motor's back with bore = motor + 1.0, a wall of 1.5 or more, and the boss and the pocket's \u00f886.6 bore grown to suit. Then remove '(README: a cup)' from M4."
+  },
+  {
+   "id": "d3",
+   "size": "bookshelf",
+   "sheet": "sheet-7 (M3), sheet-3, README questions",
+   "where": "sheet-7 M3 (first column, about x 126-1080, y 650-1056 px on EM-BS-007); sheet-3 section B-B, the tweeter body in the \u00f862.4 bore (about x 2252-2422, y 337-825 px)",
+   "severity": "blocks",
+   "problem": "The D3004/602200 is drawn 17 deep behind its faceplate, in a bore that holds 26. The only published depth is 45.3, and the README's fallback (move the boss and the bay back) cannot work under the bookshelf's roof.",
+   "evidence": "params.py TWEETER_PART has body_depth 17 and flange_t 4.5, both PLACEHOLDER. M3: 'Shops give ... 45.3 deep (from where?): the bore holds 26 behind the faceplate (a CAD check). Print nothing until it is measured.' The research gives SoundImports' depth as 45.3 (datasheets json) and about 21.5 for the D3004/602000 predecessor (drivers-small.json). The pocket's boss bore is \u00f869 on z 517, so its top is at z 551.5, and it runs to y 127. The back slope falls from the ridge (y 110, z 568.6) at 0.769 per mm: it is at z 555.5 at y 127 (cad.json: 4.03 of gable over the bore) and z 547.8 at y 137. Lengthening the boss by 10 mm would put the bore 3.7 mm through the roof; only about 1.3 mm more depth keeps the 3 mm minimum.",
+   "fix": "Get Scan-Speak's D3004/602200 drawing, or measure one, before buying the pair. Put the body's diameter and its depth behind the faceplate on sheet 3 as measured values. If the depth is over 26, take it to the owner (lower the throat from z 517, or choose a shorter tweeter); the shop cannot fix it."
+  },
+  {
+   "id": "d4",
+   "size": "both",
+   "sheet": "sheet-7 (M1-M5), sheets 1, 3, 4, 6, cutlist, dxf, stl, title blocks",
+   "where": "sheet-7 'Measure first' M1 to M5 on EM-FS-007 and EM-BS-007; the title block of every sheet reads 'issue 2026-10-09 ... rev D' with no release status",
+   "severity": "blocks",
+   "problem": "No sheet or file is released for cutting or printing. Every bought-part interface is still a PLACEHOLDER that the notes say to measure, enter in params.py and regenerate with fab/build.sh, and nothing marks which DXFs and STLs are on hold.",
+   "evidence": "PLACEHOLDER values in params.py: WOOFER_REBATE 315.6 x 9 (flange 'about 5, measure it'), MID_REBATE 166.6 x 11.5, MID_CUTOUT 140.3, DRIVER_SCREWS pcd 295 (from one shop) and 154 ('estimate'), TRIM_RING_ID 290 / 141 / 147, TWEETER_PART, and AMP plate_r 4.0 (Hypex's 2D drawing was not obtained). M1: 'set WALL = t in params.py and run fab/build.sh again'. The cut-list widths 354 and 184 assume t = 18.0, and the floorstander's 11 gable layers become 12 if t is under 17.73. M4 (FS) and M3 (BS): 'Print nothing until it is measured'. M5: the back panel's R4.5 rebate corners (dxf/back-panel.dxf POCKET_4.5MM, fitted radius 4.50) will not seat a plate whose corners are under R2.8.",
+   "fix": "Buy and measure M1 to M5, regenerate, and reissue as rev E with the measured values in place of every PLACEHOLDER. Until then, add 'HOLD: not for cutting' to sheets 1, 3, 4 and 6, to front-baffle.dxf and back-panel.dxf, and to the insert, gable, sleeve and trim-ring STLs. Say on sheet 7 that the sides, bottom, top, brace, mid shelf and divider, and the amplifier-box panels may be cut once the measured ply thickness (M1) has been entered."
+  },
+  {
+   "id": "d5",
+   "size": "both",
+   "sheet": "bom, README, sheet-8 (F1)",
+   "where": "bom.csv 'Driver fixings' row; README step 3; sheet-8 F1 (about x 2254-3200, y 1214-1400 px on EM-FS-008)",
+   "severity": "guess",
+   "problem": "The woofer's T-nut flange is '15 or less' in the BOM and README but '12 or less' on the drawing. The commonly stocked M4 T-nut is 15 across, which overhangs all three cut-outs, and no part is named.",
+   "evidence": "bom.csv: 'M4 T-nuts, flange 15 or less across (woofer) and 12 or less (mid; bookshelf woofer)'. README step 3: 'flanges 15 or less across for the floorstander's woofer'. Sheet 8 F1 (FS): 'flange 12 or less across (woofer), 12 or less across (mid)'. params.py tnut_flange woofer 12, commented 'a 15 mm flange overhung its 282 cut-out by 1'. cad.json: 'woofer's T-nut flanges (12) clear of its cut-out', margin 0.5. A 15 mm flange on \u00f8295 reaches r 140.0, 1.0 inside the \u00f8282 cut-out (r 141.0); on the mid's \u00f8154 it is 0.65 inside \u00f8140.3, and on the bookshelf's \u00f8159 0.45 inside \u00f8144.9. DIN 1624 M4 tee nuts are 15 across. The \u00f85.5 holes (DRILL_D5.5_THROUGH) also assume a 5.5 barrel on a T-nut nobody has chosen.",
+   "fix": "Change bom.csv and README step 3 to 'flange 12 or less (woofer)'. Name the T-nut in F1 and bom.csv (flange 12 or less, barrel OD 5.5, length 8 / 6 / 7 or less). If no such part is stocked, add to F1: 'grind each 15 mm flange flat to 6.0 from its centre on the side facing the cut-out', or specify M4 threaded inserts with their drill size."
+  },
+  {
+   "id": "d6",
+   "size": "floorstander",
+   "sheet": "sheet-8 (2.5), README step 8",
+   "where": "sheet-8 note 2.5 (first column, about x 126-1060, y 806-1084 px on EM-FS-008); README 'The build, in order', step 8",
+   "severity": "guess",
+   "problem": "The port is tuned in step 8, before the glands, the mid, the divider's seal and the amplifier go in (step 9). The woofer box is therefore open to the room through four holes, and the impedance dip cannot be trimmed to 32 Hz.",
+   "evidence": "Note 2.5 and README step 8: fit the woofer, clip the DATS to its terminals with 'its cable not yet connected', and trim until the minimum is at 32 Hz. Step 9 then fits the glands ('Screw the M16 glands' bodies into their nuts in the lid'), the drivers and the plate. At step 8, the lid's three \u00f816.5 holes open into the amplifier box, whose 336 x 111 cut-out is still empty, and the divider's \u00f812 hole opens into the mid chamber, whose \u00f8140.3 cut-out is still empty. That is about 640 + 113 mm\u00b2 of short vent in parallel with the \u00f892 port (6650 mm\u00b2, 171.3 long). A rough lumped estimate puts the dip near 40-45 Hz, and trimming the tube only raises it further. The 150 g of fill (README step 9, on no sheet) also goes in after the tuning.",
+   "fix": "Do the tuning after step 9's sealing: glands fitted and tightened on their cables (or blanked), the mid fitted, the divider's hole puttied, the fill in, and the amplifier cut-out closed by the plate or by a scrap 360 x 135 board on the EPDM. Clip the DATS to the woofer cable's free end inside the amplifier box before closing it. Say this in 2.5 and README step 8, and add the fill (150 g, kept a port's diameter from its inner end) as a note on sheet 8."
+  },
+  {
+   "id": "d7",
+   "size": "both",
+   "sheet": "sheet-7 (3.1), sheet-3",
+   "where": "sheet-7 note 3.1 ('Mated, 24 long or less'); sheet-3 section B-B, the connector in the bay (FS about x 2041-2073, y 432-528 px; BS about x 2060-2123, y 551-740 px)",
+   "severity": "guess",
+   "problem": "The connector bays are sized on a 24 mm mated length that no source gives for the named Molex parts. That leaves 12 mm (floorstander) and 8 mm (bookshelf) above the pair for the lead's bend and the fingers.",
+   "evidence": "3.1: 'Molex Mini-Fit Jr. ... 39-01-2021 ... 39-01-2020 ... Mated, 24 long or less'. params.py CONNECTOR mated_l 24. research/datasheets-2026-10-09.json: mated length 'not found', plug size 'not found', and the receptacle 39-01-2020 listed as '5.4 x 14.1 x 19.6' by a distributor with unclear axes, so the receptacle alone may be 19.6 long. Bays: \u00f836 on z 927 with its floor at z 909 (FS); \u00f832 on z 512 with its floor at z 496 (BS). The pair stands on the floor. The README asks only whether a hand can mate it.",
+   "fix": "Take the mated length from Molex SD-5557-003 and 55590020-SD and write it on sheet 3. Size each bay so that 10 mm or more stays above the mated pair. Add a step before the gable is made: print a \u00f836 x 35 (bookshelf \u00f832 x 22) test bay with its \u00f814 channel, and mate and unlatch the pair by hand through a mock pocket."
+  },
+  {
+   "id": "d8",
+   "size": "both",
+   "sheet": "sheet-8 (FS 4.8, BS 4.7), dsp/*.md, README",
+   "where": "sheet-8 FS note 4.8 (about x 1190-2124, y 1246-1340 px); sheet-8 BS note 4.7 (about x 1190-2124, y 494-590 px); out/dsp/floorstander.md; out-bookshelf/dsp/bookshelf.md",
+   "severity": "guess",
+   "problem": "The DSP notes on the sheets, and the DSP files, leave out the woofer high-pass that the README says each size needs to protect its woofer.",
+   "evidence": "README 'Read this before ordering anything': 'Set the DSP's high-pass at about 25 Hz and its limiter to the woofer's excursion' for the floorstander (port air at 50 m/s at 250 W), and 'Its +8.3 dB shelf to 45 Hz needs a 35 Hz high-pass in the DSP' for the bookshelf. Sheet 8 FS 4.8: 'Polarity, delay and the crossover ... are set in the DSP'. BS 4.7: 'The crossover (2.4 kHz, LR4), the woofer's shelf to 45 Hz (+8.3 dB) and the delays'. Both dsp/*.md files list crossovers, delays, gains and EQ, with no high-pass and no limiter.",
+   "fix": "Add 'woofer high-pass 25 Hz and a limiter set to the RSS315HF-4's excursion' to FS 4.8, and 'woofer high-pass 35 Hz under the +8.3 dB shelf' to BS 4.7. Add both filters to dsp/*.md and dsp/*.json."
+  },
+  {
+   "id": "d9",
+   "size": "bookshelf",
+   "sheet": "sheet-7 (M2), sheet-1",
+   "where": "sheet-7 M2 (first column, about x 126-1080, y 474-636 px on EM-BS-007); sheet-1 front-view note 'rebate \u00f8172.6 x 10.5 deep'",
+   "severity": "guess",
+   "problem": "M2 presents as settled that the shop's 10.9 'includes the surround', so the 10.5 rebate stands. The research says the drawing's labels were never seen, and a 10.9 raised rim would need a rebate the baffle cannot hold.",
+   "evidence": "M2: 'flange 6.5 thick (SB's drawing; a shop's 10.9 includes the surround) sets the rebate, 10.5 deep'. research/datasheets-2026-10-09.json, SB17NRX2C35-8 notes: 'I cannot say exactly what 85.9 is measured to ... If it is a raised frame rim, the rim is 10.9 high and 6.5 is the thickness under the \u00d88.5 screw seats. That would make the flush rebate 10.9, not 6.5. Check the drawing before routing.' A rebate of 10.9 + 4.0 = 14.9 deep would leave 3.1 of birch under it, against the 7.5 that a 7 mm T-nut barrel needs (cad.json margin is 0.0 even now).",
+   "fix": "Reword M2: 'flange 6.5 per SB's drawing, labels not seen: measure the flange at its screw holes, and anything standing above it, before the baffle is cut. If anything at the rim stands above 6.5, stop and ask: a flush rebate would leave 3.1 of birch, too little for any T-nut.'"
+  },
+  {
+   "id": "d10",
+   "size": "bookshelf",
+   "sheet": "sheet-4, sheet-7 (M4)",
+   "where": "sheet-4 note 'plate 120 x 315, in a 121 x 316 x 4.5 rebate; cut-out 96 x 293, R3 (4.1)' (about x 1008-1376, y 1540-1636 px on EM-BS-004)",
+   "severity": "guess",
+   "problem": "The FA122 cut-out is drawn 96 x 293, but Hypex's manual gives 96 x 291, and the sheets do not say why.",
+   "evidence": "research/datasheets-2026-10-09.json FA122: cut-out 291 x 96 (Hypex Fusion Manual R4, 'maker text'). amps.md: '291\u00d796 ... An Audiophonics drawing shows 293'. params.py AMP cut_h 293, commented 'cut 293 ... unless the module offered to a test cut-out says otherwise'. dxf/back-panel.dxf CUT_INSIDE spans y 88.5-381.5 (293). At 293 the plate laps 11 at each end instead of Hypex's 12, which leaves about 3.25 of birch between a \u00f83.5 pilot centred 6 from the plate's edge and the cut-out.",
+   "fix": "Either cut Hypex's 96 x 291, or keep 293 and add to sheet 4 and M4: '293 per Audiophonics' drawing; Hypex's manual says 291. Offer the module to a 291 slot in scrap, and open it to 293 only if it binds.'"
+  },
+  {
+   "id": "d11",
+   "size": "both",
+   "sheet": "sheet-7 (3.2), sheet-3",
+   "where": "sheet-7 note 3.2 on EM-FS-007 and EM-BS-007; sheet-3 section B-B at the throat's seat",
+   "severity": "guess",
+   "problem": "The 0.5 mm foam gasket under the tweeter is called for but never sized. Its inner edge sits at the throat, where any overlap becomes a step in the waveguide.",
+   "evidence": "FS 3.2: 'seat its front ring on a 0.5 mm foam gasket on the throat's seat'. BS 3.2: 'seat its faceplate on a 0.5 mm foam gasket'. bom.csv: '0.5 mm closed-cell foam (tweeter)', one sheet. No inner or outer diameter appears on sheet 3 or 7. The seat is the ring between the throat (\u00f845 FS, cad.json throat_d 45; \u00f834 BS) and the bore (\u00f873.4 FS, \u00f862.4 BS). Note 2.2 relies on 'the wall runs on from the surround with no step'.",
+   "fix": "Add to sheet 3: 'tweeter gasket: 0.5 closed-cell foam ring, ID 46 / OD 73 (floorstander), ID 35 / OD 62 (bookshelf), punched; its ID must not come inside the throat'."
+  },
+  {
+   "id": "d12",
+   "size": "floorstander",
+   "sheet": "sheet-2",
+   "where": "section D-D, the '52' beside the port tube's right wall (about x 1645-1680, y 1635-1660 px)",
+   "severity": "legibility",
+   "problem": "The 52 in section D-D has no dimension line, arrows or extension lines, so it does not say from where or to where.",
+   "evidence": "Zoomed to 4x, it is bare text between the port tube's wall (x 245) and the mid's cable dot (x 297). 297 - 245 = 52, so it is presumably the run's clearance from the tube; note 4.6 sets that clearance as 20 from the \u00f8128 flare.",
+   "fix": "Draw it as a dimension, with arrows, from the port tube's outside (x 245) to the mid's run (x 297), labelled '52 (20 or more from the flare, 4.6)'; or delete it."
+  },
+  {
+   "id": "d13",
+   "size": "floorstander",
+   "sheet": "sheet-5",
+   "where": "exploded view: balloon 10 at about (1688, 1041) px, its leader dot at about (1608, 1103) px",
+   "severity": "legibility",
+   "problem": "Balloon 10 (Port) points at the top corner of the right side panel (part 3); only a sliver of the port shows behind it.",
+   "evidence": "Zoomed to 4x, the leader's dot lands on the corner of part 3, with the edge of the port's flare just below it.",
+   "fix": "Pull the port out behind the back panel (part 2) in the exploded view, or end the leader on the visible part of its flange (about 1612, 1150 px)."
+  },
+  {
+   "id": "d14",
+   "size": "floorstander",
+   "sheet": "sheet-3, sheet-2",
+   "where": "sheet-3 section B-B, the stippled bands round the motor (about x 2116-2260, y 260-300 and 560-600 px); sheet-2 detail C, the red dashed line from the channel into the tweeter (about x 2158-2260, y 767 px)",
+   "severity": "legibility",
+   "problem": "The retaining sleeve is drawn (stippled) in section B-B and in detail C but labelled in neither. Detail C also runs the cabinet's cable straight from the channel into the tweeter with no socket, unlike sheet 3.",
+   "evidence": "Sheet 3 labels the bore, pins, bay, lead, connector and silicone, but not part 17; the sleeve's sizes appear only in 3.2 ('tube \u00f873 / \u00f867 x 33.75 long, flange \u00f885 x 3'). In detail C the red dashed line goes up the channel and across to the tweeter, whereas 3.4 and section B-B put the socket on the bay's floor with the tweeter's own lead between it and the tweeter.",
+   "fix": "Add a leader in both views: 'retaining sleeve (stl/tweeter-retainer.stl, 3.2), 3 x 3.0 x 12 into the boss'. In detail C, end the red dashed line at a socket on the bay's floor, or add the note 'cables simplified: see sheet 3'."
+  },
+  {
+   "id": "d15",
+   "size": "both",
+   "sheet": "cutlist",
+   "where": "cutlist.csv, row amp-box-lid, column 'operations' (both sizes)",
+   "severity": "legibility",
+   "problem": "The lid's operations text stops mid-sentence: '...centre each pocket on its hole; before the lid goes in'.",
+   "evidence": "Parsed with Python's csv module, the field ends at 'before the lid goes in' with nothing after it, and the note column starts a new sentence.",
+   "fix": "Finish it: '...; cut both before the lid goes in: G2 epoxies the gland nuts into these counterbores first'."
+  }
+ ],
+ "questions": [
+  {
+   "question": "If the bare TW29DN-B turns out to be \u00f870 (as SB's drawing suggests), or a single cylinder with no ring, which mount do you want: a cup sleeve on the motor's back (bore 71 or more, wall 1.5, boss and pocket bore grown to suit); the bore grown to the ring + 0.4 with the screw circle moved out; or the unit bonded in?",
+   "why": "The drawn sleeve (bore 67 on a 66 motor) fails with a 70 motor. The insert's outline leaves only about 5.6 mm round the \u00f886 boss (cad.json), so the choice changes the insert and the gable, and neither can be printed until it is made."
+  },
+  {
+   "question": "If the D3004/602200 measures more than 26 deep behind its faceplate, what should change: the throat position (now y 95, z 517, from the BkD study), the tweeter, or the mount?",
+   "why": "The README's idea of moving the boss and bay back runs out after about 1.3 mm: at y 137 the back slope is at z 547.8, below the \u00f869 bore's top at z 551.5."
+  },
+  {
+   "question": "Which M4 T-nut and which M4 x 20 screw should the sheets name?",
+   "why": "F1 asks for a flange of 12 or less and a head 1.6 high and 8 across or less. DIN 1624 M4 tee nuts are 15 across and ISO 7380 heads are 2.2 high, and a 15 mm flange overhangs all three cut-outs."
+  },
+  {
+   "question": "Is it acceptable for the port's inner end to sit 65 to 75 mm from the woofer's motor, with the port's axis at the motor's top edge?",
+   "why": "That is less than the port's 92 mm bore. An obstruction that close to the port's inner end shifts the tuning and adds noise at the 50 m/s the README predicts at full power."
+  },
+  {
+   "question": "Are sealed, unvented amplifier boxes (90 mm deep for the FA253, 70 mm for the FA122) acceptable thermally?",
+   "why": "Hypex's manual asks that convection not be impeded, its FAQ mentions venting holes, and the amplifier's output drops 6 dB at maximum temperature. A one-hour heat run before the box is closed would settle it."
+  },
+  {
+   "question": "Which gable route is the default: route A (milled birch) or route B (printed)?",
+   "why": "Route A's pocket and connector bay need a cutter that reaches about 251 mm in from the front face, which few local routers have. Route B's printed pocket crosses bonded joints, and the README already asks whether it needs 0.4 mm a side."
+  },
+  {
+   "question": "Is 1.5 to 1.8 mm of resin under the bookshelf tweeter's bore enough, or should the throat rise 2.2 mm?",
+   "why": "cad.json gives 1.5 (minimum 1.2). The insert is pulled out by a ribbon against four magnets, and a thin floor under a \u00f862.4 bore is where a resin print cracks."
+  },
+  {
+   "question": "If a tweeter's measured dome-plus-surround is not 45 mm (TW29DN-B) or 34 mm (D3004/602200) across, is the waveguide re-simulated with bem.py, or kept with a step at the throat?",
+   "why": "The waveguides are fixed by simulation, but their throat radii (r0 22.5 and 17) come from PLACEHOLDER estimates of the diaphragms."
+  },
+  {
+   "question": "Are feet, glides or spikes intended?",
+   "why": "None are drawn. The plinth's 2K-painted bottom edges would carry the whole speaker (24.8 kg of birch alone for the floorstander, before drivers and amplifier) directly on the floor."
+  },
+  {
+   "question": "Is about 1.2 mm of resin between the sleeve's thread-forming screws and the tweeter bore enough?",
+   "why": "The \u00f82.4 pilots sit 1.5 from the \u00f873.4 bore (cad.json margin 1.5), so a \u00f83.0 thread-forming screw leaves about 1.2 mm of SLA resin, which tends to split. The bookshelf already uses bonded knurled inserts instead."
+  },
+  {
+   "question": "Can a builder close the two ties under the top panel (z 842) blind, about 470 mm in through the woofer's cut-out and the brace's window?",
+   "why": "Note 4.6 leaves those ties for step 9, after the tweeter cable has been fed, and it is the longest reach in the build."
+  }
+ ]
+}

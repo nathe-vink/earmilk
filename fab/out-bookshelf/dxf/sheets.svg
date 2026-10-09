@@ -16,10 +16,10 @@
 <text x="107.0" y="772.0" font-size="40" text-anchor="middle" font-family="sans-serif">side</text>
 <rect x="211.0" y="530.0" width="184.0" height="484.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
 <text x="303.0" y="772.0" font-size="40" text-anchor="middle" font-family="sans-serif">side</text>
-<rect x="407.0" y="701.0" width="184.0" height="313.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
-<text x="499.0" y="857.5" font-size="40" text-anchor="middle" font-family="sans-serif">amp-box-front</text>
-<rect x="603.0" y="701.0" width="184.0" height="313.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
-<text x="695.0" y="857.5" font-size="40" text-anchor="middle" font-family="sans-serif">amp-box-front</text>
+<rect x="407.0" y="703.0" width="184.0" height="311.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="499.0" y="858.5" font-size="40" text-anchor="middle" font-family="sans-serif">amp-box-front</text>
+<rect x="603.0" y="703.0" width="184.0" height="311.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="695.0" y="858.5" font-size="40" text-anchor="middle" font-family="sans-serif">amp-box-front</text>
 <rect x="799.0" y="786.0" width="228.0" height="228.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
 <text x="913.0" y="900.0" font-size="40" text-anchor="middle" font-family="sans-serif">gable-layer-01</text>
 <rect x="1039.0" y="786.0" width="228.0" height="228.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>

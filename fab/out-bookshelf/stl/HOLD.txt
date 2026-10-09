@@ -1,0 +1,8 @@
+HOLD: these prints wait on the measurements of drawings sheet 7 ("Measure first"). Enter each in fab/params.py and
+run fab/build.sh before printing.
+
+  waveguide-insert.stl                         the tweeter (M3): its faceplate, body and depth set the bore and the seat
+  gable-block.stl, gable-print/*.stl           the tweeter and the connector (M3, M5): the pocket's bore and bay
+  trim-ring-*.stl                              the drivers (M2): each surround at its glue line sets a ring's bore
+
+Print the connector's test bay first (README, step 1).

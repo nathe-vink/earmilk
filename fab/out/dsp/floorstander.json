@@ -1,6 +1,15 @@
 {
  "size": "floorstander",
  "amplifier": "Hypex FusionAmp FA253",
+ "woofer_protection": {
+  "high_pass": {
+   "f_hz": 25.0,
+   "type": "Butterworth",
+   "order": 4,
+   "why": "the port unloads the woofer below its 32 Hz tuning"
+  },
+  "limiter": "set to the RSS315HF-4's excursion; the port's air reaches about 50 m/s at 250 W"
+ },
  "channels": {
   "CH1": "woofer, Dayton Audio RSS315HF-4 (Reference HF subwoofer, 12 in)",
   "CH2": "mid, SB Acoustics Satori MR16P-8 (6.5 in dedicated midrange, papyrus)",
@@ -21,14 +30,14 @@
   }
  ],
  "acoustic_centres_mm_behind_front": {
-  "woofer": 53.0,
+  "woofer": 54.0,
   "tweeter": 172.0,
-  "mid": 32.5
+  "mid": 33.5
  },
  "delays_ms": {
-  "woofer": 0.347,
+  "woofer": 0.344,
   "tweeter": 0.0,
-  "mid": 0.407
+  "mid": 0.404
  },
  "sensitivity_db_2v83": {
   "woofer": 90.3,

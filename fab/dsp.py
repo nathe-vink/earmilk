@@ -98,7 +98,14 @@ def main():
         woofer_eq = [{'type': 'linkwitz-transform', **lt, 'why': 'the sealed box\'s corner moved down to 45 Hz (fab/acoustics.py)'}]
     else:
         woofer_eq = [{'type': 'peaking', 'f_hz': 37.0, 'gain_db': -3.3, 'q': 1.2, 'why': 'the vented alignment\'s bump (fab/research/drivers-floorstander.md)'}]
-    plan = {'size': SIZE, 'amplifier': AMP['model'],
+    # the woofer's protection (the README's 'Read this before ordering', the drawing check's d8, round 7): a high-pass
+    # under the port's tuning (the floorstander: unloaded below it) or under the sealed box's shelf (the bookshelf), and
+    # a limiter set to the woofer's excursion
+    woofer_protect = ({'high_pass': {'f_hz': 35.0, 'type': 'Butterworth', 'order': 2, 'why': 'under the +8.3 dB shelf to 45 Hz'},
+                       'limiter': 'set to the SB17NRX2C35-8\'s 5.5 mm Xmax at the shelf\'s frequencies'} if BOOK else
+                      {'high_pass': {'f_hz': 25.0, 'type': 'Butterworth', 'order': 4, 'why': 'the port unloads the woofer below its 32 Hz tuning'},
+                       'limiter': 'set to the RSS315HF-4\'s excursion; the port\'s air reaches about 50 m/s at 250 W'})
+    plan = {'size': SIZE, 'amplifier': AMP['model'], 'woofer_protection': woofer_protect,
             'channels': {f'CH{i + 1}': f'{r}, {names[r]}' for i, r in enumerate(roles)},
             'crossovers': xos, 'acoustic_centres_mm_behind_front': CENTRES, 'delays_ms': delays,
             'sensitivity_db_2v83': S, 'gains_db': gains, 'woofer_eq': woofer_eq,
@@ -120,6 +127,8 @@ def main():
           '| gain to start (dB) | ' + ' | '.join(str(gains[c]) for c in cols) + ' |', '',
           'Crossovers: ' + '; '.join(f'{x["between"]} {x["f_hz"]:.0f} Hz' for x in xos) + ', Linkwitz-Riley 24 dB/octave.', '',
           'Woofer EQ: ' + json.dumps(woofer_eq), '',
+          f'Woofer protection: a {woofer_protect["high_pass"]["f_hz"]:.0f} Hz high-pass ({woofer_protect["high_pass"]["type"]}, order {woofer_protect["high_pass"]["order"]}: '
+          f'{woofer_protect["high_pass"]["why"]}) and a limiter {woofer_protect["limiter"]}.', '',
           ('The waveguide\'s on-axis level against its level at the crossover (from the simulation): ' +
            ', '.join(f'{f:.0f} Hz {v:+.1f} dB' for f, v in wg_rel.items()) + '. Flatten it with a shelf after measuring.') if wg_rel else '',
           '', 'Workflow: ' + ' '.join(f'({i + 1}) {s_}.' for i, s_ in enumerate(plan['workflow']))]

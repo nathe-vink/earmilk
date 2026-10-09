@@ -1,6 +1,15 @@
 {
  "size": "bookshelf",
  "amplifier": "Hypex FusionAmp FA122",
+ "woofer_protection": {
+  "high_pass": {
+   "f_hz": 35.0,
+   "type": "Butterworth",
+   "order": 2,
+   "why": "under the +8.3 dB shelf to 45 Hz"
+  },
+  "limiter": "set to the SB17NRX2C35-8's 5.5 mm Xmax at the shelf's frequencies"
+ },
  "channels": {
   "CH1": "woofer, SB17NRX2C35-8",
   "CH2": "tweeter, Illuminator D3004/602200"
@@ -14,11 +23,11 @@
   }
  ],
  "acoustic_centres_mm_behind_front": {
-  "woofer": 31.5,
+  "woofer": 32.5,
   "tweeter": 91.0
  },
  "delays_ms": {
-  "woofer": 0.173,
+  "woofer": 0.171,
   "tweeter": 0.0
  },
  "sensitivity_db_2v83": {
