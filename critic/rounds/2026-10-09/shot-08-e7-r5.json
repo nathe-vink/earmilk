@@ -1,0 +1,303 @@
+{
+ "stage1": {
+  "impression": "A clean, legible technical cutaway of the milk-carton speaker on a grey sweep, but it is lit like a diagram: the pale cut faces and the interior wood sit at nearly one value, the mid-grey backdrop does nothing for the product, and the cabinet barely seems to touch the floor. The red horn and white front that identify the product are a thin sliver at the right edge, and the frame leaves a large, unworked empty field to the right.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Grounding: the floor 2-6 px below the front cut edge must read at least 18% darker than the floor 40 px further down. Now it is about 8% (103 vs 112; falloff -8.6 in [430, 808, 490, 848]). The floor beside the plinth [590, 760, 700, 800] must reach 80 or below (now 91.9), so the cabinet visibly bears on the sweep.",
+  "Backdrop hierarchy: the empty bottom-right floor [1100, 780, 1350, 900] must sit at least 20 levels under the halo behind the product [350, 60, 560, 120]. Now it is 127.6 against 129.6, and the brightest backdrop zone outside the halo is that empty corner.",
+  "Section hierarchy: every cut face must be brighter than the interior surface directly behind it. At the base, the bottom panel's cut face reads 175.6 against 186.9 for the cavity floor behind it. The section (top-panel 203.7) should clear the interior horizontals by 30 or more; it clears that floor by 17.",
+  "Whites: the white lacquer front median must be at least 232 (now 224.3, \u0394E2000 7.18 against #FFFFFF).",
+  "Brand reds on spec: the roof must be at \u0394E \u2264 2.5 to #C62828 (now 3.70) and the plinth band at \u0394E \u2264 5 (now 11.24: lum 57.3, rgb 147/34/40). The plinth gets only about two-thirds of the white front's mid-height light, so it needs light of its own that does not reach the floor.",
+  "Waveguide: one continuous soft highlight must run across the bowl's widest part, with p95 at least 150 in [515, 208, 550, 238]. Now it is 103.9 on flat red at a median of 61.2, so the acoustic flare does not model.",
+  "Must-show legibility: the tweeter in section must not have a crushed void. Now 42.06% of tweeter-frame pixels are at 3 or below, with a median of 4.4."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The product's whites and reds sit about a quarter-stop low: the white lacquer front reads light grey and the roof red falls below #C62828, while nothing in the frame clips.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      556,
+      262,
+      583,
+      700
+     ]
+    },
+    "measured": "White front median 224.3, \u0394E2000 7.18 vs #FFFFFF. Roof red (gable-block in [440,123,582,250]) median rgb 183/35/40, \u0394E 3.70 vs #C62828, with R 15 under. Frame p99 205.1, clip 0.00%, below-40 1.5%."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.1,
+    "to": 0.3
+   },
+   "expected": "Modelled through Khronos PBR Neutral: white front about 233 (\u0394E about 5.5); roof red about 195/41/46 (\u0394E about 1.8); top-panel cut face 203.7 to about 210 (already in the shoulder); halo behind the product 129.6 to about 140; port black 39 to about 45; still no clipping.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      556,
+      262,
+      583,
+      700
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     230,
+     240
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "asset",
+   "problem": "The kick strip hangs 1.4 m out over the floor right of the product and lights the empty sweep harder than the white front it is there for. The bottom-right foreground ends up as bright as the halo behind the product, which pulls the eye into the empty corner and fills the shadow beside the plinth.",
+   "evidence": {
+    "region": [
+     1100,
+     780,
+     1350,
+     900
+    ],
+    "measured": "Bottom-right floor median 127.6 against the halo [350,60,560,120] at 129.6. Floor brightness peaks at 126-130 for x 1125-1275, y 780-900, around the lamp's own floor point (about 1289, 822). The floor beside the plinth [590,760,700,800] reads 91.9. From the card's geometry, the strip at [1.27, 0.34, 1.03] puts about 1.2x its target irradiance on the floor at [1.2, 0.22, 0], against about 0.85x on the white front's mid-height."
+   },
+   "change": {
+    "setting": "lights.kick receivers (light linking; not on the card)",
+    "from": "every object, sweep included",
+    "to": [
+     "front-baffle",
+     "gable-block",
+     "waveguide-insert",
+     "letters-front-*"
+    ]
+   },
+   "expected": "The kick lights the white front, plinth, roof and horn exactly as now, but the sweep loses it, which is roughly half the light on the floor right of the product. With c1, the bottom-right corner falls to about 95-108 and the floor beside the plinth to about 70-80, so the halo becomes the brightest part of the backdrop and the base sits in its own shadow. If light linking is unavailable, a camera-invisible matte black flag gives most of the same result: 0.9 x 0.7 m, horizontal at z 0.20 m, centred at [1.45, 0.35, 0.20] under the strip. The strip's rays to the face's lower edge cross z 0.20 at x about 0.65, so they pass the flag.",
+   "accept": {
+    "region": [
+     1100,
+     780,
+     1350,
+     900
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     90,
+     112
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The waveguide's flare is flat red across its widest part. Its only highlights are thin streaks at the throat and along the mouth's rim, so the profile the frame exists to show does not model as a curved gloss surface.",
+   "evidence": {
+    "region": {
+     "part": "waveguide-insert",
+     "box": [
+      515,
+      208,
+      550,
+      238
+     ]
+    },
+    "measured": "693 red px: median 61.2, p95 103.9, p5 49.6, range 54.3, \u0394E 2.38 vs #C62828. The bowl's 375 px above lum 100 sit at x 450-500 (throat) and x 550-560 (rim)."
+   },
+   "change": {
+    "setting": "glints.3",
+    "from": null,
+    "to": {
+     "at": [
+      0.147,
+      0.06,
+      0.907
+     ],
+     "normal": [
+      0.45,
+      -0.85,
+      0.27
+     ],
+     "size_m": 0.12,
+     "power_w": 2,
+     "receivers": [
+      "waveguide-insert"
+     ]
+    }
+   },
+   "expected": "One broad, soft highlight across the middle of the bowl, drawn out along the flare from throat to mouth. p95 there should be about 160-200, with the median still red at about 62-70 (\u0394E \u2264 3) and no clipping. 'at' projects to (532, 223) on the insert. The surface's mirror direction (0.60, -0.69, 0.41) points up and out to the front-right into open studio, so no set or product part blocks the lamp.",
+   "accept": {
+    "region": {
+     "part": "waveguide-insert",
+     "box": [
+      515,
+      208,
+      550,
+      238
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     150,
+     212
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The 30-degree key lights the interior's horizontal surfaces as hard as the section, so the cavity floor of the lowest bay out-shines the bottom panel's own cut face in front of it, and at the base the section is not the brightest plane.",
+   "evidence": {
+    "region": [
+     440,
+     772,
+     500,
+     790
+    ],
+    "measured": "Cavity floor front median 186.9; bottom-panel cut face (part bottom-panel in [440,796,520,812]) 175.6. Section references: top-panel 203.7, back-panel cut strip 199.9. The key falls on horizontals at sin30 = 0.50 against 0.56 on the cut plane."
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 30,
+    "to": 18
+   },
+   "expected": "Incidence falls to 0.31 on horizontals and rises to 0.61 on the cut plane. With c1, the cavity floor goes to about 170-176, the bottom cut face to about 188 (now brighter than the floor behind it) and the top cut face to about 214. The floor in front of the base gets about a third less key, so the bottom-left floor dims and the front contact deepens slightly. The key's floor shadow keeps its path to the right edge of frame, and the far wall gains about 5% as the top panel's shadow band shrinks.",
+   "accept": {
+    "region": [
+     440,
+     772,
+     500,
+     790
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     155,
+     178
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "asset",
+   "problem": "The plinth band, the accent colour carrying the wordmark, reads maroon. It is the lowest part of the front and gets only about two-thirds of the kick light the white front gets at mid-height, and no lamp is aimed at it.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      556,
+      728,
+      583,
+      812
+     ]
+    },
+    "measured": "Median lum 57.3, rgb 147/34/40, \u0394E2000 11.24 vs #C62828 (the roof, under brighter light, is 3.70)."
+   },
+   "change": {
+    "setting": "lights.plinth (new light, linked to front-baffle and letters-front-* only)",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.5,
+      0.12
+     ],
+     "position": [
+      0.75,
+      0.05,
+      0.07
+     ],
+     "target": [
+      0.195,
+      0.05,
+      0.05
+     ],
+     "irradiance": 1.2,
+     "color": 5600,
+     "specular": 0.2
+    }
+   },
+   "expected": "A low strip 0.55 m off the plinth, level with it, roughly doubles the plinth's light. With c1, the band should read about 185-200/38-46/40-48 (\u0394E \u2264 5), and the letters and the bottom 10 cm of the white front lift a little. It must be linked like c2: unlinked, its grazing spill would put about 1 W/m2 back on the floor beside the plinth and undo that shadow.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      556,
+      728,
+      583,
+      812
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     5
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The rear-mounted tweeter, a must-show in section, has a crushed black void at its centre, so it reads as a black box rather than a driver cut through.",
+   "evidence": {
+    "region": "part:tweeter-frame",
+    "measured": "485 px: median 4.4, p5 0.4, crush_pct 42.06 (lum 3 or below); p95 136.8 comes only from the grey cut rim."
+   },
+   "change": {
+    "setting": "glints.4",
+    "from": null,
+    "to": {
+     "at": [
+      -0.01,
+      0.02,
+      0.934
+     ],
+     "normal": [
+      0,
+      -1,
+      0
+     ],
+     "size_m": 0.03,
+     "power_w": 0.5,
+     "receivers": [
+      "tweeter-frame"
+     ]
+    }
+   },
+   "expected": "A soft sheen on the housing's inner wall, which 'at' projects to (430, 205), lifts the void to about 15-30, so its wall and depth read against the grey cut rim. crush_pct should fall below about 15. The mirror direction (-0.32, -0.94, -0.11) leaves the cavity straight out through the cut, so no part blocks the lamp.",
+   "accept": {
+    "region": "part:tweeter-frame",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     8,
+     35
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Show the Baltic birch ply laminations on every cut face.",
+   "why": "The birch is the product's own material and is fixed. The sections read as solid timber, which weakens the 'technical cutaway rendered photographically' read, because the ply stripes are how a viewer recognises Baltic birch in section."
+  },
+  {
+   "request": "Render at a larger frame size so the connector and tweeter read.",
+   "why": "The frame size and sampling are fixed. At 1350x900 the connector is about 7x16 px (connector-plug 53 px plus connector-socket 36 px) and the tweeter about 20x46 px. The must-show 'connector and cable run' stays barely legible even at the largest framing a 1055 mm product allows in a 3:2 frame (about 86% of the height, against 77% now)."
+  }
+ ],
+ "score_if_fixed": 6.5
+}

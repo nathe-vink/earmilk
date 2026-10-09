@@ -59,6 +59,7 @@ KNOBS = [
     ('lights.*.orbit.elevation_deg', 'deg', (-30, 90), 'see orbit'),
     ('lights.*.orbit.distance_m', 'm', (0.2, 20), 'see orbit'),
     ('lights.*.target', 'm [x, y, z]', None, 'the point the lamp faces (default the product\'s centre)'),
+    ('lights.*.receivers', '[part names, * wildcards]', None, 'light linking: the lamp lights only these parts (a kick for a face that must not light the floor beside it); absent, it lights everything'),
     ('lights.*.power_w', 'W', (0, 50000), 'lamp power (Cycles watts); light on the subject falls with distance squared'),
     ('lights.*.irradiance', 'W/m2', (0, 50), 'area lamp: the light it puts on a surface facing it at its target (replaces power_w; about 3 renders a white near 230 at exposure 0)'),
     ('lights.*.color', 'K or hex', None, 'colour temperature or sRGB hex'),
