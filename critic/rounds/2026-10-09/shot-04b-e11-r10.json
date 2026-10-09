@@ -1,0 +1,177 @@
+{
+ "stage1": {
+  "impression": "A clean, correctly drawn three-quarter of the red-and-white carton speaker on a grey sweep: verticals true, type legible, the left half held for copy. It reads as a competent CG draft, not a homepage shot: soft frontal light leaves the white faces as flat airbrushed ramps (one near paper white, one a dull grey), the sweep is a drab mid-grey with a soft shadow smeared up beside the product, and the base barely presses into the floor.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Hero white in the lacquer range: the back band [886,452,1072,474] at 208-222 (now 238.4; the corner-side strip [886,222,912,594] 245.4 with 1% clipped), with only edge highlights above 235 and the near-corner highlight standing >= 20 above its neighbour (now 255 against 247).",
+  "Light that comes from above on the hero face: an eave-to-plinth falloff of 20-30 levels on the back's clear strip [1052,222,1072,594] (now 15.7, 244 to 228; the corner-side strip only 10.0).",
+  "A shadow that belongs to the base: no soft smear climbing the sweep beside the side face ([610,450,735,600] at 118.6 against ~146 open sweep; it should be >= 136) and a dark crease under the plinth ([950,786,1000,800] at 146.5 against 156.5 just beyond; it should be <= 138).",
+  "The clear coat reads on at least one flat face: the roof slope is one value from ridge to eave (79.5 to 82.3) and the side is a straight airbrushed ramp (207 top-near to 180 bottom-far, about 3 levels per 25 px across and per 55 px down, flat below y 500); it needs a reflection with a soft edge there, plus highlights on the far rounds (far-left edge p95 190.6, no peak).",
+  "The amplifier's connections read as hardware, not glyphs: 30.7% of connector and rocker pixels sit at 255 (part:amp-connectors|amp-switch), brighter than the back panel.",
+  "A backdrop with designed light: the copy field is a flat 142-158 grey with a 136 trough at the lower left (x 0-150, y 600-700) and nothing that leads the eye to the product."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The key at 30 degrees elevation, only 15 degrees off the back's normal, floods the hero face to paper white (228-251) with a weak 10-16 level eave-to-plinth falloff, leaves the near-corner highlight nothing to stand on, and throws a 1.7 m shadow that climbs beside the side face to mid-height as a soft smear.",
+   "evidence": {
+    "region": [
+     886,
+     452,
+     1072,
+     474
+    ],
+    "measured": "back band median 238.4 (p5 233.4, p95 243.6); corner-side strip [886,222,912,594] 245.4, falloff 10.0 (250.4 to 240.4), 1.05% clipped; clear strip [1052,222,1072,594] 236.4, falloff 15.7 (244.1 to 228.4); corner highlight 255 beside 247.4; sweep beside the side [610,450,735,600] 118.6 against 146 open sweep at [300,500,450,600]; roof slope [900,150,990,200] RGB 196,50,51, delta E 2.2 to #C62828"
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 30,
+    "to": 48
+   },
+   "expected": "The back band falls to ~216 and the clear strip's falloff rises to 18-24 (top ~226, bottom ~205), so the face reads lit from above and the corner highlight stands ~25 levels proud; the shadow shortens to ~0.9 m and tucks against the base (sweep at [610,450,735,600] ~140); the roof slope, now more square to the key, keeps or improves its red (R 196 to ~200, delta E <= 3); the side drops ~8 to ~182, still >= 25 above the sweep beside it; the near floor stays ~165.",
+   "accept": {
+    "region": [
+     886,
+     452,
+     1072,
+     474
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     208,
+     222
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The plinth stands on the floor without weight: the contact occlusion reaches only 5 cm (~10 px in front), so the floor just in front of the back plinth dips to 146.5 against 156.5 a few pixels further out, with no dark crease where the red meets the paper.",
+   "evidence": {
+    "region": [
+     950,
+     786,
+     1000,
+     800
+    ],
+    "measured": "median 146.5 (p5 130.5) 3-27 px below the plinth edge; [950,800,1000,830] 156.5; under the near corner 120 at 1 px, back to 150 within 16 px; the engine found contact strength 0.4 to 0.8 moved its test only 1.0, so the reach, not the strength, is the limit"
+   },
+   "change": {
+    "setting": "set.contact.distance_m",
+    "from": 0.05,
+    "to": 0.1
+   },
+   "expected": "A firmer crease under the plinth: [950,786,1000,800] to ~130, the first row under the edge <= 100, fading over ~20 px in front and ~60 px along the side's base; the open floor at [950,840,1000,880] stays ~168.",
+   "accept": {
+    "region": [
+     950,
+     786,
+     1000,
+     800
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     120,
+     138
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The amplifier's connections, a must-show, read as white stickers: glint 0 (2 W, 4 cm, receivers amp-connectors and amp-switch) drives their rims and the rocker past the clip, brighter than the back's white itself, so they lose all form.",
+   "evidence": {
+    "region": [
+     997,
+     634,
+     1065,
+     659
+    ],
+    "measured": "part:amp-connectors|amp-switch p95 255, 30.7% clipped; amp-switch median 255 with 67.9% clipped; amp-connectors 26.5% clipped, RGB median 229,225,234; the back panel's own median is 237.4 and the plate behind them 86.5"
+   },
+   "change": {
+    "setting": "glints.0.power_w",
+    "from": 2,
+    "to": 0.4
+   },
+   "expected": "Rims and rocker settle at ~215-240 with a lit and a shaded side, reading as moulded parts on the dark plate; the RCA, LED, plate and screws are not receivers and do not change.",
+   "accept": {
+    "region": "part:amp-connectors|amp-switch",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     212,
+     248
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The far-left vertical edge (the 6 mm round between the side and the front) carries no highlight, so the silhouette is cut by value alone and the lacquer's rounds read only at the near corner.",
+   "evidence": {
+    "region": [
+     737,
+     300,
+     744,
+     670
+    ],
+    "measured": "p95 190.6 against the side's 180-182 beside it; the profile across [730,300,756,670] goes 125 to 142 to 175 to 180 with no peak (edge step 34.8 on [728,300,760,670]); the near corner by contrast peaks at 255"
+   },
+   "change": {
+    "setting": "lights.kicker",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.2,
+      1.5
+     ],
+     "orbit": {
+      "azimuth_deg": -140,
+      "elevation_deg": 8,
+      "distance_m": 2.0
+     },
+     "irradiance": 0.3,
+     "color": 5600,
+     "specular": 1,
+     "diffuse": 0
+    }
+   },
+   "expected": "A 1-2 px line at 215-245 down the far-left edge from the eave to about a third above the floor (y ~212 to ~525); with diffuse 0 the side face and the sweep do not change (side [760,222,860,670] within 2 levels).",
+   "accept": {
+    "region": [
+     737,
+     300,
+     744,
+     670
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     210,
+     248
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A graduated sheen across the upper back so the clear coat reads on the hero face.",
+   "why": "The fixed marks sit under the same clear coat: a reflection strong enough to show (~+0.08 linear) would lift the wordmark's black (17-31 now) and the Nutrition Facts type toward ~80 and grey them, so the back has to be modelled by diffuse falloff (c1) and its edge highlights instead."
+  },
+  {
+   "request": "Darker connector housings and rocker so the connections read as hardware against the plate.",
+   "why": "They are the product's own materials, which are fixed; light can only bring them off the clip (c3), not change their white."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
