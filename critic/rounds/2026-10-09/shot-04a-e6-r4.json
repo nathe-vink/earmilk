@@ -1,0 +1,144 @@
+{
+ "stage1": {
+  "impression": "A dead-on, deadpan view of a milk-carton speaker on warm grey: clean and centred, with a crisp, legible label, but lit flat like a catalogue cut-out, cropped off at the bottom, and with the black port punching the heaviest hole in the frame. The glossy red roof mirrors OPEN OTHER SIDE upside down under the fin like a misprint, and the 'earmilk' logo is a faint pinkish-grey smudge rather than a mark.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "No legible mirrored OPEN OTHER SIDE under the ridge: lum_range in [262,172,640,184] at 18 or less (41.7 now, with strokes peaking at 108 on a base of 52).",
+  "The 'earmilk' letters read as a metal mark: their faces sit 40-55 levels below the panel around them (213 vs 229-236 now) and are neutral, |R-B| at 4 or less (R 219 vs B 208 now).",
+  "A backdrop that frames the gable: about 160-168 just above the fin, falling to 150 or less in the corners, instead of a flat 150-155 with one dark corner at 135.",
+  "The port reads as a moulded part, not a flat grey washer around a hole: the ring is flat at 96-118 across its radius, its brightest quadrant is only +15, and the hole is 6090 px at exactly 0.",
+  "The red is within dE2000 3 of #C62828 across the fin and slope (fin right 4.75 and slope near the eave 3.39 now; whole gable 2.6)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "material",
+   "problem": "The 0.08 clear coat mirrors the fin's white OPEN OTHER SIDE upside down in a 10 px band just under the ridge, so the must-show line reads as a double print.",
+   "evidence": {
+    "region": [
+     262,
+     172,
+     640,
+     184
+    ],
+    "measured": "lum_median 58.4, p95 93.6, range 41.7. Rows 174-181 peak at 91-108 on a base of 51-54, while the slope just below ([262,192,640,208]) varies by only 5.8. The band (rows 173-182) is exactly where the slope sees the 47 mm fin from a camera at eave height (z 0.83)."
+   },
+   "change": {
+    "setting": "materials.paint.coat_roughness",
+    "from": 0.08,
+    "to": 0.22
+   },
+   "expected": "The mirrored strokes blur into the dark band and no letterforms remain. In [262,172,640,184] the range drops from 41.7 to 18 or less and p95 from 93.6 to about 70. The roof keeps its ramp (about 72 under the band to 55 at the eave) and reads satin-gloss. Nothing else in the frame changes visibly, because the white panel reflects no light sources. Set the same value on this product's other frames so the finish matches. (Keeping 0.08 would need the camera at about z 1.4 m, which shrinks the band to about 4 px but moves the whole frame and the roof's ramp reflection.)",
+   "accept": {
+    "region": [
+     262,
+     172,
+     640,
+     184
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     4,
+     18
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The cast 'earmilk' letters, a must-show, sit only 16-22 levels below the panel around them, with uniform faces and no edge light, so the mark reads as a faint pinkish sticker rather than metal.",
+   "evidence": {
+    "region": [
+     334,
+     385,
+     565,
+     429
+    ],
+    "measured": "part:letters-back-*: lum_median 213.2 (p5 202.2, p95 216.1), rgb [219, 212, 208]. Panel around the word is 229.3-235.4: left [290,385,330,430] 235.4, right [570,385,610,430] 229.3, above [330,360,570,380] 234.1, below [330,435,570,455] 233.0. Left edges step from 235 to 212 over 3 px with no light; right and bottom edges carry only a 1-2 px shadow at 166-178."
+   },
+   "change": {
+    "setting": "glints.letters_sheen.power_w",
+    "from": 0.2,
+    "to": 0.13
+   },
+   "expected": "The letter faces fall to about 185 (the engine's own proof gave 189.0 at 0.138 W), a step of 40-50 levels below the 229-236 panel, so the word reads as satin metal even at thumbnail size. The hairline shadows and the panel around the word stay as they are, because the glint reaches only the letters.",
+   "accept": {
+    "region": "part:letters-back-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     178,
+     194
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The backdrop is one flat warm grey (150-155 across the top, 148 at bottom-left) with only the bottom-right corner falling to 135, so nothing frames the gable or draws the eye to the fin.",
+   "evidence": {
+    "region": [
+     350,
+     5,
+     550,
+     90
+    ],
+    "measured": "Above the fin: lum_median 154.8 (range 2.1). Corners: top-left [20,5,170,90] 150.8, top-right [730,5,880,90] 150.1, bottom-left [20,1040,170,1120] 147.6, bottom-right [730,1040,880,1120] 134.8. The bg light aims at z 1.75 on the wall, above the frame's top edge (about z 1.47 there), so only a +5 fringe of its glow reaches the frame."
+   },
+   "change": {
+    "setting": "lights.halo",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.4,
+      0.3
+     ],
+     "position": [
+      0,
+      1.4,
+      0.95
+     ],
+     "target": [
+      0,
+      2.8,
+      1.3
+     ],
+     "irradiance": 0.4,
+     "color": "#FFFFFF"
+    }
+   },
+   "expected": "A soft glow peaks just above the fin: [350,5,550,90] rises to 160-168, the top corners stay at about 152-156, and the bottom corners, on floor the lamp cannot reach, stay at 150 or below. The red gable then sits on a lighter field that falls off toward the corners. The lamp projects inside the product's outline (about x 302-598, y 142-359) and faces away from the product, so it is never seen or reflected.",
+   "accept": {
+    "region": [
+     350,
+     5,
+     550,
+     90
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     160,
+     168
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the port a rounded black flare and a visible tube interior so it reads as a moulded port.",
+   "why": "The ring is flat across its radius (117-118 from r 62 to 75 px at 135 degrees, 96-97 at 315 degrees) and the hole is 6090 px at exactly 0, so light alone cannot give it shape. The port's shape and finish are product geometry, which the card fixes."
+  },
+  {
+   "request": "Round or chamfer the edges of the 'earmilk' letter faces so they catch a highlight.",
+   "why": "Seen straight on, only the flat faces show, and their edges step from 235 to 212 with no light. c2 separates the letters by tone, but a lit edge would need new letter geometry, and the marks are fixed."
+  }
+ ],
+ "score_if_fixed": 6.3
+}

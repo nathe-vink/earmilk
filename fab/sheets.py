@@ -528,9 +528,10 @@ def sheet3(pdf, M, W):
     iax.add_patch(Rectangle((-(yw + gw), TOP_Z0 - 4), 2 * gw, 4, fc='#333333', ec=INK, lw=0.3 * PT, zorder=7))
     # labels to the left, right-aligned in the gap between the front view and this section
     gx_ = lambda y: x0p - 7 - (os_[0] - k * y)
-    for (y, z, t, dx, dy) in ((I_['boss_back_y'] + 2, zbay + 4, f'tweeter lead, 2 x 1.0 mm2', gx_(I_['boss_back_y'] + 2), 30),
+    # the lead's label sits under the bay's: its target is further in and lower, so their leaders do not cross
+    for (y, z, t, dx, dy) in ((I_['boss_back_y'] + 2, zbay + 4, f'tweeter lead, 2 x 1.0 mm2', gx_(I_['boss_back_y'] + 2), 12),
                               (yw, zcon - 4, 'connector, 2 pole, locking\n(JST VH): plug on the lead,\nsocket on the cabinet\'s', gx_(yw), -12),
-                              (yw + I_['bay_l'] / 2 - 4, zbay + I_['bay_d'] / 2 - 4, f'connector bay ø{I_["bay_d"]:.0f}', gx_(yw + I_['bay_l'] / 2 - 4), 22),
+                              (yw + I_['bay_l'] / 2 - 4, zbay + I_['bay_d'] / 2 - 4, f'connector bay ø{I_["bay_d"]:.0f}', gx_(yw + I_['bay_l'] / 2 - 4), 30),
                               (yw, (BODY + zcon - 12) / 2, f'channel ø{WIRE_HOLE_D:.0f}', gx_(yw), -14),
                               (yw, TOP_Z0 - 2, 'grommet, sealed,\nunder the top panel', gx_(yw), -12),
                               (yw, BODY - 36 * XS, 'to the amplifier\n(sheet 4)', gx_(yw), -30)):
