@@ -245,8 +245,12 @@ def main():
 def _parts_2d(scene, cam, objs, part_of):
     """Where each part lands in the frame, in pixels from the top left: its box's centre and the box's extent, and its
     distance in front of the camera. For callouts and labels laid over the image (a deck, an exploded view)."""
+    import bpy
     from bpy_extras.object_utils import world_to_camera_view
     from mathutils import Vector
+    # a render evaluates the scene; without one (--masks-only) the parts' and the camera's matrices are stale until
+    # the view layer updates: 07-e6's exploded parts came out behind the camera, thousands of pixels off the frame
+    bpy.context.view_layer.update()
     W, H = scene.render.resolution_x, scene.render.resolution_y
     out = {}
     for ob in objs:

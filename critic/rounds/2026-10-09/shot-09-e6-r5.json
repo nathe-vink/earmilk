@@ -1,0 +1,200 @@
+{
+ "stage1": {
+  "impression": "A believable, tastefully dressed lifestyle set in which the red-and-white carton speakers read at once as the heroes, with a coherent warm palette and gentle depth of field. It stays a competent draft: the white bodies are lit nearly flat with a slight pink cast, the speakers sit lightly on the sideboard, the right one looks a touch softer than the left, and the static centred layout leaves a dead sideboard front and a dark print pulling the eye to the empty middle.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Both white fronts show a light direction: falloff of at least 18 levels from eave to plinth with the eave at or below 242 and no clipping (now 9.1 on the left strip [137,392,148,666] and 7.6 on the right strip [1025,395,1039,706]).",
+  "Every outer silhouette separates from what is behind it by at least 15 levels: side face vs wall is now -3.3 on the left ([296,560,368,640]) and -5.7 on the right ([1196,560,1260,680]), and the left fin (149) sits on a 154 wall.",
+  "The room reads bright and its light reads as light: upper back wall at 165 or more (now 146-155), and the left speaker's sun shadow below the print either defined (10-90 edge 15 px or less; now 38 px with a 1.4/px step at [740,500,880,580]) or gone, not a soft 30-level smudge.",
+  "Gloss accent parts carry smooth graduated reflections with no hard bands: right plinth step at most 3.5/px (now 7.0 at [1030,713,1066,754]) and the left plinth no longer a flat veil (falloff 2.1, range 2.9, dE2000 5.35 from #C62828).",
+  "The cast letters read as polished metal: graded, median about 170-215, not flat bluish white (now 244.4, rgb 242/245/251).",
+  "The pair matches: white fronts within dE2000 1.0 and 2 levels of each other and neutral (now dE2000 2.23; rgb 231/227/228 vs 229/221/220, 227.9 vs 222.6 below the woofers).",
+  "Each plinth sits in a contact shadow at least 30% darker than the open sideboard top, fading over 10-15 px (now a 3 px line 18% darker: 84.8 vs 103.0 under the left plinth).",
+  "No set element out-contrasts the product: the print's darkest band no more than about 75 levels below the wall (now 51.5 on a 146-154 wall)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The white fronts carry no light direction: beside the left woofer the face runs 237 to 228 from eave to plinth and below the woofer spans only 7 levels, so each carton front reads as a flat card.",
+   "evidence": {
+    "region": [
+     137,
+     392,
+     148,
+     666
+    ],
+    "measured": "profile y 237.0, 235.1, 234.1, 233.1, 230.9, 228.2, 227.0, 227.9 (falloff 9.1); right speaker strip [1025,395,1039,706] 231.7 to 224.1 (falloff 7.6); below the left woofer [140,518,276,666] p5 225.2, p95 232.1; left to right only 228.1 to 225.9"
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 55,
+    "to": 72
+   },
+   "expected": "The key skims the fronts from above: each white front falls about 20-28 levels from the eave (about 238-242, unclipped) to the plinth (about 212-218), the right strip [1025,395,1039,706] falls at least 15, the trim rings pick up a top edge, and the face below the woofer keeps a median of at least 218 so it still reads white.",
+   "accept": {
+    "region": [
+     137,
+     392,
+     148,
+     666
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     18,
+     32
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "Each speaker's right side face is the wall's own value, so the outer silhouette and the carton's volume disappear, and the mid-grey wall undercuts the bright-room brief.",
+   "evidence": {
+    "region": [
+     296,
+     560,
+     368,
+     640
+    ],
+    "measured": "profile x 150.5, 149.3, 148.3, 153.0, 154.6, 153.8, 153.8, 153.8: side face 150.5 vs wall 153.8 (falloff -3.3, largest step 5.7); right speaker side 164.3 vs wall 169.7 (falloff -5.7 over [1196,560,1260,680]); left fin 149 vs wall 154; upper wall 146-155 across the frame; frame lum_mean 136.2"
+   },
+   "change": {
+    "setting": "set.wall.color",
+    "from": "#CFC6BA",
+    "to": "#E7DDD0"
+   },
+   "expected": "The walls lift about 18-24 levels at the same warm hue (beside the left speaker [332,540,372,640] 153.8 to about 172-178, upper wall to about 165, sun patch to about 195) while the side faces rise 5 or less, so each side reads as a darker plane 16-30 levels under the wall; the right side vs wall falloff over [1196,560,1260,680] reaches -18 or lower; the white fronts still lead the wall by 30 or more; frame lum_mean about 148.",
+   "accept": {
+    "region": [
+     296,
+     560,
+     368,
+     640
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -36,
+     -16
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The plinth sheen is a uniform veil that ends in a hard cut: the left plinth is one flat pinkish red, the right plinth splits into a pink upper band and a deep-red lower band at a 4 px step that reads as a stripe, and the letters mirror the same flat panel and read as bluish-white paint rather than cast metal.",
+   "evidence": {
+    "region": [
+     1030,
+     713,
+     1066,
+     754
+    ],
+    "measured": "profile y 79.6, 78.8, 78.8, 78.6, 78.4, 73.4, 51.1, 50.7 (largest step 7.0 per px at y 741-744); left plinth [143,672,170,709] median 80.6, range 2.9, falloff 2.1, rgb 184/52/59, dE2000 5.35 from #C62828; letters-front-* median 244.4, p5 236.9, rgb 242/245/251"
+   },
+   "change": {
+    "setting": "lights.plinth_sheen.ramp.values",
+    "from": [
+     1,
+     1
+    ],
+    "to": [
+     0,
+     1
+    ]
+   },
+   "expected": "The panel fades toward its lower edge, so each plinth carries a smooth top-to-bottom sheen (left plinth [143,672,170,709] about 68 under the shadow line to about 55 at the base, falloff 8-20) and the red resaturates toward #C62828; the right plinth's band dissolves with no step above 3.5/px; the letters drop to about 180-210 with a visible gradient, reading as polished metal and staying legible on the red.",
+   "accept": {
+    "region": [
+     1030,
+     713,
+     1066,
+     754
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     0,
+     3.5
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "The print's dark band is the heaviest dark mass on the wall and hangs dead centre between the speakers' heads, pulling the eye from the product to empty wall.",
+   "evidence": {
+    "region": [
+     585,
+     282,
+     750,
+     335
+    ],
+    "measured": "dark band median 51.5 (rgb 71/48/29), mid band 105.6, light band 144.8, on a 146-154 wall: 95 levels below it and darker than both gables (75-82)"
+   },
+   "change": {
+    "setting": "set.props.1.artwork.bands",
+    "from": [
+     [
+      "#CDBB9C",
+      0.38
+     ],
+     [
+      "#A9875C",
+      0.3
+     ],
+     [
+      "#5C4A3B",
+      0.32
+     ]
+    ],
+    "to": [
+     [
+      "#CDBB9C",
+      0.38
+     ],
+     [
+      "#BCA07A",
+      0.3
+     ],
+     [
+      "#9A8470",
+      0.32
+     ]
+    ]
+   },
+   "expected": "The print keeps its three torn bands, proportions and seed but reads as a quiet tonal piece: bands about 145 / 125 / 95-100, its darkest band no more than about 75 below the lightened wall, so the woofers and gables are the darkest accents in the frame.",
+   "accept": {
+    "region": [
+     585,
+     282,
+     750,
+     335
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     86,
+     112
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A satin rather than gloss clear coat on the fin, so the left fin stops mirroring the front window and matches the right fin.",
+   "why": "It matters because the pair's most carton-like detail does not match: left fin rgb 226/127/140 vs right 206/18/16 (dE2000 26.7). The product's paint and clear coat are its fixed finish, and the window cannot be moved out of the left fin's mirror direction (about x -1.9 m on the front wall) without also taking the sun off the set."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
