@@ -1,0 +1,128 @@
+{
+ "stage1": {
+  "impression": "A competent lifestyle draft: both cartons read clearly in a plausible room, with low window light raking the floor. A muddy umber shadow blots the wall behind and between the speakers, and the white fronts sit flat and bright like card.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The wall behind and between the speakers reads as a soft shadow, not a band: [560,290,820,450] lum_median 95-125 with r_median - b_median <= 25 (now 45.6 at RGB 63/43/18), with no band edge across the products (now a horizontal soft edge at y~245, 79 px wide from 10 to 90%).",
+  "The hero's white side stays white down to the plinth: [488,600,526,660] lum_median >= 105 and b_median >= 90 (now 91.5, RGB 106/89/75).",
+  "The red's back-right silhouette never merges with what is behind it: the side (x 518-526) and the background (x 536-552) differ by >= 25 on every row from y 460 to 660 (now 2-9 at y 530-540 against the lower wall, and 4-18 at y 610-650 against the floor).",
+  "The white lacquer fronts show a graduated sheen without clipping: the red front's clear strip [415,345,428,675] falls 15-20 levels with clip_pct 0 (now 10.1, from 244.2 to 234.1); the blue front's centre [845,350,930,450] has lum_range >= 8 (now 4.1).",
+  "The 6 mm vertical corner rounds carry a thin highlight instead of a dark dip (the red's front-right corner at y 360 runs 244, 231, 205, 188, 192, 196: 8 levels below the side, no highlight)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The wall behind and between the speakers is blotted by a soft-edged umber band, from the red's back edge to past the blue, so the backdrop reads as a stain and the room looks half lit.",
+   "evidence": {
+    "region": [
+     560,
+     290,
+     820,
+     450
+    ],
+    "measured": "lum_median 45.6 (p5 41.4, p95 57.1) at RGB 63/43/18. The open wall left of the red [20,250,270,520] is 154.4 (163/153/144), and the wall just above the band [560,150,820,200] is 144.9. Profile down x 600-800, y 120-450: 146, 146, 142, 126, 85, 62, 51, 45, 43, 43, 44, with the top edge horizontal at y~245 (79 px from 10 to 90%). Right of the blue [985,300,1100,440] reads 61.0; right of the vase [1210,250,1340,450] reads 121.7. The band's top (y~245, z~1.06 on the wall) and bottom (y~480, z~0.35), its left end hidden behind the red, and its fade from x~1030 under the right window all match set.flags.0 (x -0.91 to 1.29, z 0.42 to 1.14, 0.45 m off the wall) shadowing the front window's skylight. The flag has to stay: it is what keeps the 15-degree sun's patch (wall z 0.29-0.92) and the cartons' hard shadows off the wall."
+   },
+   "change": {
+    "setting": "lights.wall_fill",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.0,
+      0.6
+     ],
+     "position": [
+      0.19,
+      0.7,
+      0.72
+     ],
+     "target": [
+      0.19,
+      1.1,
+      0.72
+     ],
+     "strength": 0.15,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.42,
+       1.02
+      ],
+      "values": [
+       1,
+       1
+      ]
+     },
+     "diffuse": 1
+    }
+   },
+   "expected": "The band rises from 45.6 to 100-120 and turns warm grey (about 118/107/96; R-B under 25, now 45). Its top edge at y~245 melts into the open wall: [560,150,820,200] stays 140-156 (now 144.9). Right of the blue, [985,300,1100,440] rises from 61 to 100-130. The red side keeps a step of >= 60 against the wall at y 380-460 (edge in [515,380,550,460], now 99). The fronts do not move (red strip [415,345,428,675] median stays 236-241): the panel sits 5 cm behind the flag, smaller than it, facing the wall, so the products and their glossy faces never see it.",
+   "accept": {
+    "region": [
+     560,
+     290,
+     820,
+     450
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     95,
+     125
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The hero's white side turns muddy brown-grey at its lower back corner, so the white body looks dirty where it meets the floor.",
+   "evidence": {
+    "region": [
+     488,
+     600,
+     526,
+     660
+    ],
+    "measured": "lum_median 91.5 (p5 77.2) at RGB 106/89/75. The same face reads 194.3 (193/194/201) at its top [445,350,525,420] and 146.2 at its lower front [440,600,470,680]. Side profile top to bottom: 195, 189, 180, 165, 143, 129, 129. This corner mirrors red_side_ramp below where its ramp starts (z < 0.25, value 0), so it gets no clean reflection, only bounce from the umber band and from the red's own floor shadow ([540,640,640,720], 60.7 at 85/57/27)."
+   },
+   "change": {
+    "setting": "lights.red_side_ramp.ramp.values",
+    "from": [
+     0,
+     1
+    ],
+    "to": [
+     0.4,
+     1
+    ]
+   },
+   "expected": "[488,600,526,660] rises from 91.5 to 110-125 and turns neutral (b_median from 75 to >= 95). The side's top [445,350,525,420] stays 190-198, so the side still falls about 75-85 levels from top to bottom (now about 100) and still reads as a gradient. The side-to-floor step at y 610-650 grows from 4-18 to >= 25; the step against the white skirting at y 560-600 shrinks from 28-47 to about 15-25.",
+   "accept": {
+    "region": [
+     488,
+     600,
+     526,
+     660
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     105,
+     130
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Raise the white lacquer's clear-coat reflectance so the white fronts show their gloss.",
+   "why": "Both white fronts read as matte card (red clear strip [415,345,428,675] lum_range 10.9; blue front [845,350,930,450] lum_range 4.1), but the paint and clear coat are the product's fixed finish. The sheen panels already aimed at the fronts flatten out on the tone curve's shoulder at 234-244: red_front_ramp gave 13.3, 15.4 and 15.8 at strength 3, 5 and 6.5. So light alone gains only a few levels there."
+  }
+ ],
+ "score_if_fixed": 7.4
+}
