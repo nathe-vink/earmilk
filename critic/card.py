@@ -94,12 +94,13 @@ def main():
         seen.add(path)
     # knobs the shot does not set yet but may (the common ones)
     extra = [k for k in ('camera.fstop', 'camera.shift_x', 'camera.shift_y', 'camera.polariser.strength', 'camera.polariser.angle_deg',
-                         'render.exposure', 'render.white_balance_k', 'render.look')
+                         'render.exposure', 'render.white_balance_k', 'render.white_balance_tint', 'render.look')
              if k not in seen]
     for k in extra:
         unit, rng, meaning = K.describe(k)
         rtxt = '' if rng is None else (f'{rng[0]:g} to {rng[1]:g}' if isinstance(rng, tuple) and all(isinstance(x, (int, float)) for x in rng) else ', '.join(map(str, rng)))
-        L.append(f'| `{k}` | (default) | {unit} | {rtxt} | {meaning} |')
+        dflt = {'render.white_balance_tint': '10 (the default)'}.get(k, '(default)')
+        L.append(f'| `{k}` | {dflt} | {unit} | {rtxt} | {meaning} |')
     L.append('')
     L.append('The set\'s materials take their preset\'s keys (`materials.oak.plank_contrast`, `materials.plaster.bump`, ...): '
              + '; '.join(f'**{n}**: ' + ', '.join(f'{k} {fmt(v)}' for k, v in p.items()) for n, p in _presets().items()) + '. '
