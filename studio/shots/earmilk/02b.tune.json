@@ -227,5 +227,63 @@
   "set": 0.3111,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "lights.fill.orbit.elevation_deg",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    30,
+    54
+   ]
+  },
+  "proofs": [
+   [
+    32.0,
+    50.4
+   ],
+   [
+    48.0,
+    40.2
+   ],
+   [
+    45.1765,
+    42.2
+   ]
+  ],
+  "set": 45.1765,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "lights.facesheen.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    8,
+    22
+   ]
+  },
+  "proofs": [
+   [
+    3.0,
+    33.5
+   ],
+   [
+    8.0,
+    38.0
+   ],
+   [
+    2.6667,
+    32.0
+   ]
+  ],
+  "set": 2.6667,
+  "passes": false,
+  "moves_the_test": true
  }
 ]
