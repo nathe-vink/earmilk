@@ -1,0 +1,221 @@
+{
+ "stage1": {
+  "impression": "A warm, sun-raked living room with the red-capped white pair flanking a credenza: the wall patch, the twig shadows and the floor light are believable, but the speakers are small in the frame and their white fronts read flat and evenly lit, as if pasted in, while the sun stripe across the empty foreground floor pulls the eye off the product. A competent archviz draft, not yet a product hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The pair holds the frame: each speaker at least 45% of the frame height (now 358 px, 40%) and the floor below the plinths at most 20% of the frame (now 244 px, 27%), with at least 25% copy space kept. A longer lens alone pushes the print's top (now y 57) to the frame edge and the copy space under 25%, so the speakers must first stand closer to a narrower sideboard.",
+  "Both white fronts carry an 18 to 26 level gable-to-plinth falloff (now 12.2 left, 11.0 right) and a sun-side lift across their width of at least 6 levels (now 236 to 239, flat), with no channel above 245.",
+  "The pair's whites match within dE2000 2 (now 4.09: left front (243, 238, 236) b* +2.0, right front (237, 235, 241) b* -2.2). The toe-in gives the left front 0.53 of the sun's beam and the right 0.38, and the right also takes more skylight from the front window. Turning both speakers to 0 degrees would put the right front back into the tone shoulder that c1 takes it out of, so this needs a light that warms only the right front.",
+  "The sun reads on the cabinets, not only on the room: the sun-side flank at least 20 px wide with a crisp terminator against the front (now a 12 px strip, x 233 to 244, lum 213).",
+  "The woofers read as black anodised aluminium: cone p95 at most 155 (now 202 left, 184 right) and a warm-neutral sheen instead of the lavender (190, 196, 215) crescent over a fifth of the cone.",
+  "The accent red holds on the roof slopes: dE2000 at most 8 against #C62828 (now 11.0 left, 8.5 right).",
+  "The right speaker's shaded side reads as white lacquer in shade, median 105 to 135 (now 90, rgb (97, 88, 88)).",
+  "The room reads lived-in and material: a second domestic object in view, oak figure instead of uniform horizontal streaks in the floor, and plaster texture where the sun rakes the back wall (now lum range 7.4 in [440, 295, 495, 325])."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The white fronts sit in PBR Neutral's highlight shoulder, so the reflections of the front panels are compressed instead of modelling the fronts, and each front reads as one flat value.",
+   "evidence": {
+    "region": [
+     99,
+     364,
+     233,
+     612
+    ],
+    "measured": "Left white front (front-baffle above the plinth): median 238.9, rgb (243, 238, 236), p95 242.7. Profile y (8 bins): 241.9, 241.9, 240.0, 238.8, 237.0, 234.3, 231.5, 229.7, a falloff of only 12.2 levels. Profile x: 236.1 to 239.7, flat. Right front [793, 364, 927, 612]: 237.5 to 226.5 (11.0). Every channel is above the curve's compression knee (about 226 sRGB). That is why the engine log shows the falloff shrinking as front_gradient rises (2.33 gave 7.6, 4 gave 7.0, 7 gave 5.9): more light, less modelling."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 1.4279,
+    "to": "-0.2"
+   },
+   "expected": "The front reflections get headroom. Left front about 237 at the gable to about 216 above the plinth (falloff about 21; right front about 17), front medians about 231, no channel above 245. The copy-space wall [960, 40, 1340, 520] goes from 83 to about 75 and the sun patch [440, 295, 495, 325] from 163 to about 153, so the sun-to-shade ratio and the low-sun mood stay.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      90,
+      360,
+      250,
+      612
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     18,
+     26
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The left woofer's glint spreads a pale lavender crescent over a fifth of the cone, so the black anodised aluminium cone reads as blue chrome.",
+   "evidence": {
+    "region": [
+     127,
+     508,
+     205,
+     584
+    ],
+    "measured": "Left woofer-cone: median 47.4, p95 202.0, 19.7% of its pixels above 150. The crescent [128, 548, 160, 580] is rgb (190, 196, 215) and is centred on glint 2's point, which projects to about (151, 566)."
+   },
+   "change": {
+    "setting": "glints.2.power_w",
+    "from": 2.6667,
+    "to": 1.0
+   },
+   "expected": "Cone p95 about 135, with under 5% of the cone above 150. The crescent becomes a soft satin sheen that still shows the cone's flare, and the cone body reads black (median about 44).",
+   "accept": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      90,
+      480,
+      250,
+      610
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     115,
+     155
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The right woofer's glint does the same: a pale blue crescent that turns the black cone silver.",
+   "evidence": {
+    "region": [
+     821,
+     508,
+     899,
+     584
+    ],
+    "measured": "Right woofer-cone: median 59.6, p95 184.0, 13.8% of its pixels above 150. The crescent [826, 550, 891, 580] is rgb (167, 177, 204) and lies around glint 1's point (about 877, 566)."
+   },
+   "change": {
+    "setting": "glints.1.power_w",
+    "from": 2.6667,
+    "to": 1.0
+   },
+   "expected": "Cone p95 about 135 with under 5% of the cone above 150, matching the left woofer's satin sheen so the pair's drivers read alike.",
+   "accept": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      770,
+      480,
+      940,
+      610
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     115,
+     155
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The roof ramp's reflection washes the upper half of each roof slope from the accent red to pink.",
+   "evidence": {
+    "region": [
+     100,
+     322,
+     247,
+     366
+    ],
+    "measured": "Left roof slope (gable-block below the fin): median rgb (205, 78, 89), dE2000 11.0 against #C62828 (right roof 8.5). Profile y from ridge to eave: 121.5, 109.8, 96.8, 81.9, 67.4, 54.8. The fin above it holds (208, 15, 19), dE 3.8."
+   },
+   "change": {
+    "setting": "lights.roof_ramp.strength",
+    "from": 1.4274,
+    "to": 0.95
+   },
+   "expected": "The roof keeps a ridge-to-eave sheen (falloff about 45 instead of 67), but its median holds red at about (192, 58, 66), dE2000 about 6, with roof p95 about 112.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      90,
+      322,
+      260,
+      366
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     5,
+     8
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The right speaker's shaded side reads as muddy grey rather than white lacquer in shade.",
+   "evidence": {
+    "region": [
+     779,
+     357,
+     793,
+     612
+    ],
+    "measured": "Side-left above the plinth: median 90.0, p5 41.0, rgb (97, 88, 88), lum rising from about 55 at its back edge to 113 at its front edge. That is 2.7 stops under the left speaker's sunlit side (213.8). The previous round's 100 to 135 target stopped at 95.4 with this fill at 0.51."
+   },
+   "change": {
+    "setting": "lights.inner_fill.strength",
+    "from": 0.51,
+    "to": 1.4
+   },
+   "expected": "Side median about 115, rgb about (122, 112, 108), still about 2 stops under the sunlit side, so the sun's direction still reads and the white stays white. The front-to-side edge stays a clean step of about 110 levels.",
+   "accept": {
+    "region": {
+     "part": "side-left",
+     "box": [
+      0,
+      0,
+      1350,
+      612
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     105,
+     135
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A heavier clear coat on the white body so the room's reflections read on the fronts.",
+   "why": "The paint and clear coat are the product's own finish and are fixed. It matters because a clear coat over white can only lift the front a few levels, so the lacquer has to read through exposure headroom (c1) and the existing front panels."
+  },
+  {
+   "request": "A warmer, blacker base colour on the woofer cone, dust cap and trim rings, if their blue-grey (cone body (45, 47, 59), mid ring (85, 94, 111)) comes from the material rather than a reflection.",
+   "why": "The drivers' materials and colours belong to the named products. It matters because the drivers read cold against the warm room, and only what they reflect (c2, c3) may change."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
