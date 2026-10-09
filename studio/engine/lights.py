@@ -443,3 +443,26 @@ def link_receivers(bpy, light_ob, objects):
     for o in objects:
         col.objects.link(o)
     light_ob.light_linking.receiver_collection = col
+
+
+def split_set_shadow(bpy, ob, product, set_objs, f):
+    """The lamp's shadow on the set at `f` of its density, its light on the product untouched (08's round 7: the key's
+    long cast shadow banding the copy floor, where every other lever changed the section's modelling). The lamp lights the
+    product only; a copy at f of its power lights the set with the product's shadow, and another at the rest lights the
+    set through the product (shadow linking: the product does not block it). Returns the two copies."""
+    link_receivers(bpy, ob, product)
+    out = []
+    for suffix, share, open_ in (('-set', f, False), ('-set-open', 1.0 - f, True)):
+        c = ob.copy(); c.data = ob.data.copy(); c.name = ob.name + suffix
+        bpy.context.scene.collection.objects.link(c)
+        c.data.energy = ob.data.energy * share
+        link_receivers(bpy, c, set_objs)
+        if open_:
+            col = bpy.data.collections.new(c.name + '-blockers')
+            for o in product:
+                col.objects.link(o)
+            c.light_linking.blocker_collection = col
+            for co in col.collection_objects:
+                co.light_linking.link_state = 'EXCLUDE'
+        out.append(c)
+    return out

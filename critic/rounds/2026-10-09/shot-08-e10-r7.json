@@ -1,0 +1,257 @@
+{
+ "stage1": {
+  "impression": "A clear, well-built cutaway of the milk-carton speaker with a lovely glossy red waveguide and crisp driver sections, but the birch section is lit so softly and evenly that cut faces, inner walls and cavity floors sit close in value and the inside reads like a flat diorama. The cold, murky grey sweep darkening to the lower right, with only a faint contact shadow, leaves the warm product floating in a drab set, and the white carton exterior that says what it is barely shows.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The tweeter's rear chamber (part of the 'tweeter in section' must-show) holds detail: [427,189,433,224] at a median of 10-22 (1.4 today, 88% of its pixels at or below 3; part:tweeter-frame 41% crushed), with the frame's grey section rim no brighter than the insert's section grey (164-170).",
+  "The white lacquer front models instead of printing as paper: [556,262,580,300] at 206-224 and [556,425,580,500] at or below 226 (235.3 and 235.4 today, the upper face spanning only 8.8 levels p5-p95), while the plinth band [567,730,578,775] stays within dE 3 of #C62828 (0.76) and the waveguide streaks keep p95 160-210 in [465,185,545,225] (178.5).",
+  "The copy-side floor reads as one field: the key's cast-shadow band [900,650,1300,750] (75.2) within 4 levels of the floor above it [900,560,1300,620] (82.9) and below it [900,800,1300,880] (86.2), keeping the contact pool beside the base [620,660,760,760] (69.9) for grounding.",
+  "The set's light holds the eye on the product: the empty lower-left floor [0,750,250,900] (107.6) is the brightest corner of the frame and 13 levels above the floor beside the base [600,800,900,880] (94.3); it should sit at or below the floor at the base."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The tweeter's rear chamber prints as a pure black slot, so the tweeter in section, a must-show, reads as a grey outline around a void.",
+   "evidence": {
+    "region": [
+     427,
+     189,
+     433,
+     224
+    ],
+    "measured": "median 1.4, p95 3.4, 88% of pixels at or below 3; part:tweeter-frame median 4.6 with 41% crushed. Glint 4 is skipped (the surface mirrors the frame itself) and an earlier round's axis-lamp tuning reached only 5.5 at 0.85 W/m2: PBR Neutral's toe maps a scene value x under 0.08 to 6.25x^2, so a black anodised cavity needs about 2.5 W/m2 of its own."
+   },
+   "change": {
+    "setting": "lights.tweeter",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.3,
+      0.3
+     ],
+     "position": [
+      1.25,
+      -3.1,
+      1.35
+     ],
+     "target": [
+      -0.01,
+      0.02,
+      0.93
+     ],
+     "irradiance": 2.5,
+     "color": 5600,
+     "specular": 0.2,
+     "receivers": [
+      "tweeter-frame"
+     ]
+    }
+   },
+   "expected": "Lit from about 4 degrees off the lens axis, from just behind the camera, and linked to tweeter-frame only, the chamber reads as dark anodised metal with a gradient into its depth: the box rises from 1.4 to 10-22 and tweeter-frame crush falls from 41% to under 5%; the frame's grey section rim rises from a median of 139 to no more than about 170, level with the insert's section grey (164); no other part changes.",
+   "accept": {
+    "region": [
+     427,
+     189,
+     433,
+     224
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     10,
+     22
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The red plinth band belongs to front-baffle, the same part as the white face, so the kick that holds the band's red cannot be taken off the white face without darkening the band that round 6 corrected with the plinth lamp.",
+   "evidence": {
+    "region": [
+     567,
+     730,
+     578,
+     775
+    ],
+    "measured": "band rgb (201, 32, 37), dE 0.76 to #C62828, lit by the kick and the plinth lamp, both of which list front-baffle; the white face above it, [556,262,580,300], sits at 235.3 under the same two lamps."
+   },
+   "change": {
+    "setting": "product.zone_parts",
+    "from": false,
+    "to": true
+   },
+   "expected": "No visible change on its own: it splits the band off as front-baffle.plinth so c3 can keep the kick on '*.plinth' while taking it off the white face; the band stays within dE 3 of #C62828 (0.76 now) through c3 and c4. Apply c2, c3 and c4 together.",
+   "accept": {
+    "region": [
+     567,
+     730,
+     578,
+     775
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     3
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The kick, there for the red gable, the waveguide streaks and the plinth band, also lands almost square on the white face (about 25 degrees off its normal), and that is what pins the whole face above PBR Neutral's 226 knee.",
+   "evidence": {
+    "region": [
+     556,
+     425,
+     580,
+     500
+    ],
+    "measured": "235.4 between the drivers (p5 217.6, p95 243.5); 235.3 on the upper face with only 8.8 levels p5-p95; down the face 235, 238, 236, 235, 230, 238, 240, 242; an earlier round measured the white at 211 with the kick at 1.5 and 225 at 2.0, so the kick is the face's main source."
+   },
+   "change": {
+    "setting": "lights.kick.receivers",
+    "from": [
+     "front-baffle",
+     "gable-block",
+     "waveguide-insert",
+     "letters-front-*"
+    ],
+    "to": [
+     "gable-block",
+     "waveguide-insert",
+     "letters-front-*",
+     "*.plinth"
+    ]
+   },
+   "expected": "With c4 (on its own this change leaves the upper face near 160, too grey), the face between the drivers falls from 235 to 198-226 and its reflections show; the kick keeps lighting the reds at full strength, so the waveguide streaks hold p95 160-210 in [465,185,545,225] (178.5 now), the fin keeps dE at or under 3 in [440,128,466,158] (2.85 now), and the band keeps the kick through c2.",
+   "accept": {
+    "region": [
+     556,
+     425,
+     580,
+     500
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     198,
+     226
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The white lacquer front, the only white of the Whole body in frame, prints as one flat paper value with no reflection or gradient.",
+   "evidence": {
+    "region": [
+     556,
+     262,
+     580,
+     300
+    ],
+    "measured": "median 235.3, p5 230.4, p95 239.2 (range 8.8), above the 226 knee where the card says a white prints as one value; a white lacquer that models sits at 200-220 with only its highlights above 226."
+   },
+   "change": {
+    "setting": "lights.whitetop",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.3,
+      0.6
+     ],
+     "position": [
+      0.75,
+      0.12,
+      1.2
+     ],
+     "target": [
+      0.195,
+      0.1,
+      0.72
+     ],
+     "irradiance": 1.0,
+     "color": 5600,
+     "specular": 0,
+     "receivers": [
+      "front-baffle"
+     ]
+    }
+   },
+   "expected": "With the kick off the face (c3), this weaker lamp, 0.55 m out from the face and above the eave, sets the upper face at 206-224 and the face between the drivers at about 210-220, so the face models gently from the top and its diagonal reflection reads (p5-p95 opening from 9 to 15 or more); it stays the brightest broad surface on the product, above the birch cut faces (205-210), so the earlier aim of a white that reads white is kept; the band, 0.67 m below its aim point, gets under a fifth of its strength, so its dE stays at or under 3.",
+   "accept": {
+    "region": [
+     556,
+     262,
+     580,
+     300
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     206,
+     224
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "asset",
+   "problem": "The key's cast shadow runs from the base across the copy floor as a soft dark band, the darkest broad area of the frame, and every card lever that would shorten or soften it (key elevation, azimuth, size, distance) also changes the section's modelling that the last two rounds set.",
+   "evidence": {
+    "region": [
+     900,
+     650,
+     1300,
+     750
+    ],
+    "measured": "median 75.2 against 82.9 above [900,560,1300,620] and 86.2 below [900,800,1300,880]; vertical profile over x 900-1300, y 520-900: 86, 84, 81, 78, 75, 75, 79, 84, 86, 88; its line matches the key at azimuth -50, elevation 18.7, only 0.28 m above the top of the product, so the top's shadow runs past the 2 m of floor."
+   },
+   "change": {
+    "setting": "asset: shadow linking for lights.key on the sweep (not on the card)",
+    "from": "the product casts lights.key's shadow over the whole floor",
+    "to": {
+     "light": "lights.key",
+     "caster": "product",
+     "receiver": "sweep",
+     "cast_within_m": 0.6,
+     "fade_m": 0.5
+    }
+   },
+   "expected": "The band lifts from 75 to 80-87, level with the floor around it, while the contact pool beside the base ([620,660,760,760], 69.9) and the crease under the cut edge stay, so the product stays grounded and the key's light on the section is untouched.",
+   "accept": {
+    "region": [
+     900,
+     650,
+     1300,
+     750
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     80,
+     87
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the waveguide insert's cut face a material read (cast or printed grain, a faint sheen) instead of a flat fill.",
+   "why": "Its 2,706-pixel section is one grey (p5 161, median 164, p95 170) right beside the grained birch and the hero tweeter, and reads as a CAD hatch rather than a photographed cut; the section colour and what is cut are fixed, and only the section colour's reproduction may change."
+  }
+ ],
+ "score_if_fixed": 7.3
+}

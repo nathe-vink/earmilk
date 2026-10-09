@@ -144,6 +144,10 @@ def main():
             recv = [o for o in objs if any(Pr._match(part_of[o.name], r) for r in spec['receivers'])]
             for o in [ob] + (Lt.twins(bpy, ob) if kind == 'panel' else []):
                 Lt.link_receivers(bpy, o, recv)
+        elif kind in ('area', 'spot', 'point') and spec.get('shadow_on_set', 1.0) < 1.0:
+            # the lamp's shadow on the set lightened, the product's light and shadows as they were
+            set_objs = [o for o in bpy.context.scene.objects if o.type == 'MESH' and o.name not in part_of and not o.get('engine_light')]
+            Lt.split_set_shadow(bpy, ob, objs, set_objs, max(0.0, spec['shadow_on_set']))
     gl = sh.get('glints') or []
     names = list(gl.keys()) if isinstance(gl, dict) else [str(i) for i in range(len(gl))]
     gl = list(gl.values()) if isinstance(gl, dict) else list(gl)
