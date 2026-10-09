@@ -428,5 +428,158 @@
   ],
   "reply": "critic/rounds/2026-10-09/shot-09-e7-r6.json",
   "shot_sha": "e095a1d67f389d7a2d19f412243ad4149e57744b"
+ },
+ {
+  "change": "c8",
+  "setting": "lights.front_sheen.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    125,
+    165
+   ]
+  },
+  "proofs": [
+   [
+    5.0,
+    86.8
+   ],
+   [
+    8.0,
+    111.6
+   ],
+   [
+    12.0403,
+    136.5
+   ]
+  ],
+  "set": 12.0403,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c5",
+   "c6",
+   "c7",
+   "c8"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-09-e8-r7.json",
+  "shot_sha": "571e9284a3612b0e3010e212477b9bf2e26903e1"
+ },
+ {
+  "change": "c1",
+  "setting": "render.exposure",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    200,
+    220
+   ]
+  },
+  "proofs": [
+   [
+    0.15,
+    213.2
+   ],
+   [
+    0.35,
+    226.6
+   ],
+   [
+    0.1022,
+    210.5
+   ]
+  ],
+  "set": 0.15,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c5",
+   "c6",
+   "c7",
+   "c8"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-09-e8-r7.json",
+  "shot_sha": "24fdba8255e9f87625e45a0543717149a2d55872"
+ },
+ {
+  "change": "c2",
+  "setting": "sky.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    168,
+    186
+   ]
+  },
+  "proofs": [
+   [
+    6.0,
+    167.0
+   ],
+   [
+    7.0,
+    177.7
+   ]
+  ],
+  "set": 7.0,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c5",
+   "c6",
+   "c7",
+   "c8"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-09-e8-r7.json",
+  "shot_sha": "2ac65c121931b6229fadff917adf57936a6f034a"
+ },
+ {
+  "change": "c7",
+  "setting": "lights.top.irradiance",
+  "test": {
+   "metric": "delta_e",
+   "op": "<=",
+   "value": 3.0
+  },
+  "proofs": [
+   [
+    0.4,
+    2.94
+   ],
+   [
+    0.7,
+    1.65
+   ]
+  ],
+  "set": 0.7,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c5",
+   "c6",
+   "c7",
+   "c8"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-09-e8-r7.json",
+  "shot_sha": "32bb731ee2bbaaffea431b8baed15bd2949a3a88"
  }
 ]
