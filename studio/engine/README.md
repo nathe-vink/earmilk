@@ -130,7 +130,11 @@ open sky in front). Nothing is rendered.
 - **Glints** are placed from the surface the camera sees at their point, with that surface's own normal (the camera's
   ray through `at`, else the nearest receiving surface that faces the camera); a glint whose lamp would have to sit
   behind the floor or inside the product is skipped, because that surface mirrors the floor there, and the render's
-  report and the next critic's card say so.
+  report and the next critic's card say so. The test for what hides the lamp ignores the surface itself: a hit within
+  2 mm, a face seen from behind (a connector's bezel sunk in its module), and the parts in `occlusion_ignore`.
+- **Flags**: a reflect-only flag (`set.flags`, `reflect_only`) is one-sided, seen only from the side its normal faces,
+  so a card laid on the floor shows in the product's lacquer while the floor's own gloss, looking at its back, sees
+  through it; two-sided it printed a straight-edged patch on the sweep.
 - **The sun through a window**: `sun.aim` `{"at": [x, y, z], "window": 0, "through": [0.5, 0.5]}` sets the azimuth
   and elevation that send the sunlight through that point of the window onto `at`.
 - **Panels**: `{"type": "panel", ...}` is an emissive rectangle the camera cannot see, its brightness ramped along a
