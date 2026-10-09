@@ -1,0 +1,359 @@
+{
+ "stage1": {
+  "impression": "A clean, noise-free exploded view of the milk-carton speaker that reads at a glance, but the light is a flat, even wash: the two white faces barely separate, the carton has almost no contact shadow, and the parts float in a uniform gray void. The gray waveguide shell melts into the same-valued backdrop, the embossed logo on the red band is near illegible, and the black drivers read as silhouettes rather than engineered parts.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Every exploded part clear of its neighbours and of the cabinet silhouette by >= 12 px with no tangencies: mask gaps woofer-to-cabinet, mid-to-cabinet and mid-ring-to-insert are 1, 1 and 1 px now.",
+  "The waveguide insert's gray flank >= 20 levels off the sweep behind it (now 172.6 vs 173.8, silhouette step 5.2, held apart only by hue, dE2000 6.6).",
+  "The two white cabinet planes 25-40 levels apart at equal height (now 9 at y 380-465: 239.3 vs 230.1; 11-14 at y 600-650).",
+  "Accent red on the front roof slope and inside the insert's bowl within dE2000 ~10 of #C62828, with the lacquer gloss as a graduated highlight across the slope (lum range >= 25) instead of a flat veil (now dE 21.5 / 21.0, slope lum range 3.1).",
+  "Both drivers read as the named products: a specular band across the anodised woofer cone (woofer-cone p95 >= 110, now 67.4) and visible sheen or fibre on the papyrus mid cone (mid-cone lum range >= 25, now 9.0).",
+  "The cast 'earmilk' letters separate in value from the red plinth (now isoluminant: L* 43.2 vs 41.6; letters lum_p95 114.1).",
+  "The pocket's magnets and boss bore visible, as the brief asks (magnets-pocket shows 13 px).",
+  "The tweeter balanced between the pocket and the insert (22 px from the pocket now; ~106 px from the insert once the insert is drawn to 0.68 m).",
+  "The widened group (x 445-1020 after these changes) recentred and lifted: the base is 70 px from the bottom edge against 186 px of headroom, the group's box centre 58 px below frame centre.",
+  "Whites neutral within dE2000 ~1.5 (side-left a* +1.9; front a* +1.9, b* -2.1; dE 2.6 and 3.3 from neutral)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "composition",
+   "problem": "The 12-inch woofer is drawn out only 0.16 m, so its ~0.15 m-deep motor and basket still sit over its hole inside the cabinet's silhouette: it reads half-inserted, not exploded.",
+   "evidence": {
+    "region": [
+     651,
+     537,
+     767,
+     721
+    ],
+    "measured": "woofer-motor box [651,563,701,660] lies inside the cabinet silhouette (front-baffle right edge x 705); mask gap woofer-to-cabinet 1 px; the baffle margin [698,600,704,660] reads 37.6 (black frame over it) where the uncovered margin above, [698,522,704,540], reads 189.7."
+   },
+   "change": {
+    "setting": "product.explode.5.offset_m",
+    "from": [
+     0,
+     -0.16,
+     0
+    ],
+    "to": [
+     0,
+     -0.31,
+     0
+    ]
+   },
+   "expected": "Woofer slides ~71 px right along its axis (~22 px down with perspective): motor's left edge 651 -> ~721, ~15 px clear of the cabinet edge at x 706; box ~[721,559,840,743]; the baffle margin [698,600,704,660] shows white lacquer (~170-185) and the whole rebate and hole read. Needs c2, or the surround lands on its ring.",
+   "accept": {
+    "region": [
+     698,
+     600,
+     704,
+     660
+    ],
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 140
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "composition",
+   "problem": "With the woofer drawn to 0.31 m its surround would land on the trim ring at 0.34 m; the ring must stay one clear gap ahead of the driver on the same axis.",
+   "evidence": {
+    "region": [
+     789,
+     561,
+     852,
+     751
+    ],
+    "measured": "woofer-ring box [789,561,852,751], 21 px (box) / 32.6 px (mask) ahead of the woofer surround (box right 768); c1 moves the surround ~71 px right, past the ring's left outline; the strip [856,662,886,692] holds no outline now (edge 0.3)."
+   },
+   "change": {
+    "setting": "product.explode.4.offset_m",
+    "from": [
+     0,
+     -0.34,
+     0
+    ],
+    "to": [
+     0,
+     -0.49,
+     0
+    ]
+   },
+   "expected": "Ring moves ~74 px right and ~21 px down to ~[863,582,927,772], ~23 px clear of the moved surround (right edge ~840); its left outline crosses the strip [856,662,886,692] with a step of ~25-45; a ring too near (s < ~0.46) or too far (s > ~0.53) leaves the strip empty.",
+   "accept": {
+    "region": [
+     856,
+     662,
+     886,
+     692
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     12,
+     90
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "The sweep renders at the value of the waveguide insert's gray shell and only ~16 levels under the shaded white front, so the hero part of this frame has no silhouette and the cabinet's right edge barely holds.",
+   "evidence": {
+    "region": [
+     760,
+     340,
+     780,
+     390
+    ],
+    "measured": "sweep beside the insert 173.8 (rgb 178,173,170) vs the insert's flank [792,330,828,385] 172.6 (rgb 168,173,181): 1.2 levels apart, separated only by hue (dE2000 6.6); largest step across its left silhouette [765,335,805,385] 5.2, across its top [795,285,815,330] 4.8; front's right margin [698,522,704,540] 189.7 vs sweep right of the cabinet [708,470,740,520] 174.1; the sweep's brightest band, 182.8 at [700,0,1000,150], runs above the insert in the same columns."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#C9C5BE",
+    "to": "#A09C95"
+   },
+   "expected": "Paper luminance x0.60 at the same warm hue: sweep [1050,40,1300,240] 178.9 -> ~140, beside the insert [760,340,780,390] 173.8 -> ~137, right of the cabinet 174.1 -> ~138, foreground floor [450,850,600,890] 206.7 -> ~164; the insert's flank (~157 after c4 and c8) sits ~20 above the sweep instead of 1.2 below it, the front's right margin (~176) ~38 above it instead of 16, and the whites read whiter by contrast.",
+   "accept": {
+    "region": [
+     1050,
+     40,
+     1300,
+     240
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     134,
+     150
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The fill (2x2 m at azimuth 50, 2.23 W/m2) lights the front baffle nearly as hard as the key lights the side, so the two white planes sit only 9-14 levels apart and the box reads flat.",
+   "evidence": {
+    "region": [
+     595,
+     380,
+     645,
+     465
+    ],
+    "measured": "corner profile at y 380-465: side 240.3 -> front 232.0, 231.0, 230.0, 227.0, 222.3; at y 600-650: 231.2 -> 220.1, 217.3; front [621,380,641,465] 230.1 vs side [470,380,595,465] 239.3."
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": 2.2275,
+    "to": 1.9
+   },
+   "expected": "Front upper-left [621,380,641,465] 230.1 -> ~216, front middle [655,470,700,512] 210.9 -> ~190, side-left [470,380,595,465] 239.3 -> ~236: the corner step grows from ~9 to ~20, a lit and a shaded white plane; black parts lose at most ~5 levels (woofer-cone median 40.9 -> ~37), crush_pct stays 0; the insert's flank drops ~5 (to ~157), which c3 keeps above the sweep.",
+   "accept": {
+    "region": [
+     621,
+     380,
+     641,
+     465
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     208,
+     222
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The gloss panel at 3.64 is mirrored evenly across the flat front roof slope and inside the insert's bowl, washing the accent red to salmon pink.",
+   "evidence": {
+    "region": [
+     548,
+     262,
+     575,
+     300
+    ],
+    "measured": "front slope rgb (238,119,124), dE2000 21.5 vs #C62828, lum p5-p95 142.9-146.0 (a flat veil, no ramp); insert bowl [870,340,910,380] rgb (222,120,125), dE 21.0; the gable triangle that does not mirror the panel, [470,320,520,345], is (222,51,51), dE 5.8."
+   },
+   "change": {
+    "setting": "lights.gloss.strength",
+    "from": 3.6375,
+    "to": 1.5
+   },
+   "expected": "Slope -> ~(232,74,78), dE2000 21.5 -> ~11.5 (the remainder is the lit slope's lightness), still visibly glossier than the gable triangle (G ~74 vs 51); bowl -> ~(215,72,78), dE ~9, its streak highlights kept at ~40% of their present strength so the bowl's depth still reads.",
+   "accept": {
+    "region": [
+     548,
+     262,
+     575,
+     300
+    ],
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     64,
+     88
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "composition",
+   "problem": "The 6.5-inch mid is drawn out only 0.13 m, so its motor and basket still overlap the cabinet's right edge.",
+   "evidence": {
+    "region": [
+     677,
+     388,
+     739,
+     482
+    ],
+    "measured": "mid-motor box [677,400,703,455] and mid-frame box [691,388,739,482] cross the front-baffle edge at x 705; mask gap mid-to-cabinet 1 px; the baffle margin [690,420,704,460] reads 52.6 where the uncovered margin above, [690,372,704,386], reads 190.9."
+   },
+   "change": {
+    "setting": "product.explode.3.offset_m",
+    "from": [
+     0,
+     -0.13,
+     0
+    ],
+    "to": [
+     0,
+     -0.23,
+     0
+    ]
+   },
+   "expected": "Mid slides ~46 px right (~13 px down): motor's left edge 677 -> ~722, ~17 px clear of x 706; box ~[722,400,785,495]; the margin [690,420,704,460] shows white lacquer (~170-185). Needs c7 and c8, or it lands on its ring.",
+   "accept": {
+    "region": [
+     690,
+     420,
+     704,
+     460
+    ],
+    "metric": "lum_median",
+    "op": ">=",
+    "value": 140
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "composition",
+   "problem": "With the mid drawn to 0.23 m its surround would meet the trim ring at 0.24 m.",
+   "evidence": {
+    "region": [
+     755,
+     401,
+     791,
+     496
+    ],
+    "measured": "mid-ring box [755,401,791,496], 22.2 px (mask) ahead of the mid surround (box right 737); c6 moves the surround ~47 px right; the strip [796,448,824,474] holds no outline now (edge 0.2)."
+   },
+   "change": {
+    "setting": "product.explode.2.offset_m",
+    "from": [
+     0,
+     -0.24,
+     0
+    ],
+    "to": [
+     0,
+     -0.34,
+     0
+    ]
+   },
+   "expected": "Ring moves ~48 px right and ~12 px down to ~[803,413,840,509], ~19 px clear of the moved surround (~784) and ~48 px above the moved woofer (top ~559); its left outline crosses [796,448,824,474] with a step of ~30-50.",
+   "accept": {
+    "region": [
+     796,
+     448,
+     824,
+     474
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     12,
+     90
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "composition",
+   "problem": "The mid trim ring already touches the waveguide insert's lower-left corner, and drawing the ring out (c7) would drive it into the insert.",
+   "evidence": {
+    "region": [
+     783,
+     302,
+     936,
+     427
+    ],
+    "measured": "mask gap mid-ring-to-waveguide-insert 1.0 px (they meet near (785,400)); insert box [783,302,936,427]; after c7 the ring's top (~413) would sit under the insert's lower edge (y ~400-427) at x 803-840."
+   },
+   "change": {
+    "setting": "product.explode.0.offset_m",
+    "from": [
+     0,
+     -0.52,
+     0
+    ],
+    "to": [
+     0,
+     -0.68,
+     0
+    ]
+   },
+   "expected": "Insert moves ~78 px right and ~18 px down to ~[861,320,1020,445]: ~22 px clear of the moved ring's right outline (~839) and ~30 px at the ring's top; the tweeter (726-755) stays between the pocket edge (704) and the insert; its red bowl now covers [945,385,985,410] (G ~70-115 there, where the sweep reads G ~137-173).",
+   "accept": {
+    "region": [
+     945,
+     385,
+     985,
+     410
+    ],
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     50,
+     125
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Darken, lighten or recolour the waveguide insert's gray outer shell so it stands off the sweep",
+   "why": "The insert's material and the waveguide are fixed spec; its separation has to come from the set and light (c3, c4)."
+  },
+  {
+   "request": "Give the drivers lighter or more detailed cones, surrounds or baskets",
+   "why": "They are real named products whose materials and colours are their own; they can only be revealed by light (blocking_9, drivers)."
+  },
+  {
+   "request": "Enlarge, brighten or refinish the 'earmilk' letters for legibility",
+   "why": "Typeface, size, tracking and the letters' material are fixed marks; they are isoluminant with the red (L* 43.2 vs 41.6), so the fix must be light that catches the metal."
+  },
+  {
+   "request": "Lift the insert or the mid trim ring off their axes to clear the tangency without widening the explosion",
+   "why": "Each part stays on its own fixing axis in assembly order; only how far it is drawn out may change (c6-c8)."
+  },
+  {
+   "request": "Change the cutaway or explode set so the pocket's magnets and boss bore face the camera",
+   "why": "Which parts are cut away or exploded is fixed; at rotate_z 72 the magnets show 13 px though the brief asks to see them, so a later camera or rotation move must reveal them without re-creating the overlaps."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
