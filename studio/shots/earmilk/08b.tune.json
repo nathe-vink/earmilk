@@ -1,0 +1,85 @@
+[
+ {
+  "change": "c2",
+  "setting": "lights.key.irradiance",
+  "test": {
+   "metric": "r_median",
+   "op": "between",
+   "value": [
+    212,
+    244
+   ]
+  },
+  "proofs": [
+   [
+    5.5,
+    242.0
+   ],
+   [
+    7.0,
+    245.0
+   ],
+   [
+    2.3333,
+    218.0
+   ]
+  ],
+  "set": 2.3333,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c6",
+  "setting": "lights.inside.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    95,
+    165
+   ]
+  },
+  "proofs": [
+   [
+    1.0,
+    139.3
+   ],
+   [
+    1.6,
+    157.6
+   ],
+   [
+    0.6951,
+    129.0
+   ]
+  ],
+  "set": 0.6951,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c7",
+  "setting": "lights.bowl_ramp.strength",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    95,
+    160
+   ]
+  },
+  "proofs": [
+   [
+    0.8,
+    138.0
+   ],
+   [
+    1.6,
+    138.0
+   ]
+  ],
+  "set": 0.8,
+  "passes": true,
+  "moves_the_test": false
+ }
+]
