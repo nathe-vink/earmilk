@@ -1,0 +1,234 @@
+{
+ "stage1": {
+  "impression": "A clean, competent lineup of six milk-carton speakers on a mid-grey sweep, evenly lit from the front left, with the geometry and colourways reading clearly. But the light is flat and the grey ground is dull, so the whites look greyish, the dark colourways go muddy and nothing leads the eye; it reads as a catalogue proof, not a hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Every silhouette steps at least 15 levels from the ground beside it. Now: 1.6 at the 2% right side [492,400,528,430], 4.2 at the Whole right side [298,385,330,415], 4 at the Oat front-left edge (ground 158, face 162) and 7 at the Matcha front-left edge (ground 155, face 148).",
+  "The ground has depth: a soft 15-30 level falloff from behind the row to the top edge and the near floor. Now the sweep is flat: 162-166 over rows 0-140, 164 in the top band and 155 on the near floor.",
+  "The lacquer reads as gloss on every unit. Each roof front slope needs a ridge-to-eave sheen of 12-26 levels; now the Matcha falloff is 2.2, the 2% 3.0 and the Whole and Oat 8-9, with p95-p5 of 3.6-12 on the slopes. The light colours need highlights above 226; the brightest pixel in the frame is now 224.",
+  "The Skim's white side is neutral, within dE 2 of a grey of the same lightness. Now it is (140,146,136), dE 6.6, tinted green by the Matcha 0.26 m away. Fixing it takes wider spacing between the units, with front_ramp, front_strip, letter_card and roof_sheen widened to match.",
+  "Every unit is shown at the same angle, within 4 degrees, and the five gaps on screen agree within 5 px. Now the camera sees the Whole 42.7 degrees off its front and the Oat 22.5 degrees off, and the gaps are 16, 23, 30, 38 and 46 px, so the left end crowds.",
+  "The Whole's red matches the swatch's chroma and hue. Now the gable is (182,14,15): C* 76.7 at hue 37.6 degrees, against 68.1 at 33.8 for #C62828 at the same exposure (dE 3.7). PBR Neutral's toe crushes the green and blue channels.",
+  "The mid drivers show their cone form. Now each mid is a flat disc: p95 34 against a median of 28."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The sweep renders as one flat mid-grey (164 at the top edge, 155 on the near floor), the same value as the white units' shaded sides (157, 158, 144) and the Matcha (148) and Oat (157) fronts. Four silhouettes dissolve, and the whites have nothing darker to read against.",
+   "evidence": {
+    "region": [
+     560,
+     0,
+     940,
+     100
+    ],
+    "measured": "lum_median 164.3 (p5 162.3, p95 166.3), rgb 165/164/165. y-profile over rows 0-140: 164, 166, 165, 164, 163, 162, 162, 162. Near floor [300,680,1200,750]: 154.7. Steps across silhouettes: 2% right side [492,400,528,430] 1.6, Whole right side [298,385,330,415] 4.2, Oat front-left [1160,315,1195,345] ground 158 vs face 162, Matcha front-left [722,355,755,385] ground 155 vs face 148."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#C0C0C0",
+    "to": "#909090"
+   },
+   "expected": "The ground falls to about 117 in the top band and 100-115 on the floors. The four failing edges step 20-45 levels; the 2% right side, for example, is about 140 against about 100 behind it. The Skim's light-blue gable (137) still clears the ground by 20 levels plus hue. The white fronts stay at 209-213 and read whiter by contrast. The frame mean drops from 139 to about 110, and the floor gaps between units darken to 75-85 at their base.",
+   "accept": {
+    "region": [
+     560,
+     0,
+     940,
+     100
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     108,
+     126
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The roof front slopes read as flat colour cards (Matcha 49 to 47, 2% 67 to 64 from ridge to eave). roof_sheen's reflection is only about 0.013 linear, and PBR Neutral's toe cancels it: it subtracts the smallest channel, so on these saturated colours a veil v shows only as 6.25 v^2. The ramp's ridge-bright gradient never appears.",
+   "evidence": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      743,
+      225,
+      856,
+      287
+     ]
+    },
+    "measured": "Matcha front slope y-profile: 49.1, 48.7, 47.9, 47.7, 47.2, 47.0, 46.9, 46.9 (falloff 2.2); p5-p95 46.2-50.3. 2% slope [337,200,438,258]: falloff 3.0. Slope rgb (4,62,38) against (0,62,35) expected for #004225 at its exposure: the veil lifts R by only 4."
+   },
+   "change": {
+    "setting": "lights.roof_sheen.strength",
+    "from": 1.5286,
+    "to": 6.0
+   },
+   "expected": "Every front slope brightens toward the ridge along the strip's z ramp. The panel's tilt puts all six slopes on nearly the same part of the ramp (Whole 0.10-0.71, Matcha 0.17-0.84, Oat 0.28-0.94). The Matcha slope goes from about 50 at the eave to about 70 at the ridge (falloff 12-26), and the 2% and Oat slopes follow. The red ridge rises to about (190,50,50), the cream ridge to about 218, the light blue by about 5. The waveguide streaks brighten. Fronts, sides and ground are unchanged (diffuse false).",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      743,
+      225,
+      856,
+      287
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     26
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Bounce from the sweep supplies part of the light on the white units' shaded sides (158.7 on Whole and 2%). c1 halves the paper's albedo (0.527 to 0.279 linear), which would drop the sides toward about 140 and make the white units read grey on their three-quarter side.",
+   "evidence": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      237,
+      215,
+      515,
+      448
+     ]
+    },
+    "measured": "Whole and 2% white sides: lum_median 158.7 (p5 144.4, p95 162.1), rgb 157/159/161; y-profile 155, 160, 161, 161, 159, 156. The Whole's side falls from 161 to 145 toward its rear, where the 2% blocks the fill."
+   },
+   "change": {
+    "setting": "lights.side_lift",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      7.6,
+      1.0
+     ],
+     "position": [
+      1.8,
+      -1.6,
+      0.9
+     ],
+     "target": [
+      1.8,
+      0.0,
+      0.5
+     ],
+     "strength": 0.5,
+     "color": 5800,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -2.0,
+       5.6
+      ],
+      "values": [
+       1,
+       1
+      ]
+     },
+     "diffuse": 1,
+     "receivers": [
+      "side-right"
+     ]
+    }
+   },
+   "expected": "Tuned with c1 in, the white sides hold at about 158 and the front-to-side ratio stays about 1.9:1. The Matcha, Chocolate and Oat sides lift 5-10 levels, which raises the Matcha side's crushed blue channel (29 now, about 49 for its swatch at that exposure). The Skim side's green tint thins a little. Ground, fronts and roofs are unchanged (linked to side-right).",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      237,
+      215,
+      515,
+      448
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     150,
+     166
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The 6.5 in papyrus mids read as flat dark discs on all six units (cone p95 34 against a median of 28), next to woofer cones that model from 10 to above 100, so each mid looks like a hole rather than a cone.",
+   "evidence": {
+    "region": "part:mid-cone",
+    "measured": "mid-cone median 28.0, p5 21.1, p95 34.3; woofer-cone p5 9.6, p95 102.4."
+   },
+   "change": {
+    "setting": "lights.mid_kick",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      5.2,
+      0.4
+     ],
+     "position": [
+      -0.4,
+      -1.15,
+      1.3
+     ],
+     "target": [
+      -0.05,
+      -0.18,
+      0.66
+     ],
+     "strength": 2.0,
+     "color": 5800,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -3.0,
+       2.2
+      ],
+      "values": [
+       1,
+       1
+      ]
+     },
+     "diffuse": 1,
+     "receivers": [
+      "mid-cone",
+      "mid-cap"
+     ]
+    }
+   },
+   "expected": "Lit from about 33 degrees above the front, each cone's lower half and the cap lift while the upper half stays dark: p95 about 56, p5 at or below 25. Nothing else changes (linked to mid-cone and mid-cap).",
+   "accept": {
+    "region": "part:mid-cone",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     44,
+     68
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Render the frame at 4000 px or more across (it is 1500 x 750 now).",
+   "why": "The frame must hold up across a magazine spread, which needs about 5000 px at 300 dpi. At 1500 px the 6 mm rounds, the 3 mm shadow lines, the wordmark and the tweeter are 1-15 px. The frame size is fixed by the card."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
