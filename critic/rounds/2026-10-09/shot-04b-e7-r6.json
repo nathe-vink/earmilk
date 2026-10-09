@@ -1,0 +1,233 @@
+{
+ "stage1": {
+  "impression": "A clean, correctly built three-quarter of the carton's back, set right of centre on a warm grey sweep with generous copy room, where the red-and-white graphics and the label read instantly. But it is lit like a default studio: the white faces sit as soft light-grey planes against a taupe set of nearly the same weight, the base has only a vague halo instead of a contact shadow, and a mirrored ghost of the fin's lettering sits on the glossy roof.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Figure-ground: the set beside the white side face must sit at least 55 levels below it (now 160 at [690,300,735,620] against 196 on part:side-right), and the left-silhouette step at y 300-320 must be at least 50 (now 23.5).",
+  "The floor contact must read as a shadow, not a ramp: the floor 5-15 px under the plinth at least 1 stop below the open floor, with the shadow edge resolving within about 60 px (now 145 against 181, 0.7 stop, rising evenly 145 to 186 all the way to the frame edge).",
+  "The amp plate must read as satin metal, not a flat slab: at least 15 levels of sheen across it (now 6 across [905,634,985,660]; the whole plate spans 63-77).",
+  "The connections must read as hardware: specular edges of 110 or more on the connector shells (now p95 75 on the round connector's rim, 57 over part:amp-connectors).",
+  "No mirrored ghost of OPEN OTHER SIDE on the roof's back slope (band [835,121,985,130] has a 30.5 range against 18.2 just below it).",
+  "The brightest set value must sit by the product, not in the bottom-right corner (now 185 at [1150,800,1350,900] against 166-168 beside the product).",
+  "The gable end must show some modelling: it is one flat red, 57.6 with a 4.3 range over [790,170,840,205]; it needs at least 8 levels of gradient to read as lacquer."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The sweep renders as a mid taupe too close in value to the white. The cove beside the side face is 160 against the side's 196 (36 levels apart), the left silhouette steps only 23.5 at the top and the copy field is 160, so the carton reads grey on grey and the frame looks muted.",
+   "evidence": {
+    "region": [
+     690,
+     300,
+     735,
+     620
+    ],
+    "measured": "lum_median 160.3 (rgb 166/159/157); part:side-right 195.8, its white area [760,260,860,600] 198.8; edge across the left silhouette [720,300,760,320] 23.5; copy field [0,0,700,900] median 159.9; frame median 162.2"
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#B4AFA7",
+    "to": "#8E8A83"
+   },
+   "expected": "The cove beside the product drops to about 122-130 and the copy field to about 120-130, keeping the same warm hue. The left-silhouette step rises from 23.5 to 55 or more. The white faces lose no more than 4 levels of floor bounce (part:side-right stays at 190 or above, part:back-panel at 226 or above), and the red roof and plinth separate harder. A mock that scaled the set to this value measured 121.9 in this region and a 64.6 silhouette step.",
+   "accept": {
+    "region": [
+     690,
+     300,
+     735,
+     620
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     118,
+     136
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The floor under the plinth is a long, even ramp rather than a contact shadow. It rises from 145 to 171 over the first 60 px and keeps climbing to 186 at the frame edge, only 0.7 stop below the open floor at the base. The cause is the 1.8 m rim strip: it reaches in front of the back face, so the carton cuts it off only partly near the base (about 70% shaded at 5-10 cm, about 30% at 40 cm, by the card's geometry).",
+   "evidence": {
+    "region": [
+     945,
+     790,
+     995,
+     848
+    ],
+    "measured": "profile y 144.9, 151.1, 155.7, 159.2, 162.8, 166.6, 168.6, 171.3 (falloff -26.4); band [945,786,995,800] 144.0 against open floor [945,860,995,895] 181.4; steepest step 1.1 per row"
+   },
+   "change": {
+    "setting": "lights.rim.size_m",
+    "from": [
+     0.3,
+     1.8
+    ],
+    "to": [
+     0.3,
+     0.4
+    ]
+   },
+   "expected": "The carton fully cuts off the rim over the first ~10 cm of floor, and the rim clears it by ~37 cm, so a defined contact pad forms. The 5-15 px band under the plinth drops about 10 levels (to ~135, ~103 with c1) and the floor beyond ~40 cm gains about 5. The falloff over this region goes from -26 (-20 with c1 alone) to about -32 with c1, or about -41 without it. Rim highlights on the fin top and hips get thinner. The roof's diffuse level does not change (part:gable-block stays 84-92).",
+   "accept": {
+    "region": [
+     945,
+     790,
+     995,
+     848
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -48,
+     -27
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The Hypex plate reads as a flat grey slab, not anodised metal. Its 15,000 px span only 63-77, and its upper band goes just 68 to 74 left to right, because the 0.3 m glint lamp mirrors as an even sheen over the whole 18 cm plate.",
+   "evidence": {
+    "region": [
+     905,
+     634,
+     985,
+     660
+    ],
+    "measured": "profile x 68.4, 69.4, 70.4, 71.2, 72.2, 72.5, 73.4, 74.4 (falloff -6.0); part:amp-plate median 71.2, p5 63.4, p95 76.5; vertical profile 72.4 to 63.4"
+   },
+   "change": {
+    "setting": "glints.1.size_m",
+    "from": 0.3,
+    "to": 0.12
+   },
+   "expected": "The glint's reflection shrinks to a sheen about 10 cm across, centred just left of the connectors (~1000, 634). That area rises to about 90-105 while the plate's left end stays about 62-68. The band rises 14-32 levels left to right, the dark connectors (51) stand out against it, and part:amp-plate median stays within 62-85.",
+   "accept": {
+    "region": [
+     905,
+     634,
+     985,
+     660
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -32,
+     -14
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The connections are a must-show, but they read as dark shapes on a dark plate with no edge light. The shells sit at 51 (p95 57) on a 71 plate, and glint 0 was skipped: its point lies inside the IEC socket and mirrors the amp module.",
+   "evidence": {
+    "region": [
+     1023,
+     640,
+     1033,
+     646
+    ],
+    "measured": "lum_p95 74.6 on the round connector's upper rim; part:amp-connectors median 51.2, p95 57.3; part:amp-plate 71.2; card log: glint 0 skipped (mirrors amp-module#0 at 0.00 m)"
+   },
+   "change": {
+    "setting": "glints.0.at",
+    "from": [
+     0.591,
+     -0.074,
+     0.189
+    ],
+    "to": [
+     0.534,
+     -0.118,
+     0.196
+    ]
+   },
+   "expected": "Glint 0 lands on the upper-front round of the round connector's shell, which projects to ~(1028, 643) and stands 7 mm proud of the back face. There the surface faces up and out, so its mirror direction clears the plate. The result is a 2-4 px highlight of about 130-190 that makes the shell read as a raised ring, and nothing else moves.",
+   "accept": {
+    "region": [
+     1023,
+     640,
+     1033,
+     646
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     110,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "asset",
+   "problem": "The brightest set value is the floor in the bottom-right corner, which pulls the eye out of frame. [1150,800,1350,900] measures 185, against 166 on the floor beside the plinth and 168 on the cove beside the product, and the column brightens 174 to 189 toward the frame edge because that floor is nearest the key (key at about [1.12, -2.12, 1.83]).",
+   "evidence": {
+    "region": [
+     1150,
+     760,
+     1350,
+     900
+    ],
+    "measured": "profile y 174.2, 177.2, 180.2, 182.9, 184.2, 185.9, 187.2, 188.9 (falloff -14.7); [1150,800,1350,900] 185.2; [1080,760,1110,775] 166.1; [1085,150,1135,250] 168.1"
+   },
+   "change": {
+    "setting": "set.flags.2",
+    "from": null,
+    "to": {
+     "center_m": [
+      1.35,
+      -1.0,
+      0.35
+     ],
+     "size_m": [
+      1.0,
+      0.7
+     ],
+     "normal": [
+      0,
+      -1,
+      0
+     ],
+     "reflect_only": false,
+     "color": "#101010"
+    }
+   },
+   "expected": "A matte black cutter, 1.0 x 0.7 m, standing on the floor out of frame (x 0.85-1.85 m at y -1.0 m projects beyond x 1386 px). It is not mirrored by the back panel, plinth or plate, since their mirror rays leave far to the right. It shades the key and fill off the floor at the frame's bottom-right (x of about 1190 px and up, y of about 810 px and down). The product is untouched: the key's rays to the plinth pass the cutter at z 0.84 m or higher, and to the floor beside the plinth at z 0.76 m or higher. The corner drops about 10-14 levels (to ~172, ~133 with c1), and the column's falloff goes from -14.7 to between -6 and +10.",
+   "accept": {
+    "region": [
+     1150,
+     760,
+     1350,
+     900
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -6,
+     10
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Remove the mirrored ghost of OPEN OTHER SIDE from the roof's back slope just under the fin (band [835,121,985,130], 30.5 range against 18.2 just below; at spread size it reads as a misprint on the roof).",
+   "why": "It is the roof's clear coat mirroring the fin's own lettering. The finish and the fin are fixed, no lamp can sit where the fin is, and no camera move in range clears it without changing the view, so it needs a retouch or acceptance."
+  }
+ ],
+ "score_if_fixed": 7.3
+}
