@@ -73,7 +73,10 @@ def main():
         templates = Pr.import_model(bpy, Path(ROOT, pdef['model']), pdef['origin_mm'], pdef.get('axes', 'gltf'))
         if pdef.get('smooth'):
             Pr.smooth_parts(bpy, templates, pdef['smooth'])
-        if pdef.get('normals_from'):
+        if pdef.get('normals_from') and not a.masks_only:
+            # shading normals, and the waveguide's facets refined onto its true surface (a few tenths of a millimetre):
+            # nothing a flat id mask can show, and in a frame of six copies the refined mesh took the mask pass to
+            # 9.7 GB (05-e7)
             Pr.normals_from(bpy, templates, pdef['normals_from'], pdef['origin_mm'], ROOT)
         o_, p_ = Pr.place(bpy, pdef, templates, {**sh, 'product': blk}, ROOT)
         objs += o_; part_of.update(p_)
