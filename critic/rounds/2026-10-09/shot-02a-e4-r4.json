@@ -1,0 +1,257 @@
+{
+ "stage1": {
+  "impression": "A clean, high-key lifestyle render: the red-and-white carton speaker reads instantly against a white wall and oak floor, with a pleasant window-light story. But the speaker's sun shadow sits on the wall with no shadow crossing the floor from its base, the white front is lit as one flat value with razor CG edges, the floor shows a curved smear at lower left and the table legs float, so it reads as a competent CG draft rather than a photograph.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The speaker's sun shadow reads as one band from plinth to skirting: floor beside the speaker [625,628,700,660] and at the skirting [770,608,860,620] within 12 levels of each other (now 148.5 vs 112.8), both at least 20 below the sunlit boards [845,652,925,692] (now 151.4).",
+  "No hard edge from an invisible lamp on the floor: lum_range on [72,708,122,728] at most 14 (now 26.8, against 10.9 on clean boards).",
+  "The Whole body reads neutral white in sun: [503,500,512,630] within dE 1.5 of neutral #F2F2F2 (now (234,241,247), dE 3.8).",
+  "The sunlit lacquered front carries a soft 4-9 level gradient instead of one value (now 240.6 to 239.8 on [391,330,400,634], range 2.1).",
+  "The sun reads on the floor, not only on the wall: sunlit boards beside the speaker at least 25 levels above the shadow band (now 3: 151.4 vs 148.5).",
+  "Oak boards with real figure at spread size: within-board lum_range 9-20 on [420,745,500,755] (now 6.2, smeared streaks).",
+  "Accent red on sunlit faces within dE 3 of #C62828 (plinth front (220,32,34) dE 4.5; fin front (227,50,56) dE 7.0)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "material",
+   "problem": "The oak floor mirrors the sunlit wall into the speaker's floor shadow, so that shadow only shows where the floor mirrors the wall's own shadow, and the carton silhouette on the wall looks detached from the speaker.",
+   "evidence": {
+    "region": [
+     625,
+     628,
+     700,
+     660
+    ],
+    "measured": "shadow band beside the speaker lum_median 148.5, against 151.4 on the sunlit boards [845,652,925,692] and 112.8 for the same band at the skirting [770,608,860,620]. Sampled along the band's centre from plinth to skirting: 145, 147, 162, 162, 151, 112, 107, 116, 113. The step at floor (0.37, 0.79) m falls exactly where that point's mirror ray crosses the wall shadow's left edge (x 0.26 m on the wall). The floor is glossy enough to mirror: just under the plinth it reads redder (167,125,98) than 30 px lower (178,146,118)."
+   },
+   "change": {
+    "setting": "materials.oak.roughness",
+    "from": 0.42,
+    "to": 0.65
+   },
+   "expected": "The band reads as one shadow from plinth to skirting: 118-140 beside the speaker and about 118-132 at the skirting, both 20 or more below the sunlit boards. The floor's sheen softens and the plinth's red reflection blurs to a tint.",
+   "accept": {
+    "region": [
+     625,
+     628,
+     700,
+     660
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     118,
+     140
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The lacquer_ramp panel is invisible to the camera but stands on the floor at lower left: its base line draws a hard curved edge with a dark rim across the boards, and it puts nothing on the front (the engine's log: falloff 0.5 at strength 3 and at 5).",
+   "evidence": {
+    "region": [
+     72,
+     708,
+     122,
+     728
+    ],
+    "measured": "lum_range 26.8 (p5 117.6: a dark rim against 140-144 on the same boards), against 10.9 on the clean boards at [132,708,182,728]. Profile across [85,696,135,712] in 10 bins: 144, 144, 144, 144, 121, 121, 127, 133, 137, 139. The panel's base corners (-0.86,-0.39,0) and (-0.60,-0.81,0) project to (114,679) and (77,746), which is that edge."
+   },
+   "change": {
+    "setting": "lights.lacquer_ramp.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The edge and its rim are gone and the boards run unbroken: lum_range at most 14 on [72,708,122,728], with its median about 142-150 like the neighbouring boards. The product does not change, because the panel never reached it.",
+   "accept": {
+    "region": [
+     72,
+     708,
+     122,
+     728
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     0,
+     14
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "The sunlit white body renders blue (B 13 above R) beside a neutral sunlit wall, so the Whole flavour's #FFFFFF reads as a cold blue-white in what should be warm morning light.",
+   "evidence": {
+    "region": [
+     503,
+     500,
+     512,
+     630
+    ],
+    "measured": "front white rgb (234,241,247), dE2000 3.79 against neutral #F2F2F2. Whole front [392,330,518,490] is (233,241,248), dE 5.28 against #FFFFFF. The sunlit wall patch [920,380,1140,560] is (245,245,241), and the shaded wall [700,150,1100,280] is (203,211,216) for a #FBF7F1 plaster."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 5450,
+    "to": 5950
+   },
+   "expected": "Front white neutral within about 3 levels R to B at 238-246 (e.g. 241,242,242). The sun patches go cream (about 249,245,236), the shaded wall goes near neutral (about 207,211,211), and the accent's dE on lit faces moves by 0.6 or less.",
+   "accept": {
+    "region": [
+     503,
+     500,
+     512,
+     630
+    ],
+    "metric": "delta_e",
+    "hex": "#F2F2F2",
+    "op": "between",
+    "value": [
+     0,
+     1.5
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The sun is weak on the floor (2.5 W/m2 striking it 75 degrees from normal), so the sunlit boards beside the speaker are no brighter than the boards' own tone spread and the floor shadow will stay faint once c1 removes the mirror fill; only the wall reads as sunlit.",
+   "evidence": {
+    "region": [
+     845,
+     652,
+     925,
+     692
+    ],
+    "measured": "sunlit boards right of the shadow lum_median 151.4, with p5-p95 133.6-169.4 from board-to-board tone; shadow band beside the speaker 148.5. In the foreground, in-beam boards [180,830,340,895] read 163.9 against 122.7 out of the beam [560,840,700,895]. The wall patch is 244.8 against 209.6 for the shaded wall."
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 2.5,
+    "to": 3.3
+   },
+   "expected": "Sunlit boards beside the speaker at 160-172, and the foreground in-beam boards [180,830,340,895] at about 175 against about 123 out of the beam. With c1, the floor shadow sits 25 or more below the sunlit strip. The wall patch stays at 249 or below and the front white at 246 or below, with no channel reaching 254.",
+   "accept": {
+    "region": [
+     845,
+     652,
+     925,
+     692
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     160,
+     172
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The sunlit white front is one value from eave to plinth and edge to edge, so the lacquered face reads as a flat card.",
+   "evidence": {
+    "region": [
+     391,
+     330,
+     400,
+     634
+    ],
+    "measured": "left white strip profile along y: 240.6, 240.6, 239.7, 239.7, 239.5, 239.4, 239.6, 239.8 (falloff 0.8, lum_range 2.1). Across [392,440,518,490] it runs 239.7 to 239.8. The face mirrors only the dim left-front corner of the room, and the lacquer_ramp panel never registered on it."
+   },
+   "change": {
+    "setting": "glints.2",
+    "from": null,
+    "to": {
+     "at": [
+      -0.212,
+      -0.148,
+      0.8
+     ],
+     "normal": [
+      -0.242,
+      -0.97,
+      0
+     ],
+     "size_m": 0.5,
+     "power_w": 4,
+     "receivers": [
+      "front-baffle"
+     ],
+     "distance_m": 0.6
+    }
+   },
+   "expected": "A broad soft highlight centred near (396,350), above and left of the mid, rolls off toward the lower right. The left strip falls 4-9 levels top to bottom with its top at 250 or below. The lower right of the front (c3's region) moves less than 2 levels, and nothing clips.",
+   "accept": {
+    "region": [
+     391,
+     330,
+     400,
+     634
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     4,
+     9
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "asset",
+   "problem": "The oak boards have no figure: in the foreground the grain is a smeared horizontal streak with no pores, rays or cathedral figure, which will fail at spread size.",
+   "evidence": {
+    "region": [
+     420,
+     745,
+     500,
+     755
+    ],
+    "measured": "within one foreground board lum_range 6.2 (p5 147.3, p95 153.5), and 5.9 at [600,840,700,850]. At 3x, crop [500,760,900,900] shows only blurred streaks."
+   },
+   "change": {
+    "setting": "set.floor texture (asset)",
+    "from": "procedural oak, materials.oak.grain 1",
+    "to": "Scanned European oak floor set for the room floor: albedo, roughness and normal maps for at least 8 distinct flat- and rift-sawn boards, each 0.19 x 1.8 m at 4096 px or more along the board, with open pores and cathedral figure. Albedo balanced so board medians stay on base #BC9668, dark #A47E52 and light #CDA97C, the roughness map's mean matching c1's value, and the normal map's pore depth about 0.1 mm."
+   },
+   "expected": "Visible pores and cathedral figure in the foreground boards, with within-board lum_range 9-20 on [420,745,500,755] and board medians unchanged within 5 levels.",
+   "accept": {
+    "region": [
+     420,
+     745,
+     500,
+     755
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     9,
+     20
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the white lacquer's clear coat more gloss so the front mirrors the room as a soft ramp.",
+   "why": "The sunlit front is one value (240 +/-1 over 380 px) because it only mirrors the dim left-front corner of the room. A reflection gradient is what makes a lacquered face read as lacquer, but the product's materials are fixed, so c5 uses a linked glint instead."
+  },
+  {
+   "request": "Shift the accent paint so the sunlit faces land on #C62828.",
+   "why": "The sunlit plinth front (220,32,34) is dE 4.5 and the fin front (227,50,56) is dE 7.0, both hotter and more saturated than the brand red. The colours are fixed. Exposure, white balance and view transform would move the white body as well, and c3 already spends white balance on the white."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
