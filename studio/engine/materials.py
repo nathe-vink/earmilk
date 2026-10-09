@@ -231,3 +231,79 @@ def _planks(nt, b, p):
     bn2 = nt.nodes.new('ShaderNodeBump'); bn2.inputs['Strength'].default_value = 0.08; bn2.inputs['Distance'].default_value = 0.0005
     nt.links.new(nz.outputs['Fac'], bn2.inputs['Height']); nt.links.new(bn.outputs['Normal'], bn2.inputs['Normal'])
     nt.links.new(bn2.outputs['Normal'], b.inputs['Normal'])
+
+
+def polarise(bpy, cam_rot, strength, angle_deg, ior=1.5):
+    """A polarising filter on the lens. Light a dielectric (a clear coat, a plastic, a waxed floor) reflects is
+    polarised: the component across the plane of incidence (s) reflects more than the one in it (p), and at Brewster's
+    angle (56 degrees from the normal for n = 1.5) only s reflects; diffuse light is not polarised. A filter whose pass
+    axis is at angle a to s passes s by cos2 a and p by sin2 a, and half the unpolarised light; with the exposure made
+    good (x2), a camera ray's specular is scaled by 2 (Rs cos2 a + Rp sin2 a) / (Rs + Rp), from the Fresnel terms at its
+    angle of incidence, and its diffuse is unchanged. Nothing changes head-on (Rs = Rp) or at grazing angles.
+
+    Applied to every Principled BSDF that is not a metal or glass: the coat's weight and the specular level are
+    multiplied by the factor for camera rays only, so what the surfaces light and mirror for each other is untouched.
+    `angle_deg` is the pass axis in the frame from horizontal: 90 cuts the glare on faces tilted toward or away from the
+    camera (a roof slope, a floor, a top), 0 on faces turned to the side."""
+    from mathutils import Vector
+    m = cam_rot.to_matrix()
+    right, up = m @ Vector((1, 0, 0)), m @ Vector((0, 1, 0))
+    a = math.cos(math.radians(angle_deg)) * right + math.sin(math.radians(angle_deg)) * up
+    ng = bpy.data.node_groups.new('polariser', 'ShaderNodeTree')
+    ng.interface.new_socket(name='Factor', in_out='OUTPUT', socket_type='NodeSocketFloat')
+    N, L = ng.nodes, ng.links
+    def mth(op, x, y=None, clamp=False):
+        n = N.new('ShaderNodeMath'); n.operation = op; n.use_clamp = clamp
+        for i, v in enumerate((x, y)):
+            if v is None:
+                continue
+            if isinstance(v, (int, float)): n.inputs[i].default_value = v
+            else: L.new(v, n.inputs[i])
+        return n.outputs['Value']
+    def vec(op, x, y=None):
+        n = N.new('ShaderNodeVectorMath'); n.operation = op
+        for i, v in enumerate((x, y)):
+            if v is None:
+                continue
+            if isinstance(v, Vector): n.inputs[i].default_value = v
+            else: L.new(v, n.inputs[i])
+        return n.outputs['Value'] if op == 'DOT_PRODUCT' else n.outputs['Vector']
+    geo = N.new('ShaderNodeNewGeometry'); lp = N.new('ShaderNodeLightPath')
+    nrm, inc = geo.outputs['Normal'], geo.outputs['Incoming']
+    c = mth('MINIMUM', mth('ABSOLUTE', vec('DOT_PRODUCT', nrm, inc)), 1.0)
+    ct = mth('SQRT', mth('SUBTRACT', 1.0, mth('DIVIDE', mth('SUBTRACT', 1.0, mth('MULTIPLY', c, c)), ior * ior)))
+    nct, nc = mth('MULTIPLY', ct, ior), mth('MULTIPLY', c, ior)
+    rs = mth('POWER', mth('DIVIDE', mth('SUBTRACT', c, nct), mth('ADD', c, nct)), 2.0)
+    rp = mth('POWER', mth('DIVIDE', mth('SUBTRACT', ct, nc), mth('ADD', ct, nc)), 2.0)
+    q = mth('POWER', vec('DOT_PRODUCT', vec('NORMALIZE', vec('CROSS_PRODUCT', inc, nrm)), a), 2.0)   # cos2 between s and the pass axis
+    num = mth('ADD', mth('MULTIPLY', rs, q), mth('MULTIPLY', rp, mth('SUBTRACT', 1.0, q)))
+    fp = mth('DIVIDE', mth('MULTIPLY', num, 2.0), mth('ADD', rs, rp))
+    f = mth('ADD', 1.0, mth('MULTIPLY', mth('SUBTRACT', fp, 1.0), strength))
+    out = mth('ADD', 1.0, mth('MULTIPLY', mth('SUBTRACT', f, 1.0), lp.outputs['Is Camera Ray']))
+    go = N.new('NodeGroupOutput'); L.new(out, go.inputs['Factor'])
+
+    touched = 0
+    for mat in bpy.data.materials:
+        if not mat.use_nodes or not mat.node_tree:
+            continue
+        nt = mat.node_tree
+        for b in [n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED']:
+            I = b.inputs
+            if (not I['Metallic'].is_linked and I['Metallic'].default_value > 0.5) or \
+               (not I['Transmission Weight'].is_linked and I['Transmission Weight'].default_value > 0.5):
+                continue
+            g = None
+            for k in ('Coat Weight', 'Specular IOR Level'):
+                sock = I[k]
+                if not sock.is_linked and sock.default_value <= 0:
+                    continue
+                if g is None:
+                    g = nt.nodes.new('ShaderNodeGroup'); g.node_tree = ng
+                mul = nt.nodes.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; mul.use_clamp = (k == 'Coat Weight')
+                if sock.is_linked:
+                    src = sock.links[0].from_socket; nt.links.remove(sock.links[0]); nt.links.new(src, mul.inputs[0])
+                else:
+                    mul.inputs[0].default_value = sock.default_value
+                nt.links.new(g.outputs['Factor'], mul.inputs[1]); nt.links.new(mul.outputs['Value'], sock)
+                touched += 1
+    return touched

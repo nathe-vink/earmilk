@@ -114,6 +114,10 @@ def main():
         F = cam_spec.get('focus', 'target')
         F = T if F == 'target' else Vector(F)
         cd.dof.focus_distance = (F - C).dot((T - C).normalized())
+    pol = cam_spec.get('polariser') or {}
+    if pol.get('strength', 0) > 0:
+        import materials as M
+        M.polarise(bpy, cam.rotation_euler, pol['strength'], pol.get('angle_deg', 90.0))
 
     # --- light -----------------------------------------------------------------------------------------------------
     sun_aim = None

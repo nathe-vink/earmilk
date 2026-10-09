@@ -86,7 +86,8 @@ def main():
         L.append(f'| `{path}` | {fmt(val)}{flag} | {unit} | {rtxt} | {meaning} |')
         seen.add(path)
     # knobs the shot does not set yet but may (the common ones)
-    extra = [k for k in ('camera.fstop', 'camera.shift_x', 'camera.shift_y', 'render.exposure', 'render.white_balance_k', 'render.look')
+    extra = [k for k in ('camera.fstop', 'camera.shift_x', 'camera.shift_y', 'camera.polariser.strength', 'camera.polariser.angle_deg',
+                         'render.exposure', 'render.white_balance_k', 'render.look')
              if k not in seen]
     for k in extra:
         unit, rng, meaning = K.describe(k)

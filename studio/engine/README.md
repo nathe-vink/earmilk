@@ -158,6 +158,16 @@ open sky in front). Nothing is rendered.
   of 96 in the floorstander, 160 in the bookshelf), and the teeth are gone. A reflection that breaks into teeth is the mesh's parameterisation before it is the shading's.
 - **Real blacks**: the products' black paint, rubber, plastic and anodising reflect 3 to 4 %, as real ones do; at
   under 1 % no light can model a driver's basket or an amplifier's plate.
+- **A polarising filter** (`camera.polariser`: `strength` 0 to 1, `angle_deg` the pass axis from horizontal). A clear
+  coat's reflection is polarised: across the plane of incidence (s) it reflects more than in it (p), and at Brewster's
+  angle (56 degrees off the normal for a 1.5 lacquer) only s reflects. The filter scales each camera ray's specular
+  on every dielectric (coat and specular level; not metals or glass) by 2 (Rs cos2 a + Rp sin2 a) / (Rs + Rp), from
+  the Fresnel terms at that ray's angle and the angle a between s and the pass axis, and leaves the diffuse alone,
+  the exposure made good. So it clears the veil a bright room lays over a lacquered red on a roof slope or a plinth's
+  side, as it does on a camera, and does nothing head-on. Only camera rays see it: what the surfaces light and mirror
+  for each other is unchanged. On 03 at full strength, the axis vertical, the lit roof went from dE 6.5 to 4.0 off
+  #C62828 and the horn's floor from 75 to 55, darker than the roof, as a recess reads; the dome's highlight and the
+  left wall's band, at other angles, stayed (`renders/2026-10-09/engine/polariser-03-proof.png`, without and with).
 
 The critic may also move and turn the product within its set (`product.instances.N.position`, `.rotate_z`), set how
 far an exploded part is drawn out along its own axis (`product.explode.N.offset_m`), and dress a room with the

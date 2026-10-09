@@ -19,6 +19,8 @@ KNOBS = [
     ('camera.roll_deg', 'deg', (-10, 10), 'roll about the view axis'),
     ('camera.fstop', 'f-number', (0, 32), 'depth of field; 0 for none (all sharp)'),
     ('camera.focus', 'm [x, y, z] or "target"', None, 'the plane of focus passes through this point'),
+    ('camera.polariser.strength', '0 to 1', (0, 1), 'a polarising filter on the lens: 1 removes the glare a dielectric (the lacquer, a plastic, a waxed floor) reflects across the pass axis, completely at Brewster\'s angle (56 degrees off the surface\'s normal), not at all head-on or at grazing angles; colour under the glare comes back, highlights there dim with it; exposure is made good'),
+    ('camera.polariser.angle_deg', 'deg', (0, 180), 'the filter\'s pass axis in the frame, from horizontal: 90 cuts the glare on faces tilted toward or away from the camera (a roof slope, a floor, a top), 0 on faces turned to the side (a side face, a plinth\'s side); one angle cannot clear both'),
     # exposure and colour
     ('render.exposure', 'EV', (-5, 5), 'exposure; +1 doubles every pixel\'s light'),
     ('render.view', 'choice', ('Khronos PBR Neutral', 'AgX', 'Filmic', 'Standard'), 'view transform (tone mapping)'),
