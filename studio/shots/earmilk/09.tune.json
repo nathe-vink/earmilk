@@ -288,5 +288,73 @@
   "set": 3.7189,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "lights.key.orbit.elevation_deg",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    18,
+    32
+   ]
+  },
+  "proofs": [
+   [
+    66.0,
+    5.4
+   ],
+   [
+    76.0,
+    5.1
+   ],
+   [
+    46.0,
+    6.2
+   ]
+  ],
+  "set": 46.0,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [
+   "c2",
+   "c3",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-09-e6-r5.json",
+  "shot_sha": "152392dbffd71a415fe1de0b15a57e7d6e7be5d7"
+ },
+ {
+  "change": "c3",
+  "setting": "lights.plinth_sheen.strength",
+  "test": {
+   "metric": "edge",
+   "op": "between",
+   "value": [
+    0,
+    3.5
+   ]
+  },
+  "proofs": [
+   [
+    0.5,
+    0.6
+   ],
+   [
+    1.0,
+    1.5
+   ]
+  ],
+  "set": 1.0,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c2",
+   "c3",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-09-e6-r5.json",
+  "shot_sha": "dd3fcef9858dd0dd1cb3cc44127c99bf29ccd22b"
  }
 ]
