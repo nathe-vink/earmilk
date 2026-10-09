@@ -285,5 +285,112 @@
   "set": 2.6667,
   "passes": false,
   "moves_the_test": true
+ },
+ {
+  "change": "c6",
+  "setting": "sky.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    18,
+    30
+   ]
+  },
+  "proofs": [
+   [
+    3.5,
+    16.4
+   ],
+   [
+    5.0,
+    20.4
+   ],
+   [
+    6.35,
+    24.0
+   ]
+  ],
+  "set": 3.5,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c5"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-02b-e9-r6.json",
+  "shot_sha": "a215b6515270caf8e9bcdd0af5e5bdfd6420bf97"
+ },
+ {
+  "change": "c4",
+  "setting": "lights.fill.orbit.distance_m",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    38,
+    62
+   ]
+  },
+  "proofs": [
+   [
+    1.6,
+    65.4
+   ],
+   [
+    1.9,
+    93.6
+   ],
+   [
+    1.4362,
+    45.7
+   ]
+  ],
+  "set": 1.4362,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c4",
+   "c5"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-02b-e9-r6.json",
+  "shot_sha": "f6ee4f498e00a67904f12a336d5f6e9f742afe8c"
+ },
+ {
+  "change": "c1",
+  "setting": "render.exposure",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    200,
+    222
+   ]
+  },
+  "proofs": [
+   [
+    1.75,
+    219.2
+   ],
+   [
+    1.95,
+    221.3
+   ],
+   [
+    1.35,
+    212.4
+   ]
+  ],
+  "set": 1.75,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c4",
+   "c5"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-02b-e9-r6.json",
+  "shot_sha": "4bd76731f566e3189a7e29ddd2324abe712f40fb"
  }
 ]
