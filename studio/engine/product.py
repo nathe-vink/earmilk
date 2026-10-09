@@ -515,12 +515,24 @@ def cutaway(bpy, spec, instances, objs):
             # the cut faces lie on the box's walls and face into it (toward what was cut away)
             W = Ti @ ob.matrix_world
             R = W.to_3x3()
+            cut = []
             for p in new.polygons:
                 c = W @ p.center; n = (R @ p.normal).normalized()
                 for k in range(3):
                     if (abs(c[k] - lo[k]) < 2e-5 and n[k] > 0.99) or (abs(c[k] - hi[k]) < 2e-5 and n[k] < -0.99):
                         if all(lo[j] - 2e-5 <= c[j] <= hi[j] + 2e-5 for j in range(3) if j != k):
-                            p.material_index = si
+                            p.material_index = si; cut.append(p.index)
+                            break
+            if cut:
+                # a cut face is a plane: its own normal at every corner and flat shaded. The boolean's caps otherwise take
+                # normals blended from the part's sides, a soft dark smudge across the section (08b's tweeter frame)
+                ln = [tuple(cn.vector) for cn in new.corner_normals]
+                for pi in cut:
+                    p = new.polygons[pi]; nn = tuple(p.normal)
+                    for li in p.loop_indices:
+                        ln[li] = nn
+                    p.use_smooth = False
+                new.normals_split_custom_set(ln)
             ob.data = new
             for sl in ob.material_slots:
                 sl.link = 'DATA'

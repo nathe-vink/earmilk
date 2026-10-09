@@ -1,0 +1,176 @@
+{
+ "stage1": {
+  "impression": "Six carton speakers in a clean diagonal row on a mid-grey sweep: the colourways read distinctly and the drivers are convincing, but the light is a flat, even CG wash, with one-value white fronts, a dull grey ground, faint contact shadows, glassy-looking plinth sides and a two-tone wordmark on the last carton. It is a competent catalogue draft, not yet a hero frame.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "White fronts fall off smoothly 15-25 levels from eave to plinth instead of reading as flat cards (now 6-8: Whole 241->233, Skim 242->236, and flat 239-240 across). They sit on the PBR Neutral shoulder, and no light on the card makes that falloff without pulling the whites down and the plinths off their colours.",
+  "The Oat's wordmark is one tone like the other metal wordmarks (now 'ear' 146, 'milk' 92), and its plinth front is even (now 30.5 left of x=1272, 22 right of it).",
+  "Shadows between cartons read as soft studio shadow, not black wedges (all five gaps bottom out at 42-47 on a 113-147 set), so no edge loses its value step: at y=450 the gap behind the Chocolate's left edge is 61, the same as its front (61-65).",
+  "The light sits on the group, not on the empty lower-left floor (bottom band falls 147 -> 113 from left to right), and every carton gets the same key (Oat front 185 against a #D9BC92 value of 191; the Whole's side is 183 against 179 and 175 on the next two, because the key grazes it).",
+  "The four white side faces match within about 12 levels (now 183/179/175/150: the Matcha's side faces the dark Chocolate, so much less light bounces back onto it).",
+  "Every front base has a contact line (front contact now only 6-13 levels darker than the floor 30 px out; under the Chocolate's cream plinth the floor is 13 levels brighter, so that carton looks lifted).",
+  "The vertical front/side rounds carry a fine continuous highlight that draws each box (now a bare 240 -> 193 step over 2-3 px).",
+  "The waveguide reads as a recessed bowl on every flavour (the Chocolate's cream insert is 220 on a 225 roof, with only 24 levels of shading inside it).",
+  "Plinth sides read as lacquered wood, not glass: each one mirrors its neighbour's two-tone side as a sharp pale parallelogram (Matcha plinth side p95 55 over a median of 37, next to a front of 53; the cream plinth side spans 106-151)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The Oat's wordmark is split into two tones and its plinth front steps in value, because the floor_card panel that the metal letters and plinths mirror ends at x = 1.5 m, inside the Oat's reflection footprint, so its finish no longer matches the other five.",
+   "evidence": {
+    "region": [
+     1264,
+     590,
+     1298,
+     609
+    ],
+    "measured": "Oat 'milk' letters median 92 vs its 'ear' 146 and the metal wordmarks on Whole/2%/Matcha 141-149; this box p95 101 vs 155 on 'ear' [1238,586,1265,601] and 152-154 on the same-size boxes of the other three; plinth front 30.5 in every column left of x=1270 and 22 right of x=1275. That step falls where the plinth mirrors x = 1.5 m, the panel's right edge (centre -2.05 plus half-width 3.55)."
+   },
+   "change": {
+    "setting": "lights.floor_card.size_m",
+    "from": [
+     7.1,
+     3.4
+    ],
+    "to": [
+     9.0,
+     3.4
+    ]
+   },
+   "expected": "The panel's right edge moves to x = 2.45 m, past the Oat's front corner (about 1.73 m). 'milk' rises to about 145 to match 'ear', and this box's p95 goes from 101 to about 150-155. The Oat plinth front reads about 30 across, nearer #2B2118 (about 35). The other five cartons do not change, because their footprints already lie inside the panel.",
+   "accept": {
+    "region": [
+     1264,
+     590,
+     1298,
+     609
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     135,
+     170
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The key is only 4 m out, hanging 3.2 m above the floor just in front of the frame's lower-left corner, so the set falls 34 levels from left to right with empty floor as its brightest area, and the light changes along the row (it grazes the Whole's side, and by geometry the far-right Oat gets about 60% of the key the Whole gets).",
+   "evidence": {
+    "region": [
+     0,
+     665,
+     1500,
+     750
+    ],
+    "measured": "Floor band profile 147, 146, 143, 139, 133, 124, 119, 113 (falloff 34). Backdrop [0,0,1500,130] 132, 138, 139, 136, 131, 125, 120, 115. Oat front 185 against #D9BC92 = 191. White sides 183 (Whole) vs 179 and 175 beside it. Background behind the Oat's shaded tan side [1386,300,1420,380] is 105 against the side's 110."
+   },
+   "change": {
+    "setting": "lights.key.orbit.distance_m",
+    "from": 4,
+    "to": 9
+   },
+   "expected": "The floor band runs about 138 on the left to 119 on the right (falloff about 18). The backdrop evens out and lifts about 10-14 levels, so the Oat's shaded side separates from it (105 -> about 120 behind a 110 side), while the Matcha's shaded side still clears the backdrop behind its top corner by at least 15 (now 141 vs 107). The Oat's front comes to about 191 and the Chocolate's to about 66, both within dE 2 of spec. The Whole's side drops to about 178, in line with its neighbours. Key shadows get crisper: the 3 x 2 m lamp shrinks from about 41 to 19 degrees as seen from the row, the edge of the Oat's floor shadow goes from 62 px to about 30 px, and small key glints on the waveguide rims grow brighter without clipping.",
+   "accept": {
+    "region": [
+     0,
+     665,
+     1500,
+     750
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     8,
+     22
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Every gap between the cartons bottoms out in a near-black wedge as dark as the woofer cones, which makes the set heavy and leaves the Chocolate's brown front with no value step against the shadow behind its left edge.",
+   "evidence": {
+    "region": [
+     948,
+     490,
+     976,
+     530
+    ],
+    "measured": "The gap between the Matcha and the Chocolate has median 43 (p95 49). Its column profile from y=300 to y=520 runs 109, 104, 99, 95, 88, 81, 74, 66, 56, 45, 42, 43, and the other four gaps bottom out at 47, 46, 45 and 43. At y=450 that gap is 61-64 against the Chocolate's front at 61-65. The woofer cones' median is 48."
+   },
+   "change": {
+    "setting": "lights.gap_lift",
+    "from": "absent (new light)",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      4.5,
+      0.8
+     ],
+     "position": [
+      0.1,
+      0.75,
+      1.2
+     ],
+     "target": [
+      0.1,
+      1.3,
+      0.0
+     ],
+     "strength": 1.5,
+     "color": 5800,
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       0.35,
+       1.15
+      ],
+      "values": [
+       1,
+       1
+      ]
+     },
+     "diffuse": 1
+    }
+   },
+   "expected": "This is a panel the camera cannot see. It hangs just behind the row, above the fins (its low edge is at y 0.39, z 1.03), and faces down and back, so it lights the floor behind the cartons. The fronts, sides and roofs are behind its plane or face away from it, so they get nothing. The wedges lift from 42-47 to about 80-90 at their darkest. The Chocolate's left edge clears what is behind it by at least 10 levels at the bottom and 20 or more higher up. The backdrop behind the gables rises 5 levels or less. The darkening at the side bases goes from about 45 to about 25 levels against the open floor, and it stays as the contact shadow.",
+   "accept": {
+    "region": [
+     948,
+     490,
+     976,
+     530
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     74,
+     98
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A deeper bowl or a contrasting rim on the Chocolate's cream waveguide insert so that it reads against the cream roof (insert 220, roof 225, 24 levels inside it).",
+   "why": "The waveguide's depth, profile and mouth are set by acoustic simulation. Only light may change how it reads, and no lamp on the card rakes that bowl without also lifting every gable away from its colour."
+  },
+  {
+   "request": "A larger radius on the vertical corners so each box catches a readable highlight line (now a bare 240 -> 193 step over 2-3 px).",
+   "why": "The 6 mm rounds are spec geometry."
+  },
+  {
+   "request": "A lighter value for the Chocolate body so its left edge separates from the shadow behind it (front 61-65, gap 61 at y=450).",
+   "why": "#5E3A1F is the flavour's colour. The separation has to come from the set and the light (c3)."
+  }
+ ],
+ "score_if_fixed": 6.5
+}

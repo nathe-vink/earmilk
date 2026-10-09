@@ -1,0 +1,286 @@
+{
+ "stage1": {
+  "impression": "A legible cutaway of a house-shaped birch cabinet, with a glossy red horn on the right roof slope, a grey driver block in a routed pocket and wiring running down into the box. A dead-flat mid-grey backdrop, one flat tan on the wood faces, a stippled reflection band near the horn's lower right and a crop through the box leave it a clean technical draft rather than a hero image.",
+  "score": 4.5
+ },
+ "blocking_9": [
+  "No mesh faults on the hero part: the bowl crease is continuous, largest per-pixel step 5 or less in [1090,562,1130,566] (now 21.0; 23.2 in e3, 24.9 in e1), and the tweeter pocket wall at x 615-640, y 360-560 shows no red/tan fan.",
+  "The tweeter frame's cut face is one clean plane: lum_range 9 or less in [658,364,716,425] (now 23.1, against 6.0 lower on the same face).",
+  "One accent red on every lacquered face: the fin's front face within dE2000 6 of #C62828 (now 13.34 at 149,79,80), like the slope (5.35 at 177,22,26).",
+  "A lit set, not a card: the sweep pools behind the roof and falls 10 or more levels toward each top corner (right half of the top band now flat at 129.9-131.9), and reads neutral-warm like the paper, not mauve (now R127 G122 B123, G lowest).",
+  "Birch that reads as birch, R 216-230 near the cluster (now 211), with light that steps down 8 or more levels from the cluster to the back eave instead of an even fill (lower gable band falloff now -1.9; peak to eave only 14).",
+  "Neutral greys: the insert's grey section within dE2000 2 of neutral (now 4.77 at 130,133,142), and the tweeter frame without its blue lean (180,179,186).",
+  "The tweeter reads as a driver in section, not a uniform light-grey slab with a flat 65-70 half-disc for a dome. What is cut fixes this (out of scope), and on its own it keeps 'the tweeter in its counterbore' at an outline."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "asset",
+   "problem": "The hero part's glossy bowl breaks into a zipper of saw-teeth and dark slits along its lower crease, from (960,520) to (1180,592): a mesh seam that reads as a render fault at 100%.",
+   "evidence": {
+    "region": [
+     1090,
+     562,
+     1130,
+     566
+    ],
+    "measured": "Largest per-pixel step across x is 21.0 (row 562 every 2 px: 41, 54, 75, 60, 44, 38, 59, 57, 40, 34). The same strip measures 23.2 in e3 and 24.9 in e1 under different lights, so it is geometry, not light. Clean bowl strips [880,470,960,474] and [800,560,880,564] measure 0.7 and 0.8. The part mask is all waveguide-insert there, with a clean boundary to the gable block, so it is not z-fighting. It is not orange peel either: the long highlight upstream is smooth (p5-p95 120.1-121.7 in [940,480,1020,488])."
+   },
+   "change": {
+    "setting": "asset: waveguide-insert mesh, bowl surface along its lower crease",
+    "from": "a seam between surface patches tessellated at different densities, teeth every 4-6 px (about 1.5-2.3 mm)",
+    "to": {
+     "seam": "welded, one tessellation across it",
+     "chord_tolerance_mm": 0.02,
+     "max_normal_deviation_deg": 1,
+     "normals": "smooth across the crease",
+     "profile_depth_mouth": "unchanged, same acoustic CAD"
+    }
+   },
+   "expected": "The crease reads as one continuous gloss gradient. The teeth and slits are gone, and the strip's largest step drops from 21.0 to 5 or less, like clean bowl (0.7 to 0.8). The waveguide's shape is not touched, only sampled finely enough for a mirror coat.",
+   "accept": {
+    "region": [
+     1090,
+     562,
+     1130,
+     566
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "<=",
+    "value": 5
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The sweep is a flat wash with no pool. Its only lamp hangs over the product about 3.7 m from the cove, so the backdrop is brightest at the right frame edge and level across the whole right half: a card that seats nothing.",
+   "evidence": {
+    "region": [
+     700,
+     10,
+     1340,
+     100
+    ],
+    "measured": "Top band right half profile: 129.9, 130.9, 131.9, 131.9, 131.9, 131.9, 131.1, 130.9 (falloff -1.0). The sweep behind the peak [770,140,860,230] and at the right edge [1280,150,1345,260] both read 130.9. The right strip [1230,300,1340,880] reads 134.8, the brightest backdrop in frame. The left half only ramps 116.9 to 128.9 toward the centre."
+   },
+   "change": {
+    "setting": "lights.pool",
+    "from": "absent",
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.0,
+      1.0
+     ],
+     "position": [
+      -0.55,
+      2.25,
+      1.85
+     ],
+     "target": [
+      -0.55,
+      3.33,
+      0.95
+     ],
+     "irradiance": 0.9,
+     "color": 5600,
+     "specular": 0
+    }
+   },
+   "expected": "A soft pool centred just right of the fin, at about (700,198): about 154 there, falling to about 142 at the right edge (falloff about 12) and about 132 at the left edge, so the roof sits in light instead of on a card. The lamp is behind the product, above the frame top (z 1.18 at its depth) and facing the cove, so it adds no light or reflection to the product. lights.bg stays as it is, because from its place over the product (z about 1.9) it is also the roof slope's top light.",
+   "accept": {
+    "region": [
+     700,
+     10,
+     1340,
+     100
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     10,
+     26
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "asset",
+   "problem": "The tweeter frame's flat cut face, at the centre of the must-shows, carries a soft round dark smudge at its top centre, about 45 px across and 24 levels deep.",
+   "evidence": {
+    "region": [
+     658,
+     364,
+     716,
+     425
+    ],
+    "measured": "p5 158.6, p95 181.7, range 23.1. Profile across x at y 370-395: 177.9, 171.9, 163.8, 158.5, 163.8, 170.6, 176.8, 181.1. The same face at [658,440,716,530] has range 6.0. In e3 (key at azimuth -40) the frame read 82.5 and this box still had range 12.2: the same spot and about the same relative dip (9% there, 12% here). So the smudge belongs to the part's shading, not to a lamp."
+   },
+   "change": {
+    "setting": "asset: tweeter-frame mesh (planar cut face) and the tweeter pocket wall beside it",
+    "from": "interpolated normals bend across the flat cut face around (683,387); a fan of thin red/tan slivers on the pocket wall at x 615-640, y 360-560",
+    "to": {
+     "cut_face_normals": "flat (face normal)",
+     "pocket_wall": "one surface, no coincident or sliver faces",
+     "shape_and_material": "unchanged"
+    }
+   },
+   "expected": "The cut face reads as one even plane. The top-centre dip falls from 24 levels to 4 or less, and the box range drops from 23.1 to 9 or less, matching the face lower down (6.0), whatever lamp the metal frame mirrors. The pocket wall at x 615-640 reads as one clean surface.",
+   "accept": {
+    "region": [
+     658,
+     364,
+     716,
+     425
+    ],
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 9
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The birch section is dim for birch, R 211 near the cluster and 191 on the top panel. Apart from the connector and pin-point glints the frame has no light value, so the whole image reads murky.",
+   "evidence": {
+    "region": [
+     440,
+     470,
+     525,
+     600
+    ],
+    "measured": "r_median 211, lum_median 186.4. part:top-panel R 191, lum 166.1. Image lum p99 is 192.9; only the connector (217.5) and the magnet glints exceed 200. The key was proofed to R 218 on the top panel, but the frame as rendered (exposure -0.7, was -0.4) shows 191."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 2.3333,
+    "to": 2.9
+   },
+   "expected": "The birch reads light and clean. R near the cluster rises from 211 to about 223 (lum about 196) and the top panel to about R 200. The insert section and the connector lift with it (connector under about 228). No large surface reaches PBR Neutral's shoulder (e3's birch sat at R 249 in this box). The key sits on the -x side of the fin and slope and is aimed at the product, so neither those faces nor the backdrop move.",
+   "accept": {
+    "region": [
+     440,
+     470,
+     525,
+     600
+    ],
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     216,
+     230
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The fin's front face, the top of the silhouette, gets about half the light of the slope beside it, because the bg lamp top-lights the slope but not this vertical face. The same lacquer reads dusty rose beside the gloss red.",
+   "evidence": {
+    "region": [
+     695,
+     140,
+     755,
+     250
+    ],
+    "measured": "Fin face rgb 149,79,80 (r_median 149, lum 93.7, range 5.2), dE2000 13.34 against #C62828. The slope of the same lacquer (gable-block in [860,290,1000,400]) reads 177,22,26 (dE 5.35). Fitting the three channels gives a diffuse red of only about 0.24 linear on the fin. The mouth lamp is the one light that faces it squarely."
+   },
+   "change": {
+    "setting": "lights.mouth.irradiance",
+    "from": 2,
+    "to": 4.5
+   },
+   "expected": "The fin's diffuse red about doubles: r_median 149 to about 188. The slope, whose light is mostly the bg lamp, rises only to about R 200, the accent's own value. The fin's G and B stay about 75-80 (its grey mirror, removed by c6). The white front edge, the body colour #FFFFFF seen edge-on, lifts from 169 toward white. The lamp sits in the cut plane off the front (y 0), so the section is unchanged.",
+   "accept": {
+    "region": [
+     695,
+     140,
+     755,
+     250
+    ],
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     176,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "asset",
+   "problem": "Even lit right, the fin face is seen about 80 deg off-normal. Its clear coat mirrors the grey sweep just past the right frame edge, and that veil keeps it pink (G and B 79-80 against the accent's 40).",
+   "evidence": {
+    "region": [
+     695,
+     140,
+     755,
+     250
+    ],
+    "measured": "rgb 149,79,80, dE 13.34. The sweep it mirrors reads 130.9 (134,130,130) at [1280,150,1345,260]. Fitting coat plus diffuse to the three channels gives about 0.07 linear grey added to each. Raising the diffuse alone bottoms out near dE 9.6 (about 193,83,84); removing the veil as well reaches about dE 3.6-6."
+   },
+   "change": {
+    "setting": "asset: set flag (the sweep set has none)",
+    "from": "none",
+    "to": {
+     "what": "matte black flag on a stand",
+     "albedo_max": 0.03,
+     "size_m": [
+      0.9,
+      0.8
+     ],
+     "centre": [
+      0.82,
+      3.0,
+      1.0
+     ],
+     "normal": [
+      0,
+      -1,
+      0
+     ]
+    }
+   },
+   "expected": "The fin face mirrors near-black instead of the sweep. With c5 it reads about 180,44,45, within dE 6 of #C62828 (now 13.34): the same paint as the slope. The flag spans x 0.37-1.27 at y 3.0, 5 cm outside the right frame edge (x 0.32 at that depth). The fin's mirror rays land at x 0.42-0.52. The white front face mirrors x 0.25, not the flag. The flag is clear of c2's lamp path to the visible sweep, so it casts no shadow in frame.",
+   "accept": {
+    "region": [
+     695,
+     140,
+     755,
+     250
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 6
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Show the tweeter's internal structure (magnet, pole piece, voice coil, rear chamber) in section, instead of one uniform light-grey slab with a flat dark half-disc for the dome.",
+   "why": "What is cut and the drivers' own materials are fixed. The hero of 'the tweeter in its counterbore' reads as an outline, not a driver (tweeter-frame p5-p95 160.5-182.8 over 14416 px; dome 65.1-70.3)."
+  },
+  {
+   "request": "Re-route the tweeter cable after the grommet so it drops straight into the box, instead of doubling back up-left from (580,735) to (470,690).",
+   "why": "The cable path is part of the product arrangement (fixed). The doubled-back run (lum 39 against a 111 wall, 7 px soft edge) reads as a bracket or a shadow and blurs 'the cable's run into the box'."
+  },
+  {
+   "request": "Give the birch cut faces real birch figure and the insert's grey section a machined or printed surface.",
+   "why": "The product's materials are fixed and birch is not an editable preset. The insert section is one value (133-136 across 400 px) and the birch is a soft procedural mottle (p5-p95 180-191). Both read as CAD fills at 100%, which holds the frame below photographic."
+  },
+  {
+   "request": "Hide the dark cast-letter edge that notches the back panel's silhouette at x 174-178, y 735-797.",
+   "why": "The marks are fixed. letters-back-3 (lum 63 on a 104 panel) reads as a stray tick on the left edge of the silhouette."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
