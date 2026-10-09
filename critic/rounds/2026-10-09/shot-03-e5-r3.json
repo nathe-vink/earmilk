@@ -1,0 +1,353 @@
+{
+ "stage1": {
+  "impression": "A clean, legible three-quarter detail of a red gable-top carton with a horn-shaped recess and a black dome tweeter, the red standing out against a warm grey. It still reads as a draft: the background is a dead flat grey, the roof plane and fin are near-uniform slabs of red, a hard diagonal reflection makes the curved horn look faceted, a thin dark line traces the recess, and the cropped white body looks grey.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The accent reads as #C62828 lacquer on the lit planes: dE2000 <= 4 on the upper-left roof [240,380,330,470] (now 13.75) and on the waveguide floor [330,650,700,695] (now 13.73), with any sheen kept to a gradient toward the ridge.",
+  "The horn reads as a sunk, machined recess: the floor darker than the roof beside it and at least 12 levels darker toward the throat (falloff <= -12 on [705,575,735,765], now -5.1), and no reflection band on the left wall stepping more than about 30 levels within 5 px (now 45 to 110 between y 488 and 496 at x=400).",
+  "The mouth's rim carries a continuous fine highlight along both branches; now only the apex catches light (peak 152 at (704,372)) and the left branch shows nothing brighter than the roof beside it (109 to 116 at x=300 and x=400).",
+  "The background carries a designed gradient of at least 15 levels, brightest behind the shaded right side and falling toward the corners; now the whole background spans 152.6 to 158.6.",
+  "Every red plane reads as the same lacquer: the gable end deep red without a grey veil (g_median <= 40 on [1125,440,1180,540], now 76) and the fin carrying a sheen gradient of at least 15 levels along its length (now 4).",
+  "The white body reads neutral white: front-baffle median 229 to 238 (now 224.4) with R, G and B within 2 levels (now 228/223/228; the sweep shows the same green deficit, 160/152/150 against #A29E98). The Kelvin-only white balance cannot remove a magenta tint.",
+  "The tweeter is the focal accent: its dome highlight crisp and at least as bright as the rim highlights around it (dome p95 >= 115, now 96.7; rim peak 152).",
+  "The waveguide holds the frame: it fills 16.4% of it now. A 9-level close-up gives the horn and tweeter 25% or more while keeping the fin's top edge, which this camera direction cannot fit (fin top at y=97 and mouth corner at y=823 already span 81% of the height)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The lit roof slope and the waveguide floor render coral rather than #C62828: the up-facing planes take far more light from the 4.2 m top panel (its diffuse light plus a clear-coat veil) than the vertical faces do, so the red sits on the tone curve's shoulder with G and B lifted.",
+   "evidence": {
+    "region": [
+     240,
+     380,
+     330,
+     470
+    ],
+    "measured": "Upper-left roof rgb (235,84,87), lum 116.4, dE2000 13.75; waveguide floor [330,650,700,695] rgb (234,84,88), dE 13.73; right slope [870,340,970,780] rgb (225,60,65), dE 8.0. The vertical fin [320,150,700,200] is rgb (198,14,19), dE 3.6, so the colour coat is right and the light on up-facing planes is too strong."
+   },
+   "change": {
+    "setting": "lights.top.strength",
+    "from": 2.5753,
+    "to": "x0.5"
+   },
+   "expected": "Upper-left roof from (235,84,87), lum 116, to about (205-212, 42-55, 46-58), lum 80-90, dE2000 under 5. Right slope to about (198-205, 32-45, 36-48). Waveguide floor down about 25-30 levels. The ridge-to-eave gradient on the right slope (now 108.6 to 77.8) stays, at about 15-25 levels. The rim and hip highlights stay the brightest reds (rim peak 152 to about 110-125). The background drops about 10-20 levels, and c3 reshapes it.",
+   "accept": {
+    "region": [
+     240,
+     380,
+     330,
+     470
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<",
+    "value": 5.0
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The waveguide floor has the same value as the roof around it and does not darken into the throat. The horn reads as a raised triangle between two dark stripes, not a sunk recess, and the left wall carries a hard bright stripe.",
+   "evidence": {
+    "region": [
+     705,
+     575,
+     735,
+     765
+    ],
+    "measured": "Floor column, throat end to mouth end: 113.5, 114.9, 116.1, 117.3, 117.5, 118.3, 118.5, 118.6 (falloff -5.1). Floor [450,630,700,700] median 114.6 against the roof beside it [240,380,330,470] at 116.4. Left wall at x 390-410, y 450-580: 108, 73, 46, 45, 87, 110, 111, 112, 117, 117, 71, 76, 83, with a 12.7-level step per pixel (10-90% width 0 px). The floor's slight darkening toward the throat, opposite to the roof's gradient, shows it mirrors the panel's falloff behind the ridge (y > 0.35)."
+   },
+   "change": {
+    "setting": "lights.top.ramp.at_m",
+    "from": [
+     -1,
+     -0.45,
+     0,
+     0.35,
+     1.2
+    ],
+    "to": [
+     -1,
+     -0.45,
+     0,
+     0.3,
+     0.7
+    ]
+   },
+   "expected": "The ramp falls about twice as fast behind the ridge. The floor's throat end then darkens about 15-20 levels against its mouth end (column falloff from -5 to about -16), and the floor separates from the roof and reads as sloping down into the throat. The rim-side half of the left-wall streak dims, which cuts its hard step (about 65 levels now) roughly in half, and the dark tongue under the tweeter loses its crisp edge. The roof mirrors the panel at y < 0 and does not change.",
+   "accept": {
+    "region": [
+     705,
+     575,
+     735,
+     765
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -35,
+     -12
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The background is one flat value across the whole frame, so nothing separates the shaded right side from the set or gives the frame depth.",
+   "evidence": {
+    "region": [
+     1250,
+     0,
+     1350,
+     900
+    ],
+    "measured": "Right strip profile 154.8, 156.6, 157.6, 157.6, 158.6, 157.6, 157.6, 156.6 (falloff -1.8); left strip [0,0,50,900] 152.6 to 155.6; top centre [700,0,1000,120] median 156.8, range 2.0."
+   },
+   "change": {
+    "setting": "lights.bg_pool",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.2,
+      1.2
+     ],
+     "position": [
+      0.35,
+      1.0,
+      1.7
+     ],
+     "target": [
+      0.25,
+      2.3,
+      0.25
+     ],
+     "irradiance": 1.5,
+     "color": 5700,
+     "specular": 0
+    }
+   },
+   "expected": "A soft pool on the sweep curve centred near frame (1155, 310), just right of the fin's end and behind the gable end's apex: background about 160-170 at the upper right, about 135-145 at the left edge and bottom corners. Right strip falloff goes from -1.8 to +12 to +35. The lamp sits behind the product facing away from it, so no product value changes. The bright side of the set falls behind the shaded side of the product.",
+   "accept": {
+    "region": [
+     1250,
+     0,
+     1350,
+     900
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     35
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The right gable end reads brick-brown, like a different material: seen at about 76 degrees incidence, its clear coat mirrors the grey sweep behind and to the right (Fresnel near 0.29) and lays a grey veil over the red.",
+   "evidence": {
+    "region": [
+     1125,
+     440,
+     1180,
+     540
+    ],
+    "measured": "rgb (161,76,76), lum 94.3, range 3.7; dE2000 10.5 against #C62828 on [1120,420,1190,560]. Its mirror direction from (0.17,-0.11,0.9) is about (0.47,0.79,-0.39) and meets the floor near (1.27,1.73,0), outside the frame."
+   },
+   "change": {
+    "setting": "lights.flag_right",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.7,
+      0.5
+     ],
+     "position": [
+      0.6,
+      0.6,
+      0.55
+     ],
+     "target": [
+      0.17,
+      -0.11,
+      0.9
+     ],
+     "strength": 0.05,
+     "color": 5700,
+     "diffuse": false
+    }
+   },
+   "expected": "A near-black panel acts as a flag in the gable end's mirror direction. The face loses the grey veil and goes from (161,76,76), lum 94, to about (130-160, 15-35, 18-38), lum 45-60: the roof's red in shade, dark against the c3 pool. The panel sits about 20 degrees right of the lens axis (the frame's half-width is 12), so nothing else in the frame changes.",
+   "accept": {
+    "region": [
+     1125,
+     440,
+     1180,
+     540
+    ],
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     12,
+     40
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The fin is a flat slab of paint, one value from end to end, with no sheen to show it is lacquered.",
+   "evidence": {
+    "region": [
+     320,
+     190,
+     1080,
+     205
+    ],
+    "measured": "Profile along x: 54.0, 53.7, 52.6, 52.1, 51.8, 51.4, 51.0, 50.0 (falloff 4.0); [320,150,700,200] lum 53.3, range 2.6. The fin mirrors about (-0.60,-0.75,-0.27), the dim floor in front-left, with a clear-coat share near 0.04."
+   },
+   "change": {
+    "setting": "lights.fin_sheen",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.0,
+      0.25
+     ],
+     "position": [
+      -0.65,
+      -0.82,
+      0.735
+     ],
+     "target": [
+      0.0,
+      0.0,
+      1.03
+     ],
+     "strength": 1.3,
+     "color": 5700,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -1.0,
+       -0.3
+      ],
+      "values": [
+       1,
+       0.1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "A sheen runs along the fin: the left end at about lum 75-85 (rgb near (205,48,52)), fading to about 52-58 at the right end. Falloff along x goes from 4 to 15-35. The white front's reflections pass about 0.3 m below the panel and the panel is out of view, so only the fin and a small secondary glint on the dome pick it up.",
+   "accept": {
+    "region": [
+     320,
+     190,
+     1080,
+     205
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     15,
+     35
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The white body reads dim and greyish beside the red, because the key at 40 degrees elevation spends more of its light on the up-facing roof than on the vertical front.",
+   "evidence": {
+    "region": [
+     55,
+     670,
+     990,
+     900
+    ],
+    "measured": "part:front-baffle median 224.4, p95 230.4, rgb (228,223,228); x profile along the bottom rows 226.4 to 217.6. The roof under the same key sits on the tone curve's shoulder (see c1)."
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 40,
+    "to": 25
+   },
+   "expected": "The key's cosine on the front face rises about 18% and on the roof slope falls about 12-15%. The white front median goes from 224.4 to 229-238 with its left-to-right gradient kept, and the roof and waveguide floor darken about 10%, which helps c1 and c2. The fin's base value rises a few levels.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     229,
+     238
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The tweeter dome, the frame's focal point, carries only a dull highlight, dimmer than the rim highlight beside it, so it does not pop at the throat.",
+   "evidence": {
+    "region": [
+     633,
+     396,
+     697,
+     462
+    ],
+    "measured": "part:tweeter-dome median 46.7, p95 96.7, peak 128 at (669,412); rim highlight peak 152 at (704,372); surround median 19.5."
+   },
+   "change": {
+    "setting": "glints.1.power_w",
+    "from": 3,
+    "to": 6
+   },
+   "expected": "The dome highlight peak rises from 128 to about 170 and p95 from 96.7 to 115-160. The dome reads as a sphere sitting in the throat and becomes the brightest accent in the tweeter area. The glint size (0.04 m) is unchanged, so the highlight stays small.",
+   "accept": {
+    "region": "part:tweeter-dome",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     115,
+     160
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Soften or round the creases where the waveguide's walls meet its flat floor",
+   "why": "The crisp creases (10-90% edge width 0-5 px along (185,665)-(565,470)) and the planar floor make the horn read as folded facets, but the profile is set by acoustic simulation."
+  },
+  {
+   "request": "A satin rather than gloss finish on the waveguide insert",
+   "why": "The concave gloss walls mirror the opposite rim and throat, which produces the light and dark bands on the left wall (46/112/71 at x=400) whatever the lighting. The product's finishes are fixed."
+  },
+  {
+   "request": "A wider or chamfered seam around the waveguide insert",
+   "why": "At this distance the insert's seam renders as a 1 px near-black outline that reads as a drawn line. The insert's fit is geometry."
+  },
+  {
+   "request": "Make the 3 mm shadow line under the gable read dark",
+   "why": "From a camera 20 degrees above it, the groove's lit lower face shows as a pale pink line between the red and the white. Its depth and form are spec."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
