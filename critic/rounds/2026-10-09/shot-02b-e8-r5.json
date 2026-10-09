@@ -1,0 +1,189 @@
+{
+ "stage1": {
+  "impression": "A white-and-red milk-carton speaker stands right of centre on dark wood in front of a dark green wainscot. Hard low sun from camera right throws a crisp carton silhouette onto the wall: a strong, witty concept with clear separation between subject and ground. The execution reads as a draft: the white faces look flat, a soft glow hangs on the wall behind the speaker's right edge, the floor is muddy, and the large dark shadow mass competes with the product for attention.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "No hidden lamp may show as a reflection in the glossy wainscot. The wall right of and above the carton must sit at plain-shade level: [990,330,1030,450] <= 26. Now it is 62.4, a neutral halo that falls from 69 to 7 across x 985-1345 and reads 68 above the fin. The top-left corner must not be bright: [5,195,120,330] is 66.5, against 42.3 on the panel below it.",
+  "The sunlit Whole white must read as warm cream, not rose. Front [836,360,878,500] should sit near a* 2 / b* 12. Now it is [247,227,220], Lab 91.6/5.7/5.9, hue 46, dE2000 7.9 to #EBDCC7. The sunlit plaster should read golden, not salmon: now [180,149,130], hue 59, against the plaster's own hue of 84.",
+  "The sunlit front must fall 10-20 levels from eave to plinth, from a light source the wall cannot reflect. Now the fall is 11.8 on [836,360,852,715], and all of it comes from the facesheen panel, which also causes the halo.",
+  "No architectural line may touch the carton or the sunbeam. Two panel joints must go: the dark groove rising 30 px into the fin top (x 898-900, 67 -> 23 -> 66), and the groove sitting inside the sun patch's soft left edge (x 298-299, inside the 291-309 transition).",
+  "The floor must read as oak in low sun: the foreground boards show grain and the window streaks lift them visibly. Now the streaks read about 37 against 27 in shade, and high-pass std is 0.75 on [100,800,600,890], i.e. a smooth plane."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The facesheen panel shows as a reflection in the glossy wainscot. The reflection's centre is hidden behind the carton, and its blur spills out as a neutral grey halo hugging the carton's top and right edge, a backlight that no light in the room explains.",
+   "evidence": {
+    "region": [
+     990,
+     330,
+     1030,
+     450
+    ],
+    "measured": "lum_median 62.4, rgb [61,63,61], against 8.2 on the same wainscot at [1200,300,1340,500]. Row y360-400 falls 69.4 -> 6.6 from x 985 to 1345. 68 above the fin (y230-250, x860). The facesheen's reflection point on the back wall projects to (872,411), directly behind the carton."
+   },
+   "change": {
+    "setting": "lights.facesheen.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "[990,330,1030,450] drops from 62.4 to about 14-22 (shade plus bounce from the sunlit right side). The wall above the fin drops from about 68 to 20-30, and row y360-400 runs about 20 -> 7 instead of 69 -> 7. Cost: the front's eave-to-plinth fall-off on [836,360,852,715] drops from 11.8 to about 3 (see c5).",
+   "accept": {
+    "region": [
+     990,
+     330,
+     1030,
+     450
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     5,
+     26
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The sun renders pink-orange rather than golden, so the Whole white body reads rose (strawberry rather than milk) and the sunlit plaster reads salmon. White balance alone cannot fix it: it moves b* but leaves a* at +7 to +10.",
+   "evidence": {
+    "region": [
+     836,
+     360,
+     878,
+     500
+    ],
+    "measured": "rgb [247,227,220], Lab 91.6/5.7/5.9 (hue 46), dE2000 7.89 to #EBDCC7. In the window-bar shadow on the same face the colour is [144,144,161]. Sunlit minus shadow, with the PBR Neutral shoulder inverted, gives the sun as rendered at R:G:B 1.35:1:0.79, against 1.26:1:0.64 for a 3000 K blackbody at a 3700 K white point. Sunlit plaster [320,20,680,150] is [180,149,130], hue 59, against its own hue of 84."
+   },
+   "change": {
+    "setting": "sun.color",
+    "from": 3000,
+    "to": "#FFBD66"
+   },
+   "expected": "With c1 applied, the front patch goes from [247,227,220] to about [238-239,220-226,201-202]: Lab about 89-90, a* 0 to 3.6, b* 11-14, cream. This holds whether the engine converts kelvin by CIE blackbody or by the Helland approximation. Sunlit plaster goes to about [175,151,116], hue about 75-80. The front plinth red stays within dE 2 of #C62828 (now 1.75). The shadows stay cool.",
+   "accept": {
+    "region": [
+     836,
+     360,
+     878,
+     500
+    ],
+    "metric": "delta_e",
+    "hex": "#EBDCC7",
+    "op": "<=",
+    "value": 4.5
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "Two panel joints in the wainscot (stiles) clash with the picture. One rises out of the fin top like an antenna. The other sits exactly on the sunbeam's left edge, so the light reads as a painted panel.",
+   "evidence": {
+    "region": [
+     785,
+     228,
+     920,
+     250
+    ],
+    "measured": "A 2 px groove at x 898-900 runs from the panel moulding (y about 224) into the fin top (y 253): 67 -> 23 -> 66, largest column step 27.2. The second groove at x 298-299 (35-36) sits inside the sun patch's left edge transition (x 291-309, 42 -> 96). The visible joints sit at wall x -1.27/-1.13 and 0.34/0.47."
+   },
+   "change": {
+    "setting": "set.wainscot.panel_w",
+    "from": 1.5,
+    "to": 4.8
+   },
+   "expected": "No vertical joints left in frame: [785,228,920,250] has no column step over 5 (now 27.2), the sunbeam's left edge lands on plain paint, and the top and bottom mouldings stay. All three panel layouts that fit the visible joints (centred on the room, anchored at the left wall, or 3 panels fitted to the 4.8 m wall) give a single field at 4.8.",
+   "accept": {
+    "region": [
+     785,
+     228,
+     920,
+     250
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "<=",
+    "value": 5
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The fill lamp shows as a reflection in the glossy wainscot just outside the top-left corner, so the frame brightens toward its corner instead of falling off, with a second unexplained light source on the side of the room that has no window.",
+   "evidence": {
+    "region": [
+     5,
+     195,
+     120,
+     330
+    ],
+    "measured": "lum_median 66.5, rgb [56,69,72], against 52.6 at [130,195,230,330] and 42.3 at [5,450,230,600]. Row y200-240 falls 77.8 -> 46.4 from x 0 to 290. Column x5-60 falls 74.8 -> 40.3 from y 200 to 600. The fill's reflection point on the wall projects to (-70,181)."
+   },
+   "change": {
+    "setting": "lights.fill.orbit.elevation_deg",
+    "from": 18,
+    "to": 40
+   },
+   "expected": "The fill's reflection moves above the wainscot onto the matte plaster (wall z about 1.84, above the frame), so [5,195,120,330] falls to about 40-48 and the corner glow goes. The side-left face dims a little (127.9 -> about 120) and its top-to-bottom fall-off grows (now 137.7 -> 116.4). The silhouette's interior gets slightly darker (now 23.9).",
+   "accept": {
+    "region": [
+     5,
+     195,
+     120,
+     330
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     30,
+     54
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "asset",
+   "problem": "c1 costs the front its only eave-to-plinth fall-off. The root cause is that the wainscot paint is glossy enough to reflect hidden lamps (the facesheen gives the halo, the fill gives the corner glow). The card offers no wainscot finish and no light linking for panels. What is needed is a roughness key for the wainscot paint on all wainscot surfaces, set to eggshell 0.7, and then lights.facesheen switched back on (off: false, strength 5).",
+   "evidence": {
+    "region": [
+     836,
+     360,
+     852,
+     715
+    ],
+    "measured": "falloff 11.8 (231.8 -> 220.0). The bottom half is flat at 219.8-220.7, so the whole gradient is the facesheen ramp seen in the clear coat, and it disappears with c1."
+   },
+   "change": {
+    "setting": "set.wainscot.roughness (new key, not on the card)",
+    "from": "not offered",
+    "to": 0.7
+   },
+   "expected": "At roughness 0.7 the wainscot blurs lamp reflections into its base shade, so the facesheen can return. The front keeps about 12 levels of fall-off (232 -> 220), while [990,330,1030,450] stays <= 26 and the top-left corner stays even.",
+   "accept": {
+    "region": [
+     836,
+     360,
+     852,
+     715
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     8,
+     22
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [],
+ "score_if_fixed": 7.0
+}

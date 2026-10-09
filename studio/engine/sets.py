@@ -183,7 +183,8 @@ def _wainscot(bpy, walls, wins, wa):
     """Panelling below a dado rail on each wall but the front: a painted board, raised panels and the rail, broken
     where a window's sill comes lower than the rail."""
     H = wa.get('height', 0.9); col = wa.get('color', '#CFC3AE')
-    paint = M.make(bpy, 'wainscot', 'satin_paint', {'color': col, 'roughness': 0.38, 'specular': 0.5})
+    # its sheen: 0.38 is a satin that mirrors a lamp's panel as a soft halo; eggshell (0.7) blurs lamps into its shade
+    paint = M.make(bpy, 'wainscot', 'satin_paint', {'color': col, 'roughness': wa.get('roughness', 0.38), 'specular': 0.5})
     out = []
     for name, (a, b) in walls.items():
         if name == 'front' and not wa.get('front', False):
