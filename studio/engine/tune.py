@@ -85,14 +85,29 @@ def main():
         positive = (v0 > 0 and v1 > 0) or knobs[0].split('.')[-1] in ('power_w', 'irradiance', 'strength')
         if positive and (v2 <= 0 or v2 > 10 * max(v0, v1) or v2 < min(v0, v1) / 10):
             v2 = v1 * (3.0 if (goal - f1) * (f1 - f0) * (v1 - v0) > 0 else 1 / 3.0)
+        # never more than two spans past the values given: a reading that barely moves sends the secant far off (02b's
+        # sky, 1.5 and 2 moving the test 0.8, sent to 11.75, which broke five other tests); then the setting is not the
+        # one that sets the test, and the card says so
+        span = abs(a.v1 - a.v0) or abs(a.v0) or 1.0
+        v2 = min(max(v2, min(a.v0, a.v1) - 2 * span), max(a.v0, a.v1) + 2 * span)
         if isinstance(rng, tuple) and len(rng) == 2 and all(isinstance(x, (int, float)) for x in rng):
             v2 = min(max(v2, rng[0]), rng[1])
         if abs(v2 - v1) < 1e-9:
             break
         v0, f0, v1 = v1, f1, v2
         f1 = proof(v2)
-    ok = [p for p in proofs if p[2]]
-    best = min(ok, key=lambda p: abs(p[1] - goal)) if ok else min(proofs, key=lambda p: abs(p[1] - goal))
+    # a value that breaks the reply's other tests (ones passing at the values given) is worse than one that only misses
+    # its own: the fewest broken first, then passing nearest the aim, then nearest to passing
+    first_ok = {x['id'] for p in proofs[:2] for x in p[3] if x['pass'] and x['id'] != a.change}
+    def broken(p):
+        return [x['id'] for x in p[3] if x['id'] in first_ok and not x['pass']]
+    fewest = min(len(broken(p)) for p in proofs)
+    for p in proofs:
+        if len(broken(p)) > fewest:
+            print(f"  {a.knob} = {p[0]:.4g} set aside: it breaks {', '.join(broken(p))}")
+    cand = [p for p in proofs if len(broken(p)) == fewest]
+    ok = [p for p in cand if p[2]]
+    best = min(ok, key=lambda p: abs(p[1] - goal)) if ok else min(cand, key=lambda p: abs(p[1] - goal))
     print(f"best: {a.knob} = {best[0]:.4g} ({t['metric']} {best[1]}, {'passes' if best[2] else 'still fails'})")
     # what was tried, for the render's report and the next critic's card (the shot's .tune.json, one record a run)
     side = Path(a.shot).with_suffix('.tune.json')
