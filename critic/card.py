@@ -140,14 +140,23 @@ def main():
                           ('' if tr['moves_the_test'] else '; the test did not move with this setting, so it is not the lever for it')
                 # a test that barely moves across the whole range tried, and still fails, is set by something else
                 rs = [r for _, r in tr['proofs'] if isinstance(r, (int, float))]
-                vs = [v for v, _ in tr['proofs'] if isinstance(v, (int, float)) and v > 0]
+                vs = [v for v, _ in tr['proofs'] if isinstance(v, (int, float))]
                 tv = tr['test'].get('value')
                 if rs and vs and tr['moves_the_test'] and not tr.get('passes') and isinstance(tv, (list, int, float)):
                     lo_, hi_ = (tv if isinstance(tv, list) else (tv, tv))
                     need = min(abs(r - lo_) if r < lo_ else abs(r - hi_) if r > hi_ else 0 for r in rs)
-                    if need > 0 and (max(rs) - min(rs)) < 0.25 * need and max(vs) / min(vs) >= 2:
-                        verdict += (f'; across a {max(vs) / min(vs):.0f}x range it moved the reading only '
-                                    f'{max(rs) - min(rs):.1f}, still {need:.1f} from the test, so something else sets it')
+                    # wide enough to judge: a strength over a 2x range, or any setting (an angle, a position) over at
+                    # least the step the critic asked for
+                    if min(vs) > 0 and max(vs) / min(vs) >= 2:
+                        wide = f'across a {max(vs) / min(vs):.0f}x range'
+                    elif tr.get('asked') and max(vs) - min(vs) >= abs(tr['asked'][1] - tr['asked'][0]) > 0:
+                        wide = (f'across {min(vs):g} to {max(vs):g}, wider than the {tr["asked"][0]:g} to '
+                                f'{tr["asked"][1]:g} asked')
+                    else:
+                        wide = ''
+                    if need > 0 and (max(rs) - min(rs)) < 0.25 * need and wide:
+                        verdict += (f'; {wide}, it moved the reading only {max(rs) - min(rs):.2f}, still {need:.1f} '
+                                    f'from the test, so something else sets it')
                 notes.append(f'- the engine tuned `{tr["setting"]}` for {tr["change"]} ({tr["test"].get("metric")} {tr["test"].get("op")} '
                              f'{tr["test"].get("value")}) by proof renders: {tried}; {verdict}.')
             if notes:

@@ -127,6 +127,11 @@ def main():
     rec = {'change': a.change, 'setting': ','.join(knobs), 'test': {k: t[k] for k in ('metric', 'op', 'value') if k in t},
            'proofs': [[round(p[0], 4), p[1]] for p in proofs], 'set': round(best[0], 4) if a.save else None,
            'passes': bool(best[2]), 'moves_the_test': moved}
+    # the step the critic asked for, so the card can say when proofs past both ends of it left the test where it was
+    # (05's round 6 turned the key -40 to -28 for a green cast; -48 to -24 moved it 0.65 of the 5.5 it needed)
+    ch_ = next((c.get('change', {}) for c in reply.get('changes', []) if c.get('id') == a.change), {})
+    if all(isinstance(ch_.get(k), (int, float)) and not isinstance(ch_.get(k), bool) for k in ('from', 'to')):
+        rec['asked'] = [ch_['from'], ch_['to']]
     if a.save:
         raw = json.loads(Path(a.shot).read_text())
         for k in knobs:
