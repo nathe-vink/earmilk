@@ -1,0 +1,133 @@
+{
+ "stage1": {
+  "impression": "A witty, graphic set-up: the milk-carton speaker stands beside its own house-shaped sun shadow on a dark teal panelled wall, with a clear focal product and good negative space. But the product is lit flat and from the front, which does not match the hard side sun that casts the wall shadow; the sunlit wall patch goes muddy olive and competes with the product; and the floor and lower frame sink into murky brown with weak contact grounding.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The sun on the panelling must read as the same golden light as the sun on the plaster above the rail: region [320,220,400,580] within dE2000 4.5 of #9A7B5D. It is now 13.2: the patch renders olive [132,129,92] at hue ~103 deg, against honey [154,123,93] at ~70 deg on the plaster.",
+  "The cast-metal wordmark must read as bright metal on the red plinth: part:letters-front-* lum_median 148-178. It is now 121.1 with p95 123.9, a single flat mid-grey that reads as grey print.",
+  "The woofer's dust cap must show its dome: lum_p95 50-120 inside its upper-left quadrant [822,588,846,608]. It is now 34.6; the whole cap has median 2.7, with 57% of its pixels crushed.",
+  "The speaker must read as lit by the low sun, not a front-left card: its sun-facing right side (flat, 216-220 top to bottom) should be the brightest plane on the product, at least 8 levels above the front's upper-left corner. That corner is now 222 and is the brightest zone on the product, on the corner farthest from the sun."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The low sun turns olive-khaki on the sage panelling, so the largest lit shape in the frame reads as khaki paint rather than golden light, and the same patch changes colour at the rail: honey on the plaster above, olive below.",
+   "evidence": {
+    "region": [
+     320,
+     220,
+     400,
+     580
+    ],
+    "measured": "rgb median [132,129,92], lum_median 127.0 (lum_range 10.4); delta_e 13.22 against #9A7B5D, the colour this same sun has on the plaster above the rail ([610,130,690,168]: [154,123,93], lum 127.4); Lab hue ~103 deg (yellow-green) here against ~70 deg on the plaster; unlit panelling [40,240,260,560] [17,45,45] lum 39.0; silhouette interior [430,420,620,570] [12,33,28] lum 28.2. A per-channel model of this render's light (inverting PBR Neutral) gets the plaster patch right to within ~4 levels."
+   },
+   "change": {
+    "setting": "set.wainscot.color",
+    "from": "#5F6B5C",
+    "to": "#6A685E"
+   },
+   "expected": "The panelling patch goes to about [151,126,96] (hue ~75 deg, lum ~129, ~2-3 dE from the plaster patch), so one golden light crosses the rail and the wall reads as tone-on-tone drab separated by its rail and mouldings. The silhouette interior goes from [12,33,28] lum 28 to about [18,24,24] lum ~22, so its contrast against the patch rises from 4.6x to ~5.8x. The unlit panelling cools from green-teal [17,45,45] (lum 39) to slate-teal about [24,37,43] (lum ~35), and the wall right of the speaker drops from 26 to about 20. Patch luminance does not change, so the bounce onto the top edge (round 9 c5 region [295,0,710,100], 39.5 against its limit of 40) and the patch's p5 (round 9 c6, 124) should hold.",
+   "accept": {
+    "region": [
+     320,
+     220,
+     400,
+     580
+    ],
+    "metric": "delta_e",
+    "hex": "#9A7B5D",
+    "op": "<=",
+    "value": 4.5
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The cast-metal wordmark is one flat mid-grey with no lift, so the brand mark reads as grey plastic print on the red plinth.",
+   "evidence": {
+    "region": "part:letters-front-*",
+    "measured": "lum_median 121.1, lum_p95 123.9, rgb ~[123,121,115]; red plinth beside the letters [750,705,790,770] lum 53.8 [177,20,23], so the letters are only 2.2x the plinth; plinth profile 46-61 with no reflection band from the letter light."
+   },
+   "change": {
+    "setting": "lights.letterkick.strength",
+    "from": 0.079,
+    "to": 0.13
+   },
+   "expected": "Letters' median about 155-165, rgb about [160,158,150]. Round 9's proof renders gave 113 at 0.07 and 151 at 0.12. That is bright silver at ~2.9x the plinth's luminance instead of 2.2x, so the wordmark reads as metal and carries at thumbnail size. Round 9 c8 stopped inside [100,140] at a grey that still reads as plastic; this change carries on with c8's aim rather than reversing it.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     148,
+     178
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The woofer's convex dust cap mirrors the unlit front-left of the room and crushes to black, so the centre of the biggest driver reads as a hole instead of a dome.",
+   "evidence": {
+    "region": "part:woofer-cap",
+    "measured": "lum_median 2.7, lum_p5 0.7, lum_p95 30.5, crush_pct 57.4; its upper-left quadrant [822,588,846,608] median 15.2, p95 34.6; the cone's shaded right half has median 4.7 (the sunlit left half 40.0). Camera back-projection puts the cap apex ~44 mm behind the baffle at about [-0.086,-0.124,0.32]."
+   },
+   "change": {
+    "setting": "glints.2",
+    "from": "none",
+    "to": {
+     "at": [
+      -0.096,
+      -0.113,
+      0.34
+     ],
+     "normal": [
+      -0.695,
+      -0.687,
+      0.213
+     ],
+     "size_m": 1.0,
+     "power_w": 0.5,
+     "receivers": [
+      "woofer-cap"
+     ]
+    }
+   },
+   "expected": "A soft highlight ~12-15 px across on the cap's upper-left around pixel (833, 596), peaking ~90-110, on the side the front-left fill comes from, so the cap reads as a dome; the cap's median stays under ~10, so the driver still reads black anodised. Glints 0 and 1 were skipped because their points on the concave cone mirror the product. This point's mirror ray leaves the cone left-forward and up ~11 deg and travels ~3 m to the left wall, so the engine can place the lamp.",
+   "accept": {
+    "region": [
+     822,
+     588,
+     846,
+     608
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     50,
+     120
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the woofer and mid cones a lighter or more reflective finish so their shaded right halves (woofer median 4.7 with 26% of the cone crushed; mid median 8.8) hold detail.",
+   "why": "The drivers' materials and colours are the products' own and fixed, and a concave cone mirrors itself, so no glint lamp can reach those halves (round 9's glints 0 and 1 were skipped for that reason). Only the convex dust cap can take a highlight (c3)."
+  },
+  {
+   "request": "Bevel, brush or polish the wordmark letters so they show a metallic gradient instead of one flat value (p95 123.9 against median 121.1).",
+   "why": "The marks and the letters' cast-metal finish are fixed. Light can only change what their flat faces mirror, and a flat face mirrors one point of the letterkick strip, so c2 can raise their brightness but cannot give them a gradient."
+  },
+  {
+   "request": "Make the fin read as a thin tab at the silhouette's peak. It is now a ~53 px wide 'chimney' (x 500-553), which makes the silhouette read as a cottage at ~1.6:1 against the carton's ~2.5:1.",
+   "why": "The fin and roof are fixed geometry. The width comes from the sun seeing the right side 16 deg off its normal. The lever in scope, product.instances.0.rotate_z toward about -43, would narrow the fin to ~30 px and show twice the sunlit side, but it takes ~40% of the sun off the front (about -10 levels, below the 200-220 band) and shrinks the sun crescents in the drivers. The exposure needed to restore the front would push the top edge past round 9's limit of 40."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
