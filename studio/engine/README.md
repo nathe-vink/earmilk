@@ -176,6 +176,12 @@ open sky in front). Nothing is rendered.
   for each other is unchanged. On 03 at full strength, the axis vertical, the lit roof went from dE 6.5 to 4.0 off
   #C62828 and the horn's floor from 75 to 55, darker than the roof, as a recess reads; the dome's highlight and the
   left wall's band, at other angles, stayed (`renders/2026-10-09/engine/polariser-03-proof.png`, without and with).
+- **A wainscot's sheen** (`set.wainscot.roughness`, 0.38 satin by default): a satin dado mirrors a lamp's panel as a
+  soft halo behind the product, a backlight no light in the room explains (the 02b critic's round 5); at 0.7, eggshell,
+  it blurs the lamps into its own shade, so a reflection panel can stay on for the lacquer.
+- **Part positions after a masks-only pass**: `render.py --masks-only` evaluates the scene before it reads where each
+  part lands in the frame. Without a render nothing had moved the exploded parts or the camera into place, and 07-e6's
+  report put its parts behind the camera; the deck's callouts read these positions.
 
 The critic may also move and turn the product within its set (`product.instances.N.position`, `.rotate_z`), set how
 far an exploded part is drawn out along its own axis (`product.explode.N.offset_m`), and dress a room with the
