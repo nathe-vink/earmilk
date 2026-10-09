@@ -1,0 +1,227 @@
+{
+ "stage1": {
+  "impression": "A legible cutaway of a plywood gable with a glossy red waveguide flaring out of it, but only the red horn has any light modelling: the plywood and grey section faces are evenly lit flat fills and the dull mid-grey backdrop gives the piece no depth. It reads as a competent technical render rather than a photograph, with a heavy empty band above the fin, tiny parts at the heart of the subject, and a bright sliver down the right edge and a flat salmon fin face that look like artefacts.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Light on the cut with a direction and falloff: at least 25 levels from the bay/tweeter to the frame's lower corners, and shade inside the bay, channel and counterbore. Now the gable plywood is 172-184 throughout, the back-panel cut face falls 9 levels over 250 px and the insert section is 136-140 flat.",
+  "The backdrop separated in value: at least 20 levels from the insert's grey section and 60 from the plywood. Now 133 vs 139 (dE 6.9) vs about 178.",
+  "The waveguide's gloss as a graduated highlight with no flat, hard-edged area. Now a pale-pink wedge, (243,148,152), range 3.3 inside it and 5 px edges, covers 15,400 of the bowl's 59,400 red pixels at dE 27.5 from #C62828.",
+  "The fin's front face reading as the accent, dE 6 or less from #C62828. Now (180,85,86), dE 10.6, flat 103-108 across.",
+  "No edge artefact: the white front face's 8 px edge-on line (206-237) down the cabinet's right side gone.",
+  "The must-show cluster read at a glance. Bay, plug, socket, magnets, pin, channel and grommet span about 230 x 370 px, 7% of the frame (plug 28 x 33 px, magnets about 24 x 30). It needs to be about 1.2x larger: 105 mm at the same target still holds the whole roof, fin top to grommet and some cable run.",
+  "The tweeter's rear chamber showing form rather than a plugged black. Now median 2.8 and 51% of [650,370,685,530] at 3 or below."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The backdrop sits at the insert section's own value, so the big blue-grey wedge under the bowl reads like a hole through to the backdrop, and the whole frame lives in one mid-grey band.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     600,
+     120
+    ],
+    "measured": "Backdrop lum_median 133.0 here, 140.1 at the right edge [1230,100,1350,900], 130.1 bottom-left. The insert's cut face [700,595,1100,640] is 138.8, RGB (135,139,148), dE2000 6.9 from the backdrop's #898482. Plywood about 172-184. Frame p1 33, p99 198. The pool supplies about 80% of the wall's light (0.58 x 1.9 x exposure gives about 122 of the 133)."
+   },
+   "change": {
+    "setting": "lights.pool.irradiance",
+    "from": 1.9,
+    "to": 1.0
+   },
+   "expected": "Backdrop 88-110 in the top-left and about 95-110 at the right edge. The insert's cut face (about 120-138 after c2) sits 15-30 above it, and the plywood 60 or more above it. The fin's glare, a mirror of the lit sweep at about 81 degrees, drops by a third to a half, taking the fin toward (175,65,66), dE about 7.",
+   "accept": {
+    "region": [
+     0,
+     0,
+     600,
+     120
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     88,
+     110
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The key orbits 0.7 m at 45 degrees round the product's centre (z about 0.53), which puts it at z about 1.02, level with the ridge and 0.49 m in front of the cut, so the section is lit head-on and reads as one flat value.",
+   "evidence": {
+    "region": [
+     178,
+     650,
+     212,
+     900
+    ],
+    "measured": "The back-panel cut face (vertical plies) profiles 169.1, 168.1, 166.1, 165.1, 164.1, 163.1, 161.3, 160.1: a falloff of 9.0 over 250 px. Along the gable at y 600-630, left to right: 169, 174, 175, 175, 176, 177, 176. The insert section runs 139.8 to 135.9 across 485 px. The bay's back wall is 117 against 175 plywood, with no shade at any recess top."
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 45,
+    "to": 62
+   },
+   "expected": "The key comes down onto the cut at about 30 degrees from about 0.2 m above the tweeter. The back-panel cut face falls 14-28 levels top to bottom. The insert section grades from about 135 at the counterbore to about 115 at the mouth. The tops of the bay, channel and counterbore take shade. Plywood beside the bay stays at 165 or above, since the subject's irradiance drops only about 16%.",
+   "accept": {
+    "region": {
+     "part": "back-panel",
+     "box": [
+      176,
+      650,
+      212,
+      900
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     14,
+     28
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "camera",
+   "problem": "The bowl's lower-far wall mirrors a uniform lamp as a flat, hard-edged pale-pink wedge across a quarter of the waveguide, so the accent turns pink there and the bowl reads as a flat cut-out rather than a glossy curve.",
+   "evidence": {
+    "region": [
+     930,
+     470,
+     990,
+     510
+    ],
+    "measured": "RGB (243,148,152), lum 168.6, range 3.3. Across [800,470,1100,500] the profile runs 159, 166, 168, 168, 168.5, 168.5 then 153 and 142. Edges are 5 px (10-90). dE2000 27.5 vs #C62828. The wedge is 15,400 of the bowl's 59,400 red pixels; the rest of the bowl is (196,11,18) to (223,22,29), dE 3.8-5.0. Its glare is slightly cool (B/G 1.07 in linear), and none of the reflection-enabled lamps (key, rim, inside at 0.2) sits cleanly in this wall's mirror direction, so the lever chosen does not depend on which lamp it is."
+   },
+   "change": {
+    "setting": "camera.polariser",
+    "from": "(default)",
+    "to": {
+     "strength": 0.8,
+     "angle_deg": 90
+    }
+   },
+   "expected": "With the pass axis vertical, glare is cut on the up-facing bowl wall (a floor to the lens) where it meets the lens at moderate angles. The wedge falls to a median of 70-140 and grades across instead of sitting flat at 168 (range above 15). The bowl's deep red is unchanged, and the rim streaks and the fin, seen at 80 degrees or more, barely move. If it does not move, the wedge is near head-on and its lamp sits in front of the cut.",
+   "accept": {
+    "region": {
+     "part": "waveguide-insert",
+     "box": [
+      930,
+      470,
+      990,
+      510
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     70,
+     140
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "camera",
+   "problem": "The camera stands 25 mm in front of the front face's plane (x 0.22 against 0.195), so the white lacquered front shows edge-on as a bright 8 px line down the cabinet's right edge that reads as a rendering artefact.",
+   "evidence": {
+    "region": [
+     1199,
+     620,
+     1209,
+     900
+    ],
+    "measured": "lum_median 206.9, p95 232.4, RGB (211,208,213), between the plywood cut face (about 160) and the backdrop (146). part:front-baffle lum_p95 is 213.2 against its cut face's 181.5."
+   },
+   "change": {
+    "setting": "camera.position",
+    "from": [
+     0.22,
+     -1.25,
+     1.06
+    ],
+    "to": [
+     0.17,
+     -1.25,
+     1.06
+    ]
+   },
+   "expected": "The front face falls behind its own plane and the white line disappears. The right edge becomes the plywood cut against the backdrop, and front-baffle p95 drops from 213 to the cut face's 150-185. The view turns 2.3 degrees about the unchanged target, so the roof shifts by under about 10 px.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     140,
+     196
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The inside lamp orbits 0.9 m at 10 degrees round the product's centre, putting it at z about 0.68, below the frame. It holds the box interior above the planned backdrop and lights the section from underneath, against the top-down falloff c2 builds.",
+   "evidence": {
+    "region": [
+     350,
+     700,
+     450,
+     900
+    ],
+    "measured": "Interior lum_median 121.9, profile 110 to 130 top to bottom. With the backdrop at about 100 after c1, the lower fifth of the frame would be the brighter, heavier band. The cable is 26 against it."
+   },
+   "change": {
+    "setting": "lights.inside.irradiance",
+    "from": 0.6951,
+    "to": 0.5
+   },
+   "expected": "The interior settles at 88-108, at or just under the backdrop, so the bottom of the frame recedes. The cable stays at least 60 levels darker than the wall behind it. The section's lower part loses some underfill, adding to c2's falloff.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      350,
+      700,
+      450,
+      900
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     88,
+     108
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A satin rather than gloss clear coat on the waveguide insert, to feather the wedge's hard edges.",
+   "why": "The lacquer and clear coat are the product's finish and fixed. Only what the bowl mirrors (light, set, polariser) can change how its highlight reads."
+  },
+  {
+   "request": "A lighter or warmer section colour on the insert's cut face (135,139,148), so it parts from the backdrop by itself.",
+   "why": "Section colours are fixed apart from their reproduction. Exposure or white balance would move the backdrop with them, so the separation has to come from the backdrop's light (c1)."
+  },
+  {
+   "request": "Take off the dark cast letter standing proud of the back face at the left edge (letters-back-3, x 172-178, y 735-797), which reads as a stray latch on the silhouette.",
+   "why": "The cast lettering is a fixed mark of the product, and cropping it out would cut through the back wall."
+  },
+  {
+   "request": "A lighter tweeter frame, so its rear chamber shows detail.",
+   "why": "The drivers' materials and colours are the named products' own and fixed. Light can lift that near-black only a little before the section around it washes out."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
