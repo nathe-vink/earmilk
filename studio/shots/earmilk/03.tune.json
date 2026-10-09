@@ -136,5 +136,113 @@
   "set": 8.8606,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "lights.fill.specular",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    80,
+    96
+   ]
+  },
+  "proofs": [
+   [
+    0.1,
+    109.0
+   ],
+   [
+    0.25,
+    109.0
+   ]
+  ],
+  "set": 0.1,
+  "passes": false,
+  "moves_the_test": false
+ },
+ {
+  "change": "c4",
+  "setting": "lights.rim_left.strength",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    115,
+    175
+   ]
+  },
+  "proofs": [
+   [
+    3.0,
+    98.6
+   ],
+   [
+    7.0,
+    137.5
+   ],
+   [
+    7.7712,
+    143.1
+   ]
+  ],
+  "set": 7.7712,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "lights.rim_right.strength",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    100,
+    160
+   ]
+  },
+  "proofs": [
+   [
+    3.0,
+    87.0
+   ],
+   [
+    6.0,
+    109.7
+   ],
+   [
+    8.6828,
+    125.1
+   ]
+  ],
+  "set": 8.6828,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c7",
+  "setting": "lights.top.strength",
+  "test": {
+   "metric": "delta_e",
+   "op": "between",
+   "value": [
+    2.5,
+    5.0
+   ]
+  },
+  "proofs": [
+   [
+    1.0,
+    1.3
+   ],
+   [
+    1.35,
+    3.77
+   ]
+  ],
+  "set": 1.35,
+  "passes": true,
+  "moves_the_test": true
  }
 ]
