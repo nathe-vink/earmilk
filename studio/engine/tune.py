@@ -13,7 +13,7 @@ margin inside the test (the middle of a "between"), up to --max proofs. It print
 other test of the reply on that proof, and with --save writes the best value into the shot: the passing one nearest
 the aim, else the nearest to passing.
 """
-import argparse, json, subprocess, sys, tempfile
+import argparse, hashlib, json, subprocess, sys, tempfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -53,6 +53,15 @@ def main():
     parts = any(isinstance(x['region'], (str, dict)) for x in tests)
     td = Path(tempfile.mkdtemp(prefix='tune-'))
     proofs = []
+    # what passed at the shot as it stands, if the last tune on this reply left it so (07-e7: a lamp tuned after the
+    # insert's kick took the kick's test back below its range, since neither of its own proofs had passed it)
+    side = Path(a.shot).with_suffix('.tune.json')
+    log = json.loads(side.read_text()) if side.exists() else []
+    sha = hashlib.sha1(Path(a.shot).read_bytes()).hexdigest()
+    last = log[-1] if log else {}
+    before_ok = set(last.get('passing') or []) if last.get('shot_sha') == sha and last.get('reply') == a.reply else set()
+    if before_ok:
+        print(f"  passing at the shot as it stands (the last tune's proof): {', '.join(sorted(before_ok))}")
 
     def proof(v):
         out = td / f'proof-{len(proofs)}.png'
@@ -96,9 +105,10 @@ def main():
             break
         v0, f0, v1 = v1, f1, v2
         f1 = proof(v2)
-    # a value that breaks the reply's other tests (ones passing at the values given) is worse than one that only misses
-    # its own: the fewest broken first, then passing nearest the aim, then nearest to passing
-    first_ok = {x['id'] for p in proofs[:2] for x in p[3] if x['pass'] and x['id'] != a.change}
+    # a value that breaks the reply's other tests (ones passing at the values given, or at the shot as it stood: a tune
+    # before this one saved it and logged what passed there) is worse than one that only misses its own: the fewest
+    # broken first, then passing nearest the aim, then nearest to passing
+    first_ok = {x['id'] for p in proofs[:2] for x in p[3] if x['pass'] and x['id'] != a.change} | (before_ok - {a.change})
     def broken(p):
         return [x['id'] for x in p[3] if x['id'] in first_ok and not x['pass']]
     fewest = min(len(broken(p)) for p in proofs)
@@ -110,19 +120,21 @@ def main():
     best = min(ok, key=lambda p: abs(p[1] - goal)) if ok else min(cand, key=lambda p: abs(p[1] - goal))
     print(f"best: {a.knob} = {best[0]:.4g} ({t['metric']} {best[1]}, {'passes' if best[2] else 'still fails'})")
     # what was tried, for the render's report and the next critic's card (the shot's .tune.json, one record a run)
-    side = Path(a.shot).with_suffix('.tune.json')
-    log = json.loads(side.read_text()) if side.exists() else []
     moved = len({p[1] for p in proofs}) > 1
-    log.append({'change': a.change, 'setting': ','.join(knobs), 'test': {k: t[k] for k in ('metric', 'op', 'value') if k in t},
-                'proofs': [[round(p[0], 4), p[1]] for p in proofs], 'set': round(best[0], 4) if a.save else None,
-                'passes': bool(best[2]), 'moves_the_test': moved})
-    side.write_text(json.dumps(log, indent=1) + '\n')
+    rec = {'change': a.change, 'setting': ','.join(knobs), 'test': {k: t[k] for k in ('metric', 'op', 'value') if k in t},
+           'proofs': [[round(p[0], 4), p[1]] for p in proofs], 'set': round(best[0], 4) if a.save else None,
+           'passes': bool(best[2]), 'moves_the_test': moved}
     if a.save:
         raw = json.loads(Path(a.shot).read_text())
         for k in knobs:
             S.set_path(raw, k, round(best[0], 4))
         Path(a.shot).write_text(json.dumps(raw, indent=1) + '\n')
         print('saved', a.shot)
+        # the tests the saved value's proof passed, for the next tune on this shot and reply to keep
+        rec.update(passing=sorted(x['id'] for x in best[3] if x['pass']), reply=a.reply,
+                   shot_sha=hashlib.sha1(Path(a.shot).read_bytes()).hexdigest())
+    log.append(rec)
+    side.write_text(json.dumps(log, indent=1) + '\n')
 
 
 if __name__ == '__main__':

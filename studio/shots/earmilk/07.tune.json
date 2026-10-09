@@ -255,5 +255,146 @@
   "set": -84.0,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "lights.drivers.diffuse",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    224,
+    238
+   ]
+  },
+  "proofs": [
+   [
+    0.08,
+    238.4
+   ],
+   [
+    0.25,
+    238.4
+   ]
+  ],
+  "set": 0.08,
+  "passes": false,
+  "moves_the_test": false
+ },
+ {
+  "change": "c2",
+  "setting": "lights.key.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    184,
+    196
+   ]
+  },
+  "proofs": [
+   [
+    2.2,
+    197.6
+   ],
+   [
+    2.9,
+    203.5
+   ],
+   [
+    1.2983,
+    189.4
+   ]
+  ],
+  "set": 1.2983,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "lights.insert_kick.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    178,
+    200
+   ]
+  },
+  "proofs": [
+   [
+    0.5,
+    164.6
+   ],
+   [
+    1.2,
+    177.2
+   ],
+   [
+    1.8556,
+    187.5
+   ]
+  ],
+  "set": 0.5,
+  "passes": false,
+  "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "lights.top.irradiance",
+  "test": {
+   "metric": "r_median",
+   "op": "between",
+   "value": [
+    202,
+    222
+   ]
+  },
+  "proofs": [
+   [
+    0.5,
+    218.0
+   ],
+   [
+    0.9,
+    224.0
+   ],
+   [
+    0.1,
+    211.0
+   ]
+  ],
+  "set": 0.1,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "lights.motor_strip.strength",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    50,
+    100
+   ]
+  },
+  "proofs": [
+   [
+    2.0,
+    19.9
+   ],
+   [
+    5.0,
+    21.4
+   ],
+   [
+    11.0,
+    24.1
+   ]
+  ],
+  "set": 11.0,
+  "passes": false,
+  "moves_the_test": true
  }
 ]

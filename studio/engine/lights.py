@@ -90,7 +90,11 @@ def panel(bpy, name, spec, centre):
     strength 1 reads scene-linear 1.0 seen head-on, its mirror image in a clear coat about 0.05 of that); `ramp`
     {"axis": "x"|"y"|"z" or [x, y, z] (world), "at_m": [a, b, ...], "values": [va, vb, ...]}: the strength's fraction
     is va where the world coordinate along the axis is a, vb where it is b, and so on, linear between the stops and
-    held beyond them; without a ramp the panel is even. `diffuse` false: seen only in reflections (a reflector card), lighting nothing diffusely.
+    held beyond them; without a ramp the panel is even. `diffuse` and `specular` are its shares (0 to 1, or a boolean)
+    of diffuse light and of reflections: `diffuse` 0 is a reflector card, seen only in reflections; a fraction lights at
+    that share of the panel's strength. A fraction is carried by a twin panel in the same place, unseen by the camera,
+    that only lights (or only reflects): Cycles honours an object's ray visibility in light sampling, where a Light Path
+    node would not (an emitter's shader is evaluated there without a ray type).
     The panel's face looks at its target; its back emits nothing; it casts no shadow."""
     import bmesh
     w, h = spec.get('size_m', [1.0, 0.25])
@@ -158,9 +162,27 @@ def panel(bpy, name, spec, centre):
     nt.links.new(mix.outputs['Shader'], out.inputs['Surface'])
     me.materials.append(m)
     ob.visible_camera = bool(spec.get('camera', False)); ob.visible_shadow = False
-    ob.visible_diffuse = bool(spec.get('diffuse', True)); ob.visible_glossy = bool(spec.get('specular', True))
+    d, s = _share(spec.get('diffuse', True)), _share(spec.get('specular', True))
+    ob.visible_diffuse = d >= 1.0; ob.visible_glossy = s >= 1.0
     ob['engine_light'] = True
+    twins = []
+    for kind, share in (('diffuse', d), ('specular', s)):
+        if 0.0 < share < 1.0:
+            tw = panel(bpy, f'{name}.{kind}', dict(spec, strength=peak * share, camera=False,
+                                                   diffuse=kind == 'diffuse', specular=kind == 'specular'), centre)
+            tw.visible_transmission = False; tw.visible_volume_scatter = False
+            twins.append(tw.name)
+    ob['engine_twins'] = ','.join(twins)
     return ob
+
+
+def twins(bpy, ob):
+    """A panel's twins (its fractional diffuse or specular share), which light linking has to reach as well."""
+    return [bpy.data.objects[n] for n in (ob.get('engine_twins') or '').split(',') if n]
+
+
+def _share(v):
+    return (1.0 if v else 0.0) if isinstance(v, bool) else min(1.0, max(0.0, float(v)))
 
 
 def spot(bpy, name, spec, centre):

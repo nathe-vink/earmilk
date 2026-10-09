@@ -136,7 +136,9 @@ def main():
         kind = spec.get('type', 'area')
         ob = {'area': Lt.area, 'spot': Lt.spot, 'point': Lt.point, 'panel': Lt.panel}[kind](bpy, name, spec, centre)
         if spec.get('receivers'):
-            Lt.link_receivers(bpy, ob, [o for o in objs if any(Pr._match(part_of[o.name], r) for r in spec['receivers'])])
+            recv = [o for o in objs if any(Pr._match(part_of[o.name], r) for r in spec['receivers'])]
+            for o in [ob] + (Lt.twins(bpy, ob) if kind == 'panel' else []):
+                Lt.link_receivers(bpy, o, recv)
     gl = sh.get('glints') or []
     names = list(gl.keys()) if isinstance(gl, dict) else [str(i) for i in range(len(gl))]
     gl = list(gl.values()) if isinstance(gl, dict) else list(gl)
