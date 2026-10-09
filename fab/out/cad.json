@@ -640,6 +640,12 @@
    "ok": true
   },
   {
+   "check": "pins' holes clear of the magnets' holes (material between)",
+   "margin_mm": 17.04,
+   "least_mm": 2.0,
+   "ok": true
+  },
+  {
    "check": "retaining sleeve clear of the tweeter's motor (a side)",
    "margin_mm": 0.5,
    "least_mm": 0.4,
@@ -715,6 +721,12 @@
    "check": "connector bay above the top panel",
    "margin_mm": 49.0,
    "least_mm": 4.0,
+   "ok": true
+  },
+  {
+   "check": "tweeter's lead reaches the socket with the insert clear of its pocket (75 for a hand)",
+   "margin_mm": 9.62,
+   "least_mm": 0.0,
    "ok": true
   },
   {

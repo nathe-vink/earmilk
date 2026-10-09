@@ -159,12 +159,21 @@ DRIVER_SCREWS = dict(woofer=dict(n=8, pcd=298.0, hole=5.5, start_deg=22.5), mid=
 # so the trim ring's channel over them stays inside the ring, and T-nuts whose flanges stay clear of the cut-outs
 DRIVER_SCREW = dict(thread='M4 x 20', head='low-profile (wafer) button head, A2', head_d=8.0, head_h=1.6,
                     tnut_flange=dict(woofer=15.0, mid=12.0), tnut_barrel=dict(woofer=8.0, mid=6.0))
-LEAD_ABOVE_GROMMET = 97.0    # the cabinet's tweeter lead above the top panel's underside: 67 up the channel to the bay's floor
-                             # and 30 into the bay, where its socket stays. The slack to plug it is the tweeter's own lead
-                             # (TWEETER_LEAD): a 6.4 mm round cable cannot fold in a 36 mm bay (round 3's first question)
-TWEETER_LEAD = dict(l=150.0, wire='2 x 0.75 mm2 silicone-insulated flex, twisted (about 2.2 mm each)')
-                             # soldered to the tweeter's tabs, the plug on its end; folds into the sleeve and the bay
-                             # in front of the bay (so the socket comes out through the empty pocket), 16 of slack
+LEAD_ABOVE_GROMMET = 77.0    # the cabinet's tweeter lead above the top panel's underside: 67 up the channel to the bay's floor
+                             # and 10 past it into its socket, which stands on the floor (the drawing check's d2, round 4:
+                             # 30 past the floor put a 24 mm pair through the bay's ceiling). The slack to plug it is the
+                             # tweeter's own lead (TWEETER_LEAD): a 6.4 mm round cable cannot fold in a 36 mm bay
+TWEETER_LEAD = dict(l=310.0, wire='2 x 0.75 mm2 silicone-insulated flex, twisted (about 2.2 mm each)')
+                             # soldered to the tweeter's tabs, the plug on its end. It must reach the socket in the bay
+                             # with the insert held just clear of its pocket, the tabs about 225 from the socket, 75 for a hand
+                             # in the pocket and 10 spare; home, its spare loops into the bay (the drawing check's d1, round 4: at 150 it
+                             # could not be plugged in)
+# The connector: Molex Mini-Fit Jr., two circuits, a locking wire-to-wire pair (the drawing check's d2, round 4). The
+# socket, female contacts, on the cabinet's lead (the amplifier's side); the plug, male, on the tweeter's
+CONNECTOR = dict(series='Molex Mini-Fit Jr., 2 circuits',
+                 socket='receptacle housing 39-01-2020 with female terminals 39-00-0077 (16 AWG) on the cabinet\'s 1.0 mm2 lead',
+                 plug='plug housing 39-01-2021 with male terminals 39-00-0041 (18 to 24 AWG) on the tweeter\'s 0.75 mm2 flex',
+                 mated_l=24.0, pin1='red +')
 WOOFER_REBATE = dict(d=315.6, depth=9.0)  # PLACEHOLDER the RSS315HF-4's 314 frame + 2 x 0.8; depth its flange (about 5, measure it) + 1.0 of compressed gasket + the 3 mm ring
 MID_REBATE = dict(d=166.6, depth=11.5)    # PLACEHOLDER the MR16P-8's 165 frame + 2 x 0.8; depth its 7.5 front flange + 1.0 of gasket + the 3 mm ring
 TRIM_RING = dict(t=3.0, width=20.0)       # PROPOSAL printed trim ring over each frame and its screws, sprayed satin black, held by three dots of neutral-cure silicone
@@ -208,7 +217,7 @@ if BOOK:
     WAVEGUIDE = dict(throat_y=95.0, throat_z=517.0, r0=17.0, a0=4.0, a_h=45.0, a_up=35.0, a_down=30.0, k=1.4, lip_r=7.0, s_min=10.0)
     INSERT = dict(margin=1.5, eave_clip=14.0, back_y=113.0, boss_d=68.4, boss_back_y=126.0, clear=0.3,   # PROPOSAL boss 68.4 round the faceplate's 62.4 bore, flattened on the top panel (1.5 of insert under the bore); to y 126, 9.5 behind the tweeter's body, so 4 mm of gable stays over its bore under the back slope (the drawing check's d4, round 3: at 131 it was 0.26)
                   magnet_d=8.0, magnet_t=3.0, pin_d=4.0, pin_l=8.0,
-                  bay_d=26.0, bay_l=22.0, bay_dz=-5.0)
+                  bay_d=32.0, bay_l=22.0, bay_dz=-5.0)   # bay ø32 (was 26): a 24 mm mated pair and its lead's bend (round 4's d2)
     # Scan-Speak Illuminator D3004/602200: its 62 mm faceplate screwed to the insert's back, the dome in the 34 mm throat
     TWEETER_PART = dict(model='Scan-Speak Illuminator D3004/602200', dome_d=26.0, surround_w=4.0, flange_d=62.0, flange_t=4.5,
                         body_d=48.0, body_depth=17.0, screws=3, bolt_circle=54.0, mount='screws')
@@ -224,7 +233,8 @@ if BOOK:
     WOOFER_CUTOUT = 144.9                     # PLACEHOLDER unconfirmed in the research
     DRIVER_SCREWS = dict(woofer=dict(n=4, pcd=159.0, hole=5.5, start_deg=45.0))   # 4 x 4.3 on 159 (fab/research/drivers-small.md)
     DRIVER_SCREW = dict(DRIVER_SCREW, tnut_flange=dict(woofer=12.0), tnut_barrel=dict(woofer=7.0))
-    LEAD_ABOVE_GROMMET = 63.0    # 33 up the channel to the bay's floor and 30 into the bay (the tweeter's own lead is the slack)
+    LEAD_ABOVE_GROMMET = 40.0    # 30 up the channel to the ø32 bay's floor and 10 into its socket (the tweeter's own lead is the slack)
+    TWEETER_LEAD = dict(TWEETER_LEAD, l=220.0)   # the tabs about 134 from the socket with the insert clear of its pocket, 75 for a hand, 10 spare
     WOOFER_REBATE = dict(d=172.6, depth=10.5)  # the 171 frame + 2 x 0.8; its 6.5 flange + 1.0 of gasket + the 3 mm ring
     MID_CUTOUT = None; MID_REBATE = None
     PORT = None                               # sealed: 9.2 L net (fab/out-bookshelf/acoustics.json), f3 63 Hz, a DSP shelf to 45 Hz

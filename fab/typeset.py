@@ -73,7 +73,7 @@ def stud_points(outer, holes, max_studs=2, stud_d=3.0):
 def make_wordmark_files():
     os.makedirs(os.path.join(OUT, 'metal'), exist_ok=True)
     # Set as the renders set it (44 mm, tracking -0.035 em, baseline 0.35 em below the badge's centre), then centre the
-    # ink on x = 195: the renders centred the text's advance box, which leaves the ink 1.5 mm right of centre.
+    # ink on x = RUN (195 on the floorstander): the renders centred the text's advance box, which leaves the ink 1.5 mm right of centre.
     contours, width = wordmark(RUN, BADGE['z'], BADGE)
     bx0, by0, bx1, by1 = bbox(contours)
     dx = RUN - (bx0 + bx1) / 2
@@ -127,7 +127,7 @@ def make_wordmark_files():
             ax.plot([0, X1 - X0], [rz, rz], color='#000', lw=0.8)
             ax.text(2, rz + (2 if rz < zh / 2 else -6), ref_label, fontsize=5.5)
             ax.plot([RUN - X0] * 2, [0, zh], color='#c00', lw=0.4, ls='--')
-            ax.text(RUN - X0 + 1.5, zh - 5, 'CENTRELINE: align with the panel\'s centre (195 mm from either side)', fontsize=5, color='#c00')
+            ax.text(RUN - X0 + 1.5, zh - 5, f'CENTRELINE: align with the panel\'s centre ({RUN:g} mm from either side)', fontsize=5, color='#c00')
             for (x, y, r) in st:
                 ax.plot([x - 3.5, x + 3.5], [y, y], color='#000', lw=0.35); ax.plot([x, x], [y - 3.5, y + 3.5], color='#000', lw=0.35)
                 ax.add_patch(mpatches.Circle((x, y), 1.5, fill=False, lw=0.35))

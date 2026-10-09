@@ -148,7 +148,7 @@ def wire_hole_y():
 def connector_z():
     """The mated connector's centre: standing in the bay on its floor, clear of the channel below, whose top 20 mm the
     silicone fills (drawn in the channel's mouth it sat where the seal goes: the drawing check's d12, round 3)."""
-    return WAVEGUIDE['throat_z'] + INSERT['bay_dz'] - INSERT['bay_d'] / 2 + 13.0
+    return WAVEGUIDE['throat_z'] + INSERT['bay_dz'] - INSERT['bay_d'] / 2 + 1.0 + CONNECTOR['mated_l'] / 2
 
 
 def dowel_points():
@@ -277,6 +277,11 @@ def insert_fixings():
     w = (inner + outer) / 2 if outer > inner else inner
     mags += [(RUN - w, zc), (RUN + w, zc)]
     zp = z0 + 0.5 * (z1 - z0) - 6; wp = 0.8 * half_width(zp)
+    # down until 2.5 of material stands between a pin's hole and every magnet's (the bookshelf's sat 1.0 from its upper
+    # magnet: the drawing check's d14, round 4)
+    r_need = (INSERT['pin_d'] + 0.2) / 2 + (INSERT['magnet_d'] + 0.2) / 2 + 2.5
+    while min(math.hypot(wp - abs(mx - RUN), zp - mz) for (mx, mz) in mags) < r_need and zp > z0 + 6:
+        zp -= 0.5
     pins = [(RUN - wp, zp), (RUN + wp, zp)]
     return mags, pins
 
@@ -641,6 +646,8 @@ def checks(parts):
         for (x, z) in mags + pins:
             d_ = (I['magnet_d'] if (x, z) in mags else I['pin_d']) / 2
             chk(f'magnet or pin at ({x - RUN:+.1f}, {z:g}) clear of the boss\'s bore', math.hypot(x - RUN, z - zc) - d_ - bore_r, 3.0)
+        chk('pins\' holes clear of the magnets\' holes (material between)', min(math.hypot(px - mx, pz - mz) for (px, pz) in pins for (mx, mz) in mags)
+            - (I['pin_d'] + 0.2) / 2 - (I['magnet_d'] + 0.2) / 2, 2.0)
         if RETAINER:
             R = RETAINER
             chk('retaining sleeve clear of the tweeter\'s motor (a side)', R['clear'], 0.4)
@@ -672,6 +679,13 @@ def checks(parts):
         roof = RIDGE_Z - (yb - RUN) * tan_ if yb > RUN else BODY + yb * tan_
         chk('birch over the connector bay, under the back slope (vertical)', roof - zt, 8.0)
         chk('connector bay above the top panel', zc + I['bay_dz'] - I['bay_d'] / 2 - BODY, 4.0)
+        # the tweeter's own lead has to reach the socket standing in the bay while the insert is held just clear of its
+        # pocket (its back face at y 0), with 75 to spare for a hand in the pocket (the drawing check's d1, round 4)
+        T_ = TWEETER_PART
+        tabs_y = WAVEGUIDE['throat_y'] + (RETAINER['gasket'] if RETAINER else 0.0) + T_['flange_t'] + T_['body_depth'] - I['back_y']
+        sock_z = zc + I['bay_dz'] - I['bay_d'] / 2 + 1.0 + CONNECTOR['mated_l'] / 2
+        reach = math.hypot(wire_hole_y() - tabs_y, sock_z - zc)
+        chk('tweeter\'s lead reaches the socket with the insert clear of its pocket (75 for a hand)', TWEETER_LEAD['l'] - reach - 75.0, 0.0)
     bot_front = PLINTH_H + SHADOW
     w = WOOFER['z'] - WOOFER_REBATE['d'] / 2
     chk('woofer rebate above the plinth\'s shadow line', w - bot_front, 5.0)

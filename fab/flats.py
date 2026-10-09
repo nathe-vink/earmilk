@@ -125,7 +125,7 @@ def panel_defs():
                               'NOTES': [('text', (INNER / 2, 6.0), 'FRONT EDGE', 6.0)]},
                       note=f'the amplifier box\'s lid, z {z1:g} to {z1 + WALL:g}, its front edge (the bottom of the drawing) over the box\'s front; '
                            f'{len(gl)} ø{AMP_BOX["gland_hole"]:g} holes for {AMP_BOX["gland"]} glands, one per cable, {xs_} from the left, {gy_:g} from the front edge, '
-                           f'each nut in a ø{AMP_BOX["nut_cb"][0]:g} x {AMP_BOX["nut_cb"][1]:g} counterbore from the underside'))
+                           f'each nut (20 AF or less) epoxied into a ø{AMP_BOX["nut_cb"][0]:g} x {AMP_BOX["nut_cb"][1]:g} counterbore from the underside before the lid goes in'))
         P.append(dict(name='amp-box-front', qty=1, w=INNER, h=z1 - z0, layers={},
                       note=f'the amplifier box\'s front, between floor and lid, {AMP_BOX["depth"]:g} in front of the back\'s inner face; glue and seal all round'))
     return P

@@ -73,7 +73,7 @@
    "mass_kg": 0.41
   },
   "gable-block": {
-   "volume_l": 1.4407,
+   "volume_l": 1.4355,
    "bbox_mm": [
     -0.0,
     -0.0,
@@ -141,7 +141,7 @@
    "id_from": "the surround at its glue line + 2: PLACEHOLDER, measure"
   },
   "gable-print-front-left": {
-   "volume_l": 0.589,
+   "volume_l": 0.586,
    "size_mm": [
     110.0,
     164.0,
@@ -149,7 +149,7 @@
    ]
   },
   "gable-print-front-right": {
-   "volume_l": 0.589,
+   "volume_l": 0.586,
    "size_mm": [
     110.0,
     164.0,
@@ -313,11 +313,11 @@
    "pins": [
     [
      -46.57,
-     511.85
+     509.85
     ],
     [
      46.57,
-     511.85
+     509.85
     ]
    ],
    "pin_hole_insert": 4.1,
@@ -328,7 +328,7 @@
     "from_front": 30.0
    },
    "pin_hole_pocket": 4.2,
-   "bay_d": 26.0,
+   "bay_d": 32.0,
    "bay_l": 22.0,
    "bay_z": 512.0,
    "channel": {
@@ -342,7 +342,7 @@
     "boss_bore_d": 69.0,
     "boss_bore_to_y": 127.0,
     "bay": {
-     "d": 26.0,
+     "d": 32.0,
      "from_y": 126.0,
      "to_y": 148.0,
      "axis_z": 512.0
@@ -457,15 +457,21 @@
    "ok": true
   },
   {
-   "check": "magnet or pin at (-46.6, 511.85) clear of the boss's bore",
-   "margin_mm": 10.35,
+   "check": "magnet or pin at (-46.6, 509.85) clear of the boss's bore",
+   "margin_mm": 10.61,
    "least_mm": 3.0,
    "ok": true
   },
   {
-   "check": "magnet or pin at (+46.6, 511.85) clear of the boss's bore",
-   "margin_mm": 10.35,
+   "check": "magnet or pin at (+46.6, 509.85) clear of the boss's bore",
+   "margin_mm": 10.61,
    "least_mm": 3.0,
+   "ok": true
+  },
+  {
+   "check": "pins' holes clear of the magnets' holes (material between)",
+   "margin_mm": 2.56,
+   "least_mm": 2.0,
    "ok": true
   },
   {
@@ -500,14 +506,20 @@
   },
   {
    "check": "birch over the connector bay, under the back slope (vertical)",
-   "margin_mm": 14.37,
+   "margin_mm": 11.37,
    "least_mm": 8.0,
    "ok": true
   },
   {
    "check": "connector bay above the top panel",
-   "margin_mm": 15.0,
+   "margin_mm": 12.0,
    "least_mm": 4.0,
+   "ok": true
+  },
+  {
+   "check": "tweeter's lead reaches the socket with the insert clear of its pocket (75 for a hand)",
+   "margin_mm": 11.26,
+   "least_mm": 0.0,
    "ok": true
   },
   {
