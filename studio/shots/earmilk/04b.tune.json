@@ -397,5 +397,76 @@
   "set": 0.5706,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "set.contact.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    -45,
+    -30
+   ]
+  },
+  "proofs": [
+   [
+    0.4,
+    -22.5
+   ],
+   [
+    0.6,
+    -23.1
+   ],
+   [
+    0.8,
+    -23.5
+   ]
+  ],
+  "set": 0.8,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-04b-e10-r9.json",
+  "shot_sha": "bb11be3ddf548df1fb991b42338347ddf8f32b1b"
+ },
+ {
+  "change": "c4",
+  "setting": "lights.side.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    182,
+    196
+   ]
+  },
+  "proofs": [
+   [
+    0.3,
+    197.6
+   ],
+   [
+    0.38,
+    199.6
+   ],
+   [
+    0.14,
+    192.9
+   ]
+  ],
+  "set": 0.14,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-04b-e10-r9.json",
+  "shot_sha": "cc2f573308bf80579bdf196fff5156eb04c44086"
  }
 ]
