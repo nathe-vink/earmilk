@@ -197,5 +197,117 @@
   "set": 0.51,
   "passes": false,
   "moves_the_test": true
+ },
+ {
+  "change": "c2",
+  "setting": "materials.oak.grain",
+  "test": {
+   "metric": "lum_range",
+   "op": "between",
+   "value": [
+    4,
+    9
+   ]
+  },
+  "proofs": [
+   [
+    1.0,
+    7.3
+   ],
+   [
+    1.6,
+    8.6
+   ],
+   [
+    0.6308,
+    7.1
+   ]
+  ],
+  "set": 1.6,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "set.floor.plank_contrast",
+  "test": {
+   "metric": "edge",
+   "op": "between",
+   "value": [
+    6,
+    14
+   ]
+  },
+  "proofs": [
+   [
+    1.1,
+    18.4
+   ],
+   [
+    1.6,
+    18.4
+   ]
+  ],
+  "set": 1.1,
+  "passes": false,
+  "moves_the_test": false
+ },
+ {
+  "change": "c4",
+  "setting": "lights.front_gradient.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    11,
+    22
+   ]
+  },
+  "proofs": [
+   [
+    4.0,
+    7.0
+   ],
+   [
+    7.0,
+    5.9
+   ],
+   [
+    2.3333,
+    7.6
+   ]
+  ],
+  "set": 4.0,
+  "passes": false,
+  "moves_the_test": true
+ },
+ {
+  "change": "c6",
+  "setting": "glints.5.power_w",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    30,
+    60
+   ]
+  },
+  "proofs": [
+   [
+    4.0,
+    100.5
+   ],
+   [
+    9.0,
+    134.3
+   ],
+   [
+    3.0,
+    86.6
+   ]
+  ],
+  "set": 3.0,
+  "passes": false,
+  "moves_the_test": true
  }
 ]
