@@ -73,7 +73,7 @@
    "mass_kg": 1.53
   },
   "gable-block": {
-   "volume_l": 8.1337,
+   "volume_l": 8.1191,
    "bbox_mm": [
     -0.0,
     -0.0,
@@ -82,10 +82,10 @@
     390.0,
     1055.0
    ],
-   "mass_kg": 5.53
+   "mass_kg": 5.52
   },
   "waveguide-insert": {
-   "volume_l": 2.5156,
+   "volume_l": 2.5153,
    "bbox_mm": [
     53.37,
     -0.0,
@@ -93,6 +93,17 @@
     336.63,
     216.0,
     983.61
+   ]
+  },
+  "tweeter-retainer": {
+   "volume_l": 0.0281,
+   "bbox_mm": [
+    153.0,
+    182.5,
+    893.0,
+    237.0,
+    219.0,
+    977.0
    ]
   },
   "window-brace": {
@@ -146,7 +157,7 @@
    ]
   },
   "amp-box-lid": {
-   "volume_l": 0.679,
+   "volume_l": 0.673,
    "bbox_mm": [
     18.0,
     264.0,
@@ -169,18 +180,20 @@
   },
   "trim-ring-woofer": {
    "od_mm": 314.0,
-   "id_mm": 284.1,
+   "id_mm": 290.0,
    "t_mm": 3.0,
-   "groove": "10 wide, 2 deep on \u00f8298"
+   "groove": "10 wide, 2 deep on \u00f8298",
+   "id_from": "the surround at its glue line + 2: PLACEHOLDER, measure"
   },
   "trim-ring-mid": {
    "od_mm": 165.0,
-   "id_mm": 136.1,
+   "id_mm": 141.0,
    "t_mm": 3.0,
-   "groove": "10 wide, 2 deep on \u00f8154"
+   "groove": "10 wide, 2 deep on \u00f8154",
+   "id_from": "the surround at its glue line + 2: PLACEHOLDER, measure"
   },
   "gable-print-front-left": {
-   "volume_l": 0.655,
+   "volume_l": 0.654,
    "size_mm": [
     159.8,
     150.0,
@@ -188,36 +201,138 @@
    ]
   },
   "gable-print-front-right": {
-   "volume_l": 0.655,
+   "volume_l": 0.654,
    "size_mm": [
     159.8,
     150.0,
     115.4
    ]
   },
-  "gable-print-back-left": {
-   "volume_l": 3.412,
+  "gable-print-mid-left": {
+   "volume_l": 2.327,
    "size_mm": [
     195.0,
-    240.0,
+    120.0,
     195.0
    ]
   },
-  "gable-print-back-right": {
-   "volume_l": 3.412,
+  "gable-print-mid-right": {
+   "volume_l": 2.327,
    "size_mm": [
     195.0,
-    240.0,
+    120.0,
     195.0
+   ]
+  },
+  "gable-print-rear-left": {
+   "volume_l": 1.077,
+   "size_mm": [
+    195.0,
+    120.0,
+    92.3
+   ]
+  },
+  "gable-print-rear-right": {
+   "volume_l": 1.077,
+   "size_mm": [
+    195.0,
+    120.0,
+    92.3
    ]
   }
  },
  "units": "mm, litres, kg",
+ "gable_print_pins": [
+  {
+   "joint": "mid-left / mid-right",
+   "plane": "x = 195",
+   "pins": [
+    [
+     196.0,
+     996.0
+    ],
+    [
+     256.0,
+     866.0
+    ]
+   ]
+  },
+  {
+   "joint": "rear-left / rear-right",
+   "plane": "x = 195",
+   "pins": [
+    [
+     276.0,
+     936.0
+    ],
+    [
+     366.0,
+     866.0
+    ]
+   ]
+  },
+  {
+   "joint": "front-left / mid-left",
+   "plane": "y = 150",
+   "pins": [
+    [
+     6.0,
+     866.0
+    ],
+    [
+     116.0,
+     956.0
+    ]
+   ]
+  },
+  {
+   "joint": "front-right / mid-right",
+   "plane": "y = 150",
+   "pins": [
+    [
+     271.0,
+     956.0
+    ],
+    [
+     381.0,
+     866.0
+    ]
+   ]
+  },
+  {
+   "joint": "mid-left / rear-left",
+   "plane": "y = 270",
+   "pins": [
+    [
+     6.0,
+     866.0
+    ],
+    [
+     186.0,
+     936.0
+    ]
+   ]
+  },
+  {
+   "joint": "mid-right / rear-right",
+   "plane": "y = 270",
+   "pins": [
+    [
+     201.0,
+     866.0
+    ],
+    [
+     381.0,
+     936.0
+    ]
+   ]
+  }
+ ],
  "woofer_chamber_air_l": 85.088,
  "woofer_chamber_gross_l": 103.26,
  "mid_chamber_gross_l": 8.029,
  "waveguide_air_l": 1.6795,
- "wood_mass_kg": 24.83,
+ "wood_mass_kg": 24.82,
  "port_tube_length_mm": 153.3,
  "size": "floorstander",
  "features": {
@@ -281,13 +396,6 @@
    "tweeter_bore_d": 73.4,
    "tweeter_bore_from_y": 176.0,
    "tweeter_bore_to_y": 216.0,
-   "tweeter_screws": {
-    "n": 4,
-    "pcd": 62.0,
-    "hole_d": 4.0,
-    "depth": 6.0,
-    "insert": "M3 x 5.7 heat-set brass"
-   },
    "magnets": [
     [
      -75.87,
@@ -320,7 +428,13 @@
      915.8
     ]
    ],
-   "pin_hole_insert": 5.9,
+   "pin_hole_insert": 6.1,
+   "pins_bonded": true,
+   "pull_groove": {
+    "w": 12.0,
+    "depth": 1.5,
+    "from_front": 30.0
+   },
    "pin_hole_pocket": 6.2,
    "bay_d": 36.0,
    "bay_l": 35.0,
@@ -329,6 +443,36 @@
     "x": 195.0,
     "y": 233.5,
     "d": 14.0
+   },
+   "pocket": {
+    "clear": 0.3,
+    "back_wall_y": 200.3,
+    "boss_bore_d": 86.6,
+    "boss_bore_to_y": 220.0,
+    "bay": {
+     "d": 36.0,
+     "from_y": 216.0,
+     "to_y": 251.0,
+     "axis_z": 927.0
+    }
+   },
+   "tweeter_retainer": {
+    "sleeve_od": 73.0,
+    "sleeve_id": 67.0,
+    "from_y": 182.5,
+    "to_y": 216.0,
+    "flange_d": 84.0,
+    "flange_t": 3.0,
+    "screws": {
+     "n": 3,
+     "circle_d": 79.6,
+     "pilot": [
+      2.4,
+      10.0
+     ],
+     "hole_d": 3.4,
+     "screw": "3.0 x 12 thread-forming screws for plastics (WN 1411 / PT K30, pan head)"
+    }
    }
   },
   "amp": {
@@ -355,7 +499,11 @@
    "gland": {
     "x": 332.0,
     "y": 307.0,
-    "hole_d": 25.5
+    "hole_d": 25.5,
+    "nut_counterbore": [
+     40.0,
+     8.0
+    ]
    }
   },
   "port": {
@@ -367,7 +515,8 @@
    "flange_t": 5.0,
    "tube_from_flange_face": 153.3,
    "collar": 18.0,
-   "overall": 171.3
+   "overall": 171.3,
+   "printed_from_flange_face": 163.3
   }
  },
  "checks": [
@@ -435,6 +584,42 @@
    "check": "magnet or pin at (+84.1, 915.804) clear of the boss's bore",
    "margin_mm": 40.0,
    "least_mm": 3.0,
+   "ok": true
+  },
+  {
+   "check": "retaining sleeve clear of the tweeter's motor (a side)",
+   "margin_mm": 0.5,
+   "least_mm": 0.4,
+   "ok": true
+  },
+  {
+   "check": "retaining sleeve's wall",
+   "margin_mm": 3.0,
+   "least_mm": 1.5,
+   "ok": true
+  },
+  {
+   "check": "sleeve's pilots in the boss's wall, inside",
+   "margin_mm": 1.9,
+   "least_mm": 1.5,
+   "ok": true
+  },
+  {
+   "check": "sleeve's pilots in the boss's wall, outside",
+   "margin_mm": 2.0,
+   "least_mm": 1.5,
+   "ok": true
+  },
+  {
+   "check": "sleeve's flange inside the pocket's bore (a side)",
+   "margin_mm": 1.3,
+   "least_mm": 0.5,
+   "ok": true
+  },
+  {
+   "check": "sleeve's screw heads (5.6 pan) clear of the pocket's bore",
+   "margin_mm": 0.7,
+   "least_mm": 0.3,
    "ok": true
   },
   {

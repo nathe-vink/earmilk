@@ -189,14 +189,18 @@ class Sheet:
         if L < 1e-6: return
         u = d / L; n = np.array([-u[1], u[0]]); o = off / k
         a2, b2 = a + n * o, b + n * o
+        # nothing clipped at the inset's edge: a dimension under the section's last panel lies outside it (the
+        # bookshelf's '36' and '95 to the throat' lost their lines)
         for p, q in ((a, a2), (b, b2)):
             ax.plot([p[0] + n[0] * np.sign(o) / k, q[0] + n[0] * 1.5 * np.sign(o) / k], [p[1] + n[1] * np.sign(o) / k, q[1] + n[1] * 1.5 * np.sign(o) / k],
-                    color=INK, lw=LW['dim'] * PT, zorder=10)
-        ax.annotate('', xy=b2, xytext=a2, arrowprops=dict(arrowstyle='<|-|>', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0, mutation_scale=4), zorder=10)
+                    color=INK, lw=LW['dim'] * PT, zorder=10, clip_on=False)
+        an = ax.annotate('', xy=b2, xytext=a2, arrowprops=dict(arrowstyle='<|-|>', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0, mutation_scale=4),
+                         zorder=10, annotation_clip=False)
+        an.arrow_patch.set_clip_on(False)
         m = (a2 + b2) / 2 + n * 1.6 / k
         ang = math.degrees(math.atan2(u[1], u[0]))
         if ang > 90.1 or ang < -89.9: ang += 180
-        ax.text(m[0], m[1], text, fontsize=size, ha='center', va='center', rotation=ang, zorder=11, bbox=dict(fc='white', ec='none', pad=0.3))
+        ax.text(m[0], m[1], text, fontsize=size, ha='center', va='center', rotation=ang, zorder=11, bbox=dict(fc='white', ec='none', pad=0.3), clip_on=False)
 
     def cutting_plane(self, p0, p1, letter, arrow_dir, origin, scale):
         """A section's cutting plane on a view: a chain line, thick at its ends, arrows the way the section looks, lettered."""
@@ -610,7 +614,7 @@ def sheet3(pdf, M, W):
     S.ax.annotate('the waveguide (air)', xy=(os_[0] - k * (ty - 50), os_[1] + k * (tz - 5)), xytext=(os_[0] - k * (ty - 50) + 22, os_[1] + k * (tz + 28)),
                   fontsize=5, zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK))
     # the wiring in the section: the tweeter's lead into the bay, the connector at the channel's mouth, the cabinet's
-    # lead down the channel and through the grommet under the top panel (the same runs as the render model's)
+    # lead down the channel and through the top panel, sealed there with silicone (the same runs as the render model's)
     I_, T_ = INSERT, TWEETER_PART
     yw = cad.wire_hole_y(); zbay = tz + I_['bay_dz']; zcon = zbay - I_['bay_d'] / 2 + 2.0
     lead = np.array([(ty + T_['flange_t'] + T_['body_depth'] - 2, tz - 6), (I_['boss_back_y'] + 4, zbay + 4),
@@ -656,28 +660,30 @@ def sheet3(pdf, M, W):
         for (x, z) in pts:
             S.lines([circle_pts(-x, z, RETAINER['pilot_d'])], ob, k, lw=LW['outline'])
         hx, hz = pts[0]
+        # three lines from the frame's left edge, clear of the back view (two right-aligned on the pilot ran off the sheet)
         S.ax.annotate(f'{RETAINER["screws"]} x ø{RETAINER["pilot_d"]:g} x {RETAINER["pilot_depth"]:g} pilots on ø{RETAINER["screw_circle"]:g} in the boss\'s back face,\n'
-                      f'one at the top, 120° apart, for the retaining sleeve\'s {RETAINER["screw"]}',
-                      xy=(ob[0] + k * (-hx), ob[1] + k * hz), xytext=(ob[0] + k * (-hx) - 4, ob[1] + k * (WAVEGUIDE['throat_z'] + 75 * XS)),
-                      fontsize=4.6, ha='right', va='center', zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
+                      f'one at the top, 120° apart, for the retaining sleeve\'s\n{RETAINER["screw"]}',
+                      xy=(ob[0] + k * (-hx), ob[1] + k * hz), xytext=(16, ob[1] + k * (WAVEGUIDE['throat_z'] + 75 * XS)),
+                      fontsize=4.6, ha='left', va='center', zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
     else:
         # the faceplate's screws' inserts in the seat, seen through the bore
         pts = cad.seat_screw_points()
         for (x, z) in pts:
             S.lines([circle_pts(-x, z, INSERT_SCREW['hole_d'])], ob, k, lw=LW['thin'])
         hx, hz = pts[0]
-        S.ax.annotate(f'{T_["screws"]} x ø{INSERT_SCREW["hole_d"]:g} x {INSERT_SCREW["depth"]:g} on ø{T_["bolt_circle"]:g} in the seat for {INSERT_SCREW["insert"]}\n'
-                      f'inserts, one at the top, 120° apart; {INSERT_SCREW["screw"]} through the faceplate: measure it first',
-                      xy=(ob[0] + k * (-hx), ob[1] + k * hz), xytext=(ob[0] + k * (-hx) - 4, ob[1] + k * (WAVEGUIDE['throat_z'] + 75 * XS)),
-                      fontsize=4.6, ha='right', va='center', zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
+        S.ax.annotate(f'{T_["screws"]} x ø{INSERT_SCREW["hole_d"]:g} x {INSERT_SCREW["depth"]:g} holes on ø{T_["bolt_circle"]:g} in the seat, one at the top, 120° apart,\n'
+                      f'for {INSERT_SCREW["insert"]} inserts bonded with {INSERT_SCREW["bond"]};\n'
+                      f'{INSERT_SCREW["screw"]} through the faceplate: measure it first',
+                      xy=(ob[0] + k * (-hx), ob[1] + k * hz), xytext=(16, ob[1] + k * (WAVEGUIDE['throat_z'] + 75 * XS)),
+                      fontsize=4.6, ha='left', va='center', zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK, shrinkA=0, shrinkB=0))
     S.label(ob[0] + k * (-RUN), ob[1] + k * BODY - 14, 'BACK (THE FACE THAT MEETS THE POCKET)')
-    S.notes(230, 128, 'Fitting the tweeter and the insert', [
+    S.notes(230, 130, 'Fitting the tweeter and the insert', [
         'Solder the tweeter\'s lead (2 x 1.0 mm2, 120 mm) to its tabs and crimp the plug half of a two-pole locking connector (JST VH) on its end.',
         (f'Pass the tweeter in from behind through the ø{T_["flange_d"] + 0.4:g} bore, dome first, and seat its front ring on a {RETAINER["gasket"]:g} mm foam gasket on the throat\'s seat. '
          f'Slide the printed retaining sleeve (stl/tweeter-retainer.stl: bore ø{T_["body_d"] + 2 * RETAINER["clear"]:g}, outside ø{T_["flange_d"] + 0.4 - 2 * RETAINER["fit"]:g}, flange ø{RETAINER["flange_d"]:g} x {RETAINER["flange_t"]:g}) over its motor, '
          f'lead through it, and drive its {RETAINER["screws"]} {RETAINER["screw"]} into the boss until the ring is held: no thread to SB\'s own screw holes is needed. Measure the motor first: the sleeve\'s bore is its diameter + {2 * RETAINER["clear"]:g}.'
          if RETAINER else
-         f'Bond {T_["screws"]} {INSERT_SCREW["insert"]} inserts into the seat (ø{INSERT_SCREW["hole_d"]:g} x {INSERT_SCREW["depth"]:g} holes on ø{T_["bolt_circle"]:g}; a heat-set insert will not melt into cured resin). '
+         f'Bond {T_["screws"]} {INSERT_SCREW["insert"]} inserts into the seat with {INSERT_SCREW["bond"]} (ø{INSERT_SCREW["hole_d"]:g} x {INSERT_SCREW["depth"]:g} holes on ø{T_["bolt_circle"]:g}; a heat-set insert will not melt into cured resin). '
          f'Pass the tweeter in from behind through the ø{T_["flange_d"] + 0.4:g} bore, dome first, seat its faceplate on a 0.5 mm foam gasket and screw it to the inserts with {INSERT_SCREW["screw"]} through its own holes. '
          f'Measure first: the heads need 0.5 clear of the body (the circle at least the body + {INSERT_SCREW["head_d"] + 1:g}).'),
         f'Glue the magnets into the insert\'s back with epoxy, polarity marked, and their partners into the pocket\'s back wall, opposite poles out. Bond the two pins into the insert with epoxy.',
@@ -686,7 +692,7 @@ def sheet3(pdf, M, W):
         f'Service: pull it out by a ribbon loop glued in the {PULL_GROOVE_NOTE} groove under its front edge, unplug, and the tweeter comes out with it.',
         pocket_note(cad),
         fixings_note(cad),
-    ], width=150)
+    ], width=265)     # about 165 mm wide: at 95 the eight notes ran into the title block
     S.save(pdf)
 
 

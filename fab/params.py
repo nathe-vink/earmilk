@@ -149,7 +149,7 @@ TERMINAL_CUTOUT = (113.0, 49.0)  # DERIVED the terminal cup's body plus 0.5 a si
 # The drivers' screws: holes for M4 T-nuts fitted from inside, on each frame's bolt circle. PLACEHOLDER circles and counts
 # (the research's estimates, fab/research/drivers-*.md): measure the frame before drilling.
 DRIVER_SCREWS = dict(woofer=dict(n=8, pcd=298.0, hole=5.5, start_deg=22.5), mid=dict(n=4, pcd=154.0, hole=5.5, start_deg=45.0))
-LEAD_ABOVE_GROMMET = 250.0   # the cabinet's tweeter lead past the grommet: 67 up the channel, 167 to 20 proud of the roof
+LEAD_ABOVE_GROMMET = 250.0   # the cabinet's tweeter lead above the top panel's underside (the channel's seal): 67 up the channel, 167 to 20 proud of the roof
                              # in front of the bay (so the socket comes out through the empty pocket), 16 of slack
 WOOFER_REBATE = dict(d=315.6, depth=9.0)  # PLACEHOLDER the RSS315HF-4's 314 frame + 2 x 0.8; depth its flange (about 5, measure it) + 1.0 of compressed gasket + the 3 mm ring
 MID_REBATE = dict(d=166.6, depth=11.5)    # PLACEHOLDER the MR16P-8's 165 frame + 2 x 0.8; depth its 7.5 front flange + 1.0 of gasket + the 3 mm ring
@@ -203,8 +203,8 @@ if BOOK:
     # floorstander's sleeve, which the 3 mm boss wall here cannot hold. Knurled brass inserts bonded with epoxy hold in
     # any of the insert's materials (a heat-set insert will not melt into cured resin). PLACEHOLDER circle: measure first.
     RETAINER = None
-    INSERT_SCREW = dict(hole_d=3.6, depth=5.0, insert='M2.5 x 4 knurled brass, bonded with epoxy',
-                        screw='M2.5 x 8 button head, ISO 7380, A2', head_d=4.7)
+    INSERT_SCREW = dict(hole_d=3.6, depth=5.0, insert='M2.5 x 4 knurled brass', bond='epoxy',
+                        screw='M2.5 x 8 button heads (ISO 7380, A2)', head_d=4.7)
     TWEETER = dict(TWEETER, faceplate_y=WAVEGUIDE['throat_y'], z=WAVEGUIDE['throat_z'])
     DRIVER_SET = dict(woofer='sb17nrx2c35-8', mid=None, tweeter='d3004-602200')
     WOOFER_CUTOUT = 144.9                     # PLACEHOLDER unconfirmed in the research

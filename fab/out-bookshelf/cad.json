@@ -13,7 +13,7 @@
    "mass_kg": 1.05
   },
   "back-panel": {
-   "volume_l": 1.3603,
+   "volume_l": 1.3577,
    "bbox_mm": [
     -0.0,
     202.0,
@@ -85,7 +85,7 @@
    "mass_kg": 0.97
   },
   "waveguide-insert": {
-   "volume_l": 0.3868,
+   "volume_l": 0.3863,
    "bbox_mm": [
     30.37,
     -0.0,
@@ -100,43 +100,44 @@
    "bbox_mm": [
     18.0,
     114.0,
-    61.5,
+    60.5,
     202.0,
     202.0,
-    79.5
+    78.5
    ]
   },
   "amp-box-lid": {
-   "volume_l": 0.2855,
+   "volume_l": 0.2817,
    "bbox_mm": [
     18.0,
     114.0,
-    390.5,
+    391.5,
     202.0,
     202.0,
-    408.5
+    409.5
    ]
   },
   "amp-box-front": {
-   "volume_l": 1.03,
+   "volume_l": 1.0367,
    "bbox_mm": [
     18.0,
     114.0,
-    79.5,
+    78.5,
     202.0,
     132.0,
-    390.5
+    391.5
    ]
   },
   "trim-ring-woofer": {
    "od_mm": 171.0,
-   "id_mm": 136.6,
+   "id_mm": 147.0,
    "t_mm": 3.0,
-   "groove": "10 wide, 2 deep on \u00f8159"
+   "groove": "10 wide, 2 deep on \u00f8159",
+   "id_from": "the surround at its glue line + 2: PLACEHOLDER, measure"
   }
  },
  "units": "mm, litres, kg",
- "woofer_chamber_air_l": 9.549,
+ "woofer_chamber_air_l": 9.516,
  "woofer_chamber_gross_l": 15.167,
  "mid_chamber_gross_l": 0.0,
  "waveguide_air_l": 0.4193,
@@ -192,13 +193,6 @@
    "tweeter_bore_d": 62.4,
    "tweeter_bore_from_y": 95.0,
    "tweeter_bore_to_y": 131.0,
-   "tweeter_screws": {
-    "n": 3,
-    "pcd": 54.0,
-    "hole_d": 4.0,
-    "depth": 6.0,
-    "insert": "M3 x 5.7 heat-set brass"
-   },
    "magnets": [
     [
      -41.41,
@@ -231,7 +225,13 @@
      510.39
     ]
    ],
-   "pin_hole_insert": 3.9,
+   "pin_hole_insert": 4.1,
+   "pins_bonded": true,
+   "pull_groove": {
+    "w": 12.0,
+    "depth": 1.5,
+    "from_front": 30.0
+   },
    "pin_hole_pocket": 4.2,
    "bay_d": 26.0,
    "bay_l": 22.0,
@@ -240,12 +240,33 @@
     "x": 110.0,
     "y": 142.0,
     "d": 14.0
+   },
+   "pocket": {
+    "clear": 0.3,
+    "back_wall_y": 113.3,
+    "boss_bore_d": 69.0,
+    "boss_bore_to_y": 132.0,
+    "bay": {
+     "d": 26.0,
+     "from_y": 131.0,
+     "to_y": 153.0,
+     "axis_z": 512.0
+    }
+   },
+   "tweeter_screws": {
+    "n": 3,
+    "pcd": 54.0,
+    "hole_d": 3.6,
+    "depth": 5.0,
+    "insert": "M2.5 x 4 knurled brass, bonded with epoxy",
+    "screw": "M2.5 x 8 button head, ISO 7380, A2",
+    "head_d": 4.7
    }
   },
   "amp": {
    "cutout": [
     96.0,
-    291.0
+    293.0
    ],
    "rebate": [
     121.0,
@@ -259,14 +280,18 @@
      202.0
     ],
     "z": [
-     79.5,
-     390.5
+     78.5,
+     391.5
     ]
    },
    "gland": {
     "x": 162.0,
     "y": 157.0,
-    "hole_d": 20.5
+    "hole_d": 20.5,
+    "nut_counterbore": [
+     32.0,
+     8.0
+    ]
    }
   }
  },
@@ -338,6 +363,18 @@
    "ok": true
   },
   {
+   "check": "faceplate screws' heads clear of the tweeter's body",
+   "margin_mm": 0.65,
+   "least_mm": 0.5,
+   "ok": true
+  },
+  {
+   "check": "faceplate screws' inserts in the seat, inside the bore",
+   "margin_mm": 2.4,
+   "least_mm": 1.5,
+   "ok": true
+  },
+  {
    "check": "birch over the connector bay, under the back slope (vertical)",
    "margin_mm": 10.53,
    "least_mm": 8.0,
@@ -375,7 +412,7 @@
   },
   {
    "check": "amplifier box above the bottom panel",
-   "margin_mm": 43.5,
+   "margin_mm": 42.5,
    "least_mm": 0.0,
    "ok": true
   }
