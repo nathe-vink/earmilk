@@ -1,0 +1,143 @@
+{
+ "stage1": {
+  "impression": "A clean, legible cutaway of the milk-carton speaker, but lit like a CAD viewport: the plywood section and interior sit at almost one value, so the cut reads as a flat diagram rather than a carved volume, and the black port and amplifier parts are near-silhouettes. The base barely touches the floor, the white baffle strip looks hot, and the product sits small at the left of a large, dull gray sweep with no light shaping it.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The light must model the section: the back panel's cut face should fall 13-20 levels from eave to plinth (now 8.9: 209.0 -> 200.1), and the whole cut should span at least 28 levels from the gable to the plinth corner (now 22: gable wood 207.7, top-panel 209 -> 203, bottom cut 191 -> 187, front-baffle cut 203 -> 190).",
+  "After the relight, every cut face must stay at least 12 levels above the interior surface beside it. Today: bottom cut face 189-193 vs bottom-chamber floor 165; mid-divider cut 202-204 vs the far wall beside it 186-188.",
+  "The product's floor shadow should read as an attached, compact soft shape. Today the 7.3 deg key throws a low streak to the right edge of the frame: [640,700,760,760] is 67.9 against the floor in front [640,830,760,880] at 89.5, and [1000,700,1200,760] is 73.2 against [1000,840,1200,880] at 83.1.",
+  "The base must sit on the floor: a contact crease 2-8 px under the bottom cut edge, [434,803,454,808] at 70-86. Now it is 97.3, warm bounce rgb [104,96,90], brighter than the open floor at 90.3.",
+  "The accent red on the plinth band must be within dE2000 3 of #C62828 (now 4.49, rgb [180,26,32])."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The key sits almost level (7.3 deg elevation), so the section plane is lit as one even value and the cut reads as a pasted flat shape. The same low key throws a long, vague shadow streak across the floor on the copy side.",
+   "evidence": {
+    "region": [
+     317,
+     248,
+     329,
+     790
+    ],
+    "measured": "back-panel cut face only (part back-panel inside this box), 8-bin profile in y: 209.0, 208.9, 208.0, 207.2, 205.9, 205.8, 201.8, 200.1, falloff 8.9. All cut faces sit at 187-209. Floor beside the base [640,700,760,760] is 67.9 vs 89.5 in front, and the streak still measures 73.2 vs 83.1 at x 1000-1200 and 70.2 at the right edge."
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 7.3333,
+    "to": 18
+   },
+   "expected": "The back-panel cut face falls 13-20 levels top to bottom, and the gable cut stays at or below 215 (now 207.7). The top panel and window brace cast short shadow bands on the far wall, so the cavity gains depth. The floor shadow becomes shorter (about 3 m instead of about 8 m) and attached to the base. Guard: the bottom-chamber floor (now 165) must stay at least 10 levels below the bottom panel's cut face (now 189-193). If it closes that gap, take the lower end of the range.",
+   "accept": {
+    "region": {
+     "part": "back-panel",
+     "box": [
+      317,
+      248,
+      329,
+      790
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     13,
+     20
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The bottom edge of the section does not sit on the sweep. The floor just under the cut edge is brighter than the open floor and has no contact crease, so the base looks pasted on.",
+   "evidence": {
+    "region": [
+     434,
+     803,
+     454,
+     808
+    ],
+    "measured": "lum_median 97.3, rgb [104,96,90], 2-9 px under the bottom-panel cut edge (edge rows 798-801). The open floor 15-30 px lower, [434,815,454,830], is 90.3. The edge steps from 190 to 99 in 1-3 px with no darkening."
+   },
+   "change": {
+    "setting": "materials.sweep.contact",
+    "from": 0,
+    "to": 0.5
+   },
+   "expected": "A narrow crease forms under the cut edge: [434,803,454,808] reads 70-86, at least 8 levels below the open floor beside it. It fades out within the 0.05 m contact radius, about 11 px below the edge. The shaded floor under the plinth (56-63 now) darkens a few levels and does not crush.",
+   "accept": {
+    "region": [
+     434,
+     803,
+     454,
+     808
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     70,
+     86
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The accent red on the plinth band comes out dark and over-saturated, although the white baffle above it reads correctly at 232.",
+   "evidence": {
+    "region": [
+     553,
+     750,
+     582,
+     812
+    ],
+    "measured": "front-baffle pixels only (excluding the letters): rgb [180,26,32], lum 59.2, dE2000 4.49 vs #C62828. White part of the baffle median [235,229,232], p95 241."
+   },
+   "change": {
+    "setting": "lights.plinth.irradiance",
+    "from": 1.4815,
+    "to": 2.0
+   },
+   "expected": "The band moves toward [198,40,40], lum about 63-68, dE2000 at or below 3. The white just above the plinth shadow line stays at or below p95 245, and the letters stay darker than the band.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      553,
+      750,
+      582,
+      812
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     3
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Show the Baltic birch ply laminations on the cut faces.",
+   "why": "The section renders as uniform fine-grained wood (about 207 with fine vertical grain), so the cut reads as solid softwood. Laminations are the strongest cue that this is a real cut plywood cabinet, but the birch is the product's own finish and is fixed."
+  },
+  {
+   "request": "Lift the tweeter's rear chamber out of pure black.",
+   "why": "The tweeter in section is a must-show, yet 42.7% of tweeter-frame pixels are at or below 3 (median 4.5). The black is the driver's own finish inside a closed cavity, and light is not the lever: glint 4 was skipped because the frame mirrors itself, and the axis light barely moves it. Driver materials are fixed."
+  },
+  {
+   "request": "Give the cut faces a section colour distinct from the interior faces.",
+   "why": "It would make the cut read instantly at thumbnail size, but the card allows only the section colour's reproduction to change, not the colour itself."
+  }
+ ],
+ "score_if_fixed": 6.8
+}
