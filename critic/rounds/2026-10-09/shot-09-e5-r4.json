@@ -1,0 +1,369 @@
+{
+ "stage1": {
+  "impression": "A coherent warm living-room set in which the milk-carton speakers read at once, but they are small, flatly lit white blocks in the middle of a frame given over to empty wall, a framed print and a blurred taupe sideboard front, with a crude white turntable competing at the centre. A competent draft: the modelling of the white surfaces, the grounding and the crispness fall short of a homepage image.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The pair covers at least 13% of the frame (now about 9.6%, roughly 117k of 1.215M px), with side margins of 9-11% of the width and nothing tangent to an edge (the print's moulding at least 30 px inside the top).",
+  "The two fronts read as one white: right and left front-baffle medians within 5 levels of each other and both 222-234 (now 226.9 left vs 211.1 right), each keeping a 12-25 level falloff from eave to plinth (now 13.6 and 19.8), nothing above 242.",
+  "The shaded right sides read as white in shade at 145-185 (now 123.0 on the left speaker's Nutrition Facts side and 112.2 on the right speaker, both darker than the 154-157 wall behind them).",
+  "Each red roof slope carries a visible gloss gradient (p95-p5 at least 28 on the front slope; now 3-6), and gables and plinths sit within dE2000 4 of #C62828 (gables now 3.3-4.1, plinths 5.7-8.2).",
+  "The turntable reads as a real hi-fi component (tonearm with pivot base, counterweight and headshell), and its plinth sits darker than the speakers' whites (its front is now 209.8, level with the right speaker's front at 211.1).",
+  "Both speakers are in critical focus: silhouette and wordmark edges resolve within 1-2 px (now 2-3 px on the nearer right speaker, 1 px on the left).",
+  "The room's light still reads as low sun once fill is added: the top edge of the wall patch steps at least 25 levels (now 33-38) and the speakers stay the brightest large objects."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "camera",
+   "problem": "The pair is small in a frame given over to empty wall and a blurred sideboard front, so the image reads as a room picture with speakers in it rather than a speaker hero.",
+   "evidence": {
+    "region": [
+     220,
+     294,
+     1165,
+     699
+    ],
+    "measured": "Speaker parts total about 117k px (9.6% of 1350x900). The pair spans 70% of the width (x 220-1164) and 45% of the height (y 294-699). Above it are 294 px of wall (band [0,0,1350,290], median 129.8); below it, 200-250 px of sideboard front ([160,720,1200,900], median 107.5)."
+   },
+   "change": {
+    "setting": "camera.lens_mm",
+    "from": 50,
+    "to": 57
+   },
+   "expected": "Together with c2 (projected with a pinhole model that reproduces this frame's speaker boxes to within 1-2 px): the pair spans x of about 134-1212 (margins about 134/138 px, 10% each), the speakers stand about 406-460 px tall (now 356-405), and the product fills about 12.5% of the frame. Both sideboard ends stay in frame (x about 49-1265). The left sun patch is mostly cropped; the right patch stays behind the right speaker and the turntable.",
+   "accept": {
+    "region": [
+     142,
+     540,
+     178,
+     640
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     195,
+     245
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "camera",
+   "problem": "At 57 mm the current target would cut the print's top moulding at the frame edge and leave uneven margins (156 px left, 117 px right), because the camera stands right of centre at x 0.85.",
+   "evidence": {
+    "region": [
+     550,
+     55,
+     828,
+     438
+    ],
+    "measured": "The print's moulding top is at y of about 55 (moulding 81, wall above 124.6). At 57 mm with the current target, the calibrated model projects it to y of about 0 and the pair to x 156-1233."
+   },
+   "change": {
+    "setting": "camera.target",
+    "from": [
+     0,
+     0.02,
+     0.9
+    ],
+    "to": [
+     0.03,
+     0.02,
+     0.95
+    ]
+   },
+   "expected": "The moulding top sits about 34 px inside the frame. Margins are about 134/138 px. The speakers' tops fall at y of about 307-310 and the right speaker's base at about 767, leaving about 133 px of sideboard front below it (now 200). Focus distance changes by less than 0.02 m.",
+   "accept": {
+    "region": [
+     600,
+     0,
+     760,
+     22
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     110,
+     150
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Both speakers' right sides sit two stops under their fronts and darker than the wall behind them, and the nearer right speaker's front is 16 levels greyer than the left's (the left one mirrors the sky through the front window, the right one a plain wall), so the pair reads as one white and one grey speaker with grey sides.",
+   "evidence": {
+    "region": [
+     347,
+     360,
+     385,
+     615
+    ],
+    "measured": "side-right medians are 123.0 on the left speaker (RGB 133/121/113, the Nutrition Facts side) and 112.2 on the right, against a wall of 154-157 beside them (row y=540). front-baffle medians are 226.9 left (229/226/229) vs 211.1 right (216/210/209). The left front's surplus is bluish in linear terms (+0.10/+0.12/+0.15), which points to sky reflection: its woofer ring reads 62.7 (59/63/70) against 22.6 on the right."
+   },
+   "change": {
+    "setting": "lights.fill",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.9,
+      0.9
+     ],
+     "position": [
+      2.45,
+      -1.14,
+      1.58
+     ],
+     "target": [
+      0,
+      0,
+      0.85
+     ],
+     "irradiance": 0.4,
+     "color": 5700
+    }
+   },
+   "expected": "Expected values: left (Nutrition Facts) side about 150-165, which keeps a step of about one stop to its 229-233 front. Right side about 175-185. Right front median about 224-232, within about 5 levels of the left. Plinth reds lift in R only. The wall right of the right speaker rises about 15-20 levels (to about 172) and the sun patch's top-edge step stays at 25 or more. From this position the line to the left speaker's side clears the right speaker's front by about 0.3 m, so that side is not shadowed (from 80 degrees azimuth or more round the pair it would be). The lamp lies about 45 degrees outside the 57 mm field of view.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      0,
+      0,
+      675,
+      900
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     145,
+     172
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The red roof slopes are one flat value because they mirror the dim ceiling, so the lacquered gable reads as matte plastic and its red renders with crushed green and blue.",
+   "evidence": {
+    "region": [
+     1000,
+     318,
+     1146,
+     368
+    ],
+    "measured": "Right front slope (gable-block, fin and waveguide excluded): lum 57.3-61.7, range 4.4 (3.1 in the accept box), RGB 200/21/16, dE2000 4.1 against #C62828. Left slope: range 5.7, RGB 209/28/26, dE 3.26. The only sheen on either gable is the left fin's pink window reflection (155)."
+   },
+   "change": {
+    "setting": "lights.roof_sheen",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.0,
+      0.26
+     ],
+     "position": [
+      -0.15,
+      0.07,
+      1.6
+     ],
+     "target": [
+      -0.15,
+      0.07,
+      0.0
+     ],
+     "strength": 0.8,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       0.03,
+       0.13
+      ],
+      "values": [
+       0.15,
+       1.0
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The panel faces down with its 2.0 m side along x. Mirror footprints traced from the camera at z 1.6: left roof x -1.02 to -0.76, right roof x 0.45 to 0.71, eaves at y 0.00-0.04, ridges at y 0.10-0.14. Each front slope then shows a band rising from about 70 at the eave (about 200/35/32) to about 105-115 just under the fin (about 210/85/83). Slope medians come within about dE 2 of #C62828. The rims of the waveguide bowls catch the panel and read as shaped. The sun and key paths do not cross the panel.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      1023,
+      336,
+      1146,
+      395
+     ]
+    },
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     28,
+     70
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "asset",
+   "problem": "The turntable at the optical centre is a white box with a puck platter and a stick tonearm that ends in mid-air, and its front is as bright as the speakers' fronts, so a crude prop competes with the product.",
+   "evidence": {
+    "region": [
+     510,
+     575,
+     830,
+     680
+    ],
+    "measured": "Plinth front [560,645,760,672] median 209.8 (214/209/205), against 211.1 for the right speaker's front. The tonearm is a 2-3 px grey line from (725,592) to (800,577) with no pivot, base or headshell."
+   },
+   "change": {
+    "setting": "set.props.0 turntable model",
+    "from": "built-in turntable: white box plinth, puck platter, stick tonearm",
+    "to": "Detailed turntable model in the same place and footprint (centred on the sideboard top at x 0, y about -0.05; plinth about 0.44 x 0.34 x 0.10 m, front face at y about -0.16 to -0.22, top at z about 0.66). Satin walnut plinth #4A3426 on four low feet; 300 mm aluminium platter with black felt mat and the black record with red label kept; tonearm on a visible pivot base with counterweight, armrest and headshell parked on the rest; small aluminium speed knob front left; no dust cover."
+   },
+   "expected": "The plinth front reads as a dark walnut band (lum about 50-80) under the black record, which leaves the speakers' whites as the only bright objects in the frame. At the new scale the arm reads as a mechanism. The red label still echoes the accent.",
+   "accept": {
+    "region": [
+     545,
+     690,
+     715,
+     718
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     30,
+     95
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "camera",
+   "problem": "The nearer right speaker sits about 0.24 m in front of the plane of focus (the target at the sideboard's centre), so its edges are 2-3 px soft against the left speaker's 1 px, and the 57 mm lens would enlarge every blur disc by 1.3x.",
+   "evidence": {
+    "region": [
+     985,
+     520,
+     1012,
+     600
+    ],
+    "measured": "Right speaker's left silhouette steps 161 -> 193 -> 227 (2 px); its fin top steps 131 -> 112 -> 70 -> 54 (3 px, largest step 41.8). The left speaker's silhouette goes 158 -> 228 in 1 px (step 70.7). The print's outer moulding edge steps 11.2 over 4-5 px."
+   },
+   "change": {
+    "setting": "camera.fstop",
+    "from": 1.7209,
+    "to": 2.8
+   },
+   "expected": "f^2/N goes from 1453 (50 mm, f/1.72) to 1160 (57 mm, f/2.8), so every blur disc is 0.8x today's. The right speaker's blur is about 1.2 px (now about 1.5, and about 1.9 at 57 mm f/1.72), and its silhouette and wordmark edges resolve within 2 px. The wall and print stay soft: in the new frame the print's outer moulding edge, at x of about 511-515, steps about 13-15.",
+   "accept": {
+    "region": [
+     490,
+     150,
+     524,
+     300
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     12,
+     20
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The plinth bands render darker and more crimson than the spec red because their vertical lacquer mirrors the unlit floor by the front wall and the view transform's toe then crushes green and blue.",
+   "evidence": {
+    "region": [
+     1003,
+     652,
+     1146,
+     695
+    ],
+    "measured": "Right plinth front (front-baffle) median 168/12/9 (lum 44.9), dE2000 8.19. Left plinth 180/18/16 (lum 51.7), dE 5.74. Spec #C62828 is 198/40/40 (lum 73.6). The bottom 5% of the right front-baffle is plinth: lum_p5 44.2."
+   },
+   "change": {
+    "setting": "lights.plinth_sheen",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.15,
+      0.24
+     ],
+     "position": [
+      -0.675,
+      -2.5,
+      0.16
+     ],
+     "target": [
+      -0.675,
+      -0.11,
+      0.59
+     ],
+     "strength": 0.3,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.04,
+       0.28
+      ],
+      "values": [
+       1.0,
+       1.0
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "Mirror footprints at y -2.5: right plinth x -0.16 to 0.26, z 0.07-0.21; left plinth x about -1.64 to -1.24, z about 0.08-0.26. Each plinth gains about +0.025 linear of white reflection: right about 185/48/44 (dE about 2.4), left about 187/50/46, plinth lum about 72-78. Letters stay at about 245 and the fronts' bottom edges gain under 4 levels. The sun beams to the speakers cross y -2.5 at z 1.27 or higher, so the panel shades nothing.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      700,
+      0,
+      1350,
+      900
+     ]
+    },
+    "metric": "lum_p5",
+    "op": "between",
+    "value": [
+     60,
+     90
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A glossier white lacquer on the body so the fronts carry a crisp, art-directable reflection.",
+   "why": "The body finish is the product's own and fixed. Today the fronts differ by only about 16 levels between mirroring a sky-filled window (left) and a wall (right), so the pair has to be matched with light (c3) rather than with what the fronts reflect."
+  },
+  {
+   "request": "A larger or more openly tracked plinth wordmark so 'earmilk' stays legible at this distance.",
+   "why": "The marks' size and tight tracking are fixed. At 11-16 px tall the counters fill in (the gaps between strokes only fall to 120-170 on the right plinth), so legibility has to come from focus (c6) and framing (c1)."
+  }
+ ],
+ "score_if_fixed": 7.2
+}

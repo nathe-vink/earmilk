@@ -360,6 +360,53 @@ def _lathe(bpy, name, prof, mat, n=64):
     return _mesh(bpy, name, verts, faces, mat)
 
 
+def _turntable(bpy, name, cx, tz, p):
+    """A record player on a surface at height tz, centred at x cx: a walnut plinth on four feet, a machined aluminium
+    platter under a felt mat and a record (its label in `label`), a speed knob, and a tonearm on a pivot base with its
+    counterweight behind, parked on its rest with the headshell and cartridge at the front. About 450 x 340 x 140 mm,
+    a real deck's size, in place of the white box the critics read as a prop."""
+    made = []
+    walnut = M.make(bpy, name + '-walnut', 'birch', {'color': p.get('tt_color', '#4A3426'), 'roughness': 0.35})
+    alu = M.make(bpy, name + '-alu', 'metal', {'color': '#C2C3C5', 'roughness': 0.28})
+    black = M.make(bpy, name + '-tt-black', 'satin_paint', {'color': '#141414', 'roughness': 0.5, 'specular': 0.3})
+    felt = M.make(bpy, name + '-felt', 'satin_paint', {'color': '#1B1B1B', 'roughness': 0.95, 'specular': 0.05})
+    vinyl = M.make(bpy, name + '-record', 'gloss_plastic', {'color': '#0B0B0B', 'roughness': 0.25})
+    label = M.make(bpy, name + '-label', 'satin_paint', {'color': p.get('label', '#C62828'), 'roughness': 0.6})
+    foot_h, body_h = 0.015, 0.075
+    top = tz + foot_h + body_h
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            f = _cyl(bpy, f'{name}-tt-foot{sx}{sy}', 0.021, foot_h, black, n=24); f.location = Vector((cx + sx * 0.19, sy * 0.135, tz))
+            made.append(f)
+    made.append(box(bpy, name + '-tt', cx - 0.225, -0.17, tz + foot_h, cx + 0.225, 0.17, top, walnut, bevel=0.004))
+    px, py = cx - 0.045, 0.0                                         # the platter left of centre, the arm to its right
+    z = top + 0.003
+    pl = _cyl(bpy, name + '-platter', 0.152, 0.022, alu, n=128); pl.location = Vector((px, py, z)); made.append(pl)
+    z += 0.022
+    mt = _cyl(bpy, name + '-mat', 0.147, 0.003, felt, n=128); mt.location = Vector((px, py, z)); made.append(mt)
+    z += 0.003
+    rc = _cyl(bpy, name + '-record', 0.150, 0.002, vinyl, n=128); rc.location = Vector((px, py, z)); made.append(rc)
+    lb = _cyl(bpy, name + '-label', 0.045, 0.0006, label, n=64); lb.location = Vector((px, py, z + 0.002)); made.append(lb)
+    sp = _cyl(bpy, name + '-spindle', 0.0035, 0.012, alu, n=16); sp.location = Vector((px, py, z)); made.append(sp)
+    kn = _cyl(bpy, name + '-knob', 0.012, 0.012, alu, n=32); kn.location = Vector((cx - 0.18, -0.13, top)); made.append(kn)
+    # the tonearm: base and pivot at the back right, the arm forward to its rest beside the platter
+    ax, ay = cx + 0.165, 0.10
+    b = _cyl(bpy, name + '-arm-base', 0.026, 0.02, alu, n=48); b.location = Vector((ax, ay, top)); made.append(b)
+    pv = _cyl(bpy, name + '-arm-pivot', 0.011, 0.03, black, n=32); pv.location = Vector((ax, ay, top + 0.02)); made.append(pv)
+    az = top + 0.045
+    made.append(_tube(bpy, name + '-arm', [(ax, ay + 0.012, az), (ax + 0.004, ay - 0.06, az - 0.001), (ax + 0.010, ay - 0.15, az - 0.003),
+                                           (ax + 0.012, ay - 0.215, az - 0.004)], 0.0042, alu, n=12))
+    cw = _cyl(bpy, name + '-counterweight', 0.016, 0.03, black, n=32)
+    cw.rotation_euler = (math.radians(90), 0, 0); cw.location = Vector((ax, ay + 0.055, az)); made.append(cw)
+    # box() builds round the world origin: headshell and cartridge built round their own centres, then turned and placed
+    hs = box(bpy, name + '-headshell', -0.011, -0.02, -0.0025, 0.011, 0.02, 0.0025, alu, bevel=0.0015)
+    hs.rotation_euler = (0, 0, math.radians(-12)); hs.location = Vector((ax + 0.011, ay - 0.235, az - 0.0055)); made.append(hs)
+    ct = box(bpy, name + '-cartridge', -0.0065, -0.011, -0.006, 0.0065, 0.011, 0.006, black, bevel=0.001)
+    ct.rotation_euler = (0, 0, math.radians(-12)); ct.location = Vector((ax + 0.0105, ay - 0.239, az - 0.014)); made.append(ct)
+    rest = _cyl(bpy, name + '-armrest', 0.004, 0.038, black, n=12); rest.location = Vector((ax + 0.018, ay - 0.17, top)); made.append(rest)
+    return made
+
+
 def _tube(bpy, name, pts, r, mat, n=8):
     """A thin tube along 3D points (a branch, a cable)."""
     verts, faces = [], []
@@ -416,17 +463,7 @@ def prop(bpy, name, p, mats):
                 made.append(_cyl(bpy, f'{name}-leg{sx}{sy}', 0.016, leg, wood, n=16, r_top=0.02))
                 made[-1].location = Vector((sx * (w / 2 - 0.08), sy * (d / 2 - 0.06), 0))
         if p.get('turntable', True):
-            tz = hh
-            ox = p.get('tt_x', -0.355) + 0.355          # the turntable's centre along the top (default left of centre)
-            plinth = M.make(bpy, name + '-tt', 'satin_paint', {'color': p.get('tt_color', '#E9E6DF'), 'roughness': 0.35, 'specular': 0.5})
-            made.append(box(bpy, name + '-tt', -0.58 + ox, -0.17, tz, -0.13 + ox, 0.17, tz + 0.09, plinth, bevel=0.006))
-            rec = M.make(bpy, name + '-record', 'gloss_plastic', {'color': '#0B0B0B', 'roughness': 0.25})
-            pl = _cyl(bpy, name + '-platter', 0.152, 0.012, dark, n=96); pl.location = Vector((-0.38 + ox, 0.0, tz + 0.09)); made.append(pl)
-            rc = _cyl(bpy, name + '-record', 0.150, 0.002, rec, n=96); rc.location = Vector((-0.38 + ox, 0.0, tz + 0.102)); made.append(rc)
-            lab = M.make(bpy, name + '-label', 'satin_paint', {'color': p.get('label', '#C62828'), 'roughness': 0.6})
-            lb = _cyl(bpy, name + '-label', 0.045, 0.0006, lab, n=48); lb.location = Vector((-0.38 + ox, 0.0, tz + 0.104)); made.append(lb)
-            metal = M.make(bpy, name + '-arm', 'metal', {'color': '#C9C9C6', 'roughness': 0.2})
-            made.append(_tube(bpy, name + '-arm', [(-0.17 + ox, 0.12, tz + 0.12), (-0.24 + ox, 0.05, tz + 0.115), (-0.30 + ox, -0.06, tz + 0.11)], 0.004, metal))
+            made += _turntable(bpy, name, p.get('tt_x', -0.355), hh, p)
     elif kind == 'vase':
         h = p.get('height', 0.32); z0 = p.get('z', 0.0)
         cer = M.make(bpy, name + '-ceramic', 'satin_paint', {'color': p.get('color', '#E8E2D6'), 'roughness': 0.55, 'specular': 0.5})
