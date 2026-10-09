@@ -132,6 +132,11 @@ PRESET_UNITS = {
     'albedo': ('0 to 1', (0.5, 0.95), 'the colour coat\'s reflectance scale (a white lacquer is about 0.85)'),
     'roughness': ('0 to 1', (0.0, 1.0), 'surface roughness'),
     'color': ('hex', None, 'sRGB colour'),
+    # the sweep's contact shadow (08's round 6 tuned it to 1.4, past where the colour's multiplier turns negative)
+    'contact': ('0 to 0.9', (0.0, 0.9), 'the sweep\'s wide contact shadow, its colour multiplied down to 1 - this in a corner'),
+    'contact_m': ('m', (0.005, 0.3), 'how far the wide contact shadow reaches'),
+    'core': ('0 to 0.9', (0.0, 0.9), 'the sweep\'s tight contact term, multiplied with the wide one'),
+    'core_m': ('m', (0.003, 0.05), 'how far the tight contact term reaches'),
 }
 
 
