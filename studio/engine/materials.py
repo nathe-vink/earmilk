@@ -30,7 +30,7 @@ PRESET_DEFAULTS = {
     'oak':        dict(base='#B8905F', dark='#9C7448', light='#C9A273', plank_w=0.18, plank_l=1.6, roughness=0.42, grain=0.6, seam=0.0015, plank_contrast=0.5,
                        figure=0.22, rings=60.0, arch=4.0, flat_sawn=0.6, gloss_vary=0.3),
     'plaster':    dict(color='#DDD6CA', roughness=0.92, bump=0.025, drift=0.03),
-    'sweep':      dict(color='#A9A59E', roughness=0.55),
+    'sweep':      dict(color='#A9A59E', roughness=0.55, contact=0.0, contact_m=0.05),
     'glass':      dict(color='#FFFFFF', roughness=0.0, ior=1.5),
     'emit':       dict(color='#FFFFFF', strength=1.0),
     'print':      dict(color='#1E1A17', roughness=0.6),
@@ -104,6 +104,8 @@ def make(bpy, name, preset, overrides=None, bevel_mm=0.0):
         _planks(nt, b, p)
     elif preset in ('plaster', 'sweep'):
         setin('Base Color', hex_lin(p['color'])); setin('Roughness', p['roughness'])
+        if preset == 'sweep' and p.get('contact', 0) > 0:
+            _contact(nt, I, hex_lin(p['color']), p['contact'], p['contact_m'])
         if preset == 'plaster':
             # a faint plaster bump and a slow colour drift, so a wall is a surface and not a flat fill
             nt.links.new(_bump_noise(nt, 0.004, p['bump']), I['Normal'])
@@ -124,6 +126,25 @@ def make(bpy, name, preset, overrides=None, bevel_mm=0.0):
         em = nt.nodes.new('ShaderNodeEmission'); em.inputs['Color'].default_value = hex_lin(p['color']); em.inputs['Strength'].default_value = p['strength']
         nt.links.new(em.outputs['Emission'], out.inputs['Surface'])
     return m
+
+
+def _contact(nt, I, col_lin, strength, distance):
+    """A contact shadow painted into a surface: where something stands on it or close to it, an ambient-occlusion term
+    `distance` deep multiplies its base colour down to 1 - strength (in a corner), and leaves it alone farther out. A
+    sweep under a box lit by large sources keeps little of its own (every lamp reaches the floor beside the plinth, and
+    04b's base read pasted on); a photographer paints one in, and this is that."""
+    ao = nt.nodes.new('ShaderNodeAmbientOcclusion'); ao.samples = 16; ao.only_local = False
+    ao.inputs['Distance'].default_value = distance
+    mr = nt.nodes.new('ShaderNodeMapRange'); mr.clamp = True
+    mr.inputs['To Min'].default_value = 1.0 - strength; mr.inputs['To Max'].default_value = 1.0
+    nt.links.new(ao.outputs['AO'], mr.inputs['Value'])
+    mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'; mix.blend_type = 'MULTIPLY'; mix.inputs['Factor'].default_value = 1.0
+    ins = [x for x in mix.inputs if x.type == 'RGBA']; outs = [x for x in mix.outputs if x.type == 'RGBA']
+    ins[0].default_value = col_lin
+    comb = nt.nodes.new('ShaderNodeCombineColor')
+    for ch in ('Red', 'Green', 'Blue'):
+        nt.links.new(mr.outputs['Result'], comb.inputs[ch])
+    nt.links.new(comb.outputs['Color'], ins[1]); nt.links.new(outs[0], I['Base Color'])
 
 
 def ply_section(bpy, name, color, roughness, axis, lo, thickness, plies, per_layer=None):

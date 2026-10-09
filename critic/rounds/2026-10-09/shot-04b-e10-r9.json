@@ -1,0 +1,178 @@
+{
+ "stage1": {
+  "impression": "A white-and-red milk-carton speaker stands right of centre on a flat warm mid-grey sweep, cleanly modelled and readable, but lit like an overcast product shot: the big white face reads nearly one value, the side a dull grey, and the set has no light shape beyond a vague shadow pool. The light floor contact, a dark blotch in the bottom-right corner and the drab grey that dulls the red keep it a competent draft rather than a homepage hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Bottom-right corner clean: the x-falloff along the bottom band [1000,840,1350,900] within +/-10 (now +47.3; the corner [1290,830,1350,900] reads 93.7 against 135.0 beside it).",
+  "Copy space that carries type: [0,300,450,640] at 145 to 162 (now 118.6, where black type reaches about 4.7:1 and white about 4.5:1).",
+  "Set light that frames the carton: the brightest backdrop next to the product, falling off toward the frame edges. Now the top band (129.6 at rows 0-50) and the near floor (136.7 at [300,840,1100,900]) are the brightest zones, and the foot of the sweep's curve behind the plinth (about 110 at row 680) the darkest.",
+  "A contact core under the plinth: the floor strip below the front corner at least 30 levels under the floor 60 px out (falloff over [868,800,902,864] at most -30, now -17.2), and the same under the side plinth (111 to 116 against 130 to 135 now).",
+  "Lacquer that reads on the big planes: a graduated ridge-to-eave reflection of at least 8 levels on the roof's back slope ([905,128,990,211] is flat now, 81.0 to 83.7), staying within \u0394E 4 of #C62828 (2.5 now).",
+  "Amplifier connections that read as hardware, not white icons: no clipped whites on the switch and connector block (36 + 148 px at 254 or above now), in a cluster now only about 68 x 25 px.",
+  "Plane separation kept once the ground is lighter: the side at least 35 levels under the back (191.6 against 230.1 now) and at least 35 above the ground beside its upper third.",
+  "The label face turned toward the open side of the frame: now the back faces right, toward the 273 px right margin, and the copy space on the left gets the shadow side and the cast shadow."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The black flag set.flags.2, standing just past the right edge of frame (x 0.85 to 1.85 m at y -1, 0.7 m tall), throws its key shadow onto the floor in the bottom-right corner: a 40-level dark wedge that reads as a stray object or a dirty lens, not as a vignette.",
+   "evidence": {
+    "region": [
+     1000,
+     840,
+     1350,
+     900
+    ],
+    "measured": "x-profile 138.0, 137.7, 135.7, 129.5, 121.6, 112.6, 100.7, 90.7 (falloff +47.3). The corner [1290,830,1350,900] is 93.7, against 135.0 at [1000,820,1150,900] and 127.8 at the bottom left [0,820,300,900]. The key, at about (1.44, -2.99, 2.44), casts the flag's shadow on the floor from y -1 to about y -0.2, which the frame sees at its lower right."
+   },
+   "change": {
+    "setting": "set.flags.2.center_m",
+    "from": [
+     1.35,
+     -1,
+     0.35
+    ],
+    "to": [
+     3.0,
+     -1,
+     0.35
+    ]
+   },
+   "expected": "The flag's near edge moves from x 0.85 to 2.5 m, well past the frame's right edge on the floor (x about 0.9 to 1.0 m), so the flag and its shadow leave the frame. The corner comes up to the rest of the bottom band (about 135 now, about 170 with c2), and the band's x-falloff falls to about 0. The lower right of the back panel and the SHAKE WELL band may lift 2 to 4 levels, because the flag also clipped the bottom of the key there.",
+   "accept": {
+    "region": [
+     1000,
+     840,
+     1350,
+     900
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -10,
+     10
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The copy space is a putty mid-grey: neither black type (about 4.7:1) nor white type (about 4.5:1) is comfortable on it, and the grey deadens the white body and the red. This frame is a homepage hero with copy space.",
+   "evidence": {
+    "region": [
+     0,
+     300,
+     450,
+     640
+    ],
+    "measured": "lum_median 118.6, rgb [122, 118, 114], R-B 8. The whole left half [0,0,700,900] has median 123.3, p5 to p95 105.6 to 131.6."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#8E8A83",
+    "to": "#B3B1AC"
+   },
+   "expected": "The paper's linear albedo rises about 1.7x, so the copy area renders about 150 to 157 (black type about 7:1) and the warm cast drops to about R-B 4. The floor in front goes to about 170 to 175 and the product's shadow on the curve to about 115. The red roof (79) and the white back (230) both keep 60+ levels of separation from the ground behind them. The side gets more floor bounce, which c4 holds.",
+   "accept": {
+    "region": [
+     0,
+     300,
+     450,
+     640
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     145,
+     162
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "asset",
+   "problem": "The carton sits on the paper with no contact core. 1 to 8 px below the plinth's front corner the floor is 119.9, only 17 levels under the open floor 60 px out, so the base reads pasted on.",
+   "evidence": {
+    "region": [
+     868,
+     800,
+     902,
+     864
+    ],
+    "measured": "y-profile 119.9, 123.4, 126.8, 129.6, 131.6, 134.1, 135.9, 137.1 (falloff -17.2). Under the side plinth the floor is 111 to 116, against 130 to 135 at 64 px. The key, fill and edge light all reach the floor in front of the visible faces, and the 0.6 m rim is the only source the base hides, so no setting on the card can make a contact core."
+   },
+   "change": {
+    "setting": "asset: contact-shadow (ambient-occlusion) pass on the floor",
+    "from": "none",
+    "to": {
+     "what": "an ambient-occlusion pass on the sweep floor only, occlusion distance 0.05 m, multiplied over the beauty pass",
+     "where": "along the plinth's visible bottom edges, x 740 to 1077 and y 740 to 800 in this frame",
+     "strength": "the floor within 8 px of the edge at about 65% of the open floor's linear value, back to 100% by about 40 px; the product and its cast shadow untouched"
+    }
+   },
+   "expected": "A thin, darker contact line hugging the plinth: the strip below the front corner 30 to 40 levels under the floor 60 px out, and the strips under the side and back plinths the same. Nothing else in the frame moves.",
+   "accept": {
+    "region": [
+     868,
+     800,
+     902,
+     864
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -45,
+     -30
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The side face has to keep its value under c2's lighter paper. More floor bounce would lift side-right from 191.6 toward about 200 and shrink its 38-level step down from the back panel (230.1), the step that carries the box's form.",
+   "evidence": {
+    "region": [
+     746,
+     225,
+     874,
+     670
+    ],
+    "measured": "side-right part median 191.6, y-profile 208.6 to 184.9, x-profile 188.6 to 200.6; back-panel part median 230.1. The card's tuning gives the side about 30 levels per 1.0 of side irradiance (0.4 gave 187.9, 0.6 gave 193.8)."
+   },
+   "change": {
+    "setting": "lights.side.irradiance",
+    "from": 0.4712,
+    "to": 0.3
+   },
+   "expected": "With c2 in place, the side holds at about 185 to 194, at least 35 levels under the back panel: 0.30 offsets about +5 levels of extra bounce. The side's 24-level top-to-bottom ramp from the sidegloss reflection does not change.",
+   "accept": {
+    "region": "part:side-right",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     182,
+     196
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Show the amplifier's connectors and switch as dark or metal hardware rather than white icons (the switch is at 255 over 36 of its 53 px; the connectors' p95 is 255).",
+   "why": "They are the Hypex plate's own parts, and the product's materials are fixed. Only light can change how they read, and the fixed frame size holds the cluster to about 68 x 25 px."
+  },
+  {
+   "request": "A glossier clear coat on the gable, so the 37.6-degree back slope shows a graduated reflection (ridge to eave it is flat now, 81.0 to 83.7).",
+   "why": "The paint and clear coat are the product's finish and fixed. Only what they reflect may change: the gloss panel, whose glare the 0.9 polariser mostly removes on this slope."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

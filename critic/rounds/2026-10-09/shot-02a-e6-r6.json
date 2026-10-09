@@ -1,0 +1,236 @@
+{
+ "stage1": {
+  "impression": "A white-and-red milk-carton speaker stands in a sunlit room on oak, and the sun patch on the wall, with the speaker's cast shadow in it, gives the empty right half a purpose; the room is believable and calm. The product is under-modelled, though: the white front and side read as two flat values, the red gable reads as matte plastic, the base sits on the floor without a convincing shadow attaching it, and the frame is soft overall.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The white front holds a continuous gradient over its full height within about 228-246. Today its upper 60% is pinned at 247-250 in the PBR Neutral shoulder: inverting the curve gives 2.1-2.6 scene-linear against 1.16 at the bottom, and the only visible grading is 248.5 to 243.6 in the lower third. Getting there needs the sun off the front's axis (now 11 degrees off its normal) so the white is lit by window light, which is a re-light of sun and windows, not a dial.",
+  "The speaker's floor shadow reads at 25 levels or more and visibly joins its wall shadow. Today the same board reads 131 inside it and 143 outside (a step of 12), against 180 inside and 239 outside on the wall (59). At a 15-degree sun the floor gets 0.26 of the sun's irradiance, the ambient there is about 4 times the sun term, and the sun cannot be raised without pushing the sunlit red past spec (the engine's own proof: sun 3.4 gave dE 7.15).",
+  "The red lacquer reads as gloss: a soft sheen grading up the roof's front slope, which today is one value (80 +/- 2 on both axes, lum_range 16.6). The waveguide reads as a sculpted bowl with the tweeter visible at its throat; today it is a dark scoop (median 54) and the tweeter covers 91 px.",
+  "Every lit red face is within dE 2.5 of #C62828 (plinth front today 4.47, rgb 217/42/36), and the whites are neutral to spec: shaded-wall a* within +/-0.5 (today -1.9 to -2.2), front white b* within +/-0.5 (today -1.8 where the lacquer panel reflects).",
+  "The sunlight is crisp: window-patch edges 12 px or narrower (today 14-27 px, 10-90%) and the speaker's shadow edges 3 px or narrower (today 5 px on the left, about 20 px on the right)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The white front is pinned in the shoulder of the view transform, so the gradient the lacquer ramp puts on it is crushed to nothing and the hero face reads as a flat card; the sunlit red is also a touch over spec.",
+   "evidence": {
+    "region": [
+     503,
+     330,
+     517,
+     640
+    ],
+    "measured": "Between the drivers [395,442,515,488] the front is 247.6 with lum_range 2.0. The clean right column [503,330,517,640] falls only 248.5 to 243.6 (falloff 4.9). Inverting PBR Neutral, that column runs 2.6 to 1.16 scene-linear; the 8-bit levels near the top are 2.63, 2.11, 1.82 and 1.62 scene-linear apiece. Gable front slope rgb 202/47/41; plinth front 217/42/36 (dE 4.47 to #C62828). Exact simulation of the tone curve: at -0.2 EV the column falls 247.6 to 239.8, the plinth dE drops to 2.4 and the gable reads dE 2.0."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": -0.15,
+    "to": -0.35
+   },
+   "expected": "The right column grades about 248 to 240 (falloff about 8, about 9 once c5 lands); the front between the drivers stays 246-250 and remains the brightest thing in frame. Shaded wall 206 to about 193, sun patch 239 to about 235, side 173 to about 162, floor foreground 130 to about 121. Gable front slope about 73 (dE about 2.0); plinth front dE 4.47 to about 2.4.",
+   "accept": {
+    "region": [
+     503,
+     330,
+     517,
+     640
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     7,
+     10
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The lacquered red roof slope mirrors only the evenly lit ceiling, so it renders as one flat value and reads as matte plastic; the waveguide bowl, mirroring the same nothing, reads as a dark scoop.",
+   "evidence": {
+    "region": [
+     392,
+     262,
+     520,
+     330
+    ],
+    "measured": "Gable front slope ({part: gable-block, box [392,262,520,330]}, the waveguide excluded): median 80.0, p5 67.3, p95 83.9. Profile along y 76.7, 80.2, 80.9, 80.4, 80.5, 80.0, 79.4, 79.5; along x 81.8 to 78.1. Waveguide insert median 53.6, profile across x 81, 62, 57, 54, 51, 49, 46, 72. Mirror geometry: from the camera the slope (normal -0.148, -0.592, 0.792) reflects toward (-0.585, 0.322, 0.745), i.e. the ceiling at about (-1.5, 0.7); Fresnel there is about 0.094 at 61 degrees incidence."
+   },
+   "change": {
+    "setting": "lights.gable_sheen",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.2,
+      0.7
+     ],
+     "position": [
+      -0.78,
+      0.32,
+      1.9
+     ],
+     "target": [
+      -0.024,
+      -0.095,
+      0.94
+     ],
+     "strength": 0.8,
+     "color": 5950,
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       1.7,
+       2.1
+      ],
+      "values": [
+       0.15,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The front slope mirrors the panel as a soft sheen rising from the eave (the slope sees the panel at about z 1.82, ramp about 0.4) to the ridge (about z 1.99, ramp about 0.77). Its lum_p95 goes from about 76 (after c1) to 95-110 and its median stays 72-82, so the red stays on spec where the sheen is weak. The y-profile changes from flat to rising toward the ridge. The 5950 K panel colour keeps the sheen neutral under the white balance. Part of the waveguide's concave wall picks up the panel as a highlight that traces the bowl's curvature. No diffuse light reaches the room.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      392,
+      262,
+      520,
+      330
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     92,
+     112
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The windows feed the room a green-cyan sky, so the warm-white plaster and skirting read as mint-grey in shade instead of a soft cool-neutral, which undercuts the morning-light mood.",
+   "evidence": {
+    "region": [
+     600,
+     40,
+     1300,
+     240
+    ],
+    "measured": "Shaded upper wall rgb 204/207/202, Lab 82.8 / -1.9 / +2.1, against the spec #FBF7F1 at a* +0.3, b* +3.3. Wall right of the patch [1180,300,1340,560] is 205/211/210 (a* -2.2); skirting in shade 181/185/182 (a* -2.0). The sky horizon #D0ECF8 itself sits at a* -6.7. A mix model fitted to the measured wall light (horizon share 0.45-0.65) puts the shaded wall at a* -0.6 to -0.1 with #D6EAF8, at the same luminance (horizon Y 0.799 against 0.802)."
+   },
+   "change": {
+    "setting": "sky.horizon",
+    "from": "#D0ECF8",
+    "to": "#D6EAF8"
+   },
+   "expected": "Shaded wall a* -1.9 to about -0.4 with b* about +2 and luminance unchanged (at c1's exposure about 194/193/189 instead of 191/194/189). The cyan leaves the skirting and the wall right of the patch; the front white's a* goes from -0.5 toward -0.2. The sun patch is unchanged.",
+   "accept": {
+    "region": [
+     600,
+     40,
+     1300,
+     240
+    ],
+    "metric": "delta_e",
+    "hex": "#C5C4C1",
+    "op": "<=",
+    "value": 1.8
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The sun is set at twice the real sun's diameter, so its window patches and the speaker's shadow have the soft edges of an overcast lamp rather than the crisp edges of morning sun, and the faint floor shadow dissolves into the planks.",
+   "evidence": {
+    "region": [
+     722,
+     400,
+     760,
+     500
+    ],
+    "measured": "Wall-shadow left edge (x about 735): largest column step 14.3, 10-90% width 5 px, which matches a 1-degree penumbra 0.95 m from the occluding edge (about 5.5 px). Sun-patch right edge [1130,380,1200,520]: width 25 px; patch top [950,260,1100,330]: 14 px. Floor shadow on the board through (795,639): 131 to 143 over about 20 px. The -0.2 EV simulation leaves the left-edge step at 13.6, so this test isolates the sun angle."
+   },
+   "change": {
+    "setting": "sun.angle_deg",
+    "from": 1,
+    "to": 0.53
+   },
+   "expected": "Penumbrae halve. The wall-shadow left edge goes to about 3 px with a largest step of about 21-26; the patch edges go to about 7-13 px. The carton silhouette on the wall reads sharper, and the floor shadow's sun edge tightens so its weak 12-level step reads as a line instead of a smudge.",
+   "accept": {
+    "region": [
+     722,
+     400,
+     760,
+     500
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     18,
+     34
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The lacquer-ramp panel is pure #FFFFFF (D65) under a 5950 K white balance, so its reflection, which dominates the upper front, renders blue and tints the brand white wherever it lands.",
+   "evidence": {
+    "region": [
+     395,
+     442,
+     515,
+     488
+    ],
+    "measured": "Front between the drivers: rgb 245/248/251, b* -1.8, dE 1.85 to #F9F9F9. Column top [503,330,517,360] has scene-linear chroma R/G 0.969, B/G 1.021 (b* -1.3); the bottom [503,600,517,640], below the ramp, is R/G 0.991, B/G 0.982 (b* +0.8). The light the ramp adds there has chroma 0.943 / 1 / 1.068, which is blue."
+   },
+   "change": {
+    "setting": "lights.lacquer_ramp.color",
+    "from": "#FFFFFF",
+    "to": 5950
+   },
+   "expected": "The ramp's reflection renders neutral, and the front between the drivers goes from 245/248/251 to about 249/250/249 (b* about +0.4, dE about 0.8 to #F9F9F9). Top and bottom of the front match in colour; through the shoulder the upper bins gain about 1 level of luminance.",
+   "accept": {
+    "region": [
+     395,
+     442,
+     515,
+     488
+    ],
+    "metric": "delta_e",
+    "hex": "#F9F9F9",
+    "op": "<=",
+    "value": 1.2
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A lighter or glossier waveguide insert, or a shallower bowl, so the tweeter at its throat reads instead of a dark scoop (median 54, tweeter 91 px).",
+   "why": "The waveguide's depth, profile and the tweeter's place in it are set by acoustic simulation, and the insert's colour is the flavour's accent; only light and camera may change how it reads, which is what c2 attempts."
+  },
+  {
+   "request": "A higher-gloss clear coat on the white body so the front visibly mirrors the window and the lacquer panel.",
+   "why": "The product's finish is fixed, and while the front sits in the shoulder a 5% reflection moves it by only about 1.5 levels per unit of scene-linear, so the face cannot be shaped by reflection alone."
+  },
+  {
+   "request": "Finer sampling or lighter denoising for crisper oak grain, plaster texture and penumbrae.",
+   "why": "The sampling settings are fixed by the card."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

@@ -80,6 +80,8 @@ KNOBS = [
     ('set.front', 'm', (1, 30), 'sweep: floor in front of the product'),
     ('set.depth', 'm', (0.3, 10), 'sweep: floor behind the product, to the start of the curve'),
     ('set.radius', 'm', (0.1, 4), 'sweep: the curve\'s radius (larger: a softer horizon)'),
+    ('set.contact.strength', '0 to 0.8', (0, 0.8), 'sweep: a contact shadow where something stands on it, its colour multiplied down to 1 - strength in a corner (ambient occlusion); 0 off'),
+    ('set.contact.distance_m', 'm', (0.005, 0.3), 'sweep: how far the contact shadow reaches from what stands on it (0.05: a few centimetres)'),
     ('set.height', 'm', (1, 10), 'sweep: the back wall\'s height'),
     ('set.size', 'm [w, d, h]', None, 'room: width (x), depth (y), height'),
     ('set.center', 'm [x, y]', None, 'room: the floor\'s centre'),
