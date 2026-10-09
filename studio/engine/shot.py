@@ -142,6 +142,11 @@ def apply_overrides(d, items):
     return d
 
 
+# the presets the product's own parts wear: its finish, fixed like its geometry (the set's oak, plaster and sweep may change)
+PRODUCT_PRESETS = {'paint', 'metal', 'gunmetal', 'rubber', 'paper_cone', 'coated_cone', 'dome', 'plastic', 'gloss_plastic',
+                   'birch', 'print', 'glass'}
+
+
 def apply_changes(d, critic, only=None):
     """Apply a critic reply's `changes` (critic/PROMPT.md) to a shot. Returns (applied, pending): applied as
     [{id, setting, from, to}], pending (assets, unknown settings, changes not in `only`) as [{id, why}]."""
@@ -161,6 +166,9 @@ def apply_changes(d, critic, only=None):
             cur = None
             if not setting or ' ' in setting:
                 pending.append({'id': cid, 'why': f'no such setting: {setting!r}'}); continue
+        if setting.startswith('materials.') and setting.split('.')[1] in PRODUCT_PRESETS:
+            pending.append({'id': cid, 'why': f'{setting}: the product\'s own finish is fixed; only the set\'s materials may change'})
+            continue
         new = resolve(cur, c.get('to'))
         # a value the setting cannot take is held back with the reason, rather than crashing the render
         hexcol = isinstance(new, str) and re.fullmatch(r'#[0-9A-Fa-f]{6}', new.strip()) is not None   # a colour: kelvin or hex

@@ -93,8 +93,10 @@ def main():
         rtxt = '' if rng is None else (f'{rng[0]:g} to {rng[1]:g}' if isinstance(rng, tuple) and all(isinstance(x, (int, float)) for x in rng) else ', '.join(map(str, rng)))
         L.append(f'| `{k}` | (default) | {unit} | {rtxt} | {meaning} |')
     L.append('')
-    L.append('Material settings take the preset\'s keys (`materials.paint.coat_roughness`, `materials.oak.plank_contrast`, ...): '
-             + '; '.join(f'**{n}**: ' + ', '.join(f'{k} {fmt(v)}' for k, v in p.items()) for n, p in _presets().items()) + '.')
+    L.append('The set\'s materials take their preset\'s keys (`materials.oak.plank_contrast`, `materials.plaster.bump`, ...): '
+             + '; '.join(f'**{n}**: ' + ', '.join(f'{k} {fmt(v)}' for k, v in p.items()) for n, p in _presets().items()) + '. '
+             'The product\'s own materials (its paint and clear coat, metals, rubber, cones, birch) are its finish and fixed, '
+             'like its geometry: a reflection they show is changed by what they reflect.')
     L.append('')
     if a.image:
         mp = Path(a.image).with_suffix('.mask.json')
@@ -146,7 +148,7 @@ def main():
 
 def _presets():
     import materials as M
-    return {k: v for k, v in M.PRESET_DEFAULTS.items() if k in ('paint', 'oak', 'plaster', 'sweep', 'metal', 'gunmetal', 'rubber', 'paper_cone')}
+    return {k: v for k, v in M.PRESET_DEFAULTS.items() if k in ('oak', 'plaster', 'sweep')}
 
 
 if __name__ == '__main__':
