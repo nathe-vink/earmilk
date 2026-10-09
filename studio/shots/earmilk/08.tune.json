@@ -81,5 +81,92 @@
   "set": 1.3333,
   "passes": false,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "lights.key.orbit.azimuth_deg",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    -75,
+    -35
+   ]
+  },
+  "proofs": [
+   [
+    -50.0,
+    -23.2
+   ],
+   [
+    -60.0,
+    -41.8
+   ],
+   [
+    -67.0968,
+    -45.8
+   ]
+  ],
+  "set": -50.0,
+  "passes": false,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "lights.pool.irradiance",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    20,
+    34
+   ]
+  },
+  "proofs": [
+   [
+    0.6,
+    39.4
+   ],
+   [
+    1.0,
+    52.3
+   ],
+   [
+    0.2155,
+    26.0
+   ]
+  ],
+  "set": 1.0,
+  "passes": false,
+  "moves_the_test": true
+ },
+ {
+  "change": "c6",
+  "setting": "lights.axis.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    5,
+    14
+   ]
+  },
+  "proofs": [
+   [
+    0.25,
+    2.3
+   ],
+   [
+    0.45,
+    3.3
+   ],
+   [
+    0.85,
+    5.5
+   ]
+  ],
+  "set": 0.45,
+  "passes": false,
+  "moves_the_test": true
  }
 ]
