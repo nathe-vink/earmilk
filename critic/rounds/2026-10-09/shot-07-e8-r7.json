@@ -1,0 +1,196 @@
+{
+ "stage1": {
+  "impression": "A clean, competent exploded view of the milk-carton speaker on a grey seamless with good birch interiors, but the light is flat and grey: the white body reads dull, the left face is a uniform grey card and the grey waveguide sinks into the backdrop. The parts float without a clear common axis or any grounding, and the frame leaves a lot of dead grey at right and bottom, so it reads as a good draft, not a homepage hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Front baffle white modelled, not printed flat: lum_p95 <= 227 with a >= 20-level gradient across it (now p95 234.6; 45% of its white pixels sit above the 226 knee and 29% above 230; x-profile 214.9, 232.7, 231.6, 228.9, 222.4, 209.6, 208.4, 206.6).",
+  "Product separated from the sweep: floor between and behind the parts at 118-130 while the side-left white holds 190-205 (now 147.3 between the parts and 153.6 behind them, against a side white of 195.7, only about 49 levels apart).",
+  "Accent red on spec: the front roof slope within dE2000 6 of #C62828 under a graded sheen, not a flat pink veil (now dE 8.67, g_median 74, luma 100-108 in every band from ridge to eave); the side plinth band no darker than lum 50 (now 39.7, rgb (140,12,17), dE about 12.5, dead flat at p5 38.0 / p95 41.7).",
+  "Neutral whites: |b*| <= 1 on the side white, the front white and the sweep (now -1.8, -2.8 and -2.0, each with a* +1.1 to +1.4).",
+  "The build story reads: the front baffle no more than about 50 degrees off the lens (now about 63 degrees in plan), so that the pocket's back wall with its boss bore and magnets, the insert's waveguide mouth and the drivers' faces are legible (now the bore is not visible, the pocket magnets cover 33 px and the insert reads as a red-and-grey wedge). This needs the camera about 15-20 degrees further round toward the front and the mid and woofer drawn about 0.06 m further out so nothing overlaps (modelled cabinet-to-mid clearance falls from 59 px to 17 px at +13 degrees), plus the gloss panel re-aimed for the new view. Do it as a second-round move once the light is settled.",
+  "The floor brightest behind the product and darker toward the corners (now the empty bottom-right corner, at 170.4, is the brightest background, 23 levels above the floor between the parts).",
+  "The floating parts anchored by soft floor shadows (none now: the floor under the drivers rises monotonically from 144.7 to 169.4, left to right)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The sweep floor sits at 141-155 (147 between the parts), only about 49 levels under the white side (196), so the white carton reads as light grey on grey and the frame's tones crowd into 130-230.",
+   "evidence": {
+    "region": [
+     800,
+     460,
+     840,
+     520
+    ],
+    "measured": "floor between the parts lum_median 147.3, rgb (147,147,151); floor behind the parts [600,40,900,180] 153.6; left column [0,0,250,900] 143.5; side-left white {part side-left, box [282,265,462,690]} median 195.7; frame median 146.6, p1 39, p99 228"
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#9C9C9C",
+    "to": "#858585"
+   },
+   "expected": "Floor between the parts about 124 (behind the parts about 130, bottom-right about 135) while the side-left white stays about 196, so the white-to-floor separation grows from about 49 to about 72 levels; the drivers (lum 23-72) stay 50 or more levels under the floor; the insert's red face, which mirrors the sweep wall, loses part of its pink veil (G 69 to about 61).",
+   "accept": {
+    "region": [
+     800,
+     460,
+     840,
+     520
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     118,
+     130
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The front baffle, the face every part comes out of, is pushed into the view transform's shoulder: 45% of its white pixels are above 226 and 29% above 230, so its left half prints as one flat band and no modelling or lacquer reads there.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      462,
+      205,
+      572,
+      460
+     ]
+    },
+    "measured": "lum_median 221.7, lum_p95 234.6; x-profile 214.9, 232.7, 231.6, 228.9, 222.4, 209.6, 208.4, 206.6. The same panel's diffuse share also spills onto the floor it hangs 0.6 m above: the empty near-right floor [1150,760,1350,900] is the brightest background at 170.4, against 147.3 between the parts."
+   },
+   "change": {
+    "setting": "lights.drivers.diffuse",
+    "from": 0.3585,
+    "to": 0.13
+   },
+   "expected": "Front white p95 about 225 and median about 212; its left half drops to about 220-223 (from 229-233) and keeps the 20-25 level left-to-right gradient. The woofer cone's mirrored highlight (p95 134) is unchanged, since the panel's strength and reflection are untouched. The drivers' surrounds lose some fill (woofer surround 72 to about 60). The bottom-right floor drops about 12 levels before the sweep change.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      462,
+      205,
+      572,
+      460
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     216,
+     227
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The front roof slope, the largest red in the frame, is a flat pink veil instead of #C62828 under a graded sheen: every point of it mirrors the middle of the gloss panel (traced reflection hits at z 1.92-2.17 m, ramp 0.52-0.77), so G and B are lifted about 35 levels evenly from ridge to eave.",
+   "evidence": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      440,
+      135,
+      573,
+      255
+     ]
+    },
+    "measured": "rgb median (205,74,79), g_median 74, dE2000 8.67 to #C62828 (Lab 50.0/52.1/25.4 against 43.8/60.3/40.3: chroma 58 against 72.5, hue 8 degrees toward pink); slope luma 100-108 in all 8 bands from ridge to eave; the unveiled fin reads (195,33,37), dE 1.2"
+   },
+   "change": {
+    "setting": "lights.gloss.ramp.at_m",
+    "from": [
+     1.7,
+     2.4
+    ],
+    "to": [
+     2.1,
+     2.3
+    ]
+   },
+   "expected": "The right two-thirds of the slope (reflection hits below z 2.1) fall to ramp 0.3 and read near the fin's red (G about 50-56, dE about 4). The sheen survives as a bright graded band along the hip and the pocket rim, where hits reach z 2.29 (G 70-100). Slope g_median about 63, dE about 6.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      440,
+      135,
+      573,
+      255
+     ]
+    },
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     52,
+     66
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "post",
+   "problem": "The whites and the neutral sweep render cool (side white b* -1.8, front white b* -2.8, floor b* -2.0), so the Whole body reads bluish next to the warm birch.",
+   "evidence": {
+    "region": {
+     "part": "side-left",
+     "box": [
+      282,
+      265,
+      462,
+      690
+     ]
+    },
+    "measured": "r/g/b medians 197/195/199 (Lab a* +1.4, b* -1.8); front white {part front-baffle, box [462,205,572,460]} 222/221/227; floor [800,460,840,520] 147/147/151"
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 6000,
+    "to": 6300
+   },
+   "expected": "Side white about (200,195,195) with b* about +0.7, front white b* about 0, sweep b* about 0; the slope's hue moves about 1 degree back toward the spec red. The residual magenta (a* about +1.5) remains, because a Kelvin setting cannot correct it.",
+   "accept": {
+    "region": {
+     "part": "side-left",
+     "box": [
+      282,
+      265,
+      462,
+      690
+     ]
+    },
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     193,
+     197
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the waveguide bowl a flange, a rim or a shallower profile so it reads from this camera.",
+   "why": "Its depth, profile and mouth are set by acoustic simulation. Today its mouth does not read at all (the insert shows only its grey body and a veiled red face, a red-and-grey wedge), so legibility has to come from the camera move in blocking_9 and from light."
+  },
+  {
+   "request": "Confirm the waveguide insert's body finish: it renders as a cool third material, rgb (178,181,189), b* -4.4, dE 17.5 to white, while the card's Matcha spec puts the accent on 'the waveguide insert'.",
+   "why": "Product materials are fixed. A grey third material on a two-colour carton reads as a placeholder on a build page, so the owner should confirm the body is meant to be grey."
+  },
+  {
+   "request": "Make the cast 'earmilk' letters on the plinth read as metal.",
+   "why": "The marks and their material are fixed. From this camera height their front faces mirror the floor (the reflection points about 34 degrees below the horizon), so no lamp or glint can be placed where they would catch it. They read lum 73 on a lum 62 plinth, and the darker sweep in c1 brings them a few levels darker still."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
