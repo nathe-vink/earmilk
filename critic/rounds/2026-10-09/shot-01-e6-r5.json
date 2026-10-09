@@ -1,0 +1,356 @@
+{
+ "stage1": {
+  "impression": "A competent render of a sunlit room: the low sun raking across the wall and floor gives it mood, but the pair is small in frame, the group sits left of centre beside a dead grey wall, and the bottom third is empty floor. The white fronts look flat and blown out like cut-out cards, the glossy red tops are the only material that convinces, and the streaky floor and plain grey wall read as CG.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Every white front holds detail and modelling: left band [106,368,226,392] clip_pct <= 1 (now 100, every pixel 255), right band [810,368,915,392] <= 1 (now 48.6), and an 11-22 level ramp from top to bottom on the right-front strip [915,368,925,615] with its top bin >= 238.",
+  "The red roofs match #C62828 within dE00 4 and keep a visible gloss ramp (now 7.99 left, 5.22 right; the shaded plinths already read 3.4-4.0).",
+  "The oak reads as boards at spread size: lum_range within one board <= 9 at [150,831,450,866] (now 14.4, all from 1-3 px horizontal streaks), steps between boards >= 6 levels (now about 3), and staggered end joints (now one continuous seam at x 512-513 from y 600 to the bottom edge).",
+  "Both mid drivers read as papyrus cones of similar value (right mid-cone median 37.6 vs left 67.5 now; about 10 vs 50 once the highlights roll off).",
+  "The room reads lived-in rather than staged: the print is an untextured #3F5B6E field (lum_range 3.6), and the set's rug (prop 0, centre y -2.85 m, spanning y -3.7 to -2.0) lies wholly in front of the frame's bottom edge, which sees floor at y ~ -1.71 m. That leaves 244 px (27%) of bare floor under the speakers.",
+  "The pair commands the frame: the speakers are 358 of 900 px (40%) tall and the left cabinet sits 99 px (7%) from the edge. A 9 needs more product scale or a stronger reason for the space around it.",
+  "The sunlit plaster shows a surface: clean sun patches are a flat 164-165 with lum_range 1.9-3.8 ([400,280,430,330], [420,300,490,400])."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The Standard view clips the sunlit white lacquer hard (every pixel above the left mid driver is 255 and half the right speaker's top band clips) and leaves the clear coat's grey veil on the red roofs, so the white has no modelling and the red reads pink.",
+   "evidence": {
+    "region": [
+     106,
+     368,
+     226,
+     392
+    ],
+    "measured": "lum_median 254.9, rgb [255,255,254], clip_pct 100; right band [810,368,915,392] 247.7 with 48.6% clipped (B 253); front-baffle overall clip 30.8%; gable-block rgb [205,72,76] dE00 7.99 (left) and [194,63,65] 5.22 (right) vs #C62828, while the shaded plinths read 3.4-4.0; woofer cones median 71-79, rgb [69,70,78], light for a black anodised cone"
+   },
+   "change": {
+    "setting": "render.view",
+    "from": "Standard",
+    "to": "Khronos PBR Neutral"
+   },
+   "expected": "Highlights roll off instead of clipping: this band reads about 238-247 with 0% clipped, and front-baffle clip falls below 1%. The roof veil is subtracted (simulated gable dE00 2.8 left / 2.4 right at 1.35 EV). Woofer cones drop to about 49-57 median under their 190-204 glints and read as black anodised. Mid-tones lose about 0.04 linear (copy wall 94.6 to about 77, floor shade 69 to about 45); c3 recovers this.",
+   "accept": {
+    "region": [
+     106,
+     368,
+     226,
+     392
+    ],
+    "metric": "clip_pct",
+    "op": "<=",
+    "value": 1
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "material",
+   "problem": "Oak grain at 8x its preset (5 against 0.6) renders as 1-3 px horizontal streaks over the whole floor, so the boards read as brushed metal or a smeared texture, not oak.",
+   "evidence": {
+    "region": [
+     150,
+     831,
+     450,
+     866
+    ],
+    "measured": "one board row between seams at y~826 and y~871: lum_range 14.4 (p5 61.9, p95 76.3), row-to-row steps of 4-6 levels, column means flat (edge_x 0.4); a high-pass of y 540-900 shows uniform horizontal streaking; simulated under c1 the range grows to 16.6"
+   },
+   "change": {
+    "setting": "materials.oak.grain",
+    "from": 5,
+    "to": 1.2
+   },
+   "expected": "Inside one board the variation falls to 4-9 levels of fine figure, with no streaks; board tone (c5) and the sun band carry the floor. PBR Neutral's toe raises dark contrast, so expect the tuned grain to land near 1-1.5.",
+   "accept": {
+    "region": [
+     150,
+     831,
+     450,
+     866
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     4,
+     9
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "PBR Neutral subtracts about 0.04 linear from every channel, so after c1 the shaded room sinks about 18 levels and the low sun turns to dusk.",
+   "evidence": {
+    "region": [
+     950,
+     40,
+     1350,
+     500
+    ],
+    "measured": "copy wall lum_median 94.6, rgb [97,94,95]; simulated under PBR Neutral: 76.6 at 1.35 EV, 84.9 at +0.2 EV; floor shade [150,831,450,866] 69.0 now, 45.4 / 50.8 simulated"
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 1.35,
+    "to": "+0.2"
+   },
+   "expected": "Applied after c1: copy wall median 78-88, floor shade about 50, clean sun patch about 165-168, tops of the white fronts about 238-246. Keep it low: every extra 0.1 EV pushes the white ramp further into the shoulder (see c4).",
+   "accept": {
+    "region": [
+     950,
+     40,
+     1350,
+     500
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     78,
+     88
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The fronts' only modelling is the ramp reflected from front_gradient, and after c1 and c3 PBR Neutral's shoulder squeezes it from 21 levels to about 6, flattening the white fronts back into cards.",
+   "evidence": {
+    "region": [
+     915,
+     368,
+     925,
+     615
+    ],
+    "measured": "profile 249.6, 247.6, 243.9, 240.8, 237.2, 234.1, 231.1, 228.4 (falloff 21.2, 18% of the strip clipped); simulated after c1+c3: falloff 6.2"
+   },
+   "change": {
+    "setting": "lights.front_gradient.strength",
+    "from": 2.2,
+    "to": "x2.5"
+   },
+   "expected": "Applied after c1 and c3: the front's top mirrors the ramp at about 0.85 of its peak and its foot at about 0.06, so the extra strength lifts the top into the shoulder (about 245) while the foot stays about 232. That gives an 11-22 level ramp with no clipping. The plinth and the lowest part of the front mirror floor below the panel and do not change.",
+   "accept": {
+    "region": [
+     915,
+     368,
+     925,
+     615
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     11,
+     22
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "material",
+   "problem": "Tone steps between boards are about 3 levels, so once the streaks go nothing separates one board from the next.",
+   "evidence": {
+    "region": [
+     150,
+     745,
+     450,
+     880
+    ],
+    "measured": "row means smoothed over 7 px: 70.7-73.0 for y 763-825, 68.0-69.8 for y 826-870, 69.6-71.6 below; the largest raw row step is 6.5 at y 825, mostly streak"
+   },
+   "change": {
+    "setting": "set.floor.plank_contrast",
+    "from": 0.8,
+    "to": 1.4
+   },
+   "expected": "Applied after c2: boards separate at their seams (y about 754, 788, 826 and 871 in this column) by 6-14 levels, with even tone inside each, so the floor reads as individual oak boards.",
+   "accept": {
+    "region": [
+     150,
+     745,
+     450,
+     880
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     6,
+     14
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "PBR Neutral's toe crushes the right speaker's papyrus mid cone, already the darkest driver surface in frame, to near-black while the sunlit left mid stays brown, so the pair's mids stop matching.",
+   "evidence": {
+    "region": [
+     841,
+     404,
+     879,
+     440
+    ],
+    "measured": "mid-cone pixels in this box: median 37.6, p95 97.6, rgb [39,37,40]; left mid-cone 67.5, rgb [75,66,61]; simulated under PBR Neutral: right 8.9 at 1.35 EV, 10.9 at +0.2 EV"
+   },
+   "change": {
+    "setting": "glints.5",
+    "from": "none",
+    "to": {
+     "at": [
+      1.062,
+      -0.172,
+      0.67
+     ],
+     "normal": [
+      -0.469,
+      -0.828,
+      0.305
+     ],
+     "size_m": 0.4,
+     "power_w": 6,
+     "receivers": [
+      "mid-cone",
+      "mid-cap"
+     ]
+    }
+   },
+   "expected": "A soft sheen across the right mid's cone lifts its median to 30-60, in line with the left mid, so both drivers read as papyrus rather than holes. The point is the cone pixel at x 868, y 428; its mirror direction runs up-left-forward at about 28 deg and clears the dust cap.",
+   "accept": {
+    "region": {
+     "part": "mid-cone",
+     "box": [
+      830,
+      395,
+      890,
+      450
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     30,
+     60
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "asset",
+   "problem": "End joints line up in every row, so one continuous seam runs from under the sideboard to the bottom edge at x about 512, which reads as a tiled texture, not boards.",
+   "evidence": {
+    "region": [
+     497,
+     650,
+     527,
+     900
+    ],
+    "measured": "column means over y 650-900: 71.2-71.5 on either side, 69.0 and 68.2 at x 512-513 (a 3-level dip that survives averaging 250 rows); edge_x 3.0; no card setting staggers the joints"
+   },
+   "change": {
+    "setting": "set.floor (new floor material asset)",
+    "from": "procedural oak, end joints aligned in columns",
+    "to": {
+     "what": "oak plank floor material (albedo, roughness and normal maps, or an equivalent procedural)",
+     "plank_width_m": 0.19,
+     "plank_length_m": [
+      1.2,
+      2.2
+     ],
+     "end_joints": "random per row, none within 0.3 m of a joint in either neighbouring row",
+     "board_tone_variation_pct": 10,
+     "grain": "fine, along the board, low contrast",
+     "roughness": [
+      0.35,
+      0.5
+     ],
+     "base": "#A97F55",
+     "texel_density_px_per_m": 1024,
+     "where": "the whole room floor"
+    }
+   },
+   "expected": "No column of joints: across x 497-527 the column means over y 650-900 stay within 1.2 levels of their neighbours, and joints scatter from row to row as in a laid floor.",
+   "accept": {
+    "region": [
+     497,
+     650,
+     527,
+     900
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "<",
+    "value": 1.2
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "asset",
+   "problem": "The framed print is an untextured #3F5B6E field, a placeholder at the top centre of a room meant to look lived-in.",
+   "evidence": {
+    "region": [
+     515,
+     100,
+     560,
+     210
+    ],
+    "measured": "lum_median 42.4, lum_range 3.6, rgb [28,45,59], uniform"
+   },
+   "change": {
+    "setting": "set.props.3.artwork",
+    "from": "none (flat art #3F5B6E)",
+    "to": {
+     "what": "art print image for the existing frame",
+     "visible_size_m": [
+      0.41,
+      0.51
+     ],
+     "aspect": "4:5 portrait",
+     "content": "quiet abstract or architectural photograph on matte paper",
+     "palette": [
+      "#3F5B6E",
+      "#D9CDB6",
+      "#8C8273"
+     ],
+     "key": "mid-key, brightest tone well below the white fronts",
+     "resolution_px": [
+      1000,
+      1250
+     ]
+    }
+   },
+   "expected": "The print carries real image content in muted tones: lum_range 12-70 in its shaded half (now 3.6), and nothing in it brighter than the white fronts, so it adds life without pulling the eye off the pair.",
+   "accept": {
+    "region": [
+     515,
+     100,
+     560,
+     210
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     12,
+     70
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Crop the frame to 16:9 (about 1350 x 760), taking the cut from the floor below the speakers.",
+   "why": "The frame size is fixed. At 3:2, the 244 px (27%) of floor below the bases (y 656) is the emptiest, weakest band in the frame, and a 16:9 deck slide or web hero will crop most of it anyway; at 16:9 the pair would fill 47% of the height instead of 40%."
+  }
+ ],
+ "score_if_fixed": 6.8
+}

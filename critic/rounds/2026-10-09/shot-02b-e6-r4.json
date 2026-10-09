@@ -1,0 +1,160 @@
+{
+ "stage1": {
+  "impression": "A sunlit editorial interior with real mood: the milk-carton speaker reads crisply in low raking window light, a mullion shadow across its front, against a dark green wainscot. But the big flat silhouette on the wall competes with the product and seems cut loose from it on the floor, the carton's shadow side goes heavy and blue, the wall right of the speaker carries an unexplained glow, and the floor is a muddy brown.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Sunlit accent within dE2000 5 of #C62828 on the front plinth (now 14.6, rgb 245,80,85) and on the roof's front slope (now 12.5, rgb 237,77,77), with the white front still at a 218-232 median.",
+  "The wall silhouette reads as a gable-top carton, not a squat pentagon: flat top no wider than about 55% of its body (now about 175 of 250 px, 70%) and its height on the wall at least 1.6x its width (now about 368/250 = 1.47). The per-setting tests here cannot verify that, so it needs a separate re-stage: camera moved round to about azimuth -37 deg (position about [-1.98, -2.63, 1], same target) with rotate_z about 1, so the sun meets the front at about 37 deg instead of 24 deg and the roof shoulders in the shadow lengthen by about 40%.",
+  "Silhouette core 20-28 with the wainscot moulding readable inside it (now 13.6, rgb 7,16,10); the wainscot at the right frame edge [1200,250,1340,450] not crushed (now 9.4).",
+  "Woofer highlight subtle and not blue: part:woofer-cone p95 at most 95 (now 152.3) and in the glint zone B no more than 8 above R (now 110 vs 75).",
+  "Safe across a spread: the gutter band x 659-691 holds only lit wall, with no silhouette or speaker in it (now the silhouette's right edge sits at x of about 672).",
+  "The sunlit white front shows at least 8 levels of top-to-bottom gradation at a 218-232 median (now 234 to 228.5 on the strip x 862-874, effectively one value).",
+  "The floor sunbeam reads as a leading line from the speaker's base to its silhouette: the lit strip at least 1.8x the unlit floor beside it (now about 48 vs 28, 1.7x; c1 will lower it further)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The sunlit red accent renders coral-pink rather than #C62828, because the sunlit faces are driven deep into the view transform's shoulder, where Khronos PBR Neutral blends saturated colour toward white.",
+   "evidence": {
+    "region": [
+     858,
+     722,
+     900,
+     768
+    ],
+    "measured": "front plinth (front-baffle pixels only) median rgb 245,80,85, dE2000 14.6 vs #C62828; roof front slope [810,285,870,330] rgb 237,77,77, dE 12.5. Inverting the PBR Neutral curve puts the plinth at a scene-linear R of about 1.22, far past the 0.76 shoulder knee, and the white front at about R 2.2 / Y 1.8, which the shoulder flattens to 234-228.5 from top to bottom. Modelling the curve, cutting the sun's share by about 0.6x brings the plinth to about rgb 223,44,52, dE 5.5."
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": "1.8",
+    "to": 1.05
+   },
+   "expected": "Front plinth moves to about rgb 215-228, 42-58, 50-68, at most dE 7 (now 14.6); roof slope [810,285,870,330] at most dE 7 (now 12.5). The white front stays at a 220-230 median (now 233), and its top-to-bottom spread on x 862-874 widens from 5.5 to about 8-15 levels as it comes out of the shoulder. Side effects to accept: the upper-wall sun patch [320,0,720,150] falls from 190.6 to about 145-160 but stays peach (R-B at least 50), the lit wainscot from 122 to about 85-100, and the floor beam from about 48 to about 38. Stop at the highest irradiance that passes.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      858,
+      722,
+      900,
+      768
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 7
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The wall silhouette and the room's shadows sit in PBR Neutral's toe and crush to a saturated near-black, so the carton's shadow reads as a hole with no wall in it.",
+   "evidence": {
+    "region": [
+     470,
+     430,
+     620,
+     640
+    ],
+    "measured": "silhouette core lum median 13.7, rgb 7,16,10, p5 9.9: darker on screen than the unlit wainscot outside the sun patch [0,220,300,680] (33.3) and 104 levels under the sunlit wainscot beside it [330,610,415,660] (117.6). In scene-linear terms (from the inverted curve) it is about 0.021, a natural 3.5 stops under the lit wainscot (0.237) and 1 stop under the unlit wall (0.043), but below about 0.04 the toe subtracts almost everything. The fill provides about two thirds of the light there, since the speaker itself blocks the window's sun and sky from that patch of wall."
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": "0.17",
+    "to": 0.28
+   },
+   "expected": "Silhouette core rises from 13.7 to 18-28, with the wainscot's bottom-rail step and the panel moulding readable inside it, and it stays at least 60 levels under the lit wainscot around it. part:side-left rises from 99.9 to about 115-130 (keep it at or below 132; it stays slightly cool, with B about 6-8 above R). The unlit wainscot [0,220,300,680] rises from 33.3 to about 40-48, and the fill-lit wall right of the speaker [1010,250,1150,450] from 42.9 to no more than 60.",
+   "accept": {
+    "region": [
+     470,
+     430,
+     620,
+     640
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     18,
+     28
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The woofer-cone glint renders as a cold blue wash across the lower cone, which misreports a black anodised cone and clashes with the warm palette.",
+   "evidence": {
+    "region": [
+     905,
+     625,
+     950,
+     662
+    ],
+    "measured": "glint zone median rgb 83,87,116 (B 33 above R), p95 162.2; part:woofer-cone p95 152.3 against a cone median of 29.8. Glint 0 at (0.03, -0.164, 0.255) projects to (925, 638), inside the blue zone. Without it, the cone's upper part peaks at p95 78.3 and its right part at 47.8. The engine's last tuning left the glint at 121 for a 22-70 target."
+   },
+   "change": {
+    "setting": "glints.0.power_w",
+    "from": "1.3333",
+    "to": 0.35
+   },
+   "expected": "part:woofer-cone p95 falls from 152.3 to 55-95. The glint zone drops from median rgb 83,87,116 to about 45-60, 45-60, 55-75: a dim sheen that still says metal without reading as a blue cone. It will stay faintly cool, because the glint lamp has no colour setting on this card.",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     55,
+     95
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "composition",
+   "problem": "Across a spread, the gutter falls on the silhouette's right edge, so the fold would eat the shadow's shoulder and the lit gap that separates it from the speaker.",
+   "evidence": {
+    "region": [
+     640,
+     600,
+     780,
+     620
+    ],
+    "measured": "x-profile in 10 px bins: 9.3, 9.4, 10.5 (silhouette) | 123.0-128.2 (lit wall) | 107.7 | 28.7, 29.6 (unlit wall) | 87.1-97.9 (speaker side). The silhouette ends at x 670-673, 3 px from the frame centre line at 675. Gutter band [659,330,691,660] p5 10.7 against a median of 123. The lit strip between silhouette and speaker spans x 673-725 and is the only clean place for a fold."
+   },
+   "change": {
+    "setting": "camera.shift_x",
+    "from": "default (0)",
+    "to": 0.018
+   },
+   "expected": "All content moves about 24 px left (positive shift moves the frame right): the silhouette's right edge goes to about x 648, the lit strip to about 649-701, and the speaker to about x 731-982. The band x 661-689 (old x 685-713, p5 124 now, about 90 after c1) then holds only lit olive wall, so a fold separates shadow (left page) from speaker (right page). A shift under about 12 px or over about 36 px fails the test, which keeps the fold inside the strip. If the next render moves content right instead, flip the sign.",
+   "accept": {
+    "region": [
+     661,
+     520,
+     689,
+     640
+    ],
+    "metric": "lum_p5",
+    "op": "between",
+    "value": [
+     60,
+     150
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A less reflective (satin or lower-gloss) clear coat on the accent lacquer, so that sunlit red keeps its saturation.",
+   "why": "Even before tone mapping, the sunlit plinth carries G and B of about 0.10 and 0.115 against an R of 1.22 (G/R 0.08 vs 0.037 for #C62828), and the roof carries a similar neutral lift that the shaded plinth does not (about 0.003). That is consistent with the clear coat's reflection, and it may leave a floor of roughly dE 5-7 that exposure alone cannot remove. The product's paint and clear coat are its finish and are fixed."
+  }
+ ],
+ "score_if_fixed": 7.2
+}
