@@ -412,5 +412,75 @@
   ],
   "reply": "critic/rounds/2026-10-09/shot-08-e7-r5.json",
   "shot_sha": "b6bbfce23b975d5907df0f4c7b9e74e2e1d0f3bc"
+ },
+ {
+  "change": "c3",
+  "setting": "glints.3.power_w",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    150,
+    212
+   ]
+  },
+  "proofs": [
+   [
+    0.3,
+    177.5
+   ],
+   [
+    0.6,
+    206.6
+   ],
+   [
+    0.3361,
+    183.0
+   ]
+  ],
+  "set": 0.3361,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c3",
+   "c4",
+   "c5"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-08-e7-r5.json",
+  "shot_sha": "cbdd60a3d528c38af85403a21a9883c5f75a4a37"
+ },
+ {
+  "change": "c6",
+  "setting": "glints.4.power_w",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    8,
+    35
+   ]
+  },
+  "proofs": [
+   [
+    1.0,
+    4.4
+   ],
+   [
+    2.0,
+    4.4
+   ]
+  ],
+  "set": 1.0,
+  "passes": false,
+  "moves_the_test": false,
+  "passing": [
+   "c1",
+   "c3",
+   "c4",
+   "c5"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-08-e7-r5.json",
+  "shot_sha": "fe3b1b0283670993de4e2401bef3905c98df82fd"
  }
 ]
