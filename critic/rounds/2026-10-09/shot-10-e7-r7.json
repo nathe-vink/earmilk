@@ -1,0 +1,235 @@
+{
+ "stage1": {
+  "impression": "A clean, legible room shot of the two cartons, but both white fronts are flat glowing planes and the hero stands on a floor marked by a soft diagonal streak and a milky patch at its base. The set is taupe on taupe over honey oak with the sideboard reading as a pale box, so only the products' saturation pulls the eye.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Both white fronts below the shoulder: front-baffle medians 206-219 (now 241.5 red, 234.9 blue), each with a visible 10-20-level top-to-bottom ramp and p95 <= 230.",
+  "Flavour colours true on every lit face: roof front slopes delta E <= 3 (now 4.4 red, 5.6 blue) and plinth fronts delta E <= 3.5 once the whites are down.",
+  "Nothing printed on the product by a lamp or card: the lighter rectangle behind the bookshelf's wordmark (R 23 vs 11 on the face beside it) gone.",
+  "A clean floor at the hero's base: the pale patch in front of the plinth (129.8 vs 117 and 109 beside it) and the window-bar streak (106.6 vs 116-120) each within 5 levels of the floor around them.",
+  "The sideboard's middle door not split by a soft sun edge right under the bookshelf (126.5 to 84.3 inside one door), or that edge made crisp and deliberate.",
+  "The bookshelf's right roof slope reads blue with a sheen, not lavender (now 121,133,184).",
+  "Furniture with its own material and value, its top >= 25 levels off the wall behind it (sideboard front 131, top 84, against a 110-121 wall band now).",
+  "Cast letters that read as metal, a specular edge with p95 >= 200 (now 162 red, 175 blue), without a card printed on the plinth."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "Both white fronts sit in the view transform's shoulder, where everything above ~226 prints as one value, because the low sun strikes them almost square-on (sun from -25 deg, red front facing -16 deg, blue -22 deg) and supplies ~0.5 of their ~0.87-0.9 scene-linear value, so they read as white cards beside sides at 172.",
+   "evidence": {
+    "region": [
+     838,
+     253,
+     940,
+     458
+    ],
+    "measured": "Blue front (front-baffle mask in this box): median 234.9, profile top to bottom 240.4, 238.9, 237.9, 236.9, 235.9, 234.9, 233.9, 232.9, a 7.5-level ramp, all compressed. Red front [287,337,434,682]: median 241.5; the strip [292,345,430,375] is 244.3 edge to edge. Side faces (no sun): 171.8 red, 171.3 blue. The sun's share checks out on the sideboard front: lit 131.5 vs shaded 85 at the same albedo, +0.138 scene-linear, as albedo x irradiance x cos / pi predicts at this exposure."
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 1.1067,
+    "to": 0.7
+   },
+   "expected": "Blue front median ~211 with its ramp opened to ~18 levels (~227 under the gable to ~209 above the plinth); the red front's ramp-free bottom bins (233-234) drop to ~209; side faces unchanged (~172). The floor's window-bar streak ([340,852,372,868] 106.6 vs 116-120 beside it) and the sun edge across the sideboard's middle door (126.5 to 84.3) lose about a third of their depth. The red plinth front moves from (198,34,32) to about (184,31,30), delta E ~3.5, which is the right relation to a white at ~212.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      830,
+      253,
+      945,
+      458
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     206,
+     218
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "On the hero, the reflection-only panel red_front_ramp sits exactly in the white front's mirror direction and adds up to ~0.3 scene-linear to its upper half, so even with less sun the top two-thirds stay in the shoulder; it was tuned while the face was compressed (3 gave 13.3, 6.52 gave 15.8) and is ~4x too strong for a front below 226, and its light mirrored via the plinth's clear coat is the likely source of the pale patch on the floor at the base.",
+   "evidence": {
+    "region": [
+     287,
+     337,
+     434,
+     682
+    ],
+    "measured": "Red front (front-baffle mask): profile top to bottom 244.2, 243.4, 242.4, 241.6, 237.8, 233.9, 233.1, 233.9, i.e. ~1.17 scene-linear under the gable vs ~0.87 at the ramp-free bottom, which matches the blue front's base. Floor in front of the plinth [320,755,390,778]: 129.8 (p95 137.8) vs 117.1 at [250,755,300,778] and 109.4 at [400,765,460,790]; the patch lifts B most (+20 B, +15 R, +11 G over the floor beside it), a white specular source rather than more light on the orange floor."
+   },
+   "change": {
+    "setting": "lights.red_front_ramp.strength",
+    "from": 6.5238,
+    "to": 1.3
+   },
+   "expected": "Red front median ~214, a 10-16-level ramp from ~220 under the gable to ~208 above the plinth, p95 <= 228, so the trim rings, the corner round and the gradient all read; the floor patch falls to within ~6 of the floor beside it.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      280,
+      337,
+      440,
+      682
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     209,
+     219
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The roofs, a must-show and each flavour's largest colour field, are under-lit next to the vertical faces (red front slope (180,28,34), delta E 4.4 from #C62828, while the red fin and plinth fronts sit at the swatch), and c1 takes another ~0.1 scene-linear of sun off the 37.6 deg slopes, which would leave the red slope near (166,25,30), delta E ~7.",
+   "evidence": {
+    "region": [
+     290,
+     280,
+     425,
+     336
+    ],
+    "measured": "Red roof front slope (gable-block mask, waveguide excluded): rgb (180,28,34), delta E2000 4.40; red right slope [440,280,535,336] (126,15,13); red fin face [345,248,485,275] (199,26,25); red plinth front (198,34,32), delta E 1.54; blue roof front slope [839,225,905,253] (12,66,176), delta E 5.64 from #1F4FCF."
+   },
+   "change": {
+    "setting": "lights.roof_top",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.8,
+      0.3
+     ],
+     "position": [
+      0.0,
+      0.2,
+      2.3
+     ],
+     "target": [
+      0.0,
+      0.0,
+      1.0
+     ],
+     "irradiance": 0.6,
+     "color": 5800
+    }
+   },
+   "expected": "Red roof front slope ~(194,33,36), delta E <= 3; its right slope ~R 160, still >= 25 below the front slope in R; blue roof front slope delta E <= 4, and the insides of both waveguides lift with their slopes. The lamp projects ~300 px above the frame, behind the red front's plane and, but for its left end, the blue's, so the white fronts move <= 4 levels; the floor gains 5-13, the red speaker gets a soft overhead shadow reaching ~0.25 m in front of its base, and the sideboard top rises ~15.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      290,
+      280,
+      425,
+      336
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     3.0
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The reflection-only card that lights the bookshelf's letters is mirrored by the plinth's clear coat as a lighter, desaturated rectangle around the wordmark, so the logo reads as a sticker.",
+   "evidence": {
+    "region": [
+     848,
+     460,
+     928,
+     489
+    ],
+    "measured": "Inside the rectangle, left of the letters [850,462,862,470]: (23,75,198), lum 72.8; plinth face outside it [839,463,847,488]: (11,70,194), lum 66.3. The rectangle is ~80 x 29 px, the card's 0.16 x 0.05 m at this distance, while the letters occupy only 864-908 x 473-484; letters p95 174.8."
+   },
+   "change": {
+    "setting": "lights.blue_letters_card.size_m",
+    "from": [
+     0.16,
+     0.05
+    ],
+    "to": [
+     0.08,
+     0.016
+    ]
+   },
+   "expected": "The card's reflection shrinks inside the letters' outline: the face around the wordmark reads as one colour, R <= 13 and within 3 of the face outside it; the letters keep p95 >= 160.",
+   "accept": {
+    "region": [
+     850,
+     462,
+     862,
+     470
+    ],
+    "metric": "r_median",
+    "op": "<=",
+    "value": 15
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "The sideboard is the wall's grey-taupe: its lit front (145,129,115) sits between the wall band behind it (118,111,104) and the wall above (161,147,134), so the furniture under the bookshelf reads as more wall and the set as taupe on taupe.",
+   "evidence": {
+    "region": [
+     660,
+     520,
+     820,
+     680
+    ],
+    "measured": "Lit door lum 131.5, rgb (145,129,115); profile across the whole front 133.5, 130.6, 128.5, 126.5, 116.6, 84.3, 84.3, 85.1; top [700,470,830,495] 84.1; wall band [650,300,820,440] 112.0; upper wall 148-151."
+   },
+   "change": {
+    "setting": "set.props.0.color",
+    "from": "#8A7D6F",
+    "to": "#8A6548"
+   },
+   "expected": "A teak sideboard: lit door ~95 (rgb ~(122,90,64)), shaded part ~65, top ~75-80 with c3's lamp, >= 10 levels off the bookshelf's blue plinth (~64 after c1) and >= 25 below the wall band behind it, so the white bookshelf stands on a warm dark base and the blue reads against its complement.",
+   "accept": {
+    "region": [
+     660,
+     520,
+     820,
+     680
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     80,
+     108
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Polished or brighter cast letters so the wordmarks read as metal (now flat grey: red median 152, p95 162).",
+   "why": "The letters' metal and finish are the product's own and fixed. Their faces mirror the floor ~0.17 m in front of the plinth, so the engine cannot seat a glint there (glint 2 was skipped for the same reason on the bookshelf), and a card bright enough to light them prints on the plinth's clear coat, as c4 shows."
+  },
+  {
+   "request": "A less glossy clear coat on the bookshelf's roof so its right slope keeps its blue instead of washing to (121,133,184).",
+   "why": "The paint and clear coat are the finish and fixed; at ~75 deg incidence the slope mirrors the light upper wall, and only what it mirrors or the camera's angle can change that, and a flag in that mirror path would sit 0.15 m off the wall and print its own shadow there."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
