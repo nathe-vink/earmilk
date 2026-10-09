@@ -158,6 +158,11 @@ open sky in front). Nothing is rendered.
   of 96 in the floorstander, 160 in the bookshelf), and the teeth are gone. A reflection that breaks into teeth is the mesh's parameterisation before it is the shading's.
 - **Real blacks**: the products' black paint, rubber, plastic and anodising reflect 3 to 4 %, as real ones do; at
   under 1 % no light can model a driver's basket or an amplifier's plate.
+- **Oak boards**: each board is its own piece of wood. A second brick texture gives every board a random number that
+  offsets its grain (the grain stops at the seams, where laminate's runs on), sets its sheen and its cut: flat-sawn
+  boards show their growth rings as cathedral arches, rift-sawn ones as straight lines, the latewood a thin dark line.
+  Each row is slid along by its own random amount, so the end joints fall at random (a brick texture's regular offset
+  lined them up in every other row, a column of joints the 01 critic found).
 - **A polarising filter** (`camera.polariser`: `strength` 0 to 1, `angle_deg` the pass axis from horizontal). A clear
   coat's reflection is polarised: across the plane of incidence (s) it reflects more than in it (p), and at Brewster's
   angle (56 degrees off the normal for a 1.5 lacquer) only s reflects. The filter scales each camera ray's specular

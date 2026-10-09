@@ -27,7 +27,8 @@ PRESET_DEFAULTS = {
     'plastic':    dict(color='#202020', roughness=0.45, specular=0.5),
     'gloss_plastic': dict(color='#101010', roughness=0.15, coat=0.6, coat_roughness=0.05),
     'birch':      dict(color='#EAD8B0', roughness=0.55),
-    'oak':        dict(base='#B8905F', dark='#9C7448', light='#C9A273', plank_w=0.18, plank_l=1.6, roughness=0.42, grain=0.6, seam=0.0015, plank_contrast=0.5),
+    'oak':        dict(base='#B8905F', dark='#9C7448', light='#C9A273', plank_w=0.18, plank_l=1.6, roughness=0.42, grain=0.6, seam=0.0015, plank_contrast=0.5,
+                       figure=0.22, rings=60.0, arch=4.0, flat_sawn=0.6, gloss_vary=0.3),
     'plaster':    dict(color='#DDD6CA', roughness=0.92, bump=0.025, drift=0.03),
     'sweep':      dict(color='#A9A59E', roughness=0.55),
     'glass':      dict(color='#FFFFFF', roughness=0.0, ior=1.5),
@@ -191,23 +192,64 @@ def _wood(nt, b, color, roughness, grain=0.4, stretch=(1, 1, 10)):
 
 def _planks(nt, b, p):
     """Oak floorboards in world space (x along the boards): a brick texture lays out boards of random length and
-    shade, a stretched noise and a wave give each its grain, and the mortar lines become shallow bevelled seams."""
+    shade, a stretched noise gives each its grain, and the mortar lines become shallow bevelled seams; each row is slid
+    along by its own random amount, so the end joints fall at random.
+
+    Each board is its own piece of wood: a second brick texture, laid out like the first, gives every board a random
+    number r, which offsets its grain (so the grain stops at the seams instead of running on as laminate does), sets
+    its sheen (`gloss_vary`) and its cut. A flat-sawn board (`flat_sawn`, the share of them) shows its growth rings as
+    nested cathedral arches: rings at s = (v - c)^2 rings + u arch, v across the board from a pith offset c, u along it;
+    a rift-sawn board shows them as straight lines. The latewood at the end of each ring is the dark line (`figure`,
+    how much darker)."""
     geo = nt.nodes.new('ShaderNodeNewGeometry')
     br = nt.nodes.new('ShaderNodeTexBrick')
     # brick texture: rows are boards (height = board width), bricks are board lengths
     br.inputs['Scale'].default_value = 1.0
     br.inputs['Brick Width'].default_value = p['plank_l']; br.inputs['Row Height'].default_value = p['plank_w']
     br.inputs['Mortar Size'].default_value = p['seam']; br.inputs['Mortar Smooth'].default_value = 0.6
-    br.offset = 0.37; br.squash = 1.0
+    br.offset = 0.0; br.squash = 1.0
     br.inputs['Color1'].default_value = hex_lin(p['light']); br.inputs['Color2'].default_value = hex_lin(p['dark'])
     br.inputs['Mortar'].default_value = hex_lin('#3A2A1C')
     sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(geo.outputs['Position'], sep.inputs['Vector'])
+    # each row of boards slid along by its own random amount, so the end joints fall at random as boards are laid
+    # (a brick texture's regular offset lines them up in every other row: a column of joints across the floor)
+    row = nt.nodes.new('ShaderNodeMath'); row.operation = 'FLOOR'
+    rdiv = nt.nodes.new('ShaderNodeMath'); rdiv.operation = 'DIVIDE'; rdiv.inputs[1].default_value = p['plank_w']
+    nt.links.new(sep.outputs['Y'], rdiv.inputs[0]); nt.links.new(rdiv.outputs['Value'], row.inputs[0])
+    wn = nt.nodes.new('ShaderNodeTexWhiteNoise'); wn.noise_dimensions = '1D'
+    nt.links.new(row.outputs['Value'], wn.inputs['W'])
+    slide = nt.nodes.new('ShaderNodeMath'); slide.operation = 'MULTIPLY_ADD'
+    nt.links.new(wn.outputs['Value'], slide.inputs[0]); slide.inputs[1].default_value = p['plank_l']
+    nt.links.new(sep.outputs['X'], slide.inputs[2])
     comb = nt.nodes.new('ShaderNodeCombineXYZ')
-    nt.links.new(sep.outputs['X'], comb.inputs['X']); nt.links.new(sep.outputs['Y'], comb.inputs['Y'])
+    nt.links.new(slide.outputs['Value'], comb.inputs['X']); nt.links.new(sep.outputs['Y'], comb.inputs['Y'])
     nt.links.new(comb.outputs['Vector'], br.inputs['Vector'])
+    # every board's own random number r, from a second brick texture laid out like the first, black to white
+    br2 = nt.nodes.new('ShaderNodeTexBrick')
+    for k in ('Scale', 'Brick Width', 'Row Height', 'Mortar Size', 'Mortar Smooth'):
+        br2.inputs[k].default_value = br.inputs[k].default_value
+    br2.offset = br.offset; br2.squash = br.squash
+    br2.inputs['Color1'].default_value = (0, 0, 0, 1); br2.inputs['Color2'].default_value = (1, 1, 1, 1)
+    br2.inputs['Mortar'].default_value = (0.5, 0.5, 0.5, 1)
+    nt.links.new(comb.outputs['Vector'], br2.inputs['Vector'])
+    rs = nt.nodes.new('ShaderNodeSeparateColor'); nt.links.new(br2.outputs['Color'], rs.inputs['Color'])
+    r = rs.outputs['Red']
+    def m(op, a, bb=None):
+        n = nt.nodes.new('ShaderNodeMath'); n.operation = op
+        for i, v in enumerate((a, bb)):
+            if v is None:
+                continue
+            if isinstance(v, (int, float)): n.inputs[i].default_value = v
+            else: nt.links.new(v, n.inputs[i])
+        return n.outputs['Value']
+    # the board's grain offset by r, so neighbouring boards do not share one grain
+    off = nt.nodes.new('ShaderNodeCombineXYZ')
+    nt.links.new(m('MULTIPLY', r, 7.3), off.inputs['X']); nt.links.new(m('MULTIPLY', r, 3.1), off.inputs['Z'])
+    pos = nt.nodes.new('ShaderNodeVectorMath'); pos.operation = 'ADD'
+    nt.links.new(geo.outputs['Position'], pos.inputs[0]); nt.links.new(off.outputs['Vector'], pos.inputs[1])
     # grain: noise stretched along the boards, and fine streaks
     mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1.0, 22.0, 1.0)
-    nt.links.new(geo.outputs['Position'], mp.inputs['Vector'])
+    nt.links.new(pos.outputs['Vector'], mp.inputs['Vector'])
     nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 3.0; nz.inputs['Detail'].default_value = 8.0; nz.inputs['Distortion'].default_value = 1.5
     nt.links.new(mp.outputs['Vector'], nz.inputs['Vector'])
     mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['To Min'].default_value = 1 - 0.35 * p['grain']; mr.inputs['To Max'].default_value = 1 + 0.15 * p['grain']
@@ -218,12 +260,34 @@ def _planks(nt, b, p):
     cc = nt.nodes.new('ShaderNodeCombineColor')
     for ch in ('Red', 'Green', 'Blue'): nt.links.new(mr.outputs['Result'], cc.inputs[ch])
     nt.links.new(cc.outputs['Color'], ins[1])
+    # growth rings: v across the board (-0.5 to 0.5 of its width), u along it; arches on a flat-sawn board, straight
+    # lines on a rift-sawn one, wobbled by a slow noise; the latewood a thin dark line before each ring's end
+    v = m('SUBTRACT', m('FRACT', m('DIVIDE', sep.outputs['Y'], p['plank_w'])), 0.5)
+    d = m('SUBTRACT', v, m('MULTIPLY', m('SUBTRACT', r, 0.5), 0.6))
+    u = m('ADD', sep.outputs['X'], m('MULTIPLY', r, 11.0))
+    wob_map = nt.nodes.new('ShaderNodeMapping'); wob_map.inputs['Scale'].default_value = (1.5, 12.0, 1.0)
+    nt.links.new(pos.outputs['Vector'], wob_map.inputs['Vector'])
+    wob = nt.nodes.new('ShaderNodeTexNoise'); wob.inputs['Scale'].default_value = 1.0; wob.inputs['Detail'].default_value = 3.0
+    nt.links.new(wob_map.outputs['Vector'], wob.inputs['Vector'])
+    wobble = m('MULTIPLY', m('SUBTRACT', wob.outputs['Fac'], 0.5), 3.0)
+    s_flat = m('ADD', m('ADD', m('MULTIPLY', m('MULTIPLY', d, d), p['rings']), m('MULTIPLY', u, p['arch'])), wobble)
+    s_rift = m('ADD', m('MULTIPLY', v, p['rings'] * 0.2), wobble)
+    flat = m('LESS_THAN', r, p['flat_sawn'])
+    s_ring = m('ADD', m('MULTIPLY', s_flat, flat), m('MULTIPLY', s_rift, m('SUBTRACT', 1.0, flat)))
+    late = m('POWER', m('FRACT', s_ring), 6.0)
+    fig = m('SUBTRACT', 1.0, m('MULTIPLY', late, p['figure']))
+    figc = nt.nodes.new('ShaderNodeCombineColor')
+    for ch in ('Red', 'Green', 'Blue'): nt.links.new(fig, figc.inputs[ch])
+    figmul = nt.nodes.new('ShaderNodeMix'); figmul.data_type = 'RGBA'; figmul.blend_type = 'MULTIPLY'; figmul.inputs['Factor'].default_value = 1.0
+    fins = [x for x in figmul.inputs if x.type == 'RGBA']; fouts = [x for x in figmul.outputs if x.type == 'RGBA']
+    nt.links.new(outs[0], fins[0]); nt.links.new(figc.outputs['Color'], fins[1])
     # blend the per-board colour toward the base by plank_contrast
     mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'; mix.inputs['Factor'].default_value = 1 - p['plank_contrast']
     mins = [x for x in mix.inputs if x.type == 'RGBA']; mouts = [x for x in mix.outputs if x.type == 'RGBA']
-    nt.links.new(outs[0], mins[0]); mins[1].default_value = hex_lin(p['base'])
+    nt.links.new(fouts[0], mins[0]); mins[1].default_value = hex_lin(p['base'])
     nt.links.new(mouts[0], b.inputs['Base Color'])
-    b.inputs['Roughness'].default_value = p['roughness']
+    # each board's sheen a little different, as boards finished together still are
+    nt.links.new(m('MULTIPLY', m('ADD', 1.0 - p['gloss_vary'] / 2, m('MULTIPLY', r, p['gloss_vary'])), p['roughness']), b.inputs['Roughness'])
     # seams as a shallow bump from the brick's mortar factor, plus the grain's fine relief
     bn = nt.nodes.new('ShaderNodeBump'); bn.inputs['Strength'].default_value = 0.6; bn.inputs['Distance'].default_value = 0.0008
     inv = nt.nodes.new('ShaderNodeMath'); inv.operation = 'SUBTRACT'; inv.inputs[0].default_value = 1.0
