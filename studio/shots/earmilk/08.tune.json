@@ -313,5 +313,104 @@
   "set": 3.6,
   "passes": false,
   "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "glints.3.power_w",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    150,
+    212
+   ]
+  },
+  "proofs": [
+   [
+    1.0,
+    223.2
+   ],
+   [
+    3.0,
+    243.3
+   ],
+   [
+    1.0,
+    223.2
+   ]
+  ],
+  "set": 1.0,
+  "passes": false,
+  "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "lights.key.orbit.elevation_deg",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    155,
+    178
+   ]
+  },
+  "proofs": [
+   [
+    15.0,
+    188.9
+   ],
+   [
+    22.0,
+    193.8
+   ],
+   [
+    7.3333,
+    181.9
+   ]
+  ],
+  "set": 7.3333,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c5"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-08-e7-r5.json",
+  "shot_sha": "6a0f25f4b909e2b7672abab4add6e4a6642823d9"
+ },
+ {
+  "change": "c5",
+  "setting": "lights.plinth.irradiance",
+  "test": {
+   "metric": "delta_e",
+   "op": "between",
+   "value": [
+    0,
+    5
+   ]
+  },
+  "proofs": [
+   [
+    0.8,
+    5.56
+   ],
+   [
+    1.8,
+    1.07
+   ],
+   [
+    1.4815,
+    2.52
+   ]
+  ],
+  "set": 1.4815,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c5"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-08-e7-r5.json",
+  "shot_sha": "b6bbfce23b975d5907df0f4c7b9e74e2e1d0f3bc"
  }
 ]
