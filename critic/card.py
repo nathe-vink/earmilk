@@ -127,6 +127,9 @@ def main():
             for n, v in sorted(parts.items(), key=lambda kv: -kv[1]['pixels']):
                 L.append(f'| {n} | {v["pixels"]} | {v["box"]} | {v["lum_median"]} | {v["rgb_median"]} |')
             L.append('')
+        # the last rounds on this shot: what each changed, and whether the last round's tests pass on this image, so a
+        # round does not undo the one before without knowing it (05's round 7 darkened the sweep round 6 had lightened)
+        L += _history(a.shot_id, arr, Me)
         # what the engine could not do in this render, in its own words: the critic's prescriptions meet the physics here
         rp = Path(a.report) if a.report else Path(a.image).with_suffix('.report.json')
         if rp.exists():
@@ -172,6 +175,53 @@ def main():
         Path(a.out).write_text(text)
     else:
         print(text)
+
+
+def _history(shot_id, arr, Me, rounds=3):
+    """The card's account of the shot's last rounds: the last round's changes with its tests measured on this image, and
+    every setting the last `rounds` rounds changed, in order."""
+    import glob
+    files = []
+    for f in glob.glob(str(ROOT / 'critic' / 'rounds' / '*' / f'{shot_id}-*-r*.json')):
+        m = re.search(r'-r(\d+)\.json$', f)
+        if m:
+            files.append((int(m.group(1)), Path(f).stat().st_mtime, f))
+    if not files:
+        return []
+    files.sort()
+    last = json.loads(Path(files[-1][2]).read_text())
+    ver = re.search(rf'{re.escape(shot_id)}-(e\d+)-r', files[-1][2])
+    try:
+        res = {r_['id']: r_ for r_ in Me.check(arr, last)['tests']}
+    except SystemExit:
+        res = {}
+    def short(v):
+        s = json.dumps(v) if not isinstance(v, str) else v
+        return s if len(s) <= 90 else s[:87] + '...'
+    out = ['## The last rounds on this shot', '',
+           f'Round {files[-1][0]} judged {ver.group(1) if ver else "the frame before"} and made this frame from it. Its changes, '
+           f'and its tests measured on this image:', '']
+    for c in last.get('changes', []):
+        ch = c.get('change', {}); r_ = res.get(c.get('id'))
+        verdict = '' if r_ is None else (f' Its test {"passes" if r_["pass"] else "fails"} here: {r_["metric"]} {r_["measured"]} '
+                                          f'(wanted {r_["op"]} {r_["value"]}).')
+        why = ' '.join(str(c.get('problem', '')).split())
+        why = why if len(why) <= 220 else why[:220].rsplit(' ', 1)[0].rstrip(',;:') + '...'
+        out.append(f'- {c.get("id")} `{ch.get("setting")}`: {short(ch.get("from"))} to {short(ch.get("to"))}, for: '
+                   f'{why.rstrip(".")}.{verdict}')
+    seen = {}
+    for n, _, f in files[-rounds:]:
+        for c in json.loads(Path(f).read_text()).get('changes', []):
+            s = c.get('change', {}).get('setting')
+            if s and not str(s).startswith('asset'):
+                seen.setdefault(s, []).append(f'round {n}: {short(c["change"].get("from"))} to {short(c["change"].get("to"))}')
+    rep = {s: v for s, v in seen.items() if len(v) > 1}
+    if rep:
+        out += ['', 'Settings more than one of the last rounds changed: ' +
+                '; '.join(f'`{s}` ({", ".join(v)})' for s, v in rep.items()) + '.']
+    out += ['', 'A change that reverses one of these undoes what it was for: if you prescribe one, say in "expected" why the '
+            'trade is worth it and what keeps the earlier problem from coming back.', '']
+    return out
 
 
 def _presets():
