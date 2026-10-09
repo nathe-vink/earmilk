@@ -26,7 +26,7 @@ KNOBS = [
     ('render.view', 'choice', ('Khronos PBR Neutral', 'AgX', 'Filmic', 'Standard'), 'view transform (tone mapping)'),
     ('render.look', 'choice', None, 'the view transform\'s look (AgX: "AgX - Base Contrast", "AgX - Punchy", ...)'),
     ('render.white_balance_k', 'K', (2500, 12000), 'the white point: the colour temperature that renders neutral'),
-    ('render.white_balance_tint', 'tint', (-50, 50), 'green (-) to magenta (+) correction'),
+    ('render.white_balance_tint', 'tint', (-50, 50), 'the white point\'s tint: 10 is neutral daylight; lower turns the image greener (takes out magenta: 02b\'s pink white went from dE 10.7 at 16 to 4.6 at 1.9 against warm white), higher more magenta'),
     ('render.samples', 'samples', (16, 4096), 'path samples per pixel'),
     ('render.adaptive', 'noise threshold', (0, 0.1), 'adaptive sampling; 0 samples every pixel fully'),
     ('render.clamp', 'radiance', (0, 100), 'indirect clamp against fireflies; 0 for none'),
