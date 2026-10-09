@@ -1,0 +1,330 @@
+{
+ "stage1": {
+  "impression": "A moody, sun-raked living room with two red-and-white gable-topped speakers flanking a taupe sideboard, turntable and print; the set is believable, but the product is small and its white fronts look lit flat and alike from the front, as if they did not belong to the low raking sun. The frame is left-heavy with an empty dark right third and a large dead floor foreground, so it reads as a competent lifestyle draft, not a hero.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The pair matches: the right front's white within dE2000 2.5 of the left's (now 4.44: right median 207.8, rgb [209, 207, 212], upper half [212, 211, 218]; left 214.8, [219, 214, 211]), so both cabinets read as lit by the same sun.",
+  "No unmotivated light on the set: the sideboard's right end (median 77.5, peak 88.2 at x 675-690) sits inside the right speaker's sun shadow, dark like the sideboard top above it (21.9) and the bar beside it (46-51).",
+  "The accent within dE2000 4.5 of #C62828: gable front slopes are now 6.95 (left) and 8.36 (right), plinth bands 7.4 and 8.9.",
+  "Both woofers legible: the left cone is 31.9% crushed (luma <= 3), median 15.1, against the right's 1.8% and 31.2.",
+  "The room reads lived-in and luminous rather than a sparse, dim set: frame median 52, 28.8% of pixels below 40; the visible furnishing is one sideboard, one print and one vase, and the rug (props.0 at y -2.85) is out of frame.",
+  "The milk-carton read: the gable ends show only as 14-px slivers (side panels at x 233-247 and 779-793), so from this camera the top reads as a red cap.",
+  "Set detail holds at spread size: the sunlit plaster is featureless (lum_range 1.8-3.6 in clean patches), one copy-space plank runs at 86.6 against neighbours of 67.9 and 75.7, and the print hangs 0.62 m above the sideboard with its top 57 px from the frame edge."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The two speakers do not match: the right front is cooler and darker than the left, so one cabinet reads sunlit and the other sky-lit (the +/-5 deg toe-in turns the left front to the 62/13 deg sun at cos 0.53, the right at 0.38).",
+   "evidence": {
+    "region": [
+     793,
+     366,
+     927,
+     618
+    ],
+    "measured": "right white (front-baffle, y 366-618) median 207.8, rgb [209, 207, 212], upper half [212, 211, 218]; left white median 214.8, rgb [219, 214, 211]; dE2000 right vs #DBD6D3 (the left median) 4.44"
+   },
+   "change": {
+    "setting": "lights.right_fill",
+    "from": "none (new lamp)",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.9,
+      1.2
+     ],
+     "position": [
+      2.2,
+      -1.6,
+      0.8
+     ],
+     "target": [
+      1.05,
+      -0.2,
+      0.55
+     ],
+     "irradiance": 0.3,
+     "color": 2700,
+     "receivers": [
+      "front-baffle"
+     ]
+    }
+   },
+   "expected": "Right white median 207.8 -> 212-216 and warmer, about [219, 213, 213]; dE2000 to the left white <= 2.5. The lamp is 1.8 m from the right front (cos 0.71) and 3.6 m from the left (cos 0.47), so the left white moves <= 2 levels; it is out of frame and outside both fronts' mirror directions, so no new reflection appears; the right plinth band warms with it.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      775,
+      366,
+      935,
+      618
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#DBD6D3",
+    "op": "between",
+    "value": [
+     0,
+     2.5
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The inner_fill panel (x 0.5, facing +x) spills onto the sideboard's right end and lights it brighter than the sunlit front, inside what should be the right speaker's sun shadow, which survives only as a 30-px dark bar starting at x 645, where that shadow's edge falls.",
+   "evidence": {
+    "region": [
+     600,
+     490,
+     735,
+     570
+    ],
+    "measured": "sideboard-front x-profile (y 490-570, 15-px bins from x 600): 79.3, 79.3, 79.5 | 51.2, 46.3 | 88.2, 82.2, 73.9, 65.7, a panel falloff peaking just right of the bar; the top above it is shadowed (21.9 at [640, 452, 730, 464]); right-end median 77.5 vs sunlit left end 78.5"
+   },
+   "change": {
+    "setting": "lights.inner_fill.receivers",
+    "from": "none (lights every surface)",
+    "to": [
+     "side-left"
+    ]
+   },
+   "expected": "The sideboard front from x 645 to 735 reads as one shadow at 40-50, continuous with its shadowed top, so the right speaker visibly throws the sun's shadow across the sideboard; the sunlit front left of x 645 stays 77-80; side-left keeps its fill (median 95-110, now 101.7).",
+   "accept": {
+    "region": [
+     675,
+     490,
+     735,
+     570
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     36,
+     56
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Both gables' front slopes reproduce the accent 7-8.4 dE dark, so the brand red reads maroon against the swatch; exposure cannot lift it, because the whites are already held at 208-215.",
+   "evidence": {
+    "region": [
+     100,
+     298,
+     926,
+     365
+    ],
+    "measured": "gable front slopes: left [169, 19, 27] lum 50.1, dE2000 6.95; right [162, 18, 28] lum 48.3, dE2000 8.36; both gables together [165, 22, 28], dE2000 7.53; plinth bands 7.4 / 8.9"
+   },
+   "change": {
+    "setting": "lights.gable_fill",
+    "from": "none (new lamp)",
+    "to": {
+     "type": "area",
+     "size_m": [
+      2.4,
+      0.8
+     ],
+     "position": [
+      0,
+      -1.6,
+      2.2
+     ],
+     "target": [
+      0,
+      -0.1,
+      1.0
+     ],
+     "irradiance": 0.5,
+     "color": "#FFF4E8",
+     "receivers": [
+      "gable-block"
+     ]
+    }
+   },
+   "expected": "Both front slopes rise to lum about 57-62, rgb toward [188, 30, 33]; combined gable dE2000 7.53 -> <= 4.5, the two gables lit equally (cos 0.875 each). The lamp is out of frame and outside the slopes' mirror direction (up and back), so the highlight band (about 80-90) stays; the side triangles keep their sun/shade split (now 94.5 / 37); the waveguide bowl is not a receiver and stays dark, so the recess reads deeper against a brighter slope.",
+   "accept": {
+    "region": "part:gable-block",
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     4.5
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The left woofer's inner half crushes to black, because it mirrors the unlit front-left of the room and glint 6, meant for it, was skipped (its normal mirrored into the surround).",
+   "evidence": {
+    "region": [
+     127,
+     508,
+     205,
+     584
+    ],
+    "measured": "left woofer-cone: median 15.1, crush 31.9% (luma <= 3), p95 142.2; right woofer-cone: median 31.2, crush 1.8%"
+   },
+   "change": {
+    "setting": "glints.7",
+    "from": "none (new glint)",
+    "to": {
+     "at": [
+      -0.954,
+      -0.168,
+      0.3
+     ],
+     "normal": [
+      -0.47,
+      -0.87,
+      0.16
+     ],
+     "size_m": 0.5,
+     "power_w": 1.5,
+     "receivers": [
+      "woofer-cone",
+      "woofer-cap"
+     ]
+    }
+   },
+   "expected": "A soft radial highlight on the inner (right-hand) half of the left cone just below its centre (image about x 185-205, y 535-565), matching the right woofer's; left cone median 15.1 -> 20-40, crush 31.9% -> about 15% or less. At this point the mirror direction is about (-0.93, -0.35, 0.03), almost level toward the front-left, so it clears the dust cap and the surround that skipped glint 6; the right cone is unchanged.",
+   "accept": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      95,
+      490,
+      245,
+      600
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     20,
+     40
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "The print hangs 0.62 m above the sideboard with its top 57 px from the frame edge, so it floats off the group and crowds the top of the frame.",
+   "evidence": {
+    "region": [
+     432,
+     57,
+     593,
+     272
+    ],
+    "measured": "print box [432, 57, 593, 272]; its bottom at z 1.14 vs the sideboard top at 0.52; the strip [445, 62, 585, 100] holds the top rail and mat (lum_range 39.8)"
+   },
+   "change": {
+    "setting": "set.props.3.z",
+    "from": 1.55,
+    "to": 1.32
+   },
+   "expected": "The print drops about 60 px (top about 119, bottom about 330), hangs 0.39 m above the sideboard with about 120 px of headroom, and stays clear of the vase branches (x >= 620) and the turntable (y >= 405); the strip above it becomes plain wall (lum_range < 16).",
+   "accept": {
+    "region": [
+     445,
+     62,
+     585,
+     100
+    ],
+    "metric": "lum_range",
+    "op": "<",
+    "value": 16
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "material",
+   "problem": "One floor plank in the copy-space foreground runs 460 px at 11-19 levels above its neighbours, a light streak right where the copy will sit.",
+   "evidence": {
+    "region": [
+     880,
+     725,
+     1340,
+     752
+    ],
+    "measured": "median 86.6 vs 67.9 above ([880, 700, 1340, 722]) and 75.7 below ([880, 756, 1340, 778]); plank_contrast 1.1 is 2.2x the oak preset's 0.5"
+   },
+   "change": {
+    "setting": "set.floor.plank_contrast",
+    "from": 1.1,
+    "to": 0.6
+   },
+   "expected": "Plank-to-plank variation roughly halves; that plank falls to 72-80, within about 6 of its neighbours; the grain, seams and sun band stay.",
+   "accept": {
+    "region": [
+     880,
+     725,
+     1340,
+     752
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     68,
+     80
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "material",
+   "problem": "The sunlit plaster is perfectly smooth under a raking sun, so the back wall reads as a flat CG plane rather than plaster.",
+   "evidence": {
+    "region": [
+     258,
+     268,
+     300,
+     300
+    ],
+    "measured": "clean sun patch lum_range 1.8 (p5 127.4, p95 129.2); [405, 290, 480, 395] lum_range 3.6; bump is already 0.1 (4x the preset's 0.025) and shows nothing"
+   },
+   "change": {
+    "setting": "materials.plaster.bump",
+    "from": 0.1,
+    "to": 0.3
+   },
+   "expected": "A fine, low-relief texture shows in the sun patch (lum_range 5-12 there) without reading as stucco; the shaded copy-space wall stays smooth (lum_range at [1050, 250, 1250, 350] <= 14, now 10.8).",
+   "accept": {
+    "region": [
+     258,
+     268,
+     300,
+     300
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     5,
+     12
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A wider frame (16:9 or 2:1) for the homepage hero",
+   "why": "The frame size is fixed at 3:2. With the pair 2.5 m wide and a third of the width kept for copy, each speaker tops out at about 40% of the frame height (now 358 of 900 px); a wider frame would let the product grow without losing the copy space."
+  }
+ ],
+ "score_if_fixed": 6.3
+}
