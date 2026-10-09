@@ -1,0 +1,224 @@
+{
+ "stage1": {
+  "impression": "A warm, believable sunlit room with a witty carton-silhouette shadow on the wall, but the speaker itself is lit like a studio cut-out: its white front is a near-uniform slab, its shade side barely darker, and none of the warm sun that rakes the floor and wall seems to touch it, so it reads pasted in. Composition leaves the product small at left-centre over a large empty foreground floor, with a wall shadow that pulls the eye as hard as the product does.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Accent red on the sun-lit faces within dE2000 4.5 of #C62828: plinth front [484,664,510,700] is 9.27 (rgb 239/48/43, L*C*h 52.6/85.9/35.6 against 43.8/72.5/33.8), fin 10.14, roof slope 7.4.",
+  "The white side reads as white in shade, not grey: side [530,340,598,620] median 182-196 (now 165.4, warm grey 169/165/158), and the shaded plinth keeps the accent's hue (now 135/28/7, blue crushed to 7, hue 41.8 against 33.8).",
+  "The room reads high-key and calm while the sun still reads: shaded back wall [950,40,1300,250] 203-216 (now 194.7), sun patch [930,360,1130,560] at least 20 levels above it (now 240.0), carton shadow [760,400,870,560] at least 35 below the patch (now 173.0), sunlit floor streaks at least 25 above floor shade (now 156-173 against 104-112).",
+  "The lacquered front falls 4-8 levels from eave to plinth with nothing clipped (white strip [503,332,514,640] now 246.3 to 244.5, falloff 1.8, R 249-251 in the tone curve's shoulder).",
+  "The roof waveguide reads as a horn at spread size, not a soft scoop: a lit lip against a shaded throat (part:waveguide-insert now slides smoothly from 89.9 at the mouth to 56.7 at the throat, median 63.8, with soft rim edges); light or a higher camera, not geometry.",
+  "Styling reads art-directed: the side table is a plain box in the floor's own orange-brown (leg [228,470,240,630] 109, rgb 134/105/74, against floor [0,560,120,600] 140, rgb 163/137/101), the one element that reads as a stock asset."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The shaded back wall, which is most of the frame, sits at a mid grey, so the room reads sunny but grey rather than bright and airy.",
+   "evidence": {
+    "region": [
+     950,
+     40,
+     1300,
+     250
+    ],
+    "measured": "lum_median 194.7, rgb 195/195/189; top band y 20-120 runs 191, 206, 206, 202, 197, 193, 191, 190, 191, 190 across x; wall right of the patch [1200,350,1340,560] 196.1; foreground floor shade [500,800,900,900] 110.5; against the sun patch [930,360,1130,560] at 240.0"
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 10.2958,
+    "to": 12.8
+   },
+   "expected": "Shaded wall in the region to about 207-212 and the top band to about 200, floor shade up 10-15, carton shadow to about 185, the side about +6; the sun patch stays about 236-240 so it still sits 20+ levels above the shade. The lit red rises about 0.5-1 dE, which c2 then takes out; c2 also removes some sun bounce and lowers this wall about 4-6 levels, so tune c1 to the upper half of its range.",
+   "accept": {
+    "region": [
+     950,
+     40,
+     1300,
+     250
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     203,
+     216
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The accent red renders too light and too saturated on every sun-lit face, a candy red rather than #C62828.",
+   "evidence": {
+    "region": [
+     484,
+     664,
+     510,
+     700
+    ],
+    "measured": "plinth front rgb 239/48/43, dE2000 9.27 (L*C*h 52.6/85.9/35.6 against 43.8/72.5/33.8); fin [450,247,560,258] rgb 240/57/56, dE 10.14; roof slope [507,295,528,320] rgb 229/51/44, dE 7.4. Hue is right (35-36 against 33.8): the sun-lit faces are about 0.5-0.7 EV over, which the white hides in the PBR Neutral shoulder (front R 250)"
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 4.8,
+    "to": 2.8
+   },
+   "expected": "With c1 in place: plinth front to about rgb 212-218/42-46/38-42 (dE 3.5-4.5), fin and roof slope to dE 3-5. The white front drops only about 3 levels (246 to 243) because it sits in the shoulder; the back-wall sun patch stays about 233-238, the carton shadow stays 40+ levels below it, the floor's sun streaks lose 8-12 levels but still read 30+ levels above floor shade.",
+   "accept": {
+    "region": [
+     484,
+     664,
+     510,
+     700
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 4.5
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The shaded side of a white speaker reads as a grey panel, and the red plinth below it turns rust-brown.",
+   "evidence": {
+    "region": [
+     530,
+     340,
+     598,
+     620
+    ],
+    "measured": "side white lum_median 165.4, rgb 169/165/158, 81 levels under the front (part:front-baffle 246.3); profile y 168.0 to 160.3; plinth side [530,662,590,680] rgb 135/28/7, blue crushed to 7, hue 41.8 against 33.8, dE 13.64"
+   },
+   "change": {
+    "setting": "lights.fill_right.irradiance",
+    "from": 0.5236,
+    "to": 0.9
+   },
+   "expected": "Side white to about 185-192, still 50+ levels under the front so the box keeps its form, and neutral-cool rather than warm (b_median within 4 of r_median); plinth side's blue lifts from 7 toward 15-25 and its hue moves back toward 34-37.",
+   "accept": {
+    "region": [
+     530,
+     340,
+     598,
+     620
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     182,
+     196
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The lacquered white front is one value from eave to plinth, so it reads as matte card rather than a clear-coated finish.",
+   "evidence": {
+    "region": [
+     503,
+     332,
+     514,
+     640
+    ],
+    "measured": "profile down the white strip right of the drivers 246.3, 246.3, 246.3, 246.3, 246.1, 245.3, 245.3, 244.5 (falloff 1.8), lum_range 4.0; R 249-251 sits deep in the PBR Neutral shoulder, which is why last round's front glint (power 2-6) and this panel at strength 3-5 moved the falloff by under a level"
+   },
+   "change": {
+    "setting": "lights.lacquer_ramp",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      0.5,
+      0.9
+     ],
+     "position": [
+      -0.73,
+      -0.6,
+      0.45
+     ],
+     "target": [
+      -0.047,
+      -0.189,
+      0.475
+     ],
+     "strength": 3,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.1,
+       0.75
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false,
+     "off": true
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.5,
+      0.9
+     ],
+     "position": [
+      -0.73,
+      -0.6,
+      0.45
+     ],
+     "target": [
+      -0.047,
+      -0.189,
+      0.475
+     ],
+     "strength": 20,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.1,
+       0.75
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false,
+     "off": false
+    }
+   },
+   "expected": "After c2 brings the front to about 243, the panel's clear-coat reflection (about 0.05 of 20, so about 1.0 scene-linear at the top) lifts the upper front to about 248-249 and fades out over the lowest quarter: a 4-8 level eave-to-plinth fall that reads as a window mirrored in lacquer. No front pixel reaches 254 (part:front-baffle clip_pct stays 0); side, plinth and all diffuse surfaces unchanged.",
+   "accept": {
+    "region": [
+     503,
+     332,
+     514,
+     640
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     4,
+     8
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Reshape, deepen or add a rim to the roof waveguide so it reads as a horn at this size (it now reads as a soft scoop: insert median 63.8 against the roof's 89, rim edges soft).",
+   "why": "Its depth, profile, mouth and the tweeter's place are set by acoustic simulation; if the horn must read in this frame, the route is light on its lip or a higher camera looking into the roof slope, not geometry."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
