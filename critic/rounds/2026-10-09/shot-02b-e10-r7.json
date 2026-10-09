@@ -1,0 +1,126 @@
+{
+ "stage1": {
+  "impression": "A warm, low-sun lifestyle frame with a strong idea, the carton's silhouette thrown on the wall, but the product is the weakest part: its white front is lit flat and reads peach-pink while the side reads blue-grey. The hard silhouette and the olive sun patch on the teal wainscot pull the eye as hard as the speaker does.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The wall silhouette reads at a glance as a gable-top carton, with a pitched roof on both sides and the fin tab at least 10 px clear of the glazing-bar shadow. Test: roof strip [420,318,620,340] lum_mean 72-95. Now 46.4: the shadow is 180 px wide at the roof against a 250 px body (72%).",
+  "The speaker is the brightest and most modelled mass in the frame. Its white front falls at least 15 levels from top to bottom (now 3-8: 220.0->216.6 at x 960-978, 226.4->218.5 at x 840-876), and no set area larger than the front exceeds 0.85x the front's median (upper-wall sun patch is 167.5 now).",
+  "The sunlit white reads as warm white, not peach: R-B <= 30 levels at >= 215 lum. Now [248,216,204], R-B 44-47, dE2000 14.1 to #FFFFFF.",
+  "The sunlit accent red is within dE2000 5 of #C62828. Now 7.46 on gable-block [233,41,52], 9.33 and 7.40 on the plinth front [237,52,61] and [235,34,46], fin [239,40,51].",
+  "The woofer's black anodised aluminium cone reads near-neutral dark grey with a metallic sheen, not brown plastic. Now woofer-cone median [33,17,15], R/B 2.2."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "composition",
+   "problem": "The wall silhouette reads as a box with clipped corners, not a gable-top carton. With the carton turned 14 deg and the sun at azimuth 38 deg, the sun sees the ridge 66 deg off its axis, so the gable collapses into 36-37 px chamfers either side of a 175 px flat top.",
+   "evidence": {
+    "region": [
+     420,
+     318,
+     620,
+     340
+    ],
+    "measured": "Roof strip lum_mean 46.4 (median 40.3), almost all in shadow: 39 inside against sunlit wainscot at 107-110 either side. A fine profile at y 330-340 puts the shadow at x 440-620 (180 px); the body at y 450-460 spans x 400-650 (250 px), so the roof is 72% of the body width. Left slope runs 400,400->437,313; right side steps 612,305->335, then slopes to 648,370. A projection from the card's camera and sun reproduces these corners to within about 10 px."
+   },
+   "change": {
+    "setting": "product.instances.0.rotate_z",
+    "from": 14,
+    "to": -40
+   },
+   "expected": "The sun rakes about 12 deg off the ridge, so the shadow becomes the carton's side profile: eaves at about y 381-389, a roof rising about 85 px to a fin tab at about (500, 301), 18 px under the glazing-bar shadow (its lower edge is about y 283 at x 500). The shadow is about 227 px wide and covers about 46% of the roof strip (lum_mean about 76). The speaker keeps its place (x about 738-962). The camera then sees the front 16 deg off-axis (about 183 px) and the sunlit right gable end (about 40 px, 0.97 of full sun, red gable triangle lit) in place of the shaded left side. The front takes 0.21 of the sun raking from the right plus the fill, landing at about 160-185 with a 25-30-level fall from top to bottom instead of the present 3-8, and it loses the even salmon wash. The facesheen and roofsheen panels were placed for the 14 deg pose and will no longer mirror in the front or roof.",
+   "accept": {
+    "region": [
+     420,
+     318,
+     620,
+     340
+    ],
+    "metric": "lum_mean",
+    "op": "between",
+    "value": [
+     72,
+     95
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The sunlit upper wall is the largest bright shape in the frame and sits on the top edge: a flat peach field that pulls the eye up and out of frame. Once the front leaves direct sun (c1), it would be as bright as the speaker's face.",
+   "evidence": {
+    "region": [
+     310,
+     10,
+     690,
+     150
+    ],
+    "measured": "lum_median 167.5, p5-p95 160.7-170.2 (range 9.5, one flat value), RGB [205,160,132], 53,200 px touching y=0. Second only to front-baffle 219.5 today, and brighter than the about 170 the front will hold after c1."
+   },
+   "change": {
+    "setting": "set.wall.color",
+    "from": "#A89E8F",
+    "to": "#847B6F"
+   },
+   "expected": "The patch falls to about 130 and stays peach (about [160,125,103]). The shaded upper wall drops from 43-59 to about 34-46. The speaker (front about 170, sunlit side about 225) becomes the clear brightest mass, and the wainscot patch with the silhouette (about 108) becomes the second read. The wainscot is untouched.",
+   "accept": {
+    "region": [
+     310,
+     10,
+     690,
+     150
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     118,
+     142
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Once turned, the front's brightness depends on where the turn lands. Past about -44 deg the front loses direct sun and falls to what the fill alone gives a face today: a grey 103 that no longer reads as white.",
+   "evidence": {
+    "region": [
+     733,
+     343,
+     831,
+     777
+    ],
+    "measured": "part:side-left is today's fill-only face, 11 deg from the fill's azimuth, against 20-25 deg for the turned front. lum_median 103.1, profile 131.8->82.5 top to bottom. Projection puts the turned front at about 171 at -40 deg (0.21 sun), about 147 at -45 deg (0.12) and about 105 at -52 deg (0.00)."
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": 0.3,
+    "to": 0.45
+   },
+   "expected": "front-baffle median lands at 150-185 whatever turn c1 settles on, kept below the sunlit right side (about 225) so the sun still reads as the key. The fill (azimuth -65 deg, elevation 45 deg) gives the front a 20-35-level fall from top to bottom. Spill raises the silhouette's upper interior (39 now) by no more than about 6.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     150,
+     185
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Re-finish or re-colour the woofer cone so it reads black rather than brown",
+   "why": "woofer-cone median [33,17,15] reads as brown plastic in the 2600 K sun, which undercuts the named driver. The drivers' materials and colours are the products' own and fixed, so only the light the cone sees can change; c1 moves it into the 4000 K fill."
+  },
+  {
+   "request": "Deepen the accent paint so the sunlit fin and plinth read #C62828",
+   "why": "The sunlit red sits at R 233-239 against 198 (dE2000 7.4-9.3), lighter and pinker than spec, because +1.75 EV pushes it into the tone-mapper's shoulder. The flavour colours are fixed. The in-scope lever, exposure, would darken a frame that already has 55% of its pixels below 40."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
