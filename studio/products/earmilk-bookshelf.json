@@ -302,7 +302,8 @@
   {
    "match": "front-baffle|back-panel|side-left|side-right",
    "below_z_mm": 62.0,
-   "material": "accent"
+   "material": "accent",
+   "part": "plinth"
   }
  ],
  "decals": [

@@ -64,7 +64,8 @@ def sweep(bpy, spec, mats):
     for p in me.polygons: p.use_smooth = True
     ct = spec.get('contact') or {}
     mat = M.make(bpy, 'sweep', 'sweep', {'color': spec.get('color', '#B9B5AE'), 'contact': ct.get('strength', 0.0),
-                                         'contact_m': ct.get('distance_m', 0.05), **mats.get('sweep', {})})
+                                         'contact_m': ct.get('distance_m', 0.05), 'core': ct.get('core_strength', 0.0),
+                                         'core_m': ct.get('core_distance_m', 0.025), **mats.get('sweep', {})})
     ob = _obj(bpy, 'sweep', me, mat)
     cards(bpy, spec)
     return [ob]

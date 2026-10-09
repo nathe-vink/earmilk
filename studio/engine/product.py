@@ -10,8 +10,11 @@ A product definition (studio/products/NAME.json) says:
                  "$body" takes the flavour's colour
     materials    named materials: {"body": {"preset": "paint", "color": "$body"}, ...}
     assign       [{"match": "front-baffle|side-*", "material": "body"}], first match wins (fnmatch, | for or)
-    zones        [{"match": "...", "below_z_mm": 110, "material": "accent"}]: faces of matching parts whose centre is
-                 below (or above, with above_z_mm) a height take another material (a painted band on one panel)
+    zones        [{"match": "...", "below_z_mm": 110, "material": "accent", "part": "plinth"}]: faces of matching parts
+                 whose centre is below (or above, with above_z_mm) a height take another material (a painted band on
+                 one panel). A shot with `product.zone_parts` true splits a zone that names a `part` off as its own
+                 part, "back-panel.plinth": a lamp can then be linked to the band alone. A part's patterns match its
+                 zone parts too ("back-panel" takes "back-panel.plinth"; "*.plinth" only the bands).
     decals       [{"name", "image", "center_mm", "normal", "up", "size_mm", "ink": "$facts_ink", "mode": "ink"|"alpha",
                    "material": "body"}]: a print inside that material's colour coat, under its clear
 
@@ -33,7 +36,9 @@ FIX_RAW = Matrix.Rotation(-math.pi / 2, 4, 'X')
 
 
 def _match(name, pattern):
-    return any(fnmatch.fnmatchcase(name, p.strip()) for p in pattern.split('|'))
+    # a zone part ("back-panel.plinth") answers to its own name and to its part's
+    names = (name, name.split('.', 1)[0]) if '.' in name else (name,)
+    return any(fnmatch.fnmatchcase(n, p.strip()) for n in names for p in pattern.split('|'))
 
 
 def load_def(path, root):
@@ -415,16 +420,22 @@ def place(bpy, pdef, templates, shot, root):
                     me.materials.append(mats[inner['material']])
                     n_in = mark(me, len(me.materials) - 1)
                     print(f'interior: {pname} {n_in} of {len(me.polygons)} faces take {inner["material"]}')
-            ob = bpy.data.objects.new(f'{pname}#{i}', me)
-            bpy.context.scene.collection.objects.link(ob)
-            ob['instance'] = i
-            if not zones:
-                # the mesh is shared by every copy: the material lives on the object, so flavours can differ
-                ob.material_slots[0].link = 'OBJECT'; ob.material_slots[0].material = mats[mat_name]
-            # an exploded view: the first rule that matches moves the part, in the product's frame (metres)
-            off = next((r['offset_m'] for r in prod.get('explode', []) if _match(pname, r['match'])), None)
-            ob.matrix_world = T @ Matrix.Translation(Vector(off)) if off else T
-            objs.append(ob); part_of[ob.name] = pname
+            # the zones that name a part, split off as parts of their own when the shot asks (04b's red plinth, to be
+            # lit without the white above it)
+            pieces = [(pname, me)]
+            if zones and prod.get('zone_parts') and any(z.get('part') for z in zones) and not inner:
+                pieces = _split_zones(bpy, me, pname, zones)
+            for pn, me_ in pieces:
+                ob = bpy.data.objects.new(f'{pn}#{i}', me_)
+                bpy.context.scene.collection.objects.link(ob)
+                ob['instance'] = i
+                if not zones:
+                    # the mesh is shared by every copy: the material lives on the object, so flavours can differ
+                    ob.material_slots[0].link = 'OBJECT'; ob.material_slots[0].material = mats[mat_name]
+                # an exploded view: the first rule that matches moves the part, in the product's frame (metres)
+                off = next((r['offset_m'] for r in prod.get('explode', []) if _match(pname, r['match'])), None)
+                ob.matrix_world = T @ Matrix.Translation(Vector(off)) if off else T
+                objs.append(ob); part_of[ob.name] = pn
     if prod.get('cutaway'):
         cutaway(bpy, prod['cutaway'], instances, objs, pdef.get('laminated', {}))
     return objs, part_of
@@ -593,6 +604,41 @@ def _zoned_mesh(bpy, src, key, base_mat, zones, mats):
                 mi = idx[mats[z['material']].name]
         p.material_index = mi
     return me
+
+
+def _zone_of(zones, cz):
+    """The zone a face whose centre is at height cz (mm) falls in: the last that holds it, as _zoned_mesh assigns."""
+    hit = None
+    for z in zones:
+        if z.get('above_z_mm', -1e9) <= cz <= z.get('below_z_mm', 1e9):
+            hit = z
+    return hit
+
+
+def _split_zones(bpy, me, pname, zones):
+    """A zoned mesh in pieces: [(part name, mesh)], the faces outside every named zone under the part's own name, each
+    named zone's as "part.zone" (its faces, materials and normals as they were; one mesh per flavour, as the zoned mesh)."""
+    import bmesh
+    named = [z for z in zones if z.get('part')]
+    out = []
+    for target in [None] + named:
+        pn = f'{pname}.{target["part"]}' if target else pname
+        key = f'{me.name}|{pn}'
+        m2 = bpy.data.meshes.get(key)
+        if m2 is None:
+            m2 = me.copy(); m2.name = key
+            bm = bmesh.new(); bm.from_mesh(m2)
+            kill = []
+            for f in bm.faces:
+                z = _zone_of(zones, f.calc_center_median().z * 1000.0)
+                z = z if (z is not None and z.get('part')) else None
+                if z is not target:
+                    kill.append(f)
+            bmesh.ops.delete(bm, geom=kill, context='FACES')
+            bm.to_mesh(m2); bm.free()
+        if len(m2.polygons):
+            out.append((pn, m2))
+    return out
 
 
 def bounds(objs):

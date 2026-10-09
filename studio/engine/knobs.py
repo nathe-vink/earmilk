@@ -85,6 +85,8 @@ KNOBS = [
     ('set.radius', 'm', (0.1, 4), 'sweep: the curve\'s radius (larger: a softer horizon)'),
     ('set.contact.strength', '0 to 0.8', (0, 0.8), 'sweep: a contact shadow where something stands on it, its colour multiplied down to 1 - strength in a corner (ambient occlusion); 0 off'),
     ('set.contact.distance_m', 'm', (0.005, 0.3), 'sweep: how far the contact shadow reaches from what stands on it (0.05: a few centimetres)'),
+    ('set.contact.core_strength', '0 to 0.9', (0, 0.9), 'sweep: a second contact term, tight, multiplied with the first: the dark line where the base meets the floor (0 off)'),
+    ('set.contact.core_distance_m', 'm', (0.003, 0.05), 'sweep: how far the tight contact term reaches (0.025: the core within about a centimetre of the base)'),
     ('set.height', 'm', (1, 10), 'sweep: the back wall\'s height'),
     ('set.size', 'm [w, d, h]', None, 'room: width (x), depth (y), height'),
     ('set.center', 'm [x, y]', None, 'room: the floor\'s centre'),
@@ -113,6 +115,7 @@ KNOBS = [
     # product
     ('product.flavour', 'choice', ('whole', 'two', 'skim', 'matcha', 'chocolate', 'oat'), 'colourway (fixed colours per flavour)'),
     ('product.instances', 'list of {position, rotate_z}', None, 'copies of the product: position m, rotation deg about z'),
+    ('product.zone_parts', 'true/false', None, 'the painted plinth band split off from each panel as its own part (back-panel.plinth, side-right.plinth, ...), so a lamp\'s receivers can name *.plinth and light the band alone; a test on part:back-panel still includes it'),
     ('product.normals_refine', 'true/false', None, 'the waveguide\'s facets refined onto its true surface (true); false for a frame where the waveguides are a few dozen pixels across, where it only costs memory'),
     ('product.instances.*.position', 'm [x, y, z]', None, 'where this copy stands: x and y on the floor; z is its base\'s height (0 on the floor, the top of the furniture it stands on)'),
     ('product.instances.*.rotate_z', 'deg', (-360, 360), 'its turn about z: 0 faces -y; + turns its front toward +x'),

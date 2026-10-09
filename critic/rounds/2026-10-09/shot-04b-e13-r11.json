@@ -1,0 +1,302 @@
+{
+ "stage1": {
+  "impression": "A clean, legible three-quarter hero of a milk-carton speaker on a grey sweep with wide copy space on the left, but the light is flat: the mid-grey set drains the whites, the left side face reads as a near-uniform bright slab beside a dull grey front, and only the gable's red really sings. The base sits in a soft smudge rather than a crisp contact and the surfaces read as clean CG, so it is a competent draft, not yet a homepage image.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Presence: the backdrop beside the side face sits at least 35 levels below the side face (now 164.4 vs 189.9, 26 levels), so the white body reads white rather than light grey on grey.",
+  "Depth: the copy space falls off at least 12 levels toward the frame's left edge while staying even enough for type (now 159 to 166 across 735 px, falloff -7: one flat value).",
+  "Grounding: the floor 2 to 11 px under the plinth's edge is at most 0.6 of the open floor 40 px further out (now 125.7 vs 164.8 = 0.76 under the back face, 143.1 vs 171.8 = 0.83 at the front corner).",
+  "One red: the plinth's lit back face within dE2000 5 of #C62828 (now 7.3 left of SHAKE WELL, 8.7 right of it, 11.9 on the side) while the gable roof stays within 4 (now 3.5) and the fin within 3 (now 2.0).",
+  "No CG fringe: the 2 px line along the gable hip and the top of the body's left edge at or below 238 (now 246 to 255, clipped).",
+  "Neutral whites: dE2000 at most 1 to a neutral grey of the same lightness on the back and side faces (now 1.3 to 2.5, lilac: a* +0.7 to +1.6, b* -0.9 to -1.3).",
+  "The lacquer reads as lacquer, not paint: a soft graduated reflection on the back face's upper third at least 10 levels over its diffuse base without veiling the label, and a sheen gradient on the red roof (its vertical profile is flat now, 85.7 to 86.0).",
+  "White print holds tone: OPEN OTHER SIDE at or below 248 (now 254 on 6.8 percent of the lettering box [828,96,960,114], flat white with no shading; the fin sits nearest the key)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The mid-grey paper sits too close to the white lacquer, so the body reads light grey on grey and the product has no presence.",
+   "evidence": {
+    "region": [
+     650,
+     250,
+     730,
+     600
+    ],
+    "measured": "backdrop beside the side face median 164.4 against part:side-right 189.9 (26 levels); copy space [50,100,550,500] 162.4 with p5-p95 151-170; foreground floor band [200,830,1300,895] 175.4, the brightest thing in the set; the copy space renders at about 0.8 of its paper in linear light (162 against the paper's 179), so the paper's value sets the backdrop"
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#B3B1AC",
+    "to": "#9E9C97"
+   },
+   "expected": "Same warm hue (L* 72.2 to 64.4, a* -0.21, b* +2.87); backdrop beside the side face 164 to about 141, copy space about 134, floor band 175 to about 155; the side face loses a little bounce (190 to about 185) but stands about 44 levels clear of its backdrop instead of 26, the back face (about 213) about 75 clear; the key's floor shadow keeps its shape and the red reads richer against the darker set.",
+   "accept": {
+    "region": [
+     650,
+     250,
+     730,
+     600
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     134,
+     150
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The copy space is one flat grey from the frame edge to the product, so the set has no depth and nothing holds the eye on the product; the bg lamp is lifting exactly the far-left edge that should fall away.",
+   "evidence": {
+    "region": [
+     0,
+     150,
+     735,
+     450
+    ],
+    "measured": "x-profile 159.2, 160.4, 161.5, 162.4, 163.4, 164.4, 165.5, 166.4: falloff -7.2 over 735 px; left strip [0,100,250,800] 157.2; the engine's own proofs show the bg lamp sets this balance (its falloff test read -17.3 at 0.6514, -6.4 at 1.0, +8.4 at 1.6)"
+   },
+   "change": {
+    "setting": "lights.bg.irradiance",
+    "from": 0.6514,
+    "to": 0.25
+   },
+   "expected": "The band runs from about 125 at the left edge to about 142 beside the product (falloff about -17); the top-left corner falls to about 120, the left strip 157 to about 123; the copy space stays even top to bottom (no new hot spot) so type still sits on it, and the brightest backdrop is now the zone round the product.",
+   "accept": {
+    "region": [
+     0,
+     150,
+     735,
+     450
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -26,
+     -12
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "A clipped 2 px white line traces the gable hip and the top of the body's left edge, so the silhouette reads as a cut-out with a matte fringe rather than a lacquered 6 mm round catching light.",
+   "evidence": {
+    "region": [
+     735,
+     215,
+     742,
+     300
+    ],
+    "measured": "p95 255.0, clip_pct 14.3: column x 737 at 254 from y 215 to 300, x 738 at 215, beside a body at 194-199 and background at 165-170; along the hip (y 130-205) 2 px at 246-254 between background 165-172 and the dark red gable end 51-57 (clip 2.19 percent of [760,125,812,205]); the kicker (diffuse 0, specular 1, azimuth -140) is what these rounds mirror, and the engine pushed it 0.9 to 5.6 for a test it moved only 1.9"
+   },
+   "change": {
+    "setting": "lights.kicker.irradiance",
+    "from": 5.6,
+    "to": 0.5
+   },
+   "expected": "The left-edge line drops from 254 to 205-238 and the hip line below 240: a thin kiss of light on the round, brighter than the body by 10-40 levels instead of a white outline; image clip_pct 0.06 to about 0.03 (what remains is the fin print and the back corner's edge highlight).",
+   "accept": {
+    "region": [
+     735,
+     215,
+     742,
+     300
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     205,
+     238
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "asset",
+   "problem": "The plinth band reads as a darker brick red than the gable and fin, so the accent looks like two colours, and no lamp on the card can lift it without lifting the coplanar white above by the same ratio.",
+   "evidence": {
+    "region": [
+     892,
+     735,
+     930,
+     782
+    ],
+    "measured": "plinth back rgb (163, 36, 37), dE2000 7.31 to #C62828; right of SHAKE WELL (156, 35, 36) 8.74; plinth side (141, 34, 36) 11.87; against the gable roof (208, 52, 53) 3.52 and the fin (190, 36, 38) 2.0; every pixel of the box is back-panel in the mask, so the band cannot be light-linked, and the white above is already at 217-230"
+   },
+   "change": {
+    "setting": "asset: plinth receiver parts and lights.plinth",
+    "from": "plinth band is part of back-panel and side-right; no lamp can be linked to it",
+    "to": {
+     "parts": {
+      "plinth-back": "the red band of back-panel from the floor to the 3 mm shadow line (0.13 m)",
+      "plinth-side": "the same band of side-right"
+     },
+     "lights.plinth": {
+      "type": "area",
+      "size_m": [
+       1.4,
+       0.3
+      ],
+      "orbit": {
+       "azimuth_deg": 50,
+       "elevation_deg": 6,
+       "distance_m": 2.5
+      },
+      "target": [
+       0.35,
+       0,
+       0.065
+      ],
+      "irradiance": 0.6,
+      "color": "#FFF7EA",
+      "specular": 0,
+      "receivers": [
+       "plinth-*"
+      ]
+     }
+    }
+   },
+   "expected": "Plinth back face R 163 to 180-192 with G and B near 40, dE2000 7.3 to at most 5; the white above it, the amp plate and the floor unchanged within 2 levels; the side plinth stays the shadow side (about R 140).",
+   "accept": {
+    "region": [
+     892,
+     735,
+     930,
+     782
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 5.0
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "asset",
+   "problem": "On the camera side the plinth meets the floor with no dark core, so the carton looks set down lightly rather than standing on the sweep, and the card's contact term is already at its ceiling.",
+   "evidence": {
+    "region": [
+     995,
+     776,
+     1015,
+     781
+    ],
+    "measured": "floor 2-11 px under the plinth's back edge median 125.7 against 164.8 on the open floor 40 px lower [995,815,1015,825] (0.76); front corner [874,799,892,804] 143.1 against 171.8 (0.83); set.contact.strength is at its 0.8 maximum and the engine logged 0.4 to 0.8 moving its contact test by 1.0; the key stands in front of the back face (azimuth 20 vs the face's 35), so no lamp move short of relighting the back face can shade this floor"
+   },
+   "change": {
+    "setting": "asset: tight contact-shadow core on the sweep",
+    "from": "one contact term, strength 0.8 (ceiling), distance 0.2418 m",
+    "to": {
+     "kind": "second contact term",
+     "strength": 0.9,
+     "distance_m": 0.025,
+     "where": "under the product's footprint, in addition to the existing 0.8 / 0.2418 term"
+    }
+   },
+   "expected": "The floor within about 1 cm of the plinth multiplies down to about 0.55 of the open floor and recovers by 25 mm: about 85 under the back edge (open floor about 145 after c1), the front corner 143 to under 100; a crisp line of contact inside the existing soft halo.",
+   "accept": {
+    "region": [
+     995,
+     776,
+     1015,
+     781
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     68,
+     100
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "post",
+   "problem": "The white lacquer carries a magenta cast, and the same shift sits on the whole frame.",
+   "evidence": {
+    "region": [
+     885,
+     260,
+     912,
+     590
+    ],
+    "measured": "rgb (226, 224, 227): a* +1.21, b* -1.22, dE2000 2.12 to #DFDFDF; side face (202, 200, 203) and (189, 186, 189): a* +1.24 and +1.60, dE 2.1-2.5 to same-lightness greys; the sweep renders a* +0.52 against its paper's -0.21"
+   },
+   "change": {
+    "setting": "render.white_balance_tint",
+    "from": 10,
+    "to": 7.5
+   },
+   "expected": "a* on the white strip from +1.2 to within 0.3 of zero and the sweep back to its paper's a*; dE2000 to #DFDFDF 2.12 to about 1.1 (what remains is the cool b*, c7); the red moves less than 1 dE.",
+   "accept": {
+    "region": [
+     885,
+     260,
+     912,
+     590
+    ],
+    "metric": "delta_e",
+    "hex": "#DFDFDF",
+    "op": "<=",
+    "value": 1.4
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "post",
+   "problem": "The whites are also cool, and the sweep renders cooler than its own paper, so the white body reads cold against a warm set.",
+   "evidence": {
+    "region": [
+     885,
+     260,
+     912,
+     590
+    ],
+    "measured": "b* -1.22 on the white strip, -0.86 to -1.35 across the back and side faces; the sweep renders b* +1.94 against its paper's +2.80 (0.9 cooler), so the offset is the white point, not the lacquer"
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 5800,
+    "to": 6100
+   },
+   "expected": "b* on the white within 0.4 of zero and the sweep back to about +2.8; with c6 the white strip lands at dE2000 about 0.5 to #DFDFDF: a neutral white on a warm grey.",
+   "accept": {
+    "region": [
+     885,
+     260,
+     912,
+     590
+    ],
+    "metric": "delta_e",
+    "hex": "#DFDFDF",
+    "op": "<=",
+    "value": 0.9
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Render the spread version at 4000 px wide or more.",
+   "why": "At 1350 x 900 the Nutrition Facts rows are about 6 px tall and the amplifier's connections span 68 x 25 px: enough for a homepage, too small to hold across a magazine spread; the frame size and sampling are fixed by the card."
+  },
+  {
+   "request": "A higher-gloss clear coat on the white lacquer and the red roof.",
+   "why": "The faces read as satin paint (the roof's vertical profile is flat, 85.7 to 86.0; the back face shows only diffuse falloff, 230 to 209); the product's materials are fixed, so the lacquer can only read through what it reflects, which is listed under blocking_9."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

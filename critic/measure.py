@@ -18,7 +18,9 @@ of the image as rendered (x right, y down); a region is X0 Y0 X1 Y1, end-exclusi
 Parts: when the engine rendered the frame with --masks, IMAGE.mask.png and IMAGE.mask.json sit beside it, and a
 region can name a part instead of a box: "part:front-baffle", "part:woofer-*|mid-*" (fnmatch, | for or), or
 {"part": "gable-block", "box": [x0, y0, x1, y1]} for a part inside a box. A part's region follows the part when the
-camera moves, so tests written on parts survive a reframing. On the command line, give the region as one argument:
+camera moves, so tests written on parts survive a reframing. A zone split off as its own part ("back-panel.plinth")
+is in its part's region too ("part:back-panel"); "part:*.plinth" is the band alone. On the command line, give the
+region as one argument:
 
     python3 critic/measure.py IMAGE parts                  (every visible part: pixels, box, luminance, colour)
     python3 critic/measure.py IMAGE stats part:front-baffle
@@ -79,7 +81,9 @@ def select(a, r):
             raise SystemExit('no part mask beside this image (render it with the engine\'s --masks)')
         import fnmatch
         names = [n.strip() for n in r['part'].split('|')]
-        ids = [i for i, n in MASK['legend'].items() if any(fnmatch.fnmatchcase(n, pat) for pat in names)]
+        # a zone part ("back-panel.plinth") answers to its own name and to its part's, as in the engine
+        base = lambda n: (n, n.split('.', 1)[0]) if '.' in n else (n,)
+        ids = [i for i, n in MASK['legend'].items() if any(fnmatch.fnmatchcase(b_, pat) for b_ in base(n) for pat in names)]
         m = np.isin(MASK['ids'], ids)
         if 'box' in r:
             x0, y0, x1, y1 = (int(v) for v in r['box']); bm = np.zeros_like(m); bm[y0:y1, x0:x1] = True; m &= bm

@@ -19,7 +19,7 @@ import shot as S  # noqa: E402
 
 LOCKED = ('product', 'products', 'size', 'render.samples', 'render.adaptive', 'render.denoise')
 # inside the product, where it stands and how far an exploded part is drawn out are the shot's choices, not the product's
-OPEN = re.compile(r'(product|products\.\d+)\.(instances\.\d+\.(position|rotate_z)|explode\.\d+\.offset_m)')
+OPEN = re.compile(r'(product|products\.\d+)\.(instances\.\d+\.(position|rotate_z)|explode\.\d+\.offset_m|zone_parts)')
 
 
 def fmt(v):
@@ -63,7 +63,9 @@ def main():
           'Where the product stands and how it is turned (`product.instances.N.position`, `product.instances.N.rotate_z`) are '
           'yours where the frame\'s purpose allows: keep it standing on its floor or furniture, a pair a mirrored pair, and '
           'every must-show in view. So is how far an exploded part is drawn out (`product.explode.N.offset_m`), along its '
-          'own axis. Name a setting by its path. Units and ranges are the engine\'s. Lengths are metres; the product stands at the '
+          'own axis. So is `product.zone_parts`: true splits the painted plinth band off each panel as its own part '
+          '(`back-panel.plinth`, `side-right.plinth`, ...), so a lamp with `"receivers": ["*.plinth"]` lights the band '
+          'alone; `part:back-panel` still measures the panel with its band. Name a setting by its path. Units and ranges are the engine\'s. Lengths are metres; the product stands at the '
           'origin with its front toward -y, z up; the camera\'s position and target are world points. Relative values are '
           'allowed in "to": "+0.5", "-20", "x0.8", "+15%". To add a light, set `lights.NEWNAME` to a whole spec, e.g. '
           '`{"type": "area", "size_m": [0.6, 0.6], "orbit": {"azimuth_deg": 30, "elevation_deg": 20, "distance_m": 2}, '
