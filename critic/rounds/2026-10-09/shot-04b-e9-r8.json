@@ -1,0 +1,136 @@
+{
+ "stage1": {
+  "impression": "A clean, legible milk-carton speaker on a warm grey sweep, placed right with copy space on the left, its red-and-white graphics crisp. The light is flat and the backdrop is a muddy warm grey with a heavy vignette; the base looks poorly grounded, and a stray bright streak runs across the floor from the front-left corner.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "No second shadow edge on the floor left of the carton: [340, 840, 580, 856] lum_range at most 8 (now 16.3), and no bright wedge coming off the front-left base corner at (735, 745).",
+  "No bright fan right of the plinth: [1090, 800, 1180, 900] within 8 levels of the floor in front of the plinth [900, 830, 1040, 900] (now 153.1 against 131.9).",
+  "A soft but dense contact shadow along the whole base: the 10 px of floor under the back plinth 22-40 levels darker than the floor 80 px further out (now 18.1), with no hard outline.",
+  "The lit roof slope stays the brand red and does not turn pink: r_median 195-207 on [885, 150, 1000, 205] (now 203).",
+  "The foreground floor darkens gently toward the bottom edge and corners instead of getting brighter (the bottom band now reaches 157-161 at x 1100-1180, against about 131 directly in front of the plinth).",
+  "The carton's left silhouette sits at least 100 px right of the frame's centre line, so the gutter of a spread cannot reach it (now x 738, 63 px from 675). This needs a camera shift, which belongs in a round whose tests are written on parts, because a shift moves every fixed region."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The small rim light behind the carton (0.3 x 0.4 m at azimuth 160, elevation 54.8) throws the carton's shadow about 0.75 m toward the camera. Where that shadow's edge meets the key's shadow it cuts a bright wedge out of the floor from the front-left base corner and leaves a bright fan right of the plinth, and both read as light leaking from under the product.",
+   "evidence": {
+    "region": [
+     340,
+     840,
+     580,
+     856
+    ],
+    "measured": "In this row the floor steps from 144.8 down to 128.7 across x 440-540 (x-profile 143.7, 143.8, 144.8, 144.8, 143.8, 141.8, 139.7, 136.8, 133.7, 129.8, 128.7, 128.7), lum_range 16.3. In column [590, 720, 630, 840] it falls from 148.0 at y 765-780 to 127.5 by y 810-825 (falloff 16.3). The edge runs from the corner at (735, 745) toward (500, 845), about azimuth -30 deg on the floor. That is where the rim, at about (0.78, 1.19, 2.33), throws it (-32 deg). Right of the plinth, the lit gap between the rim's shadow and the key shadow from flag 2 ([1090, 800, 1180, 900]) has a median of 153.1, against 131.9 in front of the plinth ([900, 830, 1040, 900]). It gets brighter toward the bottom edge (157-161), which is the rim's sheen on the floor."
+   },
+   "change": {
+    "setting": "lights.rim.orbit.elevation_deg",
+    "from": 54.8,
+    "to": 80
+   },
+   "expected": "The rim becomes a high back-top light, and its shadow shrinks to a pool about 0.2 m deep (about 20-40 px) around the base. The wedge and the right-hand fan go away: row [340, 840, 580, 856] has lum_range at most 8, the floor left of and in front of the carton evens out at about 136-145, and [1090, 800, 1180, 900] comes to within about 8 levels of the floor in front of the plinth. The rim's sheen leaves the foreground floor.",
+   "accept": {
+    "region": [
+     340,
+     840,
+     580,
+     856
+    ],
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 8
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Once c1 moves the rim overhead, its light falls squarely on the glossy roof slope. At the current power that would push the slope's red from r 203 toward about 230 and make it read pink, so the rim's power has to come down to keep the slope where it is.",
+   "evidence": {
+    "region": [
+     885,
+     150,
+     1000,
+     205
+    ],
+    "measured": "r_median 203, g 63, b 64, lum_median 92.9; delta E2000 against #C62828 is 5.22, lighter and pinker than the fin at 194, 38, 39. In the engine's own proof renders, rim elevation 54 gave r 202 and 62 gave r 212, about +1.25 per degree. At 80 deg the rim meets the slope (normal about (0.35, -0.50, 0.79)) at 42 deg off normal instead of 64 deg: cos 0.74 against 0.45."
+   },
+   "change": {
+    "setting": "lights.rim.irradiance",
+    "from": 2,
+    "to": 1.2
+   },
+   "expected": "The roof slope holds r_median 195-207 and lum_median about 85-97, with its sheen gradient from left to right intact. At about 1.2 W/m2 the rim also puts less light on the floor, about 0.6 W/m2 near the carton.",
+   "accept": {
+    "region": [
+     885,
+     150,
+     1000,
+     205
+    ],
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     195,
+     207
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The carton barely sits on the floor: the 10 px of floor under the back plinth are only 18 levels darker than the floor 80 px further out, a soft smudge of about 0.6 stop rather than a contact shadow. Once c1 puts the rim overhead, its 0.3 x 0.4 m source would cut a tight, hard-edged pool around the base instead.",
+   "evidence": {
+    "region": [
+     955,
+     786,
+     985,
+     866
+    ],
+    "measured": "y-profile 112.8, 118.9, 122.0, 124.6, 126.3, 128.1, 129.2, 130.9, falloff -18.1. Sampled along the whole base, the floor 3 px below the plinth reads 100-119 and 90 px below reads 130-135. Nothing darkens the seam itself at present: this column lies wholly inside the rim's long shadow, and the other lamps light it from the front."
+   },
+   "change": {
+    "setting": "lights.rim.size_m",
+    "from": [
+     0.3,
+     0.4
+    ],
+    "to": [
+     0.6,
+     0.6
+    ]
+   },
+   "expected": "With the rim overhead and at softbox size, the carton's shadow becomes a soft pool along the base. The first 10 px under the back plinth come out 22-40 levels darker than the floor 80 px further out (now 18), and the pool's edge fades over about 40-60 px instead of drawing a crisp outline. The roof does not change, because the lamp's irradiance at its target is held.",
+   "accept": {
+    "region": [
+     955,
+     786,
+     985,
+     866
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -40,
+     -22
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Remove the mirrored OPEN OTHER SIDE that shows upside down in the roof slope just under the fin (about y 120-135).",
+   "why": "It is the fin's fixed lettering mirrored by the fixed clear coat. No lamp causes it, so no light or set setting on the card can take it out without changing the product's marks or finish. It matters at spread size, where it reads as a faint smudge under the fin."
+  },
+  {
+   "request": "Make the amplifier connections larger in the frame (now about 70 x 25 px).",
+   "why": "Their geometry is fixed, and the carton already fills 79% of the frame height. Enlarging them would crop the side, the floor contact or the copy space, all of which the purpose requires, so at homepage size they stay small details."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
