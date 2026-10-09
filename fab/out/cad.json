@@ -13,7 +13,7 @@
    "mass_kg": 2.99
   },
   "back-panel": {
-   "volume_l": 5.1498,
+   "volume_l": 5.1499,
    "bbox_mm": [
     -0.0,
     372.0,
@@ -73,7 +73,7 @@
    "mass_kg": 1.53
   },
   "gable-block": {
-   "volume_l": 8.1191,
+   "volume_l": 8.1069,
    "bbox_mm": [
     -0.0,
     -0.0,
@@ -82,7 +82,7 @@
     390.0,
     1055.0
    ],
-   "mass_kg": 5.52
+   "mass_kg": 5.51
   },
   "waveguide-insert": {
    "volume_l": 2.5153,
@@ -157,7 +157,7 @@
    ]
   },
   "amp-box-lid": {
-   "volume_l": 0.673,
+   "volume_l": 0.6709,
    "bbox_mm": [
     18.0,
     264.0,
@@ -182,14 +182,24 @@
    "od_mm": 314.0,
    "id_mm": 290.0,
    "t_mm": 3.0,
-   "groove": "10 wide, 2 deep on \u00f8298",
+   "channel": {
+    "from_d": 290.0,
+    "to_d": 307.0,
+    "depth": 2.0,
+    "open_to_bore": true
+   },
    "id_from": "the surround at its glue line + 2: PLACEHOLDER, measure"
   },
   "trim-ring-mid": {
    "od_mm": 165.0,
    "id_mm": 141.0,
    "t_mm": 3.0,
-   "groove": "10 wide, 2 deep on \u00f8154",
+   "channel": {
+    "from_d": 145.0,
+    "to_d": 163.0,
+    "depth": 2.0,
+    "open_to_bore": false
+   },
    "id_from": "the surround at its glue line + 2: PLACEHOLDER, measure"
   },
   "gable-print-front-left": {
@@ -209,7 +219,7 @@
    ]
   },
   "gable-print-mid-left": {
-   "volume_l": 2.327,
+   "volume_l": 2.321,
    "size_mm": [
     195.0,
     120.0,
@@ -217,7 +227,7 @@
    ]
   },
   "gable-print-mid-right": {
-   "volume_l": 2.327,
+   "volume_l": 2.321,
    "size_mm": [
     195.0,
     120.0,
@@ -242,6 +252,20 @@
   }
  },
  "units": "mm, litres, kg",
+ "insert_split_pins": [
+  {
+   "y": 175.0,
+   "z": 886.3,
+   "d": 3.2,
+   "l": 16
+  },
+  {
+   "y": 190.0,
+   "z": 977.7,
+   "d": 3.2,
+   "l": 16
+  }
+ ],
  "gable_print_pins": [
   {
    "joint": "mid-left / mid-right",
@@ -332,7 +356,7 @@
  "woofer_chamber_gross_l": 103.26,
  "mid_chamber_gross_l": 8.029,
  "waveguide_air_l": 1.6795,
- "wood_mass_kg": 24.82,
+ "wood_mass_kg": 24.81,
  "port_tube_length_mm": 153.3,
  "size": "floorstander",
  "features": {
@@ -448,7 +472,7 @@
     "clear": 0.3,
     "back_wall_y": 200.3,
     "boss_bore_d": 86.6,
-    "boss_bore_to_y": 220.0,
+    "boss_bore_to_y": 222.5,
     "bay": {
      "d": 36.0,
      "from_y": 216.0,
@@ -471,7 +495,22 @@
       10.0
      ],
      "hole_d": 3.4,
-     "screw": "3.0 x 12 thread-forming screws for plastics (WN 1411 / PT K30, pan head)"
+     "screw": "3.0 x 12 thread-forming screws for plastics (WN 1411 / PT K30, pan head)",
+     "head_h": 2.4,
+     "points": [
+      [
+       39.8,
+       935.0
+      ],
+      [
+       -19.9,
+       969.47
+      ],
+      [
+       -19.9,
+       900.53
+      ]
+     ]
     }
    }
   },
@@ -480,6 +519,7 @@
     336.0,
     111.0
    ],
+   "cutout_corner_r": 3.0,
    "rebate": [
     361.0,
     136.0,
@@ -496,13 +536,26 @@
      252.5
     ]
    },
-   "gland": {
-    "x": 332.0,
-    "y": 307.0,
-    "hole_d": 25.5,
+   "glands": {
+    "size": "M16 x 1.5",
+    "hole_d": 16.5,
     "nut_counterbore": [
-     40.0,
+     24.0,
      8.0
+    ],
+    "centres": [
+     [
+      332.0,
+      307.0
+     ],
+     [
+      297.0,
+      307.0
+     ],
+     [
+      262.0,
+      307.0
+     ]
     ]
    }
   },
@@ -623,6 +676,36 @@
    "ok": true
   },
   {
+   "check": "sleeve's screw heads clear of the pocket's bore floor (along the axis)",
+   "margin_mm": 1.1,
+   "least_mm": 0.8,
+   "ok": true
+  },
+  {
+   "check": "sleeve's pilots off the insert's split at the centre plane",
+   "margin_mm": 18.7,
+   "least_mm": 3.0,
+   "ok": true
+  },
+  {
+   "check": "the boss's circle inside the insert's outline (seen from the front)",
+   "margin_mm": 5.61,
+   "least_mm": 0.4,
+   "ok": true
+  },
+  {
+   "check": "insert material over the tweeter's bore, at the top",
+   "margin_mm": 11.91,
+   "least_mm": 2.0,
+   "ok": true
+  },
+  {
+   "check": "gable over the pocket's boss bore, under the back slope (vertical)",
+   "margin_mm": 10.55,
+   "least_mm": 3.0,
+   "ok": true
+  },
+  {
    "check": "birch over the connector bay, under the back slope (vertical)",
    "margin_mm": 21.92,
    "least_mm": 8.0,
@@ -674,6 +757,18 @@
    "check": "amplifier box above the bottom panel",
    "margin_mm": 81.5,
    "least_mm": 0.0,
+   "ok": true
+  },
+  {
+   "check": "birch between the glands' counterbores",
+   "margin_mm": 11.0,
+   "least_mm": 5.0,
+   "ok": true
+  },
+  {
+   "check": "glands' counterbores inside the lid (from the sides' inner faces)",
+   "margin_mm": 28.0,
+   "least_mm": 5.0,
    "ok": true
   },
   {

@@ -23,38 +23,42 @@ INSIDE = ['top-panel', 'bottom-panel', 'window-brace', 'mid-shelf', 'mid-divider
 
 
 def inside_parts():
-    """The hardware inside, placed as fab/sheets.py's sheets 3 and 4 describe it: the tweeter's lead from its tabs into
-    the connector bay behind the insert's boss, the connector mated in the mouth of the cable channel, the cabinet's lead
-    down the channel (sealed with silicone at the bay), through the brace's window and into the amplifier box's gland;
-    the woofer's and mid's leads to the same gland; the insert's magnets and pins."""
+    """The hardware inside, placed as fab/sheets.py's sheets 3 and 4 describe it: the tweeter's own flexible lead from its
+    tabs into the connector bay behind the insert's boss, the connector mated standing in the bay, the cabinet's lead down
+    the channel (sealed with silicone under the bay's floor), through the brace's window and into its own gland in the
+    amplifier box's lid; the woofer's and mid's leads to theirs; the insert's magnets and pins."""
     I, T = INSERT, TWEETER_PART
     zc, yt = WAVEGUIDE['throat_z'], WAVEGUIDE['throat_y']
     yw = cad.wire_hole_y(); zb = zc + I['bay_dz']
     y0a, y1a, z0a, z1a = cad.amp_box_extent()
-    gx, gy, gz = PLAN - WALL - 40, y0a + 25, z1a + WALL          # the gland in the amplifier box's lid (cad.amp_box_panels)
+    gl = cad.amp_glands_xy(); gz = z1a + WALL                     # one gland per cable in the lid: tweeter, woofer, mid
+    gx, gy = gl[0]
     # the drop: inside the brace's window, or (no brace) down the back corner beside the amplifier box's lid's gland
     half = BRACE_WINDOW / 2 - min(20.0, BRACE_WINDOW / 6) if BRACE_Z else (PLAN - WALL - 40 - 12) - RUN
     dx, dy = RUN + half, RUN + half
     xc = RUN + 4.0                                                 # just off the centre plane, so a cut on it shows the cable whole
-    zcon = zb - I['bay_d'] / 2 + 2.0                               # the connector's latch line, at the channel's mouth
+    zcon = cad.connector_z()                                       # the connector standing in the bay, above the channel's seal
     out = {}
     out.update(C.connector_2p((xc, yw, zcon)))
     out['cable-tweeter-lead'] = C.cable([(xc + 6, yt + T['flange_t'] + T['body_depth'] - 2, zc - 6), (xc + 6, I['boss_back_y'] + 4, zb + 4),
-                                         (xc + 2, yw + I['bay_l'] / 2 - 6, zb + 6), (xc, yw + 2, zcon + 16), (xc, yw, zcon + 11)], 5.0)
+                                         (xc + 2, yw + I['bay_l'] / 2 - 6, zb + 6), (xc, yw + 2, zcon + 16), (xc, yw, zcon + 11)], 4.0)
     top = TOP_Z0 - 14
     out['cable-tweeter'] = C.cable([(xc, yw, zcon - 11), (xc, yw, top), (dx, dy, top), (dx, dy, gz + 30), (gx, gy, gz + 30), (gx, gy, gz - WALL - 30)], 5.0)
     # the channel sealed round the cable with 20 mm of silicone from the bay (a grommet will not seat in 18 mm: d16)
     out['seal-channel'] = cad.cyl_z(xc, yw, WIRE_HOLE_D - 0.2, zb - I['bay_d'] / 2 - 20.0, zb - I['bay_d'] / 2)
-    out['gland-amp'] = C.cable_gland(gx, gy, gz, AMP_BOX['gland_d'], 7.0)
+    for k, (x_, y_) in enumerate(gl):
+        out[f'gland-amp-{k + 1}'] = C.cable_gland(x_, y_, gz, AMP_BOX['gland_hole'] - 0.5, (7.0, 9.0, 8.0)[k] if k < 3 else 7.0)
+    wx, wy = gl[1] if len(gl) > 1 else gl[0]
+    mx, my = gl[2] if len(gl) > 2 else gl[-1]
     wf = DRIVER_SET['woofer']; ws = C.DRIVERS[wf]
     wt = (RUN + ws['frame_od'] * 0.28, WOOFER_REBATE['depth'] + ws['depth'] * 0.55, WOOFER['z'] - ws['frame_od'] * 0.28)
-    out['cable-woofer'] = C.cable([wt, (gx - 9, dy - 70, max(WOOFER['z'], gz + 24)), (gx - 6, gy, gz + 24), (gx - 6, gy, gz - WALL - 30)], 7.0)
+    out['cable-woofer'] = C.cable([wt, (wx, dy - 70, max(WOOFER['z'], gz + 24)), (wx, wy, gz + 24), (wx, wy, gz - WALL - 30)], 7.0)
     if MID:
         ms = C.DRIVERS[DRIVER_SET['mid']]
         mt = (RUN + ms['frame_od'] * 0.28, MID_REBATE['depth'] + ms['depth'] * 0.6, MID['z'] - ms['frame_od'] * 0.28)
         hole = (RUN - 120, WALL + MID_CHAMBER_DEPTH, MID_SHELF_TOP + 40)
         out['cable-mid'] = C.cable([mt, (hole[0], hole[1] - 20, hole[2]), (hole[0], hole[1] + 30, hole[2]), (dx - 9, dy + 9, hole[2] - 30),
-                                    (dx - 9, dy + 9, gz + 36), (gx + 6, gy, gz + 36), (gx + 6, gy, gz - WALL - 30)], 6.0)
+                                    (dx - 9, dy + 9, gz + 36), (mx, my, gz + 36), (mx, my, gz - WALL - 30)], 6.0)
     mags, pins = cad.insert_fixings()
     out['magnets-insert'] = C.discs(mags, I['back_y'] - I['magnet_t'], I['back_y'] - 0.05, I['magnet_d'])
     out['magnets-pocket'] = C.discs(mags, I['back_y'] + I['clear'] + 0.05, I['back_y'] + I['clear'] + I['magnet_t'], I['magnet_d'])

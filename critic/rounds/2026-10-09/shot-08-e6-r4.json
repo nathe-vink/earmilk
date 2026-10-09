@@ -1,0 +1,221 @@
+{
+ "stage1": {
+  "impression": "A clean but flat cutaway of the milk-carton speaker: the birch section is lit almost evenly, so cut edges, inner walls and chamber floors merge into one tan value and the cavities read as a shallow diorama, while the white-and-red exterior that identifies the product shows only as a thin sliver at the right. It stands on a dim grey sweep with weak grounding and a large dull void to the right, so it reads as a CAD export rather than a hero image.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The waveguide insert's grey cut face must separate from the backdrop by at least 12 \u0394E2000. Now the insert section is L* 65.9 and the backdrop beside the roof [590,170,650,240] is L* 60.4, a \u0394E of 5.4, so it reads as a hole rather than a solid part.",
+  "The cavities must sit at least 1.3 stops under the section: upper far wall [395,285,470,425] at 140 or below while the gable cut face [345,225,395,245] holds at 205 or above. Now they are 154.9 and 210.8, about 1 stop apart.",
+  "Every driver must read in section: mid-cone p95 at least 70 (now 41.9), and the woofer, mid and tweeter motors showing pole piece, top plate and magnet instead of flat grey slabs (woofer-motor face 82-89, tweeter-frame 118-138).",
+  "The white body must read white on its lit band: front strip [566,270,581,495] median at least 225, L* 89 or more (now 215.1, L* 85.8). The red fin and roof rise with it (now L* 35.7 and 36.9, against 43.8 for #C62828).",
+  "The connector plug (7x8 px), its pins (7x4 px) and the tweeter dome (7x18 px) must be legible, about 15 px across or more. This frame size cannot give that with the whole cabinet in view.",
+  "The Baltic birch cut faces must show their ply laminations instead of one uniform tan (gable p5-p95 now 208.8-211.8)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The waveguide insert's cut face renders the same cool grey as the backdrop, which the pool light brightens directly behind the roof, so the insert's section reads as a hole through the cabinet instead of a solid part.",
+   "evidence": {
+    "region": [
+     590,
+     170,
+     650,
+     240
+    ],
+    "measured": "Backdrop beside the roof: median 145.6, rgb (144,145,156). The insert's grey section pixels: median 160, rgb (158,160,166). \u0394E2000 between them is 5.37. Backdrop x-profile at y 60-100: 104, 125, 146, 155, 149, 131, 113, 101, 92. The peak at x 450-600 is the pool: its target [-0.6,3.21,0.7] projects to about (572,173), right behind the roof."
+   },
+   "change": {
+    "setting": "lights.pool.irradiance",
+    "from": 1,
+    "to": 0.3
+   },
+   "expected": "The backdrop beside the roof falls to about 118-125, and above the fin from 153.6 to about 122. The copy area [800,150,1300,650] stays about 95-100. The insert section then sits about 13 \u0394E above the backdrop and reads as a lit solid. The gable birch (211) and the white front (215) gain about 25 levels of edge separation, and the red fin (63) keeps at least 55 levels against the backdrop.",
+   "accept": {
+    "region": [
+     590,
+     170,
+     650,
+     240
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     110,
+     128
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The on-axis fill (lights.axis at azimuth 19\u00b0, elevation 14\u00b0, on the camera's own line at 18.7\u00b0/13.3\u00b0) lights the cavity far walls as fully as the cut faces, so the cavities sit only about one stop under the section and read as a shallow lit box.",
+   "evidence": {
+    "region": [
+     395,
+     285,
+     470,
+     425
+    ],
+    "measured": "Upper far wall median 154.9 and lower far wall [430,600,500,720] 145.1, against cut faces at 210.8 (gable), 202.1 (back-panel edge [317,250,329,490]) and 178.8 (bottom edge). The linear ratio of gable to upper far wall is 1.96, about 1.0 stop. The window-brace top [425,452,525,470] at 186.1 is as bright as the bottom cut face."
+   },
+   "change": {
+    "setting": "lights.axis.irradiance",
+    "from": 0.45,
+    "to": 0.05
+   },
+   "expected": "The upper far wall falls to about 132-138 and the lower to about 125-130. The mid chamber's far wall drops from 99.6 to about 85 and stays legible. The cut faces lose about 8 levels, which c5 restores. Section-to-cavity contrast rises to about 1.3 stops, so the cut panel edges read as a bright frame around deeper volumes.",
+   "accept": {
+    "region": [
+     395,
+     285,
+     470,
+     425
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     126,
+     140
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The mid driver reads as a flat dark silhouette in section: its cone spans only 27 to 42 levels, so its profile from surround to cap is lost, while the woofer's glint gives that cone its shape.",
+   "evidence": {
+    "region": [
+     534,
+     332,
+     558,
+     404
+    ],
+    "measured": "part:mid-cone median 36.2, p5 26.8, p95 41.9 (part:mid-frame 23% crushed at or below 3). part:woofer-cone p95 is 153.4 with glint 1."
+   },
+   "change": {
+    "setting": "glints.2",
+    "from": null,
+    "to": {
+     "at": [
+      0.176,
+      0.05,
+      0.71
+     ],
+     "normal": [
+      0.87,
+      -0.43,
+      -0.25
+     ],
+     "size_m": 0.06,
+     "power_w": 0.8,
+     "receivers": [
+      "mid-cone"
+     ]
+    }
+   },
+   "expected": "A soft highlight appears on the upper flank of the mid cone at about image (548,350), where this point projects. Mid-cone p95 rises to about 85-115 while its median stays at 55 or below, so the cone's curve reads like the woofer's without a hot spot.",
+   "accept": {
+    "region": "part:mid-cone",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     70,
+     125
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The front face is under-lit against the section, so the white body renders light grey (L* 86) and the red fin, roof and plinth sit equally low (L* 28-37 against 43.8 for #C62828), because its main lamp, the 0.3 x 1.2 m kick strip, runs at 1.3 W/m\u00b2 against the key's 3.5.",
+   "evidence": {
+    "region": [
+     566,
+     270,
+     581,
+     495
+    ],
+    "measured": "White front strip: median 215.1 (L* 85.8), rgb (218,214,218), p95 235.6. Fin red (159,37,44), L* 35.7, \u0394E2000 8.8 to #C62828. Roof slope (172,24,28), L* 36.9, \u0394E 6.1. Plinth band (129,27,35), L* 28.3, \u0394E 14.9. The red sits at the white's own light level (Y ratio about 0.137), so the shortfall is light, not colour."
+   },
+   "change": {
+    "setting": "lights.kick.irradiance",
+    "from": 1.3,
+    "to": 1.7
+   },
+   "expected": "The white strip median reaches about 226-232 (L* about 89-91) with its specular band kept under about 248. The fin and roof rise about 2-3 L* toward #C62828 (fin \u0394E about 7) and the plinth lifts about 5 levels. The section and backdrop are unchanged.",
+   "accept": {
+    "region": [
+     566,
+     270,
+     581,
+     495
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     222,
+     236
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "Dimming the on-axis fill (c2) also removes about 10% of the light on the cut plane, so without a key correction the section drops about 8 levels and stops being the brightest wood in frame.",
+   "evidence": {
+    "region": [
+     345,
+     225,
+     395,
+     245
+    ],
+    "measured": "Gable cut face median 210.8 (p5 208.8, p95 211.8). The axis lamp supplies about 0.41 of the roughly 3.6 W/m\u00b2 on the cut plane (0.45 at 23.5\u00b0 off the cut normal), so after c2 the gable would be about 202."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 3.5,
+    "to": 3.85
+   },
+   "expected": "The gable cut face returns to about 206-212 and the back-panel edge to about 198-202. The far walls rise only about 2 levels because they sit mostly in the key's penumbra, so c2's depth survives.",
+   "accept": {
+    "region": [
+     345,
+     225,
+     395,
+     245
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     204,
+     218
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Show the driver motors in true section (pole piece, top plate, magnet, voice coil, spider) instead of solid grey blocks.",
+   "why": "woofer-motor (face 82-89), mid-motor (115-121) and tweeter-frame (118-138) read as placeholder slabs, which undercuts a technical cutaway. The drivers are real named products whose geometry and materials are fixed."
+  },
+  {
+   "request": "Ply laminations on the Baltic birch cut faces.",
+   "why": "The cut faces are one uniform tan (gable p5-p95 208.8-211.8 over 50x20 px) and read as solid timber, and ply edges are the clearest cue for Baltic birch in section. The birch is the product's own fixed finish."
+  },
+  {
+   "request": "A detail inset or a larger frame for the insert, tweeter and connector.",
+   "why": "The connector plug is 7x8 px, the pins 7x4 px and the tweeter dome 7x18 px. With the whole 1055 mm cabinet in a 900 px-tall frame they cannot be read, and the frame size is fixed."
+  },
+  {
+   "request": "A warmer or darker section colour for the waveguide insert.",
+   "why": "Its cut face (rgb 158,160,166) is the backdrop's cool grey (\u0394E 5.4). The section colour is fixed, so c1 separates the two by darkening the backdrop instead."
+  }
+ ],
+ "score_if_fixed": 6.3
+}

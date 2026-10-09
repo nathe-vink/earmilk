@@ -43,76 +43,98 @@ The figures are simulations and datasheets (below); measure the built speakers b
   reaches about 50 m/s and will chuff; at a loud 100 dB it is 12 m/s and silent. Set the DSP's high-pass at about
   25 Hz and its limiter to the woofer's excursion.
 - **The bookshelf's bass shelf costs excursion.** Its +8.3 dB shelf to 45 Hz needs a 35 Hz high-pass in the DSP.
-- **Print the waveguide insert fine.** Its walls are the acoustic surface the simulation was run on: 0.1 mm layers or
-  finer (SLA resin, or MJF nylon), filled and sanded smooth before the paint.
+- **Print the waveguide insert fine and tough.** Its walls are the acoustic surface the simulation was run on: 0.1 mm
+  layers or finer, in a tough (ABS-like) SLA resin or MJF nylon, which hold the tweeter's screws in 2 mm walls; filled
+  and sanded smooth before the paint. One piece from a service; the floorstander's halves only on a desktop printer.
 - **The wordmark is 172 mm wide** at the spec's 44 mm type size (the spec says "about 155"); say if 155 matters and
   the type shrinks to 39.6 mm.
 
 ## The build, in order
 
-The two sizes are built the same way; only the numbers differ. Drawings: `out*/drawings/earmilk-sheets.pdf`, six
-A3 sheets per size, numbered EM-FS-001 to 006 (floorstander) and EM-BS-001 to 006 (bookshelf), first-angle: (1) the
+The two sizes are built the same way; only the numbers differ. Drawings: `out*/drawings/earmilk-sheets.pdf`, eight
+A3 sheets per size, numbered EM-FS-001 to 008 (floorstander) and EM-BS-001 to 008 (bookshelf), first-angle: (1) the
 general arrangement, (2) the centre section, (3) the waveguide insert and the tweeter's mount and wiring, (4) the back,
-the amplifier and the wiring, (5) the exploded view and the parts list, (6) the inner panels' details.
+the amplifier and the wiring, (5) the exploded view and the parts list, (6) the inner panels' details and the trim
+rings' sections, (7) and (8) the notes, all 2.5 mm high: what to measure first (M1, M2, ...) and sheets 1 to 3's notes
+by number (1.1, 1.2, ...) on sheet 7; sheets 4 to 6's notes, the glue-up order (G1 to G7) and the fixings (F1, F2) on
+sheet 8. Each sheet names the notes sheet its numbers point to.
 
+0. **Buy and measure first.** Buy the drivers, the tweeters and the amplifiers (`bom.csv`) and the ply, and measure
+   them before anything is cut or printed. Sheet 7's "Measure first" table lists every value the drawings assume and
+   what it sets: the ply's thickness (the sides and inner panels are the plan less twice it); each driver's flange
+   (the rebate is the flange + 1.0 of gasket + 3.0 of ring), frame, cut-out, hole circle and surround at its glue line
+   (the trim ring's bore is that + 2); the TW29DN-B's front ring and motor (the insert's bore and the sleeve's), or the
+   D3004/602200's faceplate, its hole circle and body, and whether its front is flat from ø34 to ø62 with the grille
+   off; the dome and surround's diameter (the throat); the amplifier's plate, its corner radius, and its module offered
+   to a test cut-out in scrap. Edit `params.py`, run `build.sh`, and check `cad.json`'s "checks" all pass.
 1. **Prove the tweeter and its waveguide (a weekend).** Print the gable (`stl/gable-print/`: six pieces for the
-   floorstander, each 120 or less on one side for a resin printer's 218 x 123 x 220, keyed by 4 mm pins and bonded with
-   epoxy; one for the bookshelf) and the insert (`stl/waveguide-insert.stl`; the floorstander's also comes in halves,
-   `-left` and `-right`, joined by two 3 x 16 steel pins and epoxy). Hollow the pieces to 3 mm walls with two drain
-   holes in the slicer. Mount the tweeter on the insert (sheet 3), set the gable on a box of the right plan, and measure
-   on the axis and every 15 degrees horizontally and vertically with a calibrated USB microphone and REW. Compare with
-   `out*/acoustics/waveguide/*-polar.png`. If it holds, carry on; the simulation's levers are the throat's depth and
-   height (`WAVEGUIDE` in `params.py`, then `bem.py`).
-2. **Buy the drivers and the amplifier** (`bom.csv`) and measure them against `params.py` before any wood is cut or
-   anything printed: each driver's flange (the rebate is the flange + 1.0 of gasket + 3.0 of ring) and its surround at
-   its glue line (the trim ring's inner diameter is that + 2); the tweeter's motor (the floorstander's retaining
-   sleeve's bore is its diameter + 1) or the bookshelf tweeter's faceplate holes; the amplifier's plate, its corner
-   radius and its screw holes (Hypex's 2D drawing, or the plate itself), and its module through a test cut-out.
-3. **Cut the panels.** `out*/dxf/` to a local CNC cabinet or sign shop or a makerspace ShopBot: front, back, two
+   floorstander, four for the bookshelf, each 120 or less on one side for a resin printer's 218 x 123 x 220, keyed by
+   ø4 x 20 pins bonded with epoxy) and the insert (`stl/waveguide-insert.stl`) in a tough (ABS-like) SLA resin or MJF
+   nylon, not standard resin and not MDF: the sleeve's screws and the bookshelf's knurled inserts need it. One piece from
+   a print service is the default, with no seam in the waveguide. The floorstander's also comes in halves for a desktop
+   printer (`-left`, `-right`, split at the centre plane and printed tilted, about 209 x 117 x 213), joined by two
+   ø3.2 x 16 steel pins and epoxy, the seam filled and sanded flush (sheet 3). Hollow the gable's pieces to 3 mm walls
+   with two drain holes each in the slicer. Mount the tweeter on the insert (step 7), set the gable on a box of the
+   right plan, and measure on the axis and every 15 degrees horizontally and vertically with a calibrated USB microphone
+   and REW. Compare with `out*/acoustics/waveguide/*-polar.png`. If it holds, carry on; the simulation's levers are the
+   throat's depth and height (`WAVEGUIDE` in `params.py`, then `bem.py`).
+2. **Cut the panels.** `out*/dxf/` to a local CNC cabinet or sign shop or a makerspace ShopBot: front, back, two
    sides, top, bottom, the amplifier box's floor, lid and front; the floorstander adds the window brace and the mid
    chamber's shelf and divider. Each DXF layer names its operation (through cuts, the 3 mm shadow-line and rebate
-   pockets, the drivers' and amplifier's rebates, the lid's counterbore from its underside). No instant online service
+   pockets, the drivers' and amplifier's rebates, the lid's gland holes and the counterbores for their nuts, cut from
+   its underside). The amplifier's cut-out has R3 inside corners: a 6 mm cutter or smaller. No instant online service
    cuts 18 mm plywood.
-4. **Glue up the box.** First press the M4 T-nuts into the front's inside face (barrels 8 or less for the woofer, 6
-   or less for the mid, 7 or less on the bookshelf). Front and back run the full width; the sides sit between them;
-   everything else sits inside. Glue (Titebond II or III), clamp, square. Cut the shadow lines across the front and
-   back panels' edges at the side corners and round the four vertical corners (6 mm on the floorstander, 4 on the
-   bookshelf). The amplifier's box goes in before the top: its floor, front and lid between the sides, sealed, the
-   lid's counterbore for the gland's nut cut first.
-5. **Make the gable.** Printed (`stl/gable-print/`), filled and painted, or laminated birch (`dxf/gable-layer-*.dxf`)
+3. **Glue up the box** (sheet 8, G1 to G7; G1 to G5 on the bookshelf). Press the M4 T-nuts into the front's inside face first (flanges 15 or less
+   across for the floorstander's woofer, 12 or less for the mid and the bookshelf's woofer; barrels 8, 6 and 7 or
+   less). Then: lay the back face down and glue both sides and the bottom to it; the amplifier's box (its floor, front
+   and lid between the sides, against the back), its joints sealed; the floorstander's window brace at z 500, then the
+   mid chamber's shelf and its divider; the front; the top panel last, inside all four walls. Titebond II or III, and
+   clamp across the sides at every inner panel; check the diagonals. Cut the shadow lines across the front and back
+   panels' edges at the side corners and round the four vertical corners (6 mm on the floorstander, 4 on the
+   bookshelf).
+4. **Make the gable.** Printed (step 1's pieces), filled and painted, or laminated birch (`dxf/gable-layer-*.dxf`)
    milled to `step/gable-block.step`. The insert's pocket is a prism along the depth and mills from the front with the
    block on its back, but its back wall is 200 deep and the connector bay 250: a 3-axis router needs that much reach
-   (a long-series cutter or a 5-axis machine), or print the block. Round the hips and the fin's edges. Glue it on
-   four 10 mm dowels.
-6. **Finish, before anything is fitted.** Fill the grain and edges, 2K high-build primer, block flat, the body colour
+   (a long-series cutter or a 5-axis machine), or print the block. Round the hips and the fin's edges. Before it goes
+   on, sand the front panel's top edge flush with the top panel to within 0.1: the insert sits on both. Glue it on four
+   10 x 28 mm dowels (holes 10 deep in the top panel, 20 in the block).
+5. **Finish, before anything is fitted.** Fill the grain and edges, 2K high-build primer, block flat, the body colour
    everywhere, mask the marks with the vinyl stencils (`out*/marks/`), the accent colour on the plinth and gable, peel;
    then the Nutrition Facts (`marks/facts-print.pdf`, on the back of the floorstander and the right side of the
    bookshelf) as a screen print in a 2K ink or a water-slide decal, and 2K clear over everything, flatted until the
    print's edge disappears. The insert is painted with the gable but on its face only: mask its sides, base and back,
-   its seat, its magnet and pin holes, and the pocket's walls, so the fit (the pocket +0.2/0, the insert 0/-0.15)
-   survives the paint. The trim rings satin black. Let the clear cure before step 7.
-7. **Run the tweeter's cabinet lead** (sheets 3 and 4): round-sheathed 2 x 1.0 mm2 from the amplifier box's gland,
-   through the brace's window (floorstander, 30 mm in from its back edge), up the 14 mm channel through the top panel
-   and the gable block to the socket of a two-pole locking connector (JST VH), 250 mm above the top panel's underside
-   (185 on the bookshelf). Seal the channel round the cable with 20 mm of neutral-cure silicone from the bay.
-8. **Fit the insert** (sheet 3). The floorstander's tweeter goes in from behind through its bore, its front ring on a
-   0.5 mm gasket on the throat's seat, held by the printed retaining sleeve (`stl/tweeter-retainer.stl`) and its three
-   3.0 x 12 thread-forming screws in the boss's back face. The bookshelf's tweeter screws through its faceplate's own
-   holes into three M2.5 knurled inserts bonded in the seat. The magnets in the insert's back and their partners in the
-   pocket's back wall, epoxied, opposite poles out; the two pins bonded in; a ribbon loop glued in the groove under the
-   insert's front edge. Plug its 120 mm lead into the cabinet's socket and slide the insert home.
-9. **The port** (floorstander): the tube is printed 10 mm long. Push it in from the back, dry; slide the flare collar
+   its seat, its magnet and pin holes, the pocket's walls and its floor, so the fit (the pocket +0.2/0, the insert
+   0/-0.15) survives the paint. The trim rings satin black. Let the clear cure before step 6.
+6. **Run the tweeter's cabinet lead** (sheets 3 and 4): round-sheathed 2 x 1.0 mm2 from its own gland in the
+   amplifier box's lid, through the brace's window (floorstander, 30 mm in from its back edge), up the 14 mm channel
+   through the top panel and the gable block into the connector bay, where its socket (the cabinet's half of a
+   two-pole locking connector, JST VH) stays: 97 mm above the top panel's underside (63 on the bookshelf), 30 past the
+   bay's floor. Seal the channel round the cable with 20 mm of neutral-cure silicone pushed in from the bay.
+7. **Mount the tweeter and fit the insert** (sheet 3). Solder the tweeter's own lead to its tabs, 150 mm of
+   2 x 0.75 mm2 silicone-insulated flex, twisted, with the plug half of the connector crimped on its end. The
+   floorstander's tweeter goes in from behind through its bore, its front ring on a 0.5 mm gasket on the throat's
+   seat, held by the printed retaining sleeve (`stl/tweeter-retainer.stl`) and three 3.0 x 12 thread-forming pan
+   heads in the boss's back face (one on the horizontal at the speaker's right, the others 120 degrees on). The
+   bookshelf's tweeter screws through its faceplate's own holes into three M2.5 knurled inserts bonded in the seat,
+   M2.5 x 8 button heads. The magnets in the insert's back and their partners in the pocket's back wall, epoxied,
+   opposite poles out; the two pins bonded in; a ribbon loop glued in the groove under the insert's front edge. Hold
+   the insert just in front of its pocket, plug its lead into the socket in the bay, and slide it home: the lead folds
+   into the sleeve and the bay.
+8. **The port** (floorstander): the tube is printed 10 mm long. Push it in from the back, dry; slide the flare collar
    on from inside through the woofer's cut-out; fit the woofer and measure the impedance's dip (REW). Take the woofer
    and collar out, trim the tube's inner end until the dip sits at 32 Hz, bond the collar on with epoxy, and glue the
    flange to the finish.
-10. **Wire the woofer and the mid** (sheet 4) to the same gland, the drivers on 1.5 mm foam gaskets in their rebates,
-    M4 x 20 button heads 1.6 high or less into the T-nuts, the trim rings over them on three dots of silicone. Seal the
-    gland: the woofer's box must be airtight, and the insert's pocket is open to the room through its 0.3 mm seam.
-    **The amplifier**: its module goes through the back's cutout into its sealed box, the plate on 3 mm EPDM tape flush
-    in its 4.5 mm rebate, ten 4.3 x 16 screws in 3.5 pilots drilled through where Hypex's drawing puts them.
-11. **Metal.** The letters (`metal/wordmark-letters.dxf`, 1.5 mm stainless or aluminium, polished; four sets of
+9. **The glands, the drivers and the amplifier** (sheet 4). Fit the M16 glands in the lid now, one per cable: the
+   bodies from above, the lock nuts from below in their counterbores, reached through the amplifier's cut-out. Feed each
+   driver's cable through its own gland and tighten it: the woofer's box must be airtight, and the insert's pocket is
+   open to the room through its 0.3 mm seam. The drivers on 1.5 mm foam gaskets in their rebates, M4 x 20 low-profile
+   button heads (1.6 high and 8 across or less) into the T-nuts, the trim rings over them on three dots of silicone.
+   **The amplifier**: its module goes through the back's cut-out into its sealed box, the plate on 3 mm EPDM tape flush
+   in its 4.5 mm rebate; drill its holes ø3.5 through the 13.5 left under the rebate, from the plate in hand, and fix it
+   with 4.3 x 16 self-tapping pan heads (8 or 10, to suit the plate; Hypex's 4.3 x 25 kit also works).
+10. **Metal.** The letters (`metal/wordmark-letters.dxf`, 1.5 mm stainless or aluminium, polished; four sets of
     eight pieces a pair) glued on with the 1:1 templates (`metal/wordmark-template-*.pdf`).
-12. **Tune it** (`out*/dsp/*.md`). Load the channels and crossovers into Hypex Filter Design over USB (a USB mini-B
+11. **Tune it** (`out*/dsp/*.md`). Load the channels and crossovers into Hypex Filter Design over USB (a USB mini-B
     cable, not supplied), then measure each driver on the tweeter's axis at 1 m (REW, a UMIK-1), set levels and delays
     from the measurements, check the reverse null at each crossover, and EQ the sum flat on axis. The files' numbers
     are where to start.
@@ -126,9 +148,10 @@ the amplifier and the wiring, (5) the exploded view and the parts list, (6) the 
 | `cutlist.csv` | every panel, size and operation for a pair | the shop, and you |
 | `step/gable-block.step`, `dxf/gable-layer-*.dxf` | the gable: the milled block and its glue-up layers | CNC millwork or pattern shop |
 | `stl/gable-print/` | the gable for printing | a printer |
-| `stl/waveguide-insert*.stl`, `step/waveguide-insert.step` | the insert with the waveguide, the tweeter's counterbore, magnet and pin holes | SLA or MJF service, or CNC |
-| `stl/port-*.stl` | the floorstander's port, two pieces | a printer |
-| `drawings/earmilk-sheets.pdf` | the six A3 drawings, from the same solids | the builder |
+| `stl/waveguide-insert*.stl`, `step/waveguide-insert.step` | the insert with the waveguide, the tweeter's bore, magnet and pin holes (the floorstander's halves too) | an SLA (tough resin) or MJF service |
+| `stl/tweeter-retainer.stl`, `stl/trim-ring-*.stl` | the floorstander's tweeter sleeve; the drivers' trim rings | a print service; a printer (the woofer's ring needs a 320 bed) |
+| `stl/port-*.stl`, `step/port-tube.step` | the floorstander's port, two pieces | a printer |
+| `drawings/earmilk-sheets.pdf` | the eight A3 sheets, from the same solids | the builder |
 | `acoustics/waveguide/` | the waveguide study: candidates, polar maps, the choice | you |
 | `dsp/*.md`, `dsp/*.json` | the DSP's starting setup: channels, crossovers, delays, levels, EQ | you, at Hypex Filter Design |
 | `acoustics.json`, `acoustics/` | the box: volumes, port, simulated response | you |
@@ -222,10 +245,12 @@ the floorstander's port settles in two passes with the CAD), `dsp.py` (the cross
 
 ## Checks the files pass
 
-Every build checks, on the solids: the insert above the top panel and with material under the tweeter's counterbore,
-birch over the connector bay, the drivers' rebates clear of each other and of the shadow lines, the amplifier's plate
-clear of the plinth's shadow line and inside the back, the port clear of the amplifier's box, the box clear of the
-brace (`cad.json`, "checks"; a failure stops the build).
+Every build checks, on the solids: the insert above the top panel and with material under the tweeter's bore, its
+boss and fixings inside its own outline (so it slides into its pocket), 2 mm or more of insert over the bore and 3 of
+gable over the pocket's bore, birch over the connector bay, the sleeve's screw heads clear of the bore's floor and its
+pilots off the insert's split, the drivers' rebates clear of each other and of the shadow lines, the amplifier's plate
+clear of the plinth's shadow line and inside the back, the glands 5 or more apart and inside the lid, the port clear
+of the amplifier's box, the box clear of the brace (`cad.json`, "checks"; a failure stops the build).
 
 The floorstander: overall 1,055; ridge 1,010; body 860; slope 246 at 37.6 degrees; fin 45 x 8; plinth 110 with the
 groove at 110 to 113 and the gable's at 857 to 860; corners and hips R6, the fin R3; woofer at z 320, mid at 690;
@@ -237,7 +262,13 @@ later decisions made: the build is active, so the Hypex plate takes the back's f
 cup sat (z 175; `POSTS` and `TERMINAL_CUP` in `params.py` are kept for a passive build), and the tweeter's throat is at
 y 176, z 935 from the waveguide study, not the spec's 125. Both are listed for the owner to confirm in the spec.
 
-**Questions for the owner** (the drawing check's, round 2): has Hypex accepted the FA253 lying on its side, its long
-edge horizontal, and is a 90 mm sealed box enough for its heat (the research has both open)? Is 1.5 mm of insert under
-the bookshelf tweeter's bore strong enough, or should its throat rise 2.2 mm? Is the milled gable meant for a shop
-with the reach, or is the printed one the default (the sheets assume either)?
+**Questions for the owner** (the drawing checks', rounds 2 and 3). Open: has Hypex accepted the FA253 lying on its
+side, its long edge horizontal, and is a 90 mm sealed box enough for its heat (the research has both open)? Is 1.5 mm
+of insert under the bookshelf tweeter's bore strong enough, or should its throat rise 2.2 mm? Is the milled gable meant
+for a shop with the reach, or is the printed one the default (the sheets assume either)? Taken as proposals, for the
+owner to confirm: the bookshelf insert's outline rises about 3 mm at the top so it covers the boss behind it (the
+waveguide is unchanged; its seam on the roof moves about 4 mm up the slope); the insert is printed in a tough resin or
+MJF nylon, one piece from a service, the floorstander's halves only as a fallback; the cabinet's tweeter lead ends at
+a socket in the bay and the tweeter's own 150 mm of flexible wire is the slack (a 6.4 mm round cable will not fold in
+a 36 mm bay); the insert comes out by a ribbon loop against its magnets (four N42 pairs at about 0.9 mm, several
+kilograms: pull it level, and add a second loop if one tears).

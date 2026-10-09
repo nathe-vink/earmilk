@@ -284,7 +284,7 @@
    "material": "rubber"
   },
   {
-   "match": "gland-amp",
+   "match": "gland-amp*",
    "material": "black"
   },
   {

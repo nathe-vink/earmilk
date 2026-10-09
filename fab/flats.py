@@ -33,7 +33,7 @@ LAYERS = {'CUT_OUTSIDE': 7, 'CUT_INSIDE': 1, 'POCKET_3MM': 3, WOOFER_POCKET: 4, 
 OPS = {'CUT_INSIDE': 'cut inside', 'POCKET_3MM': 'pocket 3 mm deep', WOOFER_POCKET: f"pocket {WOOFER_REBATE['depth']:g} mm deep (woofer)",
        MID_POCKET: f"pocket {MID_REBATE['depth']:g} mm deep (mid)" if MID else '', PLATE_POCKET: f"pocket {AMP['rebate']:g} mm deep (amplifier plate)" if AMP else '',
        'DRILL_D10_DEPTH10': 'drill ø10, 10 deep', 'DRILL_D5.5_THROUGH': 'drill ø5.5 through (M4 T-nuts from inside; measure the frame first)',
-       NUT_POCKET: f"pocket {AMP_BOX['nut_cb'][1]:g} mm deep from the underside, concentric with the gland's hole (cut the hole, turn the panel over, centre on it; before the lid goes in)" if AMP else '', 'NOTES': 'notes'}
+       NUT_POCKET: f"pocket {AMP_BOX['nut_cb'][1]:g} mm deep from the underside, concentric with each gland's hole (cut the holes, turn the panel over, centre on them; before the lid goes in)" if AMP else '', 'NOTES': 'notes'}
 
 
 def rect(x0, y0, x1, y1):
@@ -80,11 +80,12 @@ def panel_defs():
     if PORT:
         back['CUT_INSIDE'] += circle(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5)
     if AMP:
-        back['CUT_INSIDE'] += rect(RUN - AMP['cut_w'] / 2, AMP['z'] - AMP['cut_h'] / 2, RUN + AMP['cut_w'] / 2, AMP['z'] + AMP['cut_h'] / 2)
+        back['CUT_INSIDE'] += rrect(RUN - AMP['cut_w'] / 2, AMP['z'] - AMP['cut_h'] / 2, RUN + AMP['cut_w'] / 2, AMP['z'] + AMP['cut_h'] / 2, cad.AMP_CUT_R)
         back[PLATE_POCKET] = rrect(RUN - AMP['plate_w'] / 2 - 0.5, AMP['z'] - AMP['plate_h'] / 2 - 0.5,
                                    RUN + AMP['plate_w'] / 2 + 0.5, AMP['z'] + AMP['plate_h'] / 2 + 0.5, AMP['plate_r'] + 0.5)
         what = (f'the {AMP["model"]}\'s module goes through its {AMP["cut_w"]:g} x {AMP["cut_h"]:g} cutout, its plate on 3 mm EPDM tape '
-                f'flush in the {AMP["rebate"]:g} mm rebate; ten ø3.5 pilot holes, 25 deep, to Hypex\'s drawing')
+                f'flush in the {AMP["rebate"]:g} mm rebate; the cut-out\'s corners R{cad.AMP_CUT_R:g} (a 6 mm cutter or smaller); the plate\'s '
+                f'screw holes drilled ø3.5 through the {WALL - AMP["rebate"]:g} left under the rebate, from the plate in hand, centred in its flange')
     else:
         tw, th = TERMINAL_CUTOUT
         back['CUT_INSIDE'] += rect(RUN - tw / 2, POSTS['z'] - th / 2, RUN + tw / 2, POSTS['z'] + th / 2)
@@ -116,14 +117,15 @@ def panel_defs():
         y0, y1, z0, z1 = cad.amp_box_extent()
         d = y1 - y0 + WALL
         P.append(dict(name='amp-box-floor', qty=1, w=INNER, h=d, layers={}, note=f'the amplifier box\'s floor, z {z0 - WALL:g} to {z0:g}, against the back'))
-        gx, gy = cad.amp_gland_xy()
+        gl = cad.amp_glands_xy()
+        xs_ = ', '.join(f'{gx - WALL:g}' for (gx, _) in gl); gy_ = gl[0][1] - (y0 - WALL)
         P.append(dict(name='amp-box-lid', qty=1, w=INNER, h=d,
-                      layers={'CUT_INSIDE': circle(gx - WALL, gy - (y0 - WALL), AMP_BOX['gland_d'] + 0.5),
-                              NUT_POCKET: circle(gx - WALL, gy - (y0 - WALL), AMP_BOX['nut_cb'][0]),
+                      layers={'CUT_INSIDE': sum((circle(gx - WALL, gy - (y0 - WALL), AMP_BOX['gland_hole']) for (gx, gy) in gl), []),
+                              NUT_POCKET: sum((circle(gx - WALL, gy - (y0 - WALL), AMP_BOX['nut_cb'][0]) for (gx, gy) in gl), []),
                               'NOTES': [('text', (INNER / 2, 6.0), 'FRONT EDGE', 6.0)]},
                       note=f'the amplifier box\'s lid, z {z1:g} to {z1 + WALL:g}, its front edge (the bottom of the drawing) over the box\'s front; '
-                           f'the gland\'s ø{AMP_BOX["gland_d"] + 0.5:g} hole {gx - WALL:g} from the left, {gy - (y0 - WALL):g} from the front edge, its nut in a '
-                           f'ø{AMP_BOX["nut_cb"][0]:g} x {AMP_BOX["nut_cb"][1]:g} counterbore from the underside; sealed after wiring'))
+                           f'{len(gl)} ø{AMP_BOX["gland_hole"]:g} holes for {AMP_BOX["gland"]} glands, one per cable, {xs_} from the left, {gy_:g} from the front edge, '
+                           f'each nut in a ø{AMP_BOX["nut_cb"][0]:g} x {AMP_BOX["nut_cb"][1]:g} counterbore from the underside'))
         P.append(dict(name='amp-box-front', qty=1, w=INNER, h=z1 - z0, layers={},
                       note=f'the amplifier box\'s front, between floor and lid, {AMP_BOX["depth"]:g} in front of the back\'s inner face; glue and seal all round'))
     return P
@@ -263,7 +265,7 @@ def main():
         for p in panels + layers:
             ops = [OPS.get(k, k.replace('_', ' ').lower()) for k in p['layers'] if p['layers'][k] and k != 'NOTES'] or ['outline only']
             wr.writerow([p['name'], p['qty'], p['qty'] * 2, f"{p['w']:.1f}", f"{p['h']:.1f}", f'{WALL:.0f}',
-                         'Baltic birch plywood, B/BB, 18 mm', '; '.join(ops), p['note']])
+                         f'Baltic birch plywood, B/BB, {WALL:g} mm nominal: measure the sheet first (sheet 7, M1)', '; '.join(ops), p['note']])
     area = sum(p['w'] * p['h'] * p['qty'] * 2 for p in panels + layers) / 1e6
     print(f'{len(panels)} panel types, {len(layers)} gable layers; pair area {area:.2f} m2 on {len(sheets)} sheets of 1525 x 1525')
     for i, items in enumerate(sheets):

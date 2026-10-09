@@ -37,7 +37,8 @@ DRIVERS = {
     'd3004-602200': dict(kind='dome', dome_d=26.0, surround_w=4.0, flange_d=62.0, flange_t=4.5, body_d=48.0, body_depth=17.0, dome_h=7.0),
     'nd25fn-4': dict(kind='dome', dome_d=25.0, surround_w=2.5, flange_d=41.0, flange_t=3.0, body_d=36.0, body_depth=18.0, dome_h=7.0),
 }
-RING = dict(width=20.0, t=3.0, crown=0.5, ease=1.0)    # params.TRIM_RING: printed, satin black, over the frame and its screws
+RING = dict(width=20.0, t=3.0, crown=0.0, ease=1.0, inner_r=0.8)   # params.TRIM_RING: printed, satin black, over the frame and its screws;
+                                                                   # flat and flush (a 0.5 crown stood proud of 'flush': d9, round 3)
 
 
 def _revolve_profile(pts):
@@ -175,19 +176,38 @@ def dome_tweeter(spec, detail=24):
     return out, dict(r_radiating=rd + sw)
 
 
+def ring_channel(r_in, r_out, r_screws, head_d, depth=2.0, clear=0.5, wall=1.0):
+    """The channel in a trim ring's back over its frame's screw heads, as (from_r, to_r, depth): the heads' width and
+    `clear` a side about the screws' circle, kept `wall` inside the ring's outer edge, and opened to the bore when the
+    inner wall would be thinner than `wall` (the floorstander woofer's heads reach its bore: the ring's inner part is
+    then a lip t - depth thick over them). The drawing check's d9, round 3: a 10 wide channel ran past both edges."""
+    lo, hi = r_screws - head_d / 2 - clear, r_screws + head_d / 2 + clear
+    if lo - r_in < wall:
+        lo = r_in
+    hi = min(hi, r_out - wall)
+    return (lo, hi, depth)
+
+
 def trim_ring(r_in, r_out, ring=RING, groove=None):
-    """The trim ring's profile, outer to inner: eased outer edge level with the finish, a crown `crown` proud, a rounded
-    inner edge down onto the frame. Local frame: a = 0 at the finish, the ring sits in a = 0 to t. `groove` (radius,
-    width, depth): a channel in its back over the frame's screw heads, so the ring lies on the flange, not on them."""
-    t, cr, e = ring['t'], ring['crown'], ring['ease']
+    """The trim ring's profile, outer to inner: eased outer edge level with the finish, a crown `crown` proud (0: flat), a
+    rounded inner edge (inner_r) down onto the frame. Local frame: a = 0 at the finish, the ring sits in a = 0 to t.
+    `groove` (from_r, to_r, depth), from ring_channel: a channel in its back over the frame's screw heads, so the ring
+    lies on the flange, not on them; from_r at r_in opens it to the bore."""
+    t, cr, e, ir = ring['t'], ring['crown'], ring['ease'], ring.get('inner_r', 2.5)
     pts = [(r_out, t), (r_out, e)] + [(r_out - e + e * math.cos(th), e - e * math.sin(th)) for th in [math.pi / 2 * i / 6 for i in range(7)]][1:]
     mid = (r_in + r_out) / 2
-    pts += [(r_out - e - 2, 0.0), (mid + 3, -cr), (mid - 3, -cr), (r_in + 2.5, 0.0)]
-    pts += [(r_in + 2.5 - 2.5 * math.sin(th), 2.5 - 2.5 * math.cos(th)) for th in [math.pi / 2 * i / 6 for i in range(7)]][1:]
-    pts += [(r_in, t)]
-    if groove:
-        rg, gw, gd = groove
-        pts += [(rg - gw / 2, t), (rg - gw / 2, t - gd), (rg + gw / 2, t - gd), (rg + gw / 2, t)]
+    if cr > 0:
+        pts += [(r_out - e - 2, 0.0), (mid + 3, -cr), (mid - 3, -cr)]
+    pts += [(r_in + ir, 0.0)]
+    pts += [(r_in + ir - ir * math.sin(th), ir - ir * math.cos(th)) for th in [math.pi / 2 * i / 6 for i in range(7)]][1:]
+    if groove and groove[0] <= r_in + 1e-6:
+        lo, hi, gd = groove                           # open to the bore: the inner edge stops at the channel's floor
+        pts += [(r_in, t - gd), (hi, t - gd), (hi, t)]
+    else:
+        pts += [(r_in, t)]
+        if groove:
+            lo, hi, gd = groove
+            pts += [(lo, t), (lo, t - gd), (hi, t - gd), (hi, t)]
     return _revolve_profile(pts)
 
 
