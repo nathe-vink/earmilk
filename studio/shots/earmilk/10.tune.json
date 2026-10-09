@@ -85,5 +85,150 @@
   "set": 1.0,
   "passes": false,
   "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "sun.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    222,
+    234
+   ]
+  },
+  "proofs": [
+   [
+    1.4,
+    232.4
+   ],
+   [
+    2.0,
+    241.4
+   ],
+   [
+    1.1067,
+    226.3
+   ]
+  ],
+  "set": 1.1067,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c2",
+  "setting": "sky.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    126,
+    145
+   ]
+  },
+  "proofs": [
+   [
+    4.5,
+    135.0
+   ],
+   [
+    6.5,
+    162.2
+   ],
+   [
+    4.5368,
+    135.3
+   ]
+  ],
+  "set": 4.5368,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "lights.red_front_ramp.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    10,
+    24
+   ]
+  },
+  "proofs": [
+   [
+    3.0,
+    13.3
+   ],
+   [
+    5.0,
+    15.4
+   ],
+   [
+    6.5238,
+    15.8
+   ]
+  ],
+  "set": 6.5238,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c6",
+  "setting": "lights.red_side_ramp.strength",
+  "test": {
+   "metric": "edge",
+   "op": "between",
+   "value": [
+    28,
+    70
+   ]
+  },
+  "proofs": [
+   [
+    1.5,
+    25.0
+   ],
+   [
+    2.5,
+    43.1
+   ],
+   [
+    2.826,
+    48.3
+   ]
+  ],
+  "set": 2.826,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c8",
+  "setting": "glints.3.power_w",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    80,
+    175
+   ]
+  },
+  "proofs": [
+   [
+    1.0,
+    34.2
+   ],
+   [
+    2.0,
+    46.3
+   ],
+   [
+    4.0,
+    69.2
+   ]
+  ],
+  "set": 4.0,
+  "passes": false,
+  "moves_the_test": true
  }
 ]
