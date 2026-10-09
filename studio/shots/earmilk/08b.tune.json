@@ -81,5 +81,63 @@
   "set": 0.8,
   "passes": true,
   "moves_the_test": false
+ },
+ {
+  "change": "c5",
+  "setting": "lights.mouth.irradiance",
+  "test": {
+   "metric": "r_median",
+   "op": "between",
+   "value": [
+    176,
+    200
+   ]
+  },
+  "proofs": [
+   [
+    3.5,
+    167.0
+   ],
+   [
+    5.0,
+    183.0
+   ],
+   [
+    5.4688,
+    187.0
+   ]
+  ],
+  "set": 5.4688,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c2",
+  "setting": "lights.pool.irradiance",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    10,
+    26
+   ]
+  },
+  "proofs": [
+   [
+    0.7,
+    1.0
+   ],
+   [
+    1.1,
+    2.0
+   ],
+   [
+    1.9,
+    4.0
+   ]
+  ],
+  "set": 1.9,
+  "passes": false,
+  "moves_the_test": true
  }
 ]
