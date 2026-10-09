@@ -1,0 +1,202 @@
+{
+ "verdict": "Not quite. The cabinets can go to a CNC shop once the drivers, tweeters and amplifier plates are bought and measured. I checked panel sizes, cut-outs, rebate diameters and depths, bolt circles, the gland, dowel and channel coordinates, and the 5 x 5 ft nests. On all of these the DXFs, both cut lists, both cad.json files and sheets 1, 2, 4 and 6 agree with each other. Every section has its cutting plane, every view has a scale, and all text in both PDFs is 10 pt DejaVu (2.57 mm caps). What stops a pair today is how the tweeter plugs into the cabinet. The 150 mm tweeter lead cannot reach the socket fixed in the connector bay once the insert is outside its pocket: the floorstander needs about 225 mm and the bookshelf has 17 mm spare. The socket height in the notes (30 mm past the bay floor) contradicts the drawn connector, and on the bookshelf it is above the ceiling of the \u00f826 bay. Three remakes are likely. The bookshelf notes and the BOM send its letters, templates and stencils to the floorstander's files and to 1.5 mm sheet. The floorstander's printed retaining sleeve depends on the tweeter front-ring thickness, which the measure-first list never asks for. The rest would be settled by phone: the top panel fitted last into a closed box at \u00b10.5, gland nuts loose in round counterbores, the plate's corner radius, the cable splices, the damping, a rebate rule the mid breaks, a pin size given two ways, no adhesive named for the printed gable, and text printed over text on the bookshelf's sheet 6.",
+ "buildable_score": 6.0,
+ "findings": [
+  {
+   "id": "d1",
+   "size": "both",
+   "sheet": "sheet-3 (section B-B), sheet-7 (note 3.4), README step 7, params.py TWEETER_LEAD, bom",
+   "where": "Section B-B, the tweeter's own lead from the motor's back to the plug in the bay (FS sheet-3 crop x 1900-3050, y 120-900 px; BS sheet-3 x 1940-2560, y 300-1020 px); note 3.4",
+   "severity": "blocks",
+   "problem": "The 150 mm tweeter lead cannot reach the socket in the bay while the insert is outside its pocket, so 'plug in, then slide home' cannot be done on the floorstander and leaves 17 mm of slack on the bookshelf.",
+   "evidence": "The socket stays on a 30 mm stub sealed with silicone in the channel at y 233.5 (FS) and y 137 (BS) (cad.json insert.channel.y). The bay can only be reached through the empty pocket, and the insert only enters aligned, back face first. When the slide starts (back face at y 0) the tabs on the motor's back are at y 8.5 on the FS (seat 176 + 0.5 gasket + 6 ring + 26 motor = 208.5 at home, back face 200) and y 4 on the BS (95 + 0.5 + 4.5 + 17 = 117 at home, back face 113). Straight-line distance to the plug is 225 mm (FS) and 133 mm (BS); TWEETER_LEAD l is 150. No check in cad.json covers this, and the params comment '16 of slack' only fits the bookshelf.",
+   "fix": "Make the lead at least 300 mm (FS) and 210 mm (BS): the distance at the start of the slide plus about 75 mm for a hand in the pocket. Raise the BOM's 0.4 m of flex to suit. On section B-B, show where the spare lead lies with the insert home: a loop in the bay, y 222.5 to 251 (FS) or 127 to 148 (BS). Add to 3.4: 'plug in with the insert clear of the pocket and feed the loop into the bay as it goes home, keeping it out of the 1.1 mm between the sleeve's screw heads and the bore floor'."
+  },
+  {
+   "id": "d2",
+   "size": "both",
+   "sheet": "sheet-3 (section B-B), sheet-7 (3.4), sheet-8 (FS 4.4, BS 4.3), README step 6, bom",
+   "where": "Section B-B, the mated connector standing in the bay: drawn from z 910 to 934 (FS), and from z 500 to 524 with the lead looping to z 528 (BS)",
+   "severity": "remake",
+   "problem": "The socket height is given as 97/63 mm above the top panel's underside (30 past the bay floor) but drawn standing on the floor; on the bookshelf, 30 past the floor is above the ceiling of the \u00f826 bay.",
+   "evidence": "FS: bay \u00f836 on z 927, floor 909, ceiling 945. The note puts the lead's end at z 939, so a 24 mm mated pair would top out near z 951, above the ceiling; the section draws it at 910 to 934 (cad.py connector_z = floor + 13). BS: bay \u00f826 on z 512, floor 499, ceiling 525. The note's z 529 is 4 mm above the ceiling, and the section shows the tweeter lead leaving the plug's top at about z 528, 3 mm inside the gable's birch. No sheet or BOM line gives connector part numbers, mated length, terminals for 1.0 and 0.75 mm2, or which pin is +.",
+   "fix": "Dimension the socket's base on the bay floor and the cabinet lead's end 10 mm past it (77 above the top panel's underside FS, 43 BS). Name the plug and socket housings and terminals for 0.75 and 1.0 mm2, mated length 24 or less, pin 1 = red +. Enlarge the bookshelf bay to \u00f832 on the same axis z 512: the floor drops to z 496, birch over the bay is 11.4 against the 8 minimum, and the bay is 12 above the top panel against 4. Add to 3.4 that the cabinet lead is fed down the channel from the bay through the empty pocket and caught through the woofer cut-out; it cannot be pushed up from inside."
+  },
+  {
+   "id": "d3",
+   "size": "bookshelf",
+   "sheet": "sheet-7 (1.6), sheet-8 (4.8), bom, out-bookshelf/metal/wordmark-template-front.pdf",
+   "where": "BS note 1.6 (letters and templates), BS note 4.8 (stencils); BOM Metal and Paint stencil lines",
+   "severity": "remake",
+   "problem": "The bookshelf notes and the BOM point the shop at the floorstander's letter, template and stencil files and at 1.5 mm sheet.",
+   "evidence": "Note 1.6 reads 'out/metal/wordmark-letters.*, 1.2 proud: 97.8 x 18.4' with templates in 'out/metal/'. out/metal/wordmark-letters.dxf is 172.17 x 32.47 and its STL is 1.5 thick; out-bookshelf/metal is 97.82 x 18.45 and 1.2 thick. Note 4.8 reads 'out/marks/stencil-*.svg, 15 mm type', but out/marks holds 26/27 mm type, including an OPEN OTHER SIDE 307.4 wide (out/typeset.json) for a 220 fin. The BOM gives '1.5 mm sheet, fab/out/metal/...' and 'fab/out/marks/...' for both sizes. The bookshelf's own front template says 'CENTRELINE ... 195 mm from either side'.",
+   "fix": "In the bookshelf notes write out-bookshelf/metal/wordmark-letters.* and out-bookshelf/metal/wordmark-template-*.pdf (1.6) and out-bookshelf/marks/stencil-*.svg (4.8). Split the BOM lines: letters 1.5 mm from fab/out/metal (floorstander) and 1.2 mm from fab/out-bookshelf/metal (bookshelf), and stencils from each size's own marks folder. Change the bookshelf template's text to '110 mm from either side'."
+  },
+  {
+   "id": "d4",
+   "size": "floorstander",
+   "sheet": "sheet-7 (M4, 3.2), stl/tweeter-retainer.stl",
+   "where": "M4 (measure first) and note 3.2 (the retaining sleeve)",
+   "severity": "remake",
+   "problem": "The printed sleeve's length is set by the TW29DN-B front ring's thickness, a 6.0 PLACEHOLDER, which M4 never asks the builder to measure.",
+   "evidence": "The sleeve runs from y 182.5 to 216 plus a 3 mm flange (cad.json tweeter_retainer; the STL runs y 182.5 to 219). 182.5 = seat 176 + 0.5 gasket + TWEETER_PART flange_t 6.0. M4 lists only the ring's \u00f873, the motor's \u00f866 and the 45 mm dome, and the sleeve's length is not dimensioned anywhere. A ring 1 mm thinner leaves the tweeter loose; 1 mm thicker holds the flange off the boss, so the three 3.0 x 12 screws bend it and load the 2 mm boss walls. Bookshelf likewise: the D3004 faceplate thickness (4.5) sets the 3.5 mm thread engagement of the M2.5 x 8 screws and is not in M3.",
+   "fix": "Add to M4: 'the front ring's thickness t (6.0) sets the sleeve's tube length, 39.5 - t (33.5), flange 3'. Dimension the sleeve in 3.2 as tube \u00f873/\u00f867 x 33.5, flange \u00f884 x 3. Add to BS M3: 'the faceplate's thickness (4.5) sets the screw length, M2.5 x (thickness + 3.5)'."
+  },
+  {
+   "id": "d5",
+   "size": "both",
+   "sheet": "sheet-8 (FS G4, G6, G7; BS G4, G5), sheet-6 top-panel, title block",
+   "where": "Glue-up steps; top panel 354 x 354 (BS 184 x 184); title block 'panels \u00b10.5'",
+   "severity": "guess",
+   "problem": "The top panel goes in last, into a closed four-wall opening, with no clearance and a \u00b10.5 tolerance; the clamping step comes after it, and nothing locates the floating shelf and divider.",
+   "evidence": "The opening is 390 - 2t each way (front and back width less two sides; the sides' 354 width) and the top panel is 354 x 354 (cut list), so up to 1.0 mm of interference, pushed 18 mm in with glue on four edges. Every other inner panel goes in while the front is still off. G7 'Clamp across the sides at every inner panel' comes after G6, though Titebond stays workable only for minutes. In G4 the shelf (z 572-590) and divider touch only the sides until G5.",
+   "fix": "Cut the top panel 353.5 x 353.5 (BS 183.5 x 183.5), or give it -0.3/-0.8, and dry-fit it before G5. Put 'clamp across the sides' into each step. Mark the shelf's underside (554 above the bottom panel) and the divider's front face (90 behind the sides' front edges) on the sides' inner faces, or give two spacer lengths."
+  },
+  {
+   "id": "d6",
+   "size": "both",
+   "sheet": "sheet-8 (FS 4.7, BS 4.6), sheet-6 amp-box-lid, bom",
+   "where": "Amplifier box lid: \u00f816.5 holes with \u00f824 x 8 counterbores underneath",
+   "severity": "guess",
+   "problem": "Each gland's lock nut sits 3 mm deep in a round \u00f824 counterbore, with no size limit and nothing to stop it turning while the gland body is tightened from above.",
+   "evidence": "amp-box-lid.dxf has POCKET_8MM_UNDERSIDE \u00f824. The 15 mm thread in the 18 mm lid ends 3 mm short of the underside, so a 5 mm nut is recessed and no spanner reaches it. A 20 AF nut is 23.1 across corners and spins with 0.45 clearance; a 22 AF M16 nut is 25.4 across corners and will not go in. The BOM says only 'each with its lock nut'.",
+   "fix": "In the BOM and 4.7, specify the lock nut as 20 AF or less (23.1 across corners), 5 thick. Epoxy each nut into its counterbore, centred on a gland body, before the lid goes in (G2), so the body screws into it from above."
+  },
+  {
+   "id": "d7",
+   "size": "both",
+   "sheet": "sheet-8 (4.1), sheet-7 (FS M5, BS M4), README step 0",
+   "where": "Amplifier plate rebate, 361 x 136 (FS) / 121 x 316 (BS), R4.5 corners",
+   "severity": "guess",
+   "problem": "The plate rebates have R4.5 corners, but the measure-first list never asks for the plate's corner radius, which decides whether the plate seats.",
+   "evidence": "back-panel.dxf POCKET_4.5MM has R4.5 corners and 0.5 mm clearance each side round a 360 x 135 (FS) or 120 x 315 (BS) plate. A plate corner under R2.8 will not go in (sqrt(2)(4 - r) + r <= 4.5). params AMP plate_r 4.0 is a PLACEHOLDER (research/amps.md: radii are in Hypex's 2D drawing, not obtained). README step 0 says to measure the corner radius; M5 and M4 do not.",
+   "fix": "Add to FS M5 and BS M4: 'the plate's corner radius r sets the rebate's corners, R = r + 0.5 (R4.5 for r 4); a square corner or one under R2.8 will not seat'."
+  },
+  {
+   "id": "d8",
+   "size": "floorstander",
+   "sheet": "sheet-7 (1.2), sheet-1 mid callout, sheet-8 (F1)",
+   "where": "Note 1.2 against the 'rebate \u00f8166.6 x 11.5 deep' callout on the front view",
+   "severity": "guess",
+   "problem": "Note 1.2 says the rebate is flange + 4.0 'only while 7.5 of birch stays under it', and the mid's own 11.5 mm rebate breaks that rule.",
+   "evidence": "18 - 11.5 = 6.5 mm under the mid's rebate (cad.json mid.rebate_depth 11.5). F1 allows the mid a 6 mm barrel, which fits 6.5. The woofer has 9 under it (barrel 8) and the bookshelf woofer 7.5 (barrel 7). Read literally, 1.2 makes the mid need a proud ring.",
+   "fix": "Reword 1.2: '... only while the T-nut's barrel + 0.5 of birch stays under it: 9 under the woofer's rebate (barrel 8 or less), 6.5 under the mid's (barrel 6 or less)'."
+  },
+  {
+   "id": "d9",
+   "size": "both",
+   "sheet": "sheet-8 (FS 4.2-4.6, BS 4.2-4.5)",
+   "where": "Runs, connectors and seals notes",
+   "severity": "guess",
+   "problem": "Only the tweeter's splice to the Hypex harness is described; how the woofer's and mid's round cables join the amplifier is not.",
+   "evidence": "4.6 says 'splice the tweeter's extension to Hypex's harness inside the amplifier's box'. 4.2 and 4.3 start the 2.5 and 1.5 mm2 cables 'from its gland'. 4.4 says 'the supplied 1.25 m Hypex harness is too short once it is spliced: extend it', yet the 1.2 m round cable already runs the whole way. The harness's own wires would not seal in an M16 gland (clamping range 4.5 to 10).",
+   "fix": "In 4.6: 'cut each harness pair to about 150 mm inside the box and butt-splice it to its round cable (FS woofer 2.5, mid 1.5, tweeter 1.0 mm2; BS woofer 1.5, tweeter 1.0); only round cable passes the glands'. Delete 'too short once it is spliced: extend it'."
+  },
+  {
+   "id": "d10",
+   "size": "both",
+   "sheet": "bom (Damping), sheet-8 G steps, README build order, sheet-2",
+   "where": "No sheet or step",
+   "severity": "guess",
+   "problem": "The damping and any cable fixing are never drawn or placed in the build order, and the mid chamber is closed at G5/G6.",
+   "evidence": "The BOM says 'Lightly fill the woofer chamber; line the mid chamber (floorstander); keep the amplifier's box clear', but no sheet or step says what, how much or when. After G5 the 354 x 90 x 252 mid chamber can only be reached through the \u00f8140.3 cut-out. The tweeter cable hangs 570 mm from the channel to its gland with nothing holding it.",
+   "fix": "Add a step before G5 (FS) naming the lining's material, thickness and faces (for example the divider and the top). Add a step after README step 9 naming the woofer chamber fill (material, mass, kept 92 mm, one port diameter, from the port's inner end). Show cable-tie mounts on the back panel's inner face along each run on sheet 2."
+  },
+  {
+   "id": "d11",
+   "size": "both",
+   "sheet": "README step 4, bom (wood glue line)",
+   "where": "Gable route B (printed) glued to the body",
+   "severity": "guess",
+   "problem": "The printed gable is glued on the same way as the birch block, with Titebond and fluted dowels, but PVA glue does not bond cured resin.",
+   "evidence": "README step 4: 'Printed ... or laminated birch ... Glue it on four 10 x 28 mm dowels'. Step 3: 'Titebond II or III'. BOM: 'Wood glue (Titebond II or III), 10 mm fluted dowels'. No adhesive is named for a resin block.",
+   "fix": "For the printed gable: 'epoxy (the 3M DP420 already in the BOM) on the base and the dowels, base scuffed with 120 grit'."
+  },
+  {
+   "id": "d12",
+   "size": "floorstander",
+   "sheet": "sheet-3 callout, sheet-7 (3.9), README step 1, bom",
+   "where": "'split pins \u00f83.2 x 16, two (3.9)' on section B-B",
+   "severity": "guess",
+   "problem": "The insert halves' pins are \u00f83.2 on the drawings and in the README but 3 mm in the BOM.",
+   "evidence": "Sheet 3 'split pins \u00f83.2 x 16'; 3.9 'two \u00f83.2 x 16 steel pins ... (3.2 holes, 8 deep each side)'; README 'two \u00f83.2 x 16 steel pins'. The BOM says 'Steel dowel pins 3 x 16 ... bonded with epoxy in 3.2 and 4.2 holes'. cad.json insert_split_pins d 3.2 is the hole size. A 3.2 pin in a 3.2 hole leaves no room for epoxy.",
+   "fix": "On sheet 3, in 3.9 and in the README: '\u00f83 x 16 steel dowel pins, epoxied in \u00f83.2 x 8 holes each side'."
+  },
+  {
+   "id": "d13",
+   "size": "bookshelf",
+   "sheet": "sheet-7 (1.2, 3.4)",
+   "where": "Notes copied from the floorstander",
+   "severity": "guess",
+   "problem": "Two bookshelf notes carry floorstander text that is wrong for this size.",
+   "evidence": "1.2 says 'the woofer's ring needs a 320 bed, or a print service', but the bookshelf ring is \u00f8171 (stl/trim-ring-woofer.stl, 171 x 171 x 3). 3.4 says 'the lead folds into the sleeve and the bay', but the bookshelf has no sleeve (params RETAINER None; the tweeter screws through its own faceplate).",
+   "fix": "1.2: 'the woofer's ring, \u00f8171, prints on any bed of 180 or more'. 3.4: 'folds behind the tweeter's body, in the boss's bore and the bay'."
+  },
+  {
+   "id": "d14",
+   "size": "bookshelf",
+   "sheet": "sheet-7 (3.8), sheet-3 back view",
+   "where": "Insert back face and pocket wall: each pin beside the upper magnet",
+   "severity": "guess",
+   "problem": "Each locating pin hole is only about 1 mm from the magnet hole next to it.",
+   "evidence": "Pins at \u00b146.6 across, 27.9 up (\u00f84.1 in the insert, \u00f84.2 in the wall); magnets at \u00b141.5 across, 33.0 up (\u00f88.2). Centres are 7.23 apart, leaving a 1.03 mm wall in the pocket (birch, if milled) and 1.08 in the insert. On the floorstander the nearest pin and magnet are 26 mm apart.",
+   "fix": "Move the pins to \u00b146.6 across, 25.5 up. That leaves 2.8 mm to the upper magnet hole, 3.9 to the lower one and 10.6 to the \u00f869 bore."
+  },
+  {
+   "id": "d15",
+   "size": "bookshelf",
+   "sheet": "sheet-3 front view, sheet-7 (3.7)",
+   "where": "Pocket width at the base",
+   "severity": "guess",
+   "problem": "The pocket width is given two ways: 159.9 on sheet 3 and 159.8 in note 3.7.",
+   "evidence": "Sheet 3 reads '159.3 (pocket 159.9)' (insert width + 2 x 0.3). 3.7 reads '159.8 wide at its base' (the bounding box of the pocket solid). The floorstander gives 283.9 in both places.",
+   "fix": "Print one value from the pocket solid in both places."
+  },
+  {
+   "id": "d16",
+   "size": "bookshelf",
+   "sheet": "sheet-6",
+   "where": "Lower left, crop x 120-1400, y 1780-2230 px: trim-ring section over the amp-box-front view",
+   "severity": "legibility",
+   "problem": "The trim-ring section, its title and its callouts are printed over the amp-box-front view, its 184 dimension and its note.",
+   "evidence": "'channel from \u00f8150.0 to \u00f8168.0, 2 deep' is printed over 'lid, 70 in front of the back's inner face; glue'. 'woofer: \u00f8171 / \u00f8147 x 3' sits on the '184' dimension, and the hatched section sits on the dimension line. The PDF's word boxes show 30 overlapping word pairs on this sheet and none on any other sheet.",
+   "fix": "Move the trim-ring block into the empty area right of the amp-box-front (x 1650-3200, y 1000-1800 px)."
+  },
+  {
+   "id": "d17",
+   "size": "floorstander",
+   "sheet": "sheet-1 front view",
+   "where": "Woofer and mid in the front view",
+   "severity": "legibility",
+   "problem": "The front view draws both trim rings 20 mm wide, with their inner edges inside the drawn surrounds; every other source makes them 12 mm wide.",
+   "evidence": "Measured on sheet 1 at 1:5: woofer circles at \u00f8314.8 (ring/rebate), \u00f8283.7 (surround) and \u00f8274.0 (ring inner edge); the mid's ring edge is near \u00f8124, inside its surround near \u00f8134. sheets.py draws ring - 2 x TRIM_RING width (20, floorstander only). Sheet 6, note 1.2, cad.json and the STLs all say \u00f8314/\u00f8290 and \u00f8165/\u00f8141.",
+   "fix": "Set the floorstander's TRIM_RING width to 12, or draw the inner edge from TRIM_RING_ID, so sheet 1 shows \u00f8290 and \u00f8141."
+  }
+ ],
+ "questions": [
+  {
+   "question": "How should the tweeter connect: a longer tweeter lead (about 300 mm FS, 210 mm BS) looped into the bay as the insert goes home, or a flexible cabinet-side tail long enough to bring the socket out through the empty pocket?",
+   "why": "With the socket fixed 30 mm into the bay and a 150 mm lead, the insert cannot be connected and then slid in (d1). Each option changes what the bay holds and how you plug in."
+  },
+  {
+   "question": "May the bookshelf's connector bay grow from \u00f826 to \u00f832 on the same axis (z 512)?",
+   "why": "A 24 mm mated two-pole locking connector plus the lead's bend needs about 32 mm. The CAD's own limits still pass: 11.4 mm of birch over the bay against 8, and 12 mm above the top panel against 4."
+  },
+  {
+   "question": "If the D3004/602200's body measures over 49 mm (the cut-out of its predecessor, the D3004/602000, was 50), what holds the bookshelf tweeter?",
+   "why": "The M2.5 heads on \u00f854 clear a 48 mm body by only 0.65. params.py says a larger body needs the floorstander's sleeve, which the 3 mm boss wall cannot hold, so the insert would have to change."
+  },
+  {
+   "question": "Is the SB17NRX2C35-8 flange 6.5 or 10.9 mm thick, and if 10.9, do you want a proud trim ring or a thicker baffle?",
+   "why": "M2 leaves this as your call. At 10.9 a flush rebate is 14.9 deep and leaves 3.1 mm of birch for T-nuts that need 7.5. It must be settled before the bookshelf baffle is cut."
+  },
+  {
+   "question": "Should the bookshelf letters be 1.2 mm (sheet 7 note 1.6 and its STL) or 1.5 mm (BOM, README step 10)?",
+   "why": "The metal is ordered by sheet thickness, and 1.2 mm is not a common aluminium gauge. The two documents disagree."
+  },
+  {
+   "question": "Is a visible ribbon tab at the front of the roof acceptable?",
+   "why": "The loop is glued in the groove under the insert's front edge (y 0 to 30), so it hangs over the baffle's top edge in front of the gable shadow line. No sheet shows where it sits when not in use."
+  }
+ ]
+}
