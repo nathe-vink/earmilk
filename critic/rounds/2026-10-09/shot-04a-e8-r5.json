@@ -1,0 +1,194 @@
+{
+ "stage1": {
+  "impression": "A frontal, centred view of the milk-carton speaker with clean graphics and a legible label, but the white body looks almost evenly lit so it reads as a flat card, the carton runs out of the bottom of the frame with nothing under it, and the red gable carries a mirrored ghost of the fin's OPEN OTHER SIDE that looks like a rendering error. The warm mid-grey backdrop with its top halo is serviceable but a little muddy, and little in the light describes the carton's volume or its lacquer and metal finishes.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "No legible mirrored OPEN OTHER SIDE under the fin: [300,174,600,184] lum_range <= 9 (now 41.7; the strokes reach p95 94.4 on a 51-58 base and still show at one-third size).",
+  "The red slope keeps a smooth clear-coat gradient from just under the fin to the eave: [300,190,600,340] falloff 8-18 (now 16.7), with no band other than the fin's own dark reflection.",
+  "The cast letters read as metal, not grey plastic: a specular falloff across the wordmark (part:letters-back-* lum_range 24-45; now 11.8, every face at 184-190), median held at 176-198 so the word stays 35+ levels under the 234 panel.",
+  "Both vertical edges read as 6 mm rounds over their full height: the right lower round carries a 236.7 line on a 216.2 face, the left lower round has none ([189,850,195,1100] p95 227.3, the same as the face beside it).",
+  "The port reads as a moulded flare, not a flat washer: the flange is one 118 value (range 2.0 in [397,903,405,911]) meeting a hole that is 34.7% pure black.",
+  "The white lacquer shows gloss somewhere: its only modelling is a smooth 25-level diffuse falloff (237 top-left to 212 bottom-right) with no reflection on the face, so it reads as matte paint.",
+  "The fin face reads as lacquer rather than flat print: its text-free end is one value (range 1.7 in [220,114,255,166], falloff 0.8).",
+  "The unwashed red holds dE2000 <= 3 against #C62828: eave band 3.68 (196,17,19, oversaturated) and the strip under the fin 3.64; only the glare-washed top (0.83) is on colour."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "camera",
+   "problem": "The clear-coated roof slope mirrors the fin, so a reversed, legible OPEN OTHER SIDE sits directly under the must-show text and reads as a misprint or render error.",
+   "evidence": {
+    "region": [
+     300,
+     174,
+     600,
+     184
+    ],
+    "measured": "The ghost strokes push lum_p95 to 94.4 and lum_range to 41.7, against a letter-free base of 51-58 (median 57.3 at [222,174,258,184], 51.3 at [642,174,680,184]). The camera is at the eave height, so it sees the slope at 52 deg incidence at the eave and 56 deg at the ridge. Brewster's angle for the lacquer is 56 deg, so this glare is almost fully s-polarised."
+   },
+   "change": {
+    "setting": "camera.polariser",
+    "from": "(default)",
+    "to": {
+     "strength": 0.95,
+     "angle_deg": 90
+    }
+   },
+   "expected": "The reversed text falls to <= 3 levels above its base. The strip under the fin becomes a plain dark-red reflection band of about 52-57 (range <= 9, from 41.7). Faces seen head-on change by < 2 levels (back panel 212-237, fin face 54-61, letters about 186). The slope's ramp glare goes too (falloff 16.7 to about 2) until c2 brings it back. Tune strength only (0.9-0.97) and keep the pass axis at 90.",
+   "accept": {
+    "region": [
+     300,
+     174,
+     600,
+     184
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     2,
+     9
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "c1 removes all the slope's glare. The slope's only modelling is a 16.7-level gloss ramp mirrored from the roof_ramp panel, so it would go too and leave a flat red trapezoid that reads as matte paint.",
+   "evidence": {
+    "region": [
+     300,
+     190,
+     600,
+     340
+    ],
+    "measured": "The y-profile is 71.9, 69.0, 66.6, 63.8, 61.3, 59.0, 56.6, 55.2 (falloff 16.7). R holds at 195-196 from the top to the eave while G falls from 39.5 to 16.7, so the whole gradient is reflected white glare that the polariser will cut to about 5%."
+   },
+   "change": {
+    "setting": "lights.roof_ramp.strength",
+    "from": 0.467,
+    "to": "x10"
+   },
+   "expected": "With c1 passing about 5-8% of the slope's glare, x10 (about 4.7) gives back a 9-15 level gradient: about 66-70 just under the fin's reflection band, falling to about 55 at the eave. The top band's G channel returns to about 30-38 (dE about 1-2 there). The fin's own dark reflection band at y 168-186 stays. The hips may pick up a thin line under about 95. This is sized for c1 at 0.95; if c1 settles near 0.9, expect x6-x8.",
+   "accept": {
+    "region": [
+     300,
+     190,
+     600,
+     340
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     8,
+     18
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Every face of the cast-metal letters is one value, from 'e' to 'k' and from top to bottom. The 0.3 m sheen glint is wider than the metal's reflection lobe, so it lifts them evenly and the wordmark, a must-show, reads as grey plastic.",
+   "evidence": {
+    "region": [
+     334,
+     385,
+     566,
+     429
+    ],
+    "measured": "On part:letters-back-*: median 186.3, p5 178.5, p95 190.3 (range 11.8). Per letter: e 185.0, a 186.3, r 187.3, m 187.1, i 187.0, l 187.3, k 185.3. The 'm' face runs 187.9 to 184.3 from top to bottom. The panel around the letters is 234.1."
+   },
+   "change": {
+    "setting": "glints.letters_sheen.size_m",
+    "from": 0.3,
+    "to": 0.12
+   },
+   "expected": "The sheen narrows to the metal's own lobe: about 200-210 across 'rmi', falling to about 165-175 on 'e' and 'k'. part:letters-back-* range goes to 24-45 (from 11.8) with the median about 178-196, so the faces read as satin cast metal and the word keeps >= 25 levels of contrast under the 234 panel.",
+   "accept": {
+    "region": "part:letters-back-*",
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     24,
+     45
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The left vertical edge has no highlight on its lower half, so it reads as a cut against the backdrop while the right edge reads as a 6 mm round.",
+   "evidence": {
+    "region": [
+     189,
+     850,
+     195,
+     1100
+    ],
+    "measured": "The left round's p95 is 227.3, the same as the face beside it ([200,850,215,1100] p95 227.3), and its median of 220.2 is darker than the face's 223.5. The right round carries a line at 236.7 against a 216.2 face ([704,850,711,1100] vs [695,850,702,1100]), from kicker_r."
+   },
+   "change": {
+    "setting": "lights.kicker_l",
+    "from": "none",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.2,
+      1.5
+     ],
+     "position": [
+      -0.9,
+      0.05,
+      0.75
+     ],
+     "target": [
+      -0.195,
+      -0.19,
+      0.75
+     ],
+     "irradiance": 2.2,
+     "color": "#FFFFFF"
+    }
+   },
+   "expected": "A 1-2 px line along the left round at x about 190-192: about 236-240 low on the edge and about 245 near the top, where the view transform's shoulder keeps it off 254. It matches kicker_r's line on the right. The strip sits behind the back face's plane (y 0.05 vs -0.195), so the face, the label and the backdrop move < 2 levels.",
+   "accept": {
+    "region": [
+     189,
+     850,
+     195,
+     1100
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     236,
+     246
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Raise the roof lacquer's clear-coat roughness, or lower its gloss, so the slope stops mirroring the fin.",
+   "why": "The clear coat is the product's finish and is fixed. A reflection can change only through what it reflects or through a filter at the lens, which is c1."
+  },
+  {
+   "request": "Lift the camera above the ridge (z about 1.2 m or more, still level) so that only a strip about 7 mm deep below the ridge can mirror the fin.",
+   "why": "The frame's purpose fixes a straight-on, level view of the panel. From above the roof the camera would look down on the label and foreshorten the gable."
+  },
+  {
+   "request": "Give the port flange a rounded, glossier lip so it stops reading as a flat 118 washer.",
+   "why": "The port's shape and finish are the product's own; only its light is in scope."
+  },
+  {
+   "request": "Give the cast letters a brushed or polished finish so they read as metal.",
+   "why": "The letters' metal is the product's finish; only what they mirror can change, which is c3."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
