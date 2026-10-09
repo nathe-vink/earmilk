@@ -255,5 +255,34 @@
   "set": 1.2925,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "glints.1.size_m",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    -32,
+    -14
+   ]
+  },
+  "proofs": [
+   [
+    0.09,
+    -17.0
+   ],
+   [
+    0.15,
+    -14.3
+   ],
+   [
+    0.05,
+    -17.3
+   ]
+  ],
+  "set": 0.05,
+  "passes": true,
+  "moves_the_test": true
  }
 ]
