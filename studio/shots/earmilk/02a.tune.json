@@ -393,5 +393,41 @@
   "set": 30.0,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c2",
+  "setting": "lights.gable_sheen.strength",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    92,
+    112
+   ]
+  },
+  "proofs": [
+   [
+    0.8,
+    74.8
+   ],
+   [
+    1.4,
+    92.7
+   ],
+   [
+    1.7117,
+    100.4
+   ]
+  ],
+  "set": 1.7117,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c2",
+   "c3",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-02a-e6-r6.json",
+  "shot_sha": "6bf57a3b22a8d4c82ee55e6ad325b68b0cf49f3c"
  }
 ]
