@@ -115,7 +115,10 @@ something is rendered. `tune.py` renders proofs at the critic's scale with the s
 exactly as `critic/round.py check` will, and follows the secant toward a reading a margin inside the test (the middle
 of a "between"), three or four proofs in all, printing every other test of the reply on each proof. A test of your
 own can stand in for the critic's (where its "expected" gives a band and its test only a floor), and several settings
-can move together (a symmetric pair of glints).
+can move together (a symmetric pair of glints). A value that breaks another of the reply's tests is set aside for one
+that does not: the tests passing at its own first two proofs, and those the previous tune of the same reply left
+passing at the shot as it stands (each saved tune logs them in the shot's `.tune.json` with the shot's hash), so tuning
+one lamp after another cannot quietly undo an earlier one.
 
 ## The reflection probe
 
@@ -142,7 +145,10 @@ open sky in front). Nothing is rendered.
   and elevation that send the sunlight through that point of the window onto `at`.
 - **Panels**: `{"type": "panel", ...}` is an emissive rectangle the camera cannot see, its brightness ramped along a
   world axis, lighting one side, casting no shadow, with `diffuse: false` seen only in reflections and with
-  `receivers` only in the parts named: a graduated scrim for a lacquered roof, a reflection card for a cone.
+  `receivers` only in the parts named: a graduated scrim for a lacquered roof, a reflection card for a cone. `diffuse`
+  and `specular` take a fraction too (0.15: a reflection at full strength that lights at 15 %): a second panel in the
+  same place, unseen by the camera, carries the fraction, because Cycles samples an emitter's light without a ray type,
+  so a Light Path node in the panel's shader would change what reflections see and leave its light at full strength.
 - **The inside**: in a cutaway or an exploded view, the faces inside the product (a cavity's walls, a face another
   part covers) take the product's `interior` materials (raw birch, bare resin), found by rays from each face against
   the assembled product before it is opened; a shadow line's walls stay painted.
