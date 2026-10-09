@@ -1,0 +1,154 @@
+{
+ "stage1": {
+  "impression": "A believable late-afternoon living room with a good low-sun story, but the two carton speakers sit small and left of centre, and their white fronts read as flat, uniformly bright cards, lit as if apart from the raking sun around them. The empty right third and the bright diagonal sun bands on the floor pull the eye off the product, so it reads as a competent lifestyle draft rather than a hero.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Both white fronts sit at median 205-218 (now 231.9) with p95 at or below 230 (now 239.6) and a 22-32 level top-to-bottom falloff (now 16.3, most of it inside the PBR Neutral shoulder), so the lacquer shows its ramp, its reflections and the sunlit corner highlight",
+  "The two woofers read alike: the left cone's inner half is crushed (789 px at lum <= 3, 23% of the cone, all in x 168-204; cone median 22.2 against 41.9 on the right, which has none crushed)",
+  "The pair's whites match within about dE2000 2 (now 4.1: left front rgb 239/233/232 warm, right front 232/230/236 cool, because the right cabinet takes more sky from both right-hand windows)",
+  "The cabinets separate from the central furniture: the sideboard's sunlit front (125) sits in the same value band as the wall's sun patch (150) and the left cabinet's sunlit inner side (202), and its shaded end (95) sits next to the right cabinet's shaded side (120)",
+  "The cast metal letters read as metal rather than flat grey paint (median 148, rgb 159/146/148, no highlight; glints 3 and 4 were skipped)"
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The white lacquer fronts sit in the PBR Neutral shoulder, so they print as one flat bright value with no visible ramp or reflection and read as cards pasted onto the sunlit room.",
+   "evidence": {
+    "region": [
+     90,
+     360,
+     940,
+     614
+    ],
+    "measured": "front-baffle pixels in this box (both white fronts above the plinth): median 231.9, p5 211.7, p95 239.6, all above the 226 knee; 8-bin y profile 234.6, 234.6, 232.9, 231.8, 230.0, 226.8, 221.4, 218.3 (falloff 16.3, compressed); the band between mid and woofer [110,458,225,486] is 233.1 with a range of 2.9; the sunlit corner round reads 240-241 against a 233-237 front, a highlight the shoulder squeezes to 5 levels"
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 1.23,
+    "to": 0.9
+   },
+   "expected": "At about -0.33 EV the white fronts go from median 231.9 / p95 239.6 to about 214 / 229 (left ~217, right ~211); the 8-bin profile becomes about 222.6, 223.1, 217.3, 213.4, 209.2, 204.3, 198.9, 195.9 (falloff ~27), so the front_gradient and front_ramp reflections and the corner highlight (~236 against ~217) become visible. The room drops by the same factor: copy-space wall [1000,60,1300,450] 76 to ~63, wall sun patch 150 to ~133, frame median 67 to ~55, share below 40 from 11% to ~26%; the red darkens with the white (gable rgb 187/32/37 to ~168/24/30, dE against #C62828 2.8 to ~7, ratio to the white unchanged); the left woofer falls to ~16 with 32% crushed, which c2 repairs.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      90,
+      360,
+      940,
+      614
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     205,
+     218
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The left woofer's inner half mirrors the dark, shaded left side of the room and goes to black, so the left driver reads as a hole beside the evenly lit right driver.",
+   "evidence": {
+    "region": [
+     127,
+     508,
+     205,
+     584
+    ],
+    "measured": "woofer-cone pixels of the left speaker: median 22.2, p5 2.1, p95 163.3; 789 of 3396 px at lum <= 3, all in x 168-204 (the half toward the sideboard); right woofer cone median 41.9 with 0 px crushed; glints.2 lights only the left cone's outer half (normal +x), and glints.1 the right cone's outer half"
+   },
+   "change": {
+    "setting": "glints.6",
+    "from": "absent",
+    "to": {
+     "at": [
+      -0.989,
+      -0.17,
+      0.261
+     ],
+     "normal": [
+      -0.281,
+      -0.853,
+      0.44
+     ],
+     "size_m": 0.4,
+     "power_w": 1.5,
+     "receivers": [
+      "woofer-cone",
+      "woofer-cap"
+     ]
+    }
+   },
+   "expected": "A soft streak on the left cone's inner half, mirroring glints.2 across the cone's axis: left cone median from 22.2 (16.2 after c1 alone) to 26-42, in line with the right cone (~33 after c1); pixels at lum <= 3 in the left cone fall from 23% to under 5%; the white front and the right woofer are unchanged (receivers are the cone and cap only).",
+   "accept": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      100,
+      480,
+      260,
+      610
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     26,
+     42
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "The light-taupe sideboard sits in the same value band as the wall's sun patch and the cabinets' inner sides, so the speakers do not separate from the central furniture and the centre reads as a pale blank box.",
+   "evidence": {
+    "region": [
+     300,
+     470,
+     430,
+     575
+    ],
+    "measured": "sunlit sideboard front median 125.1 (rgb 140/122/110); its shaded band under the right cabinet's shadow [655,470,690,575] 94.6; wall sun patch [300,300,400,330] 149.7; left cabinet's sunlit inner side (side-right) 201.6, right cabinet's shaded inner side (side-left) 120.3"
+   },
+   "change": {
+    "setting": "set.props.1.color",
+    "from": "#897C6E",
+    "to": "#705A48"
+   },
+   "expected": "A mid-walnut sideboard: its sunlit front goes from 125.1 (about 110 after c1) to about 72, its shaded band from 94.6 to about 46; the cabinets' inner sides stand clear of it (left ~181 against ~72, right ~105 against ~46); the right cabinet's shadow on the doors still reads (~72 against ~46), and the turntable's grey plinth and the white vase read against a darker top.",
+   "accept": {
+    "region": [
+     300,
+     470,
+     430,
+     575
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     62,
+     84
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Keep the red accent at its hex value (gable now rgb 187/32/37, dE 2.8) while the white drops to about 214",
+   "why": "The red and the white share the same sun on the same planes, and the body is #FFFFFF at full albedo under a clear coat; only a different body colour or finish could separate them, and both are fixed by the flavour spec, so c1 darkens the red with the white (gable dE about 7, same ratio to the white)."
+  },
+  {
+   "request": "Give the cast metal letters a bevel or polish that catches a highlight",
+   "why": "Their material and the marks (typeface, size, tracking) are the product's; the engine skipped glints 3 and 4 because the letter faces mirror the floor 0.24 m away, and the letters_card they mirror already holds them at 148 (110-165), so they stay a flat grey."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
