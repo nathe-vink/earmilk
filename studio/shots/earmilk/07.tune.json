@@ -110,5 +110,63 @@
   "set": 3.6375,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "lights.fill.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    208,
+    222
+   ]
+  },
+  "proofs": [
+   [
+    1.7,
+    215.0
+   ],
+   [
+    2.1,
+    226.3
+   ],
+   [
+    1.7,
+    215.0
+   ]
+  ],
+  "set": 1.7,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "lights.gloss.strength",
+  "test": {
+   "metric": "g_median",
+   "op": "between",
+   "value": [
+    64,
+    88
+   ]
+  },
+  "proofs": [
+   [
+    1.2,
+    66.0
+   ],
+   [
+    2.0,
+    88.0
+   ],
+   [
+    1.5636,
+    77.0
+   ]
+  ],
+  "set": 1.5636,
+  "passes": true,
+  "moves_the_test": true
  }
 ]

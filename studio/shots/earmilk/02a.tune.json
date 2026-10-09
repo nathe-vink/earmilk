@@ -85,5 +85,88 @@
   "set": 0.5236,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "glints.0.size_m",
+  "test": {
+   "metric": "lum_p5",
+   "op": "between",
+   "value": [
+    150,
+    215
+   ]
+  },
+  "proofs": [
+   [
+    0.14,
+    221.6
+   ],
+   [
+    0.24,
+    174.0
+   ],
+   [
+    0.2221,
+    181.8
+   ]
+  ],
+  "set": 0.2221,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c2",
+  "setting": "lights.lacquer_ramp.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    5,
+    8
+   ]
+  },
+  "proofs": [
+   [
+    3.0,
+    0.5
+   ],
+   [
+    5.0,
+    0.5
+   ]
+  ],
+  "set": 3.0,
+  "passes": false,
+  "moves_the_test": false
+ },
+ {
+  "change": "c5",
+  "setting": "sky.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    206,
+    214
+   ]
+  },
+  "proofs": [
+   [
+    9.0,
+    200.8
+   ],
+   [
+    10.0,
+    207.9
+   ],
+   [
+    10.2958,
+    209.8
+   ]
+  ],
+  "set": 10.2958,
+  "passes": true,
+  "moves_the_test": true
  }
 ]

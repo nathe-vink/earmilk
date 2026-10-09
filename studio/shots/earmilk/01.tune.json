@@ -85,5 +85,30 @@
   "set": 0.6667,
   "passes": false,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "lights.front_gradient.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    12,
+    18
+   ]
+  },
+  "proofs": [
+   [
+    1.4,
+    10.8
+   ],
+   [
+    2.2,
+    15.6
+   ]
+  ],
+  "set": 2.2,
+  "passes": true,
+  "moves_the_test": true
  }
 ]

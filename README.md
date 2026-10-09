@@ -9,7 +9,7 @@ Canvas (source of truth for layout, copy and proportions): https://claude.ai/art
 - A serious passive three-way that is, unmistakably, a half gallon of milk — and a cabinet that outlives its skin. *Amended 2026-10-08: active, with a plate amplifier in the back; and a bookshelf sibling.*
 - The treble fires forward from the throat of a concave bowl carved into the front gable panel. The bowl is the waveguide. *Amended 2026-10-08: the bowl is now a waveguide shaped by acoustic simulation, in an insert set into the roof.*
 - The cabinet is birch; the carton is a two-piece sleeve of heavy printed board (tube + lid). Swap the sleeve, keep the speaker. *Amended 2026-10-02: no sleeve. The carton is the cabinet, finished in the flavour's colours; the colour is fixed per speaker. See Amendments, 2026-10-02.*
-- Flavor is the colorway. Six flavors. One voicing. *(Five until 2026-10-08, when the owner added a green one: Matcha, British racing green on white, its tweeter's waveguide in matcha green.)*
+- Flavor is the colorway. Six flavors. One voicing. *(Five until 2026-10-08, when the owner added a green one: Matcha. Since 2026-10-09 a matcha-green body with British racing green on the gable, fin and plinth and in the tweeter's waveguide.)*
 
 Voice: dairy deadpan. The spec sheet is an FDA-style Nutrition Facts panel. One joke per surface, maximum.
 
@@ -181,7 +181,7 @@ White board unless noted. Print = wordmark on front and side. Throat = bowl inte
 | Whole | #FFFFFF | #C62828 | #C62828 → #8E1B1B |
 | 2% | #FFFFFF | #1F4FCF | #1F4FCF → #153792 |
 | Skim | #FFFFFF | #6FA5DC | #8FBBE8 → #4F86BF |
-| Matcha | #FFFFFF | #004225 British racing green *(or Kelly green #4CBB17)* | the waveguide insert itself matcha #A4C26B *(added 2026-10-08)* |
+| Matcha | #A4C26B matcha green | #004225 British racing green | the gable, fin, plinth and the tweeter's waveguide insert in the accent, as on the other flavours *(added 2026-10-08; the body matcha and the insert dark green since 2026-10-09, the owner)* |
 | Chocolate | #5E3A1F (whole board) | #F1E3CC | #5E3A1F → #2B170B *(2026-10-06; was #E2CBA3 → #A97E4F)* |
 | Oat | #D9BC92 unbleached | #2B2118 | #8E6A3E → #5C4224 |
 

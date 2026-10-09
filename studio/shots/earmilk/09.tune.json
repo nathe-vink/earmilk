@@ -114,5 +114,63 @@
   "set": 0.5,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "camera.fstop",
+  "test": {
+   "metric": "edge",
+   "op": "between",
+   "value": [
+    8,
+    18
+   ]
+  },
+  "proofs": [
+   [
+    2.8,
+    18.8
+   ],
+   [
+    2.0,
+    14.5
+   ],
+   [
+    1.7209,
+    12.4
+   ]
+  ],
+  "set": 1.7209,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "glints.0.power_w",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    205,
+    238
+   ]
+  },
+  "proofs": [
+   [
+    0.08,
+    248.0
+   ],
+   [
+    0.2,
+    250.1
+   ],
+   [
+    0.0667,
+    247.9
+   ]
+  ],
+  "set": 0.0667,
+  "passes": false,
+  "moves_the_test": true
  }
 ]

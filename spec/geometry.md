@@ -132,7 +132,7 @@ No sleeve. The outer dimensions stay as above; the skin is a finish on the birch
 
 | | |
 |---|---|
-| Lid | On the white-board flavours (Whole, 2%, Skim, Matcha) the lid, gable and fin, is printed in the flavour's print colour. Chocolate and Oat stay one colour, lid included. |
+| Lid | On Whole, 2%, Skim and Matcha the lid, gable and fin, is printed in the flavour's print colour. Chocolate and Oat stay one colour, lid included. |
 | Band | A band of the print colour, 110 tall from the floor line, around the front and both sides. On the back it covers only the sleeve frame below the window, `z` 0 → 40. |
 | Wordmark | "earmilk", Archivo Black, 52 mm type size, reversed in the board colour, centred in the band: on the front at `x = 195`, and on the right side centred on the depth, reading front to back. Nothing is printed under the gable. Tracking −0.035 em. |
 | Owner's panel (optional, print to order) | Right side, above the band: 300 wide × 330 tall, centred on the depth, `z` 295 → 625, in the print colour. Headline, a halftone portrait, four rows the owner fills in. Copy in `copy/hero.md`. |

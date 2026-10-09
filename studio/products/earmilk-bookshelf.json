@@ -32,12 +32,12 @@
    "insert": "#6FA5DC"
   },
   "matcha": {
-   "body": "#FFFFFF",
+   "body": "#A4C26B",
    "accent": "#004225",
-   "insert": "#A4C26B",
+   "insert": "#004225",
    "letters": "#C9C9C6",
    "letters_preset": "metal",
-   "facts_ink": "#1E1A17"
+   "facts_ink": "#1E2A14"
   },
   "chocolate": {
    "body": "#5E3A1F",
@@ -54,30 +54,6 @@
    "letters_preset": "metal",
    "facts_ink": "#2B2118",
    "insert": "#2B2118"
-  },
-  "matcha-kelly": {
-   "body": "#FFFFFF",
-   "accent": "#4CBB17",
-   "insert": "#A4C26B",
-   "letters": "#C9C9C6",
-   "letters_preset": "metal",
-   "facts_ink": "#1E1A17"
-  },
-  "matcha-body": {
-   "body": "#A4C26B",
-   "accent": "#004225",
-   "insert": "#A4C26B",
-   "letters": "#C9C9C6",
-   "letters_preset": "metal",
-   "facts_ink": "#1E2A14"
-  },
-  "matcha-body-kelly": {
-   "body": "#A4C26B",
-   "accent": "#4CBB17",
-   "insert": "#A4C26B",
-   "letters": "#C9C9C6",
-   "letters_preset": "metal",
-   "facts_ink": "#1E2A14"
   }
  },
  "materials": {

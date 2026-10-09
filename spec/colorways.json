@@ -61,22 +61,20 @@
     },
     "matcha": {
       "name": "Matcha",
-      "board": "#FFFFFF",
-      "boardNote": "white finish",
+      "board": "#A4C26B",
+      "boardNote": "matcha green finish",
       "print": "#004225",
-      "printNote": "British racing green; the owner's other choice is Kelly green #4CBB17 (the flavour 'matcha-kelly' in the products, for comparison)",
-      "waveguide": "#A4C26B",
-      "waveguideNote": "the tweeter's waveguide insert in matcha green, its own colour (the other flavours' inserts take their print colour)",
+      "printNote": "British racing green: the gable, fin, plinth and the tweeter's waveguide insert",
       "throat": {
-        "mouth": "#A4C26B",
-        "throat": "#7C9A4A"
+        "mouth": "#004225",
+        "throat": "#002F1A"
       },
-      "swatchCaption": "British racing green on white, a matcha horn.",
+      "swatchCaption": "British racing green on matcha.",
       "lid": "print",
       "plinth": {
         "fill": "#004225"
       },
-      "addedNote": "2026-10-08, the owner: \"a green one too\", Kelly or British racing green, \"maybe with a matcha green tweeter port\""
+      "addedNote": "2026-10-08, the owner: \"a green one too\", Kelly or British racing green, \"maybe with a matcha green tweeter port\". 2026-10-09, the owner: \"Matcha body but darker green for the tweeter diffuser\": the body matcha, the accent and the waveguide insert British racing green."
     },
     "chocolate": {
       "name": "Chocolate",

@@ -50,7 +50,7 @@
    "base": "#BC9668",
    "dark": "#A47E52",
    "light": "#CDA97C",
-   "plank_contrast": 0.4
+   "plank_contrast": 0.7
   },
   "wall": {
    "color": "#FBF7F1"
@@ -153,9 +153,9 @@
  },
  "sky": {
   "kind": "gradient",
-  "strength": 8.0,
+  "strength": 10.2958,
   "zenith": "#9FB8DA",
-  "horizon": "#E4ECF3",
+  "horizon": "#D0ECF8",
   "ground": "#8A8478"
  },
  "lights": {
@@ -171,7 +171,38 @@
     "distance_m": 2.4
    },
    "irradiance": 0.5236,
-   "color": "#FFFFFF"
+   "color": "#D6F0FF"
+  },
+  "lacquer_ramp": {
+   "type": "panel",
+   "size_m": [
+    0.5,
+    0.9
+   ],
+   "position": [
+    -0.73,
+    -0.6,
+    0.45
+   ],
+   "target": [
+    -0.047,
+    -0.189,
+    0.475
+   ],
+   "strength": 3.0,
+   "color": "#FFFFFF",
+   "ramp": {
+    "axis": "z",
+    "at_m": [
+     0.1,
+     0.75
+    ],
+    "values": [
+     0,
+     1
+    ]
+   },
+   "diffuse": false
   }
  },
  "glints": [
@@ -186,7 +217,7 @@
     -0.985,
     0
    ],
-   "size_m": 0.06,
+   "size_m": 0.2221,
    "power_w": 0.3557,
    "receivers": [
     "letters-front-0",

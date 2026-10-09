@@ -22,7 +22,7 @@ earmilk. Lowercase, Archivo Black, tight tracking. Never a flavor word under it.
 - Whole: Red on white.
 - 2%: Blue on white.
 - Skim: Light blue on white.
-- Matcha: British racing green on white, a matcha horn. *(added 2026-10-08)*
+- Matcha: British racing green on matcha. *(added 2026-10-08; the body matcha since 2026-10-09)*
 - Chocolate: Brown board, cream print. *(draft 2026-10-02: Brown all over, cream plinth.)*
 - Oat: Unbleached board, brown print. *(draft 2026-10-02: Unbleached all over, dark plinth.)*
 
