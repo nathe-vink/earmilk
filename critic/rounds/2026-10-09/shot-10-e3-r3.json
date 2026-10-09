@@ -1,0 +1,394 @@
+{
+ "stage1": {
+  "impression": "A plausible sunlit living-room scene that clearly shows both carton speakers, but the hero red unit's white front reads as one flat near-clipped value and its red gable as untextured plastic, so the product looks pasted in rather than lit by the same sun that rakes the floor and wall. The composition leaves a dead grey wall in the upper left, the diagonal window-mullion shadow on the floor runs straight under the hero, and the blue unit is small and lost against the bright wall patch behind it.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The Whole accent reads as #C62828 on every camera-facing red face: plinth front and fin front within dE2000 5 (now 19.8 and 20.8, while the roof slope is 4.4).",
+  "Both white fronts carry a smooth top-to-bottom falloff of 10 to 24 levels with nothing above 248 (now red 239.5 to 242.6 and blue 241.0 to 242.2: one value, inside the tone curve's shoulder).",
+  "The shaded wall reads as an off-white in shade: top-left wall median 126 to 145 with R >= B (now 112.4, rgb 119/111/106), with the sun patch still at least 60 levels above it.",
+  "The hero's side is one clean lacquer plane: no row-to-row step over 4 levels down its back strip (now 7.9, from a glint-disc rim and a mirrored shadow-edge band) and a back edge at least 28 levels off the wall (now 23 mid-height, 13 at the top).",
+  "Both products shown at a comparable three-quarter: side-to-front width ratio 0.4 to 0.7 for each (now red 0.30, blue 0.11).",
+  "The bookshelf unit's woofer reads as anodised aluminium like the hero's: cone p95 80 to 175 (now 33; the hero's is 178).",
+  "The cast letters read as metal, not white print: median 160 to 225 with no clipped channel (now red 250, blue 243 with the blue channel at 254 on 67% of letter pixels)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "composition",
+   "problem": "The Whole accent turns pink on the hero's camera-facing vertical faces: the plinth's lacquer mirrors the sun's glare off the glossy floor straight into the lens and the fin front mirrors the front window, so the red reads two-tone against its own roof.",
+   "evidence": {
+    "region": [
+     293,
+     698,
+     468,
+     748
+    ],
+    "measured": "Plinth front (part front-baffle in [250,698,600,748]) rgb 233/117/114, dE2000 19.8 vs #C62828; fin front [340,252,490,266] rgb 226/111/126, dE 20.8; roof slope [445,275,490,330] rgb 190/17/17, dE 4.4; blue plinth rgb 4/80/210, dE 1.1. Geometry: the sun (az -25, el 15), mirrored by the floor and then the vertical plinth, leaves at az +25, el 15. Seen from the plinth that is 3 degrees from the camera (az +24, el 17). The fin's mirror ray from the camera lands inside the front window at x -2.2 m, z 1.0 m."
+   },
+   "change": {
+    "setting": "products.0.instances.0.rotate_z",
+    "from": 0,
+    "to": -16
+   },
+   "expected": "The floor-plinth double mirror swings 30 degrees off the lens and the fin's mirror ray lands on the shaded left wall at y -1.7 m: plinth front about rgb 195-215/20-45/20-45 (dE <= 6), fin front likewise; the hero becomes a 38-degree three-quarter (side about 85 px, front about 148 px, from 53 and 175); the cast letters lose the floor glare and drop below 240. The panels in c4 and c6 are placed for this angle.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      250,
+      698,
+      600,
+      748
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 6
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The shaded room is a dull mauve-grey: the off-white wall filling the top half of the frame sits 2.3 stops under the same wall in the sun patch and is one value edge to edge, so the room reads gloomy rather than sunlit.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     280,
+     230
+    ],
+    "measured": "Median 112.4, rgb 119/111/106; y-profile 107.6 to 117.4, x-profile 110.4 to 113.6. The same wall in the sun patch [1000,335,1110,440] reads 229 (rgb 238/228/213, dE 1.0 to #EDE5D8). Shaded floor [0,590,280,650] 65.7; shaded sideboard third [1060,520,1250,700] 52.0."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 3,
+    "to": 5.5
+   },
+   "expected": "More window skylight lifts every shaded surface: top-left wall 126-145 with R >= B, shaded floor about 80, sideboard shade about 62, the hero's shaded side up about 15; the sun patch stays at least 60 levels above the shaded wall, so the sun still reads.",
+   "accept": {
+    "region": [
+     0,
+     0,
+     280,
+     230
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     126,
+     145
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Both white fronts sit in the tone curve's shoulder, where no gradient can show: the low sun meets them almost head-on and lifts the white past the PBR Neutral knee, so a 0.1 linear change shows as about 3 levels instead of about 14.",
+   "evidence": {
+    "region": [
+     293,
+     339,
+     468,
+     688
+    ],
+    "measured": "Red front (part front-baffle in [250,335,600,688]) 8-bin y-profile 241.6, 241.3, 240.2, 239.5, 241.6, 242.6, 242.4, 242.6; x-profile 239.4 to 239.5; lower strip [250,670,600,688] 242.6; blue front 242.2 to 241.1. PBR Neutral compresses above 0.76 linear (about 226 sRGB). The sun meets the front at N.L 0.875 and gives about 85% of its light. Engine note: front_sheen 3 to 9 moved the front's falloff 0.2."
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 2.5,
+    "to": 1.6
+   },
+   "expected": "The sunlit white comes down to the knee: lower white strip 222-234, so c4's ramp becomes visible, and so does the ramp the blue front already mirrors from front_sheen (about 8-12 levels). The sun patch goes from 229 to about 200, the plinth red settles toward #C62828 and the blue letters stop clipping.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      250,
+      670,
+      600,
+      688
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     222,
+     234
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The hero's white front has no falloff (it is 1 level brighter at the plinth than under the eave), and once c1 turns it the front no longer mirrors front_sheen at all.",
+   "evidence": {
+    "region": [
+     293,
+     339,
+     468,
+     688
+    ],
+    "measured": "Falloff (8 bins, top minus bottom) -1.0. Today the front mirrors front_sheen only above mid-height, at ramp values up to 0.58. After c1 its mirror direction swings to azimuth -56 and crosses y -1.6 m at x -2.7 m, outside the panel's x range of -1.5 to 0.35 m."
+   },
+   "change": {
+    "setting": "lights.red_front_ramp",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.0,
+      0.9
+     ],
+     "position": [
+      -1.69,
+      -0.9,
+      0.45
+     ],
+     "target": [
+      -0.6,
+      -0.19,
+      0.45
+     ],
+     "strength": 4,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.15,
+       0.85
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The lacquer mirrors a graduated panel the camera never sees, 1.3 m out along the rotated front's mirror direction: the white falls from about 240-246 under the eave to about 226 beside the woofer (falloff 10-24), nothing above 248; as a reflection the ramp stays smooth and reads as lacquer.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      250,
+      335,
+      600,
+      688
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     10,
+     24
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The hero's side carries the rim of the 1 m glints.1 disc, a 36-level step that curves across the flat face as an arc and reads as the reflection of a round object that is not in the room.",
+   "evidence": {
+    "region": [
+     468,
+     335,
+     521,
+     650
+    ],
+    "measured": "Band y 420-440 x-profile 119.9, 121.9, 140.2, 153.8, 155.6, 155.6; strip x 500-510 y-profile 122.8, 120.9, 154.6, 155.6, 153.8, 148.1, 142.4, 137.6, 122.1, 82.7, 80.0, 66.5. The arc runs from (520,365) through (485,480) to (520,610). The top 20 px (y 338-356) are a second band at 150 that drops to 118 by y 362; it is the mirrored top edge of the hero's own shadow on the sun patch. Largest row step down [512,345,524,650]: 7.9."
+   },
+   "change": {
+    "setting": "glints.1.power_w",
+    "from": 1.3333,
+    "to": 0
+   },
+   "expected": "The disc and its arc go. With c6's panel filling the side's mirror view, the shadow-edge band goes too, leaving no row-to-row step above 4 levels down the side's back strip.",
+   "accept": {
+    "region": [
+     512,
+     345,
+     524,
+     650
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "<=",
+    "value": 4
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "Without a controlled reflection the hero's shaded side melts into the wall at its back edge, which separates by only 13 to 23 levels.",
+   "evidence": {
+    "region": [
+     510,
+     345,
+     562,
+     640
+    ],
+    "measured": "Edge across x in [510,400,562,560]: 23.0. y 345-375: side 120-129 against wall 106-110 (step 13.4); y 600-640: side 78 against wall 59 (step 15.4)."
+   },
+   "change": {
+    "setting": "lights.red_side_ramp",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.45,
+      0.95
+     ],
+     "position": [
+      -0.14,
+      0.14,
+      0.475
+     ],
+     "target": [
+      -0.3625,
+      -0.0537,
+      0.475
+     ],
+     "strength": 2,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       0.02,
+       0.24
+      ],
+      "values": [
+       0.25,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The side mirrors a graduated panel behind and right of the hero, placed for c1's -16 degrees (the front corner mirrors it at y 0.03 m, the back corner at y 0.22 m). The side reads about 135-145 at the front corner, rising to about 165-180 at the back edge. That keeps it at least 50 levels under the front and 28-70 levels above the wall at the back edge.",
+   "accept": {
+    "region": [
+     510,
+     400,
+     562,
+     560
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     28,
+     70
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "composition",
+   "problem": "The bookshelf unit is shown almost flat-on beside a three-quarter hero, so the family reads as two different views rather than one design in two sizes.",
+   "evidence": {
+    "region": [
+     847,
+     253,
+     969,
+     495
+    ],
+    "measured": "At y 480 the blue front spans x 847-956 (110 px) and its side 957-968 (12 px), ratio 0.11. The red front spans 293-467 (175 px) and its side 468-520 (53 px), ratio 0.30, about 0.59 after c1. [940,300,945,440] is white front now: p95 242.6."
+   },
+   "change": {
+    "setting": "products.1.instances.0.rotate_z",
+    "from": -6,
+    "to": -22
+   },
+   "expected": "The blue side widens to about 45 px and its front narrows to about 100 px (ratio about 0.45), matching the hero's three-quarter. Hold -21 degrees or beyond: from -10 to -20 its fin mirrors the front window and would bleach like the red fin. At -22 the fin's mirror ray lands on the shaded left wall, and the front still mirrors front_sheen (crossing y -1.6 m at x -1.1 m). The shaded side fills [940,300,945,440] at about 130-170.",
+   "accept": {
+    "region": [
+     940,
+     300,
+     945,
+     440
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     90,
+     190
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The bookshelf unit's woofer reads as a black hole: its anodised cone carries no sheen while the hero's shows a bright streak.",
+   "evidence": {
+    "region": [
+     874,
+     278,
+     928,
+     332
+    ],
+    "measured": "Blue cone (part woofer-cone in [835,250,990,360]) median 23.9, p95 33.1, range 18.5; red cone median 54.5, p95 178.3."
+   },
+   "change": {
+    "setting": "glints.3",
+    "from": null,
+    "to": {
+     "at": [
+      0.491,
+      -0.079,
+      0.903
+     ],
+     "normal": [
+      0.07,
+      -0.91,
+      0.41
+     ],
+     "size_m": 0.12,
+     "power_w": 1.5,
+     "receivers": [
+      "woofer-cone"
+     ]
+    }
+   },
+   "expected": "A soft streak on the lower left of the blue cone, like the red's (placed for c7's -22 degrees, 2.5 cm left of and 2 cm below the cone's axis): p95 80-175 while the median stays at or under 45, so the cone still reads black.",
+   "accept": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      835,
+      250,
+      990,
+      360
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     80,
+     175
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Matte the clear lacquer (materials.paint.coat_roughness up) so the plinth and fin stop mirroring the floor glare and the front window.",
+   "why": "The clear coat over the colour coat is the product's specified finish; matting it would misrepresent the product. c1 breaks the mirror alignment instead."
+  },
+  {
+   "request": "Make the cast 'earmilk' letters read as metal: they measure 250 (red) and 243 with the blue channel clipped on 67% of pixels (blue), the same as the sunlit white body, so they read as white print.",
+   "why": "glints.2 moved them only 6 levels across a 3x power range (engine note), so their own material sets their brightness, and the letters' material is part of the fixed product; the letter material in the product model needs checking by its owner. c1 and c3 will lower them somewhat."
+  }
+ ],
+ "score_if_fixed": 7.6
+}

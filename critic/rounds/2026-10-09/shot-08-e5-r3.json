@@ -1,0 +1,270 @@
+{
+ "stage1": {
+  "impression": "A clean, legible cutaway of a carton-shaped speaker on a warm grey sweep, but the section is lit as one flat beige plane, so the cavities, shelves and panel thicknesses barely separate and it reads more like a card model than an engineered object. The drab mid-grey ground, faint grounding and solid-black driver baskets keep it at competent-draft level, well short of homepage polish.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Every cut face reads at least 35 levels brighter than the interior surface beside it. Today the far wall next to the mid-divider is 181 against a 202 section, and the bottom panel's top face (191) is brighter than its own cut face (180).",
+  "The white body and the accent are on spec where lit: front white median at least 228 with dE2000 at most 6 vs #FFFFFF (now 210, dE 10.1); fin and plinth within dE 4 of #C62828 (now 7.8 and 12.7); no clipping.",
+  "The drivers show their structure: no more than 20% of the woofer and mid basket pixels at or below 3 (now 61.6% and 46.4%).",
+  "A neutral backdrop (dE at most 2 from a neutral grey; now 4.45 from #66686C) with a soft pool behind the product (falloff at least 20 levels to the frame edge; now 12.6), and no background brighter than the area beside the product (the bottom floor band is now 124.8 against 111.9).",
+  "A contact shadow along the front edge of the base at least 15 levels deep (now a 7-level dip: 111.5 at the edge against 118.6 about 20 px below).",
+  "The tweeter, insert and connector cluster is legible at the delivered size. The connector is about 7 x 16 px and the tweeter dome 102 px. The cabinet fills 77% of the frame height and could reach about 85%, but a 9 probably needs a detail view that the fixed frame size does not allow."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "Next to the vertical panels the far wall is lit almost as brightly as the section, so the mid-divider's cut face barely stands out from the cavity behind it and the cavities look shallow.",
+   "evidence": {
+    "region": [
+     455,
+     300,
+     485,
+     380
+    ],
+    "measured": "Profile x (8 bins): far wall 180.7, 181.3, 181.3, 182.4, 184.8, then the divider's cut face 203.0, 200.8, 197.9. Falloff -17.2; largest column step 13.2 (edge on [455,300,483,380]). Far wall median 181.2 [455,300,472,380] against cut face 201.8 [474,300,485,380]. At azimuth -40 the key is 48.5 deg off the section normal, so about 74% of the 1.4 m box still reaches the far wall 220 mm from the back panel. Across the upper cavity the far wall runs 138 at the back to 183 at the front (profile x on [335,300,470,420]: 138.2, 133.2, 136.1, 155.3, 172.1, 182.7)."
+   },
+   "change": {
+    "setting": "lights.key.orbit.azimuth_deg",
+    "from": -40,
+    "to": -55
+   },
+   "expected": "The back panel's raking shadow covers most of each cavity's far wall: the share of the key reaching the wall beside the divider drops from about 74% to about 31% of the box. Once c3 lands, that wall falls to about 145-160 against a section near 210 (falloff about -50). The port tube, amp box and shelves cast soft shadows to the right, and the section gains a 5-10 level gradient from back to front. The section itself dims about 15% until c3 restores it.",
+   "accept": {
+    "region": [
+     455,
+     300,
+     485,
+     380
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -75,
+     -35
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The white zenith of the sky dome lights the upward-facing faces of the horizontal panels as brightly as their own cut faces, so the sections of the bottom panel, the brace and the amplifier-box lid disappear.",
+   "evidence": {
+    "region": [
+     420,
+     776,
+     470,
+     800
+    ],
+    "measured": "Profile y (8 bins): bottom panel top face 187.7, 189.1, 190.7, 191.0, then its cut face 186.7, 181.4, 180.5, 178.4. Falloff +9.3, so the top face is brighter than its own section. The brace stub [338,452,372,473] ramps from 139.9 to 192.8 straight into its cut face at 197.3 with no step. Engine log for the earlier c4 test: sky strength 0.2 gave 109.1 and 0.8333 gave 145.8 (part:side-right now reads 147.1), so the dome supplies most of the interior light."
+   },
+   "change": {
+    "setting": "sky.zenith",
+    "from": "#FFFFFF",
+    "to": "#8C8C8C"
+   },
+   "expected": "Upward-facing faces (tops of the bottom panel, brace, amp-box lid and mid-shelf, and the open floor) lose 20-30 levels, while vertical faces (section, far walls) lose at most 8. The bottom panel's top face ends 12-20 levels below its cut face (falloff about -15), and the brace and lid edges read as separate sections. part:side-right stays at 135 or above. The bright foreground floor band drops relative to the backdrop.",
+   "accept": {
+    "region": [
+     420,
+     776,
+     470,
+     800
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -45,
+     -8
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "Nothing on the product reaches a clean light: the section tops out at 205-212, the white body renders light grey and the red accent runs dark. c1 and c2 will dim the section a further 10-15%.",
+   "evidence": {
+    "region": [
+     319,
+     280,
+     328,
+     420
+    ],
+    "measured": "Back panel cut strip median 205.2. The gable is 211.6 and flat across x (211.6, 211.8, 211.8, 211.8, 211.5). White baffle [558,262,578,312] median 210.1, rgb [213,209,212], dE2000 10.1 vs #FFFFFF. Fin [438,130,464,158] rgb [161,32,31], dE 7.8 vs #C62828. Plinth [558,720,578,760] rgb [136,33,33], dE 12.7. Frame p99 204.0, clip 0%."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": -0.15,
+    "to": 0.25
+   },
+   "expected": "Sized to be applied after c1 and c2: back strip about 212, gable about 215-220, white baffle median 228-234 (dE about 5), fin about [178-190, 35, 35] (dE 4 or less). clip_pct on the product stays 0. c4 takes back the extra brightness this adds to the backdrop.",
+   "accept": {
+    "region": [
+     319,
+     280,
+     328,
+     420
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     206,
+     220
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "The sweep renders a warm taupe in the same hue family as the birch, so the section sits beige-on-beige and the white and red lose crispness.",
+   "evidence": {
+    "region": [
+     1100,
+     100,
+     1340,
+     500
+    ],
+    "measured": "rgb [104,100,98], dE2000 4.45 vs neutral-cool #66686C. Floor band [900,840,1340,895] rgb [129,123,120]. Floor under the base [380,818,520,850] rgb [127,116,108]. The paper colour #75726D is itself warm (R-B 8)."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#75726D",
+    "to": "#6A6D71"
+   },
+   "expected": "After c3's exposure the backdrop renders neutral to slightly cool at about today's value: far right about [100,102,106], dE at most 1.5 vs #66686C, luminance 98-106. Floor band R-B at most 2. The birch and the red then stand apart from the ground in hue as well as value.",
+   "accept": {
+    "region": [
+     1100,
+     100,
+     1340,
+     500
+    ],
+    "metric": "delta_e",
+    "hex": "#66686C",
+    "op": "<=",
+    "value": 2.5
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "There is no pool of light on the backdrop behind the product: the area beside it is barely lighter than the frame edge, and the brightest background is the floor band along the bottom edge, which pulls the eye out of frame.",
+   "evidence": {
+    "region": [
+     600,
+     150,
+     1340,
+     450
+    ],
+    "measured": "Profile x (8 bins): 111.9, 111.7, 110.9, 109.7, 107.5, 103.8, 101.5, 99.3 (falloff 12.6). Bottom band [1100,830,1340,895] 124.8 and [0,830,250,895] 124.1, against 111.9 beside the product [600,150,750,450]. The right-hand column (profile y) rises from about 104 on the cove to 124 at the bottom edge."
+   },
+   "change": {
+    "setting": "lights.pool",
+    "from": "none (new light)",
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.2,
+      1.2
+     ],
+     "position": [
+      -0.5,
+      1.0,
+      1.8
+     ],
+     "target": [
+      -0.6,
+      3.21,
+      0.7
+     ],
+     "irradiance": 0.8,
+     "color": 6500
+    }
+   },
+   "expected": "A soft halo on the cove, centred behind the top right of the product (the cove point seen at about x 585, y 180): about 120-125 beside the product, falling to 92-98 at the right edge (falloff 20-34). The red top then sits against a lighter ground, and the darker band to the right of the base is partly filled. The lamp is above the frame and faces away from the product, so product values do not change.",
+   "accept": {
+    "region": [
+     600,
+     150,
+     1340,
+     450
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     20,
+     34
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The woofer and mid baskets are pure black in section, so the drivers, which the frame must show, read as holes with only a 2-3 px outline.",
+   "evidence": {
+    "region": [
+     500,
+     506,
+     557,
+     710
+    ],
+    "measured": "part:woofer-frame median 1.4, rgb [2,1,2], 61.6% of its 3661 px at or below 3; only the lit cut edge lifts p95 to 111.7. part:mid-frame median 3.5, 46.4% at or below 3. The basket's inner face sits behind the cone, so light can reach it only along the camera's own line of sight. The inside lamp, at azimuth -8, is 27 deg off that line and gives only 0.3 W/m2."
+   },
+   "change": {
+    "setting": "lights.axis",
+    "from": "none (new light)",
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.0,
+      1.0
+     ],
+     "orbit": {
+      "azimuth_deg": 19,
+      "elevation_deg": 14,
+      "distance_m": 3.6
+     },
+     "target": [
+      0.08,
+      0.06,
+      0.32
+     ],
+     "irradiance": 0.35,
+     "color": 6000,
+     "specular": 0.3
+    }
+   },
+   "expected": "A low, shadowless fill from just behind the camera (out of frame) lifts the baskets to a readable dark grey: woofer-frame median 6-12 with about 20% or less crushed, and the mid basket likewise. The port tube and amp module gain soft definition. The birch interior rises at most 6 levels and the section at most 4, so the gains from c1 and c2 hold.",
+   "accept": {
+    "region": "part:woofer-frame",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     5,
+     14
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A larger frame or a detail inset for the tweeter, insert and connector cluster",
+   "why": "The frame size is fixed. At 1350 x 900, with the whole 1055 mm cabinet in view, the cluster is about 40 x 60 px (connector plug 54 px, socket 36 px, pins 28 px, tweeter dome 102 px), so these must-show parts stay marginal at any framing that keeps the cabinet whole."
+  },
+  {
+   "request": "A lighter finish or a distinct section colour on the cut woofer and mid baskets so their inner faces show form",
+   "why": "The drivers' materials and colours are the products' own, and only the reproduction of the section colour may change. The basket's inner face sits behind the cone, so no lamp has a mirror path to it; light alone (c6) can lift it only to a dark grey."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

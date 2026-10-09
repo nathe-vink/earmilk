@@ -256,10 +256,24 @@ def true_glint(bpy, spec, receivers, cam_pos, ray_m=0.05, snap_m=0.03, agree_deg
     dg = bpy.context.evaluated_depsgraph_get(); scene = bpy.context.scene
     P0 = Vector(spec['at']); C = Vector(cam_pos); given = Vector(spec['normal']).normalized()
     names = {o.name for o in receivers}
-    def cast(origin, d, dist):
+    ignore = tuple(spec.get('occlusion_ignore', []))
+    def cast(origin, d, dist, occluding=False):
+        # occluding: the test for whether anything hides the lamp from the glint's point. A hit within 2 mm of where the
+        # ray starts, or on a face seen from behind (the ray starting inside a solid that overlaps the surface, as a
+        # connector's bezel sunk in its module), is the surface itself, not something in the way; so is a part named in
+        # the glint's occlusion_ignore.
+        start = origin
         hit, loc, nrm, _, hob, _ = scene.ray_cast(dg, origin, d, distance=dist)
-        while hit and hob is not None and (hob.get('engine_light') or hob.hide_render):
-            origin = loc + d * 1e-4; dist -= (loc - origin).length
+        def skip(hit, loc, nrm, hob):
+            if not hit or hob is None:
+                return False
+            if hob.get('engine_light') or hob.hide_render:
+                return True
+            return occluding and ((loc - start).length < 0.002 or nrm.dot(d) > 0 or (ignore and hob.name.startswith(ignore)))
+        while skip(hit, loc, nrm, hob):
+            dist -= (loc - origin).length + 1e-4; origin = loc + d * 1e-4
+            if dist <= 0:
+                return False, loc, nrm, None
             hit, loc, nrm, _, hob, _ = scene.ray_cast(dg, origin, d, distance=dist)
         return hit, loc, nrm, hob
     def facing(n, loc):
@@ -298,7 +312,7 @@ def true_glint(bpy, spec, receivers, cam_pos, ray_m=0.05, snap_m=0.03, agree_deg
     P = Vector(spec['at']); N = Vector(spec['normal']).normalized()
     V = (C - P).normalized(); R = 2 * N.dot(V) * N - V
     dist = spec.get('distance_m', 0.6)
-    hit, loc, _, hob = cast(P + N * 1e-3, R, dist)
+    hit, loc, _, hob = cast(P + N * 1e-3, R, dist, occluding=True)
     if hit:
         note['skipped'] = (f'the surface there mirrors {hob.name} into the camera ({(loc - P).length:.2f} m away along '
                            f'the mirror direction), so no lamp can sit there')

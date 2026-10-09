@@ -1,0 +1,299 @@
+{
+ "stage1": {
+  "impression": "A clean, competently lit CG room set: two red-capped white speakers flank a taupe sideboard under a low warm sun that throws a window patch on the wall and diagonal bars across the floor. The product reads but is small and flat (the white fronts read as one value), the set is generic archviz with a uniform plank floor and sparse props, the sun pattern competes with the speakers, and the right third and bottom quarter of the frame are empty.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Each white front carries a smooth gloss ramp over its whole height: falloff of at least 12 levels between y 420 and 612 on front-baffle (now 6.5; profile 228, 224, 224, 224, 223, 223, 223, 222), with no plateau and no new hot band under the gable (top about 243 as now).",
+  "The plinth band behind the wordmark (front-baffle rows 622-641) is within dE2000 5 of #C62828 (now 11.3, at 191/79/90, against 196/43/43 just below it).",
+  "The wordmark letters read as neutral metal: median 140-180 and under 5% clipped (now 218-222, 46-49% clipped, and blue-white at 205/222/251).",
+  "The red roofs show a lacquer highlight toward the ridge: gable-block p95 105-160 (now 85.4; the right roof is flat at 62.5-75).",
+  "The oak floor shows grain inside each plank: lum_range of at least 9 inside a sunlit plank (now 4.1 at [540, 701, 740, 719]).",
+  "The right cabinet's shade side separates from the wall: side-left at least 20 levels above the wall beside it (now 75.2 against 77.0).",
+  "The pair matches: the two fronts within dE2000 2 of each other (now 4.8, left 239/229/221 warm, right 227/222/223 neutral), because the +/-5 degree toe-in gives the fronts sun at cos 0.53 and 0.38.",
+  "The room reads lived-in: at least two personal objects (books or records, a textile, a plant) in sunlight beyond today's sideboard, turntable, twig vase and a print that is a flat #3F5B6E field, kept clear of the speaker silhouettes. The right speaker's shadow covers the sideboard top from x -0.02 to 0.78 m, so they belong on the sunlit left half or the floor.",
+  "The product is the first read: no prop near the centre as bright as the fronts (the white turntable is 222 against fronts at 223-230), and the pair larger than today's 40% of frame height, which at 3:2 costs copy width (see out_of_scope)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "Below the top 60 px the white fronts are one value: the existing front_ramp is mirrored only by the top quarter of each front (z 0.62-0.86 m), and the lower three quarters mirror shaded floor, so the lacquer reads as matte card.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      99,
+      364,
+      930,
+      612
+     ]
+    },
+    "measured": "y-profile 237.7, 232.9, 226.5, 224.2, 224.2, 223.3, 222.6, 221.8, so 12 of the 16 levels of falloff sit in the top two bins. Over y 420-612 the falloff is 6.5, and a 115x35 px patch on the left front ([110, 455, 225, 490]) spans 228.5-230.6 (std 0.7)."
+   },
+   "change": {
+    "setting": "lights.front_gradient",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      4.4,
+      4.4
+     ],
+     "position": [
+      0,
+      -2.75,
+      0.26
+     ],
+     "target": [
+      0,
+      -2.633,
+      1.253
+     ],
+     "strength": 1.8,
+     "color": "#FFF8F0",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -4.9,
+       -0.6
+      ],
+      "values": [
+       1,
+       0
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The panel is tilted 6.7 degrees and lies 0-0.52 m above the floor, from y -0.57 to -4.94 m, under the camera's line of sight. Traced mirror rays land on it across each front's full white height: z 0.12 at y -0.63 (ramp 0.01), z 0.5 at y -2.14 (0.36), z 0.8 at y -4.30 (0.86). Only the top sliver (z above 0.83) still sees the existing front_ramp, which stays as it is. Each front gets an even top-bright sheen: left about 243 under the gable, 235 at mid-height and 230 above the plinth; right about 234, 226 and 220. Falloff over y 420-612 rises from 6.5 to about 14 in even steps, and the top stays at today's 243 (front p95 about 245, no new clipping). The trim rings take a faint share of the same sheen (they reflect about a third of what the lacquer does, about +10 levels). The plinth's and woofer-cone tops' mirror rays land on the floor short of the panel's near edge, so those parts are unchanged. The letters_card already shows that panels cast no shadow on the floor.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      99,
+      420,
+      930,
+      612
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     18
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The plinth's clear coat mirrors the letters_card (a white strip on the floor 0.24 m in front of the plinths) as a pink band right behind the wordmark, and the card blows the polished letters out.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      99,
+      622,
+      930,
+      641
+     ]
+    },
+    "measured": "Plinth rows 622-641 read 191/79/90, dE2000 11.3 from #C62828, while rows 642-654 below read 196/43/43 (L) and 183/43/44 (R). letters-front-* median is 221.6 (L) and 218.1 (R), with 49% and 46% of pixels clipped."
+   },
+   "change": {
+    "setting": "lights.letters_card.strength",
+    "from": 0.6667,
+    "to": 0.3
+   },
+   "expected": "Letters median about 155, under 5% clipped, still about 80 levels above the 75-lum red so the wordmark stays crisp. The band's added green and blue halve (G 79 to about 62), taking rows 622-641 from dE 11.3 to about 6.3, or about 4.6 once c6 makes the card neutral. The woofer-cone tops mirror the same floor strip and dim slightly.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     140,
+     180
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "material",
+   "problem": "The oak floor reads as smooth laminate: each plank is a flat band of one tone with no visible grain or figure, even in full sun.",
+   "evidence": {
+    "region": [
+     540,
+     701,
+     740,
+     719
+    ],
+    "measured": "Inside one sunlit plank, lum spans only 90.1-94.2 (range 4.1, median 92.1, x-profile 90.4-93.3). Shaded foreground planks carry 1.4 levels of high-pass texture."
+   },
+   "change": {
+    "setting": "materials.oak.grain",
+    "from": 1,
+    "to": 2.5
+   },
+   "expected": "Grain lines show along each plank: lum_range 9-20 inside this plank with its median staying 88-96. Plank seams, plank-to-plank tones and the sun pattern are unchanged, and shaded planks show the grain at about half that contrast.",
+   "accept": {
+    "region": [
+     540,
+     701,
+     740,
+     719
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     9,
+     20
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The red roofs are one flat value with no lacquer highlight, so the gloss gable reads as matte paint and the right roof (70) barely separates from the shaded wall behind it (86).",
+   "evidence": {
+    "region": "part:gable-block",
+    "measured": "Median 70.8, p95 85.4. Left roof p5-p95 is 69.5-133, where the top comes only from the sunlit hip; right roof is 62.5-75.0. y-profiles run 73.3 to 70.3 (L) and 71.1 to 70.4 (R). The wall beside the right gable ([755, 300, 776, 365]) is 85.9."
+   },
+   "change": {
+    "setting": "lights.roof_ramp",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      4.0,
+      4.0
+     ],
+     "position": [
+      0,
+      0.26,
+      2.8
+     ],
+     "target": [
+      0,
+      0.2,
+      0
+     ],
+     "strength": 1.6,
+     "color": "#FFF8F0",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       0.18,
+       0.4
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "At about 50 degrees incidence, the 37.6 degree front slopes mirror the ceiling strip at y 0.13-0.39 m and x +/-1.21-1.58 m. The panel's ramp (0 at y 0.18, 1 at y 0.40) puts a soft sheen on each slope that rises toward the ridge: the upper third reaches about 130-150 lum (salmon-white over the red) and the lower third stays body red. The gable median stays at most 82, keeping the body within about dE 4 of #C62828. The waveguide's upper rim, the tweeter dome and the hips pick up thin highlights. Fronts, plinths, sides and driver rings mirror horizontal or downward directions and do not see it.",
+   "accept": {
+    "region": "part:gable-block",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     105,
+     160
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The right cabinet's shade side is the same value as the wall beside it, so that box loses its volume and reads as a flat white panel next to a dark gap.",
+   "evidence": {
+    "region": "part:side-left",
+    "measured": "side-left median 75.2 (y-profile 82.2 down to 31.8) against 77.0 for the wall strip just left of it ([740, 360, 776, 640]). The front beside it is 219-224."
+   },
+   "change": {
+    "setting": "lights.inner_fill",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.2,
+      0.75
+     ],
+     "position": [
+      0.5,
+      -0.08,
+      0.475
+     ],
+     "target": [
+      1.2,
+      -0.08,
+      0.475
+     ],
+     "strength": 0.18,
+     "color": "#FFE4C8",
+     "diffuse": 1
+    }
+   },
+   "expected": "A warm bounce, motivated by the sunlit floor and sideboard between the speakers, lifts the right speaker's inner side to about 115, with a soft roll-off toward its back edge and base. That puts it 35-40 levels above the wall and still about 100 levels under its front. The front-left round gains a thin warm edge highlight. The panel stands at x 0.5 m, y -0.18 to 0.02, z 0.10-0.85: behind the right front's plane, in front of the sideboard and below the gable. The front, the floor, the vase and the left speaker see none of it. The sideboard's shaded front-right corner warms by 10 levels at most, and the cabinet's clear coat mirrors the back wall, not the panel.",
+   "accept": {
+    "region": "part:side-left",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     100,
+     135
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The letters_card is #FFFFFF under a 4900 K white point, so it renders blue: the metal letters read icy blue-white in a warm sunlit room, and the clear-coat band behind them turns magenta-pink.",
+   "evidence": {
+    "region": "part:letters-front-*",
+    "measured": "Letters median rgb 205/222/251 (dE2000 15.6 from neutral #B4B4B4, 19.8 from #A0A0A0). Plinth band blue 90 sits above green 79."
+   },
+   "change": {
+    "setting": "lights.letters_card.color",
+    "from": "#FFFFFF",
+    "to": 4900
+   },
+   "expected": "Letters read as neutral metal (r, g and b within about 6 of each other) at c2's level of about 155. The plinth band's wash becomes a neutral lift rather than a magenta one, so rows 622-641 land near dE 4.6 from #C62828.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "delta_e",
+    "hex": "#A0A0A0",
+    "op": "between",
+    "value": [
+     0,
+     8
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A satin or brushed finish on the cast letters, or a lower-gloss clear on the plinth, so the wordmark can be lit without the plinth mirroring the same card.",
+   "why": "The letters and the plinth's clear coat face the same way and mirror the same 0.2 m floor strip, so the letters' brightness and the plinth's red trade off at about 47% (letters) to 3% (coat). At card strength 0.3 the letters sit near 155 and the band behind them still lifts to about dE 4.6. The marks and the lacquer finish are fixed."
+  },
+  {
+   "request": "Darker woofer cones that read as black anodised rather than silver-blue (cone median 68-76, p95 178-195).",
+   "why": "The drivers' materials and colours are the products' own. Only what they reflect can change, and c1 deliberately keeps the panel out of the cones' mirror directions."
+  },
+  {
+   "request": "A wider frame (16:9 or 21:9) for the homepage, so the pair can grow to about 45% of frame height while the copy column stays a third of the width.",
+   "why": "The frame size is fixed. At 3:2, a 40 mm lens that makes the speakers about 409 px tall leaves only about 25% for copy and puts the print's top edge about 4 px from the top of the frame."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

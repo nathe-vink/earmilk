@@ -66,6 +66,7 @@ KNOBS = [
     ('lights.*.specular', '0 to 1', (0, 1), 'the lamp\'s share in reflections (0: lights without a highlight; with diffuse 0: a glint only)'),
     ('lights.*.portal', 'bool', None, 'a window portal: guides the sky\'s light through an opening, adds none'),
     ('glints.*.distance_m', 'm', (0.05, 3), 'how far along the mirror ray the glint\'s lamp sits (0.6 by default); nearer keeps it clear of a floor or wall the ray meets'),
+    ('glints.*.occlusion_ignore', 'list of part names (prefixes)', None, 'parts left out of the test for whether anything hides the lamp from the glint (a hit within 2 mm, or on a face seen from behind, is already taken as the surface itself)'),
     ('glints.*.size_m', 'm', (0.005, 1), 'the glint lamp\'s diameter: larger is a softer, wider highlight'),
     ('glints.*.power_w', 'W', (0, 200), 'the glint lamp\'s power'),
     # set
@@ -92,7 +93,7 @@ KNOBS = [
     ('set.props.*.size', 'm [w, d] or [w, d, h]', None, 'room: a prop\'s size (a rug [w, d]; a table, sideboard or sofa [w, d, h]; a curtain or frame [w, h])'),
     ('set.props.*.color', 'hex', None, 'room: a prop\'s colour'),
     ('set.props.*.off', 'true/false', None, 'room: take the prop out of the set'),
-    ('set.flags', 'list of {center_m: [x, y, z], size_m: [w, h], normal: [x, y, z]}', None, 'black cards the camera cannot see: they cast shadows (a flag to cut sun off a wall) and soak up bounce light; out of reflections unless "glossy": true; with "reflect_only": true, seen only in reflections (no shadow, no bounce), "color" its shade'),
+    ('set.flags', 'list of {center_m: [x, y, z], size_m: [w, h], normal: [x, y, z]}', None, 'black cards the camera cannot see: they cast shadows (a flag to cut sun off a wall) and soak up bounce light; out of reflections unless "glossy": true; with "reflect_only": true, seen only in reflections (no shadow, no bounce), "color" its shade, and one-sided ("one_sided", true by default for these): seen only from the side its normal faces, so a card on the floor shows in the product\'s lacquer and not in the floor\'s own gloss'),
     ('set.bounces', 'list of {center_m, size_m, normal}', None, 'white cards the camera cannot see: bounce fill, and seen in reflections'),
     ('set.props.*.rotate_z', 'deg', (-180, 180), 'room: a prop\'s turn'),
     ('set.props.*.artwork', '{bands: [[hex, share], ...], ground: hex, seed: n}', None, 'frame: a colour-field painting in the print (bands top to bottom, soft-edged, canvas grain) instead of the flat art colour'),

@@ -91,6 +91,15 @@ def _card(bpy, name, f, color, glossy=False):
         # seen only in glossy reflections: no shadow, no bounce light, a card a lacquer mirrors instead of a lit floor
         ob.visible_glossy = True; ob.visible_shadow = False; ob.visible_diffuse = False
         ob.visible_transmission = False; ob.visible_volume_scatter = False
+    if f.get('one_sided', bool(f.get('reflect_only'))):
+        # seen only from the side its normal faces: a card on the floor shows in the product's lacquer, while the floor's
+        # own gloss, looking up at its back, sees through it (else a straight-edged patch on the sweep)
+        nt = m.node_tree; out = next(n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL')
+        src = out.inputs['Surface'].links[0].from_socket
+        geo = nt.nodes.new('ShaderNodeNewGeometry'); tr = nt.nodes.new('ShaderNodeBsdfTransparent')
+        mix = nt.nodes.new('ShaderNodeMixShader')
+        nt.links.new(geo.outputs['Backfacing'], mix.inputs['Fac']); nt.links.new(src, mix.inputs[1])
+        nt.links.new(tr.outputs['BSDF'], mix.inputs[2]); nt.links.new(mix.outputs['Shader'], out.inputs['Surface'])
     return ob
 
 
