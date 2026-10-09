@@ -55,9 +55,9 @@ The two sizes are built the same way; only the numbers differ. Drawings: `out*/d
 A3 sheets per size, numbered EM-FS-001 to 008 (floorstander) and EM-BS-001 to 008 (bookshelf), first-angle: (1) the
 general arrangement, (2) the centre section, (3) the waveguide insert and the tweeter's mount and wiring, (4) the back,
 the amplifier and the wiring, (5) the exploded view and the parts list, (6) the inner panels' details and the trim
-rings' sections, (7) and (8) the notes, all 2.5 mm high: what to measure first (M1, M2, ...) and sheets 1 to 3's notes
-by number (1.1, 1.2, ...) on sheet 7; sheets 4 to 6's notes, the glue-up order (G1 to G7) and the fixings (F1, F2) on
-sheet 8. Each sheet names the notes sheet its numbers point to.
+rings' sections, (7) and (8) the notes, all 2.5 mm high: what to measure first (M1, M2, ...) and sheets 1 and 3's notes
+by number (1.1, 1.2, ...) on sheet 7; sheets 2 and 4 to 6's notes, the glue-up order (G1 to G7) and the fixings (F1 to F3)
+on sheet 8. Each sheet names the notes sheet its numbers point to.
 
 0. **Buy and measure first.** Buy the drivers, the tweeters and the amplifiers (`bom.csv`) and the ply, and measure
    them before anything is cut or printed. Sheet 7's "Measure first" table lists every value the drawings assume and
@@ -69,11 +69,12 @@ sheet 8. Each sheet names the notes sheet its numbers point to.
    to a test cut-out in scrap. Edit `params.py`, run `build.sh`, and check `cad.json`'s "checks" all pass.
 1. **Prove the tweeter and its waveguide (a weekend).** Print the gable (`stl/gable-print/`: six pieces for the
    floorstander, four for the bookshelf, each 120 or less on one side for a resin printer's 218 x 123 x 220, keyed by
-   ø4 x 20 pins bonded with epoxy) and the insert (`stl/waveguide-insert.stl`) in a tough (ABS-like) SLA resin or MJF
+   ø4 x 20 pins bonded with epoxy in ø4.2 holes 10.5 deep each side) and the insert (`stl/waveguide-insert.stl`) in a tough (ABS-like) SLA resin or MJF
    nylon, not standard resin and not MDF: the sleeve's screws and the bookshelf's knurled inserts need it. One piece from
    a print service is the default, with no seam in the waveguide. The floorstander's also comes in halves for a desktop
    printer (`-left`, `-right`, split at the centre plane and printed tilted, about 209 x 117 x 213), joined by two
-   ø3 x 16 steel dowel pins epoxied in ø3.2 holes, the seam filled and sanded flush (sheet 3). Hollow the gable's pieces to 3 mm walls
+   ø3 x 16 steel dowel pins epoxied in ø3.2 holes 8.5 deep each side, the seam filled and sanded flush (sheet 3). Dry-fit every
+   pinned joint closed before mixing the epoxy: each hole is 0.5 deeper than half its pin, room for the epoxy. Hollow the gable's pieces to 3 mm walls
    with two ø3 drain holes each in the slicer, only in the outer slopes or the end faces, plugged with resin and filled before
    paint: none in the base, a joint face, the cable channel, the bay or the pocket, where a hole would let the woofer's box
    leak round the channel's seal. Bond every joint's full rim and seal the channel halves' seam along its length. The insert
@@ -138,7 +139,8 @@ sheet 8. Each sheet names the notes sheet its numbers point to.
    from above, one per cable. Inside the amplifier's box cut each of Hypex's harness pairs to about 150 mm and
    butt-splice it to its round cable: only round cable passes the glands. Feed each cable through its own gland and
    tighten it: the woofer's box must be airtight, and the insert's pocket is open to the room through its 0.3 mm seam.
-   Hold the runs to the back panel with adhesive cable-tie mounts every 150 mm, and fill the woofer chamber lightly
+   Feed each run through the loose ties on the cable-tie mounts the glue-up left (floorstander note 4.6: ten a speaker,
+   reached through the woofer's cut-out and the brace's window; bookshelf note 4.5) and pull them tight, and fill the woofer chamber lightly
    (about 150 g of polyester fibre, 60 g in the bookshelf), kept a port's diameter from the port's inner end and off
    the amplifier's box. The drivers on 1.5 mm foam gaskets in their rebates, M4 x 20 low-profile
    button heads (1.6 high and 8 across or less) into the T-nuts, the trim rings over them on three dots of silicone.
@@ -276,13 +278,19 @@ later decisions made: the build is active, so the Hypex plate takes the back's f
 cup sat (z 175; `POSTS` and `TERMINAL_CUP` in `params.py` are kept for a passive build), and the tweeter's throat is at
 y 176, z 935 from the waveguide study, not the spec's 125. Both are listed for the owner to confirm in the spec.
 
-**Questions for the owner** (the drawing checks', rounds 2 to 5). Open: has Hypex accepted the FA253 lying on its
-side, its long edge horizontal, and is a 90 mm sealed box enough for its heat (the research has both open)? Is 1.5 mm
+**Questions for the owner** (the drawing checks', rounds 2 to 6). Open: Hypex's manual (R4) allows the FA253 mounted
+horizontal, tilted up to 45 degrees, in its own compartment (the module is not airtight): is a 90 mm sealed box enough for
+its heat (the manual asks only that convection is not impeded; Hypex's FAQ mentions venting holes)? Is 1.5 mm
 of insert under the bookshelf tweeter's bore strong enough, or should its throat rise 2.2 mm? Is the milled gable meant
 for a shop with the reach, or is the printed one the default (the sheets assume either)? If the D3004/602200's body
-measures over 49 mm, its faceplate's M2.5 heads no longer clear it and the bookshelf's insert must change. If the
-SB17NRX2C35-8's flange is 10.9 rather than 6.5, a flush rebate leaves 3 mm of birch for the T-nuts: a proud ring or a
-thicker baffle? If the TW29DN-B's front ring measures over 73.8 mm or its motor over 69, may the boss (ø86), its screw circle (ø79.6) and the pocket's bore grow (the insert's outline leaves about 5.6 mm)? The floorstander's port ends 60 to 70 mm from the woofer's motor, less than its 92 mm bore, with its axis at the motor's top edge: acceptable, or should the port fold or the tube shorten with a larger flare? A printed gable's pocket crosses bonded joints and a 195 mm resin piece can warp more than the pocket's +0.2: give the printed pocket 0.4 a side? Which T-nuts and screws (F1 gives limits: the mid's flange 12 or less, barrel 6 or less, the heads 1.6 high; a 15 mm flange on the mid's circle overhangs its cut-out)? Taken as proposals, for the owner to confirm: the bookshelf insert's outline rises about 3 mm at the
+measures over 48.3 mm (its hole circle less 5.7; the research allows 50), its faceplate's M2.5 heads no longer clear it: a printed
+clamp ring like the floorstander's sleeve (its boss wall thicker than 3 mm), or the faceplate bonded to the seat? SB's drawing gives the
+SB17NRX2C35-8's flange as 6.5 (the 10.9 a shop lists is all that stands in front of the baffle), so the bookshelf's
+10.5 rebate stands: confirm it on the part. A shop lists the D3004/602200 45.3 deep: if its body behind the faceplate is
+over the 26 the bookshelf's bore holds, may the boss and the connector bay move back? SB's faceplate drawing for the TW29DN-B carries an unlabelled ø70.0 behind the faceplate, probably its motor. If its
+front ring measures over 73.0 mm (the research allows 74) or its motor over 69, may the bore grow to the ring + 0.4 and the sleeve's screw circle move out to keep 1.5 of wall (ø79.8 for a 74 ring), the boss (ø86) and the pocket's bore with them (the insert's outline leaves about 5.6 mm)? And if
+the bare unit is one ø70 cylinder with no ring standing past its motor, may the sleeve become a cup bearing on the motor's
+back, in a bore 4.4 over the motor? Can the Mini-Fit Jr. pair be mated, and its latch released, by a hand reaching about 240 mm (the bookshelf 150) into the pocket, with 12 mm (8) above the mated pair in the bay? research/ holds no Molex drawing: a printed test bay before the gable is made would show it. The floorstander's port ends 60 to 70 mm from the woofer's motor, less than its 92 mm bore, with its axis at the motor's top edge: acceptable, or should the port fold or the tube shorten with a larger flare? A printed gable's pocket crosses bonded joints and a 195 mm resin piece can warp more than the pocket's +0.2: give the printed pocket 0.4 a side? Which T-nuts and screws (F1 gives limits: the mid's flange 12 or less, barrel 6 or less, the heads 1.6 high; a 15 mm flange on the mid's circle overhangs its cut-out)? Taken as proposals, for the owner to confirm: the bookshelf insert's outline rises about 3 mm at the
 top so it covers the boss behind it (the waveguide is unchanged; its seam on the roof moves about 4 mm up the slope);
 the insert is printed in a tough resin or MJF nylon, one piece from a service, the floorstander's halves only as a
 fallback; the cabinet's tweeter lead ends at a socket standing on the bay's floor and the tweeter's own flexible lead,

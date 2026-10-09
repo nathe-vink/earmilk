@@ -81,14 +81,16 @@ TWEETER_PART = dict(model='SB Acoustics Satori TW29DN-B', dome_d=29.0, surround_
 # retaining sleeve slides over the motor from behind and presses the front ring onto the throat's seat (on a 0.5 foam
 # gasket); its own flange, on the boss's back face, takes three screws in the boss's wall, outside the bore. Whatever
 # SB's screw circle turns out to be, it is not needed. PROPOSAL; its bore follows body_d (measure the motor first).
-RETAINER = dict(gasket=0.5, preload=0.25, clear=0.5, fit=0.2, flange_d=84.0, flange_t=3.0, screws=3, screw_circle=79.6,
-                pilot_d=2.4, pilot_depth=10.0, hole_d=3.4, head_h=2.4, start_deg=0.0,
+RETAINER = dict(gasket=0.5, preload=0.25, clear=0.5, fit=0.2, flange_d=85.0, flange_t=3.0, screws=3, screw_circle=78.8,
+                pilot_d=2.4, pilot_depth=10.0, hole_d=3.2, head_h=2.4, start_deg=0.0,
                 screw='3.0 x 12 thread-forming screws for plastics (WN 1411 / PT K30, pan head)')
 # The heads stand head_h proud of the flange (a 3 mm pan head is 1.8 to 2.4): the pocket's bore runs that and 1.1 more
 # behind the flange, or the insert stops short of home (the drawing check's d3, round 3). The circle starts on the
 # horizontal (start_deg 0, the speaker's right), so no pilot lies on the insert's split at the centre plane (d5).
 # The tube is `preload` longer than the gap from the front ring to the boss's back face, so its flange stands 0.25 off
 # the boss until the three screws press the gasket by that much (a tube printed 0.15 short still holds: d5, round 5).
+# The flange ø85 with ø3.2 holes on ø78.8 keeps 1.5 of flange outside each hole and the heads inside its rim (ø84
+# with ø3.4 on ø79.6 left a 0.5 web: d6, round 6); the boss's pilots move with the circle, 1.5 inside the bore.
 INSERT_SCREW = None          # the bookshelf's: screws through its tweeter's faceplate into the seat (below)
 # 2026-10-08, the research's recommended set for the active floorstander (fab/research/drivers-floorstander.md)
 DRIVER_SET = dict(woofer='rss315hf-4', mid='mr16p-8', tweeter='tw29dn-b')
@@ -134,7 +136,7 @@ WIRE_HOLE_D = 14.0        # PROPOSAL tweeter wires drop from the pocket into the
 DOWEL_D, DOWEL_DEPTH = 10.0, 20.0  # PROPOSAL four 10 mm dowels register the block on the body
 
 # --- Waits on the drivers (PLACEHOLDER) ------------------------------------------------------------------------------
-WOOFER_CUTOUT = 282.0     # PLACEHOLDER the Dayton RSS315HF-4 (fab/research/drivers-floorstander.md; 272 for the DS315-8 / DSA315-8)
+WOOFER_CUTOUT = 282.0     # SPEC Dayton's page: 'baffle cutout diameter 282' (fab/research/datasheets-2026-10-09.json; 272 for the DS315-8 / DSA315-8)
 MID_CUTOUT = 140.3        # PLACEHOLDER the SB Acoustics Satori MR16P-8 (146 for the SB17MFC35-8)
 CLEAR = 1.0               # PLACEHOLDER radial clearance for the tweeter pocket
 # 2026-10-08: active. A Hypex FusionAmp FA253 per speaker (fab/research/amps.md): 250 + 250 + 100 W into 4 ohm, the DSP
@@ -156,12 +158,15 @@ TERMINAL_CUTOUT = (113.0, 49.0)  # DERIVED the terminal cup's body plus 0.5 a si
 # 2026-10-08, the owner: the drivers flush. Each frame sits in a rebate as deep as its flange and the printed trim ring over it, so
 # the ring's face is level with the finish, with a 0.8 reveal round it.
 # The drivers' screws: holes for M4 T-nuts fitted from inside, on each frame's bolt circle. PLACEHOLDER circles and counts
-# (the research's estimates, fab/research/drivers-*.md): measure the frame before drilling.
-DRIVER_SCREWS = dict(woofer=dict(n=8, pcd=298.0, hole=5.5, start_deg=22.5), mid=dict(n=4, pcd=154.0, hole=5.5, start_deg=45.0))
+# (the research's estimates, fab/research/drivers-*.md): measure the frame before drilling. The woofer's 8 holes are
+# Dayton's own count; their circle, 295, is Audiophonics' 'mounting bolt diameter', the one published figure (Dayton's
+# page leaves it blank; the 298 before it was an estimate): fab/research/datasheets-2026-10-09.json
+DRIVER_SCREWS = dict(woofer=dict(n=8, pcd=295.0, hole=5.5, start_deg=22.5), mid=dict(n=4, pcd=154.0, hole=5.5, start_deg=45.0))
 # The screws and the nuts they go into, by limits a named part has to meet (the drawing check's d15, round 3): a low head,
 # so the trim ring's channel over them stays inside the ring, and T-nuts whose flanges stay clear of the cut-outs
 DRIVER_SCREW = dict(thread='M4 x 20', head='low-profile (wafer) button head, A2', head_d=8.0, head_h=1.6,
-                    tnut_flange=dict(woofer=15.0, mid=12.0), tnut_barrel=dict(woofer=8.0, mid=6.0))
+                    tnut_flange=dict(woofer=12.0, mid=12.0), tnut_barrel=dict(woofer=8.0, mid=6.0))
+# the woofer's T-nuts 12 across or less: on the 295 circle a 15 mm flange overhung its 282 cut-out by 1 (a CAD check)
 LEAD_ABOVE_GROMMET = 77.0    # the cabinet's tweeter lead above the top panel's underside: 67 up the channel to the bay's floor
                              # and 10 past it into its socket, which stands on the floor (the drawing check's d2, round 4:
                              # 30 past the floor put a 24 mm pair through the bay's ceiling). The slack to plug it is the
@@ -224,6 +229,9 @@ if BOOK:
     # Scan-Speak Illuminator D3004/602200: its 62 mm faceplate screwed to the insert's back, the dome in the 34 mm throat
     TWEETER_PART = dict(model='Scan-Speak Illuminator D3004/602200', dome_d=26.0, surround_w=4.0, flange_d=62.0, flange_t=4.5,
                         body_d=48.0, body_depth=17.0, screws=3, bolt_circle=54.0, mount='screws')
+    # Shops give its cut-out as 47.8 (SoundImports) and 48 (Willy's), so the 48 body holds; its three holes are ø3.3 (M3
+    # clearance: the M2.5 screws pass), their circle still unpublished; SoundImports lists it 45.3 deep without saying
+    # from where: a body behind the faceplate deeper than the bore holds fails a CAD check (M3).
     # Its faceplate has its own three holes (about 55 apart, the research's estimate), so it screws to the seat from behind:
     # M2.5 low heads (ISO 7380, head 4.7 across) on the 54 circle clear the 48 body by 0.65; a body over 49 would need the
     # floorstander's sleeve, which the 3 mm boss wall here cannot hold. Knurled brass inserts bonded with epoxy hold in
@@ -233,12 +241,16 @@ if BOOK:
                         screw='M2.5 x 8 button heads (ISO 7380, A2)', head_d=4.7)
     TWEETER = dict(TWEETER, faceplate_y=WAVEGUIDE['throat_y'], z=WAVEGUIDE['throat_z'])
     DRIVER_SET = dict(woofer='sb17nrx2c35-8', mid=None, tweeter='d3004-602200')
-    WOOFER_CUTOUT = 144.9                     # PLACEHOLDER unconfirmed in the research
+    WOOFER_CUTOUT = 144.9                     # SPEC SB's drawing, ø144.9 (fab/research/datasheets-2026-10-09.json)
     DRIVER_SCREWS = dict(woofer=dict(n=4, pcd=159.0, hole=5.5, start_deg=45.0))   # 4 x 4.3 on 159 (fab/research/drivers-small.md)
     DRIVER_SCREW = dict(DRIVER_SCREW, tnut_flange=dict(woofer=12.0), tnut_barrel=dict(woofer=7.0))
     LEAD_ABOVE_GROMMET = 40.0    # 30 up the channel to the ø32 bay's floor and 10 into its socket (the tweeter's own lead is the slack)
     TWEETER_LEAD = dict(TWEETER_LEAD, l=220.0)   # the tabs about 134 from the socket with the insert clear of its pocket, 75 for a hand, 10 spare
     WOOFER_REBATE = dict(d=172.6, depth=10.5)  # the 171 frame + 2 x 0.8; its 6.5 flange + 1.0 of gasket + the 3 mm ring
+    # SPEC 6.5: SB's drawing (REV.2, 2019) carries 6.5, which NB Audio lists as the flange's thickness; the 10.9 a shop
+    # lists as 'front thickness' is everything in front of the baffle, its 85.9 overall less 75 behind: the surround
+    # stands 4.4 above the flange, 1.4 proud of the ring (fab/research/datasheets-2026-10-09.json). Check the drawing's
+    # labels on the part in hand (M2).
     MID_CUTOUT = None; MID_REBATE = None
     PORT = None                               # sealed: 9.2 L net (fab/out-bookshelf/acoustics.json), f3 63 Hz, a DSP shelf to 45 Hz
     POSTS = dict(POSTS, z=180.0)

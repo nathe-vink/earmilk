@@ -52,10 +52,10 @@ These are the buyable drivers and hardware for the 12 in / 6.5 in / 1 in-wavegui
 
 | Driver | Frame OD | Cutout | Depth behind flange | Holes / bolt circle | Rebate (OD + 2 × 0.8) |
 |---|---|---|---|---|---|
-| RSS315HF-4 | 314 | 282 | 146 | 8 holes (unconfirmed); circle n/f, about 298 (estimate) | 315.6 (as today) |
+| RSS315HF-4 | 314 | 282 | 146 | 8 holes (Dayton); circle 295 (Audiophonics; Dayton gives none) | 315.6 (as today) |
 | DS315-8 / DSA315-8 | 314 | 272 | 130 | DS: 5 holes (unconfirmed); circle about 296 (estimate) | 315.6 |
 | MR16P-8 | 165 | 140.3 | 75.6 (front 7.5) | n/f; about 154 (estimate) | 166.6 |
-| SB17NRX2C35-8 | 171 | 144.9 (unconfirmed) | 75 (front 10.9, unconfirmed) | n/f; about 158 (estimate) | 172.6 |
+| SB17NRX2C35-8 | 171 | 144.9 (SB drawing) | 75; flange 6.5 (SB drawing), 10.9 in front of the baffle in all (85.9 - 75) | 4 x 4.3 on 159 (SB drawing) | 172.6 |
 | TW29DN-B, faceplate off | about 71–74 body | pocket about 75 | about 32 (unconfirmed) | faceplate screws (2.5 mm hex, likely M3 or M4; count n/f) | throat ring ID = measured diaphragm OD, about 45 (estimate) |
 | D3004/602200 | 62 faceplate | 48 (unconfirmed) | about 21.5 (602000 figure) | 3 holes; circle about 55 (estimate) | 62–64 seat, as in the current CAD |
 
@@ -278,3 +278,20 @@ No faceplate thickness was published for ranks 1–7; measure it. The few that w
 - [Acousta-Stuf 1 lb](https://parts-express.com/Acousta-Stuf-Polyfill-1-lb.-Bag-260-317) · [Acousta-Blue denim 30 mm](https://www.parts-express.com/Sonic-Barrier-Acousta-Blue-Speaker-Cabinet-Sound-Absorbing-Denim-30mm-x-40-x-55-15.2-Sq.-ft.-260-566) · [Sonic Barrier 1 in foam](https://parts-express.com/Sonic-Barrier-1-Acoustic-Foam-w-PSA-18-x-24-260-525)
 
 **Earlier pass (2026-10-04):** `/home/user/earmilk/fab/drivers.json` and `/home/user/earmilk/fab/research/drivers.md`. The MR16P-8, PTT6.5M08, D3004/602000 review, DC300-8, FW305, OC25SC65-04 and ND25FN-4 figures marked "earlier pass" come from there.
+
+## Datasheet check, 2026-10-09
+
+`datasheets-2026-10-09.json` holds each number with its source and how sure it is. The PDFs themselves could not be
+downloaded from this session, so the numbers are the text of the makers' drawings or the shops' listings, and a drawing's
+labels were not seen. What changed or was learned:
+
+- **RSS315HF-4**: Dayton gives the outside diameter 314, the cut-out 282, 8 holes and 146 overall depth; the bolt circle
+  only Audiophonics gives, 295. `params.py` now drills on 295 (it was an estimated 298), and the woofer's T-nuts must be
+  12 across or less (a CAD check: a 15 flange on 295 overhangs the cut-out).
+- **TW29DN-B**: the faceplate is 103.8 x 5.0, four ø4.2 holes counterbored ø8.2 on what is probably a 92 circle, 21.7
+  behind the baffle, 29.3 overall. An unlabelled ø70.0 sits behind the faceplate, probably the motor: over 69 the
+  sleeve's wall drops under 1.5, so measure the bare unit before printing (sheet 7, M4). Nothing of the bare unit with
+  its faceplate off was found; SB's WG29-187 sheet probably has it.
+- **Hypex FusionAmp (manual R4)**: FA253 360 x 135 x 55, cut-out 336 x 111; 8 or 10 screws (Hypex suggests 4.3 x 25.4);
+  it may be mounted vertical or horizontal and tilted up to 45 degrees; it is not airtight, so it goes in its own
+  compartment. The corner radius, plate thickness and hole positions are in Hypex's 2D CAD files, not reached.

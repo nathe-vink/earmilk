@@ -14,6 +14,9 @@ DXF layers (the names say what to do; CNC shops read them):
   POCKET_3MM        3 mm deep, from the outer face (the shadow-line groove)
   POCKET_<n>MM      n mm deep, from the outer face, clearing inside the circle (2026-10-08: the flush drivers' rebates)
   DRILL_10_DEEP10   10 mm holes, 10 deep (dowels)
+  POCKET_<n>MM_UNDERSIDE  n mm deep from the face the file is drawn from: only in <part>-underside.dxf, a second set-up
+                    drawn as seen from the underside (the panel turned over left to right)
+  REF_HOLES_CUT_FROM_TOP  in an underside file, the through holes already cut, to register on; not cut
   NOTES             part name and face, not cut
 """
 import csv, math, os, sys
@@ -28,12 +31,13 @@ MID_POCKET = f"POCKET_{MID_REBATE['depth']:g}MM" if MID else 'POCKET_MID'
 PLATE_POCKET = f"POCKET_{AMP['rebate']:g}MM" if AMP else 'POCKET_PLATE'
 NUT_POCKET = f"POCKET_{AMP_BOX['nut_cb'][1]:g}MM_UNDERSIDE" if AMP else 'POCKET_NUT'
 LAYERS = {'CUT_OUTSIDE': 7, 'CUT_INSIDE': 1, 'POCKET_3MM': 3, WOOFER_POCKET: 4, MID_POCKET: 5, PLATE_POCKET: 2, 'DRILL_D10_DEPTH10': 6,
-          'DRILL_D5.5_THROUGH': 30, NUT_POCKET: 40, 'NOTES': 8}
+          'DRILL_D5.5_THROUGH': 30, NUT_POCKET: 40, 'REF_HOLES_CUT_FROM_TOP': 9, 'NOTES': 8}
 # what each layer asks of the shop, for the cut list
 OPS = {'CUT_INSIDE': 'cut inside', 'POCKET_3MM': 'pocket 3 mm deep', WOOFER_POCKET: f"pocket {WOOFER_REBATE['depth']:g} mm deep (woofer)",
        MID_POCKET: f"pocket {MID_REBATE['depth']:g} mm deep (mid)" if MID else '', PLATE_POCKET: f"pocket {AMP['rebate']:g} mm deep (amplifier plate)" if AMP else '',
        'DRILL_D10_DEPTH10': 'drill ø10, 10 deep', 'DRILL_D5.5_THROUGH': 'drill ø5.5 through (M4 T-nuts from inside; measure the frame first)',
-       NUT_POCKET: f"pocket {AMP_BOX['nut_cb'][1]:g} mm deep from the underside, concentric with each gland's hole (cut the holes, turn the panel over, centre on them; before the lid goes in)" if AMP else '', 'NOTES': 'notes'}
+       NUT_POCKET: f"then pocket {AMP_BOX['nut_cb'][1]:g} mm deep from the underside with amp-box-lid-underside.dxf: turn the panel over left to right (its FRONT EDGE still nearest you) and centre each pocket on its hole; before the lid goes in" if AMP else '',
+       'REF_HOLES_CUT_FROM_TOP': 'the holes already cut from the top, drawn to register on (not cut)', 'NOTES': 'notes'}
 
 
 def rect(x0, y0, x1, y1):
@@ -114,22 +118,32 @@ def panel_defs():
     if MID:
         P.append(dict(name='mid-shelf', qty=1, w=INNER, h=MID_CHAMBER_DEPTH + WALL, layers={},
                       note=f'z {MID_SHELF_TOP - WALL:g} to {MID_SHELF_TOP:g}, from the baffle back to under the divider'))
+        # an inner panel has no outer face: drawn seen from the front, the mid chamber's side, its face and top edge named
+        # (read from the woofer's side the hole moved from x 75 to 315: the drawing check's d12, round 6)
         P.append(dict(name='mid-divider', qty=1, w=INNER, h=TOP_Z0 - MID_SHELF_TOP, layers={
-            'CUT_INSIDE': circle(RUN - 120 - WALL, 40, 12)},
-            note=f'y {WALL + MID_CHAMBER_DEPTH:g} to {2 * WALL + MID_CHAMBER_DEPTH:g}, z {MID_SHELF_TOP:g} to {TOP_Z0:g}; seal the wire hole after wiring'))
+            'CUT_INSIDE': circle(RUN - 120 - WALL, 40, 12),
+            'NOTES': [('text', (INNER / 2, TOP_Z0 - MID_SHELF_TOP - 8.0), 'FRONT FACE, TOP EDGE', 6.0)]},
+            note=f'seen from the front (the mid chamber\'s side), its top edge up: the hole {RUN - 120 - WALL:g} from its left end; y {WALL + MID_CHAMBER_DEPTH:g} to '
+                 f'{2 * WALL + MID_CHAMBER_DEPTH:g}, z {MID_SHELF_TOP:g} to {TOP_Z0:g}; seal the wire hole after wiring'))
     if AMP:
         y0, y1, z0, z1 = cad.amp_box_extent()
         d = y1 - y0 + WALL
         P.append(dict(name='amp-box-floor', qty=1, w=INNER, h=d, layers={}, note=f'the amplifier box\'s floor, z {z0 - WALL:g} to {z0:g}, against the back'))
         gl = cad.amp_glands_xy()
-        xs_ = ', '.join(f'{gx - WALL:g}' for (gx, _) in gl); gy_ = gl[0][1] - (y0 - WALL)
-        P.append(dict(name='amp-box-lid', qty=1, w=INNER, h=d,
+        # the nuts' counterbores are cut from the underside, a second set-up with its own file drawn as seen from there
+        # (the panel turned over left to right, the FRONT EDGE still at the bottom), so no one runs them in the top
+        # face's coordinates (the drawing check's d5, round 6)
+        under = dict(name='amp-box-lid-underside', qty=0, w=INNER, h=d,
+                     layers={NUT_POCKET: sum((circle(INNER - (gx - WALL), gy - (y0 - WALL), AMP_BOX['nut_cb'][0]) for (gx, gy) in gl), []),
+                             'REF_HOLES_CUT_FROM_TOP': sum((circle(INNER - (gx - WALL), gy - (y0 - WALL), AMP_BOX['gland_hole']) for (gx, gy) in gl), []),
+                             'NOTES': [('text', (INNER / 2, 6.0), 'FRONT EDGE', 6.0),
+                                       ('text', (INNER / 2, d - 8.0), 'UNDERSIDE: TURNED OVER LEFT TO RIGHT', 5.0)]})
+        P.append(dict(name='amp-box-lid', qty=1, w=INNER, h=d, second_side=under,
                       layers={'CUT_INSIDE': sum((circle(gx - WALL, gy - (y0 - WALL), AMP_BOX['gland_hole']) for (gx, gy) in gl), []),
-                              NUT_POCKET: sum((circle(gx - WALL, gy - (y0 - WALL), AMP_BOX['nut_cb'][0]) for (gx, gy) in gl), []),
                               'NOTES': [('text', (INNER / 2, 6.0), 'FRONT EDGE', 6.0)]},
-                      note=f'the amplifier box\'s lid, z {z1:g} to {z1 + WALL:g}, its front edge (the bottom of the drawing) over the box\'s front; '
-                           f'{len(gl)} ø{AMP_BOX["gland_hole"]:g} holes for {AMP_BOX["gland"]} glands, one per cable, {xs_} from the left, {gy_:g} from the front edge, '
-                           f'each nut (20 AF or less) epoxied into a ø{AMP_BOX["nut_cb"][0]:g} x {AMP_BOX["nut_cb"][1]:g} counterbore from the underside before the lid goes in'))
+                      # short: the glands and their nuts are note 4.7 (4.6 on the bookshelf); a longer one ran into
+                      # sheet 6's title block (the drawing check's d16, round 6)
+                      note=f'the amplifier box\'s lid, z {z1:g} to {z1 + WALL:g}, its FRONT EDGE over the box\'s front; the glands and their nuts: note {"4.7" if MID else "4.6"}'))
         P.append(dict(name='amp-box-front', qty=1, w=INNER, h=z1 - z0, layers={},
                       note=f'the amplifier box\'s front, between floor and lid, {AMP_BOX["depth"]:g} in front of the back\'s inner face; glue and seal all round'))
     return P
@@ -243,6 +257,9 @@ def main():
     layers = gable_layers()
     for p in panels + layers:
         doc = new_doc(); draw(doc.modelspace(), p); doc.saveas(os.path.join(OUT, 'dxf', f"{p['name']}.dxf"))
+        if p.get('second_side'):
+            q = p['second_side']
+            doc = new_doc(); draw(doc.modelspace(), q); doc.saveas(os.path.join(OUT, 'dxf', f"{q['name']}.dxf"))
 
     # Two speakers' worth, nested.
     pair = [dict(p, qty=p['qty'] * 2) for p in panels + layers]
@@ -268,6 +285,9 @@ def main():
         wr.writerow(['part', 'qty per speaker', 'qty for a pair', 'width mm', 'height mm', 'thickness mm', 'material', 'operations', 'note'])
         for p in panels + layers:
             ops = [OPS.get(k, k.replace('_', ' ').lower()) for k in p['layers'] if p['layers'][k] and k != 'NOTES'] or ['outline only']
+            if p.get('second_side'):
+                ops += [OPS.get(k, k.replace('_', ' ').lower()) for k in p['second_side']['layers']
+                        if p['second_side']['layers'][k] and k not in ('NOTES', 'REF_HOLES_CUT_FROM_TOP')]
             wr.writerow([p['name'], p['qty'], p['qty'] * 2, f"{p['w']:.1f}", f"{p['h']:.1f}", f'{WALL:.0f}',
                          f'Baltic birch plywood, B/BB, {WALL:g} mm nominal: measure the sheet first (sheet 7, M1)', '; '.join(ops), p['note']])
     area = sum(p['w'] * p['h'] * p['qty'] * 2 for p in panels + layers) / 1e6

@@ -157,7 +157,10 @@ def dowel_points():
     r = lambda v: round(v * 2) / 2                       # to 0.5 mm, so the drawings print what the router cuts
     a = r(60.0 * PLAN / 390); b = PLAN - a
     yf = r(INSERT['back_y'] + max(12.0, 15.0 * PLAN / 390) if WAVEGUIDE else 200.0 * PLAN / 390)
-    return [(a, yf), (b, yf), (a, r(330.0 * PLAN / 390)), (b, r(330.0 * PLAN / 390))]
+    # the back pair 8 mm of block under the back slope, normal to it: the bookshelf's at 186 kept 1.8 (d7, round 6)
+    t_, c_ = math.tan(math.radians(SLOPE_DEG)), math.cos(math.radians(SLOPE_DEG))
+    yr = math.floor(2 * min(330.0 * PLAN / 390, PLAN - DOWEL_D / 2 - (DOWEL_DEPTH + 8.0 / c_) / t_)) / 2    # to 0.5, forward
+    return [(a, yf), (b, yf), (a, yr), (b, yr)]
 
 
 # --- Gable block and bowl -----------------------------------------------------------------------------------------------
@@ -632,7 +635,8 @@ def checks(parts):
     measured margin in mm and the least it may be. A failure stops the build, the way a failing test would."""
     out = []
     def chk(name, margin, least):
-        out.append({'check': name, 'margin_mm': round(margin, 2), 'least_mm': least, 'ok': margin >= least})
+        # judged on the margin as printed (to 0.01): 1.4999... against a least of 1.5 is the 1.5 the drawings give
+        out.append({'check': name, 'margin_mm': round(margin, 2), 'least_mm': least, 'ok': round(margin, 2) >= least})
     tan_ = RISE / RUN
     if WAVEGUIDE:
         I, T = INSERT, TWEETER_PART
@@ -644,6 +648,9 @@ def checks(parts):
         pocket = insert_pocket()
         for (x, y) in dowel_points()[:2]:
             chk(f'front dowel at y {y:g} clear of the insert\'s pocket', cyl_z(x, y, DOWEL_D, BODY - 1, BODY + DOWEL_DEPTH).distance_to(pocket), 3.0)
+        yr_ = dowel_points()[2][1]
+        chk('block over the rear dowels, normal to the back slope', ((PLAN - yr_ - DOWEL_D / 2) * math.tan(math.radians(SLOPE_DEG)) - DOWEL_DEPTH)
+            * math.cos(math.radians(SLOPE_DEG)), 8.0)
         mags, pins = insert_fixings()
         bore_r = I['boss_d'] / 2 + I['clear']
         for (x, z) in mags + pins:
@@ -667,6 +674,10 @@ def checks(parts):
             hd = INSERT_SCREW['head_d']
             chk('faceplate screws\' heads clear of the tweeter\'s body', T['bolt_circle'] / 2 - hd / 2 - T['body_d'] / 2, 0.5)
             chk('faceplate screws\' inserts in the seat, inside the bore', (T['flange_d'] + 0.4) / 2 - T['bolt_circle'] / 2 - INSERT_SCREW['hole_d'] / 2, 1.5)
+        # the tweeter's body inside the boss's bore and the pocket's bore behind it, along the axis (a shop lists the
+        # bookshelf's D3004/602200 45.3 deep: the datasheets of 2026-10-09)
+        body_end = WAVEGUIDE['throat_y'] + (RETAINER['gasket'] if RETAINER else 0.5) + T['flange_t'] + T['body_depth']
+        chk('tweeter\'s body inside its bore, along the axis', I['boss_back_y'] + pocket_bore_behind_boss() - body_end, 1.0)
         # the boss passes under the pocket's ceiling only if the insert's outline holds its circle (d1, round 3), and the
         # insert keeps a wall over the tweeter's bore at the top
         out_ = insert_outline()
@@ -705,6 +716,12 @@ def checks(parts):
         barrel = (DRIVER_SCREW.get('tnut_barrel') or {}).get(role)
         if reb and barrel:
             chk(f'birch under the {role}\'s rebate for its T-nuts\' barrels (+0.5)', WALL - reb['depth'] - barrel - 0.5, 0.0)
+    # each T-nut's flange, on the baffle's inside face, clear of its driver's cut-out (on the woofer's 295 circle a
+    # 15 mm flange overhung the 282 cut-out by 1: the datasheets of 2026-10-09)
+    for role, cut in (('woofer', WOOFER_CUTOUT), ('mid', MID_CUTOUT if MID else None)):
+        sc = DRIVER_SCREWS.get(role); fl = (DRIVER_SCREW.get('tnut_flange') or {}).get(role)
+        if sc and cut and fl:
+            chk(f'{role}\'s T-nut flanges ({fl:g}) clear of its cut-out', sc['pcd'] / 2 - fl / 2 - cut / 2, 0.5)
     if AMP:
         chk('amplifier plate above the plinth\'s shadow line', AMP['z'] - AMP['plate_h'] / 2 - bot_front, 2.0)
         chk('amplifier plate inside the back, across', (PLAN - AMP['plate_w']) / 2 - EDGE_R, 2.0)
@@ -813,16 +830,16 @@ def main():
         pin_pts = insert_split_pins()
         pins = None
         for (py, pz) in pin_pts:
-            c_ = Pos(RUN, py, pz) * Rot(0, 90, 0) * Cylinder(1.6, 16)
+            c_ = Pos(RUN, py, pz) * Rot(0, 90, 0) * Cylinder(1.6, 17)      # 8.5 a side for a 16 pin: room for epoxy (d4, round 6)
             pins = c_ if pins is None else pins + c_
-        report['insert_split_pins'] = [{'y': round(py, 1), 'z': round(pz, 1), 'd': 3.2, 'l': 16} for (py, pz) in pin_pts]
+        report['insert_split_pins'] = [{'y': round(py, 1), 'z': round(pz, 1), 'd': 3.2, 'l': 16, 'hole_depth': 8.5} for (py, pz) in pin_pts]
         for nm, half in (('waveguide-insert-left', ins & box(-1, -10, BODY - 1, RUN, PLAN, TOTAL)),
                          ('waveguide-insert-right', ins & box(RUN, -10, BODY - 1, PLAN + 1, PLAN, TOTAL))):
             export_stl(half - pins, os.path.join(OUT, 'stl', f'{nm}.stl'), tolerance=0.02, angular_tolerance=0.05)
     # The gable block for printing (the cheap route), cut to fit a resin printer's 218 x 123 x 220 (or any FDM bed): the
     # floorstander's in six pieces, the bookshelf's in four (whole it is 220 x 220 x 110 and fits no orientation of that
     # printer: the drawing check's d2, round 3), every piece with a side of 120 or less, keyed at each joint by two 4 mm
-    # pins (4.2 holes, 10 deep each side) where the joint face has 4 mm of material round them, bonded with epoxy (the
+    # pins (4.2 holes, 10.5 deep each side: 0.5 of room for the epoxy, the drawing check's d4, round 6) where the joint face has 4 mm of material round them, bonded with epoxy (the
     # drawing check's d5). Hollow the pieces to 3 mm walls with two drain holes in the slicer.
     g = parts['gable-block']
     os.makedirs(os.path.join(OUT, 'stl', 'gable-print'), exist_ok=True)
@@ -852,7 +869,8 @@ def main():
         for axis, val, (a, b), (u0, u1) in joints:
             pts = joint_pins(g, axis, val, (u0, u1, BODY, RIDGE_Z))
             for (u, z) in pts:
-                drill = (cyl_x(u, z, 4.2, val - 10, val + 10) if axis == 'x' else cyl_y(u, z, 4.2, val - 10, val + 10))
+                # 10.5 a side for a 20 pin: room for the epoxy at the bottom of each hole (d4, round 6)
+                drill = (cyl_x(u, z, 4.2, val - 10.5, val + 10.5) if axis == 'x' else cyl_y(u, z, 4.2, val - 10.5, val + 10.5))
                 pieces[a] = pieces[a] - drill; pieces[b] = pieces[b] - drill
             pin_log.append({'joint': f'{a} / {b}', 'plane': f'{axis} = {val:g}', 'pins': [[round(u, 1), round(z, 1)] for (u, z) in pts]})
         for nm, piece in pieces.items():

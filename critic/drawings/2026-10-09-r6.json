@@ -1,0 +1,212 @@
+{
+ "verdict": "Not today. Every cut that meets a bought part is still a research estimate that the set itself says to measure first (M1 to M5: the drivers' flanges, bolt circles and surrounds, the TW29DN-B with its faceplate off, the D3004's body, the FusionAmps' corner radius and screw pattern). For three of these, the research's own figures fall outside what is drawn: the SB17NRX2C35-8 flange (10.9 in drivers-floorstander.json against the 6.5 the bookshelf baffle is cut for), the D3004/602200 body (up to 50 against the 48.3 its screw heads allow) and the TW29DN-B ring (up to 74 against the 73.4 bore). So nothing can go to the CNC shop or the print service until one of each part is in hand, measured and build.sh re-run, and the bookshelf may need two owner decisions. Apart from that the set is unusually consistent: every number I checked agrees across the sheets, cutlist.csv, cad.json, params.py, the DXFs (layers, hole positions, R3/R4.5/R30 corners), the STLs (magnet, pin, pilot and insert holes where note 3.8 says) and the acoustics (81.1 L, 171.3 port, 9.15 L / +8.3 dB). The scales are true, the cutting planes are drawn and the smallest text is 2.54 mm caps. Once the parts are measured, these would still cost parts or a phone call. The sleeve's flange leaves 0.5 mm outside its screw holes. The insert-half and printed-gable pins have zero end clearance. The bookshelf's rear gable dowels leave 1.8 mm under the back slope. The lid's underside counterbores are drawn in the top face's coordinates. G6's PU bead gets wiped off by the top panel sliding over the divider. The ties above the brace cannot be reached at step 9. The printed gable's joints, pins and hollowing appear on no sheet. Sheet 6's lid note runs into the title block.",
+ "buildable_score": 5.5,
+ "findings": [
+  {
+   "id": "d1",
+   "size": "bookshelf",
+   "sheet": "sheet-1 / sheet-7 (M2) / cutlist",
+   "where": "Front view, woofer callout 'rebate \u00f8172.6 x 10.5 deep, through \u00f8144.9' (PNG box 231,1056-891,1146); note M2; cutlist front-baffle 'pocket 10.5 mm deep (woofer)'; front-baffle.dxf layer POCKET_10.5MM",
+   "severity": "blocks",
+   "problem": "The flush woofer rebate is cut for a 6.5 mm flange that the research's own data contradicts. At the other figure the T-nut fixing cannot work, so the baffle cannot be cut until the part is measured.",
+   "evidence": "params.py WOOFER_REBATE depth 10.5 = 6.5 flange + 1.0 gasket + 3 ring (PLACEHOLDER). drivers-small.md: '6.5 mm flange (unconfirmed)'. drivers-floorstander.json, SB17NRX2C35-8 mechanical.front_flange_thickness_mm: 10.9. At 10.9 a flush rebate is 14.9 deep and leaves 3.1 mm of birch for F1's 7 mm barrels. cad.json's check 'birch under the woofer's rebate for its T-nuts' barrels (+0.5)' is already at margin 0.0 with 6.5.",
+   "fix": "Measure the flange on a bought SB17NRX2C35-8 before the CNC job (M2). At 7.0 or less: set WOOFER_REBATE depth = flange + 4.0 and re-run build.sh. At 10.9: do not cut a flush rebate. The owner chooses (questions) between a proud ring (rebate stays 10.5, ring printed 7.4 thick and standing 4.4 proud) and a thicker baffle; then regenerate sheet 1, front-baffle.dxf and the cut list."
+  },
+  {
+   "id": "d2",
+   "size": "floorstander",
+   "sheet": "sheet-3 / sheet-7 (M4, 2.2, 3.2)",
+   "where": "Section B-B callout 'bore \u00f873.4 from the back: ... its front ring seats at the throat (y 176)' (PNG box 2400,120-3000,230); note M4",
+   "severity": "blocks",
+   "problem": "The insert's tweeter bore (\u00f873.4) and the sleeve (\u00f873 / \u00f867) are drawn for a 73 mm front ring and a 66 mm motor, but the research only bounds the bare unit at 71 to 74 across. The insert, the sleeve and the gable's pocket cannot be printed or milled until a tweeter is measured.",
+   "evidence": "params.py TWEETER_PART flange_d 73, body_d 66, flange_t 6 ('PLACEHOLDER ... no drawing found'). drivers-floorstander.md: 'bare body about 71\u201374 (unconfirmed)', 'about 32' deep. cad.json tweeter_bore_d 73.4 (0.2 a side on 73). A 74 ring needs a \u00f874.4 bore, which leaves 1.4 between the bore and the \u00f82.4 pilots on \u00f879.6, under cad.json's 1.5 minimum ('sleeve's pilots in the boss's wall, inside', margin 1.9 today).",
+   "fix": "Measure the front ring's diameter and thickness, the motor and the dome with its surround (M4) before any print. If the ring is over 73.0, set flange_d to the measured value and move the sleeve's screw circle out to keep 1.5 of wall (\u00f879.8 for a 74 ring); re-run and confirm that cad.json's checks pass."
+  },
+  {
+   "id": "d3",
+   "size": "bookshelf",
+   "sheet": "sheet-3 / sheet-7 (M3, 3.2)",
+   "where": "Back view callout '3 x \u00f83.6 x 5 holes on \u00f854 in the seat ... M2.5 x 8 button heads ... through the faceplate' (PNG box 124,1140-1210,1240); notes M3 and 3.2",
+   "severity": "blocks",
+   "problem": "The tweeter is held by M2.5 button heads driven from behind through its own faceplate holes. These clear its body only if the body is \u00f848.3 or less, but the research puts the body (cut-out) at 48 to 50, so the bookshelf insert's fixing may not work at all.",
+   "evidence": "params.py TWEETER_PART body_d 48, bolt_circle 54; INSERT_SCREW head_d 4.7 (ISO 7380 M2.5). cad.json check 'faceplate screws' heads clear of the tweeter's body': margin 0.65. Note 3.2: 'the circle at least the body + 5.7'. drivers-small.json D3004/602200 faceplate.cutout_mm '48-50 (50 is the D3004/602000's)', fixing 'circle about 55 (estimate)'. With a 50 mm body on the 54 circle, the heads' inner edge (r 24.65) overlaps the body (r 25) by 0.35.",
+   "fix": "Buy one D3004/602200 and measure its body, hole circle and faceplate thickness before ordering the insert print. Accept the drawn fixing only if hole circle minus body is 5.7 or more; otherwise the owner picks another fixing (questions) and sheet 3 and waveguide-insert.stl change."
+  },
+  {
+   "id": "d4",
+   "size": "both",
+   "sheet": "sheet-7 (3.9) / README step 1 / stl",
+   "where": "Note 3.9 (floorstander PNG box 2247,1370-3176,1790); stl/waveguide-insert-left/right.stl; stl/gable-print/*.stl in both sizes",
+   "severity": "remake",
+   "problem": "Every pinned joint in the printed parts has zero end clearance: each pin is exactly as long as its two holes together. Epoxy in a hole, or a resin hole that prints slightly shallow, stops the insert halves or the gable pieces from closing.",
+   "evidence": "Note 3.9: 'two \u00f83 x 16 steel dowel pins ... epoxied in \u00f83.2 holes 8 deep each side' (8 + 8 = 16); slices of waveguide-insert-left.stl show the holes running from x 195 to x 187.0. README step 1 and bom.csv key the printed gable with '\u00f84 x 20 pins' in 4.2 holes; gable-print-mid-left.stl holes run from x 195 to 185.0 and gable-print-front-left.stl from y 150 to 140.0 (10 + 10 = 20). The bookshelf's gable-print pieces are the same (front-left: x 110 to 100.0, y 164 to 154.0).",
+   "fix": "Make each hole 0.5 deeper than half its pin: \u00f83.2 x 8.5 each side for the \u00f83 x 16 split pins and \u00f84.2 x 10.5 each side for the \u00f84 x 20 gable pins (or specify \u00f83 x 15 and \u00f84 x 19 pins). Add 'dry-fit every pinned joint closed before mixing the epoxy' to note 3.9 and README step 1."
+  },
+  {
+   "id": "d5",
+   "size": "both",
+   "sheet": "dxf / sheet-6 / cutlist",
+   "where": "out/dxf/amp-box-lid.dxf and out-bookshelf/dxf/amp-box-lid.dxf, layer POCKET_8MM_UNDERSIDE; floorstander sheet 6 lid note (PNG box 1696,1543-2401,1749)",
+   "severity": "remake",
+   "problem": "The lid's nut counterbores are cut from the underside but drawn in the top face's coordinates. A shop that flips the panel and runs the layer as drawn will cut them away from their gland holes and scrap the lid.",
+   "evidence": "In amp-box-lid.dxf the CUT_INSIDE \u00f816.5 holes and the POCKET_8MM_UNDERSIDE \u00f824 pockets are both at (314, 43), (279, 43), (244, 43), with 'FRONT EDGE' at the bottom (bookshelf: (144, 43), (109, 43)). With the panel flipped left over right, those pockets land at top-face x 110, 75 and 40, 134 to 274 mm from their holes; flipped front over back, they land 22 mm off (y 65). Sheet 6 and the cut list only say 'turn the panel over, centre on them'.",
+   "fix": "Give the underside its own file, amp-box-lid-underside.dxf, drawn as seen from the underside with the panel flipped left over right and the FRONT EDGE still at the bottom: \u00f824 x 8 pockets at (40, 43), (75, 43), (110, 43) (bookshelf (40, 43), (75, 43)). State the flip on sheet 6 and in the cut list."
+  },
+  {
+   "id": "d6",
+   "size": "floorstander",
+   "sheet": "sheet-7 (3.2) / sheet-3 / stl",
+   "where": "Note 3.2 'flange \u00f884 x 3' (PNG box 1185,1419-2120,1757); sheet 3 callout '3 x \u00f82.4 x 10 pilots on \u00f879.6' (PNG box 124,1143-1427,1238); stl/tweeter-retainer.stl",
+   "severity": "remake",
+   "problem": "The printed retaining sleeve's flange leaves only 0.5 mm of material outside each of its three screw holes, and the pan heads overhang its rim. It is likely to crack when the screws are driven to press the gasket.",
+   "evidence": "params.py RETAINER flange_d 84, hole_d 3.4, screw_circle 79.6. A slice of tweeter-retainer.stl through the flange puts the holes' outer edge at r 41.5 and the rim at r 42.0, a 0.5 mm web. cad.json's own check uses a 5.6 mm pan head, which reaches r 42.6, 0.6 past the rim. M4 and 3.2 have the screws compress the gasket by the 0.25 preload.",
+   "fix": "Flange \u00f885, holes \u00f83.2, screw circle \u00f878.8 (the boss's pilots move with it). That leaves 1.5 mm of flange outside each hole, keeps the heads inside the rim (r 42.2) and 1.1 clear of the pocket's \u00f886.6 bore, keeps the flange 0.8 clear of the bore, and keeps 1.5 inside and 2.4 outside the pilots in the boss's wall (for the 73 ring as drawn). Update note 3.2 and sheet 3's callout."
+  },
+  {
+   "id": "d7",
+   "size": "bookshelf",
+   "sheet": "sheet-7 (3.7) / sheet-6",
+   "where": "Note 3.7 'dowel holes \u00f810 x 20 in the base at ... (34, 186), (186, 186)' (PNG box 2247,886-3176,1150); sheet 6 top panel '(16, 168), (168, 168)' (PNG box 188,751-842,850)",
+   "severity": "remake",
+   "problem": "The bookshelf's two rear gable dowel holes come within 1.8 mm of the back slope. Driving a fluted dowel, or drilling the birch block, can blow out the slope.",
+   "evidence": "Section of gable-block.stl and gable-print-rear-left.stl at x 34: the hole's top is at z 504 and the back slope at the hole's rear edge (y 191) is at z 506.3. That is 2.3 mm vertically, 1.8 mm normal to the 37.6\u00b0 slope; the floorstander keeps 22 mm over its y 330 holes.",
+   "fix": "Move the bookshelf's rear dowels to y 178: block holes at (34, 178) and (186, 178), top-panel holes 160 from its front edge. That leaves 8.5 mm of block over each hole. Or drill the two rear block holes 14 deep and cut those dowels to 22."
+  },
+  {
+   "id": "d8",
+   "size": "floorstander",
+   "sheet": "sheet-8 (G4 to G6) / bom",
+   "where": "Glue-up notes G4, G5, G6 (PNG box 1185,738-2112,1361); bom.csv 'PU sealant' line",
+   "severity": "guess",
+   "problem": "The mid chamber's top seal cannot be made as written: the PU bead laid on the divider's top edge is wiped off by the top panel sliding in from the open front over that edge.",
+   "evidence": "G1 lays the box on its back. G6: the top panel is 'slid in from the front ... just before, lay a 5 mm bead of PU sealant along the divider's top edge'. G4 planes the divider 0.3 below z 842 'so the top panel slides over it'. The panel's leading edge passes over the divider (y 108\u2013126) first and 354 mm of panel follows, scraping a 5 mm bead through a 0.3 mm gap. G5 also covers both faces of that corner with 10 mm felt. G4's 'straightedge across the sides at z 842' cannot be placed, because the sides run up to z 860.",
+   "fix": "G4: plane the divider's top 18.3 below the sides' top edges. G5: stop the felt 15 mm short of the divider's top edge, both on the divider's front face and on the top panel's underside. G6: slide the top panel in dry, then, with the front still off, run a 5 mm PU fillet along the corner between the divider's front face and the top panel's underside from x 18 to 372. Change the bom.csv line to match."
+  },
+  {
+   "id": "d9",
+   "size": "floorstander",
+   "sheet": "sheet-8 (4.6) / sheet-2",
+   "where": "Note 4.6 (PNG box 124,1122-1064,1584); section A-A, the mid's red run (PNG box 560,860-1240,1000)",
+   "severity": "guess",
+   "problem": "Note 4.6 asks for adhesive tie mounts every 150 mm above the brace (on the top panel's underside and the divider's back face). At step 9 that space can only be reached through the 254 mm brace window from the woofer's cut-out about 380 mm below, and no mount position is drawn.",
+   "evidence": "Woofer cut-out \u00f8282 at z 320 (top edge z 461); brace z 500\u2013518 with a 254 x 254 window at y 68\u2013322; top panel underside at z 842; the tweeter's run leaves the channel at (195, 233.5); the README wires at step 9, after the box is closed. Section A-A draws the mid's run as a free horizontal span at z 630 from y 137 to y 300 (sheets.py wire_paths), not along the divider's back face as note 4.6 says.",
+   "fix": "Fit the mounts above the brace during the glue-up, before G7, each with a tie threaded loose: on the top panel's underside at (195, 250) and (195, 290); on the right side's inner face at (y 290, z 640) and (y 140, z 640); on the divider's back face at (x 300, z 640) and (x 150, z 640). Draw them on section A-A, say in 4.6 and G6 that they go in before the front, and route the mid's run along the side and the divider to the hole at (75, 630)."
+  },
+  {
+   "id": "d10",
+   "size": "both",
+   "sheet": "sheet-5 / README step 1 / bom",
+   "where": "Parts list item 'Gable block ... or printed in six pieces (step 1)' (floorstander PNG box 2059,693-2888,759; bookshelf item 6, PNG box 2059,569-2904,627); the 'Fixings, a speaker' lists",
+   "severity": "guess",
+   "problem": "No sheet shows the printed gable, the README's route for the first prototype. Its split planes, its \u00f84 x 20 pin joints, the bonding, the channel-seam seal and the hollowing rules are only in README step 1 and bom.csv, and sheet 5's fixings list leaves out its pins.",
+   "evidence": "cad.json gable_print_pins lists floorstander joints at x 195, y 150 and y 270, two pins each (e.g. mid-left/mid-right at (y 196, z 996) and (256, 866)), and bookshelf joints at x 110 and y 164. The STLs hold \u00f84.2 x 10 holes each side. bom.csv buys 24 pins for a floorstander pair and 16 for a bookshelf pair. Sheet 5's fixings list has no \u00f84 x 20 pins.",
+   "fix": "Add a view to sheet 3 (or a ninth sheet) showing the gable in plan with the split planes (floorstander x 195, y 150, y 270; bookshelf x 110, y 164) and each joint's two pin positions from cad.json. Note '\u00f84.2 x 10.5 each side, \u00f84 x 20 steel pins, 3M DP420 over the full rim, seal the channel's seam' and the hollowing rule (3 mm walls; two \u00f83 drains per piece in the outer slopes or end faces only; none in the base, joint faces, channel, bay or pocket). Add 'steel pins \u00f84 x 20 (printed gable): 12' (bookshelf 8) to sheet 5's fixings."
+  },
+  {
+   "id": "d11",
+   "size": "both",
+   "sheet": "sheet-1",
+   "where": "Front view callouts '8 x \u00f85.5 on \u00f8298' and '4 x \u00f85.5 on \u00f8154' (floorstander PNG boxes 289,990-858,1049 and 264,525-858,581); bookshelf '4 x \u00f85.5 on \u00f8159' (PNG box 231,1056-891,1146)",
+   "severity": "guess",
+   "problem": "The drivers' screw holes are given only as a count on a circle diameter. The angle of the first hole, which the DXF uses, is on no sheet, so a builder laying out by hand on the table-saw route has to guess it.",
+   "evidence": "front-baffle.dxf DRILL_D5.5_THROUGH: the woofer holes, e.g. (332.66, 377.02), sit 22.5\u00b0 above the horizontal through (195, 320); the mid's, e.g. (249.45, 744.45), at 45\u00b0 from (195, 690); the bookshelf's, e.g. (166.21, 436.21), at 45\u00b0 from (110, 380). params.py DRIVER_SCREWS start_deg 22.5 and 45.",
+   "fix": "Add the angles to the callouts: '8 x \u00f85.5 on \u00f8298, the first 22.5\u00b0 above the horizontal, 45\u00b0 apart'; '4 x \u00f85.5 on \u00f8154 at 45\u00b0, 90\u00b0 apart'; bookshelf '4 x \u00f85.5 on \u00f8159 at 45\u00b0, 90\u00b0 apart'. Add 'match the frame in hand (M2, M3)'."
+  },
+  {
+   "id": "d12",
+   "size": "floorstander",
+   "sheet": "sheet-6",
+   "where": "mid-divider panel and its note '\u00f812 at (57, 40)' (PNG box 2452,195-3094,767)",
+   "severity": "guess",
+   "problem": "The divider's \u00f812 cable hole is located 'from its lower-left corner seen from its outer face', but an inner divider has no outer face. Read from the woofer-chamber side, the hole moves from x 75 to x 315.",
+   "evidence": "mid-divider.dxf puts the \u00f812 at (57, 40). Note 4.3 gives '(x 75, z 630)', which equals 18 + 57 only when the panel is seen from the front, and cad.py mid_divider() cuts it at x RUN - 120 = 75. The top panel and the lid carry 'FRONT EDGE' marks; the divider has none.",
+   "fix": "Label the panel on sheet 6 'seen from the front (the mid chamber side)' and add 'FRONT FACE, TOP EDGE' text to the NOTES layer of mid-divider.dxf."
+  },
+  {
+   "id": "d13",
+   "size": "bookshelf",
+   "sheet": "sheet-8 (4.5) / bom",
+   "where": "Note 4.5 'Hold each run to the back panel's inner face with adhesive cable-tie mounts every 150 mm' (PNG box 124,908-1064,1205)",
+   "severity": "guess",
+   "problem": "From z 60.5 to 409.5 the back panel's inner face is inside the sealed amplifier box, and neither run goes near the rest of it, so the instruction cannot be followed.",
+   "evidence": "cad.json: the amplifier box fills x 18\u2013202, y 114\u2013202, z 60.5\u2013409.5, and the glands sit at y 157 on its lid. The tweeter's run rises 56 mm to the channel at (110, 137); the woofer's goes forward to the woofer. bom.csv buys 10 mounts for the pair.",
+   "fix": "Replace with: 'tie the woofer's run to the lid beside its gland and to the amplifier box's front face at z 380; the tweeter's run is 60 mm long and needs no tie'. Cut the BOM's bookshelf mounts to 4."
+  },
+  {
+   "id": "d14",
+   "size": "both",
+   "sheet": "sheet-7 (2.1, 3.5) / sheet-3",
+   "where": "Notes 2.1 and 3.5 (floorstander PNG boxes 1185,186-2112,371 and 2247,523-3176,644); sheet 3 '283.3 (pocket 283.9)' (bookshelf '159.3 (pocket 159.9)')",
+   "severity": "guess",
+   "problem": "The insert's fit is stated as 'the pocket +0.2/0, the insert 0/-0.15, so 0.3 to 0.65 a side', which only adds up if the tolerances apply to each side. Applied to the widths they are written against, the clearance is 0.30 to 0.48 a side, so the print service cannot tell which is meant.",
+   "evidence": "283.9 - 283.3 = 0.6, i.e. 0.3 a side; +0.2 and -0.15 on the widths add 0.175 a side, giving 0.475. A side clearance of 0.65 needs +0.4/0 and 0/-0.3 on the widths. The boss \u00f886 in its \u00f886.6 bore and the bookshelf's 159.3 / 159.9 have the same problem.",
+   "fix": "If 0.65 a side is meant, write the tolerances on the sizes: 'pocket 283.9 +0.4/0 wide, insert 283.3 0/-0.3', the bookshelf's 159.9 / 159.3 and the bores \u00f886.6 / \u00f869 the same way. Otherwise change the text to 'so 0.30 to 0.48 a side'."
+  },
+  {
+   "id": "d15",
+   "size": "bookshelf",
+   "sheet": "bom",
+   "where": "bom.csv line 'Speaker cable, round-sheathed (H05VV-F): 2 x 2.5 mm2 for the woofer, 2 x 1.5 for the mid, 2 x 1.0 for the tweeter', size 'both'",
+   "severity": "guess",
+   "problem": "The BOM gives 2 x 2.5 mm2 for 'the woofer' on both sizes, but the bookshelf's sheets wire its woofer with 2 x 1.5 mm2, and the BOM gives no lengths per size.",
+   "evidence": "Bookshelf sheet 4 woofer box: '1.5 mm2 pair'. Bookshelf notes 4.2: '0.4 m of 1.5 mm2'; 4.5: 'H05VV-F 2 x 1.5 and 2 x 1.0'. Floorstander notes 4.2 to 4.4: 0.6 m of 2.5, 1.0 m of 1.5, 1.2 m of 1.0.",
+   "fix": "Split the line by size. Floorstander pair: 1.2 m of 2 x 2.5, 2.0 m of 2 x 1.5, 2.4 m of 2 x 1.0. Bookshelf pair: 0.8 m of 2 x 1.5, 1.2 m of 2 x 1.0. Add about 20% spare to each."
+  },
+  {
+   "id": "d16",
+   "size": "floorstander",
+   "sheet": "sheet-6",
+   "where": "amp-box-lid note, PNG box 1690,1930-2700,2015: its last three lines run under the title 'Panel details' and the title block's top rule",
+   "severity": "legibility",
+   "problem": "The title block and its title print over the lid note's last lines, so 'each nut (20 AF or less) epoxied into a \u00f824 x 8 counterbore from the underside before the lid goes in' cannot be read on this sheet.",
+   "evidence": "The PNG and PDF page 6 are the same: the note's second paragraph runs from y \u2248 1790 to y \u2248 2010 px while the title block's top rule is at y \u2248 1943 px. The bookshelf's sheet 6 fits.",
+   "fix": "Move the lid note up beside the lid view, or set it in two columns, so it ends above y 1930 px (about 10 mm clear of the title block); or cut it to what note 4.7 does not already say."
+  },
+  {
+   "id": "d17",
+   "size": "floorstander",
+   "sheet": "sheet-2",
+   "where": "Section A-A, the red runs through the port (PNG box 400,1200-870,1440) and across the divider (PNG box 840,860-1240,1000)",
+   "severity": "legibility",
+   "problem": "Section A-A draws the three cables on the centre plane. The tweeter's and the mid's runs pass straight through the port tube, and the mid's crosses the divider about 25 mm above its hole, which is not on this plane at all.",
+   "evidence": "cad.json puts the glands at x 262, 297, 332 (y 307). The port tube is \u00f8100 at x 145\u2013245, z 355\u2013455. sheets.py wire_paths() draws every run at x 195. The mid's run is drawn from (y 88, z 690) to (y 138, z 630), crossing the divider (y 108\u2013126) at z \u2248 655\u2013670, while the hole is \u00f812 at x 75, z 630 (note 4.3, mid-divider.dxf).",
+   "fix": "Note on sheet 2 'runs projected onto the centre plane; they pass the port on its right, x 257 to 336'. Add a plan section at z 450, looking down, showing the three runs at x 262, 297, 332 and y 292\u2013307 beside the port tube, and the mid's run reaching the divider's hole at x 75, z 630."
+  },
+  {
+   "id": "d18",
+   "size": "both",
+   "sheet": "sheet-4",
+   "where": "Back view: floorstander '185' and '405' (PNG boxes 885,1640-945,1660 and 885,1296-995,1312); bookshelf '235' (PNG box 885,1318-945,1334)",
+   "severity": "legibility",
+   "problem": "The heights of the plate and the port are dimensioned to centres that are not drawn: there is no horizontal centreline through either, so the extension lines start in empty space.",
+   "evidence": "Floorstander: 185 is the plate's centre (plate z 117.5\u2013252.5, rebate 117\u2013253) and 405 the port's. Bookshelf: 235 is the plate's centre (77.5\u2013392.5). Only vertical centrelines are drawn.",
+   "fix": "Draw horizontal centrelines through the plate (z 185; bookshelf z 235) and the port (z 405), or dimension the rebate's lower edge instead: 117 (bookshelf 77)."
+  }
+ ],
+ "questions": [
+  {
+   "question": "If the SB17NRX2C35-8's flange measures 10.9 rather than 6.5, do you want a woofer ring standing 4.4 proud of the bookshelf's baffle, or a thicker baffle (about 22.5 mm) so the rebate stays flush?",
+   "why": "A flush rebate for a 10.9 flange leaves 3.1 mm of birch for 7 mm T-nut barrels. M2 leaves the choice to you, and the shop cannot cut the bookshelf baffle until you make it."
+  },
+  {
+   "question": "If the D3004/602200's body measures over 48.3 (the research allows 50), what should hold the bookshelf tweeter: a printed clamp ring like the floorstander's sleeve (needs a boss wall thicker than the present 3 mm), or bonding the faceplate to the seat?",
+   "why": "With its own holes on \u00f854, the M2.5 heads would land inside a 50 mm body, and nothing else in the design holds the tweeter."
+  },
+  {
+   "question": "If the TW29DN-B's bare front ring is over 73.0 (the research allows 74), may the bore grow to ring + 0.4 and the sleeve's screw circle move out (\u00f879.8 for a 74 ring)?",
+   "why": "The \u00f873.4 bore leaves 0.2 a side on a 73 ring. At 74 the pilots' inner wall drops to 1.4, under the CAD's own 1.5 minimum, and the insert's outline leaves about 5.6 mm to grow into."
+  },
+  {
+   "question": "The floorstander port's inner lip ends about 70 mm from the RSS315HF-4's motor (y 223.7 against about 154), less than its 92 mm bore, with its axis at the motor's top edge. Accept it, or shorten the tube with a larger flare, or fold it?",
+   "why": "A port mouth closer than one bore to an obstruction lowers the tuning and adds turbulence. The DATS trim in step 8 can only shorten the tube, and the README leaves this open."
+  },
+  {
+   "question": "Can the Mini-Fit Jr. pair be mated, and its latch released, inside the bay by a hand reaching about 240 mm (bookshelf 150 mm) into the pocket? The floorstander's \u00f836 bay leaves 12 mm above the mated pair, the bookshelf's \u00f832 bay 8 mm. Would you accept a printed test bay before the gable is made?",
+   "why": "research/ holds no Molex drawing; only 'mated 24 long or less' is assumed. The socket is fixed by silicone 10 mm above the bay's floor, so the plug can only come straight down into that space."
+  },
+  {
+   "question": "Has Hypex accepted the FA253 lying on its side in a sealed box 90 mm deep?",
+   "why": "Its heat leaves only through the plate and the sealed box gives no convection. If Hypex says no, the back's layout changes, because the 360 mm plate does not fit upright below the port."
+  }
+ ]
+}

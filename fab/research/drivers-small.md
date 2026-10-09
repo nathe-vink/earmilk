@@ -256,3 +256,13 @@ Flagship research (2026-10-04), the source of the Illuminator, OC25SC65-04, ND25
 - Wondom: [JAB4 Audiophonics](https://www.audiophonics.fr/en/amplifier-boards/wondom-jab4-aa-ja33285-amplifier-board-4-ways-tpa3118-bluetooth-50-dsp-adau1701-4x30w-8-ohm-p-15454.html), [JAB4 notice](https://store.sure-electronics.com/document/notice/35), [JAB4 datasheet](https://store.sure-electronics.com/upload/download/2/Datasheet%20of%20JAB4%204%20x%2030W%20Class%20D%20Amplifier%20Board%20with%20ADAU1701%20DSP%20&%20BT.pdf), [JAB4 connection guide](https://store.sure-electronics.com/upload/download/2/Connection%20Guide%20of%20WONDOM%20JAB4%204CH%20Amplifier%20Board%20with%20BT%20&%20ADAU1701.pdf), [JAB5](https://www.audiophonics.fr/en/amplifier-boards/wondom-jab5-aa-ja33286-amplifier-module-class-d-bluetooth-50-dsp-adau1701-4x100w-6-ohm-p-15064.html), [JAB5 datasheet](https://files.sure-electronics.com/download/JAB5_Datasheet.pdf), [JAB3+](https://www.audiophonics.fr/en/amplifier-boards/wondom-jab3-aa-ja32173-amplifier-module-class-d-bluetooth-50-dsp-adau1701-2x50w-4-ohm-p-15063.html), [APM2](https://www.audiophonics.fr/en/dsp-modules/wondom-adau1701-apm2-audio-digital-signal-processor-dsp-for-active-filtering-sigma-studio-p-14773.html)
 - ICEpower: [PE 50ASX2SE](https://parts-express.com/ICEpower-50ASX2SE-Class-D-Audio-Amplifier-with-Power-Supply-Module-2-x-50W-326-212), [ICEpower shop](https://shop.icepoweraudio.com/product/50asx2se/), [diyAudio thread](https://www.diyaudio.com/community/threads/icepower-50asx2-modules.190311/post-4838804)
 - TPA3255 boxes and others: [Fosi V3](https://fosiaudio.com/ja/products/fosi-audio-v3-300w-x2-2-0-channel-hi-fi-stereo-audio-amplifier-with-tpa3255-chip), [AIYIMA A20](https://www.audiophonics.fr/en/integrated-amplifiers/aiyima-a20-p-21311.html), [Tinysine TSA7800C](https://uk.robotshop.com/products/tinysine-2-x-50w-100w-21-channels-spdif-coaxialdsp-amplifier-board-tsa7800c)
+
+## Datasheet check, 2026-10-09
+
+`datasheets-2026-10-09.json` holds each number with its source. **SB17NRX2C35-8**: SB's drawing gives the flange 6.5,
+the cut-out 144.9, four ø4.3 holes (with a ø8.5 counterbore, probably) on 159, the frame 171, the magnet 100 and 75
+behind the baffle; the 10.9 a shop lists as front thickness is everything in front of the baffle (85.9 less 75), the
+surround standing about 4.4 above the flange, so the bookshelf's 10.5 rebate stands. **D3004/602200**: shops give the
+cut-out 47.8 (SoundImports) and 48 (Willy's), so the 48 body holds; three ø3.3 holes (circle unpublished); SoundImports
+lists it 45.3 deep without saying from where. The bookshelf's bore holds 26 behind the faceplate (a CAD check): a
+deeper body moves the boss and the bay back. Scan-Speak itself gives no mechanical numbers in text.

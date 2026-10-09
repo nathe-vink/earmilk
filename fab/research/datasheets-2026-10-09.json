@@ -1,0 +1,597 @@
+{
+ "_meta": {
+  "date": "2026-10-09",
+  "how": "web search of the makers' datasheets and shop listings; the PDFs themselves could not be downloaded (the session's network policy allows only GitHub and package registries), so each number is the text layer of a maker's drawing or a shop's listing, as its confidence says, and a drawing's labels were not seen. Open each PDF before cutting.",
+  "used_in": "fab/params.py (the woofer's 295 circle, the cut-outs marked SPEC, the bookshelf woofer's 6.5 flange), fab/sheets.py (sheet 7, M2 to M5)"
+ },
+ "access_notes": "No PDF could be downloaded or opened. This session's network policy refused every maker and shop host (proxy answered 403 to CONNECT for sbacoustics.com, www.sbacoustics.com, www.scan-speak.dk, www.hypex.nl, www.daytonaudio.com, www.parts-express.com, www.molex.com, loudspeakerdatabase.com, even example.com; only GitHub and package registries are allowed). WebFetch failed with 'getaddrinfo ENOTFOUND' for every host, including en.wikipedia.org. downloads/ is therefore empty, and nothing was rendered with pdftoppm. Every number below came through WebSearch (extended mode), which reads a page's or PDF's TEXT LAYER and summarises it. 'maker drawing' means the number appears in the text of the maker's own drawing. The drawing image was NOT seen, so which feature a number belongs to comes from a shop listing or from arithmetic, as stated in each quote_or_page. Values marked 'LABEL INFERRED' have no outside confirmation of what they measure. Before cutting anything, open each PDF (allow the hosts above under the environment's Network access setting and re-run) and check the labels on the drawing.",
+ "parts": [
+  {
+   "part": "SB Acoustics SB17NRX2C35-8",
+   "values": {
+    "flange_thickness_mm": {
+     "value": 6.5,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17NRX2C35-8.pdf",
+     "quote_or_page": "Drawing dimension '6.5' (datasheet REV.2, 28.01.2019, single dimensioned drawing; the number is unlabelled in the text layer). NB Audio (https://nbaudio.com.au/products/sb-acoustics-12-wnrx-subwoofer-sb34swnrx-s75-6-copy) lists 'flange thickness 6.5 mm'. The same 6.5 is on the SB17NRX2C35-4, the SB17NRXC35 OEM ('6.50') and the SB17NRX2L35-8 drawings.",
+     "confidence": "maker drawing"
+    },
+    "front_projection_above_mounting_face_mm": {
+     "value": 10.9,
+     "source_url": "https://en.toutlehautparleur.com/speaker-sb-acoustics-sb17nrx2c35-8-impedance-8-ohm-6-inch.html",
+     "quote_or_page": "Shop: 'Front thickness 10.9 mm' and 'Depth after front 75 mm'. 10.9 is not among the numbers on SB's drawing. It equals drawing 85.9 (overall) minus drawing 75 (depth behind the mounting face).",
+     "confidence": "shop"
+    },
+    "overall_depth_mm": {
+     "value": 85.9,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17NRX2C35-8.pdf",
+     "quote_or_page": "Drawing dimension '85.9'. Label from SoundImports (https://www.soundimports.eu/en/sb-acoustics-sb17nrx2c35-8.html): 'overall depth 85.9 mm'. Its front end point (frame rim or surround top) could not be seen.",
+     "confidence": "maker drawing"
+    },
+    "frame_outside_diameter_mm": {
+     "value": 171.0,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17NRX2C35-8.pdf",
+     "quote_or_page": "Drawing dimension 'Ø 171.0±0.4' (largest diameter on the drawing). SoundImports and toutlehautparleur list 'outside diameter 171 mm'.",
+     "confidence": "maker drawing"
+    },
+    "cutout_diameter_mm": {
+     "value": 144.9,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17NRX2C35-8.pdf",
+     "quote_or_page": "Drawing dimension 'Ø 144.9'. toutlehautparleur and SoundImports list it as 'baffle cutout diameter 144.9 mm'. Rumoh gives 'mounting diameter 144 mm' and SpeakerBoxLite gives 145 for the -4.",
+     "confidence": "maker drawing"
+    },
+    "mounting_hole_count": {
+     "value": 4,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17NRX2C35-8.pdf",
+     "quote_or_page": "Drawing callout 'Ø4.3 (x4)'. NB Audio: 'Mounting holes: 4'.",
+     "confidence": "maker drawing"
+    },
+    "mounting_hole_diameter_mm": {
+     "value": 4.3,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17NRX2C35-8.pdf",
+     "quote_or_page": "Drawing callout 'Ø4.3 (x4)'. NB Audio: 'Mounting hole diameter: 4.3 mm'.",
+     "confidence": "maker drawing"
+    },
+    "mounting_hole_second_diameter_mm": {
+     "value": 8.5,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17NRX2C35-8.pdf",
+     "quote_or_page": "LABEL INFERRED: drawing callout 'Ø8.5 (x4)' sits next to 'Ø4.3 (x4)'. It is most likely a counterbore or spot-face at each screw hole (SB draws its tweeter faceplate holes the same way: Ø8.2 (x4) with Ø4.2 (x4)). No depth for it was found.",
+     "confidence": "maker drawing"
+    },
+    "mounting_hole_circle_diameter_mm": {
+     "value": 159.0,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17NRX2C35-8.pdf",
+     "quote_or_page": "Drawing dimension 'Ø159.0±0.10'. NB Audio: 'Bolt circle diameter: 159 mm'.",
+     "confidence": "maker drawing"
+    },
+    "mounting_depth_behind_baffle_mm": {
+     "value": 75,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17NRX2C35-8.pdf",
+     "quote_or_page": "Drawing dimension '75'. toutlehautparleur: 'Depth after front 75 mm'. NB Audio: 'mounting depth 75 mm'. Rumoh: 'mounting depth (not countersunk) 75 mm'. This is measured from the flange's rear (baffle) face.",
+     "confidence": "maker drawing"
+    },
+    "magnet_diameter_mm": {
+     "value": 100.0,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/6in-SB17NRX2C35-8.pdf",
+     "quote_or_page": "Drawing dimension 'Ø 100.0'. toutlehautparleur (C35-8) and SpeakerBoxLite (C35-4) list 'magnet diameter 100 mm'.",
+     "confidence": "maker drawing"
+    }
+   },
+   "notes": "Flange: 6.5 is the maker's dimension and NB Audio calls it the flange thickness. 10.9 does not appear on SB's drawing. It is 85.9 - 75, everything standing in front of the baffle face, and toutlehautparleur publishes it as 'front thickness'. The drawing image could not be seen, so I cannot say exactly what 85.9 is measured to. If it is the surround top, the flange plate is 6.5 and the surround stands about 4.4 above it. If it is a raised frame rim, the rim is 10.9 high and 6.5 is the thickness under the Ø8.5 screw seats. That would make the flush rebate 10.9, not 6.5. Check the drawing before routing. No full-height-at-rim dimension other than 85.9/75/6.5 was found in the text. The datasheet is REV.2, dated 28.01.2019."
+  },
+  {
+   "part": "SB Acoustics Satori TW29DN-B (4 ohm; TW29DN-B-8 = 8 ohm)",
+   "values": {
+    "bare_unit_front_ring_outside_diameter_mm": {
+     "value": null,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2026/03/SATORI-WG29-187.pdf",
+     "quote_or_page": "not found. The WG29-187 PDF was unreachable (host blocked) and is not in the search index. The TW29BNWG-4/-8 and TW29TXNWG-4 drawing text shows only waveguide dimensions (Ø170.0, Ø159.0±0.15, Ø8.0(x6), Ø4.2(x6), 52.7, 46.7), none for the bare unit.",
+     "confidence": "not found"
+    },
+    "bare_unit_front_ring_thickness_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found",
+     "confidence": "not found"
+    },
+    "bare_unit_motor_diameter_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found as a bare-unit dimension. See rear_body_diameter_behind_faceplate_mm (Ø70.0, label inferred).",
+     "confidence": "not found"
+    },
+    "bare_unit_motor_depth_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found as a bare-unit dimension. With the faceplate on, the depth behind the faceplate is 21.7 (see below).",
+     "confidence": "not found"
+    },
+    "dome_plus_surround_outside_diameter_mm": {
+     "value": null,
+     "source_url": "https://sbacoustics.com/product/satori-tw29dn-b/",
+     "quote_or_page": "not found. The maker gives only 'voice coil diameter 29 mm', 'Sd 9.6 cm^2' and 'large surround dome'. audioXpress describes a '29 mm, 8 mm wide surround' diaphragm but states no outside diameter.",
+     "confidence": "not found"
+    },
+    "faceplate_screw_size": {
+     "value": null,
+     "source_url": "https://sbacoustics.com/product/satori-wg29-187/",
+     "quote_or_page": "not found. SB's WG29-187 page says only to loosen the faceplate screws with a 2.5 mm Allen key and reuse the same screws for the adapter ring, then tighten the four set screws with a 1.3 mm Allen key. No thread size is given.",
+     "confidence": "not found"
+    },
+    "faceplate_screw_count": {
+     "value": null,
+     "source_url": "https://sbacoustics.com/product/satori-wg29-187/",
+     "quote_or_page": "not found (the WG29-187 page does not give the count; the 'four set screws' hold the waveguide, not the faceplate)",
+     "confidence": "not found"
+    },
+    "faceplate_screw_circle_diameter_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found",
+     "confidence": "not found"
+    },
+    "faceplate_outside_diameter_mm": {
+     "value": 103.8,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/SATORI-TW29DN-B.pdf",
+     "quote_or_page": "Drawing dimension 'Ø103.8±0.2' (TW29DN-B datasheet REV.0, 22.03.2018, marked 'Preliminary data'; the TW29DN-B-8 sheet, REV.1 2019, has the same). Willy's lists 'Faceplate diameter 104mm'.",
+     "confidence": "maker drawing"
+    },
+    "faceplate_thickness_mm": {
+     "value": 5.0,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/SATORI-TW29DN-B.pdf",
+     "quote_or_page": "Drawing dimension '5.0'. Label from toutlehautparleur (TW29DN-B-8 page, https://en.toutlehautparleur.com/dome-tweeter-sb-acoustics-satori-tw29dn-b-8-impedance-8-ohm-voice-coil-29-mm-noir.html): 'Front thickness 5 mm'.",
+     "confidence": "maker drawing"
+    },
+    "faceplate_cut_out_diameter_mm": {
+     "value": 71,
+     "source_url": "https://en.toutlehautparleur.com/dome-tweeter-sb-acoustics-satori-tw29dn-b-8-impedance-8-ohm-voice-coil-29-mm-noir.html",
+     "quote_or_page": "Shop: 'Baffle cutout diameter 71 mm'. This conflicts with Willy's (https://willys-hifi.com/products/sb-acoustics-satori-tw29dn-b-tweeter) 'Cutout hole diameter 74mm'. SB's drawing text shows no labelled cut-out, only an unlabelled Ø70.0.",
+     "confidence": "shop"
+    },
+    "faceplate_depth_behind_baffle_mm": {
+     "value": 21.7,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/05/SATORI-TW29DN-B-8.pdf",
+     "quote_or_page": "Drawing dimension '21.7' (TW29DN-B-8 sheet; one search also showed it on the TW29DN-B sheet). toutlehautparleur: 'Depth after front 21.7 mm'.",
+     "confidence": "maker drawing"
+    },
+    "faceplate_overall_depth_mm": {
+     "value": 29.3,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/05/SATORI-TW29DN-B-8.pdf",
+     "quote_or_page": "LABEL INFERRED: drawing dimension '29.3' is the largest axial number, so probably the overall depth, front of dome to back. 29.3 - 21.7 = 7.6 in front of the baffle face.",
+     "confidence": "maker drawing"
+    },
+    "rear_body_diameter_behind_faceplate_mm": {
+     "value": 70.0,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/SATORI-TW29DN-B.pdf",
+     "quote_or_page": "LABEL INFERRED: drawing dimension 'Ø 70.0', unlabelled. Most likely the body or motor diameter behind the faceplate (shops' 71 mm cut-out is consistent with that).",
+     "confidence": "maker drawing"
+    },
+    "faceplate_mounting_hole_count": {
+     "value": 4,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/SATORI-TW29DN-B.pdf",
+     "quote_or_page": "Drawing callouts 'Ø4.2 (x4)' and 'Ø8.2 (x4)'",
+     "confidence": "maker drawing"
+    },
+    "faceplate_mounting_hole_diameter_mm": {
+     "value": 4.2,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/05/SATORI-TW29DN-B-8.pdf",
+     "quote_or_page": "Drawing callout 'Ø4.2 (x4)'",
+     "confidence": "maker drawing"
+    },
+    "faceplate_mounting_hole_counterbore_mm": {
+     "value": 8.2,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/SATORI-TW29DN-B.pdf",
+     "quote_or_page": "LABEL INFERRED: drawing callout 'Ø8.2 (x4)', paired with Ø4.2 (x4)",
+     "confidence": "maker drawing"
+    },
+    "faceplate_mounting_hole_circle_mm": {
+     "value": 92.0,
+     "source_url": "https://sbacoustics.com/wp-content/uploads/2020/02/SATORI-TW29DN-B.pdf",
+     "quote_or_page": "LABEL INFERRED: drawing dimension 'Ø92.0' lies between the body Ø70 and the OD Ø103.8, so probably the circle the 4 holes sit on. No outside confirmation.",
+     "confidence": "maker drawing"
+    }
+   },
+   "notes": "None of the bare-unit numbers (faceplate off) were found. They are probably in SB's WG29-187 sheet, which could not be reached. SB's procedure: remove the faceplate screws (2.5 mm Allen key), lift the faceplate off slowly because glue at the diaphragm edge can stick to its back, reuse the same screws to fix the adapter ring, seat the waveguide, and tighten 4 set screws (1.3 mm Allen key). WG29-187 is 187 mm OD x 39 mm high and is listed for all TW29 models. The 4-ohm TW29DN-B sheet is still 'Preliminary data' REV.0. The cut-out is disputed between shops (71 vs 74), and SB gives no labelled cut-out."
+  },
+  {
+   "part": "Scan-Speak Illuminator D3004/602200",
+   "values": {
+    "faceplate_outside_diameter_mm": {
+     "value": 62,
+     "source_url": "https://www.soundimports.eu/en/scan-speak-d3004602200.html",
+     "quote_or_page": "SoundImports: 'Overall Outside Diameter: 62 mm'. Willy's: 'Faceplate diameter 62 mm'. Solen: '62mm Faceplate'. Scan-Speak's own Nov-2023 newsletter states 'black anodized aluminium Ø62mm faceplate' only for the sibling R3004/602200 (https://www.scan-speak.dk/scan-speak-newsletter-nov23/), not for the D3004/602200.",
+     "confidence": "shop"
+    },
+    "faceplate_thickness_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found",
+     "confidence": "not found"
+    },
+    "cut_out_diameter_mm": {
+     "value": 47.8,
+     "source_url": "https://www.soundimports.eu/en/scan-speak-d3004602200.html",
+     "quote_or_page": "SoundImports: 'Cutout Diameter: 47.8 mm'. Willy's (https://willys-hifi.com/products/scanspeak-d3004-602200-illuminator-range): 'Cutout hole diameter 48 mm'.",
+     "confidence": "shop"
+    },
+    "depth_mm": {
+     "value": 45.3,
+     "source_url": "https://www.soundimports.eu/en/scan-speak-d3004602200.html",
+     "quote_or_page": "SoundImports: 'Depth: 45.3 mm'. The shop does not say whether this is overall depth or depth behind the baffle.",
+     "confidence": "shop"
+    },
+    "fixing_hole_count": {
+     "value": 3,
+     "source_url": "https://www.soundimports.eu/en/scan-speak-d3004602200.html",
+     "quote_or_page": "SoundImports: 'Mounting Type: 3 holes 3.3 mm'",
+     "confidence": "shop"
+    },
+    "fixing_hole_diameter_mm": {
+     "value": 3.3,
+     "source_url": "https://www.soundimports.eu/en/scan-speak-d3004602200.html",
+     "quote_or_page": "SoundImports: 'Mounting Type: 3 holes 3.3 mm'",
+     "confidence": "shop"
+    },
+    "fixing_hole_circle_diameter_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found",
+     "confidence": "not found"
+    },
+    "body_diameter_behind_faceplate_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found",
+     "confidence": "not found"
+    }
+   },
+   "notes": "Scan-Speak gives no mechanical numbers in text. The product page (https://www.scan-speak.dk/product/d3004-602200/) says only '26mm Dome Tweeter 4ohm, Neo Magnet' and 'Black Anodized machined Faceplate'. The datasheet is probably https://www.scan-speak.dk/datasheet/pdf/d3004-602200.pdf (URL pattern, not verified); it was neither reachable nor indexed. Every number here is from shops. Madisound warns that the mechanical drawing does not show the notch the wire tabs need, because the tabs are not flush with the tweeter chamber, so allow for it in the cut-out."
+  },
+  {
+   "part": "Dayton Audio RSS315HF-4",
+   "values": {
+    "frame_outside_diameter_mm": {
+     "value": 314,
+     "source_url": "https://daytonaudio.com/product/121/rss315hf-4-12-reference-hf-subwoofer-4-ohm",
+     "quote_or_page": "Dayton product page: 'Overall Outside Diameter · 314 mm' (12.36\")",
+     "confidence": "maker text"
+    },
+    "cutout_diameter_mm": {
+     "value": 282,
+     "source_url": "https://daytonaudio.com/product/121/rss315hf-4-12-reference-hf-subwoofer-4-ohm",
+     "quote_or_page": "Dayton product page: 'Baffle Cutout Diameter · 282 mm' (11.1\")",
+     "confidence": "maker text"
+    },
+    "flange_thickness_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found. The spec-sheet drawing (https://www.daytonaudio.com/images/resources/295-464-dayton-audio-rss315hf-4-specifications-46174.pdf) is not in the indexed text and the host is blocked.",
+     "confidence": "not found"
+    },
+    "mounting_hole_count": {
+     "value": 8,
+     "source_url": "https://daytonaudio.com/product/121/rss315hf-4-12-reference-hf-subwoofer-4-ohm",
+     "quote_or_page": "Dayton product page: '# Mounting Holes · 8'",
+     "confidence": "maker text"
+    },
+    "mounting_hole_diameter_mm": {
+     "value": null,
+     "source_url": "https://daytonaudio.com/product/121/rss315hf-4-12-reference-hf-subwoofer-4-ohm",
+     "quote_or_page": "not found. Dayton's page shows 'Mounting Hole Diameter · --' (blank).",
+     "confidence": "not found"
+    },
+    "mounting_hole_circle_diameter_mm": {
+     "value": 295,
+     "source_url": "https://www.audiophonics.fr/en/loudspeakers-subwoofers/dayton-audio-rss315hf-4-reference-speaker-driver-subwoofer-aluminium-400w-4-ohm-90db-23hz-1000hz-o305cm-p-4944.html",
+     "quote_or_page": "Audiophonics: 'Mouting bolt diameter 295mm' with 8 holes. This is presumably the bolt circle, and it is the only source. Dayton's page shows 'Bolt Circle Diameter · --' (blank).",
+     "confidence": "shop"
+    },
+    "mounting_depth_mm": {
+     "value": null,
+     "source_url": "https://daytonaudio.com/product/121/rss315hf-4-12-reference-hf-subwoofer-4-ohm",
+     "quote_or_page": "not found as a mounting depth. Dayton gives only the overall depth (below).",
+     "confidence": "not found"
+    },
+    "overall_depth_mm": {
+     "value": 146,
+     "source_url": "https://daytonaudio.com/product/121/rss315hf-4-12-reference-hf-subwoofer-4-ohm",
+     "quote_or_page": "Dayton product page: 'Overall Depth · 146 mm' (5.75\")",
+     "confidence": "maker text"
+    },
+    "motor_diameter_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found. Dayton gives only 'Magnet Weight 150 oz', ferrite, and a 64 mm voice coil.",
+     "confidence": "not found"
+    }
+   },
+   "notes": "The spec sheet's dimension drawing is probably an image. Search indexed only the parameter page, so flange, motor and hole dimensions need the PDF itself. Do not use the RSS315HO-4's 'Bolt Circle Diameter 11.61' for the HF-4. It is a different model, although 11.61 in equals Audiophonics' 295 mm."
+  },
+  {
+   "part": "Hypex FusionAmp FA253",
+   "values": {
+    "plate_length_mm": {
+     "value": 360,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "User Guide FusionAmp (Fusion Manual R4), dimension table, row 'FA253 | 360 | 135 | 55 | 336 | 111 | mm', column A. A = plate length follows from 'Size D and E is the recommended milling dimension ... That leaves 12mm on each side for the mounting screws' (360 - 336 = 24) and from shops' 'H x W x D 360 x 135 x 55'.",
+     "confidence": "maker text"
+    },
+    "plate_width_mm": {
+     "value": 135,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "Same table, column B (135 - 111 = 24 = 2 x 12)",
+     "confidence": "maker text"
+    },
+    "cutout_length_mm": {
+     "value": 336,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "Column D. 'Size D and E is the recommended milling dimension for mounting the FusionAmp inside your speaker cabinet. That leaves 12mm on each side for the mounting screws.'",
+     "confidence": "maker text"
+    },
+    "cutout_width_mm": {
+     "value": 111,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "Column E (same sentence)",
+     "confidence": "maker text"
+    },
+    "depth_C_mm": {
+     "value": 55,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "Column C = 55 for every model; shops call it the depth (H x W x D). The text does not say whether 55 includes the plate thickness, i.e. whether it is measured from the outer or the inner face of the plate.",
+     "confidence": "maker text"
+    },
+    "screw_border_per_side_mm": {
+     "value": 12,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "'That leaves 12mm on each side for the mounting screws.'",
+     "confidence": "maker text"
+    },
+    "corner_radius_mm": {
+     "value": null,
+     "source_url": "https://www.hypex.nl/products/amplifier-families/fusion-amplifier-family/fusionamp-fa253",
+     "quote_or_page": "not found. Probably in '2D_CAD FusionAMP FA253 01xx.zip' on the product page (not reachable).",
+     "confidence": "not found"
+    },
+    "plate_thickness_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found",
+     "confidence": "not found"
+    },
+    "screw_count": {
+     "value": "8 or 10",
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "'The Fusion Amp must be mounted into the speaker cabinet with 8 or 10 screws, not included.' The text does not say which models take 8 and which take 10.",
+     "confidence": "maker text"
+    },
+    "screw_size": {
+     "value": "4.3 x 25.4 mm Phillips head (self-tapping)",
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "Manual: 'Hypex recommends Phillips head screws, 4.3 x 25.4 mm.' The accessory page (https://www.hypex.nl/products/accessories/fastening-materials/fusion-mounting-screws) says '10 self tapping, black, Phillips head screws, 4,3x25mm'. An older manual revision listed '3.9x20mm' Pozidriv.",
+     "confidence": "maker text"
+    },
+    "screw_positions": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found (beyond the 12 mm border per side). The hole layout is in Hypex's 2D CAD zip, which could not be reached.",
+     "confidence": "not found"
+    },
+    "mounting_orientation": {
+     "value": "vertical or horizontal; may be tilted 45 degrees either way",
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "'The FusionAmp is designed to be mounted in vertical or horizontal position. The FusionAmp may be tilted 45° in both direction as depicted.' (The figure itself was not seen.)",
+     "confidence": "maker text"
+    },
+    "sealed_box": {
+     "value": "separate compartment; the amp is not airtight",
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "Manual: 'The FusionAmp is not airtight. For optimal performance the module should be installed in a separate compartment in the speaker cabinet.' Hypex FAQ (https://www.hypex.nl/support/faq): 'should be installed in a sealed compartment within your speaker cabinet' and 'ensure adequate airflow within the enclosure by incorporating venting holes'.",
+     "confidence": "maker text"
+    },
+    "air_space_and_cooling": {
+     "value": "no volume or gap stated; keep convection free, do not block vents, 3 mm to conductive parts",
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "'Natural convection should not be impeded by covering the module (apart from the end applications housing). Do not block any ventilation openings.' 'All possible conductive parts of the enclosure should be connected to protective earth. Keep a minimum clearance of 3 mm to all these possible conductive parts.' The compartment should be built of V-1 class material. At maximum temperature the output is lowered by 6 dB.",
+     "confidence": "maker text"
+    }
+   },
+   "notes": "The table's A-E letters were matched to features by arithmetic and shop labels, not by seeing the figure. Hypex publishes 2D milling/drilling patterns and STEP models per model on each product page; corner radius, plate thickness and hole positions should be read there. A diyAudio forum user (not Hypex) says Hypex tests its plate amps in a wooden frame with the plate facing up. FA253 weight: the manual says 1145 g, the product page says 1.805 kg."
+  },
+  {
+   "part": "Hypex FusionAmp FA252",
+   "values": {
+    "plate_length_mm": {
+     "value": 315,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "Manual table row 'FA252 | 315 | 135 | 55 | 291 | 111 | mm' (A)",
+     "confidence": "maker text"
+    },
+    "plate_width_mm": {
+     "value": 135,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (B)",
+     "confidence": "maker text"
+    },
+    "depth_C_mm": {
+     "value": 55,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (C)",
+     "confidence": "maker text"
+    },
+    "cutout_length_mm": {
+     "value": 291,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (D)",
+     "confidence": "maker text"
+    },
+    "cutout_width_mm": {
+     "value": 111,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (E)",
+     "confidence": "maker text"
+    }
+   },
+   "notes": "Mounting, screw and cooling statements are the same as for FA253 (one manual covers the whole family). One distributor lists the FA252 as 360x135x55, which conflicts with the manual."
+  },
+  {
+   "part": "Hypex FusionAmp FA123",
+   "values": {
+    "plate_length_mm": {
+     "value": 360,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "Manual table row 'FA123 | 360 | 120 | 55 | 336 | 96' (A)",
+     "confidence": "maker text"
+    },
+    "plate_width_mm": {
+     "value": 120,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (B)",
+     "confidence": "maker text"
+    },
+    "depth_C_mm": {
+     "value": 55,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (C)",
+     "confidence": "maker text"
+    },
+    "cutout_length_mm": {
+     "value": 336,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (D)",
+     "confidence": "maker text"
+    },
+    "cutout_width_mm": {
+     "value": 96,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (E)",
+     "confidence": "maker text"
+    }
+   },
+   "notes": "Same mounting/cooling statements as FA253."
+  },
+  {
+   "part": "Hypex FusionAmp FA122",
+   "values": {
+    "plate_length_mm": {
+     "value": 315,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "Manual table row 'FA122 | 315 | 120 | 55 | 291 | 96' (A)",
+     "confidence": "maker text"
+    },
+    "plate_width_mm": {
+     "value": 120,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (B)",
+     "confidence": "maker text"
+    },
+    "depth_C_mm": {
+     "value": 55,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (C)",
+     "confidence": "maker text"
+    },
+    "cutout_length_mm": {
+     "value": 291,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (D)",
+     "confidence": "maker text"
+    },
+    "cutout_width_mm": {
+     "value": 96,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (E)",
+     "confidence": "maker text"
+    }
+   },
+   "notes": "Same mounting/cooling statements as FA253. Audiophonics shows 293 x 96 in its own drawing, but the manual says 291."
+  },
+  {
+   "part": "Hypex FusionAmp FA501",
+   "values": {
+    "plate_length_mm": {
+     "value": 280,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "Manual table row 'FA501 | 280 | 135 | 55 | 256 | 111 | mm' (A)",
+     "confidence": "maker text"
+    },
+    "plate_width_mm": {
+     "value": 135,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (B)",
+     "confidence": "maker text"
+    },
+    "depth_C_mm": {
+     "value": 55,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (C)",
+     "confidence": "maker text"
+    },
+    "cutout_length_mm": {
+     "value": 256,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (D)",
+     "confidence": "maker text"
+    },
+    "cutout_width_mm": {
+     "value": 111,
+     "source_url": "https://www.hypex.nl/media/df/df/c2/1678368740/Fusion%20Manual%20R4.pdf",
+     "quote_or_page": "same row (E)",
+     "confidence": "maker text"
+    }
+   },
+   "notes": "Same mounting/cooling statements as FA253."
+  },
+  {
+   "part": "Molex Mini-Fit Jr. 2-circuit cable-to-cable pair: receptacle 39-01-2020 (5557-02R) + plug 39-01-2021 (5559-02P)",
+   "values": {
+    "receptacle_part_number_status": {
+     "value": "39012020 = 5557-02R, active",
+     "source_url": "https://www.molex.com/en-us/products/series-chart/5557",
+     "quote_or_page": "Molex: 'Mini-Fit Jr. Receptacle Housing, Dual Row, 2 Circuits, UL 94V-2, Natural', Engineering/Old PN 5557-02R, status active. Sales drawing SD-5557-003 (https://tools.molex.com/pdm_docs/sd/039012020_sd.pdf).",
+     "confidence": "maker text"
+    },
+    "plug_part_number": {
+     "value": "39012021 = 5559-02P",
+     "source_url": "https://www.molex.com/en-us/products/series-chart/5559",
+     "quote_or_page": "Molex: 2-circuit dual-row plug housing with panel-mounting ears, natural, UL 94V-2, EngineeringOldPN 5559-02P. Drawing 55590020-SD rev E1, 2021/05/01 (https://www.molex.com/content/dam/molex/molex-dot-com/products/automated/en-us/salesdrawingpdf/555/5559/039012021_sd.pdf), 'mates with Molex receptacle #5557'. Current status not confirmed.",
+     "confidence": "maker text"
+    },
+    "mated_length_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found. Molex's product spec says 'dimensions & plating: see individual sales drawings', and the drawings' dimension text was not retrievable.",
+     "confidence": "not found"
+    },
+    "receptacle_outside_size_mm": {
+     "value": "5.4 x 14.1 x 19.6",
+     "source_url": "https://www.jameco.com/z/39-01-2020-Molex-2-Position-Female-Mini-Fit-Jr-Connector-Receptacle_303562.html",
+     "quote_or_page": "Distributors: Jameco 'Length 5.4 mm, Depth 19.6 mm'; datasheets.com (https://www.datasheets.com/molex/39-01-2020) 'Depth 19.6mm, Height 14.1mm, Length 5.4mm, Width 14.1mm'. Axis labels are inconsistent and these are not Molex numbers.",
+     "confidence": "shop"
+    },
+    "plug_outside_size_mm": {
+     "value": null,
+     "source_url": null,
+     "quote_or_page": "not found. One distributor gives 'Overall Length 0.425 in', which is implausible as a housing length and is not used.",
+     "confidence": "not found"
+    },
+    "latch_release_travel_or_finger_room_mm": {
+     "value": null,
+     "source_url": "https://tools.molex.com/pdm_docs/ps/PS-5556-001-001.pdf",
+     "quote_or_page": "not found. The only latch figure found is a force, not a distance: product spec PS-5556-001 gives a thumb-latch depress force of 22.2 N (5.0 lbf) max, applied at 25 ± 6 mm/min.",
+     "confidence": "not found"
+    }
+   },
+   "notes": "For dimensions Molex points to the individual sales drawings (SD-5557-003 for the receptacle, 55590020-SD for the plug), which could not be opened. Do not confuse these with 39-01-4020 (5557-02R2, single row) or the single-row 5559 drawings."
+  }
+ ],
+ "not_found": [
+  "SB17NRX2C35-8: what the 85.9 overall dimension is measured to (frame rim or surround), so whether 6.5 or 10.9 is the flush-rebate depth needs a look at the drawing image; depth of the Ø8.5 screw seats",
+  "TW29DN-B bare unit (faceplate off): front ring OD, front ring thickness, motor diameter, motor depth, dome-plus-surround OD",
+  "TW29DN-B faceplate screws: size, count, circle diameter (SB gives only 'loosen with 2.5 mm Allen key')",
+  "TW29DN-B: maker cut-out diameter (shops say 71 or 74)",
+  "D3004/602200: faceplate thickness, fixing-hole circle diameter, body diameter behind faceplate; any maker (Scan-Speak) number at all",
+  "RSS315HF-4: flange thickness, mounting-hole diameter, maker bolt circle, mounting depth (only overall depth 146 given), motor diameter",
+  "Hypex FusionAmp (all models): plate thickness, corner radius, screw positions, which models use 8 vs 10 screws, whether C=55 includes the plate, any required air volume or gap",
+  "Molex 5557-02R/5559-02P: mated length, plug outside size, maker housing sizes, latch travel or finger clearance",
+  "All maker PDFs (SB, Scan-Speak, Dayton, Hypex 2D CAD, Molex drawings): not downloaded or rendered, because the hosts are blocked by this session's network policy"
+ ]
+}

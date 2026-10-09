@@ -263,11 +263,11 @@
    ],
    [
     34.0,
-    186.0
+    175.5
    ],
    [
     186.0,
-    186.0
+    175.5
    ]
   ],
   "dowel": {
@@ -433,6 +433,12 @@
    "ok": true
   },
   {
+   "check": "block over the rear dowels, normal to the back slope",
+   "margin_mm": 8.23,
+   "least_mm": 8.0,
+   "ok": true
+  },
+  {
    "check": "magnet or pin at (-41.4, 500.925) clear of the boss's bore",
    "margin_mm": 5.92,
    "least_mm": 3.0,
@@ -487,6 +493,12 @@
    "ok": true
   },
   {
+   "check": "tweeter's body inside its bore, along the axis",
+   "margin_mm": 10.0,
+   "least_mm": 1.0,
+   "ok": true
+  },
+  {
    "check": "the boss's circle inside the insert's outline (seen from the front)",
    "margin_mm": 0.5,
    "least_mm": 0.4,
@@ -538,6 +550,12 @@
    "check": "birch under the woofer's rebate for its T-nuts' barrels (+0.5)",
    "margin_mm": 0.0,
    "least_mm": 0.0,
+   "ok": true
+  },
+  {
+   "check": "woofer's T-nut flanges (12) clear of its cut-out",
+   "margin_mm": 1.05,
+   "least_mm": 0.5,
    "ok": true
   },
   {

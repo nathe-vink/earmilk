@@ -1264,7 +1264,9 @@
     "frame_od_mm": 171,
     "cutout_mm": 144.9,
     "mounting_depth_mm": 75,
-    "front_flange_thickness_mm": 10.9,
+    "front_flange_thickness_mm": 6.5,
+    "front_projection_mm": 10.9,
+    "front_note": "corrected 2026-10-09 (datasheets-2026-10-09.json): SB's drawing gives the flange 6.5; the 10.9 a shop lists as front thickness is the 85.9 overall depth less the 75 behind the baffle, the surround standing above the flange",
     "holes": null,
     "bolt_circle_mm": null,
     "bolt_circle_estimate_mm": 158
