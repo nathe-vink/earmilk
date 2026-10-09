@@ -94,9 +94,12 @@ reading, not from the guess. Regions are in the critic's staged image's pixels (
     python3 studio/engine/autoexpose.py SHOT REPLY --save                              # one small EXR, then the exposure
     python3 studio/engine/render.py SHOT --out IMG --masks                             # the one full render
 
-`autoexpose.py` reads every brightness test in a critic's reply (lum_median, lum_mean, lum_p5, lum_p95) from one
-small scene-linear render, and sets the exposure within 1 EV of the shot's that passes the most of them without
-clipping the product's whites, by a margin of a few levels, with the smallest change. A test only a bigger change
+`autoexpose.py` reads every brightness and colour test in a critic's reply (lum_median, lum_mean, lum_p5, lum_p95,
+r/g/b_median, delta_e) from one small scene-linear render, turned into the final image at each exposure by Blender's
+own colour management (the shot's view, look and white balance), and sets the exposure within 1 EV of the shot's that
+passes the most of them without clipping the product's whites, by a margin of a few levels, with the smallest change.
+Colour counts: PBR Neutral's shoulder bleaches a lit red toward white (scene-linear 1.5, 0.1, 0.1 shows as 248, 91, 91),
+so an exposure chosen for the whites alone undid 02b's lowered sun on its plinth (dE 5.6 in the proof, 10.9 after). A test only a bigger change
 would pass is not exposure's (a glint that misses, a lamp too weak) and is left to fail. A critic's
 relighting is usually right in shape and wrong by a fraction of a stop; this takes the fraction out before the
 expensive render instead of after it.

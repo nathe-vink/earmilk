@@ -5,13 +5,17 @@
 
 A critic predicts the levels its changes will give and writes accept tests for them; the prediction is most often
 wrong in exposure (a view transform's shoulder hides how far over a white is). This renders the shot once, small and
-scene-linear (meter.py's EXR), reads every brightness test's region (lum_median, lum_mean, lum_p5, lum_p95, and r/g/b_median by channel; a box in
-the critic's 0.75-scale pixels, or a part, or a part within a box), and scans the exposure within --range EV (1) of
-the shot's for the value that passes the most of them; among those, one that clips under 1 % of the product's pixels, then
-one that clears every test by a few levels (a margin of 8 is enough; more buys nothing), then the smallest change.
-A test that only a larger change would pass is not exposure's to fix (a glint that misses, a lamp too weak): it is
-left failing, for the render and the next round to show. It prints each test's value now and at that exposure, and
-with --save writes the exposure into the shot. Colour, edge and falloff tests are left to the render.
+scene-linear (meter.py's EXR), and turns it into the final image at each exposure within --range EV (1) of the shot's
+with Blender's own colour management (the shot's view transform, look and white balance: what the render will do),
+then reads every test whose reading exposure moves: brightness (lum_median, lum_mean, lum_p5, lum_p95, r/g/b_median)
+and colour (delta_e), each the way critic/measure.py reads it, in its region (a box in the critic's 0.75-scale pixels,
+a part, or a part within a box). It takes the exposure that passes the most of them; among those, one that clips under
+1 % of the product's pixels, then one that clears every test by a margin (8 levels, 2 dE), then the smallest change.
+Colour counts because PBR Neutral's shoulder bleaches a saturated red toward white: exposure that lifts the whites
+can undo a fix to the red (02b's sun lowered for its plinth, then raised back in exposure). A test that only a larger
+change would pass is not exposure's to fix: it is left failing, for the render and the next round to show. It prints
+each test's value now and at that exposure, and with --save writes the exposure into the shot. Edge and falloff tests
+are left to the render.
 """
 import argparse, fnmatch, json, subprocess, sys, tempfile
 from pathlib import Path
@@ -48,9 +52,12 @@ def main():
     exp0 = sh.get('render', {}).get('exposure', 0.0)
     W, H = sh.get('size', [1600, 1000])
     tests = [c for c in json.loads(Path(a.critic).read_text()).get('changes', [])
-             if c.get('accept', {}).get('metric') in LUM_METRICS]
+             if c.get('accept', {}).get('metric') in LUM_METRICS or (c.get('accept', {}).get('metric') == 'delta_e' and c['accept'].get('hex'))]
     if not tests:
-        raise SystemExit('no brightness tests in that reply')
+        raise SystemExit('no brightness or colour tests in that reply')
+    sys.path.insert(0, str(HERE.parent.parent / 'critic'))
+    import measure as Me
+    R = sh.get('render', {})
     with tempfile.TemporaryDirectory() as td:
         out = Path(td) / 'ae.exr'
         r = subprocess.run([sys.executable, str(HERE / 'render.py'), a.shot, '--out', str(out), '--samples', str(a.samples),
@@ -59,65 +66,82 @@ def main():
             raise SystemExit(r.stderr[-2000:])
         import bpy
         im = bpy.data.images.load(str(out)); w, h = im.size
-        px = np.array(im.pixels[:], dtype=np.float32).reshape(h, w, 4)[::-1, :, :3]
         mask = np.asarray(Image.open(out.with_suffix('.mask.png')).convert('RGB'))[:, :, 0]
         legend = json.loads(out.with_suffix('.mask.json').read_text())
-    lum = px.astype(float) @ Mt.LUM
-    k = w / (W * a.ref_scale)
-    sel = []
-    for c in tests:
-        reg = c['accept']['region']
-        m = np.ones(lum.shape, dtype=bool)
-        if isinstance(reg, str) and reg.startswith('part:'):
-            reg = {'part': reg[5:]}
-        if isinstance(reg, dict):
-            ids = [int(i) for i, n in legend.items() if any(fnmatch.fnmatchcase(n, p.strip()) for p in reg['part'].split('|'))]
-            m &= np.isin(mask, ids)
-            box = reg.get('box')
-        else:
-            box = reg
-        if box:
-            x0, y0, x1, y1 = [int(v * k) for v in box]
-            bm = np.zeros_like(m); bm[y0:y1, x0:x1] = True; m &= bm
-        src = px[:, :, CHANNEL[c['accept']['metric']]].astype(float) if c['accept']['metric'] in CHANNEL else lum
-        sel.append(src[m] if m.any() else None)
-    # what a scene value shows as, through the view at a given exposure, for a whole array at once
-    grid = np.exp(np.linspace(np.log(1e-4), np.log(64), 2000))
-    shows = np.array([Mt.display_value(g, view) for g in grid])
-    def display(vals, ev):
-        return np.interp(np.log(np.maximum(vals * 2 ** ev, 1e-4)), np.log(grid), shows)
-    def margin(v, op, target):
-        if op == 'between':
-            return min(v - target[0], target[1] - v)
-        return v - target if op in ('>', '>=') else target - v
-    product = lum[mask > 0] if (mask > 0).any() else lum.ravel()
-    best = None
-    for ev in np.round(np.arange(exp0 - a.range, exp0 + a.range + 1e-6, 0.05), 2):
-        n, worst = 0, 1e9
-        for c, v in zip(tests, sel):
-            if v is None:
-                continue
+        # the final image at any exposure, from Blender's colour management: the view, its look, the white balance
+        scene = bpy.context.scene; vs = scene.view_settings
+        vs.view_transform = view
+        if R.get('look'):
+            vs.look = R['look']
+        if R.get('white_balance_k'):
+            vs.use_white_balance = True; vs.white_balance_temperature = R['white_balance_k']; vs.white_balance_tint = R.get('white_balance_tint', 10.0)
+        scene.render.image_settings.file_format = 'PNG'; scene.render.image_settings.color_depth = '8'
+        cache = {}
+        def shown(ev):
+            ev = round(float(ev), 2)
+            if ev not in cache:
+                vs.exposure = ev
+                pth = Path(td) / f'ev{ev:+.2f}.png'
+                im.save_render(str(pth), scene=scene)
+                cache[ev] = np.asarray(Image.open(pth).convert('RGB'), dtype=float)
+            return cache[ev]
+        k = w / (W * a.ref_scale)
+        sel = []
+        for c in tests:
+            reg = c['accept']['region']
+            m = np.ones((h, w), dtype=bool)
+            if isinstance(reg, str) and reg.startswith('part:'):
+                reg = {'part': reg[5:]}
+            if isinstance(reg, dict):
+                ids = [int(i) for i, n in legend.items() if any(fnmatch.fnmatchcase(n, p.strip()) for p in reg['part'].split('|'))]
+                m &= np.isin(mask, ids)
+                box = reg.get('box')
+            else:
+                box = reg
+            if box:
+                x0, y0, x1, y1 = [int(v * k) for v in box]
+                bm = np.zeros_like(m); bm[y0:y1, x0:x1] = True; m &= bm
+            sel.append(m if m.any() else None)
+        def reading(c, m, ev):
+            img = shown(ev); px = img[m]
+            acc = c['accept']; met = acc['metric']
+            if met == 'delta_e':
+                hx = acc['hex'].lstrip('#'); ref = [int(hx[i:i + 2], 16) for i in (0, 2, 4)]
+                return float(Me.ciede2000(Me.srgb_to_lab(np.median(px, axis=0)), Me.srgb_to_lab(ref)))
+            v = px[:, CHANNEL[met]] if met in CHANNEL else Me.luma(px)
+            return float(LUM_METRICS[met](v))
+        def margin(v, op, target):
+            if op == 'between':
+                return min(v - target[0], target[1] - v)
+            return v - target if op in ('>', '>=') else target - v
+        product = mask > 0
+        best = None
+        for ev in np.round(np.arange(exp0 - a.range, exp0 + a.range + 1e-6, 0.05), 2):
+            n, worst = 0, 1e9
+            for c, m in zip(tests, sel):
+                if m is None:
+                    continue
+                acc = c['accept']; val = reading(c, m, ev)
+                if passes(val, acc['op'], acc['value']):
+                    n += 1
+                    unit = 2.0 if acc['metric'] == 'delta_e' else 8.0       # a margin of 2 dE counts as 8 levels
+                    worst = min(worst, margin(val, acc['op'], acc['value']) / unit)
+            img = shown(ev)
+            clip = float((Me.luma(img[product] if product.any() else img.reshape(-1, 3)) >= 253).mean() * 100)
+            # the most tests passed; then no clipped whites on the product (a highlight's few pixels are allowed: under 1 %
+            # of its pixels); then a margin on every passed test (up to 8 levels or 2 dE); then the smallest change
+            key = (n, -(round(clip, 1) if clip >= 1.0 else 0.0), min(round(worst, 2), 1.0) if n else 0.0, -abs(ev - exp0))
+            if best is None or key > best[0]:
+                best = (key, ev)
+        ev = best[1]
+        print(f'{a.shot}: exposure {exp0:+.2f} -> {ev:+.2f} EV passes {best[0][0]} of {sum(m is not None for m in sel)} brightness and colour tests')
+        for c, m in zip(tests, sel):
             acc = c['accept']
-            val = float(LUM_METRICS[acc['metric']](display(v, ev)))
-            if passes(val, acc['op'], acc['value']):
-                n += 1
-                worst = min(worst, margin(val, acc['op'], acc['value']))
-        clip = float((display(product, ev) >= 253).mean() * 100)
-        # the most tests passed; then no clipped whites on the product (a highlight's few pixels are allowed: under 1 %
-        # of its pixels); then a margin of up to 8 levels on every passed test; then the smallest change
-        key = (n, -(round(clip, 1) if clip >= 1.0 else 0.0), min(round(worst, 1), 8.0) if n else 0.0, -abs(ev - exp0))
-        if best is None or key > best[0]:
-            best = (key, ev)
-    ev = best[1]
-    print(f'{a.shot}: exposure {exp0:+.2f} -> {ev:+.2f} EV passes {best[0][0]} of {sum(v is not None for v in sel)} brightness tests')
-    for c, v in zip(tests, sel):
-        acc = c['accept']
-        if v is None:
-            print(f"  {c['id']}: region empty"); continue
-        f = LUM_METRICS[acc['metric']]
-        now, then = float(f(display(v, exp0))), float(f(display(v, ev)))
-        print(f"  {c['id']} {acc['metric']} {acc['op']} {acc['value']}: now {now:.1f}, at {ev:+.2f} EV {then:.1f}"
-              f" {'pass' if passes(then, acc['op'], acc['value']) else 'FAIL'}")
+            if m is None:
+                print(f"  {c['id']}: region empty"); continue
+            now, then = reading(c, m, exp0), reading(c, m, ev)
+            print(f"  {c['id']} {acc['metric']} {acc['op']} {acc['value']}: now {now:.1f}, at {ev:+.2f} EV {then:.1f}"
+                  f" {'pass' if passes(then, acc['op'], acc['value']) else 'FAIL'}")
     if a.save:
         raw = json.loads(Path(a.shot).read_text())
         raw.setdefault('render', {})['exposure'] = float(ev)
