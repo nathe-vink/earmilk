@@ -230,5 +230,84 @@
   "set": 4.0,
   "passes": false,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "lights.red_side_ramp.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    90,
+    140
+   ]
+  },
+  "proofs": [
+   [
+    2.0,
+    102.6
+   ],
+   [
+    3.5,
+    102.6
+   ]
+  ],
+  "set": 2.0,
+  "passes": true,
+  "moves_the_test": false
+ },
+ {
+  "change": "c4",
+  "setting": "render.white_balance_k",
+  "test": {
+   "metric": "delta_e",
+   "op": "between",
+   "value": [
+    0,
+    2.2
+   ]
+  },
+  "proofs": [
+   [
+    5300.0,
+    3.48
+   ],
+   [
+    5800.0,
+    2.74
+   ],
+   [
+    6800.0,
+    9.02
+   ]
+  ],
+  "set": 5800.0,
+  "passes": false,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "sun.angle_deg",
+  "test": {
+   "metric": "edge",
+   "op": "between",
+   "value": [
+    1.0,
+    2.6
+   ]
+  },
+  "proofs": [
+   [
+    1.0,
+    2.2
+   ],
+   [
+    2.0,
+    1.2
+   ]
+  ],
+  "set": 1.0,
+  "passes": true,
+  "moves_the_test": true
  }
 ]
