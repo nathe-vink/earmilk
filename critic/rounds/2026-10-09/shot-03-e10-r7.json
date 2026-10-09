@@ -1,0 +1,249 @@
+{
+ "stage1": {
+  "impression": "A tight high-angle detail of a red gable-top carton speaker with clean geometry and soft light, but the red front slope reads as almost one flat value, the glossy waveguide shows a pale triangular facet and busy reflections that read as shading error rather than form, and the tweeter looks like a dull grey ball. The crop pins the ridge fin and the right roof corner against the frame edges and wastes the left third on plain backdrop, so it reads as a competent CG draft rather than a finished hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The waveguide's left wall must stop reading as a flat pale plate. Its band holds one value, 113.6 to 109.5 over 300 px, with G fixed at 88-89, and its edges drop about 50 levels within 6 px. It needs a graded sheen falling 25 levels or more from mouth to throat: falloff 7-20 in [360,502,460,513], now -1.6.",
+  "The tweeter's outline must hold all round. At 225-270 deg the surround's outer band and the throat beside it differ by only 1.5-4 levels (31.9 vs 27.9, 37.6 vs 36.1). Every sector needs 15 levels or more of separation, or a highlight on the roll.",
+  "The throat must model instead of reading as a near-black pit. Its flanks now sit at R 114-149, G 1-5, lum 26-36; they need R 165-200, grading darker into the throat.",
+  "The white front must leave PBR Neutral's compressed range and stop being the frame's brightest, flattest area. It is now median 227.1, 231-233 in the left block, with 3 levels from top to bottom. It needs a median of 204-218 with p95 at or below 226.",
+  "The shadow side must keep the product's colours. The white side is 155.9, mid-grey with a slight violet cast (157,155,161), and the red gable end is (133,12,17), dE 14.0 to #C62828. It needs the white side at 166 or more and the gable end at dE 10 or less.",
+  "The notch in the waveguide insert's lip at the eave (x 496-524, y 742-752), where the front baffle shows through, must be closed in the model.",
+  "The fin needs vertical modelling. Each 85-95 px box of its face spans only 2.2-2.9 levels top to bottom, and the face falls only along its length (70 to 48), so it reads as a flat card."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "asset",
+   "problem": "The waveguide's left wall reads as a flat pale plate pasted onto the horn. It is a planar facet mirroring the top panel's uniform plateau (ramp value 1 from y 0 to 0.3 m), so its sheen is one value with hard edges, not a machined wall turning into the throat.",
+   "evidence": {
+    "region": [
+     260,
+     449,
+     590,
+     630
+    ],
+    "measured": "Band medians are 113.6 at [300,548,330,568], 112.9 at [360,500,400,535], 112.0 at [440,482,470,505] and 109.5 at [555,452,568,468]: 4 levels over 300 px. G is 88-89 in every box (rgb 200,89,93, against the floor's 197,31,35 at [450,600,650,700]), so the reflection is constant. The edges drop about 50 levels within 6 px to the 42-60 crease band. Falloff along x in [360,502,460,513] is -1.6. A camera model fitted to this frame (fin and eave corners within 2-9 px) puts the wall's mirror footprint at about 12 x 3 cm, which no 0.3-0.45 m ramp on the top panel can grade."
+   },
+   "change": {
+    "setting": "lights.wall_grad",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.3,
+      0.12
+     ],
+     "placement": "centred on the mirror ray of the left wall's flat face from image (420,510), world [-0.107, -0.083, 0.912], 0.45 m out along that ray, facing the wall",
+     "strength": 1.35,
+     "ramp": {
+      "along": "the 0.30 m side, aligned with the wall's length",
+      "values": [
+       1.0,
+       0.22
+      ],
+      "high_end": "the end mirrored by the mouth end, image (290,580)",
+      "low_end": "the end mirrored by the throat end, image (560,460)"
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The wall's band grades from about 118 at the mouth end (290,580) to about 82 at the throat end (560,460), and G from about 95 to about 45. The wall then reads as a surface turning into the throat, and the tweeter's highlight becomes the brightest point inside the horn. Falloff in the test strip should be about 12. This is an asset because the panel must sit on the wall's mirror ray to within about 2 cm, which needs the wall's normals. The engine already computes those when it places glints. My estimate of that ray from the frame spans 0.3 m.",
+   "accept": {
+    "region": [
+     360,
+     502,
+     460,
+     513
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     7,
+     20
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The white front sits in PBR Neutral's compressed range and is the brightest, flattest area in the frame, so it shows no modelling and pulls the eye off the waveguide to the bottom edge.",
+   "evidence": {
+    "region": [
+     100,
+     730,
+     300,
+     900
+    ],
+    "measured": "part:front-baffle is median 227.1, p95 233.3. This left block is 231.1 (p95 233.3), and its y-profile runs 233.1 to 230.1, 3 levels top to bottom. The bottom band [100,860,1000,900] runs 231.1 to 217.1 across x. The card's mapping puts a white that models at 200-220."
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 30,
+    "to": 45
+   },
+   "expected": "From the orbit geometry, the key's irradiance on the vertical front falls about 16% and on the 37.6 deg roof rises about 38%. Front median about 211, p95 about 223. Its left-to-right falloff widens from 14 to about 20 levels as it leaves the knee, and the 3 mm shadow line under the gable deepens. The red slope lifts 5-8 levels and part:gable-block stays under dE 3 to #C62828 (now 1.42). The fin's face drops about 4 levels (68 to about 64 at its left end).",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     204,
+     218
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "asset",
+   "problem": "The throat around the tweeter is a near-black red pit. Its flanks mirror the waveguide's own red walls (G 1-5, so no sheen) and little diffuse light reaches them, so the throat's flare into the tweeter has no form.",
+   "evidence": {
+    "region": [
+     605,
+     390,
+     640,
+     435
+    ],
+    "measured": "This box is median 32.0, rgb 142,2,5. The throat ring 1-12 px outside the surround at 135-270 deg is 25.5-27.9, rgb 114-125,1-4. Below the tweeter, [660,468,740,500] is 40.6, rgb 160,7,11. The lit slope at [920,400,1080,600] is rgb 194,38,43."
+   },
+   "change": {
+    "setting": "lights.throat_snoot",
+    "from": "none",
+    "to": {
+     "type": "spot",
+     "cone_deg": 9,
+     "blend": 0.4,
+     "position": [
+      0.05,
+      -0.75,
+      1.75
+     ],
+     "target": [
+      0.0,
+      -0.035,
+      0.94
+     ],
+     "irradiance": 1.0,
+     "color": 5700,
+     "specular": 0
+    }
+   },
+   "expected": "The spot lays a soft disc about 0.17 m across on the throat and the waveguide's upper half. The lamp is 1.08 m out at 48 deg elevation, outside the frame. The throat flanks rise from R 114-149 to R 170-195 with G under 15. They read as saturated red graded darker into the throat, and the dark surround separates from them all round. The white front and the slope outside the disc stay within 2 levels. This is an asset because the card offers type spot but no cone or blend key. An area lamp from this side puts 20-70% as much light on the white front as on the throat and pools on the slope.",
+   "accept": {
+    "region": [
+     605,
+     390,
+     640,
+     435
+    ],
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     165,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The tweeter's outline disappears at the lower left and bottom, where the surround's outer band is as dark as the throat beside it.",
+   "evidence": {
+    "region": [
+     659,
+     436,
+     671,
+     448
+    ],
+    "measured": "This box is median 35.1, p95 44.6. Surround outer 8 px against the throat 1-12 px outside, by sector: 135 deg 60.2 vs 26.2, 180 deg 47.4 vs 25.5, 225 deg 31.9 vs 27.9, 270 deg 37.6 vs 36.1. The step across the bottom at [680,445,715,490] along y is only 4.9. The surround's lit sectors (0-90 deg) reach p95 79-81."
+   },
+   "change": {
+    "setting": "glints.4",
+    "from": "none",
+    "to": {
+     "at": [
+      -0.0158,
+      -0.0373,
+      0.9281
+     ],
+     "normal": [
+      -0.12,
+      -0.99,
+      0.09
+     ],
+     "size_m": 0.08,
+     "power_w": 4.0,
+     "receivers": [
+      "tweeter-surround"
+     ]
+    }
+   },
+   "expected": "A soft highlight arc forms on the roll's crown at the lower left, around (665,442), peaking at about 90. The ring then stands 20 or more levels above the 28-36 throat in the 225-270 deg sectors and reads as a seated ring. The at-point lies on this pixel's ray at the surround's depth (the same depth as glint 3). With my normal estimate, the mirror ray heads front-left at about -10 deg elevation, clear of the horn. If the engine reports the glint skipped, c3 carries this outline.",
+   "accept": {
+    "region": [
+     659,
+     436,
+     671,
+     448
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     65,
+     100
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The shadow side sits about 1.2 EV under the lit side, so the white side reads mid-grey and the red gable end reads maroon, a different colour from the roof.",
+   "evidence": {
+    "region": [
+     1150,
+     450,
+     1250,
+     550
+    ],
+    "measured": "The gable end is median 37.7, rgb 133,12,17, dE2000 13.98 to #C62828; the lit slope at [920,400,1080,600] is 1.56. part:side-right is median 155.9, rgb 157,155,161, against part:front-baffle at 227.1 (a linear ratio of about 0.44)."
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": 1.2,
+    "to": 1.65
+   },
+   "expected": "The fill (az 50, el 25) meets the right side at cos about 0.83 and the front at about 0.37. The side's light rises about 35%: the white side to about 172, the gable end to about rgb 152,15,20 (dE about 10). The white front rises at most 4 levels and must stay inside c2's window. The side stays 30 or more levels under the front, so the form still models.",
+   "accept": {
+    "region": "part:side-right",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     166,
+     182
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Close the notch in the waveguide insert's lower lip at the eave (x 496-524, y 742-752), where the front baffle shows through a 28 x 8 px gap.",
+   "why": "It sits at the bottom centre of the waveguide's mouth and reads as a modelling defect or damage on the one page built for close inspection. The insert and its mouth are fixed by the acoustic design, so it has to go back to the model owner."
+  },
+  {
+   "request": "Give the waveguide's left wall continuous curvature so it mirrors a gradient on its own.",
+   "why": "As a planar facet it will mirror any smooth source as one flat value (G 88-89 over 300 px), but its profile is set by acoustic simulation. Its read has to come from a placed graduated reflector (c1), not from its shape."
+  },
+  {
+   "request": "Make the tweeter dome read less like a smooth grey ball (finer texture or a more matte finish).",
+   "why": "It reads as a uniform grey sphere (median 83.6, one soft highlight to 197), but its material is the SB Satori driver's own and fixed. Only the size and place of its highlight (glint 1) can change how it reads."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

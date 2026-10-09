@@ -351,10 +351,24 @@ def true_glint(bpy, spec, receivers, cam_pos, ray_m=0.05, snap_m=0.03, agree_deg
 
 
 def glint(bpy, name, spec, cam_pos):
-    """A specular-only lamp where the surface at `at` with normal `normal` mirrors it into the camera."""
+    """A specular-only lamp where the surface at `at` with normal `normal` mirrors it into the camera. With a `ramp`
+    ({"axis": "y" or [x, y, z], "values": [a, b]}) and a [w, h] `size_m`, a graduated reflector panel there instead,
+    facing the surface, its `strength` running from a at the low end of the axis to b at the high end across it: a flat
+    facet (a waveguide's wall) mirrors any even source as one value, and only a graded one placed on its mirror ray
+    models it (shot 03's c1, round 7)."""
     P = Vector(spec['at']); N = Vector(spec['normal']).normalized()
     V = (Vector(cam_pos) - P).normalized()
     R = 2 * N.dot(V) * N - V
+    if spec.get('ramp'):
+        sz = spec.get('size_m', [0.3, 0.12])
+        w, h = (sz, sz) if isinstance(sz, (int, float)) else sz
+        pos = P + R * spec.get('distance_m', 0.45)
+        ax = spec['ramp'].get('axis', 'y')
+        axv = Vector({'x': (1, 0, 0), 'y': (0, 1, 0), 'z': (0, 0, 1)}[ax] if isinstance(ax, str) else ax).normalized()
+        c, half = pos.dot(axv), max(w, h) / 2
+        return panel(bpy, name, {'size_m': [w, h], 'position': list(pos), 'target': list(P), 'strength': spec.get('strength', 1.0),
+                                 'color': spec.get('color', 6000), 'diffuse': False, 'receivers': spec.get('receivers'),
+                                 'ramp': {'axis': list(axv), 'at_m': [c - half, c + half], 'values': spec['ramp'].get('values', [1.0, 0.2])}}, P)
     L = bpy.data.lights.new(name, 'AREA'); L.shape = 'DISK'
     L.size = spec.get('size_m', 0.05); L.energy = spec.get('power_w', 2.0)
     L.diffuse_factor = 0.0; L.specular_factor = 1.0
