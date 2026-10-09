@@ -150,6 +150,14 @@ open sky in front). Nothing is rendered.
   and `specular` take a fraction too (0.15: a reflection at full strength that lights at 15 %): a second panel in the
   same place, unseen by the camera, carries the fraction, because Cycles samples an emitter's light without a ray type,
   so a Light Path node in the panel's shader would change what reflections see and leave its light at full strength.
+- **Zone parts**: with `product.zone_parts` true, a colour zone that names a `part` in the product file (the plinth
+  band) is split off each panel as a part of its own, `back-panel.plinth`, its faces, materials and normals as they
+  were. A lamp with `"receivers": ["*.plinth"]` then lights the red band and not the white above it, which no other
+  lamp can (04b's round 11: the band 7 to 12 dE dark while the roof sat at 3.5). A part's patterns still take its
+  zones, in receivers and in `measure.py` (`part:back-panel` is the panel with its band; `part:*.plinth` the bands).
+- **Contact core**: `set.contact.core_strength` and `core_distance_m` add a second, tight ambient-occlusion term to the
+  sweep's contact shadow, multiplied with the first: the dark line right where a base meets the floor, which a wide
+  term at its ceiling only spreads into a halo.
 - **The inside**: in a cutaway or an exploded view, the faces inside the product (a cavity's walls, a face another
   part covers) take the product's `interior` materials (raw birch, bare resin), found by rays from each face against
   the assembled product before it is opened; a shadow line's walls stay painted.
