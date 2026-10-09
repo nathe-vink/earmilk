@@ -185,6 +185,35 @@ def panel(bpy, name, spec, centre):
     return ob
 
 
+def flag(bpy, name, spec, centre):
+    """A flag, a matte plane that cuts light the way a photographer's black flag does (or, light in colour, a bounce
+    card): `size_m` [w, h], `position` (or orbit) and `target` as a panel's, `color` (default black). The camera never
+    sees it, nor by default does gloss (`glossy`: true lets reflections show it); it shades whatever lies behind it from
+    each lamp, its edge soft as the lamp is large (a 0.6 m key 0.5 m behind a flag's edge spreads it about 0.3 m)."""
+    w, h = spec.get('size_m', [1.0, 0.5])
+    me = bpy.data.meshes.new(name)
+    me.from_pydata([(-w / 2, -h / 2, 0), (-w / 2, h / 2, 0), (w / 2, h / 2, 0), (w / 2, -h / 2, 0)], [], [(0, 1, 2, 3)])
+    me.update()
+    ob = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(ob)
+    ob.location = Vector(spec['position']) if 'position' in spec else orbit_point(spec.get('orbit', {}), centre)
+    target = Vector(spec.get('target', centre))
+    if abs((target - ob.location).normalized().z) < 0.999:
+        aim(ob, target)
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    bs = m.node_tree.nodes.get('Principled BSDF')
+    col = spec.get('color', '#000000')
+    bs.inputs['Base Color'].default_value = (*_hex_lin(col), 1)
+    bs.inputs['Roughness'].default_value = 1.0
+    for k in ('Specular IOR Level', 'Specular'):
+        if k in bs.inputs:
+            bs.inputs[k].default_value = 0.0
+    ob.data.materials.append(m)
+    ob.visible_camera = False
+    ob.visible_glossy = bool(spec.get('glossy', False))
+    ob['engine_light'] = True
+    return ob
+
+
 def twins(bpy, ob):
     """A panel's twins (its fractional diffuse or specular share), which light linking has to reach as well."""
     return [bpy.data.objects[n] for n in (ob.get('engine_twins') or '').split(',') if n]

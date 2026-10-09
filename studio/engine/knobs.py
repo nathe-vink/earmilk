@@ -51,7 +51,7 @@ KNOBS = [
     ('sky.ground', 'hex', None, 'gradient sky: colour below the horizon'),
     ('sky.visible', 'bool', None, 'whether the camera sees the sky (false keeps its light, hides it)'),
     # lights
-    ('lights.*.type', 'choice', ('area', 'spot', 'point', 'panel'), 'kind of lamp; a panel is a graduated emissive rectangle the camera cannot see, mirrored by gloss as a smooth ramp'),
+    ('lights.*.type', 'choice', ('area', 'spot', 'point', 'panel', 'flag'), 'kind of lamp; a panel is a graduated emissive rectangle the camera cannot see, mirrored by gloss as a smooth ramp; a flag is a matte black plane the camera cannot see that shades what lies behind it from each lamp (a light colour makes it a bounce card)'),
     ('lights.*.strength', 'radiance', (0, 200), 'panel: peak radiance (white at 1 reads scene-linear 1.0 head-on; a clear coat mirrors about 0.05 of it)'),
     ('lights.*.ramp', '{axis, at_m: [a, b], values: [va, vb]}', None, 'panel: strength fraction va at world coordinate a along axis ("x", "y", "z" or a vector), vb at b, linear between'),
     ('lights.*.shape', 'choice', ('RECTANGLE', 'ELLIPSE', 'DISK', 'SQUARE'), 'area lamp shape'),
