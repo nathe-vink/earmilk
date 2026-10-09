@@ -1,0 +1,304 @@
+{
+ "stage1": {
+  "impression": "A coherent, warm lifestyle frame: the red-topped and blue-topped cartons read at once against greige plaster and oak, and the two sizes are easy to compare. But the white bodies are near-uniform slabs, the roofs are flat colour, and a busy sun patch with odd rectangular shadows behind the sideboard competes with the products, so it reads as a good draft rather than a homepage image.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "No sun patch or stripes of cast shadow on the back wall at product height. Today the wall behind the sideboard runs from 103 to 220 across x 600-1300, y 345-470, with a 218.7 patch right beside the bookshelf's 170 side.",
+  "Both roofs (a must-show) read as lacquer, with a soft gradient from ridge to eave. Today the red front slope is one value (61.3-61.8, lum_range 1.7) and the blue's is 60.8.",
+  "The sunlit white bodies read white rather than cream: b* of +2 or less and R, G, B within about 6 of each other. Today they are 238/231/223 (b* +4.7), \u0394E2000 6.5-6.8 against #FFFFFF.",
+  "The bookshelf's side carries the same top-lit gloss ramp as the floorstander's (falloff today 2.1 against 66.6).",
+  "The bookshelf's wordmark is legible at 1x. Its letters reach p95 109 on a 65 plinth; the floorstander's read 155 on 71.",
+  "The sideboard, the largest object in frame (about 628 x 343 px), reads as a real piece of furniture rather than a flat taupe slab with procedural fluting. The sun's edge also cuts its front into halves of 130 and 87 through the middle door."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The low sun's patch on the back wall behind the sideboard is the brightest area after the white bodies. The floorstander's own shadow, thrown about 360 px to its right, and the bookshelf's shadow cut it into lit and dark stripes at product height, so the eye goes to the wall instead of the products.",
+   "evidence": {
+    "region": [
+     985,
+     345,
+     1070,
+     470
+    ],
+    "measured": "Right of the bookshelf: lum_median 218.7 (rgb 232/217/198). That is 50 above the bookshelf's side (168-171, profile of [944,256,974,456]) and only 13 below its front (231.8 in [845,400,935,455]). A lit band in [640,325,790,352] at 190.0 sits over the floorstander's thrown gable shadow in [665,380,790,470] at 116.9. Along y 400-420 the wall in 50 px bins from x 600 reads 124, 103, 120, 121, 115, (bookshelf), 220, 211, (vase), 207, 147. The open wall in [40,200,260,520] is 160.3."
+   },
+   "change": {
+    "setting": "set.flags.0.size_m",
+    "from": [
+     0.46,
+     0.42
+    ],
+    "to": [
+     2.2,
+     0.72
+    ]
+   },
+   "expected": "The flag keeps its centre [0.19, 0.65, 0.78] and its normal. Its sun shadow then covers the wall from x -0.70 to 1.50 m and z 0.29 to 1.01 m, which is all of the window beam above the sideboard (the beam on the wall today runs x -0.34 to 1.37 m, top about 0.86 m). The wall behind the sideboard becomes one ambient tone of about 115-150: the area right of the bookshelf goes from 218.7 to about 120-150, and the lit band and the stripes go. The products' direct light is unchanged because the flag stands 0.65 m behind them, so the sun still lands on both cartons, the sideboard front and the floor.",
+   "accept": {
+    "region": [
+     985,
+     345,
+     1070,
+     470
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     100,
+     160
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The roofs, a must-show, are flat colour with no reflection, so the lacquer (a colour coat under a clear) reads as matte plastic and the red waveguide reads as red on red.",
+   "evidence": {
+    "region": [
+     419,
+     278,
+     433,
+     334
+    ],
+    "measured": "Red front slope (pure gable-block, 784 px): lum_median 61.6, p5 60.7, p95 62.4. Profile from ridge to eave: 61.4, 61.4, 61.6, 61.7, 61.6, 61.4, 61.8, 61.3 (falloff 0.1). Blue front slope in [922,224,946,252]: 60.8 (p95 61.8). The red waveguide insert spans only 35-73 (p5-p95) inside a 61.6 slope."
+   },
+   "change": {
+    "setting": "lights.roof_sheen",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.2,
+      0.4
+     ],
+     "position": [
+      -0.5,
+      0.22,
+      1.66
+     ],
+     "target": [
+      -0.5,
+      -0.33,
+      1.01
+     ],
+     "strength": 1.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       1.61,
+       1.71
+      ],
+      "values": [
+       1,
+       0.1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "Seen from the camera, both front slopes mirror up and back onto this panel: the red along about (-0.57, 0.33, 0.75), the blue along about (-0.32, 0.39, 0.86). The red's ridge and eave land at panel z 1.61 and 1.71 m, the blue's at 1.645 and 1.69 m. Both slopes gain a soft sheen that is brightest under the ridge and fades to the base colour at the eave: in the red strip about 90-105 in the top bin and 62-70 in the bottom one. Highlights trace the waveguide's rim and inner walls so its form reads, and the eave stays deep red against the white front. Because the panel is diffuse false, nothing else is lit.",
+   "accept": {
+    "region": [
+     419,
+     278,
+     433,
+     334
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     15,
+     45
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The white bodies read cream where the sun lands, and the white drifts in hue from near neutral at the top of the body to warm at the bottom.",
+   "evidence": {
+    "region": [
+     845,
+     400,
+     935,
+     455
+    ],
+    "measured": "Bookshelf front: rgb median 238/231/223 (b_median 223, Lab b* +4.7), \u0394E2000 6.52 against #FFFFFF. Floorstander lower front [300,630,320,680]: 239/230/223 (b* +4.5), \u0394E2000 6.77. Its top [300,345,320,540]: 246/242/240 (b* +1.4). sun.color #FFEBCD is about 5000 K against a 5800 K white point."
+   },
+   "change": {
+    "setting": "sun.color",
+    "from": "#FFEBCD",
+    "to": "#FFF2E3"
+   },
+   "expected": "The sunlit whites go to about 235/231/230 (b* +2 or less), so the white keeps one hue from top to bottom. The accents in sun move toward spec: the red plinth's b* goes from 44.9 toward 40.3, and the blue plinth lightens and is less crushed (R is 9 today). The room stays warm through the oak and the plaster.",
+   "accept": {
+    "region": [
+     845,
+     400,
+     935,
+     455
+    ],
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     228,
+     236
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The bookshelf's side is one flat value while the floorstander's side carries a top-lit gloss ramp, so in the same room and light the two finishes read as different materials: matte card next to lacquer.",
+   "evidence": {
+    "region": [
+     944,
+     256,
+     974,
+     456
+    ],
+    "measured": "Bookshelf side profile, top to bottom: 170.5, 164.7, 165.6, 166.4, 170.5, 170.5, 169.4, 168.4 (falloff 2.1). Floorstander side [445,345,520,680]: 202.4, 197.2, 188.4, 177.5, 160.1, 142.2, 135.6, 135.8 (falloff 66.6), which comes from lights.red_side_ramp. The bookshelf has no matching panel."
+   },
+   "change": {
+    "setting": "lights.blue_side_ramp",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.3,
+      0.6
+     ],
+     "position": [
+      0.87,
+      0.17,
+      0.81
+     ],
+     "target": [
+      0.652,
+      -0.041,
+      0.83
+     ],
+     "strength": 2.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.7,
+       0.98
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "Seen from the camera, the side's centre (0.652, -0.041, 0.83) mirrors along (0.72, 0.70, -0.07), and this panel sits 0.3 m along that line. It gives a ramp to match the floorstander's: about 195-205 under the eave, falling to about 165-170 above the plinth. The side stays darker than the front (232-239), so the corner holds. The ramp is 0 below z 0.70; the sideboard top can only mirror the panel's lowest part, so it picks up nothing.",
+   "accept": {
+    "region": [
+     944,
+     256,
+     974,
+     456
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     20,
+     50
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The bookshelf's cast letters mirror the taupe sideboard top, so its wordmark is a dull smudge close to the tone of its plinth, while the floorstander's reads clearly.",
+   "evidence": {
+    "region": [
+     864,
+     473,
+     908,
+     484
+    ],
+    "measured": "Wordmark box: lum_p95 109.0. The letters (part letters-front-* in [840,460,940,500]) have lum_median 89.5, rgb 95/87/112, on a plinth of 65.1 in [842,463,935,490]: a 24-level difference. The floorstander's letters are 154.9 on 70.7, an 84-level difference. Glint 2 for these letters was skipped because their mirror path meets a surface 0.10 m out."
+   },
+   "change": {
+    "setting": "lights.blue_letters_card",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.16,
+      0.05
+     ],
+     "position": [
+      0.4625,
+      -0.146,
+      0.586
+     ],
+     "target": [
+      0.507,
+      -0.107,
+      0.59
+     ],
+     "strength": 0.6,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.5,
+       0.7
+      ],
+      "values": [
+       1,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "This small card sits 0.06 m out along the letters' mirror direction (-0.74, -0.65, -0.15), nearer than the surface that blocked glint 2. The letters mirror it and read about 160-185 against the plinth. The plinth's clear coat picks up the same card faintly and lifts from 65 to about 72-80, toward the spec's lightness (#1F4FCF has luma 78). The card is diffuse false, so the sideboard is not lit.",
+   "accept": {
+    "region": [
+     864,
+     473,
+     908,
+     484
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     140,
+     200
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Make the tweeter waveguide shallower or soften its rim so the front roof slope reads as a cleaner plane instead of a scoop",
+   "why": "Its depth, profile and mouth are set by acoustic simulation. Today it reads as a red-on-red trough (insert 35-73 inside a 61.6 slope); c2 changes how it reads through reflections instead."
+  },
+  {
+   "request": "Give the lacquer a glossier clear coat (lower roughness) so the coloured parts and the bookshelf's side read as gloss",
+   "why": "The product's materials are its finish and are fixed. The flat 61.6 roof and the flat 170 side read as matte, so the fix has to be what they reflect (c2, c4)."
+  },
+  {
+   "request": "Enlarge the bookshelf's wordmark or change the letters' finish for contrast on the blue plinth",
+   "why": "The wordmark's typeface, size and finish are fixed marks. At 1x it reads p95 109 on a 65 plinth, so c5 changes what the letters mirror instead."
+  }
+ ],
+ "score_if_fixed": 7.3
+}
