@@ -110,5 +110,92 @@
   "set": 2.2,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "materials.oak.grain",
+  "test": {
+   "metric": "lum_range",
+   "op": "between",
+   "value": [
+    9,
+    20
+   ]
+  },
+  "proofs": [
+   [
+    2.0,
+    5.3
+   ],
+   [
+    3.0,
+    7.6
+   ],
+   [
+    5.0,
+    15.0
+   ]
+  ],
+  "set": 5.0,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "lights.roof_ramp.strength",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    105,
+    160
+   ]
+  },
+  "proofs": [
+   [
+    1.2,
+    126.9
+   ],
+   [
+    2.0,
+    146.6
+   ],
+   [
+    1.4274,
+    133.2
+   ]
+  ],
+  "set": 1.4274,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "lights.inner_fill.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    100,
+    135
+   ]
+  },
+  "proofs": [
+   [
+    0.12,
+    73.7
+   ],
+   [
+    0.25,
+    81.9
+   ],
+   [
+    0.51,
+    95.4
+   ]
+  ],
+  "set": 0.51,
+  "passes": false,
+  "moves_the_test": true
  }
 ]
