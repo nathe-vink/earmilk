@@ -1,0 +1,383 @@
+{
+ "stage1": {
+  "impression": "A believable lived-in set where the red gable-top cartons read at once and the reds look right, but the white fronts look like a bright, flat card with no modelling, and the woofer trim reads as a flat grey washer drawn with dark outlines. The even, frontal light and the unequal pair (the left speaker smaller and higher) make it look like a competent render, not a photographed room.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The white fronts must model. The upper ~60% of each front sits in the PBR Neutral shoulder: the white above and around the woofers has median 236.5 and p95 241.6, and the left front's profile runs 241, 240, 238, 235, 232, 226, 215, 207. It prints as one value; it needs one continuous ramp inside ~198-228 with p95 <= 230.",
+  "The red roofs must read as gloss lacquer. The right slope has median 67, p95 77 and range 25, with only a 15-level drift from ridge to eave and no highlight.",
+  "The cast-metal wordmark must read as metal. The letters have p95 146 (right) and 168 (left) with no specular, because both glints still sit at x = +/-0.65, about 0.13 m outboard of the letters.",
+  "The trim rings need a highlight. They read 123-142 all the way round, between near-black hairlines (13-31 at the inner gap, 83-102 at the outer), so each driver reads as a drawing.",
+  "The room's light needs a direction. The fronts are lit head-on with no horizontal modelling (222.6 to 222.4 across the face), and daylight shows only as a 23-level drift across the wall (181 at left, 158 at right).",
+  "No unexplained shapes behind the turntable. The left speaker's 15-degree sun shadow leaves a pale panel under the frame, with a hard edge (152 to 131 within ~12 px at x 720-735, y 560-620).",
+  "The white body's shaded side must read white. The right side is [146, 128, 117], dE 9.0 from a neutral grey of the same lightness (left side 7.3), while the fronts are neutral (dE 2.3-2.5).",
+  "The accent must read as one red. The plinth fronts are [157-163, 21-28, 28-35], dE 7.9-9.2 from #C62828, while the gables are dE 1.2-2.2.",
+  "The pair must read as matched. The left speaker is 476 px tall with its base 47 px higher than the 525 px right one, and the sideboard's back-left corner enters the frame as a diagonal at x 0-122."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The front_sheen reflection lifts the upper ~60% of each white front into the PBR Neutral shoulder, so the face prints as one 232-241 value and the woofer sits in featureless white.",
+   "evidence": {
+    "region": [
+     140,
+     370,
+     1160,
+     560
+    ],
+    "measured": "front-baffle inside this box (the white above and beside both woofers): median 236.5, p95 241.6, rgb [237, 236, 241]. Left white front, 8 bins top to bottom: 241.1, 239.9, 238.3, 235.3, 232.3, 225.6, 214.6, 206.7; right: 241.3, 239.8, 236.8, 233.6, 228.6, 217.0, 204.9, 198.1. The baffle reads 239-240 even at the woofer's centre height. The lowest bins mirror the foot of the panel's ramp (0.06) and sit at 198-207, so the diffuse level is ~0.6 linear and the extra ~0.4 at the top is the panel."
+   },
+   "change": {
+    "setting": "lights.front_sheen.strength",
+    "from": 12.0403,
+    "to": 4.8
+   },
+   "expected": "The top of each front falls to ~224-228 and the face becomes one visible ramp of ~20-28 levels (~226 at the eave to ~200 above the plinth). The upper-field median falls to ~218 and the bottom third is unchanged. The cool cast at the top ([241, 241, 246]) goes neutral. Side effect: the trim rings mirror the same panel and fall from 131.7 to ~85-95; c5 and c6 restore their definition.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      140,
+      370,
+      1160,
+      560
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     216,
+     230
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The roof slopes read as flat red paint. At 0.6 the roof_sheen adds only ~0.03 linear, so the lacquer shows no graduated highlight toward the ridge, and the right gable has none at all.",
+   "evidence": {
+    "region": [
+     960,
+     305,
+     1165,
+     385
+    ],
+    "measured": "gable-block inside this box (right front slope, fin excluded): median 67.0, p95 77.2, range 24.7; ridge-to-eave profile 74.5, 71.3, 68.1, 64.7, 61.5, 60.1, 58.9. Left slope: p95 73.3, range 22.3. Colour [197, 31, 34], dE 1.23 to #C62828."
+   },
+   "change": {
+    "setting": "lights.roof_sheen.strength",
+    "from": 0.6,
+    "to": 1.8
+   },
+   "expected": "A soft pale sheen across the upper third of each front slope, plus a thin highlight along the top of each fin and the waveguide's upper rim. Slope p95 rises to ~110-125 and the ridge-to-eave falloff grows to ~40-55 levels. The lower half of the slope stays at the spec red (dE <= 3).",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      960,
+      305,
+      1165,
+      385
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     100,
+     130
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The right plinth's cast-metal letters read as flat grey print. glints.0 still sits at x = 0.65, the toe-in-rotated letter centre for the old +/-0.66 placement, so it is about 0.13 m outboard of the letters and off the plinth.",
+   "evidence": {
+    "region": [
+     960,
+     720,
+     1160,
+     800
+    ],
+    "measured": "letters-front-* inside this box: median 135.0, p95 145.9, range 43.5, rgb [131, 135, 143], with no specular. The word spans x 1016-1100 and is centred at 1058 on a plinth centred at 1061, so the letters sit at world x ~0.520 (instance at 0.53, turned -5 degrees). The glint at 0.65 is past the plinth's outer edge (~0.64)."
+   },
+   "change": {
+    "setting": "glints.0.at",
+    "from": [
+     0.65,
+     -0.113,
+     0.589
+    ],
+    "to": [
+     0.52,
+     -0.113,
+     0.589
+    ]
+   },
+   "expected": "A specular kick across the letter faces: p95 ~205-225 with the median ~150-170. The red plinth around them is unchanged, since the receivers are the letters only.",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      960,
+      720,
+      1160,
+      800
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     190,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The left plinth's letters read as flat grey print for the same reason: glints.1 sits at x = -0.65, about 0.13 m outboard of letters that are now centred at x ~ -0.520.",
+   "evidence": {
+    "region": [
+     140,
+     720,
+     320,
+     770
+    ],
+    "measured": "letters-front-* inside this box: median 158.2, p95 167.5, range 61.3, rgb [152, 159, 167]. The word spans x 187-260 and is centred at 223.5 on a plinth centred at 227."
+   },
+   "change": {
+    "setting": "glints.1.at",
+    "from": [
+     -0.65,
+     -0.113,
+     0.589
+    ],
+    "to": [
+     -0.52,
+     -0.113,
+     0.589
+    ]
+   },
+   "expected": "The same specular kick on the left wordmark: p95 ~210-228 and median ~165-180, matching the right speaker's letters.",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      140,
+      720,
+      320,
+      770
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     195,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The right trim ring is a flat cool-grey band with no highlight, because it only mirrors the broad front panel, and c1 will darken it further.",
+   "evidence": {
+    "region": [
+     980,
+     385,
+     1140,
+     550
+    ],
+    "measured": "woofer-ring inside this box: median 130.4, p95 141.7, rgb [125, 131, 143]; top-to-bottom 138.7, 139.5, 138.7, 136.6, 133.9, 130.7, 126.7, 122.7. The row across its left edge at the woofer centre reads 240 (baffle), 83, 122-139 (ring, ~7 px), 64, 31 (gap). It mirrors the front_sheen panel, which fits the card's front_sheen proofs for a [125, 165] test (5 gave 86.8, 12.04 gave 136.5)."
+   },
+   "change": {
+    "setting": "glints.2",
+    "from": "none",
+    "to": {
+     "at": [
+      0.466,
+      -0.106,
+      0.995
+     ],
+     "normal": [
+      -0.087,
+      -0.996,
+      0
+     ],
+     "size_m": 0.06,
+     "power_w": 0.1,
+     "distance_m": 0.6,
+     "receivers": [
+      "woofer-ring"
+     ]
+    }
+   },
+   "expected": "A soft highlight arc ~40 px long on the ring at 10-11 o'clock (ring mid-radius 0.079 m about a woofer centre at z 0.94), peaking ~180-200, with the rest of the ring at ~85-95 after c1. The driver reads as a machined trim rather than a printed band.",
+   "accept": {
+    "region": {
+     "part": "woofer-ring",
+     "box": [
+      980,
+      385,
+      1140,
+      550
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     150,
+     205
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The left trim ring is the same flat grey band with no highlight.",
+   "evidence": {
+    "region": [
+     150,
+     380,
+     300,
+     535
+    ],
+    "measured": "woofer-ring inside this box: median 133.7, p95 143.7, rgb [128, 134, 147]; top-to-bottom 140.7, 141.7, 142.0, 140.5, 137.7, 134.7, 130.7, 126.7. The row across its left edge reads 239 (baffle), 102, 139 (ring, ~7 px), 105, 13 (gap)."
+   },
+   "change": {
+    "setting": "glints.3",
+    "from": "none",
+    "to": {
+     "at": [
+      -0.575,
+      -0.115,
+      0.995
+     ],
+     "normal": [
+      0.087,
+      -0.996,
+      0
+     ],
+     "size_m": 0.06,
+     "power_w": 0.1,
+     "distance_m": 0.6,
+     "receivers": [
+      "woofer-ring"
+     ]
+    }
+   },
+   "expected": "A matching 10-11 o'clock highlight arc on the left ring, peaking ~180-200, with the rest of the ring at ~85-95 after c1. The highlight sits on the same side as the window-lit side of the wall.",
+   "accept": {
+    "region": {
+     "part": "woofer-ring",
+     "box": [
+      150,
+      380,
+      300,
+      535
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     150,
+     205
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The 15-degree sun casts the left speaker's shadow onto the wall behind the turntable with a hard left edge, which leaves an unexplained pale panel under the frame at the centre of the image.",
+   "evidence": {
+    "region": [
+     700,
+     560,
+     760,
+     620
+    ],
+    "measured": "Column profile in 5-px bins: 148.7, 150.6, 151.7, 152.6, 148.6, 136.7, 130.9, 130.7, 131.7, 131.7, 131.7, 131.7, a 22-level step within ~12 px; edge 2.8/px against 0.2-0.3 on plain wall. The edge falls where the left speaker's shadow from a sun at azimuth -25 and elevation 15 lands (predicted left edge x ~710); the shadow runs to x ~900."
+   },
+   "change": {
+    "setting": "sun.angle_deg",
+    "from": 1,
+    "to": 6
+   },
+   "expected": "The shadow edge spreads to a ~60-70 px gradient and the pale panel reads as a soft falloff rather than a shape. The sun's irradiance on the fronts, and so c1's ramp, is unchanged.",
+   "accept": {
+    "region": [
+     700,
+     560,
+     760,
+     620
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     0,
+     1.2
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The white body's shaded right side reads tan, because the warm bounce from the wall and sideboard outweighs the 5700 K fill that lights it.",
+   "evidence": {
+    "region": [
+     1158,
+     590,
+     1186,
+     760
+    ],
+    "measured": "side-right inside this box (below the Nutrition Facts panel): rgb [146, 128, 117], luminance 131.0, dE 9.02 to the neutral grey of equal lightness #838383. Left side [153, 139, 130], dE 7.26 to #8D8D8D. The fronts are neutral ([223, 222, 226], dE 2.3)."
+   },
+   "change": {
+    "setting": "lights.fill.color",
+    "from": 5700,
+    "to": 10000
+   },
+   "expected": "The right side moves to ~[140, 131, 127] (dE <= 6) with luminance within +/-5, so the side reads as white in shade. The right of the room picks up a slight daylight coolness against the warm wall.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      1158,
+      590,
+      1186,
+      760
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#838383",
+    "op": "between",
+    "value": [
+     0,
+     6.0
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the woofer trim ring a satin-metal or gloss-black finish instead of the cool grey ([126, 132, 145]) it renders as.",
+   "why": "The ring is the largest non-white element on the front and reads as a plastic washer. Its material and colour are fixed (the owner's decision, the drivers' own), so only what it reflects is changed here (c1, c5, c6)."
+  },
+  {
+   "request": "Narrow or fill the near-black gap between the trim ring and the driver frame, and the hairline between the ring and the baffle.",
+   "why": "Across the ring's edge the row drops to 13-31 at the inner gap and 83-102 at the outer, each within 1 px, which draws the driver as an outline. The flush mount under the trim ring is fixed geometry."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
