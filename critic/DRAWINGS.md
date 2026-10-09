@@ -13,10 +13,11 @@ waveguide insert, hand tools, a soldering iron. Read every file below before wri
 
 For each size (`fab/out/` is the floorstander, `fab/out-bookshelf/` the bookshelf):
 
-- `drawings/sheet-1.png` to `sheet-5.png` (A3 at 200 dpi; crop and zoom where the print is small) and `drawings/earmilk-sheets.pdf`
+- `drawings/sheet-1.png` to `sheet-6.png` (A3 at 200 dpi; crop and zoom where the print is small) and `drawings/earmilk-sheets.pdf`
 - `cutlist.csv` (every panel: name, size, thickness, quantity, operations)
 - `cad.json` (the CAD's own numbers: panel sizes, cut-outs, the waveguide, the driver rebates)
 - `dxf/` (the router files, one per panel; list them, open one or two)
+- `stl/` and `step/` (the printed parts and the solids; list them)
 
 and once: `fab/README.md` (the build order and the decisions), `fab/bom.csv` (the bought parts),
 `fab/params.py` (the numbers, marked SPEC, PROPOSAL or PLACEHOLDER), `fab/research/` (the bought parts' own data).
@@ -61,3 +62,12 @@ Reply with only this JSON:
 `buildable_score` is out of 10: 10 hands to a shop today, 5 builds with phone calls. Rank findings by severity, the
 ones that block first. Be exact: "the woofer cut-out is 282 on sheet 2 and 283.5 in cad.json (woofer.cutout_d)" is a
 finding; "check the dimensions" is not.
+
+## Rounds
+
+Each round's reply is in `critic/drawings/`. The fixes go into the CAD, `fab/params.py`, `fab/flats.py`,
+`fab/sheets.py`, `fab/bom.csv` and `fab/README.md`, and the drawings are regenerated from them.
+
+| date | round | buildable | findings | what changed |
+|---|---|---|---|---|
+| 2026-10-09 | 1 | 3.5 | 2 block, 3 remake, 19 guess, 6 legibility; 6 owner questions | d1 the tweeter went in from behind past a bore smaller than its flange: one ø73.4 bore from the boss's back to the throat, the flange seated on the throat's ring (the bookshelf's boss 68.4, flattened on the top panel, 1.5 of insert under the bore); d2 the front dowels moved behind the insert's pocket (9.7 and 6.7 clear); d3 the lid's gland drawn from its front edge, 43, with FRONT EDGE on the DXF; d4 the rebates 1.0 deeper for a flange gasket; d5 the upper magnets level with the throat, 12.6 and 3.0 clear of the boss; d6 the amplifier's box and the port in section A-A; d7 the bookshelf's stale brace files and notes gone; d8 the drivers' screw holes (DRIVER_SCREWS, measure first) on sheet 1 and the baffle's DXF; d9 the plate's rebate 4.5 for EPDM tape, its screws and pilot holes; d10 the tweeter's heat-set holes in the CAD and on sheet 3; d11 the fixings' positions and fits; d12 the trim rings exported, a channel over the screw heads, held by silicone; d13 the port 5 mm too long; d14 the gland M25 / M20 everywhere; d15 the floorstander's cabinet lead 250 past the grommet; d16 the runs through the brace's window; d17 the build order; d18 28 mm dowels; d19, d30 sizes printed exactly; d20 sheet 6, panel details; d21 the bookshelf's shelf +8.3 dB; d22 tolerances in every title block; d24 cad.json's features; d25 no text under 6 pt; d26 the roof's dimensions drawn over the sections; d27 the cutting planes A-A and B-B; d28 the balloons on faces the view sees, the gable with its pocket, not to scale |

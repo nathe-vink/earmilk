@@ -1,7 +1,7 @@
 {
  "parts": {
   "front-baffle": {
-   "volume_l": 4.4217,
+   "volume_l": 4.3996,
    "bbox_mm": [
     -0.0,
     -0.0,
@@ -10,10 +10,10 @@
     18.0,
     860.0
    ],
-   "mass_kg": 3.01
+   "mass_kg": 2.99
   },
   "back-panel": {
-   "volume_l": 5.1675,
+   "volume_l": 5.1498,
    "bbox_mm": [
     -0.0,
     372.0,
@@ -22,7 +22,7 @@
     390.0,
     860.0
    ],
-   "mass_kg": 3.51
+   "mass_kg": 3.5
   },
   "side-left": {
    "volume_l": 5.4735,
@@ -73,7 +73,7 @@
    "mass_kg": 1.53
   },
   "gable-block": {
-   "volume_l": 8.1357,
+   "volume_l": 8.1337,
    "bbox_mm": [
     -0.0,
     -0.0,
@@ -85,7 +85,7 @@
    "mass_kg": 5.53
   },
   "waveguide-insert": {
-   "volume_l": 2.5396,
+   "volume_l": 2.5156,
    "bbox_mm": [
     53.37,
     -0.0,
@@ -132,7 +132,7 @@
    "mass_kg": 1.09
   },
   "port-tube": {
-   "volume_l": 0.2495
+   "volume_l": 0.2435
   },
   "amp-box-floor": {
    "volume_l": 0.6882,
@@ -146,7 +146,7 @@
    ]
   },
   "amp-box-lid": {
-   "volume_l": 0.6793,
+   "volume_l": 0.679,
    "bbox_mm": [
     18.0,
     264.0,
@@ -167,6 +167,18 @@
     252.5
    ]
   },
+  "trim-ring-woofer": {
+   "od_mm": 314.0,
+   "id_mm": 284.1,
+   "t_mm": 3.0,
+   "groove": "10 wide, 2 deep on \u00f8298"
+  },
+  "trim-ring-mid": {
+   "od_mm": 165.0,
+   "id_mm": 136.1,
+   "t_mm": 3.0,
+   "groove": "10 wide, 2 deep on \u00f8154"
+  },
   "gable-print-front-left": {
    "volume_l": 0.655,
    "size_mm": [
@@ -184,7 +196,7 @@
    ]
   },
   "gable-print-back-left": {
-   "volume_l": 3.413,
+   "volume_l": 3.412,
    "size_mm": [
     195.0,
     240.0,
@@ -192,7 +204,7 @@
    ]
   },
   "gable-print-back-right": {
-   "volume_l": 3.413,
+   "volume_l": 3.412,
    "size_mm": [
     195.0,
     240.0,
@@ -201,13 +213,163 @@
   }
  },
  "units": "mm, litres, kg",
- "woofer_chamber_air_l": 85.082,
+ "woofer_chamber_air_l": 85.088,
  "woofer_chamber_gross_l": 103.26,
  "mid_chamber_gross_l": 8.029,
  "waveguide_air_l": 1.6795,
- "wood_mass_kg": 24.86,
+ "wood_mass_kg": 24.83,
  "port_tube_length_mm": 153.3,
  "size": "floorstander",
+ "features": {
+  "woofer": {
+   "cutout_d": 282.0,
+   "rebate_d": 315.6,
+   "rebate_depth": 9.0,
+   "z": 320.0,
+   "screws": {
+    "n": 8,
+    "pcd": 298.0,
+    "hole": 5.5,
+    "start_deg": 22.5
+   }
+  },
+  "dowels": [
+   [
+    60.0,
+    215.0
+   ],
+   [
+    330.0,
+    215.0
+   ],
+   [
+    60.0,
+    330.0
+   ],
+   [
+    330.0,
+    330.0
+   ]
+  ],
+  "dowel": {
+   "d": 10.0,
+   "depth_top_panel": 10.0,
+   "depth_block": 20.0
+  },
+  "mid": {
+   "cutout_d": 140.3,
+   "rebate_d": 166.6,
+   "rebate_depth": 11.5,
+   "z": 690.0,
+   "screws": {
+    "n": 4,
+    "pcd": 154.0,
+    "hole": 5.5,
+    "start_deg": 45.0
+   }
+  },
+  "waveguide": {
+   "throat_y": 176.0,
+   "throat_z": 935.0,
+   "throat_d": 45.0
+  },
+  "insert": {
+   "back_y": 200.0,
+   "boss_d": 86.0,
+   "boss_back_y": 216.0,
+   "clear": 0.3,
+   "tweeter_bore_d": 73.4,
+   "tweeter_bore_from_y": 176.0,
+   "tweeter_bore_to_y": 216.0,
+   "tweeter_screws": {
+    "n": 4,
+    "pcd": 62.0,
+    "hole_d": 4.0,
+    "depth": 6.0,
+    "insert": "M3 x 5.7 heat-set brass"
+   },
+   "magnets": [
+    [
+     -75.87,
+     890.9
+    ],
+    [
+     75.87,
+     890.9
+    ],
+    [
+     -61.95,
+     935.0
+    ],
+    [
+     61.95,
+     935.0
+    ]
+   ],
+   "magnet_hole": [
+    12.2,
+    4.3
+   ],
+   "pins": [
+    [
+     -84.13,
+     915.8
+    ],
+    [
+     84.13,
+     915.8
+    ]
+   ],
+   "pin_hole_insert": 5.9,
+   "pin_hole_pocket": 6.2,
+   "bay_d": 36.0,
+   "bay_l": 35.0,
+   "bay_z": 927.0,
+   "channel": {
+    "x": 195.0,
+    "y": 233.5,
+    "d": 14.0
+   }
+  },
+  "amp": {
+   "cutout": [
+    336.0,
+    111.0
+   ],
+   "rebate": [
+    361.0,
+    136.0,
+    4.5
+   ],
+   "z": 185.0,
+   "box_inside": {
+    "y": [
+     282.0,
+     372.0
+    ],
+    "z": [
+     117.5,
+     252.5
+    ]
+   },
+   "gland": {
+    "x": 332.0,
+    "y": 307.0,
+    "hole_d": 25.5
+   }
+  },
+  "port": {
+   "z": 405.0,
+   "bore": 92.0,
+   "od": 100.0,
+   "hole_d": 100.5,
+   "flange_d": 112.0,
+   "flange_t": 5.0,
+   "tube_from_flange_face": 153.3,
+   "collar": 18.0,
+   "overall": 171.3
+  }
+ },
  "checks": [
   {
    "check": "insert above the top panel (its lowest point to the body's top)",
@@ -222,9 +384,57 @@
    "ok": true
   },
   {
-   "check": "boss above the top panel",
-   "margin_mm": 32.0,
-   "least_mm": 1.0,
+   "check": "insert material under the tweeter's bore, above the top panel",
+   "margin_mm": 38.0,
+   "least_mm": 1.2,
+   "ok": true
+  },
+  {
+   "check": "front dowel at y 215 clear of the insert's pocket",
+   "margin_mm": 9.7,
+   "least_mm": 3.0,
+   "ok": true
+  },
+  {
+   "check": "front dowel at y 215 clear of the insert's pocket",
+   "margin_mm": 9.7,
+   "least_mm": 3.0,
+   "ok": true
+  },
+  {
+   "check": "magnet or pin at (-75.9, 890.902) clear of the boss's bore",
+   "margin_mm": 38.46,
+   "least_mm": 3.0,
+   "ok": true
+  },
+  {
+   "check": "magnet or pin at (+75.9, 890.902) clear of the boss's bore",
+   "margin_mm": 38.46,
+   "least_mm": 3.0,
+   "ok": true
+  },
+  {
+   "check": "magnet or pin at (-61.9, 935) clear of the boss's bore",
+   "margin_mm": 12.65,
+   "least_mm": 3.0,
+   "ok": true
+  },
+  {
+   "check": "magnet or pin at (+61.9, 935) clear of the boss's bore",
+   "margin_mm": 12.65,
+   "least_mm": 3.0,
+   "ok": true
+  },
+  {
+   "check": "magnet or pin at (-84.1, 915.804) clear of the boss's bore",
+   "margin_mm": 40.0,
+   "least_mm": 3.0,
+   "ok": true
+  },
+  {
+   "check": "magnet or pin at (+84.1, 915.804) clear of the boss's bore",
+   "margin_mm": 40.0,
+   "least_mm": 3.0,
    "ok": true
   },
   {

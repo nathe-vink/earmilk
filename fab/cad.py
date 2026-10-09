@@ -137,8 +137,12 @@ def wire_hole_y():
 
 
 def dowel_points():
-    a, b = 60.0 * PLAN / 390, PLAN - 60.0 * PLAN / 390
-    return [(a, 200.0 * PLAN / 390), (b, 200.0 * PLAN / 390), (a, 330.0 * PLAN / 390), (b, 330.0 * PLAN / 390)]
+    """The four dowels that register the gable block on the body: the front pair behind the insert's pocket (at y 200
+    they stood 5 mm inside the insert's foot, the drawing check's d2), the back pair near the back."""
+    r = lambda v: round(v * 2) / 2                       # to 0.5 mm, so the drawings print what the router cuts
+    a = r(60.0 * PLAN / 390); b = PLAN - a
+    yf = r(INSERT['back_y'] + max(12.0, 15.0 * PLAN / 390) if WAVEGUIDE else 200.0 * PLAN / 390)
+    return [(a, yf), (b, yf), (a, r(330.0 * PLAN / 390)), (b, r(330.0 * PLAN / 390))]
 
 
 # --- Gable block and bowl -----------------------------------------------------------------------------------------------
@@ -218,17 +222,23 @@ def gable_prism():
 
 
 def insert_fixings():
-    """Magnets and pins in the insert's back face (y = back_y), as (x, z): magnets inside the outline at 60 % of its
-    half-width, 25 % and 75 % of its height; the pins between them, clear of the tweeter's boss."""
+    """Magnets and pins in the insert's back face (y = back_y), as (x, z): the lower pair inside the outline at 60 % of
+    its half-width, a quarter of its height up; the upper pair level with the throat's axis, half-way between the boss
+    (its bore in the pocket, plus 3 mm) and 8 mm inside the outline (at 75 % of the height they sat on the boss, the
+    drawing check's d5); the pins between them, clear of the tweeter's boss."""
     out = insert_outline()
     zs = [BODY + DZ * s_ for (_, s_) in out]; z0, z1 = min(zs), max(zs)
     def half_width(z):
         xs = [abs(u) for (u, s_) in out if abs(BODY + DZ * s_ - z) < 4.0]
         return min(xs) if xs else 0.0
     mags, pins = [], []
-    for f in (0.25, 0.75):
-        z = z0 + f * (z1 - z0); w = 0.6 * half_width(z)
-        mags += [(RUN - w, z), (RUN + w, z)]
+    z = z0 + 0.25 * (z1 - z0); w = 0.6 * half_width(z)
+    mags += [(RUN - w, z), (RUN + w, z)]
+    zc = WAVEGUIDE['throat_z']
+    inner = INSERT['boss_d'] / 2 + INSERT['clear'] + INSERT['magnet_d'] / 2 + 3.0
+    outer = half_width(zc) - INSERT['magnet_d'] / 2 - 8.0
+    w = (inner + outer) / 2 if outer > inner else inner
+    mags += [(RUN - w, zc), (RUN + w, zc)]
     zp = z0 + 0.5 * (z1 - z0) - 6; wp = 0.8 * half_width(zp)
     pins = [(RUN - wp, zp), (RUN + wp, zp)]
     return mags, pins
@@ -236,20 +246,30 @@ def insert_fixings():
 
 def waveguide_insert():
     """The insert: the roof inside its outline from the slope back to INSERT['back_y'] (to the top panel near the
-    eave), with a boss round the tweeter to boss_back_y; less the waveguide's air, a counterbore at the throat's back for
-    the tweeter's flange, a bore for its body, the magnets' and pins' holes in its back face."""
+    eave), with a boss round the tweeter to boss_back_y; less the waveguide's air, one bore at the tweeter's flange's
+    diameter from the boss's back to the throat (the tweeter goes in from behind and seats on the throat's ring), the
+    holes for the heat-set inserts its screws go into, and the magnets' and pins' holes in its back face."""
     I, T = INSERT, TWEETER_PART
     y0, zc = WAVEGUIDE['throat_y'], WAVEGUIDE['throat_z']
     ins = _y_prism(insert_outline(), -5.0, I['back_y']) & gable_prism()
-    ins += cyl_y(RUN, zc, I['boss_d'], I['back_y'] - 1.0, I['boss_back_y'])
+    boss = cyl_y(RUN, zc, I['boss_d'], I['back_y'] - 1.0, I['boss_back_y'])
+    if zc - I['boss_d'] / 2 < BODY + I['clear']:
+        # the boss would reach below the body's top: flattened there, it rests on the top panel (the bookshelf's)
+        boss &= box(0, I['back_y'] - 2.0, BODY + I['clear'], PLAN, I['boss_back_y'] + 1.0, RIDGE_Z)
+    ins += boss
     ins -= waveguide_cavity()
-    ins -= cyl_y(RUN, zc, T['flange_d'] + 0.4, y0 - 0.01, y0 + T['flange_t'] + 0.2)
-    ins -= cyl_y(RUN, zc, T['body_d'] + 1.0, y0, I['boss_back_y'] + 1.0)
+    # the tweeter goes in from behind: one bore at its flange's diameter from the boss's back to the throat, where the
+    # flange seats on the ring round the throat (the dome forward through it) and is screwed to that seat
+    ins -= cyl_y(RUN, zc, T['flange_d'] + 0.4, y0, I['boss_back_y'] + 1.0)
+    for k in range(T['screws']):
+        a = math.radians(45.0 if T['screws'] == 4 else 90.0) + 2 * math.pi * k / T['screws']
+        ins -= cyl_y(RUN + T['bolt_circle'] / 2 * math.cos(a), zc + T['bolt_circle'] / 2 * math.sin(a), INSERT_SCREW['hole_d'],
+                     y0 - INSERT_SCREW['depth'], y0 + 0.01)
     mags, pins = insert_fixings()
     for (x, z) in mags:
         ins -= cyl_y(x, z, I['magnet_d'] + 0.2, I['back_y'] - I['magnet_t'] - 0.3, I['back_y'] + 1)
-    for (x, z) in pins:
-        ins -= cyl_y(x, z, I['pin_d'] + 0.1, I['back_y'] - I['pin_l'] / 2 - 0.5, I['back_y'] + 1)
+    for (x, z) in pins:     # pressed in: 0.1 under the pin
+        ins -= cyl_y(x, z, I['pin_d'] - 0.1, I['back_y'] - I['pin_l'] / 2 - 0.5, I['back_y'] + 1)
     return ins
 
 
@@ -260,13 +280,13 @@ def insert_pocket():
     I = INSERT
     zc = WAVEGUIDE['throat_z']
     pk = _y_prism(insert_outline(I['clear']), -5.0, I['back_y'] + I['clear'])
-    pk += cyl_y(RUN, zc, I['boss_d'] + 2 * I['clear'], I['back_y'], I['boss_back_y'] + 1.0)
+    pk += cyl_y(RUN, zc, I['boss_d'] + 2 * I['clear'], I['back_y'], I['boss_back_y'] + 1.0)   # (below the body's top it cuts nothing)
     pk += cyl_y(RUN, zc + I['bay_dz'], I['bay_d'], I['boss_back_y'], I['boss_back_y'] + I['bay_l'])   # the connector bay
     mags, pins = insert_fixings()
     for (x, z) in mags:
         pk += cyl_y(x, z, I['magnet_d'] + 0.2, I['back_y'], I['back_y'] + I['magnet_t'] + 0.3)
-    for (x, z) in pins:
-        pk += cyl_y(x, z, I['pin_d'] + 0.1, I['back_y'], I['back_y'] + I['pin_l'] / 2 + 0.5)
+    for (x, z) in pins:     # a slip fit: 0.2 over the pin
+        pk += cyl_y(x, z, I['pin_d'] + 0.2, I['back_y'], I['back_y'] + I['pin_l'] / 2 + 0.5)
     pk += cyl_z(RUN, wire_hole_y(), WIRE_HOLE_D, BODY - 1, zc + I['bay_dz'])
     return pk
 
@@ -329,6 +349,7 @@ def port_parts(length=None):
     bore, w, r, T = PORT['bore'] / 2, PORT_WALL, PORT_FLARE_R, PORT_FLANGE_T
     od, fl = bore + w, PORT['flange'] / 2
     # Tube with flange: a plain revolved rectangle-ish profile.
+    L = L - T                 # the length is from the flange's outer face (axial T), as acoustics.json gives it
     tube_prof = make_face(Polyline((bore, T), (fl, T), (fl, 0.0), (od, 0.0), (od, -L), (bore, -L), close=True))
     tube = Pos(RUN, PLAN, PORT['z']) * revolve(Plane.XY * tube_prof, Axis.Y, 360)
     # Flare collar: a socket over the tube's last 15 mm (0.2 mm clearance, 3 mm wall), then the trumpet.
@@ -355,13 +376,21 @@ def amp_box_extent():
     return y0, y1, z0, z1
 
 
+def amp_gland_xy():
+    """The gland's centre in the amplifier box's lid, (x, y): 40 in from the right side's inner face, 25 behind the
+    box's front panel (43 from the lid's front edge, which is the front panel's)."""
+    y0 = amp_box_extent()[0]
+    return PLAN - WALL - 40.0, y0 + 25.0
+
+
 def amp_box_panels():
     """Three 18 mm panels between the sides make the amplifier's sealed box: a floor, a lid and a front. The lid has a
     gland hole for the speaker leads (sealed round them after wiring)."""
     y0, y1, z0, z1 = amp_box_extent()
     floor = box(WALL, y0 - WALL, z0 - WALL, PLAN - WALL, y1, z0)
     lid = box(WALL, y0 - WALL, z1, PLAN - WALL, y1, z1 + WALL)
-    lid -= cyl_z(PLAN - WALL - 40, y0 + 25, AMP_BOX['gland_d'], z1 - 1, z1 + WALL + 1)
+    gx, gy = amp_gland_xy()
+    lid -= cyl_z(gx, gy, AMP_BOX['gland_d'] + 0.5, z1 - 1, z1 + WALL + 1)
     front = box(WALL, y0 - WALL, z0, PLAN - WALL, y0, z1)
     return {'amp-box-floor': floor, 'amp-box-lid': lid, 'amp-box-front': front}
 
@@ -428,6 +457,36 @@ def woofer_air(parts):
     return air.volume, mid_vol
 
 
+def features():
+    """The numbers the drawings carry, from the CAD's own sources, so a sheet can be checked against them: cut-outs,
+    rebates, bores and the centres of the dowels, fixings, channel and gland (mm, the CAD's frame)."""
+    f = {'woofer': {'cutout_d': WOOFER_CUTOUT, 'rebate_d': WOOFER_REBATE['d'], 'rebate_depth': WOOFER_REBATE['depth'], 'z': WOOFER['z'],
+                    'screws': DRIVER_SCREWS.get('woofer')},
+         'dowels': [[round(x, 2), round(y, 2)] for (x, y) in dowel_points()], 'dowel': {'d': DOWEL_D, 'depth_top_panel': 10.0, 'depth_block': DOWEL_DEPTH}}
+    if MID:
+        f['mid'] = {'cutout_d': MID_CUTOUT, 'rebate_d': MID_REBATE['d'], 'rebate_depth': MID_REBATE['depth'], 'z': MID['z'], 'screws': DRIVER_SCREWS.get('mid')}
+    if WAVEGUIDE:
+        I, T = INSERT, TWEETER_PART
+        mags, pins = insert_fixings()
+        f['waveguide'] = {'throat_y': WAVEGUIDE['throat_y'], 'throat_z': WAVEGUIDE['throat_z'], 'throat_d': 2 * WAVEGUIDE['r0']}
+        f['insert'] = {'back_y': I['back_y'], 'boss_d': I['boss_d'], 'boss_back_y': I['boss_back_y'], 'clear': I['clear'],
+                       'tweeter_bore_d': T['flange_d'] + 0.4, 'tweeter_bore_from_y': WAVEGUIDE['throat_y'], 'tweeter_bore_to_y': I['boss_back_y'],
+                       'tweeter_screws': {'n': T['screws'], 'pcd': T['bolt_circle'], **INSERT_SCREW},
+                       'magnets': [[round(x - RUN, 2), round(z, 2)] for (x, z) in mags], 'magnet_hole': [I['magnet_d'] + 0.2, I['magnet_t'] + 0.3],
+                       'pins': [[round(x - RUN, 2), round(z, 2)] for (x, z) in pins], 'pin_hole_insert': I['pin_d'] - 0.1,
+                       'pin_hole_pocket': I['pin_d'] + 0.2, 'bay_d': I['bay_d'], 'bay_l': I['bay_l'], 'bay_z': WAVEGUIDE['throat_z'] + I['bay_dz'],
+                       'channel': {'x': RUN, 'y': round(wire_hole_y(), 2), 'd': WIRE_HOLE_D}}
+    if AMP:
+        y0, y1, z0, z1 = amp_box_extent(); gx, gy = amp_gland_xy()
+        f['amp'] = {'cutout': [AMP['cut_w'], AMP['cut_h']], 'rebate': [AMP['plate_w'] + 1, AMP['plate_h'] + 1, AMP['rebate']], 'z': AMP['z'],
+                    'box_inside': {'y': [y0, y1], 'z': [z0, z1]}, 'gland': {'x': gx, 'y': gy, 'hole_d': AMP_BOX['gland_d'] + 0.5}}
+    if PORT:
+        L = port_length_mm()
+        f['port'] = {'z': PORT['z'], 'bore': PORT['bore'], 'od': PORT['bore'] + 2 * PORT_WALL, 'hole_d': PORT['bore'] + 2 * PORT_WALL + 0.5,
+                     'flange_d': PORT['flange'], 'flange_t': PORT_FLANGE_T, 'tube_from_flange_face': L, 'collar': PORT_FLARE_R, 'overall': L + PORT_FLARE_R}
+    return f
+
+
 def checks(parts):
     """Clearances that the parameters alone do not guarantee, measured on the solids where they can be: each a name, the
     measured margin in mm and the least it may be. A failure stops the build, the way a failing test would."""
@@ -441,7 +500,15 @@ def checks(parts):
         bb = parts['waveguide-insert'].bounding_box()
         chk('insert above the top panel (its lowest point to the body\'s top)', bb.min.Z - BODY, -0.01)
         chk('insert material under the tweeter\'s counterbore', zc - (T['flange_d'] + 0.4) / 2 - BODY, 1.5)
-        chk('boss above the top panel', zc - I['boss_d'] / 2 - BODY, 1.0)
+        chk('insert material under the tweeter\'s bore, above the top panel', zc - (T['flange_d'] + 0.4) / 2 - (BODY + I['clear']), 1.2)
+        pocket = insert_pocket()
+        for (x, y) in dowel_points()[:2]:
+            chk(f'front dowel at y {y:g} clear of the insert\'s pocket', cyl_z(x, y, DOWEL_D, BODY - 1, BODY + DOWEL_DEPTH).distance_to(pocket), 3.0)
+        mags, pins = insert_fixings()
+        bore_r = I['boss_d'] / 2 + I['clear']
+        for (x, z) in mags + pins:
+            d_ = (I['magnet_d'] if (x, z) in mags else I['pin_d']) / 2
+            chk(f'magnet or pin at ({x - RUN:+.1f}, {z:g}) clear of the boss\'s bore', math.hypot(x - RUN, z - zc) - d_ - bore_r, 3.0)
         yb = I['boss_back_y'] + I['bay_l']; zt = zc + I['bay_dz'] + I['bay_d'] / 2
         roof = RIDGE_Z - (yb - RUN) * tan_ if yb > RUN else BODY + yb * tan_
         chk('birch over the connector bay, under the back slope (vertical)', roof - zt, 8.0)
@@ -502,6 +569,22 @@ def main():
             export_step(part, os.path.join(OUT, 'step', f'{nm}.step'))
     whole = Compound(label=NAME, children=[s for s in parts.values()])
     export_step(whole, os.path.join(OUT, 'step', f'{NAME}.step'))
+    # the trim rings for printing, each with a channel in its back over its frame's screw heads
+    import components as C
+    rings = [('woofer', WOOFER_REBATE)] + ([('mid', MID_REBATE)] if MID else [])
+    for role, rb in rings:
+        sp = C.DRIVERS[DRIVER_SET[role]]; _, info = C.cone_driver(sp, 4)
+        r_out = (rb['d'] - 1.6) / 2; r_in = max(info['r_surround'] + 1.0, r_out - C.RING['width'])
+        sc = DRIVER_SCREWS.get(role)
+        ring = C.trim_ring(r_in, r_out, groove=(sc['pcd'] / 2, 10.0, 2.0) if sc else None)
+        export_stl(ring, os.path.join(OUT, 'stl', f'trim-ring-{role}.stl'), tolerance=0.05, angular_tolerance=0.1)
+        report['parts'][f'trim-ring-{role}'] = {'od_mm': round(2 * r_out, 1), 'id_mm': round(2 * r_in, 1), 't_mm': C.RING['t'],
+                                                'groove': f'10 wide, 2 deep on ø{sc["pcd"]:g}' if sc else None}
+    # a part this size has not got leaves no file behind (the bookshelf's brace)
+    for stale in ([] if BRACE_Z else ['window-brace']) + ([] if MID else ['mid-shelf', 'mid-divider']):
+        for f in (os.path.join(OUT, 'stl', f'{stale}.stl'), os.path.join(OUT, 'step', f'{stale}.step')):
+            if os.path.exists(f):
+                os.remove(f)
 
     # The waveguide insert for printing (SLA or MJF, or FDM finely) or CNC from solid: whole, and halved at the centre
     # plane with two 3 mm pin holes when it is wider than a 256 mm printer.
@@ -544,6 +627,7 @@ def main():
     report['wood_mass_kg'] = round(wood_kg, 2)
     report['port_tube_length_mm'] = port_length_mm() if PORT else None
     report['size'] = SIZE
+    report['features'] = features()
     report['checks'] = checks(parts)
     json.dump(report, open(os.path.join(OUT, 'cad.json'), 'w'), indent=1)
     print(json.dumps({k: v for k, v in report.items() if k != 'parts'}, indent=1))

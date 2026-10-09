@@ -25,7 +25,13 @@ from ezdxf.enums import TextEntityAlignment
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out-bookshelf' if BOOK else 'out')
 WOOFER_POCKET = f"POCKET_{WOOFER_REBATE['depth']:g}MM"
 MID_POCKET = f"POCKET_{MID_REBATE['depth']:g}MM" if MID else 'POCKET_MID'
-LAYERS = {'CUT_OUTSIDE': 7, 'CUT_INSIDE': 1, 'POCKET_3MM': 3, WOOFER_POCKET: 4, MID_POCKET: 5, 'DRILL_10_DEEP10': 6, 'NOTES': 8}
+PLATE_POCKET = f"POCKET_{AMP['rebate']:g}MM" if AMP else 'POCKET_PLATE'
+LAYERS = {'CUT_OUTSIDE': 7, 'CUT_INSIDE': 1, 'POCKET_3MM': 3, WOOFER_POCKET: 4, MID_POCKET: 5, PLATE_POCKET: 2, 'DRILL_D10_DEPTH10': 6,
+          'DRILL_D5.5_THROUGH': 30, 'NOTES': 8}
+# what each layer asks of the shop, for the cut list
+OPS = {'CUT_INSIDE': 'cut inside', 'POCKET_3MM': 'pocket 3 mm deep', WOOFER_POCKET: f"pocket {WOOFER_REBATE['depth']:g} mm deep (woofer)",
+       MID_POCKET: f"pocket {MID_REBATE['depth']:g} mm deep (mid)" if MID else '', PLATE_POCKET: f"pocket {AMP['rebate']:g} mm deep (amplifier plate)" if AMP else '',
+       'DRILL_D10_DEPTH10': 'drill ø10, 10 deep', 'DRILL_D5.5_THROUGH': 'drill ø5.5 through (M4 T-nuts from inside; measure the frame first)', 'NOTES': 'notes'}
 
 
 def rect(x0, y0, x1, y1):
@@ -55,6 +61,16 @@ def panel_defs():
     front[WOOFER_POCKET] = front.get(WOOFER_POCKET, []) + circle(RUN, WOOFER['z'], WOOFER_REBATE['d'])
     if MID:
         front[MID_POCKET] = front.get(MID_POCKET, []) + circle(RUN, MID['z'], MID_REBATE['d'])
+    # the drivers' screw holes on their bolt circles (DRIVER_SCREWS, PLACEHOLDER until a frame is measured)
+    holes = []
+    for role, z in [('woofer', WOOFER['z'])] + ([('mid', MID['z'])] if MID else []):
+        sc = DRIVER_SCREWS.get(role)
+        if sc:
+            for k in range(sc['n']):
+                a = math.radians(sc['start_deg'] + 360.0 * k / sc['n'])
+                holes += circle(RUN + sc['pcd'] / 2 * math.cos(a), z + sc['pcd'] / 2 * math.sin(a), sc['hole'])
+    if holes:
+        front['DRILL_D5.5_THROUGH'] = holes
     drivers = ', '.join(f'{k} {v}' for k, v in DRIVER_SET.items() if v)
     P.append(dict(name='front-baffle', qty=1, w=PLAN, h=BODY, layers=front,
         note=f'outer face up; round the two vertical outer edges {EDGE_R:g} mm after glue-up; cutouts and rebates sized for {drivers} (flush under trim rings): re-cut for other drivers'))
@@ -63,9 +79,10 @@ def panel_defs():
         back['CUT_INSIDE'] += circle(RUN, PORT['z'], PORT['bore'] + 2 * PORT_WALL + 0.5)
     if AMP:
         back['CUT_INSIDE'] += rect(RUN - AMP['cut_w'] / 2, AMP['z'] - AMP['cut_h'] / 2, RUN + AMP['cut_w'] / 2, AMP['z'] + AMP['cut_h'] / 2)
-        back['POCKET_3MM'] += rrect(RUN - AMP['plate_w'] / 2 - 0.5, AMP['z'] - AMP['plate_h'] / 2 - 0.5,
-                                    RUN + AMP['plate_w'] / 2 + 0.5, AMP['z'] + AMP['plate_h'] / 2 + 0.5, AMP['plate_r'] + 0.5)
-        what = f'the {AMP["model"]}\'s module goes through its {AMP["cut_w"]:g} x {AMP["cut_h"]:g} cutout, its plate flush in the 3 mm rebate (drill its screw holes to Hypex\'s drawing)'
+        back[PLATE_POCKET] = rrect(RUN - AMP['plate_w'] / 2 - 0.5, AMP['z'] - AMP['plate_h'] / 2 - 0.5,
+                                   RUN + AMP['plate_w'] / 2 + 0.5, AMP['z'] + AMP['plate_h'] / 2 + 0.5, AMP['plate_r'] + 0.5)
+        what = (f'the {AMP["model"]}\'s module goes through its {AMP["cut_w"]:g} x {AMP["cut_h"]:g} cutout, its plate on 3 mm EPDM tape '
+                f'flush in the {AMP["rebate"]:g} mm rebate; ten ø3.5 pilot holes, 25 deep, to Hypex\'s drawing')
     else:
         tw, th = TERMINAL_CUTOUT
         back['CUT_INSIDE'] += rect(RUN - tw / 2, POSTS['z'] - th / 2, RUN + tw / 2, POSTS['z'] + th / 2)
@@ -79,7 +96,7 @@ def panel_defs():
     dowels = cad.dowel_points()
     P.append(dict(name='top-panel', qty=1, w=INNER, h=INNER, layers={
         'CUT_INSIDE': circle(RUN - WALL, wh - WALL, WIRE_HOLE_D),
-        'DRILL_10_DEEP10': sum((circle(x - WALL, y - WALL, DOWEL_D) for (x, y) in dowels), [])},
+        'DRILL_D10_DEPTH10': sum((circle(x - WALL, y - WALL, DOWEL_D) for (x, y) in dowels), [])},
         note='upper face up (front edge at the bottom of the drawing); dowels register the gable block; the tweeter cable\'s hole gets a grommet'))
     P.append(dict(name='bottom-panel', qty=1, w=INNER, h=INNER, layers={}, note='either face'))
     if BRACE_Z:
@@ -97,8 +114,12 @@ def panel_defs():
         y0, y1, z0, z1 = cad.amp_box_extent()
         d = y1 - y0 + WALL
         P.append(dict(name='amp-box-floor', qty=1, w=INNER, h=d, layers={}, note=f'the amplifier box\'s floor, z {z0 - WALL:g} to {z0:g}, against the back'))
-        P.append(dict(name='amp-box-lid', qty=1, w=INNER, h=d, layers={'CUT_INSIDE': circle(INNER - 40, 25, AMP_BOX['gland_d'])},
-                      note=f'the amplifier box\'s lid, z {z1:g} to {z1 + WALL:g}; the gland hole for the speaker leads, sealed after wiring'))
+        gx, gy = cad.amp_gland_xy()
+        P.append(dict(name='amp-box-lid', qty=1, w=INNER, h=d,
+                      layers={'CUT_INSIDE': circle(gx - WALL, gy - (y0 - WALL), AMP_BOX['gland_d'] + 0.5),
+                              'NOTES': [('text', (INNER / 2, 6.0), 'FRONT EDGE', 6.0)]},
+                      note=f'the amplifier box\'s lid, z {z1:g} to {z1 + WALL:g}, its front edge (the bottom of the drawing) over the box\'s front; '
+                           f'the gland\'s ø{AMP_BOX["gland_d"] + 0.5:g} hole {gx - WALL:g} from the left, {gy - (y0 - WALL):g} from the front edge; sealed after wiring'))
         P.append(dict(name='amp-box-front', qty=1, w=INNER, h=z1 - z0, layers={},
                       note=f'the amplifier box\'s front, between floor and lid, {AMP_BOX["depth"]:g} in front of the back\'s inner face; glue and seal all round'))
     return P
@@ -126,6 +147,10 @@ def draw(msp, part, ox=0.0, oy=0.0, label=True):
             if it[0] == 'poly':
                 pts = [(ox + (w if x is None else x), oy + y) for (x, y) in it[1]]
                 msp.add_lwpolyline(pts, close=it[2], dxfattribs={'layer': layer})
+            elif it[0] == 'text':
+                (tx, ty), txt, hgt = it[1], it[2], it[3]
+                t_ = msp.add_text(txt, height=hgt, dxfattribs={'layer': layer})
+                t_.set_placement((ox + tx, oy + ty), align=TextEntityAlignment.MIDDLE_CENTER)
             else:
                 (cx, cy), r = it[1], it[2]
                 msp.add_circle((ox + cx, oy + cy), r, dxfattribs={'layer': layer})
@@ -190,6 +215,8 @@ def rotated(p):
         for it in items:
             if it[0] == 'poly':
                 out.append(('poly', [tr(x, y) for (x, y) in it[1]], it[2]))
+            elif it[0] == 'text':
+                out.append(('text', tr(*it[1]), it[2], it[3]))
             else:
                 (cx, cy), r = it[1], it[2]
                 out.append(('circle', tr(cx, cy), r))
@@ -199,6 +226,9 @@ def rotated(p):
 
 def main():
     os.makedirs(os.path.join(OUT, 'dxf'), exist_ok=True)
+    for f in os.listdir(os.path.join(OUT, 'dxf')):      # every file here is written below: none left from an older build
+        if f.endswith('.dxf') or f == 'sheets.svg':
+            os.remove(os.path.join(OUT, 'dxf', f))
     panels = panel_defs()
     layers = gable_layers()
     for p in panels + layers:
@@ -227,7 +257,7 @@ def main():
         wr = csv.writer(f)
         wr.writerow(['part', 'qty per speaker', 'qty for a pair', 'width mm', 'height mm', 'thickness mm', 'material', 'operations', 'note'])
         for p in panels + layers:
-            ops = [k.replace('_', ' ').lower() for k in p['layers'] if p['layers'][k]] or ['outline only']
+            ops = [OPS.get(k, k.replace('_', ' ').lower()) for k in p['layers'] if p['layers'][k] and k != 'NOTES'] or ['outline only']
             wr.writerow([p['name'], p['qty'], p['qty'] * 2, f"{p['w']:.1f}", f"{p['h']:.1f}", f'{WALL:.0f}',
                          'Baltic birch plywood, B/BB, 18 mm', '; '.join(ops), p['note']])
     area = sum(p['w'] * p['h'] * p['qty'] * 2 for p in panels + layers) / 1e6

@@ -76,6 +76,9 @@ INSERT = dict(margin=2.0, eave_clip=25.0, back_y=200.0, boss_d=86.0, boss_back_y
 # the research (no drawing found): the unit no wider than its 71 to 74 cutout and about 32 deep; measure one first.
 TWEETER_PART = dict(model='SB Acoustics Satori TW29DN-B', dome_d=29.0, surround_w=8.0, flange_d=73.0, flange_t=6.0, body_d=66.0,
                     body_depth=26.0, screws=4, bolt_circle=62.0)
+# The tweeter's screws go into heat-set brass inserts (M3 x 5.7) melted into its seat round the throat: holes 4.0 across,
+# 6 deep, on its bolt circle. PLACEHOLDER circle and count until one is measured (fab/research/drivers-floorstander.md)
+INSERT_SCREW = dict(hole_d=4.0, depth=6.0, insert='M3 x 5.7 heat-set brass')
 # 2026-10-08, the research's recommended set for the active floorstander (fab/research/drivers-floorstander.md)
 DRIVER_SET = dict(woofer='rss315hf-4', mid='mr16p-8', tweeter='tw29dn-b')
 
@@ -127,14 +130,21 @@ CLEAR = 1.0               # PLACEHOLDER radial clearance for the tweeter pocket
 # 3 mm rebate like the drivers' rings, centred at z 185 so it clears the shadow line at 113 (the research put it at 175).
 # FusionAmps are not airtight, so the module sits in its own sealed box behind the plate, the cabinet's sides its ends.
 AMP = dict(model='Hypex FusionAmp FA253', plate_w=360.0, plate_h=135.0, plate_t=3.0, plate_r=4.0, module_depth=55.0,
-           cut_w=336.0, cut_h=111.0, z=185.0, rebate=3.0)   # PLACEHOLDER outline radius and screw pattern: Hypex's 2D drawing
+           cut_w=336.0, cut_h=111.0, z=185.0, rebate=4.5)   # PLACEHOLDER outline radius and screw pattern: Hypex's 2D drawing
+# The plate's rebate is 4.5 deep: the 3.0 plate on 3 mm closed-cell EPDM tape compressed to 1.5, so it seals and lies flush
+# (fab/research/amps.md); it is held by ten 4.3 x 25 self-tappers in 3.5 pilot holes to Hypex's drawing.
 AMP_BOX = dict(depth=90.0, margin=12.0, gland_d=25.0)       # clear depth in front of the back's inner face; space above and below the cutout;
                                                             # the lid's gland an M25 with a three-hole seal (woofer, mid, tweeter)
 TERMINAL_CUTOUT = (113.0, 49.0)  # DERIVED the terminal cup's body plus 0.5 a side, through the back (was 96 x 36 behind a flat plate)
 # 2026-10-08, the owner: the drivers flush. Each frame sits in a rebate as deep as its flange and the printed trim ring over it, so
 # the ring's face is level with the finish, with a 0.8 reveal round it.
-WOOFER_REBATE = dict(d=315.6, depth=8.0)  # PLACEHOLDER the RSS315HF-4's 314 frame + 2 x 0.8; depth its flange (about 5, measure it) + the 3 mm ring
-MID_REBATE = dict(d=166.6, depth=10.5)    # PLACEHOLDER the MR16P-8's 165 frame + 2 x 0.8; depth its 7.5 front flange + the 3 mm ring
+# The drivers' screws: holes for M4 T-nuts fitted from inside, on each frame's bolt circle. PLACEHOLDER circles and counts
+# (the research's estimates, fab/research/drivers-*.md): measure the frame before drilling.
+DRIVER_SCREWS = dict(woofer=dict(n=8, pcd=298.0, hole=5.5, start_deg=22.5), mid=dict(n=4, pcd=154.0, hole=5.5, start_deg=45.0))
+LEAD_ABOVE_GROMMET = 250.0   # the cabinet's tweeter lead past the grommet: 67 up the channel, 167 to 20 proud of the roof
+                             # in front of the bay (so the socket comes out through the empty pocket), 16 of slack
+WOOFER_REBATE = dict(d=315.6, depth=9.0)  # PLACEHOLDER the RSS315HF-4's 314 frame + 2 x 0.8; depth its flange (about 5, measure it) + 1.0 of compressed gasket + the 3 mm ring
+MID_REBATE = dict(d=166.6, depth=11.5)    # PLACEHOLDER the MR16P-8's 165 frame + 2 x 0.8; depth its 7.5 front flange + 1.0 of gasket + the 3 mm ring
 TRIM_RING = dict(t=3.0, width=20.0)       # PROPOSAL printed trim ring over each frame and its screws, sprayed satin black, a friction fit
 POST_HOLE = 10.0          # PLACEHOLDER binding-post hole in the plate
 
@@ -169,7 +179,7 @@ if BOOK:
     # simulated throat was 514 up; it is 517 here so the 62 mm faceplate clears the top panel (2 mm of insert under
     # it), which moves nothing measurable at these wavelengths.
     WAVEGUIDE = dict(throat_y=95.0, throat_z=517.0, r0=17.0, a0=4.0, a_h=45.0, a_up=35.0, a_down=30.0, k=1.4, lip_r=7.0, s_min=10.0)
-    INSERT = dict(margin=1.5, eave_clip=14.0, back_y=113.0, boss_d=60.0, boss_back_y=131.0, clear=0.3,   # boss 60: clears the top panel
+    INSERT = dict(margin=1.5, eave_clip=14.0, back_y=113.0, boss_d=68.4, boss_back_y=131.0, clear=0.3,   # PROPOSAL boss 68.4 round the faceplate's 62.4 bore, flattened on the top panel (1.5 of insert under the bore)
                   magnet_d=8.0, magnet_t=3.0, pin_d=4.0, pin_l=8.0,
                   bay_d=26.0, bay_l=22.0, bay_dz=-5.0)
     # Scan-Speak Illuminator D3004/602200: its 62 mm faceplate screwed to the insert's back, the dome in the 34 mm throat
@@ -178,13 +188,15 @@ if BOOK:
     TWEETER = dict(TWEETER, faceplate_y=WAVEGUIDE['throat_y'], z=WAVEGUIDE['throat_z'])
     DRIVER_SET = dict(woofer='sb17nrx2c35-8', mid=None, tweeter='d3004-602200')
     WOOFER_CUTOUT = 144.9                     # PLACEHOLDER unconfirmed in the research
-    WOOFER_REBATE = dict(d=172.6, depth=9.5)  # the 171 frame + 2 x 0.8; its 6.5 flange + the 3 mm ring
+    DRIVER_SCREWS = dict(woofer=dict(n=4, pcd=159.0, hole=5.5, start_deg=45.0))   # 4 x 4.3 on 159 (fab/research/drivers-small.md)
+    LEAD_ABOVE_GROMMET = 100.0
+    WOOFER_REBATE = dict(d=172.6, depth=10.5)  # the 171 frame + 2 x 0.8; its 6.5 flange + 1.0 of gasket + the 3 mm ring
     MID_CUTOUT = None; MID_REBATE = None
     PORT = None                               # sealed: about 10 L net, f3 62 Hz, a DSP shelf to 45 Hz (the research)
     POSTS = dict(POSTS, z=180.0)
     # Hypex FusionAmp FA122 upright on the back (its 315 plate will not lie across a 220 back)
     AMP = dict(model='Hypex FusionAmp FA122', plate_w=120.0, plate_h=315.0, plate_t=3.0, plate_r=4.0, module_depth=55.0,
-               cut_w=96.0, cut_h=291.0, z=235.0, rebate=3.0)
+               cut_w=96.0, cut_h=291.0, z=235.0, rebate=4.5)
     AMP_BOX = dict(depth=70.0, margin=10.0, gland_d=20.0)   # an M20 with a two-hole seal
     # The back holds the amplifier, so the Facts go on the right side, as on a real carton
     LABEL = dict(w=150.0, h=147.0, top=420.0, face='right')

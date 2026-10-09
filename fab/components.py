@@ -175,15 +175,19 @@ def dome_tweeter(spec, detail=24):
     return out, dict(r_radiating=rd + sw)
 
 
-def trim_ring(r_in, r_out, ring=RING):
+def trim_ring(r_in, r_out, ring=RING, groove=None):
     """The trim ring's profile, outer to inner: eased outer edge level with the finish, a crown `crown` proud, a rounded
-    inner edge down onto the frame. Local frame: a = 0 at the finish, the ring sits in a = 0 to t."""
+    inner edge down onto the frame. Local frame: a = 0 at the finish, the ring sits in a = 0 to t. `groove` (radius,
+    width, depth): a channel in its back over the frame's screw heads, so the ring lies on the flange, not on them."""
     t, cr, e = ring['t'], ring['crown'], ring['ease']
     pts = [(r_out, t), (r_out, e)] + [(r_out - e + e * math.cos(th), e - e * math.sin(th)) for th in [math.pi / 2 * i / 6 for i in range(7)]][1:]
     mid = (r_in + r_out) / 2
     pts += [(r_out - e - 2, 0.0), (mid + 3, -cr), (mid - 3, -cr), (r_in + 2.5, 0.0)]
     pts += [(r_in + 2.5 - 2.5 * math.sin(th), 2.5 - 2.5 * math.cos(th)) for th in [math.pi / 2 * i / 6 for i in range(7)]][1:]
     pts += [(r_in, t)]
+    if groove:
+        rg, gw, gd = groove
+        pts += [(rg - gw / 2, t), (rg - gw / 2, t - gd), (rg + gw / 2, t - gd), (rg + gw / 2, t)]
     return _revolve_profile(pts)
 
 

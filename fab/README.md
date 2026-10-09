@@ -72,16 +72,19 @@ mount and wiring, (4) the back, the amplifier and the wiring, (5) the assembly.
 5. **Make the gable.** Laminated birch (`dxf/gable-layer-*.dxf`), CNC-milled to `step/gable-block.step`: the insert's
    pocket is a prism along the depth, so it mills from the front face with the block on its back. Or printed
    (`stl/gable-print/`), filled and painted. Round the hips and the fin's edges. Glue it on four 10 mm dowels.
-6. **Fit the insert** (sheet 3). Heat-set M3 inserts for the tweeter's screws; the tweeter in its counterbore from
-   behind on a 0.5 mm gasket; the magnets in the insert's back and their partners in the pocket's back wall,
-   opposite poles out; the two pins. Its 120 mm lead ends in the plug of a two-pole locking connector (JST VH).
-7. **Wire it** (sheets 3 and 4). The cabinet's lead to the tweeter comes up from the amplifier box's gland, through
-   the brace's window (floorstander), up a 14 mm channel through the top panel and the gable block, sealed by a
-   grommet under the top panel, and ends in the connector's socket in the bay behind the insert's boss. The woofer's
-   and mid's leads run to the same gland. Seal the gland and the grommet: the woofer's box must be airtight, and the
-   insert's pocket is open to the room through its 0.3 mm seam.
-8. **The amplifier.** Its module goes through the back's cutout into its sealed box, the plate flush in its 3 mm
-   rebate; drill its screw holes to Hypex's drawing.
+6. **Run the tweeter's cabinet lead** (sheets 3 and 4) before the insert goes in: from the amplifier box's gland,
+   through the brace's window (floorstander, 30 mm in from its back edge), up the 14 mm channel through the top panel
+   and the gable block to the socket of a two-pole locking connector (JST VH), 250 mm past the grommet (100 on the
+   bookshelf); seal the grommet under the top panel.
+7. **Fit the insert** (sheet 3). Heat-set M3 x 5.7 inserts in the seat round the throat; the tweeter in from behind
+   through its bore, its flange on a 0.5 mm gasket on the seat, screwed to the inserts; the magnets in the insert's back
+   and their partners in the pocket's back wall, opposite poles out; the two pins pressed in. Plug its 120 mm lead into
+   the cabinet's socket and slide the insert home.
+8. **Wire the woofer and the mid** (sheet 4) to the same gland, the drivers on 1.5 mm foam gaskets in their rebates,
+   M4 button heads into T-nuts (sheet 1), the trim rings over them. Seal the gland: the woofer's box must be airtight,
+   and the insert's pocket is open to the room through its 0.3 mm seam. **The amplifier**: its module goes through the
+   back's cutout into its sealed box, the plate on 3 mm EPDM tape flush in its 4.5 mm rebate, ten 4.3 x 25 screws in
+   pilot holes drilled to Hypex's drawing.
 9. **Finish.** Fill the grain and edges, 2K high-build primer, block flat, the body colour everywhere, mask the marks
    with the vinyl stencils (`out*/marks/`), the accent colour on the plinth and gable, peel; then the Nutrition Facts
    (`marks/facts-print.pdf`, on the back of the floorstander and the right side of the bookshelf) as a screen print in
