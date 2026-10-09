@@ -1,0 +1,270 @@
+{
+ "stage1": {
+  "impression": "A clean, high-angle close-up of the red gable roof with the waveguide and tweeter near frame centre; the lacquer reads glossy and the lip catches a crisp highlight. But the white body is a bright, flat slab across the bottom, the big red slope sits close to one value, the driver reads as a small cartoon eye under a brow, and the grey sweep goes dull on the left, so this is a competent draft, not a homepage frame.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The tweeter sits on the frame's vertical centre line (surround spans x 646-747, centre 675), so a spread's gutter runs through the hero. It must sit at 58% of the width or more (surround's left edge at x 780 or beyond): a horizontal lens shift that moves the content about 135 px right, tested on part:tweeter-surround. Deferred to the next round because a camera move invalidates this round's region tests.",
+  "No lacquered face reads as one value: the right gable end (lum_range 1.4), the right horn wall (a 48 px band at 49-51, x 796-844 at y 600) and the left wall's pale band (flat 112-115 along 300 px) each carry a graduated reflection of at least 10 levels.",
+  "The arch's crest highlight runs unbroken from x 300 to 870, never dropping below 120 (it drops to 85-88 across x 620-650 at the crown).",
+  "The fin stands at least 15 levels off the slope along its whole base (5.8 at its left end now, 25 at its right).",
+  "The driver reads as a precision part, not an eye: the surround's roll carries a highlight (p95 of 60 or more, 42 now), and the dome's single top-centre catchlight (208 at 699,393) is not the only light on the driver.",
+  "The sweep reads neutral to cool behind the red (delta E 2000 of 2 or less from a neutral). It reads rose now: chroma 3.2-4.0 at hue 43-51 degrees, only 10-17 degrees from the accent's 34.",
+  "The white front band is not the brightest large mass: it holds 230 over 11% of the frame along the bottom edge, with a 164-level step against the red, and outpulls the waveguide, whose highlights peak at 150-165."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The right gable end is one flat value, a dark maroon card with no reflection, so the lacquer reads matte on the frame's largest shadow face.",
+   "evidence": {
+    "region": [
+     1150,
+     405,
+     1210,
+     575
+    ],
+    "measured": "lum_median 38.1, lum_range 1.4 (p5 37.7, p95 39.1), profile y 38.4, 38.3, 38.1, 38.1, 38.1, 38.1, 38.1, 38.0; columns x 1195-1260 read 37-38 from the hip to the bottom edge. Ray-traced from the camera, every point of this face mirrors lights.flag_right, a uniform 0.05-radiance panel, at panel heights z 0.42 (foot of the hip) to 0.73 (apex), so the face mirrors flat black"
+   },
+   "change": {
+    "setting": "lights.side_grad",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.7,
+      0.5
+     ],
+     "position": [
+      0.586,
+      0.576,
+      0.562
+     ],
+     "target": [
+      0.17,
+      -0.11,
+      0.9
+     ],
+     "strength": 0.6,
+     "color": 5700,
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.55,
+       0.74
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "This is a graduated card set 3 cm in front of flag_right, and the gable end mirrors it as a smooth ramp. The lower half by the foot of the hip stays 38-40, the face rises to about 58-62 at y 360 and 62-66 at the apex, and [1172,355,1198,580] falloff comes out at 14-18. Across the hip the front slope stays at least 15 levels lighter at every height (79/73/65 against about 60/48/38 at y 350/500/650). The white side and the bottom edge are unchanged because the ramp is 0 below z 0.55.",
+   "accept": {
+    "region": [
+     1172,
+     355,
+     1198,
+     580
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     10,
+     20
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The highlight that traces the waveguide's arch breaks for 40 px at its crown, so the mouth's contour reads as two strokes and a blob rather than one machined edge.",
+   "evidence": {
+    "region": [
+     618,
+     322,
+     652,
+     344
+    ],
+    "measured": "lum_p95 60.9, against 159.2 on the left arm's line [575,330,605,352] and 151.0 on the crown patch [665,318,715,340]; crest peak per column: x 600 156, x 610 127, x 620-650 85-88, x 660 137"
+   },
+   "change": {
+    "setting": "glints.2",
+    "from": null,
+    "to": {
+     "at": [
+      -0.0269,
+      -0.0436,
+      0.9762
+     ],
+     "normal": [
+      -0.17,
+      -0.7,
+      0.69
+     ],
+     "size_m": 0.1,
+     "power_w": 4,
+     "receivers": [
+      "waveguide-insert"
+     ]
+    }
+   },
+   "expected": "A 2-4 px crest highlight runs across x 615-655 at y 329-336 and peaks at 135-155, joining the left arm's line (156-164) to the crown patch (137-152), so the lip reads as one continuous edge. The flat border inside the seam (y 312-320) stays near 85, with no second line. The at point is the camera ray through pixel (635,332), so the engine snaps it onto the lip's crest.",
+   "accept": {
+    "region": [
+     618,
+     322,
+     652,
+     344
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     120,
+     160
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "The sweep renders rose, turned toward the product's own red, so the accent loses hue contrast against its ground and reads as sitting on a pale echo of itself.",
+   "evidence": {
+    "region": [
+     1200,
+     0,
+     1350,
+     150
+    ],
+    "measured": "median rgb (225,215,212), Lab a +2.9 b +2.7 (chroma 4.0, hue 43 degrees), delta E 2000 4.96 from neutral-cool #D9D9DC; left strip [0,0,55,640] reads (170,163,160), hue 51 degrees. The paper #A29E98 is hue 85 degrees, so the sweep's light adds about 4-5% to R and B over G; the accent #C62828 sits at hue 34 degrees"
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#A29E98",
+    "to": "#9C9F9E"
+   },
+   "expected": "The new paper has the same luminance (Y 0.343 against 0.344), and its slight green cancels the light's magenta. The top-right sweep renders about (217,216,220) and the left about (164,164,166), luminance unchanged within 2 levels, so the red separates by hue as well as value.",
+   "accept": {
+    "region": [
+     1200,
+     0,
+     1350,
+     150
+    ],
+    "metric": "delta_e",
+    "hex": "#D9D9DC",
+    "op": "between",
+    "value": [
+     0,
+     2.0
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The tweeter's surround is an undifferentiated black ring, so the driver reads as an iris with a catchlight rather than a dome on a rubber roll.",
+   "evidence": {
+    "region": [
+     646,
+     359,
+     747,
+     464
+    ],
+    "measured": "part:tweeter-surround median 24.2, p95 42.0; p95 by quadrant 27.5 (upper left), 40.6 (upper right), 35.9 (lower left), 44.9 (lower right, part inside [700,415,750,465], median 27.2). The dome inside it peaks at 208 and its edge steps 104 levels in 1 px, so all the driver's light is the catchlight"
+   },
+   "change": {
+    "setting": "glints.3",
+    "from": null,
+    "to": {
+     "at": [
+      0.0089,
+      -0.0307,
+      0.9269
+     ],
+     "normal": [
+      0.2,
+      -0.85,
+      0.48
+     ],
+     "size_m": 0.15,
+     "power_w": 2,
+     "receivers": [
+      "tweeter-surround"
+     ]
+    }
+   },
+   "expected": "A soft crescent sits on the lower-right of the roll, the side that faces the mouth, so its mirror ray leaves the horn; it peaks at about 85-100 over 10-20 px of arc. In that quadrant, p95 rises from 44.9 to 70-90, while the other three quadrants stay at p95 41 or below, so the ring still reads black. The at point is the camera ray through pixel (728,442), at the dome's depth.",
+   "accept": {
+    "region": {
+     "part": "tweeter-surround",
+     "box": [
+      700,
+      415,
+      750,
+      465
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     60,
+     100
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "At its left end the fin is the same red as the slope below it, so the ridge disappears and the fin reads as part of the roof instead of a standing seal.",
+   "evidence": {
+    "region": [
+     300,
+     90,
+     520,
+     170
+    ],
+    "measured": "fin face median 84.0, against 89.8 for the slope below [300,210,520,300]. At x 330 the column reads 86-87 down the fin and 89-90 below it, with no step at the base (y 178 to 186: 86 to 89). At x 1150 the same junction is 54 against 79"
+   },
+   "change": {
+    "setting": "lights.fin_sheen.strength",
+    "from": 1.7701,
+    "to": 1.0
+   },
+   "expected": "The fin's left face drops to about 70-74 while the slope below stays about 90, giving a 16-20 level step along the whole base. The fin keeps a left-to-right falloff of about 15 (the engine's earlier proof at 1.0 gave 16.4). The slope does not move, because fin_sheen is diffuse false and the slope does not mirror it.",
+   "accept": {
+    "region": [
+     300,
+     90,
+     520,
+     170
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     64,
+     76
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Close or soften the dark hairline seam that outlines the waveguide insert (69 against the roof's 86 at x 450, y 415; 71 against 82 at x 330, y 540).",
+   "why": "At 1-2 px and about 15 levels below the roof it reads as an inked outline, so the insert looks like a decal rather than a machined part. But the insert's fit and seam belong to the waveguide's fixed geometry."
+  },
+  {
+   "request": "Reshape the hood or arch, or reposition the tweeter, so the driver stops reading as an eye under a brow.",
+   "why": "A black ring, a grey dome with a top-centre catchlight and an arched lip over it read as a cartoon eye, which undercuts 'a designed, machined part'. The waveguide's profile and the tweeter's place in it are set by acoustic simulation, so only light can soften this read (c4)."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
