@@ -530,5 +530,71 @@
   ],
   "reply": "critic/rounds/2026-10-09/shot-01-e9-r6.json",
   "shot_sha": "bfe7e90eddb85256c4ece96eb7078693b7d2d039"
+ },
+ {
+  "change": "c1",
+  "setting": "render.exposure",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    205,
+    218
+   ]
+  },
+  "proofs": [
+   [
+    0.85,
+    212.0
+   ],
+   [
+    1.0,
+    221.9
+   ],
+   [
+    0.8424,
+    211.6
+   ]
+  ],
+  "set": 0.8424,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c3"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-01-e10-r7.json",
+  "shot_sha": "0b5b28465782f5a2039a939c5637771cfca0afea"
+ },
+ {
+  "change": "c2",
+  "setting": "glints.6.power_w",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    26,
+    42
+   ]
+  },
+  "proofs": [
+   [
+    1.0,
+    15.0
+   ],
+   [
+    2.0,
+    15.0
+   ]
+  ],
+  "set": 1.0,
+  "passes": false,
+  "moves_the_test": false,
+  "passing": [
+   "c1",
+   "c3"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-01-e10-r7.json",
+  "shot_sha": "d19583dbe51f0d727a9a441061d0435b7f9868f1"
  }
 ]
