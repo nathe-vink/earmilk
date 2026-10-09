@@ -197,5 +197,63 @@
   "set": 10.5516,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "lights.floor.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    138,
+    158
+   ]
+  },
+  "proofs": [
+   [
+    0.7,
+    139.8
+   ],
+   [
+    1.3,
+    154.1
+   ],
+   [
+    1.0441,
+    148.1
+   ]
+  ],
+  "set": 1.0441,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c2",
+  "setting": "lights.key.orbit.azimuth_deg",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    179,
+    195
+   ]
+  },
+  "proofs": [
+   [
+    -60.0,
+    201.0
+   ],
+   [
+    -68.0,
+    198.9
+   ],
+   [
+    -84.0,
+    194.9
+   ]
+  ],
+  "set": -84.0,
+  "passes": true,
+  "moves_the_test": true
  }
 ]
