@@ -1,0 +1,335 @@
+{
+ "stage1": {
+  "impression": "A clean, noise-free view down onto a glossy red gable-top with the horn and its tweeter at the centre; the red is rich and the lacquer reads. It stops short of shipping: the big roof plane is lit almost flat, the white body reads as a dull lavender-grey slab, a broad hard-edged pink reflection folds the horn's left wall into a facet, and the crop jams the fin against the top edge while cutting the body off.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The waveguide holds the frame: insert plus tweeter at least 25% of it (now 17.0%), the tweeter on the upper third rather than dead centre (dome centroid now (664, 429), 23 px from the frame centre), the fin still in view, and no carton corner within 40 px of an edge (the left eave corner now sits at x 50-57).",
+  "The horn's left wall reads as one continuous gloss surface: its broad reflection within about 5 levels of the roof beside it (now 111.3 on [400,490,500,530] against 91.1) and no edge on it steeper than about 8 levels per pixel (now 18.2 on [395,470,405,510], axis y).",
+  "The mouth reads as a machined radius: a fine, continuous, graded highlight (peak 120-170, 2-4 px) along both branches of the rim; now only the apex catches light (158 at (683,360)) and the branches top out at p95 89.7 (left, insert pixels in [430,375,530,430]) and 83.7 (right, [735,400,805,530]).",
+  "The white body reads neutral: front-baffle R, G, B within 2 levels (now 235/230/234) and dE2000 at most 1.5 to a grey of equal lightness (now 3.53 to #E8E8E8), with the sweep its own warm grey instead of pink (now 222/211/209).",
+  "The white front recedes instead of being the brightest flat slab in the frame: at least 10 levels of fall from the eave to the frame's bottom edge (now 1.7 down part:front-baffle; [100,800,300,900] spans 2.0 levels). No offered setting does this over a 9 cm strip; it needs a flag or a graded card close to the front, and the reframe raises the slab's share to about 13.6%.",
+  "The lit roof reads as #C62828: dE2000 at most 5 on the upper-left slope [250,300,330,380] (now 6.88).",
+  "The right gable end reads as lacquer, not a cut-out: at least 10 levels of gradient across it (now 37.7 to 38.1, range 1.4, on gable-block within [1100,440,1150,620])."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "camera",
+   "problem": "The frame is a roof shot, not the close-up the brief asks for: the waveguide and tweeter fill a sixth of it, the tweeter sits dead centre, and a third of the frame is backdrop.",
+   "evidence": {
+    "region": [
+     164,
+     327,
+     847,
+     823
+    ],
+    "measured": "part:waveguide-insert 199,651 px plus tweeter 7,454 px = 17.0% of the frame, against 34.6% background and 10.3% white front; the dome's centroid (664, 429) is 23 px from the frame centre; the fin's top-left corner (270, 97) and the mouth's bottom-right corner (845, 820) span 723 of 900 rows, so any tighter frame has to crop the fin; the left eave corner is 50-57 px from the left edge."
+   },
+   "change": {
+    "setting": "camera.lens_mm",
+    "from": 85,
+    "to": 105
+   },
+   "expected": "With c2, a 1.235x crop of the same view: the camera does not move and turns about 1.5 degrees, so every reflection stays where it is. Insert plus tweeter go from 17.0% to about 25.9% of the frame, background from 34.6% to about 6.9%, white front from 10.3% to about 13.6%. The tweeter's centre lands at about (701, 331) on the upper third, the mouth's corners at about (83, 651) and (920, 815) and its apex at (663, 206); the fin runs across the top with its top edge in view from x of about 966 to its end at (1296, 36); the left eave corner and the right back eave corner leave the frame by about 59 and 53 px, and the right front eave corner sits at (1080, 855), 45 px above the bottom. At f/16 the eave, 8 cm nearer than the focus plane, blurs about 1.4 px. The test band, background now (177.8), lands on the fin and the left slope (about 87 to 94).",
+   "accept": {
+    "region": [
+     50,
+     60,
+     450,
+     100
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     60,
+     125
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "camera",
+   "problem": "The 105 mm crop of c1 about the present target would cut off the mouth's lower corner, so the frame has to be re-centred on the horn.",
+   "evidence": {
+    "region": [
+     616,
+     378,
+     714,
+     480
+    ],
+    "measured": "camera.target projects to (675, 450), beside the tweeter (dome centroid (664, 429)); a 105 mm crop about it would put the mouth's bottom-right corner at (885, 907) and the right front eave corner at (1046, 947), below the frame, while the fin's top-left corner would sit at y 14."
+   },
+   "change": {
+    "setting": "camera.target",
+    "from": [
+     0,
+     -0.03,
+     0.93
+    ],
+    "to": [
+     -0.011,
+     -0.043,
+     0.901
+    ]
+   },
+   "expected": "The frame centre moves to this image's pixel (645, 525) on the horn's floor below the tweeter: the point 3 cm below the current target on the same line of sight. With c1 the tweeter's dome and dark surround fill the box [650,285,750,380] (median about 50; now 89.6 on the red lip above the tweeter) and the mouth's bottom-right corner sits 85 px above the bottom edge.",
+   "accept": {
+    "region": [
+     650,
+     285,
+     750,
+     380
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     30,
+     65
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "A broad, flat, hard-edged pink band on the horn's left wall is the brightest thing in the waveguide and makes the curved wall read as a folded facet.",
+   "evidence": {
+    "region": [
+     400,
+     490,
+     500,
+     530
+    ],
+    "measured": "Band lum 111.3, rgb (196,88,92), dE2000 11.6 to #C62828, against 91.1 on the roof beside it; its upper edge steps 18.2 levels in one pixel ([395,470,405,510], axis y; 63 to 109 between y 490 and 496 at x=400). It is the fill's mirror image: its G/B (86/90 last render, 88/93 now) did not move although lights.top.strength fell 42% and the key dropped 10 degrees, and the unchanged fill (azimuth 50, elevation 25, 1.5 m, specular 0.4) lies on the wall's mirror direction where its normal turns 45-55 degrees from the roof's. It is the insert's brightest 5%: part p95 110.8."
+   },
+   "change": {
+    "setting": "lights.fill.specular",
+    "from": 0.4,
+    "to": 0.15
+   },
+   "expected": "The fill's mirror image on the wall falls to about 37%: band about (188,61,65), lum 85-90, level with the roof beside it, dE2000 about 5.6; its upper-edge step falls from 18 to about 9 levels per pixel; the insert's p95 falls from 110.8 to about 86-88, set by the floor near the eave. The fill's diffuse light on the right side is unchanged, and the apex lip highlight (158 at (683,360)) is the key's and stays.",
+   "accept": {
+    "region": "part:waveguide-insert",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     80,
+     96
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The left branch of the mouth has no rim highlight, so the machined radius reads only as a 1 px dark outline.",
+   "evidence": {
+    "region": [
+     430,
+     375,
+     530,
+     430
+    ],
+    "measured": "Insert pixels here peak at p95 89.7, no brighter than the roof beside them (90-92), and the wall just inside drops to 42-47 (x=400, y 472-484). Back-projecting the mouth outline onto the 37.6 degree slope, the rim's roll-over at 10-30 degrees mirrors directions up and toward the camera, into the top panel's dimmest zone (ramp 0.15-0.3 between y -0.45 and -1.9). Only the apex catches light: the key, 158 at (683,360)."
+   },
+   "change": {
+    "setting": "lights.rim_left",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.24,
+      0.16
+     ],
+     "position": [
+      -0.062,
+      -0.664,
+      1.643
+     ],
+     "target": [
+      -0.12,
+      -0.08,
+      0.93
+     ],
+     "strength": 5,
+     "color": 5700,
+     "diffuse": false
+    }
+   },
+   "expected": "A fine highlight, 2-3 px wide and peaking about 140-160 (rgb near (212,135,136)), runs just inside the seam along the whole left branch, where the roll-over has turned 22-29 degrees, from (565, 344) by the apex to (205, 632) in this image (about (576, 226) to (131, 582) after c1-c2), meeting the key's catch at the apex. The card hangs 0.75 m above the front-left of the roof, out of view; traced the same way, the roof, the fin's top edge, the eave round, both hips and the right branch do not mirror it (with its axes either way round), so nothing else changes but a small second catch on the dome. The test box is in the reframed image (this image's [430,375,530,430]).",
+   "accept": {
+    "region": {
+     "part": "waveguide-insert",
+     "box": [
+      410,
+      264,
+      533,
+      332
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     115,
+     175
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The right branch of the mouth carries only a faint sheen, so the far side of the horn has no edge.",
+   "evidence": {
+    "region": [
+     735,
+     400,
+     805,
+     530
+    ],
+    "measured": "Insert pixels here peak at p95 83.7 over a wall at median 63.8 (the deep-red channel reads 52.1 at [730,520,770,600]); the roll-over at 10-30 degrees mirrors the set's left side at 20-35 degrees elevation, where there is no lamp."
+   },
+   "change": {
+    "setting": "lights.rim_right",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.26,
+      0.22
+     ],
+     "position": [
+      -0.8,
+      -0.1,
+      1.47
+     ],
+     "target": [
+      0.04,
+      -0.1,
+      0.95
+     ],
+     "strength": 4,
+     "color": 5700,
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -0.22,
+       -0.12,
+       0.02
+      ],
+      "values": [
+       1,
+       0.6,
+       0.3
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "A fine highlight runs just inside the seam down the right branch from (726, 372), just under the key's apex catch, to about (840, 790): about 130-145 at the top fading to about 90-100 near the eave (the ramp runs along the branch), so the rim reads as lit from the upper left rather than outlined. The card stands 0.84 m left of the tweeter and 0.5 m above it, out of view; the roof, fin top, eave round, right hip and left branch do not mirror it, and the left hip's lowest 2 cm, which does, falls outside the reframed image (x below -36). The test box is in the reframed image (this image's [735,400,805,530]).",
+   "accept": {
+    "region": {
+     "part": "waveguide-insert",
+     "box": [
+      786,
+      296,
+      872,
+      456
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     100,
+     160
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The white body renders lavender, not #FFFFFF, because the Kelvin lamps sit off the white balance's locus.",
+   "evidence": {
+    "region": [
+     55,
+     670,
+     990,
+     900
+    ],
+    "measured": "part:front-baffle rgb (235,230,234): Lab a* +2.4, b* -1.3, dE2000 3.53 to a neutral #E8E8E8 of the same lightness. The side (164,160,164), the reds (gable-block 203/47/51, B above G) and the sweep (222,211,209 against its own warm #A29E98) carry the same green deficit. It matches lamps on the Planckian locus (5600 K about #FFEFE4) under a white balance whose 5700 K white sits on the daylight locus (about #FFF6E7): about 0.003 duv toward magenta, which a Kelvin white balance cannot remove."
+   },
+   "change": {
+    "setting": "lights.key.color",
+    "from": 5600,
+    "to": "#FFF4E3"
+   },
+   "expected": "#FFF4E3 is 5600 K on the daylight locus: the key keeps its warmth and loses the magenta. It gives about 60% of the light on the white front, so front-baffle G rises 2-3 levels against R and B, to about (234,232,232), a* about +1, dE2000 to #E8E8E8 about 1.2-1.6, median still 229-236 at the same irradiance. The side and the sweep keep part of the cast until fill, top and bg_pool take the same daylight-locus hex (#FFF6E7 for 5700 K).",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "delta_e",
+    "hex": "#E8E8E8",
+    "op": "<=",
+    "value": 1.8
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The upper-left roof plane, the largest red area in the frame, still reads coral rather than #C62828.",
+   "evidence": {
+    "region": [
+     250,
+     300,
+     330,
+     380
+    ],
+    "measured": "Upper-left slope rgb (216,62,66), lum 95.0, dE2000 6.88 to #C62828; last round's box [240,380,330,470] reads 6.5 against its target of under 5 (the engine's proof had 4.35 at this strength before the key and exposure moved). The right slope (gable-block in [850,320,1000,820]) reads (203,39,44), dE 1.33: only the plane facing the 4.2 m top panel is lifted, by its diffuse light and its mirror image."
+   },
+   "change": {
+    "setting": "lights.top.strength",
+    "from": 1.5,
+    "to": 1.2
+   },
+   "expected": "Upper-left slope to about (207-210, 50-55, 54-59), lum 86-90, dE2000 4-5; the left slope keeps about 10 levels of fall from ridge to eave (now 12.5), the floor still darkens into the throat, the white front loses 1-2 levels at most, and the roll-over beside the c4-c5 lines darkens slightly, which helps them read. The box is on the upper-left slope both before and after c1-c2 (5.99 there in the reframed view).",
+   "accept": {
+    "region": [
+     250,
+     300,
+     330,
+     380
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     2.5,
+     5.0
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Soften or round the crease where the horn's left wall meets its floor",
+   "why": "The crisp crease (a dark line of 56-64 at x=400, y 550-570, running from about (190,665) to (565,470)) splits the left wall into two folded facets, but the wall-to-floor profile is set by acoustic simulation."
+  },
+  {
+   "request": "Widen, chamfer or fill the seam around the waveguide insert",
+   "why": "At this distance the seam renders as a 1-2 px near-black outline (62-75 at row 520 against 88 and 111 either side) that reads as a drawn line rather than a parting line; the insert's fit is geometry. c4-c5 are the in-scope remedy: a highlight beside it makes it read as a machined joint."
+  },
+  {
+   "request": "A satin instead of gloss lacquer on the waveguide insert",
+   "why": "A concave gloss wall mirrors bright lamps and the dark set as bands whatever the light does (the 42-63 band just inside the left rim, the 111 band below it); the finish is the product's."
+  },
+  {
+   "request": "Change the arch or move the tweeter so the throat and dark dome stop reading as an eye",
+   "why": "The dark surround (median 24.8) centred under the parabolic arch reads as an eye at thumbnail size, which pulls the detail page toward a face; the waveguide's profile and the tweeter's place in it are acoustic, so only framing (c1-c2 put it on the upper third) and the rim lines (c4-c5) can steer the read."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
