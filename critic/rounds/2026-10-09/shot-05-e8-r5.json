@@ -1,0 +1,307 @@
+{
+ "stage1": {
+  "impression": "Six milk-carton speakers line up on a clean diagonal across a mid-grey sweep; the idea and the six colourways read at a glance and the modelling is crisp. But the light is flat and grey: the white fronts are paper-flat, the backdrop is an undesigned mid-grey drift with soft, weak shaping and little separation, so it reads as a competent default-studio render rather than a homepage hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "White fronts model below the PBR Neutral shoulder: lower body 196-210, eave band at or under 228, eave-to-plinth falloff 14-22 levels (now Whole 231.9 low and 235.1 at the eave, falloff 3.0-3.7 on all three whites).",
+  "Every front carries a top-down ramp of at least 12 levels (Matcha 7.8, Oat 7.9, Chocolate 4.0 now).",
+  "Every gable separates from the ground behind it by at least 10 levels of luminance (Skim's light-blue slope 150.0 against 154.6 directly above it now).",
+  "The six present the same face: side-to-front width ratio within 15 % along the row (now 0.80, 0.70, 0.60, 0.51, 0.44, 0.36; fronts 42.7 to 22.5 degrees off the line of sight), done without unbalancing the light, since toeing each carton in under the parallel key and fill shifts its front-to-side ratio by up to 20 %.",
+  "The set is lit on purpose: ground no brighter behind the lit fronts than behind the shaded sides (the band above the row now falls 13 levels left to right, 153.6 to 140.6) and a visible falloff instead of a 12-21 level drift.",
+  "The cast-metal letters read as metal, not grey print: a specular edge with p95 of at least 190 on the dark plinths (now median 109-129, p95 150-154).",
+  "Group centred: left and right margins within 15 px (now 169 and 117)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The three white fronts sit in PBR Neutral's shoulder at 234-236, one value from eave to plinth, so they read as paper cards and no gradient or reflection can show on them; Chocolate's cream roof is flattened in the shoulder the same way.",
+   "evidence": {
+    "region": [
+     169,
+     226,
+     264,
+     458
+    ],
+    "measured": "front-baffle inside the box (Whole's white body): median 234.7, profile y 235.1, 234.9, 234.9, 234.8, 233.9, 233.6, 232.6, 231.9 (falloff 3.2); 2% [360,239,462,478] median 234.9, falloff 3.0; Skim [559,254,667,492] 235.8, falloff 3.7; Whole's lower white [169,395,264,458] 231.9; Chocolate's cream slope [981,237,1095,304] 219.0 in every bin with R at 233."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": -0.6,
+    "to": -1.0
+   },
+   "expected": "Whites leave the shoulder: Whole's lower white 231.9 to about 204, eave band 235.1 to about 209, so the hidden drift opens to about 5 levels and any ramp or reflection can show; white sides 181 to about 157; ground 146-155 to about 125-133; every coloured face drops the same 0.4 EV and keeps its ratio to the white (Matcha front 172.6 to about 150, Oat 183.9 to about 160, the cream slope 219 to about 200 and out of the shoulder). Delta E against the raw hex rises about 5-7 on the coloured fronts because the white now sits where the card puts a white that models (200-220), not because any colour shifts.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      169,
+      395,
+      264,
+      458
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     196,
+     210
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Nothing grades the fronts from eave to plinth: the key is 17.3 m away and effectively parallel, and front_strip (0.5, about 1.2 m above the eaves and 0.8 m out) is too weak and too far to register, so every front, white or coloured, is a flat panel.",
+   "evidence": {
+    "region": [
+     766,
+     269,
+     881,
+     540
+    ],
+    "measured": "front-baffle (Matcha body) profile y 174.6 to 166.8, falloff 7.8; Oat [1205,301,1335,560] 185.9 to 178.0, falloff 7.9; Chocolate [981,285,1103,560] 60.2 to 56.2, falloff 4.0; Whole's white 3.2; the card records front_strip across 0.17-0.9 moved its falloff test by only 0.1."
+   },
+   "change": {
+    "setting": "lights.front_ramp",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      5.0,
+      0.4
+     ],
+     "position": [
+      -0.1,
+      -0.6,
+      1.1
+     ],
+     "target": [
+      -0.07,
+      -0.15,
+      0.55
+     ],
+     "strength": 1.0,
+     "color": 5800,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -2.6,
+       2.4
+      ],
+      "values": [
+       1,
+       1
+      ]
+     },
+     "diffuse": 1,
+     "receivers": [
+      "front-baffle"
+     ]
+    }
+   },
+   "expected": "A soft strip just above and 0.42 m in front of the eave line, parallel to the row, lights only the six fronts (floor, sides, roofs and backdrop unchanged) and falls off about 4:1 from eave to plinth: Whole's white grades about 224 at the eave to about 206 above the plinth (falloff about 18 from 3.2), with the lower white rising only about 3; Matcha and Oat fronts grade about 15 levels instead of 7.8 and 7.9; each front brightens slightly toward its corner with the shaded side, sharpening that edge.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      169,
+      226,
+      264,
+      458
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     14,
+     22
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Skim's light-blue roof is darker than the ground right above it, so the gable, the carton's signature silhouette, has no tonal edge; and the accent roofs have no light of their own to hold their colour once c1 lowers the exposure.",
+   "evidence": {
+    "region": [
+     559,
+     208,
+     659,
+     272
+    ],
+    "measured": "gable-block (Skim's front slope) median 150.0, rgb [101,158,215]; ground directly above it [600,140,700,176] 154.6, so the slope is 4.6 darker; in a 16-level posterisation the Skim gable merges into the ground; the accent slopes are accurate now (delta E2000 0.7 red, 0.7 blue, 2.2 skim, 2.3 green, 2.8 cream, 0.9 dark brown) and all would fall about 0.4 EV with c1."
+   },
+   "change": {
+    "setting": "lights.roof_fill",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      5.5,
+      0.6
+     ],
+     "position": [
+      -0.1,
+      -0.9,
+      1.6
+     ],
+     "target": [
+      -0.05,
+      -0.1,
+      0.9
+     ],
+     "strength": 2.0,
+     "color": 5800,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -2.85,
+       2.65
+      ],
+      "values": [
+       1,
+       1
+      ]
+     },
+     "diffuse": 1,
+     "receivers": [
+      "gable-block",
+      "waveguide-insert"
+     ]
+    }
+   },
+   "expected": "The six roof front slopes gain about 25-30 % of light (the panel sits outside the roofs' mirror direction, so it shows as light, not as a reflection), while the gable-end triangles keep their shade, so the roofs model more: Skim's slope about 129 after c1 to about 144, roughly 10 above the ground over it (now -4.6); the accent slopes return to about their present, accurate values after c1; light reaches into each waveguide bowl so its profile reads; the cream slope stays under R 232.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      559,
+      208,
+      659,
+      272
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     140,
+     149
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The ground is brighter behind the lit fronts than behind the shaded sides, a 13-level drift from left to right with no light designed for the set, so the right half reads dull and the set has no depth.",
+   "evidence": {
+    "region": [
+     0,
+     100,
+     1500,
+     150
+    ],
+    "measured": "band above the row, profile x 153.6, 155.8, 152.8, 152.6, 149.9, 147.6, 144.6, 140.6 (falloff +13); top band [0,0,1500,120] 147.6 to 136.6; floor band [0,640,1500,750] 148.6 to 129.4; the ground across the whole frame spans only 12-21 levels; ground right of Oat [1400,240,1500,370] 144.6."
+   },
+   "change": {
+    "setting": "lights.bg_right",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      3.0,
+      0.8
+     ],
+     "position": [
+      1.5,
+      1.0,
+      0.7
+     ],
+     "target": [
+      1.5,
+      2.8,
+      0.3
+     ],
+     "strength": 2.0,
+     "color": 5800,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       0.0,
+       3.0
+      ],
+      "values": [
+       0.5,
+       1
+      ]
+     },
+     "diffuse": 1
+    }
+   },
+   "expected": "A background light behind the right half, facing the sweep and away from the cartons (no product face is lit): the band above the row goes from falling 13 levels left to right to level or rising by up to 10, so the ground is lighter behind the shaded sides than behind the lit fronts; the lower curve behind the Chocolate and Oat gables lifts about 15-20 while the top corners lift less, so the right half falls off upward; the floor behind the row right of Matcha lifts about 8; ground right of Oat about 124 after c1 to about 138-145.",
+   "accept": {
+    "region": [
+     0,
+     100,
+     1500,
+     150
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -10,
+     0
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "composition",
+   "problem": "The group sits right of centre, with the darkest masses pressed against the tighter edge.",
+   "evidence": {
+    "region": [
+     169,
+     152,
+     1383,
+     629
+    ],
+    "measured": "products span x 169-1383 (part boxes): left margin 169 px, right 117 px; group centre x 776 against the frame's 750; Chocolate body 59, Oat gable 34.5 and Oat plinth 28.7 sit on the right."
+   },
+   "change": {
+    "setting": "camera.shift_x",
+    "from": "default (0)",
+    "to": 0.017
+   },
+   "expected": "The view moves about 26 px so the row sits centred: margins about 143 and 143; nothing else changes. The strip just right of Oat stays background; a wrong sign would push Oat into it and fail the test.",
+   "accept": {
+    "region": [
+     1386,
+     300,
+     1412,
+     470
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     118,
+     160
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A brighter, more polished finish on the cast-metal plinth letters so they read as metal.",
+   "why": "The letters' material is the product's own finish and fixed. On the red, blue, green and dark-brown plinths they read as flat grey print (median 109-129, p95 150-154), and the card records that letter_card did not move them at 0.8 or 1.5, so the lever is still unknown."
+  }
+ ],
+ "score_if_fixed": 7.4
+}
