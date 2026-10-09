@@ -284,5 +284,114 @@
   "set": 3.0,
   "passes": false,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "sky.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    203,
+    216
+   ]
+  },
+  "proofs": [
+   [
+    11.5,
+    214.7
+   ],
+   [
+    14.0,
+    226.0
+   ],
+   [
+    10.3496,
+    208.9
+   ]
+  ],
+  "set": 11.5,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c2",
+  "setting": "sun.irradiance",
+  "test": {
+   "metric": "delta_e",
+   "op": "<=",
+   "value": 4.5
+  },
+  "proofs": [
+   [
+    2.4,
+    4.07
+   ],
+   [
+    3.4,
+    7.15
+   ],
+   [
+    2.2149,
+    3.64
+   ]
+  ],
+  "set": 2.2149,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "lights.fill_right.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    182,
+    196
+   ]
+  },
+  "proofs": [
+   [
+    0.7,
+    173.5
+   ],
+   [
+    1.2,
+    197.9
+   ],
+   [
+    1.0176,
+    189.1
+   ]
+  ],
+  "set": 0.7,
+  "passes": false,
+  "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "lights.lacquer_ramp.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    4,
+    8
+   ]
+  },
+  "proofs": [
+   [
+    10.0,
+    4.0
+   ],
+   [
+    30.0,
+    5.0
+   ]
+  ],
+  "set": 30.0,
+  "passes": true,
+  "moves_the_test": true
  }
 ]
