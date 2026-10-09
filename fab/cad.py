@@ -369,6 +369,7 @@ def tweeter_retainer():
     R, T, zc = RETAINER, TWEETER_PART, WAVEGUIDE['throat_z']
     yf, yb = retainer_y()
     od = T['flange_d'] + 0.4 - 2 * R['fit']; idd = T['body_d'] + 2 * R['clear']
+    yf -= R.get('preload', 0.0)          # the tube a little longer than its gap: the screws press the gasket (d5, round 5)
     sl = cyl_y(RUN, zc, od, yf, yb) + cyl_y(RUN, zc, R['flange_d'], yb, yb + R['flange_t'])
     sl -= cyl_y(RUN, zc, idd, yf - 1, yb + R['flange_t'] + 1)
     for (x, z) in retainer_screw_points():
@@ -395,10 +396,12 @@ def insert_pocket():
     pk += cyl_y(RUN, zc, I['boss_d'] + 2 * I['clear'], I['back_y'], I['boss_back_y'] + deep)   # (below the body's top it cuts nothing)
     pk += cyl_y(RUN, zc + I['bay_dz'], I['bay_d'], I['boss_back_y'], I['boss_back_y'] + I['bay_l'])   # the connector bay
     mags, pins = insert_fixings()
+    # the holes measured from the pocket's back wall (back_y + clear), as deep as the insert's own (d11, round 5)
+    yw = I['back_y'] + I['clear']
     for (x, z) in mags:
-        pk += cyl_y(x, z, I['magnet_d'] + 0.2, I['back_y'], I['back_y'] + I['magnet_t'] + 0.3)
+        pk += cyl_y(x, z, I['magnet_d'] + 0.2, I['back_y'], yw + I['magnet_t'] + 0.3)
     for (x, z) in pins:     # a slip fit: 0.2 over the pin
-        pk += cyl_y(x, z, I['pin_d'] + 0.2, I['back_y'], I['back_y'] + I['pin_l'] / 2 + 0.5)
+        pk += cyl_y(x, z, I['pin_d'] + 0.2, I['back_y'], yw + I['pin_l'] / 2 + 0.5)
     pk += cyl_z(RUN, wire_hole_y(), WIRE_HOLE_D, BODY - 1, zc + I['bay_dz'])
     return pk
 
@@ -696,6 +699,12 @@ def checks(parts):
         chk('mid rebate below the mid shelf\'s top (inside its chamber)', MID['z'] - MID_REBATE['d'] / 2 - MID_SHELF_TOP, 5.0)
     else:
         chk('woofer rebate below the gable\'s shadow line', GABLE_SHADOW_Z0 - top_w, 5.0)
+    # the birch left under each rebate holds its T-nuts' barrels with 0.5 to spare: a thinner sheet (M1) eats it first
+    # (the drawing check's d4, round 5)
+    for role, reb in (('woofer', WOOFER_REBATE), ('mid', MID_REBATE)):
+        barrel = (DRIVER_SCREW.get('tnut_barrel') or {}).get(role)
+        if reb and barrel:
+            chk(f'birch under the {role}\'s rebate for its T-nuts\' barrels (+0.5)', WALL - reb['depth'] - barrel - 0.5, 0.0)
     if AMP:
         chk('amplifier plate above the plinth\'s shadow line', AMP['z'] - AMP['plate_h'] / 2 - bot_front, 2.0)
         chk('amplifier plate inside the back, across', (PLAN - AMP['plate_w']) / 2 - EDGE_R, 2.0)

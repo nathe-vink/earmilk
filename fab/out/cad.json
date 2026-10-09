@@ -73,7 +73,7 @@
    "mass_kg": 1.53
   },
   "gable-block": {
-   "volume_l": 8.1069,
+   "volume_l": 8.1067,
    "bbox_mm": [
     -0.0,
     -0.0,
@@ -96,10 +96,10 @@
    ]
   },
   "tweeter-retainer": {
-   "volume_l": 0.0281,
+   "volume_l": 0.0282,
    "bbox_mm": [
     153.0,
-    182.5,
+    182.25,
     893.0,
     237.0,
     219.0,
@@ -751,6 +751,18 @@
    "check": "mid rebate below the mid shelf's top (inside its chamber)",
    "margin_mm": 16.7,
    "least_mm": 5.0,
+   "ok": true
+  },
+  {
+   "check": "birch under the woofer's rebate for its T-nuts' barrels (+0.5)",
+   "margin_mm": 0.5,
+   "least_mm": 0.0,
+   "ok": true
+  },
+  {
+   "check": "birch under the mid's rebate for its T-nuts' barrels (+0.5)",
+   "margin_mm": 0.0,
+   "least_mm": 0.0,
    "ok": true
   },
   {

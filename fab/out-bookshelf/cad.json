@@ -73,7 +73,7 @@
    "mass_kg": 0.41
   },
   "gable-block": {
-   "volume_l": 1.4355,
+   "volume_l": 1.4354,
    "bbox_mm": [
     -0.0,
     -0.0,
@@ -532,6 +532,12 @@
    "check": "woofer rebate below the gable's shadow line",
    "margin_mm": 14.7,
    "least_mm": 5.0,
+   "ok": true
+  },
+  {
+   "check": "birch under the woofer's rebate for its T-nuts' barrels (+0.5)",
+   "margin_mm": 0.0,
+   "least_mm": 0.0,
    "ok": true
   },
   {

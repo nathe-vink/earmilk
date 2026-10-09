@@ -81,12 +81,14 @@ TWEETER_PART = dict(model='SB Acoustics Satori TW29DN-B', dome_d=29.0, surround_
 # retaining sleeve slides over the motor from behind and presses the front ring onto the throat's seat (on a 0.5 foam
 # gasket); its own flange, on the boss's back face, takes three screws in the boss's wall, outside the bore. Whatever
 # SB's screw circle turns out to be, it is not needed. PROPOSAL; its bore follows body_d (measure the motor first).
-RETAINER = dict(gasket=0.5, clear=0.5, fit=0.2, flange_d=84.0, flange_t=3.0, screws=3, screw_circle=79.6,
+RETAINER = dict(gasket=0.5, preload=0.25, clear=0.5, fit=0.2, flange_d=84.0, flange_t=3.0, screws=3, screw_circle=79.6,
                 pilot_d=2.4, pilot_depth=10.0, hole_d=3.4, head_h=2.4, start_deg=0.0,
                 screw='3.0 x 12 thread-forming screws for plastics (WN 1411 / PT K30, pan head)')
 # The heads stand head_h proud of the flange (a 3 mm pan head is 1.8 to 2.4): the pocket's bore runs that and 1.1 more
 # behind the flange, or the insert stops short of home (the drawing check's d3, round 3). The circle starts on the
 # horizontal (start_deg 0, the speaker's right), so no pilot lies on the insert's split at the centre plane (d5).
+# The tube is `preload` longer than the gap from the front ring to the boss's back face, so its flange stands 0.25 off
+# the boss until the three screws press the gasket by that much (a tube printed 0.15 short still holds: d5, round 5).
 INSERT_SCREW = None          # the bookshelf's: screws through its tweeter's faceplate into the seat (below)
 # 2026-10-08, the research's recommended set for the active floorstander (fab/research/drivers-floorstander.md)
 DRIVER_SET = dict(woofer='rss315hf-4', mid='mr16p-8', tweeter='tw29dn-b')
@@ -120,8 +122,9 @@ BRACE_WINDOW = 254.0      # PROPOSAL square opening, 50 mm frame
 BRACE_WINDOW_R = 30.0     # PROPOSAL corner radius of the opening
 
 # The gable: a solid block, laminated from 18 mm birch layers and carved by CNC (SPEC: "a solid carved birch block").
-GABLE_LAYER = 18.0        # PROPOSAL 11 layers of 18 mm, glued up, the top trimmed: 198 for a 195 block with its fin
-GABLE_SPLIT_Z = 914.0     # PROPOSAL split for 3-axis milling: 3 layers below (z 860 to 914), 8 above. The bowl's floor is
+GABLE_LAYER = WALL        # PROPOSAL the gable's layers are the measured ply (M1): 11 of 18 mm, glued up, the top trimmed,
+                          # 198 for a 195 block with its fin; under 17.73 a 12th layer (the drawing check's d2, round 5)
+GABLE_SPLIT_Z = BODY + 3 * GABLE_LAYER     # PROPOSAL split for 3-axis milling: 3 layers below (z 860 to 914), 8 above. The bowl's floor is
                           # all below z 873 and its ceiling all above 940, so each half is cut from one side. The side walls
                           # overhang the split a little: up to 1.2 mm in the lower half and 2.8 in the upper (80 to 105 deep,
                           # 7 to 12 above the split) since the throat came forward on 2026-10-08 (1.3 and 0.3 before). Sand

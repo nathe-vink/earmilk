@@ -99,8 +99,12 @@ def panel_defs():
     dowels = cad.dowel_points()
     P.append(dict(name='top-panel', qty=1, w=INNER, h=INNER, layers={
         'CUT_INSIDE': circle(RUN - WALL, wh - WALL, WIRE_HOLE_D),
-        'DRILL_D10_DEPTH10': sum((circle(x - WALL, y - WALL, DOWEL_D) for (x, y) in dowels), [])},
-        note='upper face up (front edge at the bottom of the drawing); dowels register the gable block; the tweeter cable\'s hole is sealed with silicone from the bay after wiring'))
+        'DRILL_D10_DEPTH10': sum((circle(x - WALL, y - WALL, DOWEL_D) for (x, y) in dowels), []),
+        # its holes are not symmetric front to back and the panel is square: the front edge marked (d3, round 5)
+        'NOTES': [('text', (INNER / 2, 6.0), 'FRONT EDGE', 6.0)]},
+        note=f'upper face up, FRONT EDGE to the open front (the ø{WIRE_HOLE_D:g} hole {wh - WALL:g} from it and {INNER - (wh - WALL):g} from the back): '
+             'turned round, the channel opens under the insert and the dowels miss the gable; dowels register the gable block; '
+             'the tweeter cable\'s hole is sealed with silicone from the bay after wiring'))
     P.append(dict(name='bottom-panel', qty=1, w=INNER, h=INNER, layers={}, note='either face'))
     if BRACE_Z:
         h = BRACE_WINDOW / 2
