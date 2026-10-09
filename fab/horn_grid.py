@@ -22,7 +22,8 @@ NAME = 'earmilk-bookshelf' if BOOK else 'earmilk-floorstander'
 
 
 def main(sections=384, steps=192, lip_steps=32):
-    G, _ = Waveguide(**WAVEGUIDE, sections=sections, steps=steps, lip_steps=lip_steps).grid()
+    wg = Waveguide(**WAVEGUIDE, sections=sections, steps=steps, lip_steps=lip_steps)
+    G, _ = wg.grid(wg.phis(max_jump=0.5))                           # the CAD's creases and refinement, finer
     # tangents round the axis (wrapping) and along the wall; their cross product, one orientation for the whole grid
     d_th = np.roll(G, -1, axis=0) - np.roll(G, 1, axis=0)
     d_s = np.gradient(G, axis=1)

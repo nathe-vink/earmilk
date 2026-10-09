@@ -146,7 +146,12 @@ open sky in front). Nothing is rendered.
   its analytic surface sampled finely (`normals_from`, the grid from `fab/horn_grid.py`), interpolated linearly across
   each grid triangle; `refine` cuts its facets and sets the new corners on that surface, and `skin` lays the surface
   itself over the facets a hair into the air, because a concave bowl mirrors its own far wall and its facets show in
-  reflections however its normals are set.
+  reflections however its normals are set. None of that cured the teeth along the bowl's floor; the mesh did. Where
+  the side walls turn into the floor, neighbouring meridians differed in length by 10 to 15 mm, so stations at the same
+  fraction of each wall sat at different depths and the ruled quads between them twisted; and the wall has a true
+  crease there (in the floorstander at 205 and 335 degrees, where the coverage starts to be narrowed). The CAD now puts
+  a meridian on each crease and adds them wherever neighbours differ by more than 2 mm (`Waveguide.phis`: 256 instead
+  of 96 in the floorstander, 160 in the bookshelf), and the teeth are gone. A reflection that breaks into teeth is the mesh's parameterisation before it is the shading's.
 - **Real blacks**: the products' black paint, rubber, plastic and anodising reflect 3 to 4 %, as real ones do; at
   under 1 % no light can model a driver's basket or an amplifier's plate.
 

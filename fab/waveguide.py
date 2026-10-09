@@ -161,10 +161,46 @@ class Waveguide:
             pts.append(self.point(p[0], p[1], phi))
         return dict(phi=phi, a=a, x_meet=X, x_lip=x_t, pts=np.array(pts))
 
-    def grid(self):
-        """All meridians: an array (sections, steps + lip_steps + 1, 3). The last ring lies on the roof."""
-        ms = [self.meridian(2 * np.pi * i / self.sections) for i in range(self.sections)]
+    def grid(self, phis=None):
+        """All meridians: an array (sections, steps + lip_steps + 1, 3). The last ring lies on the roof. `phis` (from
+        phis()) for the CAD's meridians; evenly spaced by default, as the BEM and summary() expect."""
+        phis = [2 * np.pi * i / self.sections for i in range(self.sections)] if phis is None else phis
+        ms = [self.meridian(p) for p in phis]
         return np.stack([m['pts'] for m in ms]), ms
+
+    def crease_angles(self, n=720):
+        """Where the fitted coverage starts narrowing (the wall would leave the slope there): the coverage has a kink, so
+        the surface has a crease along that meridian, and a mesh should have an edge on it."""
+        narrowed = lambda phi: not self.ok(phi, self.coverage(phi))
+        out, prev = [], narrowed(0.0)
+        for i in range(1, n + 1):
+            phi = 2 * np.pi * i / n; cur = narrowed(phi)
+            if cur != prev:
+                lo, hi = 2 * np.pi * (i - 1) / n, phi
+                for _ in range(40):
+                    m = 0.5 * (lo + hi)
+                    lo, hi = (m, hi) if narrowed(m) == prev else (lo, m)
+                out.append(0.5 * (lo + hi) % (2 * np.pi))
+            prev = cur
+        return out
+
+    def phis(self, max_jump=2.0, levels=4):
+        """The CAD's meridians: `sections` evenly round the axis, one on each crease, and more wherever neighbours' walls
+        differ in length by more than max_jump mm. Stations sit at the same fraction of each wall, so between meridians
+        of very different lengths they fall at different depths, and the ruled quads between them twist into a sawtooth
+        that a gloss coat shows (most where the side walls turn into the floor, the walls 10 to 15 mm apart per 3.75
+        degrees at 96 sections)."""
+        ph = sorted(set([2 * np.pi * i / self.sections for i in range(self.sections)] + self.crease_angles()))
+        x = {p: self.meridian(p)['x_lip'] for p in ph}
+        for _ in range(levels):
+            new = []
+            for a, b in zip(ph, ph[1:] + [ph[0] + 2 * np.pi]):
+                if abs(x[a] - x[b % (2 * np.pi)]) > max_jump:
+                    m = 0.5 * (a + b) % (2 * np.pi); x[m] = self.meridian(m)['x_lip']; new.append(m)
+            if not new:
+                break
+            ph = sorted(set(ph + new))
+        return ph
 
     def summary(self):
         G, ms = self.grid()

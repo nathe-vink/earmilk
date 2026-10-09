@@ -155,6 +155,13 @@ The simulation treats the tweeter as a flat piston across its dome and surround,
 the on-axis fall above the crossover (about 7 dB to 10 kHz in the floorstander) is mostly that, and the DSP's shelf
 takes out what the measurement shows. The TW29DN-B's 96.5 dB against the mid's 88 dB leaves 8.5 dB for it.
 
+The insert's CAD is a ruled loft through the wall's meridians. Below the axis the coverage is narrowed so that every
+wall meets the roof above the eave, which puts a crease in the wall (at 205 and 335 degrees in the floorstander, 199 and 341 in the bookshelf) and makes
+neighbouring walls very different in length where the sides turn into the floor. A meridian lies on each crease and
+more are added wherever neighbours differ by over 2 mm (`Waveguide.phis`: 256 in the floorstander, 160 in the
+bookshelf); with 96 evenly spaced, the quads between
+them twisted into a sawtooth along both creases, small on a print and plain in a gloss coat.
+
 ## The crossover (active, a starting point)
 
 `dsp.py` writes each size's starting setup from the geometry and the datasheets (`out*/dsp/`):

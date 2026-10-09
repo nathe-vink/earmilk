@@ -171,13 +171,13 @@ def bowl_cavity(n_th=96, n_t=24):
 def waveguide_cavity(sections=None):
     """The waveguide's air (fab/waveguide.py, params.WAVEGUIDE): a ruled loft through its rings, throat to mouth, each a
     polygon round the axis; the last ring lies on the roof, and a short extrusion along the slope's normal makes the cut
-    clean. Within 0.05 mm of the surface at 96 sections, which the cut files and printables use. The render model can
-    take more (EARMILK_WG_SECTIONS=384), to test whether the teeth a grazing reflection shows in the glossy bowl are the
-    mouth's polygon."""
+    clean. 96 meridians evenly round the axis, one on each crease of the wall, and more wherever neighbouring walls
+    differ in length by over 2 mm (Waveguide.phis): there the stations fell at different depths and the ruled quads
+    twisted into the teeth a gloss coat showed. EARMILK_WG_SECTIONS sets the even count."""
     from waveguide import Waveguide
     sections = sections or int(os.environ.get('EARMILK_WG_SECTIONS', 96))
     wg = Waveguide(**WAVEGUIDE, sections=sections)
-    G, _ = wg.grid()
+    G, _ = wg.grid(wg.phis())
     wires = [Wire.make_polygon([Vector(*map(float, G[k, i])) for k in range(G.shape[0])], close=True) for i in range(G.shape[1])]
     loft = Solid.make_loft(wires, ruled=True)
     ext = extrude(Face(wires[-1]), amount=30, dir=Vector(0, -DZ, DY))
