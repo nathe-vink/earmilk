@@ -93,7 +93,10 @@ def main():
         # view's shoulder) the secant overshoots: then step by a factor of three toward the aim instead
         positive = (v0 > 0 and v1 > 0) or knobs[0].split('.')[-1] in ('power_w', 'irradiance', 'strength')
         if positive and (v2 <= 0 or v2 > 10 * max(v0, v1) or v2 < min(v0, v1) / 10):
-            v2 = v1 * (3.0 if (goal - f1) * (f1 - f0) * (v1 - v0) > 0 else 1 / 3.0)
+            # a factor of three past the furthest value tried that way (from v1 it could land back on v0: 08's glint
+            # proofed 1 W twice, at 3 W the secant went below zero and a third of 3 is the 1 it started from)
+            up = (goal - f1) * (f1 - f0) * (v1 - v0) > 0
+            v2 = max(v0, v1) * 3.0 if up else min(v0, v1) / 3.0
         # never more than two spans past the values given: a reading that barely moves sends the secant far off (02b's
         # sky, 1.5 and 2 moving the test 0.8, sent to 11.75, which broke five other tests); then the setting is not the
         # one that sets the test, and the card says so
@@ -101,8 +104,8 @@ def main():
         v2 = min(max(v2, min(a.v0, a.v1) - 2 * span), max(a.v0, a.v1) + 2 * span)
         if isinstance(rng, tuple) and len(rng) == 2 and all(isinstance(x, (int, float)) for x in rng):
             v2 = min(max(v2, rng[0]), rng[1])
-        if abs(v2 - v1) < 1e-9:
-            break
+        if any(abs(v2 - p[0]) <= 1e-3 * max(abs(p[0]), 1e-9) for p in proofs):
+            break                                       # a value already proofed: another render would tell nothing new
         v0, f0, v1 = v1, f1, v2
         f1 = proof(v2)
     # a value that breaks the reply's other tests (ones passing at the values given, or at the shot as it stood: a tune
