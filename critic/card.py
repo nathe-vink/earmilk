@@ -52,6 +52,13 @@ def main():
     L += ['- The product and its flavour, and which of its parts are hidden, cut away or exploded and along which axis '
           '(everything under `product` but its placement and explode distances, below), the frame size and the sampling '
           'settings.', '']
+    # an engine fact a critic measuring values cannot see: where the view transform starts to compress (01's round 6
+    # found it by measuring; rounds holding whites at 230 to 245 had asked for gradients the curve flattens)
+    L += ['## How the engine maps values', '',
+          'The view transform is PBR Neutral: it is linear up to about 0.76 (about 226 in sRGB) and compresses everything '
+          'above, so a white held at 230 to 245 prints as one flat value and no gradient or reflection on it can show. A '
+          'white lacquer that should model and show its reflections sits at 200 to 220, with only its highlights above '
+          '226: ask for the exposure or the light that puts it there before asking for more reflection on it.', '']
     L += ['## Settings you may change', '',
           'Where the product stands and how it is turned (`product.instances.N.position`, `product.instances.N.rotate_z`) are '
           'yours where the frame\'s purpose allows: keep it standing on its floor or furniture, a pair a mirrored pair, and '
