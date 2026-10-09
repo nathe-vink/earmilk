@@ -172,5 +172,121 @@
   "set": 0.0667,
   "passes": false,
   "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "lights.fill.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    145,
+    172
+   ]
+  },
+  "proofs": [
+   [
+    0.3,
+    149.5
+   ],
+   [
+    0.5,
+    166.8
+   ],
+   [
+    0.404,
+    158.5
+   ]
+  ],
+  "set": 0.404,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "lights.roof_sheen.strength",
+  "test": {
+   "metric": "lum_range",
+   "op": "between",
+   "value": [
+    28,
+    70
+   ]
+  },
+  "proofs": [
+   [
+    0.6,
+    25.6
+   ],
+   [
+    1.0,
+    34.3
+   ],
+   [
+    1.6759,
+    40.7
+   ]
+  ],
+  "set": 0.6,
+  "passes": false,
+  "moves_the_test": true
+ },
+ {
+  "change": "c7",
+  "setting": "lights.plinth_sheen.strength",
+  "test": {
+   "metric": "lum_p5",
+   "op": "between",
+   "value": [
+    60,
+    90
+   ]
+  },
+  "proofs": [
+   [
+    0.2,
+    54.8
+   ],
+   [
+    0.4,
+    61.6
+   ],
+   [
+    0.7941,
+    70.7
+   ]
+  ],
+  "set": 0.7941,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c6",
+  "setting": "camera.fstop",
+  "test": {
+   "metric": "edge",
+   "op": "between",
+   "value": [
+    12,
+    20
+   ]
+  },
+  "proofs": [
+   [
+    2.4,
+    9.9
+   ],
+   [
+    3.2,
+    13.6
+   ],
+   [
+    3.7189,
+    15.5
+   ]
+  ],
+  "set": 3.7189,
+  "passes": true,
+  "moves_the_test": true
  }
 ]
