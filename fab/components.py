@@ -77,7 +77,7 @@ def cone_driver(spec, detail=24):
         R = fo + 10.0
         if a1 > a0 + 5 and half > 0.05:
             for i in range(n):
-                th = 2 * math.pi * (i + 0.5) / n
+                th = 2 * math.pi * i / n             # windows at 0, 60, ...: spokes up and down, where the sheets cut
                 pts = [(0.0, 0.0)] + [(R * math.cos(th - half + 2 * half * k / 8), R * math.sin(th - half + 2 * half * k / 8)) for k in range(9)]
                 wedge = Pos(0, 0, -a1) * extrude(make_face(Polyline(*pts, close=True)), amount=a1 - a0)
                 frame = frame - wedge
