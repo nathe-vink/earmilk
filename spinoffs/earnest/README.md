@@ -5,6 +5,9 @@ brief: the idea, the decisions, the numbers, the shots. `params.py` holds the nu
 
 Status: concept (the owner's idea, 2026-10-08). Everything below marked *proposal* waits on the owner.
 
+![The dozen, proof](renders/2026-10-09/hero-proof.png)
+![The half-dozen, the dozen and the flat, proof](renders/2026-10-09/family-proof.png)
+
 ## The idea in four lines
 
 - An egg crate grown into a chassis. The top is a pulp tray's surface: cups that fill their cells, low ridges between
