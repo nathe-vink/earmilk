@@ -1,0 +1,228 @@
+{
+ "stage1": {
+  "impression": "A clean, legible straight-on shot of a milk-carton speaker that reads as a flat graphic: the square camera hides every side face, the white body is lit evenly like a printed card, and the chrome earmilk letters look muddy grey. The carton is cut off at the base with no shadow or contact on a dull warm-grey sweep, so it floats without weight; a competent draft, not a homepage hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The white back must model instead of printing flat: part:back-panel median 214-220 with p95 <= 232 (now 232.2 / 239.3), and the left margin strip [200,350,262,1120] must fall >= 18 levels from eave to frame bottom (now 10.2, 240.3 -> 230.1, all of it inside PBR Neutral's compressed shoulder above 226).",
+  "The cast earmilk letters must read as metal on the lacquer: part:letters-back-* median >= 35 levels below the panel beside them (now 230.1 against 239.1 at [300,360,330,450] and 235.2 at [575,360,610,450]; the word reads only through 1 px shadows at about 203), keeping a sheen lum_range of 30-50 across the word (now 45.2).",
+  "The port must read as a tube, not a black disc in a grey washer: its lower inner wall (port-tube in [415,972,485,998]) median 14-38, graded from the lip inward (now 5.8, p95 14.2), with pure black only on the woofer motor and a neutral flange (the top flange, port-tube in [430,880,470,893], is rgb 178/163/152, warmed by the 4500 K port_fill, against a 233/232/232 panel).",
+  "The brand red within dE00 2.0 of #C62828 across part:gable-block (now 2.34; the roof slope [230,190,670,335] is 3.08 at rgb 212/43/45 and the fin's lit end [220,116,255,165] 2.82 at 212/39/41).",
+  "Both corner rounds must carry a crisp highlight >= 15 levels above the panel beside them (now left [189,450,194,800] p95 245.4 over 238.1, +7; right [705,450,710,800] p95 240.5 over 230.2, +10, a single bright column at x 709)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The white back is exposed into PBR Neutral's compressed shoulder (above 226), so the key's diagonal falloff prints as one flat value and the back reads as a printed card, and the same overexposure lifts the red off spec.",
+   "evidence": {
+    "region": [
+     200,
+     350,
+     262,
+     1120
+    ],
+    "measured": "Left margin strip, 10-bin y-profile 240.3, 239.3, 238.3, 237.3, 236.3, 235.3, 234.3, 233.2, 231.4, 230.1 (10.2 levels, all above 226); right strip [640,350,700,1120] 234.3 -> 221.6; band under the label [192,825,708,870] 234.3 -> 225.4 left to right; part:back-panel median 232.2, p95 239.3. part:gable-block rgb 210/38/41, dE00 2.34; roof slope [230,190,670,335] rgb 212/43/45, dE00 3.08."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.3183,
+    "to": 0.09
+   },
+   "expected": "Simulated on this frame by inverting PBR Neutral: part:back-panel median 232.2 -> about 217 (p95 239.3 -> about 231); the left margin strip falls about 18 levels (233 -> 215) instead of 10, the right strip 221 -> 206, so the upper-left to lower-right key falloff becomes visible; bottom right [640,850,697,1120] 223.4 -> about 207, still the brightest surface against a background of about 150 (left) and 135 (bottom right); gable dE00 2.34 -> about 1.4 (roof slope 3.08 -> about 0.6, rgb about 197/36/38); glow behind the fin 189 -> about 175; Facts ink stays <= 16; letters 230 -> about 218 before c2.",
+   "accept": {
+    "region": "part:back-panel",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     214,
+     220
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The cast earmilk letters, a must-show, are lit by their sheen glint to the panel's own value, so the word is legible only through hairline shadows and reads as white-on-white embossing, not metal.",
+   "evidence": {
+    "region": [
+     334,
+     385,
+     565,
+     429
+    ],
+    "measured": "part:letters-back-* median 230.1 (p5 187.0, p95 232.2, range 45.2), rgb 236/229/225; panel beside them 239.1 at [300,360,330,450] and 235.2 at [575,360,610,450], a 5-9 level gap. y-profile through the m (x 455-470): panel 237.1, face 231.4, a 1 px shadow at 203.0, panel 235.3. The e and k, partly outside the sheen's footprint, are 209.6 and 217.4. Comparing e9-04a (sheen size 0.28, exposure 0.25: faces 199-201) with this frame (size 0.2254, exposure 0.3183: 230-231), the sheen supplies about two thirds of the face light."
+   },
+   "change": {
+    "setting": "glints.letters_sheen.power_w",
+    "from": 0.1391,
+    "to": 0.075
+   },
+   "expected": "With about half the mirrored lamp, the middle letters fall from 231 to about 185-195 and the e and k to about 150-170, so the word sits 35-50 levels under the 223-231 panel around it (after c1) and reads as satin metal. lum_range stays about 35-50, so the sheen still falls off across the word. Nothing else changes (receivers are the eight letters).",
+   "accept": {
+    "region": "part:letters-back-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     170,
+     195
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The port's bore is unlit, so the port is a pure-black disc in a grey ring (the frame's hardest contrast, directly under the Facts panel). The 4500 K port_fill, 4.5 cm off the top flange, spends its light warming that flange instead of reaching into the tube.",
+   "evidence": {
+    "region": [
+     375,
+     880,
+     525,
+     1032
+    ],
+    "measured": "Lower inner wall (port-tube in [415,972,485,998]) median 5.8, p95 14.2; woofer-motor median 0.9, 83% crushed; port box 25% crushed; x-profile at y 945-965 steps 128.3 -> 10.7 -> 0 within one 5 px bin at the left lip. Top flange (port-tube in [430,880,470,893]) 164.6, rgb 178/163/152 (R-B 26) against the 233/232/232 panel; bottom flange [430,1015,470,1029] 111.0. The engine's proofs: 0.02 W -> 0.4, 0.08 -> 2.1, 0.2 -> 4.6 in the bore."
+   },
+   "change": {
+    "setting": "lights.port_fill",
+    "from": {
+     "type": "point",
+     "position": [
+      0,
+      -0.24,
+      0.43
+     ],
+     "power_w": 0.2,
+     "radius_m": 0.01,
+     "color": 4500,
+     "receivers": [
+      "port-tube"
+     ]
+    },
+    "to": {
+     "type": "point",
+     "position": [
+      0,
+      -0.33,
+      0.52
+     ],
+     "power_w": 1.6,
+     "radius_m": 0.01,
+     "color": 6300,
+     "receivers": [
+      "port-tube"
+     ]
+    }
+   },
+   "expected": "From 13.5 cm out and 15 cm above the port axis (centre about z 0.371), the lamp shines into the mouth at about 45 degrees instead of grazing the top flange from 4.5 cm. The lower inner wall reads about 30-40 at the lip, fading to about 15-20 where the top lip's shadow crosses it near y 977, then black on the woofer motor (<= 5). Bore box median 5.8 -> 18-30. The flange turns neutral and more even: top about 115-135 (now 164.6, R-B 26), bottom about 110-120 (now 111). Panel, letters and motor unchanged (receivers port-tube).",
+   "accept": {
+    "region": {
+     "part": "port-tube",
+     "box": [
+      415,
+      972,
+      485,
+      998
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     14,
+     38
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The right corner round (the shadow-side silhouette) carries only a 1 px glint, so the edge reads as a cut-out rather than a lacquered 6 mm round, and c1 will weaken it further.",
+   "evidence": {
+    "region": [
+     705,
+     450,
+     710,
+     800
+    ],
+    "measured": "p95 240.5, median 231.7 against 230.2 just inside [684,450,702,800]; x-profile at y 600-640 (x 703-710): 229.2, 226.5, 226.7, 230.7, 232.6, 231.5, 239.7, 232.9, a darker turn then one bright column at x 709. Simulated after c1: p95 234.5 against a 215.0 panel."
+   },
+   "change": {
+    "setting": "lights.kicker_r.irradiance",
+    "from": 2.4711,
+    "to": 3.8
+   },
+   "expected": "The outer 3-5 px of the right round (x 706-710) brighten into a rim: p95 234.5 (after c1) -> about 242-245 and median 217.7 -> about 222-230, 25-30 levels above the panel beside it (about 215). The strip sits behind the back's plane, so it reaches only the round and the back face does not change.",
+   "accept": {
+    "region": [
+     705,
+     450,
+     710,
+     800
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     241,
+     247
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The left corner round's highlight is only 7 levels over the key-lit panel beside it (both in the shoulder), so the lit edge reads as a soft brighter band rather than a gloss round.",
+   "evidence": {
+    "region": [
+     189,
+     450,
+     194,
+     800
+    ],
+    "measured": "p95 245.4, median 242.9 against 238.1 just inside [196,450,215,800]; x-profile at y 600-640 (x 189-194): 242.8, 244.9, 242.9, 241.3, 240.1, 238.4. Simulated after c1: p95 242.4 against 229.1 (+13)."
+   },
+   "change": {
+    "setting": "lights.kicker_l.irradiance",
+    "from": 2.3869,
+    "to": 4.0
+   },
+   "expected": "The left round's 5 px band (x 189-193) rises from p95 242.4 (after c1) to about 247-249, 18-20 levels above the panel beside it (about 229), so both silhouette edges read as gloss rounds, the key side the brighter. As with c4, the back face does not change.",
+   "accept": {
+    "region": [
+     189,
+     450,
+     194,
+     800
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     246,
+     250
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Turn the carton a few degrees, or move the camera off-axis, so a sliver of a side face shows.",
+   "why": "It would make the carton read as a box instead of a card, the largest remaining gap to a 9. But the purpose fixes a straight-on, level view of the Facts panel, and a turn would converge its rules."
+  },
+  {
+   "request": "Pull back to show the plinth, SHAKE WELL, the amp plate and a contact shadow on the floor.",
+   "why": "The carton is cut at about z 0.25 m with no grounding, so it floats. But the purpose frames the Facts panel with the gable above, and fitting the full 1.055 m would shrink the Facts type by about a quarter."
+  },
+  {
+   "request": "Deepen the 3 mm shadow line under the gable.",
+   "why": "The eave steps from red 63.8 to white 232.0 through a soft 4 px ramp (130.0, 182.5, 202.8, 218.1 at y 344-347) with no dark hairline, so the gable and body barely separate. The line's depth is spec geometry."
+  },
+  {
+   "request": "Give the port flange a lighter or satin finish.",
+   "why": "It reads as a flat grey ring (bottom 111.0, sides 114-129). The port tube's material is the product's own, so c3 changes only how its bore and flange are lit."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
