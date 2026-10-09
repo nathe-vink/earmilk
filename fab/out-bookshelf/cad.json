@@ -171,6 +171,16 @@
     56.0,
     43.1
    ]
+  },
+  "connector-test-bay": {
+   "volume_l": 0.174,
+   "from_y": 107.3,
+   "to_y": 160.0,
+   "size_mm": [
+    93.0,
+    52.7,
+    56.0
+   ]
   }
  },
  "units": "mm, litres, kg",
@@ -232,6 +242,76 @@
    ]
   }
  ],
+ "stl_sealed": {
+  "amp-box-floor.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "amp-box-front.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "amp-box-lid.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "back-panel.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "bottom-panel.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "connector-test-bay.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "front-baffle.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "gable-block.stl": {
+   "dropped": 4,
+   "open_edges": 0
+  },
+  "side-left.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "side-right.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "top-panel.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "trim-ring-woofer.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "waveguide-insert.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "gable-print/gable-print-front-left.stl": {
+   "dropped": 2,
+   "open_edges": 0
+  },
+  "gable-print/gable-print-front-right.stl": {
+   "dropped": 2,
+   "open_edges": 0
+  },
+  "gable-print/gable-print-rear-left.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  },
+  "gable-print/gable-print-rear-right.stl": {
+   "dropped": 0,
+   "open_edges": 0
+  }
+ },
  "woofer_chamber_air_l": 9.549,
  "woofer_chamber_gross_l": 15.167,
  "mid_chamber_gross_l": 0.0,

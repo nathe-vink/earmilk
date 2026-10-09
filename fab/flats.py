@@ -127,11 +127,12 @@ def panel_defs():
                       note=f'z {MID_SHELF_TOP - WALL:g} to {MID_SHELF_TOP:g}, from the baffle back to under the divider'))
         # an inner panel has no outer face: drawn seen from the front, the mid chamber's side, its face and top edge named
         # (read from the woofer's side the hole moved from x 75 to 315: the drawing check's d12, round 6)
-        P.append(dict(name='mid-divider', qty=1, w=INNER, h=TOP_Z0 - MID_SHELF_TOP, layers={
+        P.append(dict(name='mid-divider', qty=1, w=INNER, h=TOP_Z0 - MID_SHELF_TOP - DIVIDER_SHORT, layers={
             'CUT_INSIDE': circle(RUN - 120 - WALL, 40, 12),
-            'NOTES': [('text', (INNER / 2, TOP_Z0 - MID_SHELF_TOP - 8.0), 'FRONT FACE, TOP EDGE', 6.0)]},
+            'NOTES': [('text', (INNER / 2, TOP_Z0 - MID_SHELF_TOP - DIVIDER_SHORT - 8.0), 'FRONT FACE, TOP EDGE', 6.0)]},
             note=f'seen from the front (the mid chamber\'s side), its top edge up: the hole {RUN - 120 - WALL:g} from its left end; y {WALL + MID_CHAMBER_DEPTH:g} to '
-                 f'{2 * WALL + MID_CHAMBER_DEPTH:g}, z {MID_SHELF_TOP:g} to {TOP_Z0:g}; seal the wire hole after wiring'))
+                 f'{2 * WALL + MID_CHAMBER_DEPTH:g}, z {MID_SHELF_TOP:g} to {TOP_Z0 - DIVIDER_SHORT:g}, {DIVIDER_SHORT:g} short of the top panel (G6\'s PU fillet closes it); '
+                 f'seal the wire hole after wiring'))
     if AMP:
         y0, y1, z0, z1 = cad.amp_box_extent()
         d = y1 - y0 + WALL
@@ -147,7 +148,14 @@ def panel_defs():
                                        ('text', (INNER / 2, d - 8.0), 'UNDERSIDE: TURNED OVER LEFT TO RIGHT', 5.0)]})
         P.append(dict(name='amp-box-lid', qty=1, w=INNER, h=d, second_side=under,
                       layers={'CUT_INSIDE': sum((circle(gx - WALL, gy - (y0 - WALL), AMP_BOX['gland_hole']) for (gx, gy) in gl), []),
-                              'NOTES': [('text', (INNER / 2, 6.0), 'FRONT EDGE', 6.0)]},
+                              # the second set-up named on the part itself, so a shop cutting from the nested sheets has it
+                              # (the drawing check's d9, round 8)
+                              'NOTES': [('text', (INNER / 2, 6.0), 'FRONT EDGE', 6.0),
+                                        # at the back left, clear of the glands' holes (right of centre) and of the
+                                        # nested sheets' name label (the centre)
+                                        ('text', (75.0, d - 12.0), '2ND OP: TURN OVER LEFT TO RIGHT', 4.0),
+                                        ('text', (75.0, d - 19.0),
+                                         f'{len(gl)} POCKETS ø{AMP_BOX["nut_cb"][0]:g} x {AMP_BOX["nut_cb"][1]:g}: UNDERSIDE DXF', 4.0)]},
                       # short: the glands and their nuts are note 4.7 (4.6 on the bookshelf); a longer one ran into
                       # sheet 6's title block (the drawing check's d16, round 6)
                       note=f'the amplifier box\'s lid, z {z1:g} to {z1 + WALL:g}, its FRONT EDGE over the box\'s front; the glands and their nuts: note {"4.7" if MID else "4.6"}'))

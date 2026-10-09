@@ -44,7 +44,15 @@ RING = dict(width=20.0, t=3.0, crown=0.0, ease=1.0, inner_r=0.8)   # params.TRIM
 def _revolve_profile(pts):
     """A closed (r, a) profile (a < 0 is forward of the flange's front face), revolved about the axis. Local frame: the
     axis is z, forward is +z (z = -a), the flange's front at z = 0."""
-    face = make_face(Polyline(*[(r, 0, -a) for (r, a) in pts], close=True))   # in the XZ plane: x = radius, z = -a
+    # a corner given twice (a body as wide as its front ring, as SB draws the TW29DN-B: round 8) is one corner, and a
+    # zero-length edge stops OpenCascade
+    clean = []
+    for q in pts:
+        if not clean or abs(q[0] - clean[-1][0]) > 1e-6 or abs(q[1] - clean[-1][1]) > 1e-6:
+            clean.append(q)
+    if len(clean) > 1 and abs(clean[0][0] - clean[-1][0]) <= 1e-6 and abs(clean[0][1] - clean[-1][1]) <= 1e-6:
+        clean.pop()
+    face = make_face(Polyline(*[(r, 0, -a) for (r, a) in clean], close=True))   # in the XZ plane: x = radius, z = -a
     return revolve(face, Axis.Z, 360)
 
 

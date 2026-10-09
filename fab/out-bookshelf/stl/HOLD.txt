@@ -5,4 +5,4 @@ run fab/build.sh before printing.
   gable-block.stl, gable-print/*.stl           the tweeter and the connector (M3, M5): the pocket's bore and bay
   trim-ring-*.stl                              the drivers (M2): each surround at its glue line sets a ring's bore
 
-Print the connector's test bay first (README, step 1).
+Print the connector's test bay first (connector-test-bay.stl, README, step 1).

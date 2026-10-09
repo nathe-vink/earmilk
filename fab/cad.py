@@ -134,7 +134,7 @@ def mid_shelf():
 
 def mid_divider():
     y0 = WALL + MID_CHAMBER_DEPTH
-    p = box(WALL, y0, MID_SHELF_TOP, PLAN - WALL, y0 + WALL, TOP_Z0)
+    p = box(WALL, y0, MID_SHELF_TOP, PLAN - WALL, y0 + WALL, TOP_Z0 - DIVIDER_SHORT)   # short of the top panel (G4, G6)
     p -= cyl_y(RUN - 120, MID_SHELF_TOP + 40, 12, y0 - 1, y0 + WALL + 1)   # the mid's wires, sealed after with putty
     return p
 
@@ -775,7 +775,7 @@ def write_hold():
         + f'  gable-block.stl, gable-print/*.stl           the tweeter and the connector ({m_("tweeter", "connector")}): the pocket\'s bore and bay\n'
         f'  trim-ring-*.stl                              the drivers ({m_("woofer", "mid")}): each surround at its glue line sets a ring\'s bore\n'
         + (f'  port-tube*.stl                               printed long and trimmed to the tuning (README, step 9)\n' if PORT else '')
-        + '\nPrint the connector\'s test bay first (README, step 1).\n')
+        + '\nPrint the connector\'s test bay first (connector-test-bay.stl, README, step 1).\n')
 
 def joint_pins(g, axis, val, region, margin=4.0, step=10.0):
     """Two points far apart on a joint plane (x or y = val), inside region (u0, u1, z0, z1) with u the plane's other
@@ -800,6 +800,34 @@ def joint_pins(g, axis, val, region, margin=4.0, step=10.0):
         return ok
     best = max(((p, q) for i, p in enumerate(ok) for q in ok[i + 1:]), key=lambda pq: math.hypot(pq[0][0] - pq[1][0], pq[0][1] - pq[1][1]))
     return list(best)
+
+
+def seal_stls(folder):
+    """Every binary STL under folder: drop the triangles whose corners weld (at 0.1 micron) to fewer than three points,
+    rewrite the file if any went, and report each file's edges used other than twice (0 for a closed mesh)."""
+    import struct
+    import numpy as np
+    out = {}
+    for root, _, files in os.walk(folder):
+        for f in sorted(files):
+            if not f.endswith('.stl'):
+                continue
+            path = os.path.join(root, f); b = open(path, 'rb').read()
+            if b[:5] == b'solid' and b'facet' in b[:300]:
+                continue                                  # ascii: none written here
+            n = struct.unpack('<I', b[80:84])[0]
+            dt = np.dtype([('n', '<3f4'), ('v', '<9f4'), ('a', '<u2')])
+            a = np.frombuffer(b[84:84 + 50 * n], dtype=dt)
+            q = np.round(a['v'].reshape(-1, 3, 3).astype(np.float64) / 1e-4).astype(np.int64)
+            _, ids = np.unique(q.reshape(-1, 3), axis=0, return_inverse=True); ids = ids.reshape(-1, 3)
+            good = (ids[:, 0] != ids[:, 1]) & (ids[:, 1] != ids[:, 2]) & (ids[:, 2] != ids[:, 0])
+            if not good.all():
+                keep = a[good]
+                open(path, 'wb').write(b[:80] + struct.pack('<I', len(keep)) + keep.tobytes())
+            e = np.sort(np.concatenate([ids[good][:, [0, 1]], ids[good][:, [1, 2]], ids[good][:, [2, 0]]]), axis=1)
+            _, cnt = np.unique(e, axis=0, return_counts=True)
+            out[os.path.relpath(path, folder)] = {'dropped': int((~good).sum()), 'open_edges': int((cnt != 2).sum())}
+    return out
 
 
 def main():
@@ -913,6 +941,23 @@ def main():
             report['parts'][f'gable-print-{nm}'] = {'volume_l': round(piece.volume / 1e6, 3),
                                                     'size_mm': [round(bb.max.X - bb.min.X, 1), round(bb.max.Y - bb.min.Y, 1), round(bb.max.Z - bb.min.Z, 1)]}
         report['gable_print_pins'] = pin_log
+    # the connector's test bay (README, step 1): the gable block round the bay, from just in front of the pocket's back
+    # wall (the boss's bore behind it) to past the bay's end, with the channel below, printed first to mate and unlatch
+    # the pair by hand before the gable is made (the drawing check's d5, round 8)
+    if WAVEGUIDE:
+        I_ = INSERT; zb_ = WAVEGUIDE['throat_z'] + I_['bay_dz']; rb_ = I_['boss_d'] / 2 + I_['clear'] + 12.0
+        y0_, y1_ = I_['back_y'] + I_['clear'] - 6.0, I_['boss_back_y'] + I_['bay_l'] + 12.0
+        bay_ = g & box(RUN - rb_, y0_, BODY - 1, RUN + rb_, y1_, zb_ + I_['bay_d'] / 2 + 12.0)
+        export_stl(bay_, os.path.join(OUT, 'stl', 'connector-test-bay.stl'), tolerance=0.05, angular_tolerance=0.1)
+        bb = bay_.bounding_box()
+        report['parts']['connector-test-bay'] = {'volume_l': round(bay_.volume / 1e6, 3), 'from_y': round(y0_, 1), 'to_y': round(y1_, 1),
+                                                 'size_mm': [round(bb.max.X - bb.min.X, 1), round(bb.max.Y - bb.min.Y, 1), round(bb.max.Z - bb.min.Z, 1)]}
+    # every printed file closed: a tessellation can leave a zero-area triangle where a fillet meets a face (the gable
+    # pieces' fin ends: the drawing check's d12, round 8), which a print service's file check flags; dropped here
+    report['stl_sealed'] = seal_stls(os.path.join(OUT, 'stl'))
+    open_ = [f for f, r in report['stl_sealed'].items() if r['open_edges']]
+    if open_:
+        raise SystemExit(f'{len(open_)} STL file(s) not closed after sealing: ' + ', '.join(open_))
 
     air, mid_gross = woofer_air(parts)
     cavity = waveguide_cavity() if WAVEGUIDE else bowl_cavity()

@@ -7,4 +7,4 @@ run fab/build.sh before printing.
   trim-ring-*.stl                              the drivers (M2, M3): each surround at its glue line sets a ring's bore
   port-tube*.stl                               printed long and trimmed to the tuning (README, step 9)
 
-Print the connector's test bay first (README, step 1).
+Print the connector's test bay first (connector-test-bay.stl, README, step 1).

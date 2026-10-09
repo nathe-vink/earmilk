@@ -74,8 +74,13 @@ INSERT = dict(margin=2.0, eave_clip=25.0, back_y=200.0, boss_d=86.0, boss_back_y
 # The tweeter as the mount sees it: the SB Acoustics Satori TW29DN-B with its faceplate taken off (SB documents it: 2.5 mm
 # hex), the motor unit's front ring seated on the throat's ring. PLACEHOLDER sizes from the research (no drawing found):
 # the unit no wider than its 71 to 74 cutout and about 32 deep; measure one first.
-TWEETER_PART = dict(model='SB Acoustics Satori TW29DN-B', dome_d=29.0, surround_w=8.0, flange_d=73.0, flange_t=6.0, body_d=66.0,
-                    body_depth=26.0, screws=4, bolt_circle=62.0, mount='sleeve')
+TWEETER_PART = dict(model='SB Acoustics Satori TW29DN-B', dome_d=29.0, surround_w=8.0, flange_d=70.0, flange_t=5.0, body_d=70.0,
+                    body_depth=16.7, screws=4, bolt_circle=62.0, mount='sleeve')
+# SPEC SB's drawing (fab/research/datasheets-2026-10-09.json; the drawing check's d4, round 8): behind its 5.0 faceplate the
+# unit is one ø70.0 body 21.7 deep (29.3 overall, the dome 2.6 proud of the faceplate), so with the faceplate off it is
+# drawn as that cylinder, its first 5 the 'front ring' that seats on the throat (flange_t + body_depth = 21.7). The bore is
+# the body + 0.4, so it centres the unit; the cap's ring follows. The 73 x 6 ring and 66 x 26 motor drawn before were
+# placeholders SB's figures contradict. Still measure first (M4): the shops' cut-outs run 71 to 74.
 # How it is held (the drawing check's d1, round 2): the faceplate's screws thread into the motor from the front, and a
 # circle of screws inside the 66 motor cannot be driven from behind, so nothing screws through the tweeter. A printed
 # retaining sleeve slides over the motor from behind and presses the front ring onto the throat's seat (on a 0.5 foam
@@ -123,6 +128,8 @@ TOP_Z0 = BODY - WALL      # 842: the top panel, under the gable block
 # The midrange's own sealed chamber: a shelf under it and a divider behind it, the cabinet's walls and top doing the rest.
 MID_CHAMBER_DEPTH = 90.0  # PROPOSAL clear depth behind the baffle, y 18 to 108 (a 6.5 in mid is 65 to 85 deep)
 MID_SHELF_TOP = 590.0     # PROPOSAL shelf z 572 to 590, 15 below the mid's frame
+DIVIDER_SHORT = 1.0       # PROPOSAL the divider cut this far short of the top panel, the gap sealed by G6's PU fillet (planing it
+                          # 0.3 down between the sides after glue-up could not be done: the drawing check's d8, round 8)
 # One window brace between the woofer and the mid chamber.
 BRACE_Z = 500.0           # PROPOSAL brace z 500 to 518
 BRACE_WINDOW = 254.0      # PROPOSAL square opening, 50 mm frame
@@ -176,7 +183,8 @@ LEAD_ABOVE_GROMMET = 77.0    # the cabinet's tweeter lead above the top panel's 
                              # and 10 past it into its socket, which stands on the floor (the drawing check's d2, round 4:
                              # 30 past the floor put a 24 mm pair through the bay's ceiling). The slack to plug it is the
                              # tweeter's own lead (TWEETER_LEAD): a 6.4 mm round cable cannot fold in a 36 mm bay
-TWEETER_LEAD = dict(l=310.0, wire='2 x 0.75 mm2 silicone-insulated flex, twisted (about 2.2 mm each)')
+TWEETER_LEAD = dict(l=320.0, wire='2 x 0.75 mm2 silicone-insulated flex, twisted (about 2.2 mm each)')   # 320 since the unit is drawn
+# 21.7 deep (SB): its tabs 10 further from the socket than the 32 deep placeholder put them (round 8)
                              # soldered to the tweeter's tabs, the plug on its end. It must reach the socket in the bay
                              # with the insert held just clear of its pocket, the tabs about 225 from the socket, 75 for a hand
                              # in the pocket and 10 spare; home, its spare loops into the bay (the drawing check's d1, round 4: at 150 it

@@ -894,7 +894,7 @@ def sheet2(pdf, M, W):
                       arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK))
     S.notes(250, 112, 'The roof', [
         f'The waveguide insert (light blue) sits in a pocket in the gable block, {INSERT["clear"]:g} mm clear all round: the pocket +0.2/0 and the insert 0/-0.15 on their widths, so {INSERT["clear"]:.2f} to {INSERT["clear"] + 0.175 + 1e-9:.2f} a side. Paint only the insert\'s face: mask its sides, base and back and the pocket\'s walls. It slides out forward, level, with the tweeter on it.',
-        (f'The tweeter is rear-mounted: it goes in from behind through a ø{TWEETER_PART["flange_d"] + 0.4:g} bore and its front ring seats on the ring round the throat, its dome and surround filling the {2 * WAVEGUIDE["r0"]:g} mm throat, so the wall runs on from the surround with no step. A printed cap bearing on its motor\'s back holds it there, screwed to the boss\'s back face (sheet 3).'
+        (f'The tweeter is rear-mounted: it goes in from behind through a ø{TWEETER_PART["flange_d"] + 0.4:g} bore and its front face seats on the ring round the throat, its dome and surround filling the {2 * WAVEGUIDE["r0"]:g} mm throat, so the wall runs on from the surround with no step. A printed cap bearing on its motor\'s back holds it there, screwed to the boss\'s back face (sheet 3).'
          if RETAINER else
          f'The tweeter is rear-mounted: it goes in from behind through a ø{TWEETER_PART["flange_d"] + 0.4:g} bore and its faceplate seats on the ring round the throat, its dome and surround filling the {2 * WAVEGUIDE["r0"]:g} mm throat, screwed from behind through its own holes (sheet 3).'),
         f'Its lead leaves the boss\'s open back into the connector bay behind it (ø{INSERT["bay_d"]:.0f} x {INSERT["bay_l"]:.0f} deep), where it plugs into the cabinet\'s lead; that runs down a {WIRE_HOLE_D:.0f} mm channel through the block and the top panel, sealed round the cable with neutral-cure silicone from the bay.',
@@ -950,7 +950,7 @@ def sheet3(pdf, M, W):
     S.dim_in(iax, k, (-INSERT['boss_back_y'], zb), (-ty, zb), 0, f'{INSERT["boss_back_y"] - ty:g}', size=5,
              feet=((-INSERT['boss_back_y'], tz - INSERT['boss_d'] / 2 + 1), None))
     S.dim_in(iax, k, (6 * XS, BODY), (6 * XS, tz), 0, f'{tz - BODY:g}', size=5)
-    S.ax.annotate(f'bore ø{TWEETER_PART["flange_d"] + 0.4:g} from the back:\nthe tweeter goes in from behind,\nits {"front ring" if RETAINER else "faceplate"} seats at the throat (y {ty:g})', xy=(os_[0] - k * (ty + 8), os_[1] + k * (tz + TWEETER_PART['flange_d'] / 2 - 2)),
+    S.ax.annotate(f'bore ø{TWEETER_PART["flange_d"] + 0.4:g} from the back:\nthe tweeter goes in from behind,\nits {"front face" if RETAINER else "faceplate"} seats at the throat (y {ty:g})', xy=(os_[0] - k * (ty + 8), os_[1] + k * (tz + TWEETER_PART['flange_d'] / 2 - 2)),
                   xytext=(os_[0] - k * (ty + 2) + 18, os_[1] + k * (tz + 55 * XS)), fontsize=5, zorder=8, arrowprops=dict(arrowstyle='-', lw=LW['dim'] * PT, color=INK))
     wxy = (os_[0] - k * (ty - 50), os_[1] + k * (tz - 5))
     S.ax.annotate('the waveguide (air)', xy=wxy, xytext=((wxy[0] - 4, wxy[1] + 12) if BOOK else (wxy[0] + 22, os_[1] + k * (tz + 28))),
@@ -1069,7 +1069,7 @@ def sheet3(pdf, M, W):
     S.notes(230, 130, 'Fitting the tweeter and the insert', [
         (f'Solder the tweeter\'s own lead ({TWEETER_LEAD["l"]:g} mm of {TWEETER_LEAD["wire"]}) to its tabs and crimp the connector\'s plug on its end: {CONNECTOR["series"]}, '
          f'{CONNECTOR["plug"]}, pin 1 {CONNECTOR["pin1"]}. The socket on the cabinet\'s lead: {CONNECTOR["socket"]}. Mated, {CONNECTOR["mated_l"]:g} long or less.'),
-        (f'Pass the tweeter in from behind through the ø{T_["flange_d"] + 0.4:g} bore, dome first, and seat its front ring on the throat\'s seat on a {RETAINER["gasket"]:g} mm '
+        (f'Pass the tweeter in from behind through the ø{T_["flange_d"] + 0.4:g} bore, dome first, and seat its front face on the throat\'s seat on a {RETAINER["gasket"]:g} mm '
          f'closed-cell foam ring, ID {2 * WAVEGUIDE["r0"] + 1:g} / OD {T_["flange_d"]:g}, punched (its ID never inside the throat). Fit the printed retaining cap '
          f'(stl/tweeter-retainer.stl: a ring ø{cad.retainer_rings()[0]:g} / ø{cad.retainer_rings()[1]:g} x {cad.retainer_y()[1] - cad.retainer_y()[0]:g} long on a flange ø{RETAINER["flange_d"]:g} x {RETAINER["flange_t"]:g}) '
          f'into the bore behind it, the lead through its middle: its ring bears on the motor\'s back rim and its flange stands {RETAINER.get("preload", 0.0):g} off the boss. Drive its {RETAINER["screws"]} {RETAINER["screw"]} '
@@ -1084,7 +1084,9 @@ def sheet3(pdf, M, W):
          f'20 mm of neutral-cure silicone from the bay before the first fitting. To fit: hold the insert just clear of its pocket, reach in and plug the tweeter\'s lead into the '
          f'socket (its {TWEETER_LEAD["l"]:g} mm reaches with a hand in the pocket), then slide the insert home, feeding the spare into the bay as a loop, '
          + ('clear of the 1.1 mm between the cap\'s screw heads and the bore\'s floor.' if RETAINER else 'behind the tweeter\'s body in the boss\'s bore and the bay.')),
-        f'Slide the insert in, level, until the pins seat and the magnets pull it home: its face flush with the roof, the seam even. Fit: the pocket +0.2/0 and the insert 0/-0.15 on their widths ({INSERT["clear"]:.2f} to {INSERT["clear"] + 0.175 + 1e-9:.2f} a side; the boss in its bore the same); paint only the insert\'s face.',
+        f'Slide the insert in, level, until the pins seat and the magnets pull it home: its face flush with the roof, the seam even. Fit: the pocket +0.2/0 and the insert 0/-0.15 on their widths ({INSERT["clear"]:.2f} to {INSERT["clear"] + 0.175 + 1e-9:.2f} a side; the boss in its bore the same); paint only the insert\'s face. '
+        f'A print service holds about 0.2 to 0.3 % (0.6 to 0.9 on {max(u for (u, _) in cad.insert_outline()) - min(u for (u, _) in cad.insert_outline()):.0f}): order the base\'s width and the boss\'s ø{INSERT["boss_d"]:g} as critical dimensions, '
+        'or sand the unpainted sides, base and boss until it slides home with 0.3 to 0.5 a side; never sand the waveguide, the seat or the bore. Check the width before painting.',
         f'Service: pull it out by a ribbon loop glued at the back of the {PULL_GROOVE_NOTE} groove under its front edge, unplug, and the tweeter comes out with it. Between times the loop folds back into its groove: only its end shows, under the insert\'s front edge.',
         pocket_note(cad),
         fixings_note(cad),
@@ -1215,7 +1217,9 @@ def pocket_note(cad):
     return (f'The pocket (gable-block.step): the insert\'s outline + {p["clear"]:g} a side ({max(us) - min(us) + 2 * p["clear"]:.1f} wide at its base), from the slope to its back wall at '
             f'y {p["back_wall_y"]:g}; the boss\'s bore ø{p["boss_bore_d"]:g} to y {p["boss_bore_to_y"]:g}; the connector bay ø{p["bay"]["d"]:g} from y {p["bay"]["from_y"]:g} '
             f'to {p["bay"]["to_y"]:g} on an axis at z {p["bay"]["axis_z"]:g}; the channel ø{f["channel"]["d"]:g} at x {f["channel"]["x"]:g}, y {f["channel"]["y"]:g} down to the '
-            f'top panel; internal corners R3 or less (the insert\'s match); dowel holes ø{DOWEL_D:g} x {DOWEL_DEPTH:g} in the base at {dw}.')
+            f'top panel; R3 or less in the profile\'s corners only, and sharp where the back wall meets the walls (a flat-ended cutter), as the insert\'s back edges are; '
+            f'dowel holes ø{DOWEL_D:g} x {DOWEL_DEPTH:g} in the base at {dw}. Milled (route A), the back wall is {p["back_wall_y"]:g} and the bay {p["bay"]["to_y"]:g} from the front: '
+            f'a cutter with that reach, or print the block (route B).')
 
 
 # --- sheet 4: the back and the wiring ----------------------------------------------------------------------------------------
@@ -1311,7 +1315,7 @@ def sheet4(pdf, M, W):
     _wire(S, [(X0 - 8, 258), (X0, 258)], gry); _wire(S, [(X0 - 8, 232), (X0, 232)], gry)
     if BOOK:
         drivers = [('Tweeter, Scan-Speak D3004/602200', '26 mm dome, faceplate behind the insert', red, 'CH2', 1.0, 176),
-                   ('Woofer, SB Acoustics SB17NRX2C35-8', '6 in, sealed, DSP shelf to 45 Hz', grn, 'CH1', 1.5, 148)]
+                   ('Woofer, SB Acoustics SB17NRX2C35-8', '6.5 in, sealed, DSP shelf to 45 Hz', grn, 'CH1', 1.5, 148)]
     else:
         drivers = [('Tweeter, SB Satori TW29DN-B', '29 mm dome, faceplate off, on the insert', red, 'CH3 (100 W)', 1.0, 180),
                    ('Midrange, SB Satori MR16P-8', '6.5 in papyrus, its own sealed chamber', blu, 'CH2', 1.5, 152),
@@ -1450,7 +1454,7 @@ def sheet5(pdf, M, W):
             (8, 'Gable block', '1', 'laminated birch, CNC, or printed in four pieces (step 1)'),
             (9, 'Waveguide insert', '1', 'SLA tough resin or MJF nylon; magnets, pins'),
             (11, 'Amplifier box', '3', 'birch floor, lid (2 glands) and front; sealed'),
-            (12, 'Woofer', '1', 'SB Acoustics SB17NRX2C35-8, 6 in'),
+            (12, 'Woofer', '1', 'SB Acoustics SB17NRX2C35-8, 6.5 in'),
             (13, 'Trim ring', '1', 'printed, satin black, over the frame and screws'),
             (15, 'Tweeter', '1', 'Scan-Speak Illuminator D3004/602200'),
             (16, 'Amplifier', '1', f'{AMP["model"]}, DSP, 2 channels'),
@@ -1542,6 +1546,8 @@ def sheet6(pdf, M, W):
                     lines.append(f'{F.OPS.get(layer, layer)}: {round(pts[:, 0].min(), 1):g} to {round(pts[:, 0].max(), 1):g} across, {round(pts[:, 1].min(), 1):g} to {round(pts[:, 1].max(), 1):g} up{rad}')
                 elif it[0] == 'text':
                     (tx, ty), txt, hgt = it[1], it[2], it[3]
+                    if len(txt) > 24:
+                        continue          # a shop note for the router (the lid's second set-up): the text under the panel says it
                     # the DXF's note, at least 2.4 mm in from the edge on paper: at 1:5 its 6 mm would print over the edge
                     S.text(x + k * tx, y0 + max(k * ty, 2.4), txt, size=MIN_PT, ha='center', va='center', color='#555')
         lines = [f'{len(at)} x ' * (len(at) > 1) + f'ø{d:g} at {", ".join(at)}: {op}' for (d, op), at in holes.items()] + lines
@@ -1597,6 +1603,13 @@ def trim_ring_sections(S, x0, y0):
         if ch:
             what = 'open to the bore' if ch[0] <= r_in + 1e-6 else f'from ø{2 * ch[0]:.1f}'
             S.text(ox + k * r_in, oy - k * t - 2, f'channel {what} to ø{2 * ch[1]:.1f}, {ch[2]:g} deep', size=MIN_PT, ha='left', va='top')
+        reach = (sc['pcd'] - DRIVER_SCREW['head_d']) / 2 if sc else None
+        if reach is not None and r_in > reach:
+            # a bore wider than where the heads reach in leaves part of each head showing inside the ring (the drawing
+            # check's d11, round 8): said over the ring's label, where there is room
+            note_, _ = S.wrap(f'{r_in - reach:g} of each head shows inside the ø{2 * r_in:g} bore (they reach in to ø{2 * reach:g}; '
+                              f'a ø{2 * reach - 2:g} bore covers them): owner', 95.0)
+            S.text(ox + k * r_in, oy - k * t - 2 - 4.8, note_, size=MIN_PT, ha='left', va='top', color='#222')
         x += k * (r_out - r_in + 4) + 70
     S.text(x0, y0 - 4, f'the channel clears the {DRIVER_SCREW["thread"]} heads (F1): {DRIVER_SCREW["head_d"]:g} across, {DRIVER_SCREW["head_h"]:g} high or less',
            size=MIN_PT, va='top')
@@ -1625,25 +1638,30 @@ def measure_first():
                     f'the cut-out ø{cut:g}' + (f'; {sc["n"]} holes on ø{sc["pcd"]:g}{src}' if sc else '') + f'; the surround at its glue line + 2 sets the trim ring\'s bore, ø{TRIM_RING_ID[role]:g}.')
     if RETAINER:
         od_, id_ = cad.retainer_rings(); yf_, yb_ = cad.retainer_y()
-        rows.append(f'{T["model"]}, its faceplate off: the front ring ø{T["flange_d"]:g} sets the bore, ø{T["flange_d"] + 0.4:g}, and the cap\'s ring, ø{od_:g}; its thickness t ({T["flange_t"]:g}) '
-                    f'and the motor\'s depth d ({T["body_d"]:g} across, {T["body_depth"]:g} deep) set the cap\'s length, the boss\'s back less t + d ({yb_ - yf_:g}, {RETAINER.get("preload", 0.0):g} over its gap); '
-                    f'the motor\'s back needs a flat rim {RETAINER.get("rim", 6.0):g} wide round its edge, its tabs inside ø{id_:g} or on its side. Any motor up to the ring\'s diameter fits '
-                    f'(SB\'s faceplate drawing shows ø70.0 behind it). The dome and surround, {2 * WAVEGUIDE["r0"]:g} across, set the throat. Print nothing until it is measured.')
+        rows.append(f'{T["model"]}, its faceplate off, drawn from SB\'s drawing: one body ø{T["body_d"]:g}, {T["flange_t"] + T["body_depth"]:g} behind the 5.0 faceplate (29.3 overall). '
+                    f'Its widest part behind the dome sets the bore, + 0.4 (ø{T["flange_d"] + 0.4:g}), which centres it, and the cap\'s ring, ø{od_:g}; its depth behind its front face '
+                    f'({T["flange_t"] + T["body_depth"]:g}) sets the cap\'s length, the boss\'s back less that ({yb_ - yf_:g}, {RETAINER.get("preload", 0.0):g} over its gap); '
+                    f'its back needs a flat rim {RETAINER.get("rim", 6.0):g} wide round its edge, its tabs inside ø{id_:g} or on its side. The dome and surround, {2 * WAVEGUIDE["r0"]:g} across, '
+                    f'set the throat. Lift the faceplate as SB says, slowly (glue at the diaphragm\'s rim can stick to it): if the rim is not held without it, the unit needs SB\'s '
+                    f'adapter ring (with the WG29-187) or a printed one on the faceplate\'s screws, and the bore grows to its outside diameter (README). Print nothing until it is measured.')
     else:
         rows.append(f'{T["model"]}: the faceplate ø{T["flange_d"]:g} sets the bore, ø{T["flange_d"] + 0.4:g}; its hole circle, ø{T["bolt_circle"]:g}, and its body, '
                     f'ø{T["body_d"] + 0.3:g} or less, set the seat\'s screws; its thickness t ({T["flange_t"]:g}) sets their length, M2.5 x (t + 3.5); its front must be flat from '
                     f'ø{2 * WAVEGUIDE["r0"]:g} to ø{T["flange_d"]:g} and the grille off (or a seat recess for it); the dome and surround {2 * WAVEGUIDE["r0"]:g} across or less. '
                     f'The seat\'s holes take {INSERT_SCREW["insert"]} inserts {INSERT_SCREW["hole_d"] - 0.1:g} or less across, bonded: each hole is the insert\'s '
                     f'outside diameter + 0.1 (ø{INSERT_SCREW["hole_d"]:g} for {INSERT_SCREW["hole_d"] - 0.1:g}). Shops give its cut-out 47.8 to 48, three ø3.3 holes, 45.3 deep '
-                    f'(from where?): the bore holds {room_:g} behind the faceplate (a CAD check). Print nothing until it is measured.')
-    rows.append(f'{AMP["model"]} (Hypex\'s manual: horizontal allowed, in its own compartment): the plate {AMP["plate_w"]:g} x {AMP["plate_h"]:g} sets the rebate, '
+                    f'(from where?). Go or no-go: its body {room_:g} or less behind the faceplate\'s rear face (the bore runs y {WAVEGUIDE["throat_y"] + T["flange_t"]:g} to '
+                    f'{INSERT["boss_back_y"]:g}); over that, print nothing: the owner chooses the fallback (README). Its solder tabs: measure each one\'s angle from the nearest hole and '
+                    f'its radius from the axis; each head (ø{INSERT_SCREW["head_d"]:g} on ø{T["bolt_circle"]:g}) needs 1.0 clear of a tab and its solder, or bond the faceplate to the seat '
+                    f'with epoxy instead of screwing it. Print nothing until it is measured.')
+    rows.append(f'{AMP["model"]} (Hypex\'s manual: vertical or horizontal, in its own compartment; here {"upright" if BOOK else "on its side"}): the plate {AMP["plate_w"]:g} x {AMP["plate_h"]:g} sets the rebate, '
                 f'{AMP["plate_w"] + 1:g} x {AMP["plate_h"] + 1:g}; its corner radius r '
                 f'sets the rebate\'s corners, R = r + 0.5 (R{AMP["plate_r"] + 0.5:g} for r {AMP["plate_r"]:g}: a square corner, or one under R2.8, will not seat); '
                 f'its thickness t ({AMP["plate_t"]:g}) sets the rebate\'s depth, t + 1.5 ({AMP["plate_t"] + 1.5:g}, over the EPDM pressed), and the screws\' length, '
                 f't + 13 ({AMP["plate_t"] + 13:g}); the module sets the cut-out, {AMP["cut_w"]:g} x {AMP["cut_h"]:g}; the screw holes come from the plate in hand.')
     rows.append(f'{CONNECTOR["series"]} pair (39-01-2020 and 39-01-2021): its mated length L ({CONNECTOR["mated_l"]:g} drawn, from no maker\'s drawing: Molex SD-5557-003 '
                 f'and 55590020-SD give it) sets the bay, ø{INSERT["bay_d"]:g}, which leaves {INSERT["bay_d"] - CONNECTOR["mated_l"]:g} over the mated pair for the lead\'s bend. '
-                f'Print the test bay first (README, step 1) and mate and unlatch the pair in it by hand.')
+                f'Print the test bay first (stl/connector-test-bay.stl, README, step 1) and mate and unlatch the pair in it by hand.')
     return rows
 
 
@@ -1661,10 +1679,12 @@ def general_notes():
             + ([f'The window brace at z {BRACE_Z:g}, glued to the sides and the back' + (', its cable-tie mount on its top face (4.6)' if MID else '') + '; clamp across the sides.'] if BRACE_Z else [])
             + ([f'Mark the mid chamber on the sides\' inner faces: the shelf\'s underside {MID_SHELF_TOP - 2 * WALL:g} above the bottom panel, the divider\'s front face '
                 f'{MID_CHAMBER_DEPTH:g} behind the sides\' front edges. Glue the shelf, then the divider (its two cable-tie mounts on its back face, 4.6), to the marks; '
-                f'clamp across the sides. Plane the divider\'s top {WALL + 0.3:g} below the sides\' top edges (a rule across them), so the top panel slides over it.',
+                f'clamp across the sides. The divider is cut {DIVIDER_SHORT:g} short of the top panel (sheet 6), so the top panel slides over it; G6\'s PU fillet closes the gap.',
                 'Line the mid chamber with 10 mm wool or polyester felt (spray adhesive): the divider\'s front face, stopping 15 short of its top edge; the shelf\'s top; '
-                'the sides between them; and the top panel\'s underside over the chamber before it goes in, stopping 15 short of the divider. Leave the front\'s back face bare.'] if MID else [])
-            + ['The top panel, dowel holes up and its FRONT EDGE to the open front (sheet 6), nothing on its underside,'
+                'the sides between them; and the top panel\'s underside over the chamber before it goes in, 10 in from each side and stopping 15 short of the divider. '
+                'Leave the front\'s back face bare.'] if MID else [])
+            + ['The top panel, dowel holes up and its FRONT EDGE to the open front (sheet 6), no cable-tie mounts on its underside'
+               + (f'; its felt (G5) {INNER - 20:g} wide and {MID_CHAMBER_DEPTH - 15:g} deep from its front edge, clear of the sides\' felt,' if MID else ',')
                + ' slid in from the front and glued to the sides and the back' + (', dry over the divider' if MID else '') + '; clamp across the sides.'
                + (f' Then, with the front still off, run a 5 mm fillet of PU sealant along the corner between the divider\'s front face and the top panel\'s underside, '
                   f'x {WALL:g} to {PLAN - WALL:g}: the mid\'s chamber\'s fourth wall (check it after G7 through the mid\'s cut-out).' if MID else ''),
@@ -1702,7 +1722,10 @@ def notes_sheet(pdf, number, title, subtitle, blocks):
         x, y, ybot = cols[0]
         for i, bl in enumerate(blocks):
             if bl[0] == 'h':
-                lines = None; need = hgap + 2 * lh             # a heading keeps its first note with it
+                # a heading keeps its first note with it, whole, since a note never splits across columns (the
+                # bookshelf's 'Sheet 1: Notes' sat at a column's foot with its 1.1 at the next one's head)
+                nxt = blocks[i + 1] if i + 1 < len(blocks) else None
+                lines = None; need = hgap + (len(textwrap.wrap(nxt[2], ww)) * lh if nxt and nxt[0] == 'p' else 2 * lh)
             else:
                 lines = textwrap.wrap(bl[2], ww); need = len(lines) * lh
             if y - need < ybot:
@@ -1764,7 +1787,7 @@ def sheet7(pdf, M, W):
     m_ = lambda *ks: ', '.join(f'M{M_NUM[k]}' for k in ks if k in M_NUM)
     rel = (f'Cut once M1 is entered: the sides, the bottom and top panels' + (', the window brace, the mid shelf and the divider' if MID else '') +
            f' and the amplifier box\'s panels (sheet 6). On hold until measured (HOLD in their title blocks and DXFs, stl/HOLD.txt): the front ({m_("woofer", "mid")}), '
-           f'the back ({m_("amp")}), and every print: the insert, the gable, ' + ('the cap, ' if RETAINER else '') + 'the trim rings and the port.')
+           f'the back ({m_("amp")}), and every print: the insert, the gable, ' + ('the cap, ' if RETAINER else '') + ('the trim rings and the port.' if PORT else 'and the trim rings.'))
     blocks = [('h', 'Measure first')] + [('p', f'M{i + 1}', t) for i, t in enumerate(measure_first())] + [('p', 'Cut', rel)]
     blocks += _sheet_blocks([n for n, on in NOTES_ON.items() if on == 7])
     notes_sheet(pdf, 7, f'Notes: measure first; {_sheets_text(7)}', f'What to measure before cutting or printing, and the notes {_sheets_text(7)} point to by number.', blocks)

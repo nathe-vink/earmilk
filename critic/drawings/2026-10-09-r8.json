@@ -1,0 +1,168 @@
+{
+ "verdict": "No, not today. The drawing set is unusually complete and consistent. Every panel, hole, rebate, pocket, fit, glue-up step, cable run and seal is drawn or noted. The numbers agree across the sheets, cutlist.csv, cad.json, the DXFs and params.py. The notes print at 2.5 mm cap height, and every section has its cutting plane on another view. What stops the build is the set's own HOLD marks. Only the sides, top, bottom, window brace, mid shelf, divider and amplifier-box panels can be cut now. The front baffles, backs, waveguide inserts, gables, tweeter cap and trim rings all wait until the drivers, tweeters, amplifiers and connector are bought and measured and build.sh is run again, which needs a build123d/gmsh Python environment. Two of the placeholders behind those holds already disagree with the data in research/. The bookshelf's D3004/602200 is drawn 17 mm deep in a bore that holds 26, but its only published depth is 45.3; if that is right, the bookshelf roof cannot take it. The TW29DN-B is drawn 32 mm deep, where SB gives 21.7 behind a 5 mm faceplate. Smaller problems: the floorstander insert's 0/-0.15 width is tighter than a print service holds at 283 mm; M3 never says where the D3004's tabs are, beside screw heads 0.65 mm off its body; the connector test bay that gates the gable has no file; note 3.7's R3 corners would hold the insert 1.7 mm short in a milled gable; and a few notes contradict each other or the BOM. Once the parts are measured, the CAD is rebuilt and the bookshelf tweeter is settled, I would expect the floorstander to build with a few phone calls.",
+ "buildable_score": 4.5,
+ "findings": [
+  {
+   "id": "d1",
+   "size": "bookshelf",
+   "sheet": "sheet-3 + sheet-7 (M3)",
+   "where": "Section B-B (with the gable), the tweeter body in the \u00f862.4 bore, sheet-3.png crop x 1950-3200, y 160-1050; sheet 7 note M3",
+   "severity": "blocks",
+   "problem": "The Scan-Speak D3004/602200 is drawn 48 across and 17 deep behind its faceplate, in a bore that holds 26, but the only published depth for the part is 45.3 mm; if the body stands more than 26 behind the faceplate, neither the insert nor the gable can take it.",
+   "evidence": "params.py TWEETER_PART (bookshelf): body_d 48, body_depth 17, flange_t 4.5. cad.json: tweeter_bore from y 95 to 126, i.e. 26.5 behind the faceplate's rear face at y 99.5. Sheet 7 M3: 'the bore holds 26 behind the faceplate (a CAD check)'. research/datasheets-2026-10-09.json: SoundImports 'Depth: 45.3 mm' (reference point not stated), no maker figure; the 21.5 in drivers-small.md belongs to the older D3004/602000. Even if 45.3 is overall depth, taking off a 4.5 faceplate and a few mm of dome leaves well over 26. The README says the roof leaves about 1.3 mm to move the boss back.",
+   "fix": "Add a go/no-go line to sheet 7 M3: 'body behind the faceplate's rear face 26.0 or less (the bore runs y 99.5 to 126); over that, print nothing and use the fallback'. Put the measured depth in TWEETER_PART body_depth (now 17). Have the owner choose the fallback (see questions) before any bookshelf insert or gable is printed."
+  },
+  {
+   "id": "d2",
+   "size": "floorstander",
+   "sheet": "sheet-9 (3.5) + sheet-8 (2.1) + sheet-3",
+   "where": "note 3.5 'Fit: the pocket +0.2/0 and the insert 0/-0.15 on their widths'; sheet 3 FRONT '283.3 (pocket 283.9)'",
+   "severity": "remake",
+   "problem": "The insert's 0/-0.15 tolerance on a 283.3 mm width is several times tighter than an SLA or MJF service holds, and no note says what to do with an oversize or warped print, which will not enter a pocket only 0.3 a side larger.",
+   "evidence": "The insert is 283.3 x 216 x 123.6 and 2.5 L (STL bounding box, cad.json); the pocket is 283.9 (note 3.7). Note 3.9 and the README make 'one piece from a service (SLA tough resin or MJF nylon)' the default. Typical service tolerances are MJF \u00b10.3 % (about \u00b10.85 at 283 mm), and MJF warps on a flat 283 x 216 base; SLA \u00b10.2 % (about \u00b10.57). The boss \u00f886.0 in its \u00f886.6 bore has the same 0.3 a side. The bookshelf's 159.3 (about \u00b10.48 in MJF) stays inside its 0.6 total.",
+   "fix": "Add to note 3.5: 'Order the insert with base width 283.3 0/-0.15 and boss \u00f886.0 0/-0.15 marked as critical dimensions, or sand its unpainted sides, base and boss until it slides home with 0.3 to 0.5 a side; never sand the waveguide, the seat or the bore. Check the width before painting.'"
+  },
+  {
+   "id": "d3",
+   "size": "bookshelf",
+   "sheet": "sheet-3 (BACK) + sheet-7 (M3) + sheet-9 (3.2)",
+   "where": "BACK (the face that meets the pocket): '3 x \u00f83.6 x 5 holes on \u00f854 in the seat, one at the top, 120\u00b0 apart', sheet-3.png crop x 120-1570, y 1130-1900",
+   "severity": "remake",
+   "problem": "The three M2.5 button heads sit 0.65 mm from the tweeter's body at fixed angles, but no sheet says where the D3004/602200's solder tabs are, though a dealer warns they stand out past the body; a tab can land under a head, and the printed seat's holes would then be unusable.",
+   "evidence": "cad.json check 'faceplate screws' heads clear of the tweeter's body': margin 0.65. params INSERT_SCREW: head_d 4.7 on a \u00f854 circle, against body_d 48. research/datasheets-2026-10-09.json, D3004/602200 notes: 'Madisound warns that the mechanical drawing does not show the notch the wire tabs need, because the tabs are not flush with the tweeter chamber'. M3 lists the faceplate, hole circle, body, thickness, front, dome and inserts, but not the tabs.",
+   "fix": "Add to M3: 'Measure each tab's angle from the nearest hole and its radius from the axis. Each head (\u00f84.7 on \u00f854) needs 1.0 clear of a tab and its solder; if any head does not have it, bond the faceplate to the seat with epoxy instead of screwing it.' Draw the tabs on sheet 3's BACK view."
+  },
+  {
+   "id": "d4",
+   "size": "floorstander",
+   "sheet": "sheet-7 (M4) + sheet-9 (3.2) + sheet-3",
+   "where": "sheet 7 note M4 (sheet-7.png y about 775-1110); sheet 3 Section B-B, the tweeter and the dotted cap, sheet-3.png crop x 1500-3050, y 80-1000; stl/tweeter-retainer.stl",
+   "severity": "guess",
+   "problem": "The bare TW29DN-B is drawn 32 mm deep behind the seat (a \u00f873 x 6 front ring plus a \u00f866 x 26 motor) and the cap is 7.75 long to suit, but SB's drawing shows 21.7 behind a 5.0 faceplate and an unlabelled \u00f870.0 body; the cap in the file would stand roughly 5 to 10 mm off the motor, and nothing would centre a \u00f870 unit in the \u00f873.4 bore.",
+   "evidence": "params TWEETER_PART: flange_d 73, flange_t 6, body_d 66, body_depth 26. M4: 'thickness t (6) and the motor's depth d (66 across, 26 deep) ... (7.75, 0.25 over its gap)'. cad.json: tweeter_retainer from y 208.25 to 216. research/datasheets-2026-10-09.json: faceplate \u00f8103.8 x 5.0, depth behind the baffle 21.7, overall 29.3, \u00f870.0 behind the faceplate. Cap length = 39.75 minus the unit's depth, so 13.0 to 18.0 for a unit 21.7 to 26.7 deep, not 7.75. A \u00f870 body in the \u00f873.4 bore has 1.7 mm of radial play, against a \u00f845 throat meant to continue from the surround with no step.",
+   "fix": "On M4, print SB's figures beside the placeholders: 'SB: 21.7 behind a 5.0 faceplate, body \u00f870; expect a cap 13 to 18 long'. Add: 'the bore is the widest part behind the dome + 0.4, so that it centres the unit (\u00f870.4 if there is no ring)'. Keep the insert, cap and gable on HOLD until then."
+  },
+  {
+   "id": "d5",
+   "size": "both",
+   "sheet": "README step 1 + sheet-7 (M6; bookshelf M5) + stl/HOLD.txt",
+   "where": "M6 'Print the test bay first (README, step 1) and mate and unlatch the pair in it by hand'; the out*/stl folders",
+   "severity": "guess",
+   "problem": "The first build step, which also gates printing the gable and insert, is a printed connector test bay, but neither size has an STL, STEP or drawing of it.",
+   "evidence": "README step 1: 'First print a test bay, the connector's bay with its \u00f814 channel below it (\u00f836 x 35 for the floorstander, \u00f832 x 22 for the bookshelf, in a block with a mock pocket in front)'. Both HOLD.txt files: 'Print the connector's test bay first'. No *bay* file exists anywhere in the repository. The test has to prove a hand can mate and unlatch the pair about 240 mm (bookshelf 150) in, with 12 (8) mm above it. The mated length is itself unknown (M6: 24 drawn from no maker's drawing).",
+   "fix": "Publish stl/connector-test-bay.stl for each size, cut from gable-block.step: the back wall, boss bore (\u00f886.6 to y 222.5; bookshelf \u00f869 to y 127), bay (\u00f836 from y 216 to 251 on z 927; \u00f832 from y 126 to 148 on z 512) and channel (\u00f814, 67 and 30 down), with an open frame of the pocket's outline 200.3 (113.3) deep in front so the reach is tested."
+  },
+  {
+   "id": "d6",
+   "size": "both",
+   "sheet": "sheet-9 (3.7) + sheet-3 + sheet-5 (gable block) + cutlist gable-layer-*",
+   "where": "note 3.7: 'internal corners R3 or less (the insert's match)', back wall at y 200.3, boss bore to y 222.5, bay to y 251 (bookshelf 113.3, 127, 148)",
+   "severity": "guess",
+   "problem": "Note 3.7 lets a milled pocket have R3 internal corners, but the insert's back face is square-edged to its full outline, so R3 where the back wall meets the walls holds the insert 1.7 mm short of home; and no sheet says how the route-A pocket, 200 to 251 mm deep, is to be machined.",
+   "evidence": "On the STL, the insert's back face at y 200 runs to the full outline, 283.26 x 123.61 (bookshelf 159.26 x 67.7 at y 113), with square edges. The outline's only other corners are obtuse (a 20.6\u00b0 turn 19.8 above the base; bookshelf 23.2\u00b0 at 10.5), where R3 costs 0.05 mm. At the 90\u00b0 back-wall corners, a sharp edge against R3 with 0.3 side clearance stops 1.69 mm short: the face stands 1.0 proud of the 37.6\u00b0 roof and the magnets' gap grows 1.7. gable-block.stl's own corners are sharp. Route A has to reach 200.3, 222.5 and 251 mm along y with the block on end; README step 4 itself says it needs 'a long-series cutter or a 5-axis machine, or print the block'.",
+   "fix": "Note 3.7: 'R3 or less in the profile corners only; where the back wall meets the walls, sharp (R0.5 or less), or chamfer the insert's back edges 2 x 45\u00b0'. Then either mark the gable 'printed (route B) only' on sheets 3 and 5 and take the 22 (bookshelf 14) gable layers out of the nests and the BOM, or add a route-A method: block on end, cutters with 251 mm reach, the arch milled from the base before glue-up."
+  },
+  {
+   "id": "d7",
+   "size": "floorstander",
+   "sheet": "sheet-8 (G5, G6)",
+   "where": "Glue-up G5 and G6, sheet-8.png crop x 2244-3201, y 594-1040",
+   "severity": "guess",
+   "problem": "G5 lines the top panel's underside with 10 mm felt before it goes in, but G6 slides the same panel in with 'nothing on its underside', and felt cut the full 354 wide would drag over the sides' felt as it slides.",
+   "evidence": "G5: '...and the top panel's underside over the chamber before it goes in, stopping 15 short of the divider'. G6: 'The top panel, dowel holes up and its FRONT EDGE to the open front (sheet 6), nothing on its underside, slid in from the front'. G5 also lines 'the sides between them'. The bom.csv damping line repeats G5.",
+   "fix": "In G6, replace 'nothing on its underside' with: 'no cable-tie mounts on its underside; its felt (G5) cut 334 wide (10 in from each side) and 75 deep from its front edge (y 18 to 93), so it clears the sides' felt and stops 15 short of the divider'."
+  },
+  {
+   "id": "d8",
+   "size": "floorstander",
+   "sheet": "sheet-8 (G4) + cutlist + sheet-6 + dxf/mid-divider.dxf",
+   "where": "G4 'Plane the divider's top 18.3 below the sides' top edges (a rule across them)', sheet-8.png crop x 2244-3201, y 376-595",
+   "severity": "guess",
+   "problem": "The divider is cut 252 high, flush with the top panel's underside, and must then be planed 0.3 mm down after it is glued in, between two sides standing 18.3 above it, where a plane cannot run its full 354 length.",
+   "evidence": "cutlist and mid-divider.dxf: 354 x 252. cad.json: mid-divider z 590 to 842, top panel z 842 to 860. G4 glues the divider to marks set from the bottom (the shelf's underside 554 above the bottom panel; panels \u00b10.5) and only then planes it to z 841.7. G6 seals that joint with a 5 mm PU fillet anyway.",
+   "fix": "Cut the divider 251.0 high (z 590 to 841.0) in mid-divider.dxf, sheet 6 and the cut list. Delete the planing from G4, and let G6's 5 mm PU fillet close the gap (0.5 to 1.5 mm with the shelf's \u00b10.5)."
+  },
+  {
+   "id": "d9",
+   "size": "both",
+   "sheet": "dxf/sheet-3.dxf (floorstander), dxf/sheet-1.dxf (bookshelf)",
+   "where": "the two amp-box-lid parts in each nested sheet",
+   "severity": "guess",
+   "problem": "The nested sheets cut the lid's gland holes but carry neither its \u00f824 x 8 underside counterbores nor any note to turn it over, so a shop cutting from the nests leaves out the pockets that G2 needs for the lock nuts.",
+   "evidence": "sheet-3.dxf has only the layers NOTES, CUT_OUTSIDE, CUT_INSIDE and DRILL_D10_DEPTH10, and the lid's only text is 'amp-box-lid'. amp-box-lid-underside.dxf has POCKET_8MM_UNDERSIDE at (40, 43), (75, 43) and (110, 43); bookshelf (40, 43) and (75, 43). The second operation appears only in cutlist.csv's operations column. G2 epoxies the nuts into these pockets before the lid goes in.",
+   "fix": "Add a NOTES text to each nested lid: 'SECOND OP: TURN OVER LEFT TO RIGHT, 3 x \u00f824 x 8 POCKETS (amp-box-lid-underside.dxf)', with 2 x on the bookshelf."
+  },
+  {
+   "id": "d10",
+   "size": "floorstander",
+   "sheet": "bom.csv",
+   "where": "line 'Printed, Tweeter retaining cap (floorstander)'",
+   "severity": "guess",
+   "problem": "The BOM still describes the superseded tweeter sleeve, while sheet 9 and the STL are a cap whose ring bears on the motor's back.",
+   "evidence": "bom.csv: 'fab/out/stl/tweeter-retainer.stl: bore = the TW29DN-B's motor + 1 (measure it), presses the front ring onto the throat's seat'. Sheet 9 note 3.2: 'a ring \u00f873 / \u00f854 x 7.75 long on a flange \u00f885 x 3 ... its ring bears on the motor's back rim'. params RETAINER mode is 'cap'; the STL's bounding box is 85 x 10.75; README step 7 agrees with sheet 9.",
+   "fix": "BOM note: 'a ring \u00f873 / \u00f854 x 7.75 (39.75 less the measured unit depth) on a \u00f885 x 3 flange, bearing on the motor's back; three 3.0 x 12 PT screws into the boss (sheet 9, 3.2)'."
+  },
+  {
+   "id": "d11",
+   "size": "floorstander",
+   "sheet": "sheet-6 (trim rings) + sheet-7 (1.2)",
+   "where": "Trim rings, section at 2:1: 'woofer: \u00f8314 / \u00f8290 x 3, channel open to the bore to \u00f8304.0, 2 deep', sheet-6.png crop x 198-1650, y 1848-2244",
+   "severity": "guess",
+   "problem": "The woofer's trim ring is described as covering the frame's screws, but its \u00f8290 bore cannot: M4 heads 8 across on the \u00f8295 circle reach in to \u00f8287, so 1.5 mm of each of the eight heads shows inside the ring.",
+   "evidence": "params: DRIVER_SCREWS woofer pcd 295; DRIVER_SCREW head_d 8.0. cad.json: trim-ring-woofer id 290, channel 290 to 304, 'open_to_bore': true. Sheet 5 says 'Trim rings ... over each frame, screws'; note 1.2 says 'a channel in its back over the screws' heads'. The mid's ring (bore 141, heads 146 to 162) and the bookshelf's (bore 147, heads 151 to 167) do cover their heads.",
+   "fix": "State on sheet 6: 'woofer ring bore \u00f8285 or less covers the heads (inner edge \u00f8287) with a 1 mm lip; if the measured surround + 2 exceeds \u00f8285, the heads show inside the ring: owner to accept'."
+  },
+  {
+   "id": "d12",
+   "size": "both",
+   "sheet": "stl/gable-print",
+   "where": "floorstander gable-print-mid-left.stl and -mid-right.stl; bookshelf gable-print-front-left.stl and -front-right.stl; at the fin's end corners (floorstander x 3, y 194 and 199, z 1052-1055; bookshelf x 2, y 109 and 113, z 591.6-593.6; mirrored on the right pieces)",
+   "severity": "guess",
+   "problem": "Four of the gable-print STLs are not watertight: where the fin's rounded end meets its end face, each has two zero-area triangles, two edges used once and two edges used four times.",
+   "evidence": "Edge-use counts: {1: 2, 2: 13414, 4: 2} for floorstander mid-left and {1: 2, 2: 11881, 4: 2} for bookshelf front-left. Every other printed STL (both inserts and the halves, the cap, the rings, the port, the other gable pieces) is closed, with every edge used twice.",
+   "fix": "Re-export the four pieces with the fin's end rounding closed, or repair the meshes until every edge is used twice, before sending them to a print service; a service's file check may flag them."
+  },
+  {
+   "id": "d13",
+   "size": "bookshelf",
+   "sheet": "sheet-7",
+   "where": "the 'Cut' note at the foot of the first column (sheet-7.png about x 125-1000, y 1640-1840) and M4 (about x 800-940, y 1150-1205)",
+   "severity": "legibility",
+   "problem": "The bookshelf's sheet 7 carries two leftovers from the floorstander: its hold list includes 'the port' although the bookshelf is sealed, and M4 says 'horizontal allowed' for an amplifier drawn upright.",
+   "evidence": "EM-BS-007 'Cut': 'every print: the insert, the gable, the trim rings and the port'. params: PORT = None for the bookshelf; out-bookshelf/stl has no port-*.stl. M4: 'Hypex FusionAmp FA122 (Hypex's manual: horizontal allowed, in its own compartment)', while sheet 4 says 'upright on the back'.",
+   "fix": "Delete 'and the port' from the 'Cut' note. In M4, write '(Hypex's manual: vertical or horizontal, in its own compartment; here upright)'."
+  },
+  {
+   "id": "d14",
+   "size": "both",
+   "sheet": "README",
+   "where": "'The build, in order', first paragraph; 'Files and who gets them'; 'The crossover' table; 'The two speakers' table",
+   "severity": "legibility",
+   "problem": "The README says there are eight sheets numbered to 008, but each set has nine, and several of its figures no longer match the files.",
+   "evidence": "README: 'eight A3 sheets per size, numbered EM-FS-001 to 008 ... and EM-BS-001 to 008' and 'the eight A3 sheets'. Both PDFs have 9 pages, the title blocks read 'n of 9', and EM-FS-009 and EM-BS-009 exist. The crossover table gives acoustic centres 53 / 32 / 172 mm and delays 0.347 / 0.407 ms (bookshelf 0.173); out/dsp/floorstander.md gives 54 / 34 / 172 and 0.344 / 0.404, and bookshelf.md 0.171. Bookshelf wood: README 6.2 kg, cad.json 5.96. The SB17NRX2C35-8 is '6.5 in' in the README and BOM but '6 in' on sheets 4 and 5.",
+   "fix": "README: 'nine A3 sheets per size, EM-FS-001 to 009 and EM-BS-001 to 009' and 'the nine A3 sheets'. Copy the centres and delays from dsp/*.md, or point to those files. Bookshelf wood 6.0 kg. Sheets 4 and 5: '6.5 in'."
+  }
+ ],
+ "questions": [
+  {
+   "question": "Hypex's manual asks for the amplifier's compartment to be built of V-1 class material, with conductive parts earthed and kept 3 mm clear, but both amplifier boxes are drawn in plain birch ply. Should they be lined (for example with a bonded aluminium sheet tied to the plate's earth, or a V-0 sheet), or is ply acceptable for a one-off?",
+   "why": "research/datasheets-2026-10-09.json, FA253 'air_space_and_cooling': 'The compartment should be built of V-1 class material'. Neither the README, the BOM nor sheets 2, 4 and 8 mention it, and the box is glued shut behind the plate."
+  },
+  {
+   "question": "With its faceplate off, is the TW29DN-B's diaphragm rim held securely without a clamp?",
+   "why": "SB's WG29-187 procedure screws an adapter ring on with the faceplate's own screws and warns that the diaphragm's edge is glued to the faceplate. The drawings hold the bare unit only by the cap's 0.25 mm preload through a 0.5 mm foam ring and screw nothing to the motor (sheet 9, 3.2). If the rim needs that clamp, its edge can buzz."
+  },
+  {
+   "question": "Is 1.5 mm of resin between the cap's \u00f82.4 pilots and the \u00f873.4 bore enough for 3.0 x 12 thread-forming screws, or should the floorstander insert be MJF nylon only (not SLA)?",
+   "why": "A thread-forming screw spreads the wall it cuts, and ABS-like SLA resins are notch-sensitive. 1.5 mm is exactly the CAD's minimum (cad.json 'sleeve's pilots in the boss's wall, inside', margin 1.5). A split wall opens the bore to the connector bay and means a new insert."
+  },
+  {
+   "question": "If the D3004/602200 measures more than 26 mm behind its faceplate, which fallback does the bookshelf take: the Seas 27TFFNC/G (about 22 deep), the boss moved back the 1.3 mm the roof allows plus a printed clamp, or a lower throat?",
+   "why": "See d1: the only published depth is 45.3 mm. Choosing before anything is printed saves a second bookshelf insert and gable; the README already lists these options."
+  },
+  {
+   "question": "Is the milled-birch gable (route A) still wanted, or is the printed gable the build?",
+   "why": "See d6: as drawn, route A needs 200 to 251 mm of tool reach and square back-wall corners. Dropping it removes 22 floorstander and 14 bookshelf layers from the nests, which is most of a 5 x 5 sheet per floorstander pair."
+  }
+ ]
+}

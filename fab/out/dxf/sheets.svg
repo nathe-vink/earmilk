@@ -76,10 +76,10 @@
 <text x="3442.0" y="568.2" font-size="40" text-anchor="middle" font-family="sans-serif">window-brace</text>
 <rect x="3631.0" y="391.20000000000005" width="354.0" height="354.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
 <text x="3808.0" y="568.2" font-size="40" text-anchor="middle" font-family="sans-serif">window-brace</text>
-<rect x="3997.0" y="493.20000000000005" width="354.0" height="252.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
-<text x="4174.0" y="619.2" font-size="40" text-anchor="middle" font-family="sans-serif">mid-divider</text>
-<rect x="4363.0" y="493.20000000000005" width="354.0" height="252.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
-<text x="4540.0" y="619.2" font-size="40" text-anchor="middle" font-family="sans-serif">mid-divider</text>
+<rect x="3997.0" y="494.20000000000005" width="354.0" height="251.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="4174.0" y="619.7" font-size="40" text-anchor="middle" font-family="sans-serif">mid-divider</text>
+<rect x="4363.0" y="494.20000000000005" width="354.0" height="251.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
+<text x="4540.0" y="619.7" font-size="40" text-anchor="middle" font-family="sans-serif">mid-divider</text>
 <rect x="3265.0" y="244.20000000000005" width="354.0" height="135.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
 <text x="3442.0" y="311.70000000000005" font-size="40" text-anchor="middle" font-family="sans-serif">amp-box-front</text>
 <rect x="3631.0" y="271.20000000000005" width="354.0" height="108.0" fill="#d9bf94" stroke="#6b5232" stroke-width="3"/>
