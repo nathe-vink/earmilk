@@ -342,5 +342,60 @@
   "set": 3.6716,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "lights.rim.orbit.elevation_deg",
+  "test": {
+   "metric": "lum_range",
+   "op": "<=",
+   "value": 8
+  },
+  "proofs": [
+   [
+    74.0,
+    3.0
+   ],
+   [
+    84.0,
+    4.9
+   ],
+   [
+    90,
+    4.1
+   ]
+  ],
+  "set": 84.0,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c2",
+  "setting": "lights.rim.irradiance",
+  "test": {
+   "metric": "r_median",
+   "op": "between",
+   "value": [
+    195,
+    207
+   ]
+  },
+  "proofs": [
+   [
+    0.9,
+    209.0
+   ],
+   [
+    1.6,
+    226.0
+   ],
+   [
+    0.5706,
+    201.0
+   ]
+  ],
+  "set": 0.5706,
+  "passes": true,
+  "moves_the_test": true
  }
 ]
