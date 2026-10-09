@@ -1,0 +1,218 @@
+{
+ "stage1": {
+  "impression": "Six two-tone milk-carton speakers in a clean receding row read clearly and the colourways are crisp, but they sit on a drab mid-grey sweep under flat, even light, so the set feels murky and the products have little modelling and no sparkle. It is a competent catalogue draft, not a homepage image: the light is unshaped, the grounding soft, and product and set barely separate in tone.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Every carton's outline separates from the ground by at least 20 levels along its full height. Today the edge tool measures a 4.3 step on the Skim's right side [698,290,725,360], 7.5 on the Whole's [300,270,333,360], 2.0 on the Oat's lower right [1340,470,1370,530] and 10.1 on the Chocolate's cream gable end [1120,235,1150,280].",
+  "The three white bodies read neutral, with |a*| and |b*| at most 0.8 on the fronts (now a* +1.2 to +1.6, b* -1.1 to -1.3), and the sweep reads neutral too (wall now a* +1.15).",
+  "Each side face shows its own colour. The Skim side must lose the Matcha's green (now a* -3.4, b* +3.6, against +0.8/-2.1 on the 2% side), and the side-to-front linear ratio must agree within 20% across the six (now 0.29 on Oat and Matcha, 0.47 on Whole) instead of depending on which neighbour bounces light onto it.",
+  "The ground is a light, even field that sits above every shaded side. Today it is a 105-147 mid-grey, the same values as the white sides (140-153), and 120 at the left edge against 145 at the right at mid-height.",
+  "The lacquer reads as lacquer: each carton carries the same defined reflection or highlight on its gloss. Today the frame has 9 pixels above 226, the fronts carry about 2 levels of reflection, and roof-slope gradients run from 0 to 11 levels from carton to carton.",
+  "Each carton is presented alike, in an even rhythm. Visible gaps run 17/23/31/38/46 px and fronts are seen from 22 to 43 degrees off-axis, because a 70 mm lens stands 9.2 m away. About 135 mm from about 18 m (camera near [3.29, -16.74, 5.58]) would halve that spread; it is held back this round because it moves every test region."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The mid-grey sweep sits at the same values as the white cartons' shaded sides, so their right silhouettes dissolve and the whole frame reads murky.",
+   "evidence": {
+    "region": [
+     698,
+     290,
+     725,
+     360
+    ],
+    "measured": "Across the Skim's right edge the largest step is 4.3 (side 116-126, ground 120-123). The Whole's right edge [300,270,333,360] steps 7.5, the Oat's lower right [1340,470,1370,530] 2.0, and the Chocolate's cream gable end [1120,235,1150,280] 10.1. The ground reads 105-147 everywhere (top band 127.6, left edge 119.6, front floor 115.1) against white sides of 140-153."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#8E8E8E",
+    "to": "#C0C0C0"
+   },
+   "expected": "The wall/curve rises to 160-180 and the front floor to about 150-165. Every right silhouette steps at least 20 levels (Skim from 4.3, Whole from 7.5, Oat from 2.0, cream gable end from 10.1), while the white fronts stay at least 25 levels above the ground on their left and the cream roof stays at least 25 above the ground behind it. Contact and cast shadows read clearer on the lighter floor.",
+   "accept": {
+    "region": [
+     713,
+     280,
+     735,
+     360
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     158,
+     180
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The Skim's white side is green and darker than its white siblings: at azimuth -40 the key grazes every carton's left side (incidence cos 0.24), and the Matcha's key-lit green left side, 23 cm away, bounces onto it.",
+   "evidence": {
+    "region": [
+     641,
+     250,
+     709,
+     480
+    ],
+    "measured": "Side-right pixels in this box read RGB (137,142,134), Lab a* -3.4, b* +3.6; the back half, nearest the Matcha, reads a* -4.4, b* +5.2. The 2% side reads (153,153,157), a* +0.8, b* -2.1, and the Whole side (153,152,156). dE2000 is 7.75 against neutral #909094."
+   },
+   "change": {
+    "setting": "lights.key.orbit.azimuth_deg",
+    "from": -40,
+    "to": -28
+   },
+   "expected": "The key's incidence on the left sides falls from cos 0.24 to 0.08, so bounce between neighbours drops by about two thirds. The Skim side goes neutral, within about 1 in a* and b* of the 2% side, and the three white sides land within 6 levels of each other (now 140 against 152-153). Fronts gain about 4% key, and cast shadows swing about 12 degrees to fall behind each carton.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      641,
+      250,
+      709,
+      480
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#909094",
+    "op": "between",
+    "value": [
+     0,
+     3.2
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "Whites and sweep carry a magenta cast, so the Whole, 2% and Skim bodies print lilac-white instead of #FFFFFF, and the warm flavours are pushed toward red.",
+   "evidence": {
+    "region": [
+     130,
+     140,
+     325,
+     455
+    ],
+    "measured": "Front-baffle pixels of the Whole read RGB (212,210,213), Lab a* +1.23, b* -1.24. The 2% front reads a* +1.56 and the Skim front +1.22; the top wall band (129,127,129) reads a* +1.15. The cream roof's hue is 76.4 degrees against 85.4 in spec, and the Oat body's 76.5 against 80.3. dE2000 is 2.27 against #D1D3D5."
+   },
+   "change": {
+    "setting": "render.white_balance_tint",
+    "from": 10,
+    "to": 4
+   },
+   "expected": "The whites' a* moves from +1.2..+1.6 to within 0.4 of zero (G within 1 level of R and B), and the wall goes neutral. The cream roof's hue moves toward about 82 degrees and the Oat body's toward about 79, both toward spec, and the red plinth's G and B lift slightly toward #C62828.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      130,
+      140,
+      325,
+      455
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#D1D3D5",
+    "op": "between",
+    "value": [
+     0,
+     1.5
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "post",
+   "problem": "The white lacquer has only about 6 levels of headroom under the 226 knee of PBR Neutral, and c1's lighter floor (about 9% more bounce on the fronts) and c2's more frontal key will push it into compression, flattening its top-to-bottom modelling.",
+   "evidence": {
+    "region": [
+     130,
+     140,
+     325,
+     455
+    ],
+    "measured": "Whole front-baffle: median 210.6, p95 219.6, profile from top to bottom 218.9, 216.9, 212.9, 210.9, 208.9, 205.9, 201.6, 200.1."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": -1.1704,
+    "to": "-0.12"
+   },
+   "expected": "Exposure drops only as far as the added light needs. The Whole front median holds at 207-214 and the top of the front stays at or below 222, so the 15-20 level fall from top to bottom survives below the knee.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      130,
+      140,
+      325,
+      455
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     207,
+     214
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The ground is lit unevenly: bg_right puts a hot spot right of the Oat, about 24 levels above the left edge at mid-height. On the lighter sweep this grows to about 35, and it crowds the cream gable's silhouette.",
+   "evidence": {
+    "region": [
+     0,
+     200,
+     1500,
+     420
+    ],
+    "measured": "Profile along x: first bin 120.6, last bin 143.9, falloff -23.3. [1400,200,1500,420] reads 144.9 against [0,200,100,420] at 119.6. The ground above the cream gable [980,170,1100,198] reads 136.1, against 124.6 beside the Skim."
+   },
+   "change": {
+    "setting": "lights.bg_right.strength",
+    "from": 3,
+    "to": 1.2
+   },
+   "expected": "After c1, the right side of the ground falls to within about 10 levels of the left, the band's falloff moves from -23.3 to between -12 and +2, and the ground behind the cream gable stays at least 25 levels below its lit roof.",
+   "accept": {
+    "region": [
+     0,
+     200,
+     1500,
+     420
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -12,
+     2
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A shallower or rounder waveguide bowl, so the scoop and the dark tweeter dome stop reading as a beak and an eye at about 90 px per carton.",
+   "why": "Acoustic simulation sets its depth, profile, mouth and the tweeter's place, so they are fixed; only light and camera may change how it reads."
+  },
+  {
+   "request": "Larger corner and hip rounds to catch a crisp edge highlight on the vertical corners.",
+   "why": "The 6 mm rounds are spec. At this scale they render as a soft 5-6 px roll-off (front 215 to side 158) with no highlight, which is part of why the boxes read as satin."
+  },
+  {
+   "request": "A glossier clear coat, so the fronts show their reflections.",
+   "why": "The paint and clear coat are the product's finish and fixed; the gloss has to be shown through what it reflects."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
