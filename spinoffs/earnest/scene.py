@@ -68,7 +68,7 @@ RIG = {'type': 'sweep', 'color': '#d9d4cb', 'key': {'azimuth': -50, 'elevation':
 objects = pack_objects(12)
 shots = {
     'hero': {'size': [1800, 1200], 'samples': 192, 'rig': RIG, 'floor_z': facts['floor_z'],
-             'camera': {'azimuth': -28, 'elevation': 30, 'lens': 85, 'fill': 0.78}},
+             'camera': {'azimuth': -28, 'elevation': 42, 'lens': 85, 'fill': 0.78}},   # high enough to see the tray's surface
 }
 fam = family()
 shots['hero']['hide'] = [o['id'] for o in fam if o['id'] not in {q['id'] for q in objects}]

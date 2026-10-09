@@ -7,7 +7,8 @@ Status: concept (the owner's idea, 2026-10-08). Everything below marked *proposa
 
 ## The idea in four lines
 
-- An egg crate grown into a chassis. The top is the carton's tray, pressed into cups, with a cone standing between every four.
+- An egg crate grown into a chassis. The top is a pulp tray's surface: cups that fill their cells, low ridges between
+  them, and a cone where four meet.
 - The eggs are the valves: egg-shaped glass envelopes standing blunt end up in the cups, the heater glowing through the
   anode, the getter's silver in the dome.
 - Two eggs are not glass. A white one turns the volume and a brown one picks the input.
@@ -29,7 +30,7 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
   socket 9 mm under its cup's floor, and the getter's mirror is in the dome.
 - **The "pulp" is metal.** Valve glass runs hot enough to burn, and moulded pulp would scorch. The crate is pressed
   steel (or cast aluminium) with a textured powder coat that reads as pulp. Under the cup floors there are 74 mm for the
-  transformers and the circuit; vents round each socket draw air up past the glass.
+  transformers and the circuit, with vents round each socket to draw air up past the glass (not modelled yet).
 - **A lid, like a carton's** (*proposal, not modelled yet*). It's a perforated cage hinged at the back that closes over the
   eggs. It keeps fingers and pets off hot glass and high voltage; open it to listen.
 
@@ -38,15 +39,15 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
 | | |
 |---|---|
 | Cup pitch, both ways | 74 |
-| Cup mouth (rounded square, r 22) | 66 |
-| Cup depth, top plane to floor | 38 |
-| Cup floor | Ø 40 |
-| Cones between cups | Ø 26 at the top plane to Ø 9, 26 high |
+| Cups | fill their cells: a superellipse in plan (exponent 3.2), 38 deep to a flat floor Ø 38 |
+| Ridges where two cups meet | 2 above the top plane |
+| Cones where four cups meet | rise from the ridges (foot r 19) to a rounded tip Ø 9, 26 above the top plane |
+| Flange round the edge | 4 above the top plane, easing in over 8; the outer cups 10 from the edge |
 | Crate height, floor to top plane | 112, on four Ø 34 × 6 rubber feet |
 | Draft | 5°, so the base is 20 larger each way than the top |
-| Half-dozen (2 × 3), top plane | 246 × 172 |
-| Dozen (2 × 6), top plane | 468 × 172 |
-| Flat (4 × 6), top plane | 468 × 320 |
+| Half-dozen (2 × 3), top plane | 234 × 160 |
+| Dozen (2 × 6), top plane | 456 × 160 |
+| Flat (4 × 6), top plane | 456 × 308 |
 | Egg valve | 80 long, Ø 58, glass 1.4; base Ø 30 × 14 |
 | Knob eggs | 0.86 of a valve egg: 69 long, Ø 50 |
 
@@ -60,7 +61,8 @@ Voice: deadpan, like earmilk's Nutrition Facts. One joke per surface, maximum.
 
 ## Shots
 
-1. **Hero.** The dozen, three-quarter from above (azimuth −28°, elevation 30°, 85 mm), heaters lit, on the sweep.
+1. **Hero.** The dozen, three-quarter from above (azimuth −28°, elevation 42°, 85 mm, high enough to see the tray's
+   surface between the eggs), heaters lit, on the sweep.
    `scene.py`'s `hero`.
 2. **Family.** The three packs side by side: half-dozen, dozen, flat. `scene.py`'s `family`.
 3. **Detail** (to do). One egg valve close up: the heater's glow through the anode's open ends, the getter's mirror,

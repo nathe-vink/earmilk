@@ -2,7 +2,7 @@
  "parts": {
   "crate-6": {
    "material": "pulp",
-   "volume_cm3": 4715.1
+   "volume_cm3": 4053.81
   },
   "feet-6": {
    "material": "rubber",
@@ -10,7 +10,7 @@
   },
   "crate-12": {
    "material": "pulp",
-   "volume_cm3": 8762.91
+   "volume_cm3": 7718.14
   },
   "feet-12": {
    "material": "rubber",
@@ -18,7 +18,7 @@
   },
   "crate-24": {
    "material": "pulp",
-   "volume_cm3": 15745.6
+   "volume_cm3": 14354.57
   },
   "feet-24": {
    "material": "rubber",
@@ -30,7 +30,7 @@
   },
   "valve-getter": {
    "material": "getter",
-   "volume_cm3": 0.5
+   "volume_cm3": 0.19
   },
   "valve-anode": {
    "material": "anode",
@@ -96,8 +96,8 @@
      ]
     ],
     "size": [
-     246.0,
-     172.0,
+     234.0,
+     160.0,
      112.0
     ]
    },
@@ -167,8 +167,8 @@
      ]
     ],
     "size": [
-     468.0,
-     172.0,
+     456.0,
+     160.0,
      112.0
     ]
    },
@@ -298,8 +298,8 @@
      ]
     ],
     "size": [
-     468.0,
-     320.0,
+     456.0,
+     308.0,
      112.0
     ]
    }

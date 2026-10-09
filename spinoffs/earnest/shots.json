@@ -1142,7 +1142,7 @@
    "file": "out/stl/crate-6.stl",
    "material": "pulp",
    "translate": [
-    -477.0,
+    -465.0,
     0,
     0
    ],
@@ -1154,7 +1154,7 @@
    "file": "out/stl/feet-6.stl",
    "material": "rubber",
    "translate": [
-    -477.0,
+    -465.0,
     0,
     0
    ]
@@ -1165,7 +1165,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    -551.0,
+    -539.0,
     37.0,
     73.0
    ],
@@ -1182,7 +1182,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    -551.0,
+    -539.0,
     37.0,
     73.0
    ],
@@ -1199,7 +1199,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    -551.0,
+    -539.0,
     37.0,
     73.0
    ],
@@ -1216,7 +1216,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    -551.0,
+    -539.0,
     37.0,
     73.0
    ],
@@ -1233,7 +1233,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    -551.0,
+    -539.0,
     37.0,
     73.0
    ],
@@ -1250,7 +1250,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    -551.0,
+    -539.0,
     37.0,
     73.0
    ],
@@ -1267,7 +1267,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    -477.0,
+    -465.0,
     37.0,
     73.0
    ],
@@ -1284,7 +1284,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    -477.0,
+    -465.0,
     37.0,
     73.0
    ],
@@ -1301,7 +1301,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    -477.0,
+    -465.0,
     37.0,
     73.0
    ],
@@ -1318,7 +1318,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    -477.0,
+    -465.0,
     37.0,
     73.0
    ],
@@ -1335,7 +1335,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    -477.0,
+    -465.0,
     37.0,
     73.0
    ],
@@ -1352,7 +1352,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    -477.0,
+    -465.0,
     37.0,
     73.0
    ],
@@ -1369,7 +1369,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    -403.0,
+    -391.0,
     37.0,
     73.0
    ],
@@ -1386,7 +1386,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    -403.0,
+    -391.0,
     37.0,
     73.0
    ],
@@ -1403,7 +1403,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    -403.0,
+    -391.0,
     37.0,
     73.0
    ],
@@ -1420,7 +1420,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    -403.0,
+    -391.0,
     37.0,
     73.0
    ],
@@ -1437,7 +1437,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    -403.0,
+    -391.0,
     37.0,
     73.0
    ],
@@ -1454,7 +1454,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    -403.0,
+    -391.0,
     37.0,
     73.0
    ],
@@ -1471,7 +1471,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    -551.0,
+    -539.0,
     -37.0,
     73.0
    ],
@@ -1488,7 +1488,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    -551.0,
+    -539.0,
     -37.0,
     73.0
    ],
@@ -1505,7 +1505,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    -551.0,
+    -539.0,
     -37.0,
     73.0
    ],
@@ -1522,7 +1522,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    -551.0,
+    -539.0,
     -37.0,
     73.0
    ],
@@ -1539,7 +1539,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    -551.0,
+    -539.0,
     -37.0,
     73.0
    ],
@@ -1556,7 +1556,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    -551.0,
+    -539.0,
     -37.0,
     73.0
    ],
@@ -1573,7 +1573,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    -477.0,
+    -465.0,
     -37.0,
     73.0
    ],
@@ -1590,7 +1590,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    -477.0,
+    -465.0,
     -37.0,
     73.0
    ],
@@ -1607,7 +1607,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    -477.0,
+    -465.0,
     -37.0,
     73.0
    ],
@@ -1624,7 +1624,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    -477.0,
+    -465.0,
     -37.0,
     73.0
    ],
@@ -1641,7 +1641,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    -477.0,
+    -465.0,
     -37.0,
     73.0
    ],
@@ -1658,7 +1658,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    -477.0,
+    -465.0,
     -37.0,
     73.0
    ],
@@ -1675,7 +1675,7 @@
    "file": "out/stl/knob-white.stl",
    "material": "egg_white",
    "translate": [
-    -403.0,
+    -391.0,
     -37.0,
     77.0
    ],
@@ -1692,7 +1692,7 @@
    "file": "out/stl/crate-24.stl",
    "material": "pulp",
    "translate": [
-    588.0,
+    576.0,
     0,
     0
    ],
@@ -1704,7 +1704,7 @@
    "file": "out/stl/feet-24.stl",
    "material": "rubber",
    "translate": [
-    588.0,
+    576.0,
     0,
     0
    ]
@@ -1715,7 +1715,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    403.0,
+    391.0,
     111.0,
     73.0
    ],
@@ -1732,7 +1732,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    403.0,
+    391.0,
     111.0,
     73.0
    ],
@@ -1749,7 +1749,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    403.0,
+    391.0,
     111.0,
     73.0
    ],
@@ -1766,7 +1766,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    403.0,
+    391.0,
     111.0,
     73.0
    ],
@@ -1783,7 +1783,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    403.0,
+    391.0,
     111.0,
     73.0
    ],
@@ -1800,7 +1800,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    403.0,
+    391.0,
     111.0,
     73.0
    ],
@@ -1817,7 +1817,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    477.0,
+    465.0,
     111.0,
     73.0
    ],
@@ -1834,7 +1834,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    477.0,
+    465.0,
     111.0,
     73.0
    ],
@@ -1851,7 +1851,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    477.0,
+    465.0,
     111.0,
     73.0
    ],
@@ -1868,7 +1868,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    477.0,
+    465.0,
     111.0,
     73.0
    ],
@@ -1885,7 +1885,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    477.0,
+    465.0,
     111.0,
     73.0
    ],
@@ -1902,7 +1902,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    477.0,
+    465.0,
     111.0,
     73.0
    ],
@@ -1919,7 +1919,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    551.0,
+    539.0,
     111.0,
     73.0
    ],
@@ -1936,7 +1936,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    551.0,
+    539.0,
     111.0,
     73.0
    ],
@@ -1953,7 +1953,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    551.0,
+    539.0,
     111.0,
     73.0
    ],
@@ -1970,7 +1970,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    551.0,
+    539.0,
     111.0,
     73.0
    ],
@@ -1987,7 +1987,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    551.0,
+    539.0,
     111.0,
     73.0
    ],
@@ -2004,7 +2004,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    551.0,
+    539.0,
     111.0,
     73.0
    ],
@@ -2021,7 +2021,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    625.0,
+    613.0,
     111.0,
     73.0
    ],
@@ -2038,7 +2038,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    625.0,
+    613.0,
     111.0,
     73.0
    ],
@@ -2055,7 +2055,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    625.0,
+    613.0,
     111.0,
     73.0
    ],
@@ -2072,7 +2072,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    625.0,
+    613.0,
     111.0,
     73.0
    ],
@@ -2089,7 +2089,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    625.0,
+    613.0,
     111.0,
     73.0
    ],
@@ -2106,7 +2106,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    625.0,
+    613.0,
     111.0,
     73.0
    ],
@@ -2123,7 +2123,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    699.0,
+    687.0,
     111.0,
     73.0
    ],
@@ -2140,7 +2140,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    699.0,
+    687.0,
     111.0,
     73.0
    ],
@@ -2157,7 +2157,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    699.0,
+    687.0,
     111.0,
     73.0
    ],
@@ -2174,7 +2174,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    699.0,
+    687.0,
     111.0,
     73.0
    ],
@@ -2191,7 +2191,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    699.0,
+    687.0,
     111.0,
     73.0
    ],
@@ -2208,7 +2208,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    699.0,
+    687.0,
     111.0,
     73.0
    ],
@@ -2225,7 +2225,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    773.0,
+    761.0,
     111.0,
     73.0
    ],
@@ -2242,7 +2242,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    773.0,
+    761.0,
     111.0,
     73.0
    ],
@@ -2259,7 +2259,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    773.0,
+    761.0,
     111.0,
     73.0
    ],
@@ -2276,7 +2276,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    773.0,
+    761.0,
     111.0,
     73.0
    ],
@@ -2293,7 +2293,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    773.0,
+    761.0,
     111.0,
     73.0
    ],
@@ -2310,7 +2310,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    773.0,
+    761.0,
     111.0,
     73.0
    ],
@@ -2327,7 +2327,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    403.0,
+    391.0,
     37.0,
     73.0
    ],
@@ -2344,7 +2344,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    403.0,
+    391.0,
     37.0,
     73.0
    ],
@@ -2361,7 +2361,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    403.0,
+    391.0,
     37.0,
     73.0
    ],
@@ -2378,7 +2378,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    403.0,
+    391.0,
     37.0,
     73.0
    ],
@@ -2395,7 +2395,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    403.0,
+    391.0,
     37.0,
     73.0
    ],
@@ -2412,7 +2412,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    403.0,
+    391.0,
     37.0,
     73.0
    ],
@@ -2429,7 +2429,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    477.0,
+    465.0,
     37.0,
     73.0
    ],
@@ -2446,7 +2446,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    477.0,
+    465.0,
     37.0,
     73.0
    ],
@@ -2463,7 +2463,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    477.0,
+    465.0,
     37.0,
     73.0
    ],
@@ -2480,7 +2480,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    477.0,
+    465.0,
     37.0,
     73.0
    ],
@@ -2497,7 +2497,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    477.0,
+    465.0,
     37.0,
     73.0
    ],
@@ -2514,7 +2514,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    477.0,
+    465.0,
     37.0,
     73.0
    ],
@@ -2531,7 +2531,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    551.0,
+    539.0,
     37.0,
     73.0
    ],
@@ -2548,7 +2548,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    551.0,
+    539.0,
     37.0,
     73.0
    ],
@@ -2565,7 +2565,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    551.0,
+    539.0,
     37.0,
     73.0
    ],
@@ -2582,7 +2582,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    551.0,
+    539.0,
     37.0,
     73.0
    ],
@@ -2599,7 +2599,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    551.0,
+    539.0,
     37.0,
     73.0
    ],
@@ -2616,7 +2616,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    551.0,
+    539.0,
     37.0,
     73.0
    ],
@@ -2633,7 +2633,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    625.0,
+    613.0,
     37.0,
     73.0
    ],
@@ -2650,7 +2650,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    625.0,
+    613.0,
     37.0,
     73.0
    ],
@@ -2667,7 +2667,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    625.0,
+    613.0,
     37.0,
     73.0
    ],
@@ -2684,7 +2684,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    625.0,
+    613.0,
     37.0,
     73.0
    ],
@@ -2701,7 +2701,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    625.0,
+    613.0,
     37.0,
     73.0
    ],
@@ -2718,7 +2718,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    625.0,
+    613.0,
     37.0,
     73.0
    ],
@@ -2735,7 +2735,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    699.0,
+    687.0,
     37.0,
     73.0
    ],
@@ -2752,7 +2752,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    699.0,
+    687.0,
     37.0,
     73.0
    ],
@@ -2769,7 +2769,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    699.0,
+    687.0,
     37.0,
     73.0
    ],
@@ -2786,7 +2786,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    699.0,
+    687.0,
     37.0,
     73.0
    ],
@@ -2803,7 +2803,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    699.0,
+    687.0,
     37.0,
     73.0
    ],
@@ -2820,7 +2820,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    699.0,
+    687.0,
     37.0,
     73.0
    ],
@@ -2837,7 +2837,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    773.0,
+    761.0,
     37.0,
     73.0
    ],
@@ -2854,7 +2854,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    773.0,
+    761.0,
     37.0,
     73.0
    ],
@@ -2871,7 +2871,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    773.0,
+    761.0,
     37.0,
     73.0
    ],
@@ -2888,7 +2888,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    773.0,
+    761.0,
     37.0,
     73.0
    ],
@@ -2905,7 +2905,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    773.0,
+    761.0,
     37.0,
     73.0
    ],
@@ -2922,7 +2922,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    773.0,
+    761.0,
     37.0,
     73.0
    ],
@@ -2939,7 +2939,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    403.0,
+    391.0,
     -37.0,
     73.0
    ],
@@ -2956,7 +2956,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    403.0,
+    391.0,
     -37.0,
     73.0
    ],
@@ -2973,7 +2973,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    403.0,
+    391.0,
     -37.0,
     73.0
    ],
@@ -2990,7 +2990,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    403.0,
+    391.0,
     -37.0,
     73.0
    ],
@@ -3007,7 +3007,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    403.0,
+    391.0,
     -37.0,
     73.0
    ],
@@ -3024,7 +3024,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    403.0,
+    391.0,
     -37.0,
     73.0
    ],
@@ -3041,7 +3041,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    477.0,
+    465.0,
     -37.0,
     73.0
    ],
@@ -3058,7 +3058,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    477.0,
+    465.0,
     -37.0,
     73.0
    ],
@@ -3075,7 +3075,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    477.0,
+    465.0,
     -37.0,
     73.0
    ],
@@ -3092,7 +3092,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    477.0,
+    465.0,
     -37.0,
     73.0
    ],
@@ -3109,7 +3109,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    477.0,
+    465.0,
     -37.0,
     73.0
    ],
@@ -3126,7 +3126,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    477.0,
+    465.0,
     -37.0,
     73.0
    ],
@@ -3143,7 +3143,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    551.0,
+    539.0,
     -37.0,
     73.0
    ],
@@ -3160,7 +3160,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    551.0,
+    539.0,
     -37.0,
     73.0
    ],
@@ -3177,7 +3177,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    551.0,
+    539.0,
     -37.0,
     73.0
    ],
@@ -3194,7 +3194,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    551.0,
+    539.0,
     -37.0,
     73.0
    ],
@@ -3211,7 +3211,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    551.0,
+    539.0,
     -37.0,
     73.0
    ],
@@ -3228,7 +3228,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    551.0,
+    539.0,
     -37.0,
     73.0
    ],
@@ -3245,7 +3245,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    625.0,
+    613.0,
     -37.0,
     73.0
    ],
@@ -3262,7 +3262,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    625.0,
+    613.0,
     -37.0,
     73.0
    ],
@@ -3279,7 +3279,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    625.0,
+    613.0,
     -37.0,
     73.0
    ],
@@ -3296,7 +3296,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    625.0,
+    613.0,
     -37.0,
     73.0
    ],
@@ -3313,7 +3313,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    625.0,
+    613.0,
     -37.0,
     73.0
    ],
@@ -3330,7 +3330,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    625.0,
+    613.0,
     -37.0,
     73.0
    ],
@@ -3347,7 +3347,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    699.0,
+    687.0,
     -37.0,
     73.0
    ],
@@ -3364,7 +3364,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    699.0,
+    687.0,
     -37.0,
     73.0
    ],
@@ -3381,7 +3381,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    699.0,
+    687.0,
     -37.0,
     73.0
    ],
@@ -3398,7 +3398,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    699.0,
+    687.0,
     -37.0,
     73.0
    ],
@@ -3415,7 +3415,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    699.0,
+    687.0,
     -37.0,
     73.0
    ],
@@ -3432,7 +3432,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    699.0,
+    687.0,
     -37.0,
     73.0
    ],
@@ -3449,7 +3449,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    773.0,
+    761.0,
     -37.0,
     73.0
    ],
@@ -3466,7 +3466,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    773.0,
+    761.0,
     -37.0,
     73.0
    ],
@@ -3483,7 +3483,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    773.0,
+    761.0,
     -37.0,
     73.0
    ],
@@ -3500,7 +3500,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    773.0,
+    761.0,
     -37.0,
     73.0
    ],
@@ -3517,7 +3517,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    773.0,
+    761.0,
     -37.0,
     73.0
    ],
@@ -3534,7 +3534,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    773.0,
+    761.0,
     -37.0,
     73.0
    ],
@@ -3551,7 +3551,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    403.0,
+    391.0,
     -111.0,
     73.0
    ],
@@ -3568,7 +3568,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    403.0,
+    391.0,
     -111.0,
     73.0
    ],
@@ -3585,7 +3585,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    403.0,
+    391.0,
     -111.0,
     73.0
    ],
@@ -3602,7 +3602,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    403.0,
+    391.0,
     -111.0,
     73.0
    ],
@@ -3619,7 +3619,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    403.0,
+    391.0,
     -111.0,
     73.0
    ],
@@ -3636,7 +3636,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    403.0,
+    391.0,
     -111.0,
     73.0
    ],
@@ -3653,7 +3653,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    477.0,
+    465.0,
     -111.0,
     73.0
    ],
@@ -3670,7 +3670,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    477.0,
+    465.0,
     -111.0,
     73.0
    ],
@@ -3687,7 +3687,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    477.0,
+    465.0,
     -111.0,
     73.0
    ],
@@ -3704,7 +3704,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    477.0,
+    465.0,
     -111.0,
     73.0
    ],
@@ -3721,7 +3721,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    477.0,
+    465.0,
     -111.0,
     73.0
    ],
@@ -3738,7 +3738,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    477.0,
+    465.0,
     -111.0,
     73.0
    ],
@@ -3755,7 +3755,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    551.0,
+    539.0,
     -111.0,
     73.0
    ],
@@ -3772,7 +3772,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    551.0,
+    539.0,
     -111.0,
     73.0
    ],
@@ -3789,7 +3789,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    551.0,
+    539.0,
     -111.0,
     73.0
    ],
@@ -3806,7 +3806,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    551.0,
+    539.0,
     -111.0,
     73.0
    ],
@@ -3823,7 +3823,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    551.0,
+    539.0,
     -111.0,
     73.0
    ],
@@ -3840,7 +3840,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    551.0,
+    539.0,
     -111.0,
     73.0
    ],
@@ -3857,7 +3857,7 @@
    "file": "out/stl/valve-glass.stl",
    "material": "glass",
    "translate": [
-    625.0,
+    613.0,
     -111.0,
     73.0
    ],
@@ -3874,7 +3874,7 @@
    "file": "out/stl/valve-getter.stl",
    "material": "getter",
    "translate": [
-    625.0,
+    613.0,
     -111.0,
     73.0
    ],
@@ -3891,7 +3891,7 @@
    "file": "out/stl/valve-anode.stl",
    "material": "anode",
    "translate": [
-    625.0,
+    613.0,
     -111.0,
     73.0
    ],
@@ -3908,7 +3908,7 @@
    "file": "out/stl/valve-mica.stl",
    "material": "mica",
    "translate": [
-    625.0,
+    613.0,
     -111.0,
     73.0
    ],
@@ -3925,7 +3925,7 @@
    "file": "out/stl/valve-heater.stl",
    "material": "heater",
    "translate": [
-    625.0,
+    613.0,
     -111.0,
     73.0
    ],
@@ -3942,7 +3942,7 @@
    "file": "out/stl/valve-base.stl",
    "material": "bakelite",
    "translate": [
-    625.0,
+    613.0,
     -111.0,
     73.0
    ],
@@ -3959,7 +3959,7 @@
    "file": "out/stl/knob-brown.stl",
    "material": "egg_brown",
    "translate": [
-    699.0,
+    687.0,
     -111.0,
     77.0
    ],
@@ -3976,7 +3976,7 @@
    "file": "out/stl/knob-white.stl",
    "material": "egg_white",
    "translate": [
-    773.0,
+    761.0,
     -111.0,
     77.0
    ],
@@ -4029,7 +4029,7 @@
    "floor_z": -5.8,
    "camera": {
     "azimuth": -28,
-    "elevation": 30,
+    "elevation": 42,
     "lens": 85,
     "fill": 0.78
    },

@@ -10,18 +10,28 @@ PACKS = {6: (2, 3), 12: (2, 6), 24: (4, 6)}
 
 # The crate (PROPOSAL)
 PITCH = 74.0          # cup centre to cup centre, both ways
-CUP_TOP = 66.0        # the cup's mouth: a rounded square this wide at the top plane
-CUP_TOP_R = 22.0      # its corner radius
+CUP_TOP = 66.0        # a cup's nominal width; with MARGIN it sets the crate's size
 CUP_DEPTH = 38.0      # top plane to the cup's floor
-CUP_FLOOR_D = 40.0    # the floor's diameter
-POST_D = (26.0, 9.0) # the cones that stand between four cups (and hold the lid on a real carton): base, top
-POST_H = 26.0         # how far a cone stands above the top plane
-MARGIN = 16.0         # outer cup mouth to the crate's edge
+MARGIN = 10.0         # outer cup to the crate's edge: narrow, so the cups run nearly to the edge as on a carton
 HEIGHT = 112.0        # floor to the top plane: room for the transformers under the cups
 DRAFT_DEG = 5.0       # the sides lean in toward the top, like a moulded tray
 EDGE_R = 12.0         # the crate's corner radius in plan
 FOOT = (34.0, 6.0)    # four rubber feet: diameter, height
-RIM = (7.0, 4.0)      # the flange round the top edge where a carton's lid would close: width, height
+
+# The top is a pulp tray's surface (PROPOSAL), not a deck with holes in it: each cup fills its square cell, its wall
+# rising from a flat floor to a low ridge it shares with the next cup; a cone stands where four cups meet (on a real
+# carton, the posts that hold the lid); a flat flange runs round the edge. Built as a height field, then a CAD surface.
+CUP_PLAN_P = 3.2      # the cups' shape in plan, a superellipse's exponent: 2 is round, larger is squarer
+FLOOR_R = 19.0        # the cup's flat floor, radius: the valve's socket sits in it
+RIDGE_H = 2.0         # where two cups meet, above the top plane
+POST_TIP_D = 9.0      # a cone's rounded tip
+POST_H = 26.0         # how far a cone's tip stands above the top plane
+CONE_FOOT_R = 19.0    # where a cone leaves the ridges
+CONE_BLEND = 7.0      # the fillet where cones and ridges meet
+FLANGE = (4.0, 8.0)   # the flat flange round the edge, where a carton's lid would close: height above the top plane,
+                      # and the width over which the cups' surface eases into it
+SURFACE_STEP = 3.0    # the height field's sample spacing for the top's CAD surface (STEP)
+MESH_STEP = 1.0       # and for the crate's mesh (STL)
 
 # The egg valves (PROPOSAL for the envelope; the valve inside is a PLACEHOLDER until a maker quotes custom glass).
 # A real candidate: a 300B power triode in an egg-shaped envelope, as some makers still blow special envelopes (KR Audio's
@@ -35,7 +45,8 @@ BASE_D = 30.0         # the valve's base (Bakelite), seated in its socket in the
 BASE_H = 14.0
 BASE_SINK = 9.0       # how far the base sits below the cup's floor
 PLATE = (24.0, 11.0, 30.0)   # the anode inside: width, depth, height
-GETTER_FROM = 0.88    # the getter's silver mirror covers the dome above this fraction of the egg's length
+GETTER_FROM = 0.94    # the getter's silver mirror covers the dome above this fraction of the egg's length: a cap, so
+                      # the glass still reads as glass from above
 
 # The knobs are eggs too (PROPOSAL): a white one turns the volume, a brown one picks the input.
 KNOB_SCALE = 0.86     # a knob egg against a valve egg
