@@ -1,0 +1,127 @@
+{
+ "stage1": {
+  "impression": "A three-quarter view of the milk-carton speaker on a warm grey sweep, with the left half left as copy space; the product reads at a glance, and the gable's gloss, with the fin mirrored in it, is the only surface that looks finished. It still reads as a 3D mock-up rather than a photograph: the labelled face is a near-flat grey-white rather than white, the drab mid-grey sweep crowds the shaded side, the port is a flat black disc, and the contact shadow is a vague smudge that does not anchor the near corner.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The back face reads white end to end. The hottest flat white sits between 242 and 248 (now 236.4 at [888,224,935,262]). The band above the amp plate [884,560,1072,595] reaches at least 222 (now 209.6). The far bottom corner reaches at least 214 (now about 201).",
+  "The accent reads as one paint. The lit plinth [888,728,930,783] is within dE 5 of #C62828 (now 7.96). Its far end [1035,700,1070,755] is within dE 6 (now 10.39). The roof slope's red is within 0.5 stop of the plinth's (now R 212 against 160, a gap of 0.9 stop). The far end probably loses extra light because set.flags.2 (the black card at x 0.85-1.85 m, y -1 m, z 0-0.7 m) blocks the lower right of the key from the plinth. The same card keeps the key off the floor on the right of the frame, so moving it fixes one problem and creates another.",
+  "The floor in front of the carton is no brighter than the floor beside it. [850,870,1100,900] reads 138 or less (now 150.8, against 131-138 beside the carton). The bright patch under the far half of the back face is lit by the key, and no flag on the card could shade it without coming into the frame.",
+  "The plinth's foot has a defined contact: [920,792,1040,800] reads 100 or less (now 107.5) and grades into the shadow pool."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The Whole body's #FFFFFF lacquer renders as light grey: the hottest flat white on the back face is 236, it drops to 210 above the amp plate and to 201 in the far bottom corner, and the side sits at 185.",
+   "evidence": {
+    "region": [
+     888,
+     224,
+     935,
+     262
+    ],
+    "measured": "Top-left flat white: median 234.4, p95 236.4, clip 0%. Eave band [888,220,1072,234]: 232.4. Band above the amp [884,560,1072,595]: 209.6, x-profile 218.4 to 200.6. Back-panel white pixels: median 220.1, p99 241.6 (the corner round). Side-right white: median 184.6. Frame p99: 229.4."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.1,
+    "to": 0.25
+   },
+   "expected": "Hottest flat white rises to a p95 of about 245 with no clipping on the flat faces. Only the 3-4 px corner round, already at 254, clips further down its length. Eave band about 241, band above the amp about 221, side about 194. The lit plinth's R goes from 160 to about 170 (with c3). The sweep goes from 125 to about 131.",
+   "accept": {
+    "region": [
+     888,
+     224,
+     935,
+     262
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     242,
+     248
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The rim, nearly overhead at 75 degrees, adds by geometry about 70% of the key's light to the roof's back slope and none to the back face, so the accent splits into two reds: the roof renders (212,62,63) and the plinth on the same side (160,34,35), 0.9 stop apart.",
+   "evidence": {
+    "region": [
+     890,
+     135,
+     990,
+     200
+    ],
+    "measured": "Roof slope: rgb median 212/62/63, lum 94.0, flat top to bottom (93.6 to 94.7), dE2000 5.93 against #C62828. Plinth [888,728,930,783]: rgb 160/34/35, dE 7.96. The rim's current shadow ends about 45 px below the plinth (floor at x=960 reads 101 at the foot, 120 at +45 px, 151 at the frame edge)."
+   },
+   "change": {
+    "setting": "lights.rim.orbit.elevation_deg",
+    "from": 75,
+    "to": 57
+   },
+   "expected": "With c1 applied, the roof's R comes to about 203 (lum about 91, dE about 4.5), within about 0.55 stop of the plinth. The back face and the side do not change, because the rim cannot reach them. The rim's shadow toward the camera lengthens from about 45 px to about 110 px below the plinth. The floor in front of the near corner [780,815,900,860] drops from 122 to about 108. The carton then sits in a soft pool whose tip fades out near the bottom edge, around x 750-890.",
+   "accept": {
+    "region": [
+     890,
+     135,
+     990,
+     200
+    ],
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     197,
+     209
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "At 2.6 m the key gives the top of the carton about 1.5 times the light it gives the foot, so the far strip of the back face falls 25 levels to a grey 201 and the white spans 35 levels corner to corner, and the hot top-left corner limits how far the exposure can rise.",
+   "evidence": {
+    "region": [
+     1052,
+     220,
+     1072,
+     595
+    ],
+    "measured": "Far strip profile: 226.4, 224.4, 221.1, 218.4, 215.4, 211.4, 206.4, 201.4 (falloff 25.0). Near strip [885,220,912,595]: 235.1 to 218.6 (16.5). Top-left 234.4 against about 200 in the bottom-right corner."
+   },
+   "change": {
+    "setting": "lights.key.orbit.distance_m",
+    "from": 2.6,
+    "to": 3.5
+   },
+   "expected": "With irradiance held at the target, the far strip's falloff drops to about 19 and the near strip's to about 13, and the corner-to-corner span to about 28, so c1 can lift the face further. The near end of the plinth gains about 3% against the eave. The key's floor shadow to the left firms slightly. The sweep behind the top of the carton rises by no more than 10 levels (138 to at most 148, before c1).",
+   "accept": {
+    "region": [
+     1052,
+     220,
+     1072,
+     595
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     16,
+     22
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Render the frame larger than 1350 x 900 so the rows of the Nutrition Facts panel, about 7 px tall, resolve at magazine-spread size.",
+   "why": "The card fixes the frame size. The label is a must-show with fixed copy, and at this size its spec lines (Sensitivity to Tweeter, 32 Hz to 20 kHz) are soft."
+  }
+ ],
+ "score_if_fixed": 7.2
+}
