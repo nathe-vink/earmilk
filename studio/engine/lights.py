@@ -95,7 +95,8 @@ def panel(bpy, name, spec, centre):
     that share of the panel's strength. A fraction is carried by a twin panel in the same place, unseen by the camera,
     that only lights (or only reflects): Cycles honours an object's ray visibility in light sampling, where a Light Path
     node would not (an emitter's shader is evaluated there without a ray type).
-    The panel's face looks at its target; its back emits nothing; it casts no shadow."""
+    The panel's face looks at its target; its back emits nothing; it casts no shadow. With `receivers` its face is
+    see-through as well (its receivers see it added to what lies behind; every other part sees past it)."""
     import bmesh
     w, h = spec.get('size_m', [1.0, 0.25])
     me = bpy.data.meshes.new(name)
@@ -158,7 +159,15 @@ def panel(bpy, name, spec, centre):
     # one-sided: the back face is transparent
     gm = nt.nodes.new('ShaderNodeNewGeometry'); tr = nt.nodes.new('ShaderNodeBsdfTransparent'); mix = nt.nodes.new('ShaderNodeMixShader')
     nt.links.new(gm.outputs['Backfacing'], mix.inputs['Fac'])
-    nt.links.new(em.outputs['Emission'], mix.inputs[1]); nt.links.new(tr.outputs['BSDF'], mix.inputs[2])
+    front = em.outputs['Emission']
+    if spec.get('receivers'):
+        # a panel linked to its receivers is see-through, as Cycles' own lamps are: light linking drops its emission
+        # for every other part, and an opaque face would mirror black into them where it stands; its receivers see its
+        # light added to whatever lies behind it (another card, the floor)
+        add = nt.nodes.new('ShaderNodeAddShader'); tr2 = nt.nodes.new('ShaderNodeBsdfTransparent')
+        nt.links.new(em.outputs['Emission'], add.inputs[0]); nt.links.new(tr2.outputs['BSDF'], add.inputs[1])
+        front = add.outputs['Shader']
+    nt.links.new(front, mix.inputs[1]); nt.links.new(tr.outputs['BSDF'], mix.inputs[2])
     nt.links.new(mix.outputs['Shader'], out.inputs['Surface'])
     me.materials.append(m)
     ob.visible_camera = bool(spec.get('camera', False)); ob.visible_shadow = False

@@ -331,11 +331,11 @@
    "position": [
     -0.2,
     -0.27,
-    0.005
+    0.036
    ],
    "target": [
     -0.2,
-    -0.22,
+    -0.27,
     1.0
    ],
    "strength": 0.8,
@@ -354,7 +354,8 @@
    "diffuse": false,
    "receivers": [
     "letters-front-*"
-   ]
+   ],
+   "_why": "the critic's card for the letters (round 4, c5). It lay at z 0.005 under the floor card, which tilts down to z 0.03 at the plinths, so the letters mirrored the floor card and never this one (158.4 at 0.8 and at 1.5 W); now flat at z 0.036, between the letters' mirror points (z 0.040 to 0.055, 20 degrees down) and the floor card, and see-through for every other part"
   }
  }
 }
