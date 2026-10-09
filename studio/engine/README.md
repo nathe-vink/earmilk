@@ -43,7 +43,8 @@ lists included (`glints.0` adds the first glint).
 - **camera:** position and target, lens, `level` (look level and frame by lens shift, so verticals stay vertical),
   extra shift, roll, depth of field and focus.
 - **sun and sky:** the sun by azimuth, elevation and irradiance (W/m2), its size and colour; a gradient or physical
-  sky, or none.
+  sky, a photographed environment (`sky.kind: "hdri"`, one of the Poly Haven CC0 maps in `studio/assets/hdri`, turned
+  by `sky.rotation_deg`: real softboxes and windows for the gloss to mirror), or none.
 - **lights:** area, spot and point lamps placed by orbit round the product or by position, aimed at a target, sized,
   in W or in irradiance at the target; light linking (`receivers`) to light only some parts; glints, small lamps set
   exactly where a surface would mirror them into the camera.

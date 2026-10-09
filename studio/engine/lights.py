@@ -234,7 +234,9 @@ def sun(bpy, spec):
 
 
 def world(bpy, sky, sun_spec=None):
-    """The world: a gradient dome (zenith, horizon, ground), a physical sky matched to the sun, or black."""
+    """The world: a gradient dome (zenith, horizon, ground), a physical sky matched to the sun, a photographed
+    environment (kind 'hdri': sky.file names one in studio/assets/hdri, Poly Haven CC0, turned by sky.rotation_deg
+    about the vertical), or black."""
     W = bpy.data.worlds.new('world'); bpy.context.scene.world = W
     W.use_nodes = True; nt = W.node_tree; nt.nodes.clear()
     out = nt.nodes.new('ShaderNodeOutputWorld'); bg = nt.nodes.new('ShaderNodeBackground')
@@ -243,6 +245,15 @@ def world(bpy, sky, sun_spec=None):
     bg.inputs['Strength'].default_value = strength
     if kind == 'none':
         bg.inputs['Color'].default_value = (0, 0, 0, 1)
+    elif kind == 'hdri':
+        import os
+        name = sky.get('file', 'studio_small_03_1k')
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'hdri', name + ('' if name.endswith('.hdr') else '.hdr'))
+        env = nt.nodes.new('ShaderNodeTexEnvironment'); env.image = bpy.data.images.load(os.path.abspath(path), check_existing=True)
+        tc = nt.nodes.new('ShaderNodeTexCoord'); mp = nt.nodes.new('ShaderNodeMapping')
+        mp.inputs['Rotation'].default_value = (0.0, 0.0, math.radians(sky.get('rotation_deg', 0.0)))
+        nt.links.new(tc.outputs['Generated'], mp.inputs['Vector']); nt.links.new(mp.outputs['Vector'], env.inputs['Vector'])
+        nt.links.new(env.outputs['Color'], bg.inputs['Color'])
     elif kind == 'physical':
         tx = nt.nodes.new('ShaderNodeTexSky'); tx.sky_type = 'MULTIPLE_SCATTERING'; tx.sun_disc = False
         s = sun_spec or {}

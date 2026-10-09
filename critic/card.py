@@ -80,7 +80,11 @@ def main():
           'rug (size [w, d], color); table (size [w, d, h], color); books (colors [hex, ...], z: the height they lie on); '
           'sideboard (size [w, d, h], color, turntable true/false); vase (height, z, color, branches); lamp (height, '
           'shade); sofa (size [w, d, h], color); curtain (size [w, h], folds, depth, color, translucent); frame (size '
-          '[w, h], z, frame, art, artwork). To take one out, set `set.props.N.off` to true.', '',
+          '[w, h], z, frame, art, artwork). To take one out, set `set.props.N.off` to true. A photographed environment '
+          'lights the set and shows in every gloss surface: `sky.kind` "hdri" with `sky.file` (studio_small_03_1k, a small '
+          'photo studio with softboxes; lebombo_1k, a sunlit apartment; st_fagans_interior_1k, a museum interior with '
+          'windows; empty_warehouse_01_1k, a warehouse with skylights), `sky.strength`, and `sky.rotation_deg` to turn its '
+          'brightest part where it should face; keep `sky.visible` false (at 1k it blurs as a background).', '',
           '| setting | now | unit | range | meaning |', '|---|---|---|---|---|']
     seen = set()
     for path, val in S.flatten(sh):
