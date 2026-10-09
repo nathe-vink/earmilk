@@ -1,0 +1,265 @@
+{
+ "stage1": {
+  "impression": "A high three-quarter close-up of a red gable-top speaker whose horn waveguide and tweeter read clearly at frame centre on a grey sweep, the gloss red convincing and the waveguide's rim highlight carrying its shape. But the slopes sit near one saturated red with a pink washed-out glare at the lower-left eave, the white body reads dull grey, and the crop cuts the body at the bottom with the fin close to the top edge, so it is a competent draft rather than a hero image.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "No hotspot off the hero: the lower-left eave corner [100, 615, 185, 662] within 10 levels of the slope beside it (now 138.9 against 85.9, green 114 against 51), so the brightest red highlight sits on the waveguide, not at the frame edge.",
+  "The waveguide's left-wall reflection graded at least 25 levels along its run, brightest toward the tweeter (now flat: 136.7 / 135.5 / 136.9 in the throat, middle and foot boxes).",
+  "The white product as the brightest large area: the backdrop at least 12 levels below the lit white front everywhere (now the top-right backdrop is 217.3 against the front's 212.4), so the Whole white reads white, not grey.",
+  "The white base subordinate to the subject: it should fall off at least 12 levels from under the eave to the frame's bottom edge (now 4.0, profile 215.4 to 211.4), not run as a flat 212 band along the bottom of the frame.",
+  "The fin reading as lacquer: at least 8 levels of vertical sheen on its face (now -2.0), on top of its existing left-to-right falloff.",
+  "A closer hero: the waveguide covers 17.6% of the frame and the tweeter is 101 px across 1350. The fin's top-left corner (y 66) and the mouth's foot at the eave (y 820) already span 84% of the height, so 'close' needs the fin's top-left corner allowed out of frame (about 100 mm lens) to bring the waveguide to about 23 to 25%. Make that a separate camera pass after these light fixes land, because a camera move invalidates the box tests here.",
+  "The white tab showing through the eave notch at the mouth's foot [498, 744, 524, 756] (p95 235, the brightest spot on the product, above the dome catchlight's 220 peak) resolved in CAD or confirmed as a designed feature."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The lower-left corner of the front slope carries a pink plateau of glare, the mirrored edge of the 1 x 1 m key softbox, which is brighter than any highlight on the waveguide but the dome's catchlight, sits at the frame edge away from the hero, and washes the accent red to pink.",
+   "evidence": {
+    "region": [
+     100,
+     615,
+     185,
+     662
+    ],
+    "measured": "lum_median 138.9, p95 146.6, rgb median [231, 114, 114]. The same slope up and to the right [150, 470, 260, 560] is 85.9, rgb [214, 51, 55], and waveguide-insert p95 is 135.9. Tracing the slope's mirror rays through the card's camera (eave z 0.862 fitted to the frame) puts this corner 0.85 to 1.0 half-widths inside the key's mirrored rectangle, with orbit centre at product centre or target respectively; no other lamp is within 1.3. The plateau's added green (+0.13 to +0.17 linear) is of the order of the key's radiance times the clear coat's Fresnel at 39 degrees."
+   },
+   "change": {
+    "setting": "lights.key.size_m",
+    "from": [
+     1,
+     1
+    ],
+    "to": [
+     0.6,
+     0.6
+    ]
+   },
+   "expected": "Irradiance at the target is held, so the diffuse values on the slope, fin and white body stay where they are. The key's mirror image shrinks about its off-frame centre, and its edge clears the slope by 1.4 half-widths or more under either orbit reading. The corner falls to the slope's own value, 80 to 92, with green back near 50 to 55 (accent red, not pink). The key's catchlights on the dome, the waveguide lip and the fin's top round get smaller and slightly brighter.",
+   "accept": {
+    "region": [
+     100,
+     615,
+     185,
+     662
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     78,
+     100
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The waveguide's left wall mirrors the uniform rim_left panel as one flat pink band, 136 along its whole 404 px run from the left foot to the throat, so the wall reads as a flat card and the hero's largest bright shape has no direction.",
+   "evidence": {
+    "region": [
+     300,
+     552,
+     335,
+     566
+    ],
+    "measured": "Foot box 136.9, middle [370, 495, 430, 522] 135.5, throat end [480, 462, 520, 487] 136.7, each with lum_range under 5 and green 112 to 113. The facet normal that mirrors rim_left's centre at glint 5's point, (0.13, -0.80, 0.59), is 32 degrees from glint 5's given normal, matching the engine's 31.2-degree note, so the band is rim_left. Traced through that facet, the band's foot end mirrors the panel's -x edge (world x -0.19) and its throat end the +x edge (x +0.04); the panel's width runs along world x."
+   },
+   "change": {
+    "setting": "lights.rim_left.ramp",
+    "from": "none (uniform panel)",
+    "to": {
+     "axis": "x",
+     "at_m": [
+      -0.18,
+      0.05
+     ],
+     "values": [
+      0.15,
+      1.0
+     ]
+    }
+   },
+   "expected": "The band grades along the wall: about 135 at the throat end, about 128 in the throat box, about 116 in the middle box, and 100 to 110 in the foot box, fading into the wall near the left foot. That is a 30 to 35 level ramp that describes the wall's flare and points at the tweeter. The throat box stays at 125 or above, and the floor beside the band (70 to 90) is unchanged.",
+   "accept": {
+    "region": [
+     300,
+     552,
+     335,
+     566
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     95,
+     116
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The backdrop's top-right corner is brighter than the white product's lit face, so the Whole flavour's white reads light grey, the brightest area of the frame sits in its corner away from the subject, and the dark right gable against it is the frame's longest high-contrast edge.",
+   "evidence": {
+    "region": [
+     1210,
+     0,
+     1350,
+     140
+    ],
+    "measured": "lum_median 217.3, rgb [217, 217, 221]. Backdrop beside the gable [1290, 300, 1340, 480] 210.2; white front (part front-baffle) median 212.4, p95 216.4; right gable end core 41.7, so that silhouette edge is about 168 levels; left backdrop [0, 0, 55, 900] 162.0."
+   },
+   "change": {
+    "setting": "lights.bg_pool.irradiance",
+    "from": 2.076,
+    "to": 1.2
+   },
+   "expected": "The top-right backdrop falls to 188 to 200 and the strip beside the gable to about 185 to 195. The white front (212) becomes the brightest large area by 12 levels or more and reads white. The backdrop keeps a left-to-right gradient (about 160 to 195), the side-right white (170 to 185) still separates from it by 10 levels or more, and the right silhouette edge drops to about 150. The pool has no specular, so nothing on the product changes.",
+   "accept": {
+    "region": [
+     1210,
+     0,
+     1350,
+     140
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     186,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "asset",
+   "problem": "The white base below the eave is one flat value and the largest bright area in the frame, laid along its bottom edge, so the bottom of the frame pulls harder than the waveguide.",
+   "evidence": {
+    "region": [
+     150,
+     750,
+     450,
+     895
+    ],
+    "measured": "Profile along y 215.4, 214.4, 214.1, 213.4, 213.1, 212.4, 212.1, 211.4 (falloff 4.0), lum_range 3.9; front-baffle covers 11.1% of the frame at median 212.4. No lamp on the card can grade it: the key is an area lamp whose irradiance barely changes over the 0.25 m of visible body, and the set has no flags."
+   },
+   "change": {
+    "setting": "asset: black flag (an occluder; the card offers none)",
+    "from": "none",
+    "to": {
+     "kind": "flag",
+     "size_m": [
+      1.2,
+      0.5
+     ],
+     "color": "#000000",
+     "orientation": "vertical, facing the key",
+     "placement": "between the key and the front face, about 0.5 m from the carton toward the key, top edge on the line from the key to a point 2 to 4 cm below the eave",
+     "visible_to_camera": false
+    }
+   },
+   "expected": "The key's soft shadow edge (a penumbra of about 0.3 m from the 0.6 m key) starts just under the eave. The white front falls from about 214 under the eave to about 195 at the frame's bottom edge, a 12 to 25 level falloff. The roof, the waveguide and the eave's red band are untouched (the corner test region of c1 and the slope at [150, 470, 260, 560] keep their values), so the eye stays up on the subject.",
+   "accept": {
+    "region": [
+     150,
+     750,
+     450,
+     895
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     28
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The fin's lacquered face is one value from its top round down to the ridge, so it reads as matte paint beside a slope that shows gloss.",
+   "evidence": {
+    "region": [
+     600,
+     126,
+     800,
+     219
+    ],
+    "measured": "Profile along y 62.0, 62.2, 62.6, 62.9, 63.3, 63.5, 63.8, 64.0 (falloff -2.0, slightly darker at the top); left end [320, 100, 520, 180] 66.8 to 66.1. Traced through the card's camera, the fin's top mirrors the fin_sheen panel's plane at world z 0.75 to 0.81 and its foot at z 0.68 to 0.74. fin_sheen's only ramp runs along x, so the fin falls off left to right (67.1 to 51.4) but not vertically."
+   },
+   "change": {
+    "setting": "lights.fin_vsheen",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.0,
+      0.25
+     ],
+     "position": [
+      -0.65,
+      -0.83,
+      0.735
+     ],
+     "target": [
+      0,
+      0,
+      1.03
+     ],
+     "strength": 0.65,
+     "color": 5700,
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.68,
+       0.82
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The fin's top band gets 10 to 15 levels lighter than its foot at the ridge, a lacquer sheen fading downward. Its left end stays lighter than its right, because the left end mirrors higher z. The fin median rises only to about 66 to 74, and the step from fin to slope at the ridge stays 15 levels or more. The panel is reflection-only and sits low, front-left, so apart from small curved parts only the fin can mirror it.",
+   "accept": {
+    "region": [
+     600,
+     126,
+     800,
+     219
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     8,
+     20
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Close or fill the notch at the eave's centre where a white tab of the front baffle shows under the waveguide's mouth [498, 744, 524, 756].",
+   "why": "Geometry is the spec. But at p95 235 it is the brightest spot on the product, brighter than the dome's 220 catchlight, at the foot of the hero, so engineering should confirm it is a designed lift notch and not a modelling gap between gable and baffle."
+  },
+  {
+   "request": "Soften the creases between the horn's left wall, floor and right wall so the walls read as one flowing surface.",
+   "why": "The waveguide's profile is set by acoustic simulation. c2 grades the reflection on the facet instead, which is as far as light can go."
+  },
+  {
+   "request": "Narrow or remove the thin dark seam drawn around the waveguide insert.",
+   "why": "It is the insert's joint, part of the fixed geometry. At about 2 px and green 25 to 33 it reads like a CAD outline, and light cannot change its width."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
