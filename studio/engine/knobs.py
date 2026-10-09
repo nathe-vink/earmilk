@@ -63,6 +63,8 @@ KNOBS = [
     ('lights.*.orbit.distance_m', 'm', (0.2, 20), 'see orbit'),
     ('lights.*.target', 'm [x, y, z]', None, 'the point the lamp faces (default the product\'s centre)'),
     ('lights.*.receivers', '[part names, * wildcards]', None, 'light linking: the lamp lights only these parts (a kick for a face that must not light the floor beside it); absent, it lights everything'),
+    ('lights.*.density', '0 to 1', (0.0, 1.0), 'a flag\'s density: 1 a solid flag, 0.4 a net that lets 60 % of the light through'),
+    ('lights.*.lights', '[lamp names]', None, 'a flag that shades only these lamps (every other lamp sees through it); absent, it shades them all'),
     ('lights.*.shadow_on_set', '0 to 1', (0.0, 1.0), 'the lamp\'s shadow on the set at this fraction of its density (1 real, 0.5 half as dark), its light and shadows on the product unchanged: a copy of the lamp the product does not block lights the set with the rest (a lamp without receivers)'),
     ('lights.*.power_w', 'W', (0, 50000), 'lamp power (Cycles watts); light on the subject falls with distance squared'),
     ('lights.*.irradiance', 'W/m2', (0, 50), 'area lamp: the light it puts on a surface facing it at its target (replaces power_w; about 3 renders a white near 230 at exposure 0)'),

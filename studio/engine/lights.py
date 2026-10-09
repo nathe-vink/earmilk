@@ -207,11 +207,37 @@ def flag(bpy, name, spec, centre):
     for k in ('Specular IOR Level', 'Specular'):
         if k in bs.inputs:
             bs.inputs[k].default_value = 0.0
+    d = spec.get('density', 1.0)
+    if d < 1.0:
+        # a net, not a flag: it lets 1 - density of the light through (a scrim of black mesh), the transparent share of
+        # its shader passing shadow rays straight on (04b's round 12: the key's floor a stop too bright at the frame's foot)
+        nt = m.node_tree; out = nt.nodes['Material Output']
+        tr = nt.nodes.new('ShaderNodeBsdfTransparent'); mix = nt.nodes.new('ShaderNodeMixShader')
+        mix.inputs[0].default_value = max(0.0, d)
+        nt.links.new(tr.outputs[0], mix.inputs[1]); nt.links.new(bs.outputs[0], mix.inputs[2])
+        nt.links.new(mix.outputs[0], out.inputs['Surface'])
     ob.data.materials.append(m)
     ob.visible_camera = False
     ob.visible_glossy = bool(spec.get('glossy', False))
     ob['engine_light'] = True
     return ob
+
+
+def scope_flag(bpy, flag_ob, keep):
+    """A flag that shades only the lamps named in `keep` (their copies too, `key-set`, `key-set-open`): every other lamp
+    sees through it (shadow linking, the flag excluded from that lamp's blockers). A card in front of the floor that cuts
+    the key alone, where a plain flag would also cut the fill and the edge lamps off the product (04b's round 12)."""
+    for L in [o for o in bpy.context.scene.objects if o.type == 'LIGHT']:
+        if L.name in keep or L.name.split('-set')[0] in keep:
+            continue
+        col = L.light_linking.blocker_collection
+        if col is None:
+            col = bpy.data.collections.new(L.name + '-blockers'); L.light_linking.blocker_collection = col
+        if flag_ob.name not in col.objects:
+            col.objects.link(flag_ob)
+        for o, co in zip(col.objects, col.collection_objects):
+            if o == flag_ob:
+                co.light_linking.link_state = 'EXCLUDE'
 
 
 def twins(bpy, ob):

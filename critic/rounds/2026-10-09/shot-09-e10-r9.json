@@ -1,0 +1,417 @@
+{
+ "stage1": {
+  "impression": "A clean, legible set-up (two red-and-white milk-carton speakers flanking a walnut turntable under a framed print), but the light is soft, frontal and nearly directionless, so the white bodies read as flat matte panels, the red gables lack a shaped highlight, and the taupe wall and sideboard sit in one dull greige band with no daylight in it. The slight camera yaw makes the right speaker bigger and lower than the left without committing to a three-quarter view, the print owns the centre and the top third is dead wall, so it reads as a competent catalogue draft rather than a hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Camera squared or committed: the 15.4 degree yaw (camera at x 0.85 aimed at x 0.03) renders the right speaker 10% taller than the left (525 vs 476 px) and tilts the sideboard's back and front edges by about 33 and 70 px across the frame; both speakers need to render within 2% of each other in height with level horizontals (aim straight ahead from x 0.85 and shift the lens about half a frame toward the pair, at about 60 mm), or the view must commit to 25 degrees or more.",
+  "The room reads bright and daylit: lit wall at 190 or more with at least 40 levels of fall-off from the window side (now 156-189 and 25 levels), image median 170 or more (now 161.3), with the white fronts held at 200-220.",
+  "The white lacquer shows a window reflection on both fronts at least 20 levels above the face around it (now flat to within 4 levels across the width below the woofer).",
+  "The accent reads as one red: plinth bands and gables all within dE2000 3 of #C62828 (bands 8.5 and 9.8 now, gables 0.95 and 4.55).",
+  "Neutral whites: lit fronts within |a*| and |b*| of 1 (now a* +1.2..+1.9, b* -1.0..-2.2) and the shaded sides warm grey at hue 50-80 degrees (now pink, hue 27).",
+  "The speakers dominate the frame: the print smaller than either speaker (now 293 x 405 px, about 119k px against the left speaker's 104k) and its moulding (92-100 on a 166-178 wall) no longer the strongest dark outline in the centre.",
+  "The carton reads on both speakers: the right speaker's Nutrition Facts side is a 31 px sliver beside a 189 px front, illegible at homepage size."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The plinth band is one part with the white panel it is painted on, so no lamp can bring it up to the gable's red without also lifting the white above it.",
+   "evidence": {
+    "region": [
+     146,
+     712,
+     302,
+     760
+    ],
+    "measured": "front-baffle pixels in the left band: median RGB (160,25,32), dE2000 8.49 vs #C62828; the mask has no *.plinth parts (zone_parts is off)"
+   },
+   "change": {
+    "setting": "product.zone_parts",
+    "from": false,
+    "to": true
+   },
+   "expected": "No visible change on its own; each painted band becomes its own part (front-baffle.plinth, side-right.plinth, ...) so c2's lamp reaches the bands alone. This test passes together with c2: left band dE2000 3.5 or less.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      146,
+      712,
+      302,
+      760
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     3.5
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The wordmark band prints maroon beside a correct red gable: it receives the same light as the white just above it (204, linear 0.61), and #C62828 needs about 1.65 times that light to print at its own value.",
+   "evidence": {
+    "region": [
+     970,
+     750,
+     1154,
+     806
+    ],
+    "measured": "front-baffle pixels in the right band: median (154,19,24), dE2000 9.77 vs #C62828; left band (160,25,32) dE 8.49; the gables on the same speakers (199,41,44) dE 0.95 and (196,55,61) dE 4.55; band profile 58 to 50 top to bottom"
+   },
+   "change": {
+    "setting": "lights.plinth_lift",
+    "from": "none",
+    "to": {
+     "type": "area",
+     "size_m": [
+      2.4,
+      0.3
+     ],
+     "position": [
+      0.0,
+      -1.3,
+      0.78
+     ],
+     "target": [
+      0.0,
+      -0.11,
+      0.59
+     ],
+     "irradiance": 1.4,
+     "color": 5700,
+     "receivers": [
+      "*.plinth"
+     ]
+    }
+   },
+   "expected": "Both front bands print about (190-198, 36-42, 36-42), dE2000 3 or less vs #C62828, the same red as the gables; the side bands lift about half as much (grazing light), so the box keeps its modelling; white panels, letters and sideboard receive nothing; no new highlight, because from 1.3 m the band's clear coat mirrors z 0.37-0.42 m, below the lamp.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      970,
+      750,
+      1154,
+      806
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     3.0
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "The sideboard is a drab grey-taupe slab: its front fills the bottom sixth of the frame at 90-106, about 100 levels under the speaker whites, which weighs the picture down and reads as a dim room.",
+   "evidence": {
+    "region": [
+     10,
+     795,
+     360,
+     890
+    ],
+    "measured": "median 105.8, RGB (115,104,97), L* 44.8 (its paint #8A7D6F is L* 53; the render shifts its hue pinkward to 61 degrees); right end [900,840,1340,895] 90.3; top 97-126"
+   },
+   "change": {
+    "setting": "set.props.0.color",
+    "from": "#8A7D6F",
+    "to": "#B3A086"
+   },
+   "expected": "Front prints about 130-140 (right end about 115), top about 125-155: a light sand-oak base still 35-45 levels under the wall at its back edge, so the horizon line and the speakers' footing hold; the red plinths and the dark turntable gain contrast; image mean about +5. Its warmer bounce adds about +1 b* low on the white sides; c4 takes about 1 a* out there, so the shaded side turns warm grey, not the tan that round 8's c8 removed.",
+   "accept": {
+    "region": [
+     10,
+     795,
+     360,
+     890
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     124,
+     146
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "post",
+   "problem": "Every neutral leans magenta: the lit white fronts print faintly lilac, their shaded right sides pink, and the cream wall pinkish greige, so the product's white does not read clean.",
+   "evidence": {
+    "region": [
+     240,
+     548,
+     302,
+     620
+    ],
+    "measured": "front-baffle pixels: median (210,207,211), dE2000 2.89 vs neutral #D0D0D0; both fronts a* +1.2..+1.9, b* -1.0..-2.2; right sides (149,138,136) and (146,133,132), a* +3.7..+4.7, hue 27 degrees; wall upper-left (189,178,170) at hue 65 against its paint's 81"
+   },
+   "change": {
+    "setting": "render.white_balance_tint",
+    "from": 10,
+    "to": 6
+   },
+   "expected": "The fronts' a* falls to 0 +/- 0.5 and b* rises about +1 to near 0 (dE2000 1.2 or less vs #D0D0D0); the sides lose about 1 a* and turn warm grey (hue about 45-55); the wall moves toward its paint's hue (75-80, cream); luminance shifts 2 levels or less.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      240,
+      548,
+      302,
+      620
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#D0D0D0",
+    "op": "between",
+    "value": [
+     0,
+     1.2
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The right speaker's white lacquer shows no reflection at all: below the woofer its front is flat across its width, so the body reads as matte card rather than lacquered birch.",
+   "evidence": {
+    "region": [
+     966,
+     575,
+     1090,
+     738
+    ],
+    "measured": "front-baffle pixels: median 198.9, p95 204.0, range 7.9; 11-bin x-profile of the lower front 199.9 to 195.9"
+   },
+   "change": {
+    "setting": "lights.window_strip_R",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.1,
+      0.55
+     ],
+     "position": [
+      0.08,
+      -1.39,
+      0.665
+     ],
+     "target": [
+      0.48,
+      -0.106,
+      0.81
+     ],
+     "strength": 4.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.45,
+       0.95
+      ],
+      "values": [
+       1,
+       0.6
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The right front mirrors it as a vertical window reflection about 7 cm wide (about 58 px, x 996-1054) on its left third, from the plinth line to the gable line, peaking 226-234 below the woofer with soft edges; the rest of the face stays 196-212, so the woofer is not set in a white wash (round 8's c1 problem came from lifting 60% of the face; this lifts about 30% of its width); the trim ring's left arc picks up a highlight.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      966,
+      575,
+      1090,
+      738
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     224,
+     236
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The left front is just as flat, and its left edge barely parts from the wall behind it.",
+   "evidence": {
+    "region": [
+     142,
+     560,
+     260,
+     700
+    ],
+    "measured": "front-baffle pixels: median 205.7, p95 209.7; lower-front x-profile 207.4 to 203.7; row average across the left edge at y 600-690: wall 186.9, 2 px rim 220.5, face 205.5 (a 19-level step)"
+   },
+   "change": {
+    "setting": "lights.window_strip_L",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.1,
+      0.55
+     ],
+     "position": [
+      -0.94,
+      -1.4,
+      0.68
+     ],
+     "target": [
+      -0.56,
+      -0.113,
+      0.81
+     ],
+     "strength": 4.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.45,
+       0.95
+      ],
+      "values": [
+       1,
+       0.6
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "A matching reflection about 7 cm wide (about 53 px, x 168-221) on the left front's left third, peaking 228-236; with both speakers showing a window at their left, the light reads as the room's left window, and the left speaker's left third stands at least 25 levels above the wall even after c8.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      142,
+      560,
+      260,
+      700
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     226,
+     238
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "composition",
+   "problem": "The print owns the centre: at 293 x 405 px it covers more of the frame than either speaker, and its brown moulding is the strongest dark outline between them.",
+   "evidence": {
+    "region": [
+     540,
+     126,
+     800,
+     150
+    ],
+    "measured": "top moulding median 99.7 against the wall above it at 166.4; side mouldings 91.7-93.9; print box x 522-815, y 122-527; about 119k px against the left speaker's 104k"
+   },
+   "change": {
+    "setting": "set.props.1.size",
+    "from": [
+     0.5,
+     0.66
+    ],
+    "to": [
+     0.4,
+     0.53
+    ]
+   },
+   "expected": "The print shrinks to about 235 x 325 px, centred where it is (top at about y 158, bottom about 482); both speakers become the largest shapes; the wall above them clears into copy space, and the strip where the top moulding was prints as wall (about 166-180).",
+   "accept": {
+    "region": [
+     560,
+     126,
+     780,
+     150
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     158,
+     190
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The room does not read bright: the wall prints 156-189, 15-22 L* under its paint, and its only daylight cue is a 25-level fall from left to right.",
+   "evidence": {
+    "region": [
+     20,
+     20,
+     480,
+     260
+    ],
+    "measured": "median 179.7, RGB (189,178,170), L* 73.3 against the paint's 88.6; upper-right [870,20,1330,260] 162.5; top band x-profile 181.3 to 156.4; image median 161.3, p99 216.4"
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 7,
+    "to": 8
+   },
+   "expected": "Wall upper-left about 188 and upper-right about 170, keeping the left-to-right fall; shaded sides +5 to +8 (about 145-148), fronts +2 to +3 (median 212 or less, p95 228 or less); the wall left of the left speaker rises to about 199, and c6's reflection keeps that speaker's edge readable.",
+   "accept": {
+    "region": [
+     20,
+     20,
+     480,
+     260
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     184,
+     192
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A glossier clear coat on the white panels, so the body reads as lacquer under the room's own light without added reflection panels",
+   "why": "The paint and clear coat are the product's finish and fixed; only what the lacquer reflects may change (c5, c6). It matters because the lower fronts are flat to within 4 levels across their width."
+  },
+  {
+   "request": "A visible cone texture or a lighter dust cap, so the woofers read as drivers rather than black discs (cone 12.8, cap 12.5 median, cone p95 21.5)",
+   "why": "The drivers are named products under trim rings; their materials and colours are their own."
+  },
+  {
+   "request": "A lighter red on the plinth band so it prints like the gable under the same light",
+   "why": "#C62828 is the flavour's colour and fixed; only its reproduction may change, which c1 and c2 do with light."
+  }
+ ],
+ "score_if_fixed": 6.8
+}

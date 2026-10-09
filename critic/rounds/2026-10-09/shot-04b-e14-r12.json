@@ -1,0 +1,245 @@
+{
+ "stage1": {
+  "impression": "A clean, legible back three-quarter of the milk-carton speaker on a mid-grey sweep with generous copy space at left; the label, port and red accents are crisp and the form reads through three distinct face values. But the frame is murky and low in contrast: the white reads light grey on a dull grey void, every face is a smooth matte ramp with no lacquer reflection, and the base sits in a soft smudge rather than a firm contact, so it reads as a competent CG draft, not a homepage image.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The white lacquer shows a reflection: a soft band on the side face at least 13 levels over the face beside it ([762,240,790,380] now 189.4; the face's upper half is one even ramp, x-profile 185.3 to 196.4), with the label face left clean.",
+  "The base stands with weight: the floor 1-5 px under the plinth at most 0.65 of the open floor 40 px out (now 104.8 against 145.3 = 0.72 under the back face; front corner [874,799,892,804] 124.3, at most 110).",
+  "The light pools at the product, not at the frame edge: the bottom band [200,850,1300,895] no brighter than the backdrop beside the product (now 154.9 against 138.2; copy space 131.0).",
+  "The red lacquer reads as lacquer: the roof slope's graduated reflection at least 18 levels across the slope (now 11.2, a smooth left-to-right ramp 90.7 to 79.5 that reads as diffuse falloff).",
+  "One red on the lit faces: the plinth's back face within dE2000 3.2 of #C62828 across its width (now 4.41 left of SHAKE WELL, 5.45 right of it) while the fin (2.73) and roof (3.43) stay within 3.5.",
+  "Print resolution: at least 4000 px wide for the spread, so the Nutrition Facts rows (text about 6 px tall now) and the amplifier connections (68 x 25 px) hold; fixed by the card."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The white lacquer reads as matte paint: the side face, the largest clear white area, is one smooth diffuse ramp with no reflection in it, so nothing in the frame says clear coat.",
+   "evidence": {
+    "region": [
+     748,
+     240,
+     872,
+     420
+    ],
+    "measured": "x-profile 185.3, 187.1, 188.4, 190.4, 191.4, 193.4, 195.3, 196.4 (one even ramp), p5-p95 183.3-199.4; down the face 196.4 to 177.4; no local maximum anywhere on it. The existing sidegloss panel (0.5 x 0.78 m, about 1.5 m off) mirrors about 0.59 m wide across a 0.39 m face, so its edges never land on the face and it reads only as more falloff; its centre mirrors at the face centre (0.19, -0.11), which fixes the geometry used for the strip below."
+   },
+   "change": {
+    "setting": "lights.sidestrip",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.075,
+      0.72
+     ],
+     "position": [
+      -0.79,
+      0.29,
+      0.48
+     ],
+     "target": [
+      0.147,
+      -0.051,
+      0.58
+     ],
+     "strength": 3.0,
+     "color": "#FFF7EA",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.15,
+       0.55
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "A soft vertical strip reflection about 30-35 px wide centred near x 775 (30 percent in from the face's front edge), full from the eave (y 213) to about y 350 and fading out by about y 550 (the ramp); inside [762,240,790,380] 189 to 202-212; the strip sits 0.44 m in front of the sidegloss panel so the rest of the face keeps its current ramp, and the back face (223 in its upper-left strip), the label and the floor are unchanged within 2 levels; the band stays below the back face so the label face remains the lit face.",
+   "accept": {
+    "region": [
+     762,
+     240,
+     790,
+     380
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     202,
+     212
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "On the camera side the plinth meets the floor through a soft 6 px ramp with no dark core, so the speaker reads as set down lightly rather than standing on the sweep, and the tight contact term is narrower than a pixel at this distance.",
+   "evidence": {
+    "region": [
+     1000,
+     775,
+     1010,
+     779
+    ],
+    "measured": "median 104.8 against the open floor [995,815,1015,825] 145.3 (0.72); column x 1000 from y 773: 69.6, 82.6, 91.0, 97.6, 103.3, 107.3, 110.6, 113.3; front corner [874,799,892,804] 124.3. At 3.4 m, 1 cm of floor in front of the back face spans about 1.5 px, so a 0.025 m core lands inside the anti-aliased edge: the engine logged core_strength 0.6 giving 110.4 and 0.9 giving 109.6 on the last test, no effect."
+   },
+   "change": {
+    "setting": "set.contact.core_distance_m",
+    "from": 0.025,
+    "to": 0.05
+   },
+   "expected": "The tight term reaches about 7 px under the edge: the band 1-5 px under the back plinth 104.8 to 85-95 and the front corner 124 to about 110, a firm dark line inside the existing soft halo; the open floor 40 px out (145) and the halo beyond 10 px unchanged within 3 levels.",
+   "accept": {
+    "region": [
+     1000,
+     775,
+     1010,
+     779
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     80,
+     97
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "asset",
+   "problem": "The brightest part of the set is the floor along the bottom edge, so the eye is pulled down and out of the frame instead of resting where the light should pool, at the product.",
+   "evidence": {
+    "region": [
+     200,
+     850,
+     1300,
+     895
+    ],
+    "measured": "median 154.9 (bottom-band x-profile 143.9 to 157.1 at x 750-900) against the backdrop beside the product [650,250,730,600] 138.2 and the copy space [50,100,550,500] 131.0; the floor in front of the back face [1000,778,1040,900] climbs 121.5 to 157.3 to the frame edge. The key (azimuth 20, elevation 51.3, in front of the product) is nearer this floor than the base (3.83 vs 4.01 m) and meets it more squarely (sin 62.5 vs 57.9 degrees). A card flag low enough to cut it would also cut the fill and the edge lamp off the plinth and lower body (their rays cross z 0.35 at y -0.77 to -0.95), so the flag has to be linked to the key alone."
+   },
+   "change": {
+    "setting": "asset: key-linked net over the foreground floor",
+    "from": "no flag; card flags shade every lamp",
+    "to": {
+     "kind": "net (partial flag) that shades lights.key only",
+     "density": 0.4,
+     "orientation": "horizontal, face up",
+     "size_m": [
+      3.0,
+      1.06
+     ],
+     "position": [
+      0.2,
+      -1.17,
+      0.35
+     ],
+     "extent": "x -1.3 to 1.7 m, y -1.70 to -0.64 m; its +y edge is 5 cm clear of the key's rays to the nearest plinth corner"
+    }
+   },
+   "expected": "The floor along the bottom edge [200,850,1300,895] 154.9 to 128-138, about the copy space's value, feathered in over y 810-858 (the penumbra of the 1.4 x 1.8 m key at 0.35 m); the floor within 6 cm of the front corner and everything in front of the back face above y 810, the product, the backdrop and the copy space unchanged within 2 levels.",
+   "accept": {
+    "region": [
+     200,
+     850,
+     1300,
+     895
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     128,
+     140
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The red roof reads as satin paint: its back slope carries only a faint, even left-to-right ramp, so the gloss panel placed for it never registers as a reflection.",
+   "evidence": {
+    "region": [
+     855,
+     160,
+     1030,
+     185
+    ],
+    "measured": "x-profile 90.7, 89.7, 88.5, 87.0, 85.7, 84.0, 81.7, 79.5 (falloff 11.2), every column constant top to bottom (y-profile on [880,128,1000,206] -1.1); about 9 of the 11 levels are the gloss panel's mirror image (the key's distance gives about 2); the slope is seen near Brewster's angle (about 62 degrees) and the polariser (0.9 at 90 degrees) is set to cut exactly this slope's glare, so at 0.5147 the panel shows only as this faint ramp."
+   },
+   "change": {
+    "setting": "lights.gloss.strength",
+    "from": 0.5147,
+    "to": 1.3
+   },
+   "expected": "The ramp becomes a readable graduated reflection: the hip (left) end of the slope 91 to about 100-104 luma with its red lightening to about (218, 72, 72), the right end staying about 79-81; the right half stays within dE 4 of #C62828 (the slope is 3.43 now); the fin and the gable end, which do not mirror the panel, unchanged within 2 levels.",
+   "accept": {
+    "region": [
+     855,
+     160,
+     1030,
+     185
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     18,
+     28
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The plinth's lit back face is a darker brick red than the fin and drifts further off the accent toward its right end, so the accent reads as two reds.",
+   "evidence": {
+    "region": [
+     1035,
+     712,
+     1068,
+     752
+    ],
+    "measured": "rgb (172, 38, 39), dE2000 5.45 to #C62828; left of SHAKE WELL [892,735,930,782] (177, 39, 40), dE 4.41; the band's x-profile falls 69.8 to 66.1 left to right; the fin (186, 35, 36) is 2.73 and the roof slope (207, 53, 53) 3.43; the engine's own proofs for this lamp: 0.6 gave 2.89 and 1.0 gave 0.63 on the left box."
+   },
+   "change": {
+    "setting": "lights.plinth.irradiance",
+    "from": 0.4035,
+    "to": 0.8
+   },
+   "expected": "The plinth's back face lifts to about (190, 40, 41) left and (185, 39, 40) right of SHAKE WELL, dE at most 3 across its width, one red with the fin; the white body, amp plate and floor unchanged (the lamp is linked to *.plinth with specular 0); the side plinth stays the shadow side at about R 150.",
+   "accept": {
+    "region": [
+     1035,
+     712,
+     1068,
+     752
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 3.2
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Render the spread version at 4000 px wide or more.",
+   "why": "At 1350 x 900 the Nutrition Facts text is about 6 px tall and the amplifier's connections span 68 x 25 px: enough for a homepage, too small to hold across a magazine spread; the frame size and sampling are fixed by the card."
+  },
+  {
+   "request": "A higher-gloss clear coat on the white body and the red roof.",
+   "why": "The faces read as satin (the side face one diffuse ramp 185 to 196, the roof a smooth ramp 91 to 80); the product's materials are fixed, so gloss can only be shown through what they reflect (c1, c4)."
+  }
+ ],
+ "score_if_fixed": 6.6
+}

@@ -148,6 +148,10 @@ def main():
             # the lamp's shadow on the set lightened, the product's light and shadows as they were
             set_objs = [o for o in bpy.context.scene.objects if o.type == 'MESH' and o.name not in part_of and not o.get('engine_light')]
             Lt.split_set_shadow(bpy, ob, objs, set_objs, max(0.0, spec['shadow_on_set']))
+    # a flag scoped to some lamps (`lights`: [names]) shades only those; every other lamp sees through it
+    for fname, fspec in (sh.get('lights') or {}).items():
+        if fspec and not fspec.get('off') and fspec.get('type') == 'flag' and fspec.get('lights'):
+            Lt.scope_flag(bpy, bpy.data.objects[fname], set(fspec['lights']))
     gl = sh.get('glints') or []
     names = list(gl.keys()) if isinstance(gl, dict) else [str(i) for i in range(len(gl))]
     gl = list(gl.values()) if isinstance(gl, dict) else list(gl)
