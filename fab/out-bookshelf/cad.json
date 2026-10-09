@@ -85,7 +85,7 @@
    "mass_kg": 0.98
   },
   "waveguide-insert": {
-   "volume_l": 0.409,
+   "volume_l": 0.4088,
    "bbox_mm": [
     30.37,
     -0.0,
@@ -133,7 +133,7 @@
  "woofer_chamber_air_l": 9.549,
  "woofer_chamber_gross_l": 15.167,
  "mid_chamber_gross_l": 0.0,
- "waveguide_air_l": 0.4185,
+ "waveguide_air_l": 0.4193,
  "wood_mass_kg": 5.97,
  "port_tube_length_mm": null,
  "size": "bookshelf",

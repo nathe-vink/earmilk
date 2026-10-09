@@ -72,18 +72,6 @@
    ],
    "mass_kg": 1.53
   },
-  "window-brace": {
-   "volume_l": 1.1083,
-   "bbox_mm": [
-    18.0,
-    18.0,
-    500.0,
-    372.0,
-    372.0,
-    518.0
-   ],
-   "mass_kg": 0.75
-  },
   "gable-block": {
    "volume_l": 8.1357,
    "bbox_mm": [
@@ -97,15 +85,27 @@
    "mass_kg": 5.53
   },
   "waveguide-insert": {
-   "volume_l": 2.5418,
+   "volume_l": 2.5396,
    "bbox_mm": [
     53.37,
-    0.0,
+    -0.0,
     860.0,
     336.63,
     216.0,
     983.61
    ]
+  },
+  "window-brace": {
+   "volume_l": 1.1083,
+   "bbox_mm": [
+    18.0,
+    18.0,
+    500.0,
+    372.0,
+    372.0,
+    518.0
+   ],
+   "mass_kg": 0.75
   },
   "mid-shelf": {
    "volume_l": 0.6882,
@@ -204,8 +204,94 @@
  "woofer_chamber_air_l": 85.082,
  "woofer_chamber_gross_l": 103.26,
  "mid_chamber_gross_l": 8.029,
- "waveguide_air_l": 1.6734,
+ "waveguide_air_l": 1.6795,
  "wood_mass_kg": 24.86,
  "port_tube_length_mm": 153.3,
- "size": "floorstander"
+ "size": "floorstander",
+ "checks": [
+  {
+   "check": "insert above the top panel (its lowest point to the body's top)",
+   "margin_mm": -0.0,
+   "least_mm": -0.01,
+   "ok": true
+  },
+  {
+   "check": "insert material under the tweeter's counterbore",
+   "margin_mm": 38.3,
+   "least_mm": 1.5,
+   "ok": true
+  },
+  {
+   "check": "boss above the top panel",
+   "margin_mm": 32.0,
+   "least_mm": 1.0,
+   "ok": true
+  },
+  {
+   "check": "birch over the connector bay, under the back slope (vertical)",
+   "margin_mm": 21.92,
+   "least_mm": 8.0,
+   "ok": true
+  },
+  {
+   "check": "connector bay above the top panel",
+   "margin_mm": 49.0,
+   "least_mm": 4.0,
+   "ok": true
+  },
+  {
+   "check": "woofer rebate above the plinth's shadow line",
+   "margin_mm": 49.2,
+   "least_mm": 5.0,
+   "ok": true
+  },
+  {
+   "check": "mid rebate above the woofer rebate",
+   "margin_mm": 128.9,
+   "least_mm": 10.0,
+   "ok": true
+  },
+  {
+   "check": "mid rebate below the gable's shadow line",
+   "margin_mm": 83.7,
+   "least_mm": 5.0,
+   "ok": true
+  },
+  {
+   "check": "mid rebate below the mid shelf's top (inside its chamber)",
+   "margin_mm": 16.7,
+   "least_mm": 5.0,
+   "ok": true
+  },
+  {
+   "check": "amplifier plate above the plinth's shadow line",
+   "margin_mm": 4.5,
+   "least_mm": 2.0,
+   "ok": true
+  },
+  {
+   "check": "amplifier plate inside the back, across",
+   "margin_mm": 9.0,
+   "least_mm": 2.0,
+   "ok": true
+  },
+  {
+   "check": "amplifier box above the bottom panel",
+   "margin_mm": 81.5,
+   "least_mm": 0.0,
+   "ok": true
+  },
+  {
+   "check": "port clear of the amplifier box's lid",
+   "margin_mm": 84.5,
+   "least_mm": 5.0,
+   "ok": true
+  },
+  {
+   "check": "amplifier box below the brace",
+   "margin_mm": 229.5,
+   "least_mm": 0.0,
+   "ok": true
+  }
+ ]
 }
