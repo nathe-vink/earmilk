@@ -168,5 +168,150 @@
   "set": 0.45,
   "passes": false,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "lights.pool.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    110,
+    128
+   ]
+  },
+  "proofs": [
+   [
+    0.2,
+    110.4
+   ],
+   [
+    0.45,
+    123.3
+   ],
+   [
+    0.3667,
+    118.6
+   ]
+  ],
+  "set": 0.3667,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c2",
+  "setting": "lights.axis.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    126,
+    140
+   ]
+  },
+  "proofs": [
+   [
+    0.03,
+    139.0
+   ],
+   [
+    0.15,
+    144.3
+   ],
+   [
+    0.05,
+    139.9
+   ]
+  ],
+  "set": 0.03,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c3",
+  "setting": "glints.2.power_w",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    70,
+    125
+   ]
+  },
+  "proofs": [
+   [
+    0.5,
+    46.4
+   ],
+   [
+    1.2,
+    49.9
+   ],
+   [
+    2.6,
+    63.9
+   ]
+  ],
+  "set": 2.6,
+  "passes": false,
+  "moves_the_test": true
+ },
+ {
+  "change": "c4",
+  "setting": "lights.kick.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    222,
+    236
+   ]
+  },
+  "proofs": [
+   [
+    1.5,
+    211.3
+   ],
+   [
+    2.0,
+    225.1
+   ],
+   [
+    2.1413,
+    228.3
+   ]
+  ],
+  "set": 2.1413,
+  "passes": true,
+  "moves_the_test": true
+ },
+ {
+  "change": "c5",
+  "setting": "lights.key.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    204,
+    218
+   ]
+  },
+  "proofs": [
+   [
+    3.6,
+    201.0
+   ],
+   [
+    4.1,
+    205.6
+   ],
+   [
+    4.687,
+    208.9
+   ]
+  ],
+  "set": 3.6,
+  "passes": false,
+  "moves_the_test": true
  }
 ]
