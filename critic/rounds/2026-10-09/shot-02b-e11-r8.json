@@ -1,0 +1,263 @@
+{
+ "stage1": {
+  "impression": "A strong idea, low warm sun raking a teal wainscot with the carton's own silhouette thrown on the wall beside it, undercut by a product lit flat: the white front is one dull pinkish-grey value with no gloss, its sunlit side is a sliver, the drivers read as dark holes and the wordmark is lost in the red plinth. The big flat salmon patch top-left competes with the product for the first read, so the frame reads as a good set with an under-lit hero.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The white front reads as lit white lacquer: front-baffle white at 180-190 with a reflected side-to-side gradient (x-falloff 7-12, now 0.7) over its ~20-level eave-to-plinth falloff. Today it is one flat 170.",
+  "The white is warm white, not pink: front white within dE2000 4.5 of #C9B9A9, i.e. Lab a* <= 4 at b* 8-12 (now a* 8.1, b* 6.5). This needs a tint control the card lacks.",
+  "The sunlit side stays the brightest plane after the lift: side-right at least 15 levels above the front's right edge at mid-height. Now 29-31; c1 brings it to ~17-21 because PBR Neutral compresses the side's red channel near 240.",
+  "The wordmark reads at web size: letters-front-* at least 30 levels off the plinth (now 6 below it: 30.5 on 36.8).",
+  "The product comes first in the value order: the upper-wall sun patch at or under 122 and at least 60 levels under the front white (now 127.5, only 42 under).",
+  "The drivers read as cones, not holes: woofer-cone crush <= 15% (now 39.6%), mid-cone <= 10% (now 22.6%).",
+  "The plinth red within dE2000 6 of #C62828 (now 10.4; the gable is 5.7)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The white front, the hero surface, sits at 169.9 (right strip 167.7; eave 178.4 falling to 158.4 above the plinth). That is 30-50 levels under the 200-220 the card gives for white lacquer, so the carton reads as pinkish-grey card next to a 127.5 sun patch.",
+   "evidence": {
+    "region": [
+     746,
+     350,
+     928,
+     700
+    ],
+    "measured": "front-baffle white pixels: lum_median 169.9, rgb (189,165,160), p5-p95 157.4-180.4, y-profile 178.4 -> 158.4 in 8 bins; side-right 199.7; upper-wall sun patch [310,10,690,155] 127.5; frame p50 32.8, 65.7% of pixels under 40"
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 1.8,
+    "to": 2.05
+   },
+   "expected": "White strip right of the drivers 167.7 -> ~183; eave band 178 -> ~194; side-right 200 -> ~209 (PBR Neutral compresses its red channel near 240, so the front/side step drops from 29-31 to ~17-21, and the front has to stop near 183 instead of the card's 200); carton shadow 17 -> ~21; wall patch 127.5 -> ~140 (c4 brings it back down); gable dE 5.7 -> ~3.2; plinth dE 10.4 -> ~7.9; frame p50 33 -> ~38; no clipping.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      895,
+      400,
+      928,
+      700
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     177,
+     188
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The lacquered front shows no reflection and does not turn: side to side it is one value (x-profile 168.9, 171.7, 170.7, 170.5, 169.9, 170.7, 169.7, 168.2). The front mirrors toward azimuth ~-48 deg, front-left and slightly down, onto dark teal wainscot. lights.facesheen sits at [1.47, -1.57, 0.42], 84 deg off the front's normal on the other side, where the front can never mirror it (diffuse false).",
+   "evidence": {
+    "region": [
+     746,
+     350,
+     928,
+     700
+    ],
+    "measured": "front-baffle white: x-falloff 0.7 (8 bins), y-falloff 20.0, p95 180.4; computed mirror rays from the white front (z 0.3-0.86) cross a plane 1 m out at x -1.04..-0.65, y -1.02..-0.61, z 0.08..0.82, clear of the floor"
+   },
+   "change": {
+    "setting": "lights.frontsheen",
+    "from": "(not set)",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.6,
+      0.85
+     ],
+     "position": [
+      -0.86,
+      -0.82,
+      0.47
+     ],
+     "target": [
+      -0.115,
+      -0.158,
+      0.6
+     ],
+     "strength": 0.35,
+     "color": 3400,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -1.05,
+       -0.7
+      ],
+      "values": [
+       1,
+       0
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "A soft warm reflection grades across the front, the left edge 7-12 levels above the right (left ~192-197, top-left <= 205, still under the ~209 side). The face reads as gloss and turns away from the sun-side corner. The right edge and the front/side step do not change, because that edge mirrors the ramp's zero end. The panel faces away from the camera's floor-mirror path, so the floor shows no glow.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      746,
+      350,
+      928,
+      700
+     ]
+    },
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     7,
+     12
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The cast-metal wordmark is illegible: the letters sit at 30.5 (rgb 59,24,9) on a 36.8 plinth, 6 levels darker. The camera is above them, so their faces mirror the dark floor just 0.10-0.24 m in front of the plinth (the mirror ray runs 17 deg below horizontal).",
+   "evidence": {
+    "region": [
+     793,
+     732,
+     875,
+     752
+    ],
+    "measured": "letters-front-* lum_median 30.5, range 9.0; plinth front either side [750,724,788,770] and [882,726,925,770] 36.8, rgb (153,4,16)"
+   },
+   "change": {
+    "setting": "lights.letterkick",
+    "from": "(not set)",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.45,
+      0.05
+     ],
+     "position": [
+      -0.173,
+      -0.201,
+      0.03
+     ],
+     "target": [
+      -0.123,
+      -0.157,
+      0.05
+     ],
+     "strength": 0.15,
+     "color": 3400,
+     "diffuse": false
+    }
+   },
+   "expected": "A reflector strip 7 cm in front of the plinth and 0.6-5.4 cm off the floor, right in the letters' mirror path. The bronze letters read at 70-125 against a ~41 plinth, at least 30 levels apart, and are legible at web size. The plinth's clear coat mirrors the strip at ~5% as a faint full-width band at letter height (no rectangle edges), which lifts the red's crushed G/B (4, 16) toward the spec's 40.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     70,
+     125
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "The sun patch on the upper wall is a flat salmon block, 380 x 165 px at 127.5 (p5-p95 121.8-129.5), cut off by the top edge. It is the second-brightest area in the frame and only 42 levels under the white front, so it pulls the eye to the top-left; c1 lifts it to ~140.",
+   "evidence": {
+    "region": [
+     310,
+     10,
+     690,
+     155
+    ],
+    "measured": "lum_median 127.5, range 7.7, rgb (161,121,96); front white 169.9; olive wainscot patch under the rail [310,200,400,290] 109.0"
+   },
+   "change": {
+    "setting": "set.wall.color",
+    "from": "#847B6F",
+    "to": "#6F685E"
+   },
+   "expected": "The plaster goes ~30% darker in linear, same hue. After c1 the patch sits at ~115, about 70 levels under the front white and level with the olive wainscot patch (~120), so the window light reads as one shape and is still plainly warm. The shaded upper wall drops to ~19, not crushed.",
+   "accept": {
+    "region": [
+     310,
+     10,
+     690,
+     155
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     108,
+     122
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "asset",
+   "problem": "The white reads pink, not warm white. Between the drivers the front (189,164,158) is Lab a* 8.1, b* 6.5 (hue 39 deg), the sun side (230,193,177) is a* 10.7, b* 13, and shaded plaster renders plum (31,26,33). The 2600 K sun and the red-brown floor bounce add red; the blue sky cancels their yellow but not their red. render.white_balance_k only moves along blue-amber (modelled at 4000 K the front becomes a* 9.1, b* 13.2, tan), and the fill's colour shifts a* by under 1, so nothing on the card removes it.",
+   "evidence": {
+    "region": [
+     895,
+     400,
+     928,
+     700
+    ],
+    "measured": "front-baffle white right of the drivers rgb (188,163,156), dE2000 8.74 vs warm white #C9B9A9 (Lab 76, 3, 10); modelled after c1 alone, still ~7.2"
+   },
+   "change": {
+    "setting": "render.white_balance_tint (not on the card)",
+    "from": "(not exposed)",
+    "to": {
+     "control": "render.white_balance_tint",
+     "axis": "green-magenta",
+     "toward": "green",
+     "neutral_shift_lab": {
+      "da": -5,
+      "db": 3
+     }
+    }
+   },
+   "expected": "The front reads warm cream, Lab ~(76, 3, 10) instead of (69, 8, 6.5); the sun side reads golden (a* <= 6) and gains ~4 levels of luminance through green; shaded plaster goes from plum to warm grey. The accent red moves under 1 dE, since PBR Neutral's toe holds its G/B near 0.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      895,
+      400,
+      928,
+      700
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C9B9A9",
+    "op": "<=",
+    "value": 4.5
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A lighter or polished finish, or larger letters, for the cast 'earmilk' wordmark",
+   "why": "The wordmark's typeface, size, tracking and metal are fixed marks. Yet it is the frame's only brand cue and sits 6 levels below its plinth (30.5 vs 36.8), so c3's reflector is the only in-scope fix."
+  },
+  {
+   "request": "A lighter cone or dust-cap finish on the woofer and mid",
+   "why": "The drivers' materials belong to the named products. The deep 12 in cone mirrors its own surround, so 39.6% of woofer-cone pixels (22.6% of the mid's) sit at or under 3 and read as holes whatever the light. The card's glint was skipped for exactly this reason: it mirrors side-right 0.07 m away."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
