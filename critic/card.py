@@ -132,6 +132,7 @@ def main():
         if rp.exists():
             rep = json.loads(rp.read_text())
             notes = [f'- glint `{g["glint"]}` was skipped: {g["skipped"]}.' for g in rep.get('glints', []) if g.get('skipped')]
+            notes += [f'- glint `{g["glint"]}`: {g["moved_in"]}.' for g in rep.get('glints', []) if g.get('moved_in')]
             notes += [f'- glint `{g["glint"]}` was moved {g["moved_mm"]} mm onto the {g["on"]}; the surface\'s own normal '
                       f'there is {g["normal_off_deg"]} degrees from the one given, so its lamp was placed from the surface\'s.'
                       for g in rep.get('glints', []) if not g.get('skipped') and g.get('normal_off_deg', 0) > 10]
@@ -164,7 +165,8 @@ def main():
             if notes:
                 L += ['## What the engine did and could not do in this render', '',
                       'A glint is placed from the surface the camera sees at its point: where that surface mirrors a part of '
-                      'the set or the product into the camera, no lamp can be there, so the glint is skipped.', ''] + notes + ['']
+                      'the set or the product into the camera, its lamp moves in front of that part (to 60 % of the gap, '
+                      'scaled to look the same); where the gap is under 5 cm no lamp can be there, and the glint is skipped.', ''] + notes + ['']
     text = '\n'.join(L) + '\n'
     if a.out:
         Path(a.out).write_text(text)

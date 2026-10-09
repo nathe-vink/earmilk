@@ -13,7 +13,7 @@ A glint is a small area lamp placed where a curved surface would mirror it into 
 diffuse share and invisible to the camera: a highlight on an edge or a rim exactly where it should be, lighting
 nothing else. `receivers` limits it to some parts (light linking).
 """
-import math
+import math, os
 
 from mathutils import Vector
 
@@ -385,8 +385,25 @@ def true_glint(bpy, spec, receivers, cam_pos, ray_m=0.05, snap_m=0.03, agree_deg
     dist = spec.get('distance_m', 0.6)
     hit, loc, _, hob = cast(P + N * 1e-3, R, dist, occluding=True)
     if hit:
-        note['skipped'] = (f'the surface there mirrors {hob.name} into the camera ({(loc - P).length:.2f} m away along '
-                           f'the mirror direction), so no lamp can sit there')
+        gap = (loc - P).length
+        # EARMILK_GLINT_MOVE_IN=1 while jobs started before 2026-10-09 21:00 finish with the old rule (their proofs
+        # must agree with each other); then the default
+        if gap >= 0.05 and os.environ.get('EARMILK_GLINT_MOVE_IN', '0') == '1':
+            # the lamp moves in, in front of what the surface mirrors, to 60 % of the gap: as seen from the point it is
+            # the same lamp (its size scaled with its distance, its power with the square, so its radiance holds), and
+            # linked to its receivers it lights nothing else (01's round 7: the cone's inner half mirrors its own
+            # surround 0.19 m off, and a lamp 0.6 m out was skipped)
+            d2 = 0.6 * gap; f = d2 / dist
+            sz = spec.get('size_m', 0.05)
+            spec['distance_m'] = d2
+            spec['size_m'] = [v * f for v in sz] if isinstance(sz, (list, tuple)) else sz * f
+            if 'power_w' in spec:
+                spec['power_w'] = spec['power_w'] * f * f
+            note['moved_in'] = (f'the lamp moved in to {d2:.2f} m, in front of {hob.name} ({gap:.2f} m along the mirror '
+                                f'direction), its size and power scaled to look the same from the point')
+        else:
+            note['skipped'] = (f'the surface there mirrors {hob.name} into the camera ({gap:.2f} m away along '
+                               f'the mirror direction), so no lamp can sit there')
     return spec, note
 
 
