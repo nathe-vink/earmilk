@@ -85,5 +85,34 @@
   "set": 4.3933,
   "passes": true,
   "moves_the_test": true
+ },
+ {
+  "change": "c1",
+  "setting": "sun.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    222,
+    234
+   ]
+  },
+  "proofs": [
+   [
+    0.5,
+    232.1
+   ],
+   [
+    0.7,
+    235.8
+   ],
+   [
+    0.2784,
+    223.0
+   ]
+  ],
+  "set": 0.5,
+  "passes": true,
+  "moves_the_test": true
  }
 ]
