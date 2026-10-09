@@ -609,5 +609,41 @@
   ],
   "reply": "critic/rounds/2026-10-09/shot-04b-e11-r10.json",
   "shot_sha": "47a0256eeaf71becea01a443b3116cca07834351"
+ },
+ {
+  "change": "c4",
+  "setting": "lights.kicker.irradiance",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    210,
+    248
+   ]
+  },
+  "proofs": [
+   [
+    1.4,
+    191.7
+   ],
+   [
+    2.8,
+    192.6
+   ],
+   [
+    5.6,
+    193.6
+   ]
+  ],
+  "set": 5.6,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c3"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-04b-e11-r10.json",
+  "shot_sha": "6b335fd9fabd3ebd247c3c7260679d0e78252b06"
  }
 ]
