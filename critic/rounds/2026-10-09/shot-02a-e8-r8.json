@@ -1,0 +1,302 @@
+{
+ "stage1": {
+  "impression": "Clean, noise-free lifestyle render: the milk-carton concept reads instantly and the red accent is strong. But the product sits small, its white body merges with the near-white wall, and the sun patch and carton shadow on the wall have no matching sun on the floor or contact shadow, so the light reads as a projected effect.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Front baffle white sits at 205-224 with a top-to-bottom gradient of at least 10 levels, and only the glint goes above 226 (now the upper 60% reads 228-243; top band 395,332,515,360 median 240.9).",
+  "The sun shows on the floor: the speaker's floor shadow runs from the plinth to the carton shadow at the skirting, with a crisp step of at least 13 levels against the sunlit floor, and the edges of the beam read on the floor (now a soft 9-level step along the plank at 705-815 x 651-657; floor inside the beam 121.6, outside 127.8).",
+  "The wall sun patch glows: at least 228 and at least 35 levels above the shaded wall next to it (now 216.3 vs 185.1).",
+  "The shaded side reads as white in shade: 164-180 and within dE 4 of neutral (now 150.6, rgb 154/150/147, dE 25.9 vs #FFFFFF).",
+  "Whites stay neutral as the sun gets stronger: the lower front stays within dE 3 of a neutral at its own level (now 2.03 vs #CFCFCF), and the side does not drift blue.",
+  "The plinth meets the floor with a crisp contact line on its shaded side, not only a soft darkening of 15-20 levels spread over 30-60 px (floor right of the back corner, 612-700 x 668-690: 98.8 rising to 118.0).",
+  "The back wall falls off away from the windows: the upper wall is at least 8 levels brighter at the left than at the right (now flat, 195.7-200.6, and rising to the right).",
+  "The red roof shows a graduated lacquer sheen: p95 at least 88 on the front slope above the waveguide (now 67.9, median 54.0)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The upper 60% of the white front sits in the PBR Neutral shoulder, so the hero face prints as one flat paper-white and its lacquer gradient cannot show.",
+   "evidence": {
+    "region": [
+     503,
+     332,
+     516,
+     636
+    ],
+    "measured": "profile y 234.8, 233.6, 231.6, 227.6, 221.6, 213.8, 208.5, 206.6: the 28-level falloff is all in the lower half. Top band 395,332,515,360: median 240.9, p95 243.0. Between drivers 395,442,515,486: 232.9. Lowest white 392,629,517,636: 208.7. The base is already right; the panel's reflection adds about +33 at the top."
+   },
+   "change": {
+    "setting": "lights.lacquer_ramp.strength",
+    "from": 12,
+    "to": 3.5
+   },
+   "expected": "Top band drops from 240.9 to about 220; between-driver band from 232.9 to about 214; lowest white stays about 207. The strip profile runs about 222 to 206, a falloff of 14-18 levels entirely below 226, so the gradient prints and the glints.2 highlight at the upper left is the only white above 226.",
+   "accept": {
+    "region": [
+     395,
+     332,
+     515,
+     360
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     212,
+     226
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The sun lands on the wall as a crisp patch, with the speaker's carton shadow running down to the skirting, but the same beam barely shows on the floor, so the shadow floats free of the speaker and the sun reads as a projected gobo.",
+   "evidence": {
+    "region": [
+     705,
+     651,
+     815,
+     657
+    ],
+    "measured": "Along one plank across the speaker's floor-shadow edge (projected from the card's camera and the sun at azimuth -25, elevation 15; the same projection puts the wall shadow at x 735.6-904.0, matching the render), profile x is 103.0, 103.9, 107.9, 110.2, 111.1, 111.1, 111.1, 112.1: falloff -9.1, soft (edge width 54 px). Floor inside the beam 800,690,900,740 reads 121.6; outside it, 1150,720,1340,800 reads 127.8. On the wall, patch 950,380,1120,520 is 216.3, shaded wall 1180,380,1340,520 is 185.1, carton shadow 760,400,880,560 is 160.2, and the shadow spans x 735-904 to the skirting."
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 2.2149,
+    "to": 4.4
+   },
+   "expected": "The speaker's floor shadow appears as a crisp streak from the plinth's back-right corner to the carton shadow at the skirting. The plank step grows from -9.1 to about -16, the sunlit floor in the beam rises about 10 levels, and the beam's edges cross the floor (right edge from about 1152,634 to 494,859). On its own this also lifts the front's base by 15-20 levels, which c3 takes back.",
+   "accept": {
+    "region": [
+     705,
+     651,
+     815,
+     657
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -30,
+     -13
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The sky at 11.5 is the room's dominant light: it floods the floor so the beam cannot show there, and it gives the front most of its light, so the sun cannot rise (c2) without pushing the front back into the shoulder.",
+   "evidence": {
+    "region": [
+     503,
+     560,
+     514,
+     628
+    ],
+    "measured": "Lower front white 207.7 (rgb 211/207/205). Where the sun lands on the wall it adds only 31 levels (216.3 vs 185.1), so most of the front's 207.7 is sky. The floor reads the same inside and outside the beam: 121.6 vs 127.8, and 109.7 (150,760,350,860) vs 112.3 (1100,820,1340,895)."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 11.5,
+    "to": 5.5
+   },
+   "expected": "Lower front white holds at about 206 under the stronger sun. Floor shade in the speaker's shadow band (640-715 x 625-655, now about 104) drops to about 92, which deepens the c2 step. The walls and the side lose about 10-15 levels; c4 and c5 restore them.",
+   "accept": {
+    "region": [
+     503,
+     560,
+     514,
+     628
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     200,
+     212
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The shaded side of a white lacquer body reads as a mid-gray panel, not white in shade.",
+   "evidence": {
+    "region": [
+     525,
+     340,
+     605,
+     630
+    ],
+    "measured": "median 150.6 (p5 141.8, p95 157.5), rgb 154/150/147, dE 25.9 vs #FFFFFF; 79 levels below the front-baffle median of 229.6."
+   },
+   "change": {
+    "setting": "lights.fill_right.irradiance",
+    "from": 1,
+    "to": 2.4
+   },
+   "expected": "Side rises from 150.6 to about 172 and stays about 40 levels below the front's body, so the box keeps its form while the side reads as white in shade.",
+   "accept": {
+    "region": [
+     525,
+     340,
+     605,
+     630
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     164,
+     180
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "c3 takes sky off the walls, and without more wash the bright, airy room goes gray.",
+   "evidence": {
+    "region": [
+     620,
+     30,
+     1340,
+     200
+    ],
+    "measured": "Upper wall median 198.8 (p5 196.6, p95 201.5); profile x across the wall 195.7-200.6. The card's own proof renders show how much of it is wash: strength 1 gave 179.4, 2 gave 198.9."
+   },
+   "change": {
+    "setting": "lights.wall_wash.strength",
+    "from": 2,
+    "to": 2.9
+   },
+   "expected": "Upper wall returns to about 196 after c3. With c2, the wall patch 950,380,1120,520 ends at about 230-238 over a carton shadow 760,400,880,560 of about 150-160, a strong graphic step that reads as sun.",
+   "accept": {
+    "region": [
+     620,
+     30,
+     1340,
+     200
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     190,
+     202
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The sun is the warm light in the set, and once it carries most of the front's light (c2, c3) it will tint the white body cream.",
+   "evidence": {
+    "region": [
+     503,
+     560,
+     514,
+     628
+    ],
+    "measured": "Lower front white is rgb 211/207/205, dE 2.03 vs #CFCFCF. The sunlit wall patch 950,380,1120,520 is 224/215/206 (R-B 18) against the shaded wall's 186/185/184. An earlier proof on the card saw a delta_e test go from 4.07 to 7.15 as the sun went from 2.4 to 3.4."
+   },
+   "change": {
+    "setting": "sun.color",
+    "from": "#FFEBCE",
+    "to": "#FFF1E0"
+   },
+   "expected": "Lower front white stays within dE 3 of #CFCFCF as the sun's share roughly doubles. The plinth's blue channel no longer falls below green. The wall patch keeps a warm morning cast (R-B about 12 instead of 18).",
+   "accept": {
+    "region": [
+     503,
+     560,
+     514,
+     628
+    ],
+    "metric": "delta_e",
+    "hex": "#CFCFCF",
+    "op": "<=",
+    "value": 3.0
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The right fill is strongly cyan, and once it becomes the side's main light (c3, c4) the white side will turn blue.",
+   "evidence": {
+    "region": [
+     525,
+     340,
+     605,
+     630
+    ],
+    "measured": "Side rgb 154/150/147, kept slightly warm today by the floor bounce while the fill is a minority of its light; dE 6.91 vs #ACACAC (mostly luminance). The fill colour #D6F0FF has B 41 above R."
+   },
+   "change": {
+    "setting": "lights.fill_right.color",
+    "from": "#D6F0FF",
+    "to": "#EAF4FF"
+   },
+   "expected": "Side at about 172 with R, G and B within about 5 of each other, within dE 4 of #ACACAC, a cool-neutral white in shade rather than a blue cast.",
+   "accept": {
+    "region": [
+     525,
+     340,
+     605,
+     630
+    ],
+    "metric": "delta_e",
+    "hex": "#ACACAC",
+    "op": "<=",
+    "value": 4.0
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The red roof's front slope reads matte, with no visible sheen on a lacquered surface.",
+   "evidence": {
+    "region": [
+     440,
+     256,
+     515,
+     272
+    ],
+    "measured": "Front slope above the waveguide: median 54.0, p95 67.9, range 19.7, rgb 165/23/22; gable-block part p95 75.0."
+   },
+   "change": {
+    "setting": "lights.gable_sheen.strength",
+    "from": 1.7117,
+    "to": 3.8
+   },
+   "expected": "A soft graduated sheen appears across the upper front slope: p95 rises from 67.9 to about 100 while the median stays about 55-65, so the lacquer reads without bleaching the red.",
+   "accept": {
+    "region": [
+     440,
+     256,
+     515,
+     272
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     88,
+     120
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Lift the sunlit reds (plinth front 169/21/13, fin 168/23/22, roof slope 165/23/22; dE 7.1-8.4 vs #C62828) to the spec red.",
+   "why": "The reds take the same sun as the white front. At the light that holds the white at 205-220, where it can model (lower front 207.7, about 0.64 of full value), #C62828 renders at R about 162-169. Lighting the reds to spec would put the white front back at 235+ in the shoulder. The colour is fixed, and nothing on the card lights the red parts on their own, so the deeper red is the price of a white that models."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
