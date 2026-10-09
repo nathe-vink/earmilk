@@ -15,7 +15,7 @@ basket), <role>-surround, <role>-cone, <role>-cap, <role>-motor. Units mm, the C
 """
 import math
 
-from build123d import Axis, Plane, Polyline, Pos, Rot, Solid, Spline, Location, make_face, revolve, Wire, Edge, Face, Vector
+from build123d import Axis, Plane, Polyline, Pos, Rot, Solid, Spline, Location, extrude, make_face, revolve, Wire, Edge, Face, Vector
 
 # Datasheet numbers (fab/drivers.json, fab/research/) and proportions for what datasheets omit.
 DRIVERS = {
@@ -64,9 +64,24 @@ def cone_driver(spec, detail=24):
     # frame: the flange (front ring) and a basket cone down to the motor
     fo, ft = spec['frame_od'] / 2, spec['flange_t']
     fi = r_sur + 1.0
-    out['frame'] = _revolve_profile([(fi, 0), (fo, 0), (fo, ft), (fi + 6, ft), (spec['magnet_d'] / 2 + 6, spec['depth'] - spec['magnet_h'] - 4),
-                                     (spec['magnet_d'] / 2 - 4, spec['depth'] - spec['magnet_h'] - 4), (spec['magnet_d'] / 2 - 4, spec['depth'] - spec['magnet_h'] - 7),
-                                     (spec['magnet_d'] / 2 + 3, spec['depth'] - spec['magnet_h'] - 7), (fi + 3, ft + 3), (fi, ft + 3)])
+    frame = _revolve_profile([(fi, 0), (fo, 0), (fo, ft), (fi + 6, ft), (spec['magnet_d'] / 2 + 6, spec['depth'] - spec['magnet_h'] - 4),
+                              (spec['magnet_d'] / 2 - 4, spec['depth'] - spec['magnet_h'] - 4), (spec['magnet_d'] / 2 - 4, spec['depth'] - spec['magnet_h'] - 7),
+                              (spec['magnet_d'] / 2 + 3, spec['depth'] - spec['magnet_h'] - 7), (fi + 3, ft + 3), (fi, ft + 3)])
+    # a cast basket is spokes and windows, not a solid cone: the wall between the flange's ring and the motor's seat is
+    # cut into windows between `spokes` (PROPORTIONED: six, each about 5 % of the frame's diameter wide)
+    n = spec.get('spokes', 6)
+    if n and detail > 6:
+        a0, a1 = ft + 8.0, spec['depth'] - spec['magnet_h'] - 12.0
+        r_mid = (fi + spec['magnet_d'] / 2) / 2
+        half = math.pi / n - max(10.0, 0.05 * spec['frame_od']) / r_mid / 2
+        R = fo + 10.0
+        if a1 > a0 + 5 and half > 0.05:
+            for i in range(n):
+                th = 2 * math.pi * (i + 0.5) / n
+                pts = [(0.0, 0.0)] + [(R * math.cos(th - half + 2 * half * k / 8), R * math.sin(th - half + 2 * half * k / 8)) for k in range(9)]
+                wedge = Pos(0, 0, -a1) * extrude(make_face(Polyline(*pts, close=True)), amount=a1 - a0)
+                frame = frame - wedge
+    out['frame'] = frame
     # surround: a half roll, outer edge glued to the flange's front at r_sur, inner edge to the cone at r_cone
     c = ((r_cone + r_sur) / 2, 0.0); rr = sw / 2
     nd = detail

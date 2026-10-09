@@ -1,0 +1,347 @@
+{
+ "stage1": {
+  "impression": "A white-and-red milk-carton speaker with its drivers, trim rings and red waveguide exploded to the right. The light is soft, flat and low in contrast against a muddy mid-grey sweep, so the white body reads pale and the black drivers read as silhouettes with little form. The carton sits low, with its base almost on the bottom edge and a large empty band above, and the floating parts hug the cabinet without a clear rhythm back to their openings: a competent technical draft, not a hero image.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The pocket's boss bore and magnets are legible. magnets-pocket is 13 px now (box [592, 281, 595, 287]). The front must be seen about 40-45 deg off-axis instead of about 61 deg (the front baffle is 96 px wide against 157 px for the blank side), with the explode distances scaled up so the parts stay apart.",
+  "Every exploded part clears the cabinet and its neighbours by at least 45 px. Now the woofer motor is 17 px, the mid motor 18 px and the tweeter 21 px from the cabinet edge at x 705, and the mid ring is 26 px from the mid.",
+  "The margins balance: at least 110 px under the base, with top and bottom margins within 20% of each other (now 70 px bottom and 186 px top).",
+  "The black drivers show form: woofer cone/surround/frame p95 at least 110 while the cone's median stays at 50 or below (now p95 67.6, range 39.5).",
+  "The near corner (x about 617) separates the two white faces by at least 20 levels. Now it steps only 7-13 (side 221-242, baffle 213-232), because the key's edge spills onto the baffle, which then falls from 239 to 199 across its width.",
+  "The accent reads true on lit lacquer: the roof's front slope within dE2000 6 of #C62828 (now 15.0: RGB 239/87/91, a uniform veil with luminance range 16 at [545, 280, 585, 320]) and the insert's face within 6 (now 10.8). Gloss should read as a graduated reflection, not a pink film.",
+  "The white and grey are neutral: the body's a* and b* within +/-1 on both faces (now a* +1.9 on the side and +1.7 on the baffle), and no blue cast on the insert's grey (b* now -4.5).",
+  "The sweep reads as a deliberate, smooth gradient: no darker band across the middle (now 123-135 at y 375-450 against 145-156 above and below) and no more than 10 levels from left to right (now 122 beside the cabinet against 139-154 on the right).",
+  "The base has a crisp contact line on its lit sides. The floor within 4 px of the plinth reads 138-148, only about 20 levels under the open floor (163-166).",
+  "The wordmark is legible at full size (now 7-px letters at about 61 deg off-axis, luminance 78-86 on red at 63)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The black drivers read as matte toy silhouettes, because the reflection-only drivers panel is too weak to put any highlight on the cones, surrounds or frames.",
+   "evidence": {
+    "region": [
+     750,
+     556,
+     838,
+     745
+    ],
+    "measured": "Woofer cone, surround and frame: p5 28.2, median 42.7, p95 67.6 (range 39.5). Mid cone, surround and frame: p95 75.8. The mid's papyrus cone is uniform at 33.5 (range 12.1). The last tuning of this panel was tested on a median (strength 1 gave 40.6, 2 gave 41.6), and a highlight never moves a median. Geometry check: the half-vector between camera and panel lands on each surround's upper camera-side slope and on the woofer cone's far inner wall."
+   },
+   "change": {
+    "setting": "lights.drivers.strength",
+    "from": 1,
+    "to": 8
+   },
+   "expected": "A crescent highlight along the upper camera-side quarter of each surround and a soft sheen on the woofer cone's far inner wall. The woofer's p95 rises from 67.6 to about 115-140, the woofer cone's median stays at 50 or below (now 35.4), and the mid's p95 reaches 100 or more. The trim rings' highlights brighten; nothing diffuse changes.",
+   "accept": {
+    "region": "part:woofer-cone|woofer-surround|woofer-frame",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     100,
+     160
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "camera",
+   "problem": "The frame is bottom-heavy: the plinth's near corner sits 70 px from the bottom edge, while 186 px of empty sweep sits above the fin.",
+   "evidence": {
+    "region": [
+     500,
+     750,
+     640,
+     800
+    ],
+    "measured": "The cabinet's lowest pixel is at y 830 and the fin's top at y 186. Rows 0-150 are all sweep (median 144.6). Region [500, 750, 640, 800] is plinth (lum_mean 76.1). Simulating a 64 px upward shift gives 153.5 in that region, 49 px gives 132 and 75 px gives 163."
+   },
+   "change": {
+    "setting": "camera.target",
+    "from": [
+     0.2,
+     0,
+     0.6
+    ],
+    "to": [
+     0.2,
+     0,
+     0.47
+    ]
+   },
+   "expected": "With camera.level on, this is a pure lens-shift move of about 64 px up. The fin's top goes from 186 to about 122 and the plinth's corner from 830 to about 766, so the margins are about 122 top and 134 bottom. Region [500, 750, 640, 800] becomes floor with a sliver of plinth (lum_mean about 150). The regions for c3-c8 span their parts' rows before and after this shift.",
+   "accept": {
+    "region": [
+     500,
+     750,
+     640,
+     800
+    ],
+    "metric": "lum_mean",
+    "op": "between",
+    "value": [
+     132,
+     160
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "composition",
+   "problem": "The woofer's trim ring hangs only 27 px in front of the woofer's flange, so the woofer has no room to come clear of the cabinet.",
+   "evidence": {
+    "region": [
+     895,
+     600,
+     935,
+     760
+    ],
+    "measured": "The woofer-surround box ends at x 838 and the woofer-ring box starts at x 865. The region holds the ring's right arc (667 ring px, p5 42.6). The explode mapping was fitted to this camera: explode.4 at 0.49 puts the ring's centre at x 896 (measured 894.5)."
+   },
+   "change": {
+    "setting": "product.explode.4.offset_m",
+    "from": [
+     0,
+     -0.49,
+     0
+    ],
+    "to": [
+     0,
+     -0.64,
+     0
+    ]
+   },
+   "expected": "The ring's centre moves from x about 895 to about 974 (box about [944, 602, 1004, 796] before c2). That leaves about 56 px between the ring and the woofer once c4 moves it. The region becomes sweep only (p5 about 140).",
+   "accept": {
+    "region": [
+     895,
+     600,
+     935,
+     760
+    ],
+    "metric": "lum_p5",
+    "op": ">=",
+    "value": 100
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "composition",
+   "problem": "The woofer's motor nearly touches the cabinet, with only 17 px of sweep between them, a tangent that reads as still attached.",
+   "evidence": {
+    "region": [
+     710,
+     534,
+     752,
+     697
+    ],
+    "measured": "Row y 630: the front baffle ends at x 705 and the woofer motor starts at x 722. The region is 2413 of 6846 px motor, p5 28.3. Sweep-only p5 in this region, with and without c2's shift, is 119-120."
+   },
+   "change": {
+    "setting": "product.explode.5.offset_m",
+    "from": [
+     0,
+     -0.31,
+     0
+    ],
+    "to": [
+     0,
+     -0.41,
+     0
+    ]
+   },
+   "expected": "The motor's left edge moves to x about 767, about 62 px clear of the cabinet edge at x 705. The flange's right edge moves to about 888, about 56 px short of the moved ring. The region becomes sweep only (p5 about 119).",
+   "accept": {
+    "region": [
+     710,
+     534,
+     752,
+     697
+    ],
+    "metric": "lum_p5",
+    "op": ">=",
+    "value": 100
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "composition",
+   "problem": "The tweeter sits 21 px off the roof's eave corner and 110 px from the insert, so it reads as still in the pocket's mouth rather than between the pocket and the insert.",
+   "evidence": {
+    "region": [
+     712,
+     238,
+     780,
+     344
+    ],
+    "measured": "Row y 315: the front baffle ends at x 705 and the tweeter spans x 726-755. The insert starts at x 865. The region holds 993 tweeter px, p5 54.5. Sweep-only p5 here is 134-138."
+   },
+   "change": {
+    "setting": "product.explode.1.offset_m",
+    "from": [
+     0,
+     -0.36,
+     0
+    ],
+    "to": [
+     0,
+     -0.5,
+     0
+    ]
+   },
+   "expected": "The tweeter's box moves to about [792, 302, 822, 344] before c2. It is then about 87 px clear of the cabinet and about 100 px short of the moved insert, so it reads as clearly between them. The region becomes sweep only (p5 about 135).",
+   "accept": {
+    "region": [
+     712,
+     238,
+     780,
+     344
+    ],
+    "metric": "lum_p5",
+    "op": ">=",
+    "value": 110
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "composition",
+   "problem": "The insert's lower-left corner sits at (865, 420), exactly where the mid trim ring has to go, so the mid chain cannot open up without the ring touching the insert.",
+   "evidence": {
+    "region": [
+     870,
+     335,
+     915,
+     395
+    ],
+    "measured": "The region is 2441 of 2700 px insert body (median 171.7, p95 178.9). The sweep-only p95 there would be 138-144."
+   },
+   "change": {
+    "setting": "product.explode.0.offset_m",
+    "from": [
+     0,
+     -0.68,
+     0
+    ],
+    "to": [
+     0,
+     -0.8,
+     0
+    ]
+   },
+   "expected": "The insert's box moves to about [920, 332, 1076, 461] before c2, leaving about 274 px of right margin. Its corner clears the moved mid ring by about 30 px. The region becomes sweep (p95 about 138-144). The mid ring's dark top arc enters it after c2 but cannot raise the p95.",
+   "accept": {
+    "region": [
+     870,
+     335,
+     915,
+     395
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     120,
+     152
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "composition",
+   "problem": "The mid's trim ring hangs 26 px in front of the mid, leaving no room to pull the mid clear of the cabinet.",
+   "evidence": {
+    "region": [
+     828,
+     363,
+     862,
+     505
+    ],
+    "measured": "Row y 440: the mid frame ends at x 784 and the mid ring starts at x 810. The region holds the ring's right arc (p5 55.2). The sweep-only p5 is 135-136 with or without c2."
+   },
+   "change": {
+    "setting": "product.explode.2.offset_m",
+    "from": [
+     0,
+     -0.34,
+     0
+    ],
+    "to": [
+     0,
+     -0.47,
+     0
+    ]
+   },
+   "expected": "The ring's box moves to about [869, 429, 904, 525] before c2, about 46 px in front of the moved mid and about 56 px above the woofer's flange. The region becomes sweep only (p5 about 135).",
+   "accept": {
+    "region": [
+     828,
+     363,
+     862,
+     505
+    ],
+    "metric": "lum_p5",
+    "op": ">=",
+    "value": 100
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "composition",
+   "problem": "The mid's motor nearly touches the cabinet, with only 18 px of sweep between them.",
+   "evidence": {
+    "region": [
+     710,
+     357,
+     750,
+     478
+    ],
+    "measured": "Row y 440: the front baffle ends at x 705 and the mid motor starts at x 723. The region holds 1391 mid motor and frame px, p5 45.3. The sweep-only p5 is 134-135 with or without c2."
+   },
+   "change": {
+    "setting": "product.explode.3.offset_m",
+    "from": [
+     0,
+     -0.23,
+     0
+    ],
+    "to": [
+     0,
+     -0.31,
+     0
+    ]
+   },
+   "expected": "The motor's left edge moves to x about 761, about 56 px clear of the cabinet. The flange's right edge moves to about 823, about 46 px short of its ring. The motor-to-cabinet gaps then match across the tweeter, mid and woofer (56-87 px). The region becomes sweep only (p5 about 134).",
+   "accept": {
+    "region": [
+     710,
+     357,
+     750,
+     478
+    ],
+    "metric": "lum_p5",
+    "op": ">=",
+    "value": 100
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Model the woofer's and the mid's cast baskets with their windows and spokes.",
+   "why": "Both frames render as unbroken black cones (woofer-frame 4193 px, p5-p95 34.8-67.7, no openings). The RSS315HF-4 and MR16P are open cast-basket drivers, so at spread size these read as toys and undercut an engineering illustration. The drivers' geometry belongs to the real products and is fixed."
+  },
+  {
+   "request": "Confirm the waveguide insert's body colour.",
+   "why": "The card gives the insert the flavour's accent (Matcha's insert is racing green), yet only its face renders red. Its body renders a cool light grey (RGB 165/168/179, b* -4.5) and reads as unpainted primer beside the lacquered cabinet. The material is fixed: light can remove the blue cast but cannot change the colour, and if this is a material-assignment error the asset needs fixing."
+  }
+ ],
+ "score_if_fixed": 6.4
+}
