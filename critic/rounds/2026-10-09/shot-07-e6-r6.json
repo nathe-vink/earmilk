@@ -1,0 +1,294 @@
+{
+ "stage1": {
+  "impression": "The exploded view reads, but the light is flat: the white cabinet renders as dull light grey with its two visible faces barely separated, on a drab warm mid-grey sweep. The parts float on loosely implied axes with the red/grey insert stranded at upper right, so it is a competent draft rather than a homepage image.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The front baffle reads as the lit face: its white beside the corner is >= 224 ([474,300,482,660], now 209) and the step across the side/front corner is >= 30 levels (now 8.3 at y 420-440).",
+  "The side-left reads as the shade face: [300,330,440,650] <= 196 (now 200), and the frame's brightest large white is on the front, not the side's top-left band ([290,275,455,400] now 221 vs the front's 209).",
+  "The front baffle's lower right is not muddied by the woofer's shadow: [552,560,566,620] >= 190 (now 142; the face's x-profile falls 209 -> 154 -> 167).",
+  "The waveguide insert's grey body stands >= 35 levels off the floor behind it (now 151 vs 142; the step across its lower edge is 6.4).",
+  "The driver motors show form: magnet p95 >= 50 with the body still black (now p95 28, 14% of magnet pixels at <= 3).",
+  "The accent red holds together: the lit roof slope is within dE 8 of #C62828 (now 227,77,81, dE 11.4) and the plinth side is not a near-black crimson (now 142,13,14, lum 41, dE 12.4).",
+  "The pocket's boss bore is legible (now ~2 px; magnets-pocket 33 px).",
+  "The waveguide bowl reads as a concave mouth (its streaky highlight now reads convex), on a neutral sweep (now dE 2.8 off neutral)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The front baffle, the face that carries the holes, rebates and explode axis, is no brighter than the plain side, so the cabinet reads as a grey card with no lit face and the white never reads white.",
+   "evidence": {
+    "region": [
+     474,
+     300,
+     482,
+     660
+    ],
+    "measured": "front white beside the corner lum_median 209.0 (216 -> 204 top to bottom); the front face as a whole {part front-baffle, box [474,300,572,660]} 183.6 with x-profile 209, 208, 200, 166, 154, 167 (the woofer and mid shadow its right half: [552,560,566,620] 141.7, [548,330,570,380] 167.6); side-left [300,330,440,650] 200.0; step across the corner [440,420,490,440] only 8.3; image p99 222.2"
+   },
+   "change": {
+    "setting": "lights.drivers.diffuse",
+    "from": false,
+    "to": 0.15
+   },
+   "expected": "The drivers panel sits almost on the explode axis (az ~66 deg from the baffle against the axis's 72) and just behind the side-left's plane (n.p = 0.17 < 0.195), so its diffuse share lights the front only and throws the drivers' shadows mostly into their own holes, the woofer's onto the plinth from the panel's bright top. Front strip 209 -> ~230 (top ~236 under its ramp), front-face median 184 -> ~207, right of the mid [548,330,570,380] 168 -> ~188, lower right 142 -> ~170; side-left, floor and roof slope move <= 3 levels (roof R +<= 6); rebates and the birch inside the holes lift ~15%.",
+   "accept": {
+    "region": [
+     474,
+     300,
+     482,
+     660
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     224,
+     238
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The side-left holds the frame's brightest large white in its upper band and sits at 200 mid-face, so the eye goes to the cabinet's emptiest surface and the two faces merge across the corner.",
+   "evidence": {
+    "region": [
+     300,
+     330,
+     440,
+     650
+    ],
+    "measured": "side-left white lum_median 200.0 (p5 184.6, p95 221.2); upper band [290,275,455,400] 221.1; y-profile of [290,300,455,685] 226, 216, 210, 203, 196, 191, 187, 183; the key lights this face and the gable triangle but, sitting behind the front plane, cannot reach the baffle or the exploded parts"
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 3.2,
+    "to": 2.5
+   },
+   "expected": "Side-left mid-face 200 -> ~190, upper band 221 -> ~208, the top-to-bottom falloff kept at ~25 levels; with c1 the corner step at y 420-440 goes from 8 to >= 35 and the brightest white moves to the front; the gable triangle darkens from (193,43,43) to ~(180,38,38); the key's floor pool at the bottom left [0,750,200,900] 154 -> ~149.",
+   "accept": {
+    "region": [
+     300,
+     330,
+     440,
+     650
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     184,
+     196
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The waveguide insert's grey body, a must-show part, is the same value as the floor behind it, so its silhouette dissolves and only the red bowl reads.",
+   "evidence": {
+    "region": [
+     905,
+     262,
+     950,
+     360
+    ],
+    "measured": "{part waveguide-insert, box [905,262,950,360]} lum_median 151.4, rgb (146,152,162); floor beside it [850,270,895,360] 142.1 and below it [930,410,1060,450] 141.8; largest step across its lower edge [925,350,940,395] (axis y) 6.4"
+   },
+   "change": {
+    "setting": "lights.insert_kick",
+    "from": "absent",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.4,
+      0.4
+     ],
+     "position": [
+      0.825,
+      -0.971,
+      1.129
+     ],
+     "target": [
+      1.0,
+      -0.32,
+      0.94
+     ],
+     "irradiance": 0.8,
+     "color": 5600
+    }
+   },
+   "expected": "A small low lamp 0.7 m camera-side of the insert lights its camera-facing side at cos ~0.96 and its upward bowl at only ~0.25 of that: insert body 151 -> ~188, >= 40 levels over the floor, lower-edge step 6 -> >= 30; tweeter-frame 48 -> ~58; spill: front strip +<= 5, side-left +<= 1, roof slope R +<= 4, red bowl R 200 -> <= 212; its beam reaches the floor only far behind the set (no visible pool).",
+   "accept": {
+    "region": {
+     "part": "waveguide-insert",
+     "box": [
+      905,
+      262,
+      950,
+      360
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     178,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The lit roof slope is over-lit to a coral while the gable triangle beside it is on the swatch, so the accent reads as two different reds.",
+   "evidence": {
+    "region": [
+     405,
+     198,
+     450,
+     230
+    ],
+    "measured": "{part gable-block, box [405,198,450,230]} rgb (227,77,81), lum 109.2, dE2000 11.37 vs #C62828; gable triangle {part gable-block, box [290,215,360,262]} (193,43,43), dE 1.13; the slope faces the top lamp at cos ~0.85 (about 40% of its light) while the white faces meet it at cos ~0.06"
+   },
+   "change": {
+    "setting": "lights.top.irradiance",
+    "from": 1.3,
+    "to": 0.7
+   },
+   "expected": "Slope R 227 -> ~212, G ~70 (still inside the earlier gloss window of 64-88), dE 11.4 -> ~8.5, still lighter than the triangle so the roof keeps its form; pocket birch floor (part:top-panel) 203 -> ~190; vertical white faces move <= 2 levels; floor round the group -3 to -6.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      405,
+      198,
+      450,
+      230
+     ]
+    },
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     202,
+     222
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The woofer and mid motors are black holes with no edge or sheen, so the drivers' structure, the subject of a build page, does not read.",
+   "evidence": {
+    "region": [
+     639,
+     344,
+     701,
+     658
+    ],
+    "measured": "part:woofer-magnet|mid-magnet median 12.6, p95 28.1, 14.07% of pixels at <= 3; woofer-magnet y-profile 19.6 -> 5.8; their visible flanks face the camera side (az ~-18), which the key cannot reach past the cabinet and the fill meets at ~68 deg"
+   },
+   "change": {
+    "setting": "lights.motor_strip",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.0,
+      0.4
+     ],
+     "position": [
+      -0.14,
+      -0.75,
+      1.3
+     ],
+     "target": [
+      0.44,
+      -0.14,
+      0.52
+     ],
+     "strength": 3.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       1.2,
+       1.4
+      ],
+      "values": [
+       0.5,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "From this point the half-vector between camera and panel is normal to the drivers' axis (axial component ~0.01), so both magnets show a soft highlight band along their upper-front flank (~35-42 deg up) and the plates catch thin edge lines; p95 28 -> ~70, magnet median stays <= 20 so black reads black; reflection-only, so no diffuse light reaches the cabinet, and the lacquer faces (which mirror the floor) and the woofer cone (half-vector has no axial component) do not show it.",
+   "accept": {
+    "region": "part:woofer-magnet|mid-magnet",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     50,
+     100
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "The sweep carries a warm cast that reads beige and dingy next to the neutral white body.",
+   "evidence": {
+    "region": [
+     1150,
+     100,
+     1330,
+     240
+    ],
+    "measured": "rgb (141,136,133), lum 136.8, dE2000 2.81 against the nearest neutral (#888888); top left [60,60,240,200] (158,152,148); left of the cabinet [60,380,220,560] (147,141,138)"
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#A09C95",
+    "to": "#9C9C9C"
+   },
+   "expected": "A neutral paper of the same luminance: background R-B from ~8 to <= 2, lightness within +-3 of now, dE to neutral 2.8 -> <= 1; the white body and the red read cleaner against it.",
+   "accept": {
+    "region": [
+     1150,
+     100,
+     1330,
+     240
+    ],
+    "metric": "delta_e",
+    "hex": "#898989",
+    "op": "<=",
+    "value": 2.0
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Finish the waveguide insert's hidden body in the accent colour, or a darker tone, so its silhouette separates from the sweep.",
+   "why": "Its grey (146,152,162) sits 8-9 levels off the floor (151 vs 142), but the product's materials are fixed, so c3 fixes it with light."
+  },
+  {
+   "request": "Bring the pocket's boss bore and magnets forward, or enlarge them, so they read from this angle.",
+   "why": "The bore is ~2 px and the magnets 33 px because the end wall faces the explode axis, ~61 deg off the camera, and the pocket rim hides part of it. The pocket geometry is fixed, and a view near enough to the axis to show the bore would push the parts over the cabinet and each other."
+  },
+  {
+   "request": "A brighter or polished finish on the cast letters so the wordmark reads on the red plinth.",
+   "why": "The letters (90,68,64; lum 67-75) mirror the dark floor behind-right and stand only 15-20 levels over the plinth (lum 53), but the marks and their finish are fixed."
+  },
+  {
+   "request": "Give the trim rings a visible profile or finish so they read as trim rather than O-rings.",
+   "why": "They render as thin black loops (woofer-ring median 57, mid-ring 44), but they are the owner's real parts, with fixed geometry and finish."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
