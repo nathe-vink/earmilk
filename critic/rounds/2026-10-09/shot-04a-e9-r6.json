@@ -1,0 +1,263 @@
+{
+ "stage1": {
+  "impression": "A frontal, cleanly typeset milk-carton speaker on a warm grey sweep with a soft halo behind the gable; the Facts panel and the fin's OPEN OTHER SIDE are crisp and legible. But the white front reads as a flat printed card, the earmilk letters look like grey paint, the port is a dead black disc and the carton runs out of the bottom of the frame ungrounded, so it reads as a packaging mockup rather than a lacquered object.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The cast-metal letters must read as metal: a specular gradient across the word with lum_range >= 30 and its highlight at or above the panel's 235. Now every letter is flat at 196-203 (range 14), 36 levels below the panel.",
+  "The roof slope must read as gloss lacquer, separate from the fin: a reflected ramp of >= 18 levels from top to eave, with the roof top >= 15 levels above the fin. Now falloff is 11.1 and the roof top is 69 against the fin's 60.",
+  "The port must read as a tube: its lower inner wall lit from the lip into the dark (median >= 12 in [415,972,485,998], now 0.0), with pure black only on the woofer motor. Now 44% of the port box [375,880,525,1032] is crushed.",
+  "The brand red must sit within about 2 dE00 of #C62828 on the fin and the roof. Now the fin is 3.14 and the roof 2.42: G and B are 23-26 against 40, so the red is over-saturated.",
+  "The white body must read white on its shaded side: the bottom-right panel >= 222 (now 218.4), keeping >= 15 levels of diagonal modelling (now 238 to 218).",
+  "The 3 mm shadow line under the gable must read as a continuous dark hairline 3-4 px tall. Now the eave goes from red to white through a soft 5 px ramp (about 60 -> 127 -> 176 -> 200 -> 215 -> 229 across y 343-348, mean of x 230-670) with no line.",
+  "The background's bottom corners must sit within about 6 levels of each other. Now they are 156.6 on the left and 142.8 on the right, where the key throws the carton's shadow onto the floor."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The earmilk letters, a must-show cast-metal mark, read as flat grey paint. The 0.28 m sheen glint covers the whole word evenly, so no letter shows a reflection.",
+   "evidence": {
+    "region": [
+     334,
+     385,
+     565,
+     429
+    ],
+    "measured": "part:letters-back-*: median 199.2, p5 189.2, p95 203.2, lum_range 14.0, rgb 205/198/194. x-profile 195.6, 199.1, 200.2, 200.4, 201.0, 200.2, 200.0, 196.2 (flat). The panel around them [300,360,600,384] is 235.3, so the word sits 36 levels below the white, like a grey print. Earlier proofs: size 0.16 gave range 134.6 (a hotspot), 0.28 gave 14.9."
+   },
+   "change": {
+    "setting": "glints.letters_sheen.size_m",
+    "from": 0.28,
+    "to": 0.24
+   },
+   "expected": "The mirrored lamp covers the middle of the word and falls off over the e and the k. The middle letters rise to about 225-240 (at or just above the 235 panel); the end letters sit near 175-190. The word's lum_range goes from 14 to 30-65, with no clipping (clip_pct 0).",
+   "accept": {
+    "region": "part:letters-back-*",
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     30,
+     65
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The roof slope shows almost no lacquer gloss and its lower half is the fin's value, so the gable reads as one flat red cut-out. The polariser leaves the red over-saturated.",
+   "evidence": {
+    "region": [
+     215,
+     190,
+     685,
+     338
+    ],
+    "measured": "Roof (gable-block in box): median 65.1, 8-bin y-profile 69.2, 68.6, 67.1, 65.1, 63.8, 62.1, 60.1, 58.1 (falloff 11.1), rgb 207/26/29, dE00 2.42 vs #C62828. Fin [222,114,700,166]: median 59.6, so the roof's lower half matches the fin. The fold at y 168-185 is a 52-55 line stepping to only 64-72."
+   },
+   "change": {
+    "setting": "lights.roof_ramp.strength",
+    "from": 11.6842,
+    "to": "x1.9"
+   },
+   "expected": "The mirrored ramp roughly doubles. The top bin rises from 69 to about 78-84 as a soft pink-white sheen; the eave bin stays about 58-60. Roof falloff goes from 11 to about 20-24. The roof's g_median rises from 26 to about 30-36 (dE00 toward 2.0). The fin stays near 60, so the fold reads as a value step.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      215,
+      190,
+      685,
+      338
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     18,
+     28
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The port's interior, including the tube's own lower inner wall, is a hard-edged pure-black disc. It reads as a black sticker, and as the frame's highest-contrast spot (0 against a 220 panel) it pulls the eye down from the Facts panel.",
+   "evidence": {
+    "region": [
+     375,
+     880,
+     525,
+     1032
+    ],
+    "measured": "crush_pct 44.3. Port-tube lower inner wall [415,972,485,998]: median 0.0, p95 1.8. woofer-motor median 0.0. 9.8k px at <= 2 (3,730 on the tube wall, 6,038 on the motor). Only a thin key-lit crescent shows at lower right. The flange is 98-120 around the ring."
+   },
+   "change": {
+    "setting": "glints.port_well",
+    "from": "absent",
+    "to": {
+     "at": [
+      0,
+      -0.197,
+      0.325
+     ],
+     "normal": [
+      0,
+      -0.95,
+      0.31
+     ],
+     "size_m": 0.25,
+     "power_w": 20,
+     "receivers": [
+      "port-tube"
+     ]
+    }
+   },
+   "expected": "The lamp mirrored by the lower lip sits about 23 degrees above the tube axis, in front of the back. It puts a soft highlight on the lower lip and lights the lower inner wall from the lip inward: median in [415,972,485,998] goes from 0 to 15-40, fading to black toward the woofer motor, which stays <= 3. Port-box crush goes from 44% to <= 32%. The white panel does not change (receivers: port-tube only).",
+   "accept": {
+    "region": {
+     "part": "port-tube",
+     "box": [
+      415,
+      972,
+      485,
+      998
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     12,
+     45
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The fin faces the camera head-on and mirrors only the dark studio behind it. PBR Neutral's toe then strips the green and blue, so the fin renders as an over-saturated digital red with no gloss.",
+   "evidence": {
+    "region": [
+     222,
+     114,
+     700,
+     166
+    ],
+    "measured": "Fin (gable-block in box): rgb 206/23/24, dE00 3.14 vs #C62828 (spec 198/40/40; chroma about 82 against 72.5). The y-profile is 63.0, 62.8, 62.8, 62.7, 62.0, 62.0, 61.0, flat with no sheen. The polariser cannot help a head-on face."
+   },
+   "change": {
+    "setting": "lights.fin_card",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.4,
+      0.5
+     ],
+     "position": [
+      0,
+      -3.6,
+      1.33
+     ],
+     "target": [
+      0,
+      0,
+      1.0
+     ],
+     "strength": 0.6,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       1.08,
+       1.58
+      ],
+      "values": [
+       0.4,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "Only the fin mirrors this card: it covers z 1.20-1.34 behind the camera, while the letters mirror z 0.64-0.75 and the back panel <= 0.83. The fin gains about 0.02 of white sheen, a few levels brighter at its top. Fin rgb goes from 206/23/24 to about 208/33-39/33-39, dE00 from 3.14 to about 2.0-2.4, fin luma from 59.6 to about 63-68.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      222,
+      114,
+      700,
+      166
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     2.4
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "post",
+   "problem": "The Whole body's #FFFFFF reads light grey on its shaded side. The lower right of the back panel falls to 218.",
+   "evidence": {
+    "region": [
+     640,
+     850,
+     697,
+     1120
+    ],
+    "measured": "Bottom-right clean panel 218.4 against top-left [205,350,262,460] 238.3, top-right 230.3 and bottom-left 227.5. Label paper is 224-233. No clipping anywhere (summary p99 238.3; left rim p95 244.1)."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.25,
+    "to": "+0.1"
+   },
+   "expected": "The bottom-right panel rises from 218.4 to about 222-224 and the top-left from 238 to about 241, keeping about 17-18 levels of diagonal modelling. The left rim's p95 goes from 244 to about 247 with no clipping. The bottom-right background goes from 142.8 to about 147. Label ink stays <= 17.",
+   "accept": {
+    "region": [
+     640,
+     850,
+     697,
+     1120
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     221,
+     226
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Turn the carton about 5 degrees (rotate_z 180 to 175) so a sliver of one side face shows.",
+   "why": "It would make the carton read as a box rather than a printed card. But the shot's purpose fixes a straight-on, level view of the Facts panel, and a turn would converge its rules."
+  },
+  {
+   "request": "Deepen or sharpen the 3 mm shadow line under the gable.",
+   "why": "Across x 230-670 the red-to-white step is a soft 5 px ramp (about 60 -> 127 -> 176 -> 200 -> 215 -> 229) with no dark hairline, so the gable does not read as a separate block. The shadow line's depth is spec geometry."
+  },
+  {
+   "request": "Give the port flange a satin or lighter finish.",
+   "why": "It reads as a flat grey washer (part median 99, 98-120 around the ring). The port tube is a product part, so its material is fixed; c3 changes only how its lip and bore are lit."
+  },
+  {
+   "request": "Pull back to show the plinth, the amp plate and a contact shadow on the floor.",
+   "why": "The carton is cut at about z 0.25 m with no grounding. But the purpose frames the Facts panel with the gable above it, and fitting the full 1.055 m would shrink the Facts type by about a quarter."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
