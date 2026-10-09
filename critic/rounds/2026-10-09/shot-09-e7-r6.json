@@ -1,0 +1,305 @@
+{
+ "stage1": {
+  "impression": "A tidy, balanced lifestyle set in which the red-and-white cartons read instantly and the turntable's red label ties the palette together. But the white bodies are flat, near-uniform white with no modelling, the soft directionless light leaves the frame hazy and beige, and the modest product scale, plain CG sideboard and dominant print keep it at a competent draft.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "White fronts fall off 18-30 levels from eave to plinth and show a lacquer sheen (now 7.5 on the right front's clean column, 10.0 on the left; 3-5 levels across the area under each woofer).",
+  "Both fins within dE2000 6 of #C62828 and within 4 of each other (left fin 23.7, right fin 3.4).",
+  "Each carton's shaded side at least 15 levels off the wall behind it along its whole height (right side 172 vs wall 169 at y 400-480; left side 156 vs 173).",
+  "White body within dE2000 2.5 of a neutral of equal lightness (fronts 2.9-4.3 with a* +2.0 to +2.9; shaded sides 7-11).",
+  "Visible contact shadows: the sideboard top within about 2 cm of each plinth at least 15 levels darker than 5 cm out (now 97 vs 105).",
+  "The 3 mm shadow lines under the gables and over the plinths read as dark lines (the front steps 223 -> 147 -> 77 straight into the plinth red, no dip).",
+  "A decisive camera, square-on or a real three-quarter: the present ~15 degree yaw tilts the sideboard's front edge about 55 px across the frame (y 726 at x 120 to 781 at x 1240) and the print's top rail 13 px, and makes the right carton about 13% taller than the left (456 vs 404 px) with only a 17 px sliver of side.",
+  "The print subordinate to the product with at least 60 px headroom (now 33-46 px; 315x438 px, the largest shape in frame).",
+  "No accidental light at the frame edges (left-edge sun band 195.5 vs 173.5 wall).",
+  "Plinth letters read as cast metal rather than flat print (a uniform 243, p5 228, p95 246)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The white fronts are one flat value, so the lacquered cartons read as paper cut-outs rather than premium hi-fi: the cleanest front column falls only 7.5 levels from eave to plinth and the area under each woofer spans 3-5 levels.",
+   "evidence": {
+    "region": [
+     1178,
+     398,
+     1190,
+     705
+    ],
+    "measured": "profile y 231.0, 229.0, 228.0, 226.8, 225.8, 223.8, 221.9, 223.5 (falloff 7.5); left column [264,392,276,660] 236.6 to 226.6 (10.0); under-woofer boxes [150,520,265,665] 228.6 (p5-p95 range 4.4) and [1035,540,1180,705] 224.6 (range 5.1); last round's key-elevation sweep (46, 66, 76 deg) moved this falloff only 6.2, 5.4, 5.1, so the key cannot make it. A reflection-only ramp in front of the pair, where the fronts mirror (at y -1.6 m the left front's mirror rays land near x -1.15, the right's near x 0.29, eave at z 0.94, plinth edge at z 0.42), puts the falloff into the lacquer itself."
+   },
+   "change": {
+    "setting": "lights.front_sheen",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.2,
+      0.62
+     ],
+     "position": [
+      -0.42,
+      -1.6,
+      0.73
+     ],
+     "target": [
+      -0.42,
+      0.0,
+      0.73
+     ],
+     "strength": 8,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.45,
+       0.95
+      ],
+      "values": [
+       0.06,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "Both fronts carry a smooth reflected ramp, bright under the gable and fading to the plinth: right column bins about 240-247 at the eave and 215-227 above the plinth (falloff 18-30), left column the same within 4 levels (its bluish window reflection, now 237 at the eave, is replaced by the neutral ramp); clip_pct on part:front-baffle stays 0; plinths and roofs unchanged, since the plinths' mirror rays pass under the panel's 0.42 m edge (keeping the plinth_sheen) and the roofs mirror upward.",
+   "accept": {
+    "region": [
+     1178,
+     398,
+     1190,
+     705
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     18,
+     30
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The left fin mirrors the front window and renders pale pink, so the accent colour is wrong on one carton and the pair no longer match.",
+   "evidence": {
+    "region": [
+     168,
+     312,
+     298,
+     327
+    ],
+    "measured": "median rgb 225,126,138 (lum 147.4), dE2000 23.69 vs #C62828; right fin [1042,310,1196,330] rgb 205,25,22, dE 3.40; roof beside it [262,335,290,380] dE 1.37; the left fin's mirror ray (front turned +5 deg, camera at x 0.85) meets the front wall at x -1.87, z 1.14 m, inside window 0 (x -2.7 to -0.9, z 0.4 to 2.4); the right fin's lands at x -0.29 on plain wall. At y -1.0 m the left fin's mirror rays span x -1.11 to -0.82 at z 1.12-1.16, while the eave's pass at z 0.96."
+   },
+   "change": {
+    "setting": "lights.fin_flag",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.5,
+      0.26
+     ],
+     "position": [
+      -0.97,
+      -1.0,
+      1.18
+     ],
+     "target": [
+      -0.66,
+      -0.01,
+      1.13
+     ],
+     "strength": 1,
+     "color": "#000000",
+     "diffuse": false
+    }
+   },
+   "expected": "A camera-invisible black card that the left fin mirrors instead of the window: the fin shows its own lacquer red, about rgb 195-210, 15-55, 15-50 (dE2000 <= 6, within 4 of the right fin's 3.4); it emits and lights nothing and sits above the eave's mirror rays, so no other region moves more than 2 levels; strength has no effect because its colour is black.",
+   "accept": {
+    "region": [
+     168,
+     312,
+     298,
+     327
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 6
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The right carton's shaded side has the value and hue of the wall behind it, so its right edge vanishes above the sun line, and the left carton's side clears its wall by only 18 levels.",
+   "evidence": {
+    "region": [
+     1197,
+     400,
+     1208,
+     480
+    ],
+    "measured": "side 172.1 (rgb 187,169,159) vs wall beside it [1216,400,1245,480] 169.0 (rgb 184,166,155); below the sun line side [1197,500,1208,690] 176.4 vs wall [1216,500,1245,690] 190.1; largest step at the right silhouette 8.1; left side [288,560,318,650] 155.7 vs wall [330,560,360,640] 173.3. The face is seen nearly edge-on (~83 deg), so part of its value is its reflection of the wall; the fill (about 0.5 W/m2 on this face at cos 0.82, 2.2 m away) is the part that can be taken out."
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": 0.404,
+    "to": 0.08
+   },
+   "expected": "Right side 136-155 above the sun line (at least 14 under the 169 wall) and about 150-165 below it (at least 25 under the 190 sunlit wall); left side [288,560,318,650] about 135-148; the fronts drop at most 6 levels, which also takes the plinth end of c1's ramp out of the tone curve's shoulder; walls move at most 3 levels.",
+   "accept": {
+    "region": [
+     1197,
+     400,
+     1208,
+     480
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     136,
+     155
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "composition",
+   "problem": "The print is the largest and darkest-framed shape in the frame and its top rail all but touches the top edge, so it crowds the frame and pulls the eye away from the speakers.",
+   "evidence": {
+    "region": [
+     560,
+     48,
+     780,
+     56
+    ],
+    "measured": "frame rail lum 87.1; rail top edge at y 44 (x 560), 36 (x 780), 33 (x 820); print spans x 513-828, y 33-470 (about 315x438 px) against cartons of about 191x404 px (left) and 188x456 px (right)."
+   },
+   "change": {
+    "setting": "set.props.1.size",
+    "from": [
+     0.62,
+     0.82
+    ],
+    "to": [
+     0.5,
+     0.66
+    ]
+   },
+   "expected": "The print shrinks about its centre (z 1.27 m) to about 255x350 px, a third less area; its top rail drops to y 68-82 (at least 65 px headroom) and its bottom rises to about 430; the old rail region reads as wall, 140-175; nothing on the product moves.",
+   "accept": {
+    "region": [
+     560,
+     48,
+     780,
+     56
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     140,
+     175
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "The white body renders pink-cream instead of white, a red-magenta cast (a* +2.0 to +2.9) that the Kelvin-only white balance cannot remove because it moves along blue-amber, fed largely by the fronts facing the sun patch on the orange oak floor in front of the sideboard.",
+   "evidence": {
+    "region": [
+     1035,
+     675,
+     1180,
+     705
+    ],
+    "measured": "rgb 231,222,221, Lab 89.1/+2.9/+1.6, dE2000 4.32 vs #DBDBDB; right front under the woofer Lab 89.4/+2.5/+2.6; left front above the plinth Lab 90.7/+2.0/-0.4; shaded sides R-B 23-31 (dE 7-11 from neutral); the oak #BC9668 is Lab about 65/+7.5/+28 and its sun patch spans about x -2.1 to 0.8 m, y -2.55 to -0.2 m."
+   },
+   "change": {
+    "setting": "set.props.3",
+    "from": null,
+    "to": {
+     "kind": "rug",
+     "position": [
+      -0.6,
+      -1.4
+     ],
+     "rotate_z": 0,
+     "size": [
+      2.6,
+      2.2
+     ],
+     "color": "#A99E8C"
+    }
+   },
+   "expected": "A linen rug of the oak's lightness (Y about 0.35) but near-neutral (Lab about 66/+1.4/+9.5) over the floor's sun patch turns that bounce neutral: front a* falls to <= +1.2 with b* within +/-1.5, dE2000 <= 2.5 against #DBDBDB on the band above the right plinth; shaded sides lose some beige (R-B to <= 20); the rug lies wholly below the frame's bottom edge (the bottom row meets the sideboard front at z 0.36 m), so nothing visible changes but colour, walls within +/-3 levels.",
+   "accept": {
+    "region": [
+     1035,
+     675,
+     1180,
+     705
+    ],
+    "metric": "delta_e",
+    "hex": "#DBDBDB",
+    "op": "<=",
+    "value": 2.5
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "A sliver of sun from the left-wall window, striped by mullion shadows, lights the frame's left edge and pulls the eye out of the frame.",
+   "evidence": {
+    "region": [
+     0,
+     150,
+     45,
+     650
+    ],
+    "measured": "lum 195.5 (rgb 210,193,179) vs wall [60,300,125,650] 173.5 (rgb 185,171,163); the band runs y 110-850 with diagonal mullion shadows."
+   },
+   "change": {
+    "setting": "set.windows.1.along",
+    "from": 0.4,
+    "to": 1.1
+   },
+   "expected": "The window moves 0.7 m toward the back wall, so its patch lands on the back wall left of the frame (the sun travels +0.42 m in x per +0.91 m in y); the left edge band reads 158-182, within 6 levels of the wall at x 60-125; the front-window patch behind the right speaker (190-196) is unchanged.",
+   "accept": {
+    "region": [
+     0,
+     150,
+     45,
+     650
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     158,
+     182
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Turn the right carton on its own a few degrees toward the camera so its Nutrition Facts side reads like the left one's.",
+   "why": "A pair must stay mirrored. With the camera 0.85 m right of centre, mirrored toe-in gives the left carton a ~43 px three-quarter side and the right one a 17 px sliver at ~83 deg, a mismatch on the face that carries the carton joke; within the card only a camera change (square-on or a deeper three-quarter) can even it, and I have not prescribed one because it would move every test region."
+  },
+  {
+   "request": "Give the plinth letters a satin or brushed metal finish so they read as cast metal.",
+   "why": "The product's materials are fixed; the letters render as a flat 243 (p5 228, p95 246) that reads as white print rather than cast metal, and last round's glints moved them only 2-5 levels, so only what they mirror could change them."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
