@@ -1,0 +1,291 @@
+{
+ "stage1": {
+  "impression": "A clean, symmetrical sideboard vignette with the red-and-white pair either side of a walnut turntable, but even frontal light leaves the white bodies reading as flat cards with weak edges and little grounding, and the surfaces look soft. The wall piece reads as a placeholder box with a slot and the door veneer as a procedural chevron, so this is a competent draft, not yet a homepage hero.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The wall above the turntable is clean plaster or a credible, flush-hung print with real tonal structure. Now it is a 105-108 brown box moulding around a blank 195 card (lum_range 8.6) with one thin line, throwing a 48-level shadow and a 100 px halo, at the centre of the frame.",
+  "Each carton reads as a volume. Its visible side is a distinct face at least 12 levels off both its front and the wall (the left speaker's inner side is 180.9 on a 181.6 wall) and wide enough to carry the left one's Nutrition Facts (8 px at 5 deg toe-in). Rotate_z 0 would give about 24 px, but only with plinth_sheen, roof_sheen and the window strips re-aimed and the woofer glints re-placed for the new normals.",
+  "The pair matches: lower fronts within 4 levels (219 vs 210 now, pair falloff 9.0), gables (77.2/74.8) and plinth sheens (p95 102.9/97.5) likewise.",
+  "Each white front sits below the PBR shoulder (top at 224 or less) and carries one continuous gradient of 20-25 levels from eave to plinth. Now the upper 40 % of the left front is a flat 229 and of the right a flat 221, and the eave-to-plinth falloff is 13-16.",
+  "Product blacks and metal render neutral: woofer cones within dE2000 2 of a neutral of their lightness (4.38 left, 5.35 right now; b above r by 10-13), trim rings and wordmark likewise (3.86 and 5.11 now).",
+  "The sideboard reads as wood. The top under the pair is a smooth ramp with 1-2 levels of pixel-to-pixel variation, a flat beige slab, while the doors still show evenly pitched cathedral lines meeting at every leaf seam, and 2 px near-black reveals (an 81-level step) run off the bottom edge.",
+  "The daylight reads as a direction on the product: the left carton's shade side at least 1 stop under its lit front (0.6 stop now, 219 vs 181)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The wall frame reads as a placeholder at the centre of the frame: a heavy brown box around a blank card, standing off the wall and throwing a dark halo, the most artificial object in the picture and a rival to the pair.",
+   "evidence": {
+    "region": [
+     530,
+     185,
+     830,
+     430
+    ],
+    "measured": "moulding 105-108 (rgb 136-138, 100-103, 70-72); print inset 195.7 with lum_range 8.6 (one thin tan line, no image); shadow under the frame 124 against 172 on the wall beside it; the wall falls from 185 to 166 within 100 px of the frame's left edge and reads 137 at its right edge; region lum_range 101.0"
+   },
+   "change": {
+    "setting": "set.props.1.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The wall above the turntable becomes plain plaster on the daylight gradient. Same-size plain wall elsewhere reads lum_range 4.8-6.1; the frame's core [560, 200, 800, 400] goes from 101.3 to under 12, median about 186. The shadow box and halo go, and the pair, the turntable and the vase carry the composition. This completes round 13's c5 rather than reversing it: c5 moved the print off the left speaker and shrank it to quiet the centre (its lum_range < 14 test failed at 21.1), and removing it quiets the centre fully.",
+   "accept": {
+    "region": [
+     560,
+     200,
+     800,
+     400
+    ],
+    "metric": "lum_range",
+    "op": "<",
+    "value": 12
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The left speaker's inner side lies on the wall's own value, so that carton's depth edge disappears and it reads as a flat panel. The 10000 K fill is what lifts this shade face to wall level and adds a left lead to the pair.",
+   "evidence": {
+    "region": [
+     310,
+     300,
+     360,
+     600
+    ],
+    "measured": "row-averaged luminance runs front 218, round 190-182, side face 175-178 (x 325-333), wall 177-179: no step between side and wall; part side-right (in box [300, 260, 360, 600]) median 180.9 against 181.6 on the wall strip [336, 300, 360, 600]. The fill hits this face 29 deg off its normal (cos 0.87) from 3.2 m."
+   },
+   "change": {
+    "setting": "lights.cutter_fill_L",
+    "from": "absent",
+    "to": {
+     "type": "flag",
+     "size_m": [
+      0.42,
+      0.7
+     ],
+     "position": [
+      -0.27,
+      -0.12,
+      0.93
+     ],
+     "target": [
+      2.45,
+      -1.14,
+      1.58
+     ],
+     "density": 1.0,
+     "lights": [
+      "fill"
+     ]
+    }
+   },
+   "expected": "A cutter 0.15-0.3 m off the left speaker's inner face, square to the fill, shades the fill from that speaker alone. The fill's rays to the right speaker, the turntable's centre, the vase's middle and the wall behind clear its edges. The left speaker's inner side drops from 180.9 to about 150-165, 13-30 levels under the wall, and that carton's lit-to-shade ratio goes from 0.6 to about 1 stop. Its front loses the fill's share: lower front 218 to about 209-213, upper front 229 to 224 or less (out of the shoulder). The wall, the sideboard top beside the turntable and the right speaker stay within 2 levels. This furthers round 13's c9 (more fill on the right than the left) rather than reversing it.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      300,
+      260,
+      360,
+      600
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     145,
+     169
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The pair renders as two whites: the left front, 3.05 m from the key against the right's 3.72 m, sits 9 levels above the right and its upper 40 % runs into the PBR shoulder.",
+   "evidence": {
+    "region": [
+     145,
+     455,
+     1205,
+     635
+    ],
+    "measured": "x-profile first bin (left front below the woofer) 219.0, last bin (right front) 210.0: falloff 9.0 (round 13's c9 test, which accepted up to 12); left strip [138, 285, 152, 430] a flat 229 against the right's 221; gable 77.2 vs 74.8; plinth p95 102.9 vs 97.5"
+   },
+   "change": {
+    "setting": "lights.net_key_L",
+    "from": "absent",
+    "to": {
+     "type": "flag",
+     "size_m": [
+      0.42,
+      0.8
+     ],
+     "position": [
+      -0.72,
+      -0.26,
+      1.03
+     ],
+     "target": [
+      -2.15,
+      -2.15,
+      2.3
+     ],
+     "density": 0.3,
+     "lights": [
+      "key"
+     ]
+    }
+   },
+   "expected": "A net on the key line 0.37 m in front of the left speaker; the key's rays to the right speaker clear it by 0.2-0.4 m. Apply it after c2 and tune it on top of c2, so it trims only the left lead c2 leaves: pair falloff 9.0 to between -3 and 4, with the gables and plinth sheens evened the same way. The key keeps round 13's c4 position and its 45-degree modelling, and the left front stays at least 20 levels above its shade side. If c2 alone lands the falloff in range, the density goes to 0.",
+   "accept": {
+    "region": [
+     145,
+     455,
+     1205,
+     635
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -3,
+     4
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The black paper cones print navy. The fill is a 10000 K sky-blue from the right, where the room has no window, and PBR Neutral's toe turns that mild cool cast into a strong blue in the blacks.",
+   "evidence": {
+    "region": [
+     183,
+     325,
+     1167,
+     417
+    ],
+    "measured": "part woofer-cone median rgb (14, 18, 25), dE2000 4.57 against neutral #121212: left cone (14, 17, 24) 4.38, right cone (14, 19, 27) 5.35, bluer on the fill's side. Surround (38, 40, 46) and cap (13, 15, 21) the same way. Working back through the toe, the cones' scene-linear B/R is only about 1.2. The retouch removed b* -3.4 and -5.0 casts from the two raw fronts, the larger on the fill's side."
+   },
+   "change": {
+    "setting": "lights.fill.color",
+    "from": 10000,
+    "to": 5600
+   },
+   "expected": "The fill matches the key's 5600 K, a neutral bounce under the 5700 K white point, so the diffuse blue leaves the product. The right cone goes from (14, 19, 27) to about (14, 15, 15), dE about 1. With c2 taking the fill off the left cone, the pair's median cone dE goes from 4.57 to 3.4 or less. Nothing else changes colour by more than 2 b*: the whites are retouched, the irradiance is unchanged, and the wall right of the right speaker loses a trace of blue. A warmer fill than about 5000 K would turn the right cone brown and fail the same test.",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "delta_e",
+    "hex": "#121212",
+    "op": "<=",
+    "value": 3.4
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The upper 40 % of each white front shows no gradient: front_sheen's ramp tops out at z 0.66 while the fronts mirror z 0.29 to 0.875, so the whole band around the woofer reflects a flat 3.0 and reads as card.",
+   "evidence": {
+    "region": [
+     1198,
+     285,
+     1212,
+     430
+    ],
+    "measured": "the white strip beside the right woofer reads 221 in seven of eight bins and 220 in the last (falloff 1.0); the left strip [138, 285, 152, 430] is 229 in all eight. The mirror map gives front_sheen radiance 3.0 from y 285 to 395, 2.81 at 430, then 2.39, 1.95, 1.51, 1.07, 0.63, 0.19 and 0 at the plinth."
+   },
+   "change": {
+    "setting": "lights.front_sheen.ramp.at_m",
+    "from": [
+     0.3,
+     0.66
+    ],
+    "to": [
+     0.29,
+     0.88
+    ]
+   },
+   "expected": "The ramp spans the whole mirrored height, so the reflection grades evenly from eave to plinth. The band beside the right woofer gets about 8 levels of falloff instead of 1, the eave keeps its value, and the trim rings and woofer frames, which mirror the same panel, grade top to bottom too. The panel stays round 13's c7 centred 2.0 x 0.72 m at y -1.6 (rounds 11 and 13 set its place and size); only the ramp's span changes, so both fronts still mirror it over 94 % of their pixels and c7's lower-front ramp survives.",
+   "accept": {
+    "region": [
+     1198,
+     285,
+     1212,
+     430
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     4,
+     12
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The cast-metal wordmark prints icy blue-white. It mirrors plinth_sheen, a #FFFFFF (D65) panel, under a 5700 K white point.",
+   "evidence": {
+    "region": [
+     187,
+     662,
+     1163,
+     679
+    ],
+    "measured": "letters-front-* median rgb (224, 234, 242), dE2000 5.11 against neutral #EBEBEB; 93 % of their pixels mirror plinth_sheen (radiance 1.35-1.98), alone or under glints 0 and 1"
+   },
+   "change": {
+    "setting": "lights.plinth_sheen.color",
+    "from": "#FFFFFF",
+    "to": 5700
+   },
+   "expected": "The sheen card renders neutral at the scene's white point. The letters go from (224, 234, 242) to about (233, 233, 233), dE 2 or less, with their brightness unchanged, and the plinth's sheen band loses its slight pink-blue so the band reads as the gable's red. Only reflections change: the panel is diffuse 0.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "delta_e",
+    "hex": "#EBEBEB",
+    "op": "<=",
+    "value": 2.0
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The woofer trim rings print blue-grey: they mirror front_sheen, a #FFFFFF (D65) panel, under the 5700 K white point, so the driver's black parts disagree with the neutral front around them.",
+   "evidence": {
+    "region": [
+     155,
+     298,
+     1195,
+     445
+    ],
+    "measured": "woofer-ring median rgb (61, 65, 71), dE2000 4.04 against neutral #3D3D3D (3.86 against #414141); 78 % of its pixels mirror front_sheen at radiance 2.7-3.0, and 8 % more see it under glints 2 and 3. The two raw fronts that mirror the same card carried b* -3.4 and -5.0 before the retouch."
+   },
+   "change": {
+    "setting": "lights.front_sheen.color",
+    "from": "#FFFFFF",
+    "to": 5700
+   },
+   "expected": "The rings go neutral dark grey: rgb about (58, 59, 60), dE to #3D3D3D 2.5 or less allowing for the slight darkening c5 brings. The retouch has no cast left to remove on the fronts. Only reflections change, since the panel is diffuse 0.",
+   "accept": {
+    "region": "part:woofer-ring",
+    "metric": "delta_e",
+    "hex": "#3D3D3D",
+    "op": "<=",
+    "value": 2.5
+   }
+  }
+ ],
+ "out_of_scope": [],
+ "score_if_fixed": 6.3
+}
