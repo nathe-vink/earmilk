@@ -106,13 +106,14 @@ def main():
     # knobs the shot does not set yet but may (the common ones)
     extra = [k for k in ('camera.fstop', 'camera.shift_x', 'camera.shift_y', 'camera.polariser.strength', 'camera.polariser.angle_deg',
                          'render.exposure', 'render.white_balance_k', 'render.white_balance_tint', 'render.look',
-                         'retouch.enabled', 'retouch.match', 'retouch.lightness', 'retouch.neutral')
+                         'retouch.enabled', 'retouch.match', 'retouch.lightness', 'retouch.neutral', 'retouch.adapt')
              if k not in seen]
     for k in extra:
         unit, rng, meaning = K.describe(k)
         rtxt = '' if rng is None else (f'{rng[0]:g} to {rng[1]:g}' if isinstance(rng, tuple) and all(isinstance(x, (int, float)) for x in rng) else ', '.join(map(str, rng)))
         dflt = {'render.white_balance_tint': '10 (the default)', 'retouch.enabled': 'false (the default)',
-                'retouch.match': '1 (the default)', 'retouch.lightness': '0.5 (the default)', 'retouch.neutral': '1 (the default)'}.get(k, '(default)')
+                'retouch.match': '1 (the default)', 'retouch.lightness': '0.5 (the default)', 'retouch.neutral': '1 (the default)',
+                'retouch.adapt': '1 (the default)'}.get(k, '(default)')
         L.append(f'| `{k}` | {dflt} | {unit} | {rtxt} | {meaning} |')
     L.append('')
     L.append('The set\'s materials take their preset\'s keys (`materials.oak.plank_contrast`, `materials.plaster.bump`, ...): '

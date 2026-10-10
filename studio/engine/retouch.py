@@ -24,7 +24,11 @@ each pixel by how much it is the paint: the mask softened over its edge pixels, 
 reference's (a highlight or an edge blended with the background takes less). The raw frame stays beside it as
 IMG.raw.png, and the report lists every paint's reference before and after, in dE2000 against its swatch.
 
-    retouch: {"enabled": true, "match": 1.0, "lightness": 0.5, "neutral": 1.0}
+    retouch: {"enabled": true, "match": 1.0, "lightness": 0.5, "neutral": 1.0, "adapt": 1.0}
+
+`adapt` (0 to 1) is how far a colour's target follows the copy's white: 1 matches it to the swatch as the light that
+white shows would colour it, 0 to the plain swatch; with `neutral` under 1 in a room (a trace of the morning's warmth
+kept in the white, 02a's round 9) `adapt` 0 still holds the reds on their swatch.
 """
 import json, math
 from pathlib import Path
@@ -38,7 +42,7 @@ M_RGB2XYZ = np.array([[0.4124564, 0.3575761, 0.1804375],
 M_XYZ2RGB = np.linalg.inv(M_RGB2XYZ)
 D65 = np.array([0.95047, 1.0, 1.08883])
 BRADFORD = np.array([[0.8951, 0.2664, -0.1614], [-0.7502, 1.7135, 0.0367], [0.0389, -0.0685, 1.0296]])
-DEFAULTS = {'enabled': True, 'match': 1.0, 'lightness': 0.5, 'neutral': 1.0}
+DEFAULTS = {'enabled': True, 'match': 1.0, 'lightness': 0.5, 'neutral': 1.0, 'adapt': 1.0}
 
 
 def srgb_lin(c):
@@ -100,6 +104,14 @@ def adapt(lab, white_lab):
     W = lab_xyz(np.asarray(white_lab, float)); W = W / W[1]
     M = np.linalg.inv(BRADFORD) @ np.diag((BRADFORD @ W) / (BRADFORD @ D65)) @ BRADFORD
     return xyz_lab(M @ X)
+
+
+def _target(swatch, white, share):
+    """The swatch as the colour should read: the share `share` of the way from the plain swatch to the swatch under the
+    light the copy's white shows (0: the plain swatch, as brand guidelines judge it; 1: as the room's light colours it)."""
+    if white is None or share <= 0:
+        return swatch
+    return swatch + (adapt(swatch, white) - swatch) * min(1.0, share)
 
 
 def _soft(m):
@@ -176,14 +188,14 @@ def retouch(raw_png, swatch_png, legend, spec, out_png):
         refp = _reference(lab, mm, True)
         whole = np.median(lab[mm][refp], axis=0)
         white = whites.get(pk[0], any_white)
-        tgt = adapt(gs[0]['target'], white) if white is not None else gs[0]['target']
+        tgt = _target(gs[0]['target'], white, spec['adapt'])
         Yr, Yt = float(lab_xyz(whole)[1]), float(lab_xyz(tgt)[1])
         paint_gain[pk] = (Yt / max(Yr, 1e-6)) ** spec['lightness'] if Yr > 0 else 1.0
     for g in [g for g in groups if g['mode'] == 'match']:
         m = g['mask']; px_lab = lab[m]; ref = _reference(lab, m, True)
         before = np.median(px_lab[ref], axis=0)
         white = whites.get(g['instance'], any_white)
-        target = adapt(g['target'], white) if white is not None else g['target']
+        target = _target(g['target'], white, spec['adapt'])
         Cr0 = math.hypot(before[1], before[2])
         C = np.hypot(px_lab[:, 1], px_lab[:, 2])
         w = _soft(m)[m] * np.clip(C / max(Cr0, 1e-6), 0, 1)

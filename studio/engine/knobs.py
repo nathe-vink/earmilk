@@ -36,6 +36,7 @@ KNOBS = [
     ('retouch.enabled', 'bool', None, 'retouch the frame: each paint a flavour colours (body, accent, insert) matched to its swatch per copy, read off its lit face; the raw frame is kept beside it and the tests read the retouched one'),
     ('retouch.match', '0 to 1', (0, 1), 'the share of a colour paint\'s hue and chroma error taken out (1: its lit face reads as the swatch in hue and chroma, as the swatch looks under the light the copy\'s white shows)'),
     ('retouch.lightness', '0 to 1', (0, 1), 'the share of a colour paint\'s lightness error taken out, as a gain on its light (a lighter or darker paint); 1 makes its lit face as light as the swatch, which can flatten a deliberate shade'),
+    ('retouch.adapt', '0 to 1', (0, 1), 'how far a colour paint\'s target follows the light its copy\'s white shows: 1 the swatch as that light colours it, 0 the plain swatch (keep the reds on the swatch while the white keeps a trace of a room\'s warmth)'),
     ('retouch.neutral', '0 to 1', (0, 1), 'the share of a white paint\'s colour cast taken out (1 in a studio; less in a room where the light\'s colour is the picture\'s: a late sun\'s warm white)'),
     # sun and sky
     ('sun.azimuth_deg', 'deg', (-180, 180), 'compass direction the sun shines FROM, 0 = from in front of the product (-y), +90 = from +x'),
