@@ -1,0 +1,235 @@
+{
+ "stage1": {
+  "impression": "A coherent, warmly sunlit lifestyle frame: the red-and-white carton speaker stands on honey oak and casts its gable silhouette into a window patch on the plaster. The light is believable and the idea is good, but it reads as CG: the white front is one bright value, the side is a flat grey, the wall patch and the dark carton shadow pull the eye harder than the product does, and the floor and side table look like clean, untextured renders.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The sunlit white front models inside the linear range: the clean strip [505, 335, 514, 630] sits between 200 and 224, falls 12 to 18 levels from top to bottom, and only the upper-left glint goes above 226. Now the strip's p95 is 230.1 and the top 30 px across the face are a flat 234-235.",
+  "The shaded side reads as white lacquer in shade, not grey card: [532, 345, 598, 545] sits at 150-165 with a reflection gradient of at least 15 levels down the face. Now it is 142.6 with a 10.1 range, darker than the carton's own cast shadow on the plaster (150.5).",
+  "The oak reads as wood: planks step 6-12 levels apart in an evenly lit patch. Now [100, 740, 400, 800] has a 5.1 range across six planks, with no grain or figure visible.",
+  "The floor answers the light: a soft sheen along the sunlit skirting and a soft red reflection under the plinth. Now the strip under the 219.9 skirting reads 130.3, as flat as open floor, and the contact is only a soft occlusion, 88 at the plinth edge rising to 112 at 40 px.",
+  "The product holds the frame's strongest contrast, not the wall: the sun patch leaves the shoulder (now 227.9, p5-p95 224.9-230.5) and the carton shadow on the wall (150.5) stops being the darkest large shape beside the product.",
+  "The room stays bright toward its window side once the sun comes down: the window-side wall reaches at least 172 and the mid-wall at least 185 (now 169.5 and 186.3)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The sunlit white front sits on the view transform's shoulder, so its upper half prints as one flat value and the lacquer's ramp and glint cannot model it.",
+   "evidence": {
+    "region": [
+     505,
+     335,
+     514,
+     630
+    ],
+    "measured": "The clean strip right of the drivers reads 230.1, 229.1, 228.1, 226.1, 223.1, 220.4, 217.4, 217.4 from top to bottom (p95 230.1). The top 30 px across the face, [392, 332, 516, 360], read 234.2 with a 6.0 range, and the left strip [392, 330, 420, 640] holds 235.2-233.1 for its first 116 px. The wall's sun patch [950, 320, 1130, 560] reads 227.9 (p5 224.9, p95 230.5). Both are above the card's 226 shoulder; a white lacquer that models sits at 200-220."
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 4,
+    "to": 3.1
+   },
+   "expected": "The strip runs from about 221 at the top to about 206 at the bottom. That is a falloff of about 15, inside round 10's c3 band of 8-16. The top 30 px become a gradient from about 228 at the upper-left glint to about 221 at the right, instead of a flat 234-235, and the edge_round line on the corner (229.6) shows against about 215. The sun patch drops from 227.9 to about 215, gains gradation and stops matching the product's brightness. This partly reverses round 10's c2 (3.5 to 4.0), which closed a 39-level gap between the front (189.6) and the patch (228.7). Both scale with the sun, so the front stays about 9-11 levels under the patch, as it does now (217 against 228). What actually closed that gap was the sky (3 to 8) and lacquer_ramp at 6, and both stay; c5 holds the shaded room.",
+   "accept": {
+    "region": [
+     505,
+     335,
+     514,
+     630
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     214,
+     225
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The shaded side is one flat mid-grey and mirrors nothing bright, so the white lacquer side reads as grey card that is darker than the carton's own shadow on the wall.",
+   "evidence": {
+    "region": [
+     532,
+     345,
+     598,
+     545
+    ],
+    "measured": "The upper two-thirds of the side read 142.6 median with a 10.1 range. The full clean side [532, 345, 598, 630] runs from 145.3 to 134.7 top to bottom. That is darker than the carton's cast shadow on the plaster [760, 380, 870, 560] at 150.5 and the shaded wall at its left edge [330, 330, 385, 500] at 165.1. The mirror pass shows 59.5 % back wall at x 1.44-1.78 m (shaded plaster just right of the sun patch's edge at about 1.43 m), 29.3 % floor and 11.2 % skirting."
+   },
+   "change": {
+    "setting": "lights.side_sheen",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.9,
+      0.9
+     ],
+     "position": [
+      1.55,
+      1.0,
+      0.45
+     ],
+     "target": [
+      1.55,
+      0.0,
+      0.45
+     ],
+     "strength": 3.3,
+     "color": "#FFF1E0",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.0,
+       0.85
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "side-right"
+     ]
+    }
+   },
+   "expected": "The panel is a reflection-only card just in front of the back wall, where the side's mirror rays land. The side's upper two-thirds rise to about 150-165, brightest under the eave, and fade toward the plinth. The gradient across [532, 345, 598, 630] grows to about 20-28 levels from 10.6. The lower third, which mirrors the floor, stays about 136, and the ramp reaching 0 at z 0 leaves no step where the reflection changes from panel to floor. The face reads as gloss white mirroring a bright wall and stays well under the front (about 206-221). Floor, walls and front are unchanged (diffuse false, receivers side-right only).",
+   "accept": {
+    "region": [
+     532,
+     345,
+     598,
+     545
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     150,
+     164
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "material",
+   "problem": "The oak floor, a third of the frame, is a single value from plank to plank, so it reads as a printed sheet rather than wood.",
+   "evidence": {
+    "region": [
+     100,
+     740,
+     400,
+     800
+    ],
+    "measured": "An evenly lit patch of six planks spans p5 107.3 to p95 112.4 (range 5.1). A vertical profile through x 200-260 changes only 108.6-111.6 from plank to plank between y 700 and 860. No grain or figure is visible."
+   },
+   "change": {
+    "setting": "set.floor.plank_contrast",
+    "from": 0.3075,
+    "to": 0.65
+   },
+   "expected": "Planks step about 6-10 levels apart, with visible figure across the floor. The patch keeps its median of about 110 while its p5-p95 range grows from 5.1 to about 12-18. The cap keeps it from turning into a patchwork laminate.",
+   "accept": {
+    "region": [
+     100,
+     740,
+     400,
+     800
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     10,
+     22
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "material",
+   "problem": "The floor is fully matte: it shows no sheen where it meets the sunlit skirting at a grazing view, and no reflection seats the plinth, so the contact rests on a soft occlusion alone.",
+   "evidence": {
+    "region": [
+     990,
+     636,
+     1090,
+     652
+    ],
+    "measured": "The floor strip directly under the sunlit skirting (219.9 at [1000, 575, 1100, 615]) reads 130.3 with a 5.2 range. That is no brighter than the sun band just below it (139.7) and shows nothing of the skirting at a view about 14 degrees off the floor. Under the shaded skirting the floor reads 111.1 ([1200, 665, 1340, 690]). The front plinth's contact runs from 88.4 at the edge to 112.0 at 40 px out ([420, 676, 500, 740])."
+   },
+   "change": {
+    "setting": "materials.oak.roughness",
+    "from": 0.6211,
+    "to": 0.45
+   },
+   "expected": "A soft, warm glow appears on the floor along the sunlit skirting: the strip rises from 130.3 to about 142-152 and fades within about 30 px. The floor under the shaded skirting stays near 111, so the glow reads as a reflection of the sun patch. A faint red bloom appears on the floor under the front plinth. There is no hard mirror image; the upper bound stops it reaching polished laminate.",
+   "accept": {
+    "region": [
+     990,
+     636,
+     1090,
+     652
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     140,
+     158
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The window side of the room is still its dimmest wall, and c1's sun cut will take more of the bounce out of the shade, which works against a bright, airy room.",
+   "evidence": {
+    "region": [
+     20,
+     20,
+     150,
+     300
+    ],
+    "measured": "The window-side wall reads 169.5, against 188.3 at the right edge [1200, 20, 1340, 250] and 186.3 mid-wall [600, 20, 1000, 250]. Round 10's c1 test still reads 165.9 (wanted 166-184). The carton's shadow on the wall is 150.5."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 8,
+    "to": 9.5
+   },
+   "expected": "The window-side wall rises to about 175-180 and the mid-wall holds about 186-190 after c1. The carton's cast shadow on the plaster lightens from 150.5 to about 155-160 while the patch holds about 215, roughly 2:1 in linear light, so the morning sun still reads. The side gains a few levels of bounce, which c2's tuning absorbs. The front gains a little, which c1's tuning absorbs. This continues round 10's c1 (3 to 8) and stays below round 8's 11.5.",
+   "accept": {
+    "region": [
+     20,
+     20,
+     150,
+     300
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     172,
+     184
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Warm the speaker's white body toward the sunlit plaster: the front reads b* 0.6, against 6.2 on the sun patch and 7.4 on the sunlit skirting.",
+   "why": "The body is #FFFFFF and the walls #FBF7F1 by spec, so in the same sun the product should read slightly cooler than the plaster. Most of the 5.6 b* gap is the spec plus the retouch's neutral share, and a different body colour is not ours to ask for. It matters because a cool product against a warm room can look lit apart from it."
+  },
+  {
+   "request": "Render at print size for the magazine spread.",
+   "why": "At 1350 x 900 the cast 'earmilk' letters are 9-14 px tall and soft (letters-front-6 and -7 have p5 113 and 118 against a median of about 210), and the tweeter dome is about 10 px across. Frame size and sampling are fixed by the card, but a spread needs several times the pixels."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
