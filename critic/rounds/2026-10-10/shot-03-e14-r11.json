@@ -1,0 +1,126 @@
+{
+ "stage1": {
+  "impression": "A tight high-angle detail of the carton's glossy red gable roof with its moulded horn and dark tweeter, the white body cropped at the bottom, on a flat mid-grey backdrop. It reads as a clean, competent CG draft, but the white body renders as dull grey, the backdrop is lifeless and the red roof is lit as one broad soft wash.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The white body reads white: part:front-baffle median 205-216 (now 194) and part:side-right >= 176 (now 166). Nothing on either face goes above 226 except the top-edge round.",
+  "The dome carries a defined catchlight: part:tweeter-dome p95 150-180 (now 131.3), with its core at 230-245 and clip_pct 0.",
+  "The waveguide outline closes evenly. The left rim line stays >= 128 all the way down to the mouth's left corner (now 104-121 over y 540-630) and comes within about 50 levels of the right rim's 155-192.",
+  "The fin's top-edge highlight runs its full length: gable-block inside [1000,138,1186,172] p95 >= 145. Now it is 105.3 there, against 182.5 on the left run, because the key's reflection leaves the 6 mm round at x ~950. Any card added for this must not land on the eave round or on the slope's front-right corner.",
+  "The tweeter surround reads as a half-roll: a soft gradient around it, with its lit side at p95 >= 60 (now median 24.3, p95 49.3), and no pool of light on the throat walls.",
+  "The horn reads as recessed and carved. Its floor and walls sit >= 8 levels below the slope beside them at the same height; now the lower floor's 79-87 sits between the right slope's 70-75 and the left slope's 80-90. A key with a readable direction separates the two walls by >= 30 levels outside the reflection streaks."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The 'Whole' white body reads as light grey, not white. Its front sits below the 200-220 band the card gives for a white lacquer that models, and its side face is darker still, so beside the saturated red the carton looks dingy.",
+   "evidence": {
+    "region": [
+     65,
+     658,
+     1031,
+     900
+    ],
+    "measured": "part:front-baffle median 194.0, p95 204.0, rgb 194/194/194 (neutral after retouch). Its bottom band (y 820-900) runs 147 -> 201 from left to right under base_flag. part:side-right median 166.0 (p5 159, p95 176). Backdrop: 111-117 on the left, 144 at top right."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": -0.1,
+    "to": 0.1
+   },
+   "expected": "front-baffle median 194 -> ~206 and p95 204 -> ~216. That is still under the 226 shoulder, so the face keeps its gradient. side-right 166 -> ~176. Backdrop 111-145 -> ~119-155. The red lit faces move only about +3, because the retouch takes out half of a paint's lightness change. Every highlight rises about 7 % (fin edge 190 -> ~201) and nothing reaches 226.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     202,
+     214
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The tweeter is the frame's focal point, yet its dome has only a dim, soft catchlight, so the driver reads as a dull grey ball in a black ring rather than a precision dome.",
+   "evidence": {
+    "region": [
+     663,
+     378,
+     729,
+     446
+    ],
+    "measured": "part:tweeter-dome median 54.2, p90 101, p95 131.3, p99 181, max 205. Only 104 px (3 % of 3523) are above 150. The catchlight sits at (700, 394), where the dome mirrors glint1 (radiance 2244). Surround: median 24.3, p95 49.3."
+   },
+   "change": {
+    "setting": "glints.1.power_w",
+    "from": 8.8606,
+    "to": "x1.5"
+   },
+   "expected": "The catchlight core rises from 205 to ~235-245, and the area above 150 roughly doubles to ~200 px. Dome p95 goes from 131 to ~160-170 while the median stays ~55-60, so the driver reads as a dark coated dome with a crisp window. clip_pct on the dome stays 0. glint1 only reflects, so the throat, the surround and the roof are unchanged.",
+   "accept": {
+    "region": "part:tweeter-dome",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     150,
+     180
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The waveguide outline is lopsided. The right rim line holds 155-192 from crest to mouth, but the left rim's highlight fades over its lower half. Toward the mouth's left corner the contour is only the dark seam plus a 2-px line about 20 levels above the wall.",
+   "evidence": {
+    "region": [
+     264,
+     574,
+     278,
+     586
+    ],
+    "measured": "Lower-left rim: p95 113.7, a 2-px line peaking at 111-119 beside a 95-100 wall and a 47-55 seam. Along the left lip the rim_left line runs 139-148 at y 400-460, 122-139 at y 450-540 and 104-121 at y 540-630. The right rim runs 155-192 ([830,540,862,600] p95 158.4). rim_left is mirrored at radiance 3.9-6.7, rim_right at 9.6-18.5."
+   },
+   "change": {
+    "setting": "lights.rim_left.strength",
+    "from": 7.7712,
+    "to": "x1.6"
+   },
+   "expected": "The lower-left rim line rises from 104-121 to ~128-140. The upper-left run rises from 139-148 to ~175-185, level with the top arch (p95 182) and under the right rim's peak (192), so the outline closes evenly to the mouth corner. rim_left only reflects and is mirrored only on the left lip (plus <0.4 % of the tweeter), so the wall streak, floor and slope do not change. This keeps last round's ramp ([0.5, 1]) and lifts the whole line rather than reversing it. Last round's test (p95 95.6) read a box dominated by the wall; this box straddles the line itself.",
+   "accept": {
+    "region": [
+     264,
+     574,
+     278,
+     586
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     126,
+     158
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A contrasting finish on the waveguide insert (e.g. satin black or a darker red), so the horn separates from the roof slope.",
+   "why": "The insert takes the flavour's accent colour (#C62828), and the product's finishes are fixed. It matters because the horn's lower half sits at the slope's value: insert median 82.5 vs gable 82.0, lower floor 79-87 vs slope 70-91 at the same heights. The per-paint retouch pins both paints to the same swatch, so light can only separate them by a few levels. Today only the rim lines draw the lower horn."
+  },
+  {
+   "request": "A deeper lip or a step at the mouth crease, so the mouth reads.",
+   "why": "The waveguide's profile and mouth are set by acoustic simulation. It matters because the crease is only a ~10-level step (floor 86-90 above it, band 76-80 below), and the band below is flush with the slope and the same value."
+  },
+  {
+   "request": "A satin surround on the tweeter, so it can carry a sheen.",
+   "why": "The driver's materials are the product's own. It matters because the surround stays a near-black ring (median 24.3, p95 49.3). glint3 moved that reading by less than 1 level across 4-24 W because the rubber shows no reflection. Only a pool of diffuse light could lift it, and that would also flare the red throat around it."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
