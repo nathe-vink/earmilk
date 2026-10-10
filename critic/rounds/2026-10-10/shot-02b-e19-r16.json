@@ -1,0 +1,246 @@
+{
+ "stage1": {
+  "impression": "A milk-carton speaker stands in a raking low sun in a dark slate room, its gabled silhouette thrown hard and black inside a saturated amber window patch: a strong, witty graphic idea with believable shadow geometry. But the hero reads as a flat CG cut-out: its front and side print at nearly the same creamy value, as if lit by a separate neutral light, the red plinth sits in a hot salmon glow on the floor, and the big orange patch competes with the product for attention.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The front and the sunlit side read as two values that show where the sun is: front white 180-200 with a visible fall-off from the fill, side 220-230. Now 224.8 against 226.3, and the profile across the corner (840-1100, y 420-480) runs 224.8, 224.7, 223.8, 223.7 | 227.3, 226.4, 226.3, 226.3.",
+  "The sunlit side shows some gradation instead of one value. Now it is 226.3 in all 8 y-bins (990-1090, 280-690), and in the raw frame its red channel sits at 254 on 69% of the face. The exposure balance or the view transform has to keep the sunlit white under PBR Neutral's clip so the lacquer can show a reflection there.",
+  "The sunlit accent faces read as the plinth's red in sunlight, not coral. Side plinth (985-1095, 712-770) is (255, 94, 77), red clipped on 87% of its pixels, dE 17.4 against #C62828. Sunlit gable end (1010-1080, 215-255) is (236, 123, 118), dE 21.1. The shaded front plinth is (177, 31, 29), dE 4.8.",
+  "No specular hot spot at the frame edge: the floor's reflection of the speaker sits within about 35 levels of the sunlit floor beside it. Now it is 178-182 against 94 (falloff 83.5 on 1000-1340, y 840-880), and brightest at the bottom edge.",
+  "The room's shade holds detail and carries no shape nothing in the scene explains. Now the back wall between the frame edge and the patch (110-270, 150-500) is 2.5 with 76.8% at L<=3, bounded by a vertical edge at x~100 (17 to 2) that the fillcut flag casts.",
+  "The wordmark separates from its plinth by value. Now the letters are 64.9 and the plinth around them is 63.5.",
+  "The patch's right edge and the product's left edge do not run parallel 20 px apart. Now there is a dark gap of 13-21 at x 780-800 for the whole 480 px height of the patch.",
+  "The silhouette carries a trace of the room's ambient so it reads as a photographed shadow. Now it is 7.2 (rgb 17, 5, 0) inside a 177 patch."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "composition",
+   "problem": "The shade front prints as bright as the sunlit side (224.8 against 226.3), so the box reads as one flat value and the sun does not appear to strike the product. The low sun still meets the front at cos 0.136 and gives it about half its light.",
+   "evidence": {
+    "region": [
+     840,
+     420,
+     1100,
+     480
+    ],
+    "measured": "Profile along x, front | side: 224.8, 224.7, 223.8, 223.7 | 227.3, 226.4, 226.3, 226.3. Front white zone (front-baffle within 800-980 x 260-680) median 224.8. Side 226.3 in all 8 y-bins. In the raw frame the front is (242, 210, 189), L 215.4: warm from the raking sun, and lifted to 224.7 by the finish. The raw side is (254, 224, 200) with red clipped on 69%, so the side cannot get brighter on screen and only a darker front can separate the faces."
+   },
+   "change": {
+    "setting": "product.instances.0.rotate_z",
+    "from": -40,
+    "to": -45
+   },
+   "expected": "The front turns 5 deg further from the sun. The sun then meets the front at cos ~0.05 instead of 0.136 and the side at ~1.0. The front white falls to about 185-195 and goes near-neutral, lit mainly by the 4000 K fill from the upper left, so it keeps a fall-off from top-left to bottom-right. The side stays 224-227, so the faces separate by 30-40 levels and the box reads its volume and the sun's direction. The silhouette keeps its place but narrows about 7% (231 to ~215 px) as the sun meets the gable end square-on, which leaves more margin inside the patch and inside the fillcut's shadow. The front narrows from 169 to ~159 px and the side widens from 135 to ~145 px. Nothing in the last rounds changed rotate_z.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      800,
+      260,
+      980,
+      680
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     180,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The satin floor (roughness 0.35) mirrors the sunlit side as a hot salmon pool right under the speaker, brightest at the frame's bottom edge. The base reads as glowing, and the eye is pulled out of the bottom of the frame.",
+   "evidence": {
+    "region": [
+     1000,
+     840,
+     1340,
+     880
+    ],
+    "measured": "Profile along x: 177.8, 182.5, 170.2, 119.3, 113.4, 103.2, 100.4, 94.3, falloff 83.5. Pool 930-1110 x 800-900: median 164.7 (245, 148, 104), its y-profile rising 135.5, 154.3, 169.9, 181.8 toward the bottom edge, so it is the mirrored body rather than bounce. Red smear under the plinth (940-1100, 792-830): 138.2 (244, 113, 76). The same sunlit floor at 1150-1340 x 790-880 is 100.2."
+   },
+   "change": {
+    "setting": "set.floor.roughness",
+    "from": 0.35,
+    "to": 0.5
+   },
+   "expected": "The speaker's reflection spreads and dims. The pool falls from ~180 to ~120-135, 10-40 above the sunlit floor beside it, so it still grounds the speaker but stops reading as light leaking from under it. The red smear under the plinth softens with it. The diffuse sunlit band (98-100) and the shade floor (44) are unchanged, and the reflection of the wall patch at the wall's foot softens. Roughness up to about 0.55; past that the oak loses its satin sheen.",
+   "accept": {
+    "region": [
+     1000,
+     840,
+     1340,
+     880
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     10,
+     40
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The cast-metal wordmark has the same value as its red plinth (64.9 against 63.5), so 'earmilk' reads only by hue. Its kick panel still sits where it was before round 15 moved the product 0.25 m to y -0.25: it is now 0.12 m behind the front face, inside the carton, and the letters mirror only the floor.",
+   "evidence": {
+    "region": [
+     830,
+     742,
+     925,
+     760
+    ],
+    "measured": "part:letters-front-* median 64.9, rgb (105, 57, 39). Plinth around the letters 63.5, rgb (180, 32, 30). mirrors part:letters-front-*: floor 87.4%, front-baffle 7.6%, no letterkick. The letters' mirrored rays hit the floor at x -0.39 to -0.23, y -0.47 to -0.37, so their mirror direction is (-0.96, -0.09, -0.27) at rotate_z -40 and (-0.96, 0.08, -0.27) at -45."
+   },
+   "change": {
+    "setting": "lights.letterkick",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      0.45,
+      0.05
+     ],
+     "position": [
+      -0.173,
+      -0.201,
+      0.03
+     ],
+     "target": [
+      -0.123,
+      -0.157,
+      0.05
+     ],
+     "strength": 0.14,
+     "color": 3400,
+     "diffuse": false,
+     "receivers": [
+      "letters-front-*"
+     ]
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.3,
+      0.05
+     ],
+     "position": [
+      -0.236,
+      -0.39,
+      0.027
+     ],
+     "target": [
+      -0.14,
+      -0.39,
+      0.054
+     ],
+     "strength": 0.03,
+     "color": 3400,
+     "diffuse": false,
+     "receivers": [
+      "letters-front-*"
+     ]
+    }
+   },
+   "expected": "A thin strip 10 cm out along the letters' mirror direction, just above the floor. It sits where the letter faces mirror at any rotate_z from -40 to -48: hits fall at y -0.46 to -0.33 and z 0.003-0.05 on the panel. The letter faces rise to ~95-120 while the plinth stays ~55-63, so the wordmark reads as polished bronze 30-60 levels above the red. The panel is linked to the letters and reflection-only, so nothing else changes. Strength around 0.03 (0.14 would put the letters near 200 and read as gold paint).",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     88,
+     125
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The fillcut flag (1.4 x 1.2 m, 0.3 m off the wall, x -1.9 to -0.5) blocks the room's bounce as well as the fill from the whole back wall left of the product. The left fifth of the frame is dead black inside a rectangle with a hard vertical edge at x~100 that no window or object explains. That wall sits behind or edge-on to the fill's plane, so the fill barely reaches it either way; what kills it is the flag cutting off the bounce.",
+   "evidence": {
+    "region": [
+     110,
+     150,
+     270,
+     500
+    ],
+    "measured": "Median 2.5, 76.8% at L<=3, rgb (5, 2, 0). Profile along x over 0-280 x 200-500: 17.5, 17.3, 9.0, 2.5, 2.6, 2.5, 2.5, 2.9. The strip just outside the flag (x 0-100), which the fill cannot reach either, holds 11-19 from bounce alone (rows y 120-560)."
+   },
+   "change": {
+    "setting": "lights.fillcut",
+    "from": {
+     "type": "flag",
+     "size_m": [
+      1.4,
+      1.2
+     ],
+     "position": [
+      -1.2,
+      0.45,
+      0.73
+     ],
+     "target": [
+      -1.2,
+      -1.0,
+      0.73
+     ],
+     "lights": [
+      "fill"
+     ]
+    },
+    "to": {
+     "type": "flag",
+     "size_m": [
+      0.92,
+      1.09
+     ],
+     "position": [
+      -0.96,
+      0.45,
+      0.675
+     ],
+     "target": [
+      -0.96,
+      -1.0,
+      0.675
+     ],
+     "lights": [
+      "fill"
+     ]
+    }
+   },
+   "expected": "The flag keeps its right edge (x -0.5), its distance from the wall and its bottom (z 0.13). Its left edge moves from -1.9 to -1.42 and its top from 1.33 to 1.22, which still clears every fill corner past the silhouette (needed: left <= -1.31, right >= -0.61, top >= 1.16 for the fin's tip). So the silhouette stays shaded at 6-10 and the patch stays ~177. The wall from the frame's left edge to the patch takes the room's bounce like the strip at x<100: 2.5 to 10-18, crush under 5%, and the rectangle's edge at x~100 is gone. The plaster above the rail lifts slightly.",
+   "accept": {
+    "region": [
+     110,
+     150,
+     270,
+     500
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     8,
+     22
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Bring the 12 in woofer's cut-out in from the baffle's left edge, or narrow it, so its recess wall does not show as a sliver at x 804-814, y 540-630 (L 156, rgb 154/156/162).",
+   "why": "Driver size, flush mounting under trim rings and placement are the product's geometry and the owner's decision (fixed). It matters because this is the only cool-neutral surface on the product and reads as a grey gap at the left edge. Light can only darken or warm it, and c1 darkens it slightly."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
