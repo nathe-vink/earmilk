@@ -452,11 +452,26 @@ def prop(bpy, name, p, mats):
     elif kind == 'books':
         cols = p.get('colors', ['#3C4A5A', '#B9A27A', '#7A2E2A'])
         z = p.get('z', 0.0)
+        # hardbacks: cloth boards and a spine round a cream page block set 3 mm in at the head, tail and fore-edge,
+        # fore-edges to the camera with every other book turned spine out (10's round 10: three painted slabs read
+        # as toy blocks)
+        pages = M.make(bpy, f'{name}-pages', 'satin_paint', {'color': p.get('pages', '#EEE6D3'), 'roughness': 0.85, 'specular': 0.2})
+        M.add_relief(pages, 0.25, 0.0008, stretch=(0.02, 0.02, 1.0))     # the leaves' edges, a fine horizontal striation
+        t, inset = 0.003, 0.003
         for i, c in enumerate(cols):
-            m = M.make(bpy, f'{name}-{i}', 'satin_paint', {'color': c, 'roughness': 0.6, 'specular': 0.3})
+            m = M.make(bpy, f'{name}-{i}', 'satin_paint', {'color': c, 'roughness': 0.7, 'specular': 0.3})
             bw, bd, bh = 0.24 - 0.02 * i, 0.17 - 0.01 * i, 0.025 + 0.006 * (i % 2)
-            b = box(bpy, f'{name}-{i}', -bw / 2, -bd / 2, z, bw / 2, bd / 2, z + bh, m, bevel=0.002)
-            b.rotation_euler = (0, 0, math.radians(rnd.uniform(-6, 6))); made.append(b); z += bh
+            s_ = -1.0 if i % 2 else 1.0                                   # the spine at the back, or toward the camera
+            parts = [box(bpy, f'{name}-{i}-lower', -bw / 2, -bd / 2, z, bw / 2, bd / 2, z + t, m, bevel=0.001),
+                     box(bpy, f'{name}-{i}-upper', -bw / 2, -bd / 2, z + bh - t, bw / 2, bd / 2, z + bh, m, bevel=0.001),
+                     box(bpy, f'{name}-{i}-spine', -bw / 2, min(s_ * bd / 2, s_ * (bd / 2 - t)), z, bw / 2,
+                         max(s_ * bd / 2, s_ * (bd / 2 - t)), z + bh, m, bevel=0.0015),
+                     box(bpy, f'{name}-{i}-pages', -bw / 2 + inset, min(-s_ * (bd / 2 - inset), s_ * (bd / 2 - t)), z + t,
+                         bw / 2 - inset, max(-s_ * (bd / 2 - inset), s_ * (bd / 2 - t)), z + bh - t, pages)]
+            a = math.radians(rnd.uniform(-5, 5))
+            for b in parts:
+                b.rotation_euler = (0, 0, a); made.append(b)
+            z += bh
     elif kind == 'sideboard':
         w, d, hh = p.get('size', [1.6, 0.42, 0.56])
         leg = 0.14
