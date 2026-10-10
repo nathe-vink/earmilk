@@ -1,0 +1,596 @@
+{
+ "legend": {
+  "1": "sweep",
+  "2": "lamp rim over sweep",
+  "3": "lamp key over world (sky)",
+  "4": "gable-block",
+  "5": "world (sky)",
+  "6": "panel bowl_ramp",
+  "7": "waveguide-insert",
+  "8": "tweeter-retainer",
+  "9": "top-panel",
+  "10": "panel bowl_streak over panel bowl_ramp",
+  "11": "tweeter-frame",
+  "12": "tweeter-motor",
+  "13": "tweeter-magnet",
+  "14": "tweeter-surround",
+  "15": "lamp inside.specular over world (sky)",
+  "16": "tweeter-coil",
+  "17": "tweeter-dome",
+  "18": "cable-tweeter-lead",
+  "19": "side-right",
+  "20": "lamp snoot.specular over sweep",
+  "21": "lamp snoot.specular + lamp inside.specular over sweep",
+  "22": "connector-socket",
+  "23": "lamp inside.specular over sweep",
+  "24": "connector-plug",
+  "25": "seal-channel",
+  "26": "cable-tweeter",
+  "27": "lamp snoot.specular + lamp inside.specular over world (sky)",
+  "28": "back-panel",
+  "29": "front-baffle",
+  "30": "pull-loop",
+  "31": "mid-divider",
+  "32": "mid-frame",
+  "33": "letters-back-3",
+  "34": "mid-motor",
+  "35": "mid-magnet",
+  "36": "mid-cone",
+  "37": "mid-coil"
+ },
+ "step": 2,
+ "parts": {
+  "side-right": {
+   "pixels": 145660,
+   "seen": [
+    [
+     "lamp inside.specular over sweep",
+     0.692
+    ],
+    [
+     "back-panel",
+     0.123
+    ],
+    [
+     "sweep",
+     0.056
+    ],
+    [
+     "mid-divider",
+     0.031
+    ],
+    [
+     "mid-magnet",
+     0.029
+    ],
+    [
+     "mid-frame",
+     0.024
+    ]
+   ]
+  },
+  "gable-block": {
+   "pixels": 109728,
+   "seen": [
+    [
+     "sweep",
+     0.276
+    ],
+    [
+     "gable-block",
+     0.273
+    ],
+    [
+     "lamp inside.specular over sweep",
+     0.159
+    ],
+    [
+     "lamp inside.specular over world (sky)",
+     0.13
+    ],
+    [
+     "world (sky)",
+     0.069
+    ],
+    [
+     "panel bowl_ramp",
+     0.029
+    ]
+   ]
+  },
+  "waveguide-insert": {
+   "pixels": 108788,
+   "seen": [
+    [
+     "waveguide-insert",
+     0.28
+    ],
+    [
+     "lamp inside.specular over sweep",
+     0.273
+    ],
+    [
+     "panel bowl_ramp",
+     0.197
+    ],
+    [
+     "sweep",
+     0.131
+    ],
+    [
+     "world (sky)",
+     0.048
+    ],
+    [
+     "panel bowl_streak over panel bowl_ramp",
+     0.046
+    ]
+   ]
+  },
+  "top-panel": {
+   "pixels": 44988,
+   "seen": [
+    [
+     "lamp inside.specular over sweep",
+     0.553
+    ],
+    [
+     "top-panel",
+     0.161
+    ],
+    [
+     "sweep",
+     0.123
+    ],
+    [
+     "gable-block",
+     0.067
+    ],
+    [
+     "side-right",
+     0.06
+    ],
+    [
+     "cable-tweeter",
+     0.019
+    ]
+   ]
+  },
+  "back-panel": {
+   "pixels": 36040,
+   "seen": [
+    [
+     "side-right",
+     0.642
+    ],
+    [
+     "sweep",
+     0.201
+    ],
+    [
+     "back-panel",
+     0.129
+    ],
+    [
+     "top-panel",
+     0.018
+    ],
+    [
+     "gable-block",
+     0.01
+    ]
+   ]
+  },
+  "mid-divider": {
+   "pixels": 14660,
+   "seen": [
+    [
+     "lamp inside.specular over sweep",
+     0.502
+    ],
+    [
+     "side-right",
+     0.415
+    ],
+    [
+     "mid-divider",
+     0.073
+    ],
+    [
+     "top-panel",
+     0.009
+    ]
+   ]
+  },
+  "front-baffle": {
+   "pixels": 12332,
+   "seen": [
+    [
+     "sweep",
+     0.651
+    ],
+    [
+     "front-baffle",
+     0.271
+    ],
+    [
+     "side-right",
+     0.04
+    ],
+    [
+     "mid-frame",
+     0.03
+    ],
+    [
+     "waveguide-insert",
+     0.007
+    ],
+    [
+     "top-panel",
+     0.0
+    ]
+   ]
+  },
+  "tweeter-retainer": {
+   "pixels": 9012,
+   "seen": [
+    [
+     "tweeter-retainer",
+     0.378
+    ],
+    [
+     "world (sky)",
+     0.144
+    ],
+    [
+     "gable-block",
+     0.126
+    ],
+    [
+     "cable-tweeter-lead",
+     0.101
+    ],
+    [
+     "lamp key over world (sky)",
+     0.085
+    ],
+    [
+     "lamp snoot.specular + lamp inside.specular over world (sky)",
+     0.075
+    ]
+   ]
+  },
+  "tweeter-frame": {
+   "pixels": 6504,
+   "seen": [
+    [
+     "tweeter-frame",
+     0.449
+    ],
+    [
+     "tweeter-motor",
+     0.325
+    ],
+    [
+     "world (sky)",
+     0.062
+    ],
+    [
+     "lamp inside.specular over world (sky)",
+     0.06
+    ],
+    [
+     "lamp snoot.specular + lamp inside.specular over world (sky)",
+     0.06
+    ],
+    [
+     "waveguide-insert",
+     0.031
+    ]
+   ]
+  },
+  "cable-tweeter": {
+   "pixels": 6500,
+   "seen": [
+    [
+     "sweep",
+     0.194
+    ],
+    [
+     "back-panel",
+     0.19
+    ],
+    [
+     "top-panel",
+     0.148
+    ],
+    [
+     "gable-block",
+     0.111
+    ],
+    [
+     "lamp inside.specular over sweep",
+     0.107
+    ],
+    [
+     "side-right",
+     0.096
+    ]
+   ]
+  },
+  "tweeter-motor": {
+   "pixels": 3224,
+   "seen": [
+    [
+     "tweeter-motor",
+     0.37
+    ],
+    [
+     "lamp inside.specular over world (sky)",
+     0.37
+    ],
+    [
+     "tweeter-magnet",
+     0.105
+    ],
+    [
+     "world (sky)",
+     0.057
+    ],
+    [
+     "lamp key over world (sky)",
+     0.047
+    ],
+    [
+     "sweep",
+     0.031
+    ]
+   ]
+  },
+  "tweeter-dome": {
+   "pixels": 1692,
+   "seen": [
+    [
+     "lamp inside.specular over world (sky)",
+     0.508
+    ],
+    [
+     "tweeter-dome",
+     0.435
+    ],
+    [
+     "tweeter-surround",
+     0.035
+    ],
+    [
+     "waveguide-insert",
+     0.014
+    ],
+    [
+     "tweeter-coil",
+     0.007
+    ]
+   ]
+  },
+  "cable-tweeter-lead": {
+   "pixels": 1404,
+   "seen": [
+    [
+     "gable-block",
+     0.236
+    ],
+    [
+     "sweep",
+     0.197
+    ],
+    [
+     "lamp key over world (sky)",
+     0.16
+    ],
+    [
+     "tweeter-retainer",
+     0.137
+    ],
+    [
+     "world (sky)",
+     0.123
+    ],
+    [
+     "lamp inside.specular over sweep",
+     0.057
+    ]
+   ]
+  },
+  "seal-channel": {
+   "pixels": 1044,
+   "seen": [
+    [
+     "lamp snoot.specular + lamp inside.specular over sweep",
+     0.352
+    ],
+    [
+     "lamp snoot.specular + lamp inside.specular over world (sky)",
+     0.337
+    ],
+    [
+     "gable-block",
+     0.276
+    ],
+    [
+     "seal-channel",
+     0.023
+    ],
+    [
+     "cable-tweeter",
+     0.008
+    ],
+    [
+     "top-panel",
+     0.004
+    ]
+   ]
+  },
+  "tweeter-magnet": {
+   "pixels": 1012,
+   "seen": [
+    [
+     "tweeter-magnet",
+     0.332
+    ],
+    [
+     "lamp inside.specular over world (sky)",
+     0.289
+    ],
+    [
+     "world (sky)",
+     0.174
+    ],
+    [
+     "tweeter-motor",
+     0.15
+    ],
+    [
+     "tweeter-frame",
+     0.055
+    ]
+   ]
+  },
+  "connector-socket": {
+   "pixels": 892,
+   "seen": [
+    [
+     "lamp inside.specular over world (sky)",
+     0.771
+    ],
+    [
+     "gable-block",
+     0.206
+    ],
+    [
+     "connector-plug",
+     0.022
+    ]
+   ]
+  },
+  "connector-plug": {
+   "pixels": 884,
+   "seen": [
+    [
+     "lamp inside.specular over world (sky)",
+     0.833
+    ],
+    [
+     "gable-block",
+     0.113
+    ],
+    [
+     "cable-tweeter-lead",
+     0.054
+    ]
+   ]
+  },
+  "tweeter-surround": {
+   "pixels": 636,
+   "seen": [
+    [
+     "tweeter-surround",
+     0.302
+    ],
+    [
+     "lamp inside.specular over world (sky)",
+     0.289
+    ],
+    [
+     "waveguide-insert",
+     0.283
+    ],
+    [
+     "world (sky)",
+     0.05
+    ],
+    [
+     "tweeter-dome",
+     0.05
+    ],
+    [
+     "tweeter-frame",
+     0.025
+    ]
+   ]
+  },
+  "pull-loop": {
+   "pixels": 276,
+   "seen": [
+    [
+     "sweep",
+     0.551
+    ],
+    [
+     "pull-loop",
+     0.319
+    ],
+    [
+     "waveguide-insert",
+     0.072
+    ],
+    [
+     "lamp inside.specular over sweep",
+     0.058
+    ]
+   ]
+  },
+  "letters-back-3": {
+   "pixels": 252,
+   "seen": [
+    [
+     "sweep",
+     0.873
+    ],
+    [
+     "world (sky)",
+     0.095
+    ],
+    [
+     "letters-back-3",
+     0.032
+    ]
+   ]
+  },
+  "tweeter-coil": {
+   "pixels": 68,
+   "seen": [
+    [
+     "lamp inside.specular over world (sky)",
+     0.588
+    ],
+    [
+     "tweeter-coil",
+     0.235
+    ],
+    [
+     "tweeter-surround",
+     0.118
+    ],
+    [
+     "tweeter-dome",
+     0.059
+    ]
+   ]
+  },
+  "mid-frame": {
+   "pixels": 28,
+   "seen": [
+    [
+     "front-baffle",
+     1.0
+    ]
+   ]
+  }
+ },
+ "lamps": {
+  "key": 3.7337,
+  "inside.specular": 0.5593,
+  "rim": 2.7454,
+  "snoot.specular": 3.5296
+ }
+}
