@@ -1,0 +1,100 @@
+{
+ "date": "2026-10-10",
+ "new": "renders/2026-10-08/engine/05-e15.png",
+ "old": "renders/2026-10-10/finished/05-e14.png",
+ "new_score": 7.0,
+ "old_score": 6.0,
+ "prefer": "new",
+ "differences": [
+  {
+   "what": "In B the side face of carton 6's dark-brown base band picks up a mirror-grey floor reflection (RGB 93/90/86 against A's 15/10/6), so the band's colour block breaks between front and side and the base reads like glass or chrome. A keeps the band solid dark brown.",
+   "region": [
+    1300,
+    555,
+    1360,
+    615
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "In B the side of the green carton's base band is washed to a grey-green by a translucent diagonal sheen across the seam, so the base looks like an acrylic sleeve rather than a printed band.",
+   "region": [
+    850,
+    500,
+    912,
+    580
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "The side faces of the red, blue and light-blue base bands in B carry hard-edged diagonal light triangles that read as a glassy plinth. In A these faces are clean, solid colour with a soft falloff.",
+   "region": [
+    230,
+    440,
+    712,
+    560
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "On the cream gable the tweeter waveguide nearly disappears in B (luminance range 55 against 93 in A). A shows the scoop's rim highlight and shading clearly.",
+   "region": [
+    975,
+    230,
+    1065,
+    295
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "The light-blue gable's waveguide is softer and less defined in B (range 67 against 83).",
+   "region": [
+    560,
+    200,
+    645,
+    268
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "A grounds the cartons better: in front of the cream carton A's floor drops to 46 against 55 on the open floor, while B's is 72 against 70.",
+   "region": [
+    950,
+    588,
+    1110,
+    620
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "B has a faint blurred glow on the floor below the white earmilk logos on the green and dark cartons.",
+   "region": [
+    1195,
+    610,
+    1295,
+    640
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "B's backdrop is brighter and more even (about 115 at both top corners against A's 71 and 93), giving the dark-brown gable more separation and a more open feel.",
+   "region": [
+    0,
+    0,
+    1500,
+    210
+   ],
+   "favours": "B"
+  },
+  {
+   "what": "A's foreground floor sinks to about 39 luma, a heavy, murky band under the lineup; B's sits at about 57.",
+   "region": [
+    0,
+    640,
+    1500,
+    750
+   ],
+   "favours": "B"
+  }
+ ]
+}

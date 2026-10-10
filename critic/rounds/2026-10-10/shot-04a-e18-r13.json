@@ -1,0 +1,214 @@
+{
+ "stage1": {
+  "impression": "The straight-on back reads at once (red gable, OPEN OTHER SIDE fin, Nutrition Facts panel), but the white body looks like one bright sheet of paper with no lacquer in it, and the carton runs out of the bottom of the frame with nothing under it, so it reads as a tidy mockup on a grey vignette rather than a photographed object. The grey wordmark looks like a dated bevel effect, the port like a grey grommet over a black disc, and the warm backdrop turns muddy in the lower right.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The white back keeps its lit face near 205-220 and models under the gable. Today the band under the eave is a flat 246 (range 2) and the strip from the eave to the label falls only 3 levels (247 -> 244). A 9 needs about 8 or more levels of fall there, with the middle of the face near 212.",
+  "The white reads as gloss lacquer through a reflection that only gloss would explain. Today 70 % of the back mirrors the unlit sweep floor and 25 % a soft full-width ramp. Its bent shading normals (see out_of_scope) stop any hard-edged sheen from landing straight.",
+  "The cast letters read as metal: a reflected horizon or highlight with a clear step. Today every stroke carries the same even 192 -> 121 ramp (steepest step 5.3 levels per px).",
+  "The backdrop is even round the product: lower right (92) within about 15 levels of lower left (128), with no taupe shadow pocket.",
+  "The port flare reads as black plastic lit by the same key as the back, not as a ring lit by its own lamp 16 cm away (top lip 118 vs foot 58).",
+  "The accent red holds wherever it is not mirroring a card. The fin's foot is dE 4.6-5.1 from #C62828, against 1.2 on the lower roof."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The finish maps the white's lit face (raw 213.2) to 236 and squeezes everything brighter into the 12 levels between 236 and the peak. So the band from the eave to the label, which holds the back_sheen and the letters, prints as a flat 244-247 and the clear coat's sheen cannot show.",
+   "evidence": {
+    "region": [
+     200,
+     348,
+     325,
+     462
+    ],
+    "measured": "Left margin, eave to label: profile 247, 246, 246, 245, 244, 244 (falloff 3). Band under the eave [200,348,700,380]: median 246, range 2. That band mirrors back_sheen at radiance 1.23-2.0, which should show and doesn't. Mid face [200,820,620,870]: median 230. Whole back-panel median 232, above the card's 200-220. The previous round's c2 test fails at 246 (wanted 225-233)."
+   },
+   "change": {
+    "setting": "finish.white_out",
+    "from": 236,
+    "to": 218
+   },
+   "expected": "The lit face lands at 218 instead of 236, and the shoulder above it gets about 30 levels of room instead of 12. Mid face 230 -> about 212, bottom rows 224 -> about 207. Band under the eave 246 -> about 232, inside the previous round's c2 window of 225-233. The strip from the eave to the label falls about 8 levels (about 236 -> 228) instead of 3, so the back_sheen reads as a sheen under the gable and the corner rims stand out from the face. Values below the knee scale by about 0.92 (backdrop 145 -> 134, letters 154 -> 142); the retouch puts back half of the red's lost lightness.",
+   "accept": {
+    "region": [
+     200,
+     820,
+     620,
+     870
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     204,
+     218
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The cast-metal letters carry an even gradient fitted exactly to their height, so the wordmark reads as a grey bevel effect, not metal mirroring a card.",
+   "evidence": {
+    "region": [
+     515,
+     388,
+     522,
+     426
+    ],
+    "measured": "'l' stem profile: 191.6, 184.8, 177.5, 167.8, 157.6, 146.8, 132.8, 120.8. Largest step 5.3 per px; the 10-90 % width is 29 px of 38. The 'k' stem is identical. The letters mirror letters_ramp, whose ramp [0.78, 0.83] covers exactly the band they reflect: z 0.829 at the letter tops down to 0.782 at their feet (radiance 0.96 -> 0.23), level across all eight letters."
+   },
+   "change": {
+    "setting": "lights.letters_ramp.ramp.at_m",
+    "from": [
+     0.78,
+     0.83
+    ],
+    "to": [
+     0.804,
+     0.812
+    ]
+   },
+   "expected": "The letters mirror a horizon. The upper ~45 % of each letter (rows 386-400) sits at about 185 after c1, an 8 px transition is centred near row 404, and the rest sits at about 95, on one level line across the whole word. The step inside the 'l' rises from 5.3 to about 15-20 per px. The letters' overall falloff rises to about 85, past the previous round's c4 window of 42-60. That is the trade: c4 added dark to the reflection so the letters would read as metal. This keeps the dark but gathers it below a line, which reads as polished metal instead of a fill. The bright cap stays about 40 below the white around it, so the wordmark stays legible.",
+   "accept": {
+    "region": [
+     515,
+     388,
+     522,
+     426
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     10,
+     30
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The key's shadow of the carton on the floor behind it fills the lower right of the backdrop with a muddy taupe pocket (92 against 128 at the lower left), so the backdrop is lopsided and dirty in that corner.",
+   "evidence": {
+    "region": [
+     730,
+     1000,
+     880,
+     1120
+    ],
+    "measured": "Lower right median 92.4 (RGB 96, 92, 86) vs lower left [20,1000,170,1120] 128.2. Right strip [730,0,880,1125] falls 53.1 top to bottom, against 34.1 on the left. The floor seen there, about (0.40, 0.80), lies inside the carton's shadow from a key at azimuth -38, elevation 38."
+   },
+   "change": {
+    "setting": "lights.key.shadow_on_set",
+    "from": 1,
+    "to": 0.5
+   },
+   "expected": "The lower-right backdrop rises from 92 to about 100-108 after c1's scaling (lower left about 118). The right strip's top-to-bottom fall drops from 53 to about 30, level with the left strip's (34, about 31 after c1). A trace of shadow stays on the right, so the carton still stands on a floor lit from camera left.",
+   "accept": {
+    "region": [
+     730,
+     0,
+     880,
+     1125
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     24,
+     40
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The port flare is lit by port_fill, a 2.2 W point lamp that lights the port tube alone and sits about 16 cm from its upper lip. The ring brightens from 58 at its foot to 118 at its top while the white round it gets nothing from that lamp. This is the self-lit look the card says blind critics read as glow.",
+   "evidence": {
+    "region": [
+     425,
+     882,
+     475,
+     893
+    ],
+    "measured": "Ring top median 117.8; foot [425,1018,475,1030] 58.5; sides 74-78; port-tube median 56.6. At 0.16-0.24 m, a 2.2 W point lamp puts about 1.7-5.7 W/m2 on the ring, against about 2 W/m2 from the key on that face."
+   },
+   "change": {
+    "setting": "lights.port_fill.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The flare is lit only by the key and the room: top lip about 55-70, foot about 45. It reads as one black plastic part with the key's top-down falloff and the cast shadow it already throws to the lower right. The lower inner wall of the tube (24-58 now) darkens toward 10-30, which deepens the bore.",
+   "accept": {
+    "region": [
+     425,
+     882,
+     475,
+     893
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     40,
+     95
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The fin carries OPEN OTHER SIDE and mirrors fin_card at 0.4-1.0 of its strength over its whole face. Even its foot wears a white veil and reads coral (195, 59, 62), not the accent red the lower roof shows (193, 38, 37).",
+   "evidence": {
+    "region": [
+     222,
+     148,
+     252,
+     168
+    ],
+    "measured": "Fin foot, left of the type: dE2000 4.6 against #C62828; right of the arrow [645,148,680,168]: 5.13; the fin's full margins: 6.15. The fin mirrors fin_card at radiance 1.05-1.77 (96 % of its pixels). The lower roof [260,290,640,335] is dE 1.19."
+   },
+   "change": {
+    "setting": "lights.fin_card.ramp.values",
+    "from": [
+     0.4,
+     1
+    ],
+    "to": [
+     0,
+     1
+    ]
+   },
+   "expected": "The fin's foot mirrors the card at about 0.37 radiance instead of 1.05 and shows the swatch red (dE under 3), while its top keeps nearly the same highlight (1.56 vs 1.77). It then reads as red lacquer catching light along its top edge, as the roof does. Its falloff rises from 13 to about 20-25, past the previous round's c3 window of 9-14. That window was set so the fin would model instead of sitting as a flat band; it now models more, and its top stays as bright, so it does not go back to flat maroon. The white type gains contrast at the foot.",
+   "accept": {
+    "region": [
+     222,
+     148,
+     252,
+     168
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 3.0
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A straight-edged reflection on the white back, such as a vertical strip sheen near the right edge (the usual cue that a white box is lacquer).",
+   "why": "The back panel's shading normals are bent, not flat. At rows 350-380, the point it mirrors on the plane y = -1.0 runs from x -0.230 to +0.085 across px 210 -> 690 (a flat face would give about -0.25 to +0.25), and z climbs from 0.769 to 0.815 across the width. At rows 820-870 the floor hits run -0.357 / -0.022 / +0.200 (flat: about +/-0.41). Only at rows 1060-1120 is the mapping roughly symmetric (-0.275 / +0.256). The upper right of the panel is turned a few degrees toward -x, so any card with an edge would land as a skewed wedge. The fix is in the model's geometry, which this card fixes. It matters because, until the normals are fixed, the white can show it is gloss only through soft sheens and the corner rims."
+  },
+  {
+   "request": "Show the plinth band (SHAKE WELL) and the carton's contact with the floor.",
+   "why": "The frame cuts the carton about 24 cm above the floor, so the product has no footing and partly reads as a cut-out. But the purpose fixes a label-first, straight-on, level frame, and pulling back far enough would shrink the Facts panel to about 73 % of its size."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

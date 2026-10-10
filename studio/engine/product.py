@@ -232,10 +232,25 @@ def import_model(bpy, glb, origin_mm, axes='gltf'):
             continue
         mw = o.matrix_world.copy()
         o.parent = None
-        o.data.transform(shift @ (FIX_RAW if axes == 'raw' else Matrix.Identity(4)) @ mw)
+        # the CAD's normals as the importer set them: flat on every face, turning on the rounds. Marking the faces
+        # smooth below re-reads the custom normals in new spaces, which bent the flat faces' corners up to 6 degrees
+        # toward the rounds (p95 3.1 degrees on the back panel; a big face's triangles spread the tilt over the face,
+        # so the white panels mirrored as faintly curved card: 04a's round 13 read it in the back's reflections).
+        # They are carried through the transform and set again after
+        me = o.data
+        cn = None
+        if me.has_custom_normals:
+            import numpy as np
+            cn = np.empty(len(me.corner_normals) * 3); me.corner_normals.foreach_get('vector', cn); cn = cn.reshape(-1, 3)
+        M = shift @ (FIX_RAW if axes == 'raw' else Matrix.Identity(4)) @ mw
+        me.transform(M)
         o.matrix_world = Matrix.Identity(4)
-        for p in o.data.polygons:
+        for p in me.polygons:
             p.use_smooth = True
+        if cn is not None:
+            cn = cn @ np.array(M.to_3x3().inverted().transposed()).T
+            cn /= np.maximum(np.linalg.norm(cn, axis=1, keepdims=True), 1e-12)
+            me.normals_split_custom_set(cn.tolist())
         # a smooth-shaded facet at a grazing angle to a lamp shadows its neighbours in steps along the terminator (the
         # waveguide's saw-tooth: the shadow map showed it on the key's and fill's terminators, not in a reflection);
         # Cycles offsets such shadow rays to the smooth surface the normals describe

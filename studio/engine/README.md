@@ -183,6 +183,16 @@ the critic's card prints that table and the `retouch.*` settings, and every test
 without rendering it again. On 01 e11: the reds from dE 7.2 to 9.5 to 3.2 to 5.1 (the rest is the half of the
 lightness left), both whites from 2.4 and 3.5 to 0.
 
+## The CAD's normals
+
+The GLB carries the CAD's normals: flat on every face, turning on the 6 mm rounds. Blender's importer sets them as
+custom normals. Marking the faces smooth afterwards (which the terminator offset needs) re-reads those normals in new
+spaces. Before 2026-10-10 that bent the flat faces' corners up to 6.3 degrees toward the rounds (p95 3.1 degrees on
+the back panel). A big face's triangles spread the tilt across the face, so the white panels mirrored as faintly
+curved card, and no card with an edge could land on them straight. 04a's round 13 read it in the back's reflections.
+`import_model` now reads the imported normals, carries them through the transform and sets them again. A flat face's
+corners are then within 0.02 degrees of its normal (p95), and everything rendered since has flat lacquer panels.
+
 ## The finish
 
     "finish": {"enabled": true, "white_in": 213, "white_out": 236, "contrast": 0.12, "clarity": 0.08,

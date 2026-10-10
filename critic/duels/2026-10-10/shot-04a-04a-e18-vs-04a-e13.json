@@ -1,0 +1,70 @@
+{
+ "date": "2026-10-10",
+ "new": "renders/2026-10-08/engine/04a-e18.png",
+ "old": "renders/2026-10-10/finished/04a-e13.png",
+ "new_score": 6.0,
+ "old_score": 6.5,
+ "prefer": "old",
+ "differences": [
+  {
+   "what": "Port trim: B's satin-silver flange (L 147-185) stands apart from the black throat and shows the curve of the tube wall inside, so it reads as machined trim with real depth. A's graphite flange (L 76-118) runs into the throat and the whole port reads as one heavy dark disc, with no clear step between flange and tube.",
+   "region": [
+    372,
+    878,
+    530,
+    1035
+   ],
+   "favours": "B"
+  },
+  {
+   "what": "Background: A's grey sweep darkens unevenly, from 176 at top centre to 91 in the bottom-right corner against 127 bottom-left. That leaves a muddy, dark lower-right corner. B's warm seamless stays within 154-189 and is cleaner.",
+   "region": [
+    710,
+    700,
+    900,
+    1125
+   ],
+   "favours": "B"
+  },
+  {
+   "what": "Brand red: A's 'OPEN OTHER SIDE' fin is washed out to a milky pink (RGB 190/68/72), and its slope sits dE 2.9 off the brand red. B keeps the fin saturated (180/41/41) and the slope on brand at dE 1.6.",
+   "region": [
+    213,
+    110,
+    688,
+    170
+   ],
+   "favours": "B"
+  },
+  {
+   "what": "Logo: A's gunmetal 'earmilk' sits about 78 levels below the face (median 167 vs 245) and reads crisply as a metal badge. B's pale, slightly pink warm-grey logo (median 193) looks washed out at full size.",
+   "region": [
+    333,
+    388,
+    568,
+    432
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "Gable gloss: A's red slope carries a broad soft-box sheen that falls from 103 to 70 down the face; B's slope barely changes (86 to 71) and reads as flat plastic.",
+   "region": [
+    195,
+    185,
+    710,
+    340
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "Body edge: on A the carton's right edge has a turning shade band (L about 205-213) inside the rim highlight; on B the band is about 226-236, so A's body looks slightly more three-dimensional.",
+   "region": [
+    695,
+    350,
+    712,
+    1125
+   ],
+   "favours": "A"
+  }
+ ]
+}

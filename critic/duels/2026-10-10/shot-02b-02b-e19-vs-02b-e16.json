@@ -1,0 +1,90 @@
+{
+ "date": "2026-10-10",
+ "new": "renders/2026-10-08/engine/02b-e19.png",
+ "old": "renders/2026-10-10/finished/02b-e16.png",
+ "new_score": 5.5,
+ "old_score": 6.5,
+ "prefer": "old",
+ "differences": [
+  {
+   "what": "The brand mark reads in A and is lost in B: A's white 'earmilk' stands out on the red plinth (about 203 against 51); B's letters are dark brown on red (about 33 against 62-71), a muddy smudge.",
+   "region": [
+    830,
+    705,
+    925,
+    755
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "B's brand red goes coral on the sunlit faces: its right plinth face sits at (255,94,77) with the red channel clipped in 78% of its pixels, its gable-end triangle a flat salmon, so the carton reads as two different reds. A keeps one deep red in light and shade.",
+   "region": [
+    965,
+    690,
+    1112,
+    795
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "In B the wall left of and above the sun patch is a near-black block (about 2.5, 75% crushed) with no visible cause, swallowing the chair rail; in A the shaded wall and the cast shadow keep their detail.",
+   "region": [
+    95,
+    85,
+    280,
+    590
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "A's woofer does not read as a driver: the hard sun puts a crescent and a sharp white shard inside the cone. B's woofer reads cleanly as a real driver.",
+   "region": [
+    755,
+    535,
+    905,
+    690
+   ],
+   "favours": "B"
+  },
+  {
+   "what": "B makes the product the hero: larger (72% of frame height) at a true three-quarter angle showing the carton's volume; A is smaller and nearly front-on.",
+   "region": [
+    800,
+    150,
+    1112,
+    795
+   ],
+   "favours": "B"
+  },
+  {
+   "what": "A is low-key to the point of murk: the right third of the wall about 12 and the foreground floor about 41. B's sunlit floor has a glossy plank texture and diagonal light leading to the product.",
+   "region": [
+    1000,
+    0,
+    1350,
+    650
+   ],
+   "favours": "B"
+  },
+  {
+   "what": "A's horn shows the tweeter centred with clean speculars; in B the tweeter is a third hidden behind the lip and the gable end's diagonal edge is stair-stepped with a red fringe.",
+   "region": [
+    775,
+    280,
+    900,
+    345
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "A's set is more convincing: the sun patch wraps over the chair rail; in B the cast shadow's fin reads as a hooked beak.",
+   "region": [
+    270,
+    110,
+    720,
+    330
+   ],
+   "favours": "A"
+  }
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "date": "2026-10-10",
+ "new": "renders/2026-10-08/engine/08b-e11.png",
+ "old": "renders/2026-10-10/finished/08b-e9.png",
+ "new_score": 6.5,
+ "old_score": 4.5,
+ "prefer": "new",
+ "differences": [
+  {
+   "what": "B has three stray glossy black pucks (they look like stacked disc magnets) that A does not have. The worst one floats on the solid plywood cut face below the driver mount. It cannot be there physically and it is not sectioned like everything else on the cut plane, so it reads as a modelling error. The second sits half-hidden at the lower rear of the driver, and the third is threaded onto the signal cable. In A the wood face and driver back are clean.",
+   "region": [
+    610,
+    445,
+    652,
+    616
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "The red horn finish. A shows crisp white highlight streaks running along the flare, so the horn reads as glossy lacquer and its curvature is clear. B's highlights are weak and the horn looks flat and satiny, more like plain plastic. In the lower flare the brightest tones (95th percentile luminance) reach about 163 in A against about 126 in B.",
+   "region": [
+    745,
+    240,
+    1205,
+    665
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "Background and outline separation. A uses a near-black backdrop that falls off smoothly from about 37 at the left to about 13 at the right, and the horn's top edge stands 3 to 4 times brighter than it. B uses a flat charcoal backdrop at about 54 to 64, and the horn's top edge almost matches it in brightness. The horn's outline in B relies on colour alone and sinks into the backdrop. Neither shows banding.",
+   "region": [
+    745,
+    120,
+    1350,
+    610
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "The plywood cut faces are about 15% brighter and warmer in A (median luminance 176 to 189 against 150 to 162), so the layers read fresh and easy to follow and stand out against the set. In B the same faces look dull and slightly muddy.",
+   "region": [
+    170,
+    255,
+    665,
+    700
+   ],
+   "favours": "A"
+  },
+  {
+   "what": "The vertical red face of the horn neck picks up a milky pink haze in A (median green channel 78 against 35), which washes out the red there. B keeps that face a clean, saturated red.",
+   "region": [
+    682,
+    128,
+    745,
+    255
+   ],
+   "favours": "B"
+  }
+ ]
+}

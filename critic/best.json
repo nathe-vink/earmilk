@@ -10,7 +10,16 @@
   "since": "2026-10-10"
  },
  "shot-02b": {
-  "record": [],
+  "record": [
+   {
+    "date": "2026-10-10",
+    "new": "renders/2026-10-08/engine/02b-e19.png",
+    "old": "renders/2026-10-10/finished/02b-e16.png",
+    "new_score": 5.5,
+    "old_score": 6.5,
+    "prefer": "old"
+   }
+  ],
   "frame": "renders/2026-10-10/finished/02b-e16.png",
   "since": "2026-10-10"
  },
@@ -20,7 +29,16 @@
   "since": "2026-10-10"
  },
  "shot-04a": {
-  "record": [],
+  "record": [
+   {
+    "date": "2026-10-10",
+    "new": "renders/2026-10-08/engine/04a-e18.png",
+    "old": "renders/2026-10-10/finished/04a-e13.png",
+    "new_score": 6.0,
+    "old_score": 6.5,
+    "prefer": "old"
+   }
+  ],
   "frame": "renders/2026-10-10/finished/04a-e13.png",
   "since": "2026-10-10"
  },
@@ -30,8 +48,17 @@
   "since": "2026-10-10"
  },
  "shot-05": {
-  "record": [],
-  "frame": "renders/2026-10-10/finished/05-e14.png",
+  "record": [
+   {
+    "date": "2026-10-10",
+    "new": "renders/2026-10-08/engine/05-e15.png",
+    "old": "renders/2026-10-10/finished/05-e14.png",
+    "new_score": 7.0,
+    "old_score": 6.0,
+    "prefer": "new"
+   }
+  ],
+  "frame": "renders/2026-10-08/engine/05-e15.png",
   "since": "2026-10-10"
  },
  "shot-07": {
@@ -45,8 +72,17 @@
   "since": "2026-10-10"
  },
  "shot-08b": {
-  "record": [],
-  "frame": "renders/2026-10-10/finished/08b-e9.png",
+  "record": [
+   {
+    "date": "2026-10-10",
+    "new": "renders/2026-10-08/engine/08b-e11.png",
+    "old": "renders/2026-10-10/finished/08b-e9.png",
+    "new_score": 6.5,
+    "old_score": 4.5,
+    "prefer": "new"
+   }
+  ],
+  "frame": "renders/2026-10-08/engine/08b-e11.png",
   "since": "2026-10-10"
  },
  "shot-09": {
