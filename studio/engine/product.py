@@ -385,6 +385,7 @@ def place(bpy, pdef, templates, shot, root):
     # its faces take the "interior" rules' materials (raw birch, bare resin) instead of the paint and its zones
     inner_rules = pdef.get('interior', []) if (prod.get('cutaway') or prod.get('explode')) else []
     mark = interior_marker(templates, ignore=pdef.get('interior_ignore')) if inner_rules else None
+    later = []                     # (object, part, zones, inside's index): zone parts split off after a cutaway's cut
     for i, inst in enumerate(instances):
         fl = inst.get('flavour', prod.get('flavour', next(iter(pdef['flavours']))))
         if fl not in mats_by_flavour:
@@ -428,10 +429,12 @@ def place(bpy, pdef, templates, shot, root):
             # the zones that name a part, split off as parts of their own when the shot asks (04b's red plinth, to be
             # lit without the white above it)
             pieces = [(pname, me)]
-            if zones and prod.get('zone_parts') and any(z.get('part') for z in zones):
+            split = bool(zones and prod.get('zone_parts') and any(z.get('part') for z in zones))
+            inner_idx = len(me.materials) - 1 if inner else None
+            if split and not prod.get('cutaway'):
                 # in a cutaway or an exploded view the inside's faces (the last material) stay with the panel; only its
                 # outside's zone goes to the zone part (07 e12: skipped there, '*.plinth' matched nothing)
-                pieces = _split_zones(bpy, me, pname, zones, inner_idx=len(me.materials) - 1 if inner else None)
+                pieces = _split_zones(bpy, me, pname, zones, inner_idx=inner_idx)
             for pn, me_ in pieces:
                 ob = bpy.data.objects.new(f'{pn}#{i}', me_)
                 bpy.context.scene.collection.objects.link(ob)
@@ -443,8 +446,27 @@ def place(bpy, pdef, templates, shot, root):
                 off = next((r['offset_m'] for r in prod.get('explode', []) if _match(pname, r['match'])), None)
                 ob.matrix_world = T @ Matrix.Translation(Vector(off)) if off else T
                 objs.append(ob); part_of[ob.name] = pn
+                if split and prod.get('cutaway'):
+                    later.append((ob, pname, zones, inner_idx))
     if prod.get('cutaway'):
         cutaway(bpy, prod['cutaway'], instances, objs, pdef.get('laminated', {}))
+        # a cutaway cuts the whole panel and only then splits its zone parts off: a boolean caps an open mesh badly,
+        # and the plinth band split off first left 08's section with dark slivers fanning across the back panel's and
+        # the front baffle's cut faces from the plinth line (round 10). The cut faces stay with the panel
+        for ob, pname, zones, inner_idx in later:
+            keep = {k for k in (inner_idx, ob.get('cut_section')) if k is not None}
+            pieces = _split_zones(bpy, ob.data, pname, zones, inner_idx=keep)
+            for pn, me_ in pieces:
+                if pn == pname:
+                    ob.data = me_
+                    continue
+                o2 = bpy.data.objects.new(f'{pn}#{ob["instance"]}', me_)
+                bpy.context.scene.collection.objects.link(o2)
+                o2['instance'] = ob['instance']; o2.matrix_world = ob.matrix_world.copy()
+                o2.hide_render = ob.hide_render; o2.hide_viewport = ob.hide_viewport
+                for sl in o2.material_slots:
+                    sl.link = 'DATA'
+                objs.append(o2); part_of[o2.name] = pn
     return objs, part_of
 
 
@@ -456,7 +478,8 @@ def cutaway(bpy, spec, instances, objs, laminated=None):
                     "sections": [{"match": "pattern", "color": "#D9C29B"}, ...]}
 
     A part wholly inside the box is hidden; parts matching "skip" are left whole (a cable drawn whole in front of
-    the cut reads better than half a cable). A cut face takes the colour of the first "sections" rule its part
+    the cut reads better than half a cable), but a loose piece of one wholly inside the box (a magnet in the half cut
+    away) goes with it. A cut face takes the colour of the first "sections" rule its part
     matches (wood shows wood, a printed part its resin), else the part's own material, as a bought part's would.
     A plywood panel's cut face shows its veneers; a block the product file lists under `laminated` ({part pattern:
     sheet thickness, mm}) shows the plies of the sheets it was glued up from, stacked up the vertical."""
@@ -491,6 +514,9 @@ def cutaway(bpy, spec, instances, objs, laminated=None):
         for ob in by_inst.get(i, []):
             pname = re.sub(r'#\d+(\.\d+)?$', '', ob.name)
             if spec.get('skip') and _match(pname, spec['skip']):
+                # left whole, but a loose piece of it wholly inside the box goes with what was cut away: 08b's magnets
+                # and pins stood whole in front of the section where the insert round them had been cut off (round 7)
+                _drop_inside(ob, Ti, lo, hi)
                 continue
             # the part's box in the product's frame (an exploded part is moved, so use its own matrix)
             cs = [Ti @ (ob.matrix_world @ Vector(c)) for c in ob.bound_box]
@@ -542,6 +568,7 @@ def cutaway(bpy, spec, instances, objs, laminated=None):
                 continue
             si = len(new.materials)
             new.materials.append(sec)
+            ob['cut_section'] = si
             # the cut faces lie on the box's walls and face into it (toward what was cut away)
             W = Ti @ ob.matrix_world
             R = W.to_3x3()
@@ -567,6 +594,40 @@ def cutaway(bpy, spec, instances, objs, laminated=None):
             for sl in ob.material_slots:
                 sl.link = 'DATA'
 
+
+
+def _drop_inside(ob, Ti, lo, hi):
+    """Remove the loose pieces of a part (welded, so a magnet is one piece) that lie wholly inside the box lo..hi (the
+    product's frame; Ti takes the world to it). The mesh is copied first, as copies share it."""
+    import bmesh
+    W = Ti @ ob.matrix_world
+    bm = bmesh.new(); bm.from_mesh(ob.data)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-6)
+    bm.faces.ensure_lookup_table()
+    seen, kill = set(), []
+    for f in bm.faces:
+        if f.index in seen:
+            continue
+        comp, stack = [], [f]; seen.add(f.index)
+        while stack:
+            g = stack.pop(); comp.append(g)
+            for e in g.edges:
+                for h in e.link_faces:
+                    if h.index not in seen:
+                        seen.add(h.index); stack.append(h)
+        pts = [W @ v.co for v in {v for g in comp for v in g.verts}]
+        if all(lo[k] <= min(p_[k] for p_ in pts) and max(p_[k] for p_ in pts) <= hi[k] for k in range(3)):
+            kill += comp
+    if not kill:
+        bm.free(); return 0
+    if len(kill) == len(bm.faces):
+        bm.free(); ob.hide_render = True; ob.hide_viewport = True
+        return len(kill)
+    bmesh.ops.delete(bm, geom=kill, context='FACES')
+    me = ob.data.copy(); ob.data = me
+    bm.to_mesh(me); bm.free()
+    me.set_sharp_from_angle(angle=math.radians(35))
+    return len(kill)
 
 
 def _plate(ob):
@@ -625,8 +686,10 @@ def _zone_of(zones, cz):
 def _split_zones(bpy, me, pname, zones, inner_idx=None):
     """A zoned mesh in pieces: [(part name, mesh)], the faces outside every named zone under the part's own name, each
     named zone's as "part.zone" (its faces, materials and normals as they were; one mesh per flavour, as the zoned mesh).
-    Faces with material `inner_idx` (the inside of a cut or exploded panel) stay with the part."""
+    Faces with material `inner_idx` (the inside of a cut or exploded panel; a set of indices, with a cut's section)
+    stay with the part."""
     import bmesh
+    inner = set(inner_idx) if isinstance(inner_idx, (set, list, tuple)) else ({inner_idx} if inner_idx is not None else set())
     named = [z for z in zones if z.get('part')]
     out = []
     for target in [None] + named:
@@ -640,7 +703,7 @@ def _split_zones(bpy, me, pname, zones, inner_idx=None):
             for f in bm.faces:
                 z = _zone_of(zones, f.calc_center_median().z * 1000.0)
                 z = z if (z is not None and z.get('part')) else None
-                if inner_idx is not None and f.material_index == inner_idx:
+                if f.material_index in inner:
                     z = None
                 if z is not target:
                     kill.append(f)

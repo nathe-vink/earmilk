@@ -57,7 +57,9 @@ lists included (`glints.0` adds the first glint).
     its own fixing axis in the product's frame, for an exploded view;
   - `cutaway`: `{"box_m": [x0, y0, z0, x1, y1, z1], "skip": "cable-*", "sections": [{"match": "...", "color": "#..."}]}`,
     a boolean cut per part and the cut faces coloured by material (wood shows wood, a printed part its resin, a bought
-    part its own material), for a technical cutaway.
+    part its own material), for a technical cutaway. A part split into zone parts (`zone_parts`) is cut whole and split
+    after, since a boolean caps an open mesh badly; a `skip` part stays whole, less any loose piece of it wholly inside
+    the box.
 - **products:** a list of product blocks instead of one, for a family shot (two sizes in one room).
 - **render:** samples, adaptive threshold, denoise, clamp, bounces, the view transform (Khronos PBR Neutral keeps brand
   colours true), exposure, white balance.
