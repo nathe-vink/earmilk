@@ -156,13 +156,29 @@ def retouch(raw_png, swatch_png, legend, spec, out_png):
         lab[m] = new
         after = np.median(new[ref], axis=0)
         whites.setdefault(g['instance'], np.array([Lr, *(cast * (1 - spec['neutral']))]))
-        report.append({'paint': g['material'], 'copy': g['instance'], 'swatch': g['hex'], 'mode': 'neutral',
+        report.append({'paint': g['material'] + (f" ({g['part']})" if g.get('part') else ''), 'copy': g['instance'], 'swatch': g['hex'], 'mode': 'neutral',
                        'pixels': int(m.sum()), 'cast_before': [round(float(v), 2) for v in cast],
                        'cast_after': [round(float(v), 2) for v in after[1:]],
                        'de_before': round(de2000([Lr, *cast], [Lr, 0, 0]), 2),
                        'de_after': round(de2000(list(after), [after[0], 0, 0]), 2)})
     lin = lab_lin(lab)
     any_white = next(iter(whites.values()), None)
+    # one lightness per paint and copy, read off the lit faces of all its parts together: a gain on the paint (its
+    # albedo) keeps each face's shading against the others, which is the lighting's; each part then takes its own hue
+    paint_gain = {}
+    for g in [g for g in groups if g['mode'] == 'match']:
+        pk = (g['instance'], g.get('paint_key', g['material']))
+        paint_gain.setdefault(pk, []).append(g)
+    for pk, gs in paint_gain.items():
+        mm = np.zeros(ids.shape, bool)
+        for g in gs:
+            mm |= g['mask']
+        refp = _reference(lab, mm, True)
+        whole = np.median(lab[mm][refp], axis=0)
+        white = whites.get(pk[0], any_white)
+        tgt = adapt(gs[0]['target'], white) if white is not None else gs[0]['target']
+        Yr, Yt = float(lab_xyz(whole)[1]), float(lab_xyz(tgt)[1])
+        paint_gain[pk] = (Yt / max(Yr, 1e-6)) ** spec['lightness'] if Yr > 0 else 1.0
     for g in [g for g in groups if g['mode'] == 'match']:
         m = g['mask']; px_lab = lab[m]; ref = _reference(lab, m, True)
         before = np.median(px_lab[ref], axis=0)
@@ -171,9 +187,8 @@ def retouch(raw_png, swatch_png, legend, spec, out_png):
         Cr0 = math.hypot(before[1], before[2])
         C = np.hypot(px_lab[:, 1], px_lab[:, 2])
         w = _soft(m)[m] * np.clip(C / max(Cr0, 1e-6), 0, 1)
-        # lightness: a gain on the paint's light (its albedo), by the share asked, weighted per pixel
-        Yr, Yt = float(lab_xyz(before)[1]), float(lab_xyz(target)[1])
-        gain = (Yt / max(Yr, 1e-6)) ** spec['lightness'] if Yr > 0 else 1.0
+        # lightness: the paint's gain (above), weighted per pixel
+        gain = paint_gain[(g['instance'], g.get('paint_key', g['material']))]
         px_lin = lin[m] * (gain ** w)[:, None]
         px_lab = lin_lab(px_lin)
         mid = np.median(px_lab[ref], axis=0)
@@ -187,7 +202,7 @@ def retouch(raw_png, swatch_png, legend, spec, out_png):
         px_lab[:, 1], px_lab[:, 2] = C * np.cos(h), C * np.sin(h)
         lab[m] = px_lab; lin[m] = lab_lin(px_lab)
         after = np.median(px_lab[ref], axis=0)
-        report.append({'paint': g['material'], 'copy': g['instance'], 'swatch': g['hex'], 'mode': 'match',
+        report.append({'paint': g['material'] + (f" ({g['part']})" if g.get('part') else ''), 'copy': g['instance'], 'swatch': g['hex'], 'mode': 'match',
                        'pixels': int(m.sum()), 'adapted_to_white': white is not None and spec['neutral'] < 1,
                        'reference_before': [round(float(v), 1) for v in before], 'reference_after': [round(float(v), 1) for v in after],
                        'de_before': round(de2000(list(before), list(g['target'])), 2),

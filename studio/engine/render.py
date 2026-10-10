@@ -354,7 +354,9 @@ def _masks(bpy, scene, objs, part_of, out):
         for sl in ob.material_slots:
             src = sl.material
             link = sl.link; sl.link = 'OBJECT'; saved.append((sl, link, sl.material))
-            key = (inst_of[ob.name], src.name) if (ob.name in inst_of and src is not None and src.get('swatch')) else None
+            # per copy, paint and part: each face group takes its own hue (a plinth band under other light than its
+            # roof), while the retouch sets one lightness for the paint (the faces' shading is the lighting's)
+            key = (inst_of[ob.name], src.name, part_of.get(ob.name, '')) if (ob.name in inst_of and src is not None and src.get('swatch')) else None
             if key is None:
                 sl.material = zero
                 continue
@@ -362,7 +364,7 @@ def _masks(bpy, scene, objs, part_of, out):
                 sw_ids[key] = len(sw_ids) + 1
                 sw_mats[key] = flat(f'swatch-{sw_ids[key]}', sw_ids[key])
                 sw_leg[str(sw_ids[key])] = {'material': src['swatch_name'], 'instance': key[0], 'hex': src['swatch'],
-                                            'flavour': src.name.split('@', 1)[-1]}
+                                            'flavour': src.name.split('@', 1)[-1], 'part': key[2], 'paint_key': src.name}
             sl.material = sw_mats[key]
     sp = out.with_suffix('.swatch.png')
     scene.render.filepath = str(sp.resolve())
