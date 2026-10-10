@@ -150,3 +150,92 @@ def mouth_for_coverage(fc, angle_deg):
     """The mouth width (mm) a horn needs to hold its coverage `angle_deg` down to fc Hz: Keele's rule (AES preprint
     1038, 1975), W = 25e3 / (theta f) metres; a 90 degree horn holds to 1 kHz with a 278 mm mouth."""
     return 25.0e6 / (angle_deg * fc)
+
+
+def _se_wire(w, h, n, z, pts=72):
+    """A closed superellipse |x/w|^n + |y/h|^n = 1 at height z, as one periodic spline (one smooth face when lofted:
+    no seams at the corners, as a rounded rectangle's straight-and-arc edges leave)."""
+    from build123d import Edge, Wire, Vector
+    P = []
+    for k in range(pts):
+        t = 2 * math.pi * k / pts
+        c, s_ = math.cos(t), math.sin(t)
+        P.append(Vector(w * math.copysign(abs(c) ** (2 / n), c), h * math.copysign(abs(s_) ** (2 / n), s_), z))
+    return Wire([Edge.make_spline(P, periodic=True)])
+
+
+def _se_sections(r0, half_w, half_h, depth, n_mouth=4.5, n=12, beyond=0.0, grow=0.0, z0=0.0, before=0.0):
+    """Superellipse sections of a rectangular waveguide: round at the throat (n = 2, radius r0), each half dimension
+    growing as sqrt(r0^2 + (z tan a)^2), squaring off toward the mouth (n -> n_mouth). `grow` inflates every section
+    (the wall's outside), `beyond` runs straight on past the mouth so a cut opens through the face."""
+    ta = math.sqrt(max(half_w ** 2 - r0 ** 2, 0.0)) / depth
+    tb = math.sqrt(max(half_h ** 2 - r0 ** 2, 0.0)) / depth
+    out = [_se_wire(r0 + grow, r0 + grow, 2.0, z0 - before)] if before else []      # straight on behind the throat
+    for i in range(n + 1):
+        z = depth * (i / n) ** 1.3
+        w = math.sqrt(r0 ** 2 + (z * ta) ** 2) + grow
+        h = math.sqrt(r0 ** 2 + (z * tb) ** 2) + grow
+        out.append(_se_wire(w, h, 2.0 + (n_mouth - 2.0) * (z / depth) ** 1.2, z0 + z))
+    if beyond:
+        out.append(_se_wire(half_w + grow, half_h + grow, n_mouth, z0 + depth + beyond))
+    return out
+
+
+def _rr_sections(r0, half_w, half_h, depth, corner, n=10, beyond=0.0, grow=0.0, z0=0.0):
+    """Rounded-rectangle sections of an oblate-spheroidal-like waveguide from a round throat (radius r0, z = z0) to a
+    rounded-rectangle mouth (half_w x half_h, corner radius `corner`, z = z0 + depth): each half dimension grows as
+    sqrt(r0^2 + (z tan a)^2), so the walls start square to the throat and open to their mouth angle; the corners go
+    from round at the throat to `corner` at the mouth. `grow` inflates every section (an offset of the wall), `beyond`
+    adds a straight run past the mouth (so a cut opens through the face)."""
+    from build123d import RectangleRounded, Plane
+    ta = math.sqrt(max(half_w ** 2 - r0 ** 2, 0.0)) / depth
+    tb = math.sqrt(max(half_h ** 2 - r0 ** 2, 0.0)) / depth
+    secs = []
+    zs = [depth * (i / n) ** 1.3 for i in range(n + 1)]
+    for z in zs:
+        w = math.sqrt(r0 ** 2 + (z * ta) ** 2) + grow
+        h = math.sqrt(r0 ** 2 + (z * tb) ** 2) + grow
+        s = (z / depth) ** 1.5
+        rc = min(w, h) * (1 - s) + (corner + grow) * s
+        rc = min(rc, min(w, h) - 0.02)
+        secs.append(Plane.XY.offset(z0 + z) * RectangleRounded(2 * w, 2 * h, rc))
+    if beyond:
+        secs.append(Plane.XY.offset(z0 + depth + beyond) * RectangleRounded(2 * (half_w + grow), 2 * (half_h + grow), min(corner + grow, min(half_w, half_h) + grow - 0.02)))
+    return secs
+
+
+def waveguide_block(width, height, depth, mouth_w, mouth_h, mouth_corner, r0=12.7, wall=8.0, edge=40.0, corner_r=70.0,
+                    back_edge=20.0, boss=None, solid=False, n_mouth=4.5):
+    """A rectangular waveguide cast as one block: a rounded box `width` x `height` x `depth` (its depth-wise corners
+    on `corner_r`, the front edges on `edge`, the back's on `back_edge`) with the waveguide (round throat r0 on the
+    back face, a `mouth_w` x `mouth_h` rounded-rectangle mouth on the front) through it. Hollow unless `solid`: an outer
+    skin and the waveguide's own skin, both `wall` thick, a void between (a cast or printed shell, not a solid ingot);
+    `boss` (dict d, t, bolt_d, bolts, bolt_hole) on the back round the throat takes the driver. Local frame: x across,
+    y up, z from the back face (z = 0, the throat) to the front (z = depth)."""
+    from build123d import Box, Align, Pos, Cylinder, fillet, Axis, loft
+    outer = Box(width, height, depth, align=(Align.CENTER, Align.CENTER, Align.MIN))
+    outer = fillet(outer.edges().filter_by(Axis.Z), corner_r)
+    outer = fillet(outer.edges().group_by(Axis.Z)[-1], edge)
+    outer = fillet(outer.edges().group_by(Axis.Z)[0], back_edge)
+    # the waveguide's surface: superellipse sections, round at the throat, squaring toward the mouth (n_mouth), lofted
+    # through splines so it is one smooth face (`mouth_corner` is kept for the older rounded-rectangle sections)
+    # the loft runs on straight through the back face and past the mouth, so it opens both (a cylinder unioned to it
+    # at the throat would meet it edge to edge, a tangency OpenCascade mishandles)
+    cav = Solid.make_loft(_se_sections(r0, mouth_w / 2, mouth_h / 2, depth, n_mouth, beyond=5.0, before=6.0), False)
+    body = outer
+    if not solid:
+        t = wall
+        void = Box(width - 2 * t, height - 2 * t, depth - 2 * t, align=(Align.CENTER, Align.CENTER, Align.MIN))
+        void = Pos(0, 0, t) * fillet(void.edges().filter_by(Axis.Z), max(corner_r - t, 2.0))
+        grown = Solid.make_loft(_se_sections(r0, mouth_w / 2, mouth_h / 2, depth, n_mouth, grow=t, beyond=5.0, before=6.0), False)
+        body = body - (void - grown)
+    body = body - cav
+    if boss:
+        b = Pos(0, 0, -boss['t']) * (Cylinder(boss['d'] / 2, boss['t'], align=(Align.CENTER, Align.CENTER, Align.MIN)) -
+                                     Cylinder(r0, boss['t'] + 1, align=(Align.CENTER, Align.CENTER, Align.MIN)))
+        for k in range(boss.get('bolts', 0)):
+            a = 2 * math.pi * (k + 0.5) / boss['bolts']
+            b = b - Pos(boss['bolt_d'] / 2 * math.cos(a), boss['bolt_d'] / 2 * math.sin(a), -boss['t'] - 0.5) * \
+                Cylinder(boss['bolt_hole'] / 2, boss['t'] + 1, align=(Align.CENTER, Align.CENTER, Align.MIN))
+        body = body + b
+    return body

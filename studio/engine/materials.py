@@ -33,6 +33,10 @@ PRESET_DEFAULTS = {
     'plaster':    dict(color='#DDD6CA', roughness=0.92, bump=0.025, drift=0.03),
     'sweep':      dict(color='#A9A59E', roughness=0.55, contact=0.0, contact_m=0.05, core=0.0, core_m=0.025),
     'glass':      dict(color='#FFFFFF', roughness=0.0, ior=1.5),
+    # frosted translucent resin or glass (a cast waveguide): a milky body that light crosses (subsurface scattering
+    # `radius` metres deep, so a thin wall glows and a thick one deepens to `absorb`), a frosted surface over it
+    # (`roughness`), and a little clear transmission (`clear`) so it reads as cast resin and not as paint
+    'frosted':    dict(color='#F2EEE6', absorb='#E9DFC9', roughness=0.45, ior=1.5, radius=0.025, clear=0.15),
     'emit':       dict(color='#FFFFFF', strength=1.0),
     'print':      dict(color='#1E1A17', roughness=0.6),
     # bark finishes, procedural (no texture download): paper birch's chalky white with dark horizontal lenticels, a few
@@ -145,6 +149,13 @@ def make(bpy, name, preset, overrides=None, bevel_mm=0.0):
             nt.links.new(comb.outputs['Color'], ins[1]); nt.links.new(outs[0], I['Base Color'])
     elif preset == 'glass':
         setin('Base Color', hex_lin(p['color'])); setin('Roughness', p['roughness']); setin('Transmission Weight', 1.0); setin('IOR', p['ior'])
+    elif preset == 'frosted':
+        setin('Base Color', hex_lin(p['color'])); setin('Roughness', p['roughness']); setin('IOR', p['ior'])
+        setin('Subsurface Weight', 1.0); setin('Subsurface Scale', p['radius'])
+        dc = hex_lin(p['absorb'])
+        setin('Subsurface Radius', (max(dc[0], 0.05), max(dc[1], 0.05), max(dc[2], 0.05)))   # deeper where the tint lets light through
+        setin('Transmission Weight', p['clear'])
+        if normal is not None: nt.links.new(normal, I['Normal'])
     elif preset == 'emit':
         out = nt.nodes['Material Output']; nt.nodes.remove(b)
         em = nt.nodes.new('ShaderNodeEmission'); em.inputs['Color'].default_value = hex_lin(p['color']); em.inputs['Strength'].default_value = p['strength']

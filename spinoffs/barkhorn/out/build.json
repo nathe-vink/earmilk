@@ -1,19 +1,20 @@
 {
  "product": "barkhorn",
  "title": "barkhorn",
- "parts": 29,
- "seconds": 9,
+ "parts": 26,
+ "seconds": 29,
  "sheets": {
-  "baltic-birch-18": 3
+  "baltic-birch-18": 3,
+  "mdf-6": 1
  },
  "budget_usd": {
-  "cut": 311,
-  "print": 112,
+  "cut": 336,
+  "print": 27,
   "buy": 1645,
-  "cnc-lathe": 1726,
-  "lathe": 108
+  "cast": 1228,
+  "lathe": 89
  },
  "checks_ok": true,
- "drawings": null,
- "render": "spinoffs/barkhorn/out/render/barkhorn.glb"
+ "drawings": "spinoffs/barkhorn/out/drawings/barkhorn-sheets.pdf",
+ "render": null
 }

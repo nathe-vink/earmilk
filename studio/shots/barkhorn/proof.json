@@ -30,14 +30,14 @@
  },
  "camera": {
   "position": [
-   -2.175,
-   -4.09,
-   1.585
+   -2.306,
+   -4.337,
+   1.674
   ],
   "target": [
    0.0,
    0.0,
-   0.601
+   0.63
   ],
   "lens_mm": 70.0,
   "level": true
@@ -52,12 +52,12 @@
    "orbit": {
     "azimuth_deg": -40,
     "elevation_deg": 38,
-    "distance_m": 7.17
+    "distance_m": 7.43
    },
    "target": [
     0.0,
     0.0,
-    0.601
+    0.63
    ],
    "irradiance": 2.0,
    "color": "#FFF3E1"
@@ -71,12 +71,12 @@
    "orbit": {
     "azimuth_deg": 50,
     "elevation_deg": 15,
-    "distance_m": 7.17
+    "distance_m": 7.43
    },
    "target": [
     0.0,
     0.0,
-    0.601
+    0.63
    ],
    "irradiance": 0.8,
    "color": "#FFF7EA"

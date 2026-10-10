@@ -1,12 +1,7 @@
 {
- "_note": "barkhorn: a first look, written by studio/fabkit/render.py (edit freely; a rebuild keeps it).",
- "title": "barkhorn, eucalyptus bark",
- "size": [
-  1200,
-  1500
- ],
  "product": {
   "def": "studio/products/barkhorn.json",
+  "flavour": "eucalyptus",
   "instances": [
    {
     "position": [
@@ -17,31 +12,38 @@
     "rotate_z": 0,
     "flavour": "eucalyptus"
    }
-  ],
-  "flavour": "birch"
+  ]
  },
  "set": {
-  "kind": "sweep",
-  "color": "#B7AFA4",
-  "width": 9,
-  "front": 7,
-  "depth": 2.0,
-  "radius": 1.6,
-  "height": 5
- },
- "camera": {
-  "position": [
-   1.45,
-   -3.35,
-   1.12
+  "kind": "room",
+  "size": [
+   7.0,
+   6.0,
+   3.0
   ],
-  "target": [
+  "center": [
    0.0,
-   0.0,
-   0.7
+   -2.2
   ],
-  "lens_mm": 68,
-  "level": true
+  "floor": {
+   "base": "#8E8C88",
+   "dark": "#86847F",
+   "light": "#96948F",
+   "plank_contrast": 0.0,
+   "grain": 0.0,
+   "seam": 0.0,
+   "roughness": 0.6
+  },
+  "wall": {
+   "color": "#EEECE7"
+  },
+  "skirting": {
+   "h": 0.0,
+   "color": "#EEECE7"
+  },
+  "ceiling": "#F2F0EC",
+  "windows": [],
+  "props": []
  },
  "lights": {
   "key": {
@@ -51,54 +53,54 @@
     2.0
    ],
    "orbit": {
-    "azimuth_deg": -40,
-    "elevation_deg": 38,
-    "distance_m": 7
+    "azimuth_deg": -35,
+    "elevation_deg": 40,
+    "distance_m": 4.0
    },
    "target": [
     0,
     0,
-    0.7
+    0.8
    ],
-   "irradiance": 2.0,
+   "irradiance": 2.2,
    "color": "#FFF3E1"
   },
   "fill": {
    "type": "area",
    "size_m": [
     3.0,
-    3.0
+    2.5
    ],
    "orbit": {
-    "azimuth_deg": 45,
-    "elevation_deg": 15,
-    "distance_m": 7
+    "azimuth_deg": 30,
+    "elevation_deg": 18,
+    "distance_m": 4.0
    },
    "target": [
     0,
     0,
     0.6
    ],
-   "irradiance": 0.9,
+   "irradiance": 1.0,
    "color": "#FFF7EA"
   },
-  "rim": {
+  "wash": {
    "type": "area",
    "size_m": [
-    2.0,
+    5.0,
     1.0
    ],
-   "orbit": {
-    "azimuth_deg": 160,
-    "elevation_deg": 35,
-    "distance_m": 5
-   },
+   "position": [
+    0.0,
+    -1.0,
+    2.9
+   ],
    "target": [
-    0,
-    0,
-    1.0
+    0.0,
+    0.5,
+    1.2
    ],
-   "irradiance": 1.2,
+   "irradiance": 0.8,
    "color": "#FFF7EA"
   }
  },
@@ -107,8 +109,29 @@
   "adaptive": 0.02,
   "denoise": true,
   "clamp": 8,
-  "bounces": 10,
+  "bounces": 12,
   "view": "Khronos PBR Neutral",
-  "exposure": -0.2
+  "exposure": 0.0,
+  "white_balance_k": 5600,
+  "white_balance_tint": 3.0
+ },
+ "title": "barkhorn, eucalyptus bark",
+ "size": [
+  1200,
+  1500
+ ],
+ "camera": {
+  "position": [
+   1.55,
+   -3.2,
+   1.25
+  ],
+  "target": [
+   0.0,
+   0.05,
+   0.66
+  ],
+  "lens_mm": 55,
+  "level": true
  }
 }

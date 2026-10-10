@@ -49,6 +49,8 @@ SOLIDS = {
     'aluminium': dict(title='Aluminium 6061', density=2.70, usd_per_cm3=0.025),
     'brass': dict(title='Brass C360', density=8.5, usd_per_cm3=0.12),
     'steel': dict(title='Mild steel', density=7.85, usd_per_cm3=0.01),
+    'stainless': dict(title='Stainless steel 304', density=8.0, usd_per_cm3=0.03),
+    'cast-resin': dict(title='Tinted polyurethane casting resin, translucent', density=1.1, usd_per_cm3=0.04),
 }
 
 
@@ -73,10 +75,12 @@ class Printed:
 
 @dataclass
 class Machined:
-    """Milled, turned or cut from solid (a block of wood, a billet of metal). `material` is a key of SOLIDS."""
+    """Milled, turned or cut from solid (a block of wood, a billet of metal), or cast in a mould (process 'cast': the
+    material is the part's own volume, the setup the mould). `material` is a key of SOLIDS."""
     material: str = 'birch-hardwood'
     process: str = 'cnc-mill'
     stock: tuple | None = None      # the blank it comes from, mm (x, y, z); left out, its bounding box plus 5 mm a side
+    setup_usd: float | None = None  # the line's setup (a mould, a fixture); left out, 40
 
 
 @dataclass

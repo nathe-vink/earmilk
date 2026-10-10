@@ -1,44 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="995" height="365" font-family="sans-serif" font-size="9">
+<svg xmlns="http://www.w3.org/2000/svg" width="1503" height="365" font-family="sans-serif" font-size="9">
 <rect x="20.0" y="30" width="305.0" height="305.0" fill="#f4efe6" stroke="#333"/>
 <text x="20.0" y="20">baltic-birch 18 mm, sheet 1</text>
-<rect x="23.0" y="180.0" width="92.0" height="152.0" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="24.6" y="188.0">left</text>
-<rect x="117.4" y="180.0" width="92.0" height="152.0" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="119.0" y="188.0">left</text>
-<rect x="211.8" y="180.0" width="92.0" height="152.0" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="213.4" y="188.0">right</text>
-<rect x="23.0" y="85.6" width="96.8" height="92.0" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="24.6" y="93.6">top</text>
-<rect x="122.2" y="85.6" width="96.8" height="92.0" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="123.8" y="93.6">top</text>
-<rect x="221.4" y="85.6" width="96.8" height="92.0" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="223.0" y="93.6">bottom</text>
-<rect x="23.0" y="41.1" width="60.0" height="42.1" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="24.6" y="49.1">saddle-1</text>
-<rect x="85.4" y="41.1" width="60.0" height="42.1" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="87.0" y="49.1">saddle-1</text>
-<rect x="147.8" y="41.1" width="30.0" height="42.1" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="149.4" y="49.1">saddle-2</text>
-<rect x="180.2" y="41.1" width="30.0" height="42.1" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="181.8" y="49.1">saddle-2</text>
+<rect x="23.0" y="156.0" width="84.0" height="176.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="24.6" y="164.0">left</text>
+<rect x="109.4" y="156.0" width="84.0" height="176.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="111.0" y="164.0">left</text>
+<rect x="195.8" y="156.0" width="84.0" height="176.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="197.4" y="164.0">right</text>
+<rect x="23.0" y="69.6" width="104.8" height="84.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="24.6" y="77.6">top</text>
+<rect x="130.2" y="69.6" width="104.8" height="84.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="131.8" y="77.6">top</text>
 <rect x="345.0" y="30" width="305.0" height="305.0" fill="#f4efe6" stroke="#333"/>
 <text x="345.0" y="20">baltic-birch 18 mm, sheet 2</text>
-<rect x="348.0" y="180.0" width="92.0" height="152.0" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="349.6" y="188.0">right</text>
-<rect x="442.4" y="187.2" width="96.8" height="144.8" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="444.0" y="195.2">baffle</text>
-<rect x="541.6" y="187.2" width="96.8" height="144.8" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="543.2" y="195.2">baffle</text>
-<rect x="348.0" y="85.6" width="96.8" height="92.0" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="349.6" y="93.6">bottom</text>
-<rect x="447.2" y="92.8" width="96.8" height="84.8" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="448.8" y="100.8">brace</text>
-<rect x="546.4" y="92.8" width="96.8" height="84.8" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="548.0" y="100.8">brace</text>
+<rect x="348.0" y="156.0" width="84.0" height="176.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="349.6" y="164.0">right</text>
+<rect x="434.4" y="163.2" width="104.8" height="168.8" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="436.0" y="171.2">front-panel</text>
+<rect x="541.6" y="163.2" width="104.8" height="168.8" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="543.2" y="171.2">front-panel</text>
+<rect x="348.0" y="69.6" width="104.8" height="84.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="349.6" y="77.6">bottom</text>
+<rect x="455.2" y="69.6" width="104.8" height="84.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="456.8" y="77.6">bottom</text>
 <rect x="670.0" y="30" width="305.0" height="305.0" fill="#f4efe6" stroke="#333"/>
 <text x="670.0" y="20">baltic-birch 18 mm, sheet 3</text>
-<rect x="673.0" y="187.2" width="96.8" height="144.8" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="674.6" y="195.2">back</text>
-<rect x="772.2" y="187.2" width="96.8" height="144.8" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="773.8" y="195.2">back</text>
+<rect x="673.0" y="163.2" width="104.8" height="168.8" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="674.6" y="171.2">back</text>
+<rect x="780.2" y="163.2" width="104.8" height="168.8" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="781.8" y="171.2">back</text>
+<rect x="673.0" y="86.4" width="104.8" height="74.4" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="674.6" y="94.4">brace</text>
+<rect x="780.2" y="86.4" width="104.8" height="74.4" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="781.8" y="94.4">brace</text>
+<rect x="995.0" y="30" width="488.0" height="244.0" fill="#f4efe6" stroke="#333"/>
+<text x="995.0" y="20">mdf 6 mm, sheet 1</text>
+<rect x="998.0" y="183.8" width="87.2" height="87.2" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="999.6" y="191.8">woofer-ring</text>
+<rect x="1087.6" y="183.8" width="87.2" height="87.2" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="1089.2" y="191.8">woofer-ring</text>
 </svg>

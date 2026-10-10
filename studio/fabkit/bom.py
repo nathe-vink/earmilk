@@ -37,10 +37,13 @@ def rows(product, parts, recs, library):
             sm = SOLIDS.get(m.material, {})
             b = p.solid.bounding_box()
             stock = m.stock or (b.size.X + 10, b.size.Y + 10, b.size.Z + 10)
-            blank_cm3 = stock[0] * stock[1] * stock[2] / 1000
+            cast = m.process in ('cast', 'mould')
+            blank_cm3 = vol_cm3 * 1.1 if cast else stock[0] * stock[1] * stock[2] / 1000      # a casting pours its own volume
             out.append(dict(item=p.name, kind=m.process, qty=n, what=sm.get('title', m.material),
-                            size=' x '.join(f'{v:.0f}' for v in stock), mass_g=round(vol_cm3 * sm.get('density', 1)),
-                            usd_each=round(blank_cm3 * sm.get('usd_per_cm3', 0.02) + 5, 2), _setup=40.0,
+                            size=(f'{vol_cm3:.0f} cm3, ' if cast else '') + ' x '.join(f'{v:.0f}' for v in stock),
+                            mass_g=round(vol_cm3 * sm.get('density', 1)),
+                            usd_each=round(blank_cm3 * sm.get('usd_per_cm3', 0.02) + 5, 2),
+                            _setup=m.setup_usd if m.setup_usd is not None else 40.0,
                             source='step/' + p.name + '.step', finish=p.finish, _sig=sig))
         elif isinstance(m, Bought):
             c = library.get(m.ref, {})

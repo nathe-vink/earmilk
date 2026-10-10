@@ -47,13 +47,38 @@ def to2d(view, pts):
     return np.c_[np.asarray(pts, float) @ X, np.asarray(pts, float) @ Y]
 
 
+def _seams(shapes, view):
+    """The seams of closed faces (where a lofted or revolved surface meets itself), projected: no edge a drawing
+    shows, but hidden-line removal draws a spline surface's seam as a line."""
+    from OCP.BRep import BRep_Tool
+    out = []
+    for s in shapes:
+        for f in s.faces():
+            if f.geom_type.name in ('PLANE', 'CYLINDER', 'CONE', 'SPHERE', 'TORUS'):
+                continue                          # analytic seams are already left out
+            for e in f.edges():
+                if BRep_Tool.IsClosed_s(e.wrapped, f.wrapped):
+                    n = int(min(2000, max(60, e.length / 0.4)))         # dense: the test is distance to its points
+                    pts = [e.position_at(t) for t in np.linspace(0, 1, n)]
+                    out.append(to2d(view, [[p.X, p.Y, p.Z] for p in pts]))
+    return out
+
+
 def hlr(shapes, view, hidden=False):
     """Visible (and hidden) edges seen from `view`, as 2D polylines in the view's frame (orthographic, origin at the
-    world origin; the same frame as to2d)."""
+    world origin; the same frame as to2d). Seams of spline surfaces are left out."""
     from build123d import Compound, Drawing
     comp = Compound(children=list(shapes))
     d, up = VIEWS[view]
     dr = Drawing(comp, look_from=d, look_up=up, look_at=(0, 0, 0), with_hidden=hidden)
+    seams = _seams(shapes, view)
+    S = np.vstack(seams) if seams else None
+
+    def on_seam(q):
+        if S is None:
+            return False
+        dd = np.sqrt(((q[:, None, :] - S[None, :, :]) ** 2).sum(axis=2)).min(axis=1)
+        return float(dd.max()) < 0.6
 
     def polys(c):
         out = []
@@ -65,7 +90,10 @@ def hlr(shapes, view, hidden=False):
                 continue
             n = 2 if e.geom_type.name == 'LINE' else int(min(240, max(6, L / 1.0)))
             pts = [e.position_at(t) for t in np.linspace(0, 1, n)]
-            out.append(np.array([[p.X, p.Y] for p in pts]))
+            q = np.array([[p.X, p.Y] for p in pts])
+            if S is not None and on_seam(np.linspace(q[0], q[-1], 8) if n == 2 else q[::max(1, len(q) // 12)]):
+                continue
+            out.append(q)
         return out
     return polys(dr.visible_lines), (polys(dr.hidden_lines) if hidden else [])
 
