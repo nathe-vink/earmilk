@@ -59,6 +59,7 @@ def main():
           'above, so a white held at 230 to 245 prints as one flat value and no gradient or reflection on it can show. A '
           'white lacquer that should model and show its reflections sits at 200 to 220, with only its highlights above '
           '226: ask for the exposure or the light that puts it there before asking for more reflection on it.', '']
+    L += _photo_light(sh)
     L += ['## Settings you may change', '',
           'Where the product stands and how it is turned (`product.instances.N.position`, `product.instances.N.rotate_z`) are '
           'yours where the frame\'s purpose allows: keep it standing on its floor or furniture, a pair a mirrored pair, and '
@@ -237,6 +238,50 @@ def _last_round(shot_id):
         if m:
             files.append((int(m.group(1)), Path(f).stat().st_mtime, f))
     return Path(max(files)[2]) if files else None
+
+
+def _photo_light(sh):
+    """What makes the frame read as a photograph of lacquer rather than a render, in this frame's own lamps: fifteen
+    rounds of blind scores held at 5 to 6 while each round lifted one more part with a lamp linked to it alone, and the
+    blind impressions kept naming the result ('self-glow', 'pasted', 'flat card', 'paint, not lacquer')."""
+    def share(v, dflt=True):
+        v = dflt if v is None else v
+        return (1.0 if v else 0.0) if isinstance(v, bool) else float(v)
+    lights = {n: l for n, l in (sh.get('lights') or {}).items() if isinstance(l, dict) and not l.get('off')}
+    linked = sorted(n for n, l in lights.items() if l.get('receivers') and l.get('type') != 'flag'
+                    and share(l.get('diffuse')) > 0)
+    cards = sorted(n for n, l in lights.items() if l.get('type') == 'panel' and share(l.get('diffuse')) == 0)
+    pol = (sh.get('camera') or {}).get('polariser') or {}
+    ev = float((sh.get('render') or {}).get('exposure', 0.0))
+    sky = sh.get('sky') or {}
+    L = ['## How light reads as a photograph', '']
+    L.append(f'This frame has {len(lights)} lamps. A lamp with `receivers` that lights (a diffuse share above 0) brightens '
+             'those parts and nothing round them: the part lifts while the floor, the wall and its own shadow do not, and '
+             'blind critics of these frames have read it as self-glow and as a pasted cut-out. '
+             + (f'Lamps here that light one part alone: {", ".join(f"`{n}`" for n in linked)}. ' if linked else 'None here lights one part alone. ')
+             + 'To lift a face, move, resize or re-aim a light the whole set sees, or add a bounce card the set would have; '
+             'turning a linked lamp off (`lights.NAME.off`) is in scope, and is often the change that removes the glow. '
+             'Keep `receivers` for reflection-only cards (diffuse 0) and glints: a gloss surface shows those as reflections '
+             'and nothing else, as it would a card a photographer holds out of frame.')
+    L.append('')
+    L.append('A clear coat mirrors about 4 to 5 % of what it sees head-on (more toward grazing), so a reflection shows on '
+             'a white only when what it mirrors is many times brighter than the white itself: on a white at scene-linear '
+             f'0.6 (about 200), a soft gradient across the face takes a card of strength about 4 to 8 at exposure 0 (it adds '
+             f'about 0.045 times the strength times 2^exposure; this frame\'s exposure is {ev:+g}, so x{2 ** ev:.2f}). '
+             'A dark or coloured face needs far less: the same card washes out a chocolate or a green. The mirror map '
+             '(below) says what each face sees and its radiance; ramp the card along the axis its reflection runs on the face.'
+             + (f' Reflection cards here: {", ".join(f"`{n}`" for n in cards)}.' if cards else ''))
+    L.append('')
+    if pol.get('strength', 0) > 0:
+        L.append(f'The lens carries a polariser at strength {pol["strength"]:g} (angle {pol.get("angle_deg", 90):g} deg). It removes '
+                 'the reflections that tell lacquer from paint on every face it covers: set `camera.polariser.strength` to 0 '
+                 'unless one specific glare needs it, and expect the faces it covers to read as matte paint while it stays.')
+        L.append('')
+    if (sh.get('set') or {}).get('kind') == 'sweep' and sky.get('kind') == 'gradient' and float(sky.get('strength', 1.0)) > 0:
+        L.append(f'The world is a gradient dome at strength {float(sky.get("strength", 1.0)):g}: light from every direction at '
+                 'once, which fills every shadow and flattens every face toward one value. A studio is dark round its lamps.')
+        L.append('')
+    return L
 
 
 def _history(shot_id, arr, Me, rounds=3):

@@ -1,0 +1,187 @@
+{
+ "stage1": {
+  "impression": "A milk-carton speaker cut in half on a grey sweep, its tweeter, mid, woofer, port and amp all legible and the waveguide's red gloss convincing, but the plywood section is lit almost evenly edge to edge, so it reads as a flat CAD diagram rather than a sawn object, and the white-and-red exterior shows only as a thin sliver at the right. It sits small in the left third on a dull, cool grey ground with a weak contact shadow: a competent technical draft, not a hero image.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Every cut face clears the surface directly behind it by at least 30 levels, and the interior's perpendicular planes differ by at least 15. Today the mid-shelf's cut face (195.1) sits 7 above the wall under it (188.0), the brace's right cut face (196.1) 18 above the wall below it (177.8), the divider (204.0) 26.5 above [452,290,472,380] (177.5), and the bottom panel's cut face (172-176) level with the floor behind it ([440,768,530,786] 170.9). The back panel's inner face (142.8) and the far wall ([370,300,420,400] 141.1) print one value, and the amp box's side (129.7) sits below the wall beside it (131.4).",
+  "The section reads as sawn Baltic birch: ply lines on every cut face, and a paler, less yellow tone than the one smooth [236,202,157] (C* 27.5 at L* 83) that every cut face prints now (out of scope: the birch is the product's material).",
+  "No dark hairlines cross the cut faces at the plinth junctions. Diagonal 1-px lines now run across the back panel's cut face at [317,705,328,757] and the front baffle's at [543,738,553,757] (out of scope: how the section is capped at the shadow-line groove).",
+  "The set holds the eye on the product: the empty lower-left floor [0,750,250,900] (106.4) is no brighter than the floor beside the base [620,760,900,840] (89.1) plus 5, so the glow behind the gable ([480,40,680,160] 125.4) is the brightest part of the backdrop.",
+  "The hero detail holds at print size: the waveguide insert's section reads as a material, not a flat [165,160,166] slab at 160; the tweeter's rear chamber shows detail, not a black slot; and the amp module reads as an amplifier, not a black block (median 35.6, p95 40.1) (out of scope: product geometry and materials)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "On the key side the far wall is lit nearly as brightly as the cut faces in front of it, and on the fill side it prints at the same value as the panels that meet it, so the cabinet's inside reads as one flat plane behind the section instead of boxes with depth.",
+   "evidence": {
+    "region": [
+     440,
+     290,
+     470,
+     380
+    ],
+    "measured": "lum_median 172.9 (p5 159.5, p95 182.8), all side-right. Along row 330 the wall holds 136-150 from x 330 to 430, then climbs to 186 at x 472, leaving the divider's cut face (x 474-484, 203-207) only 19 above it. The mid-shelf's cut face (195.1) is 7 above the wall under it (188.0), and the brace's right cut face (196.1) is 18 above the wall below it (177.8). On the fill side the back panel's inner face (142.8) and the far wall ([370,300,420,400] 141.1) print one value, and the amp box's side face (129.7) is darker than the wall beside it (131.4). The climb starts where the back panel's shadow from the key (azimuth -50) gives way to its penumbra. side-right mirrors no lamp (sweep 45 %), and round 8's c1 (inside.specular 0.2 to 0) left [452,290,472,380] at 177.5, so this is diffuse key and fill light coming through the opening, not a reflection."
+   },
+   "change": {
+    "setting": "lights.wallnet",
+    "from": null,
+    "to": {
+     "type": "flag",
+     "size_m": [
+      0.36,
+      0.83
+     ],
+     "position": [
+      0,
+      0.165,
+      0.432
+     ],
+     "target": [
+      0,
+      -1,
+      0.432
+     ],
+     "density": 0.5,
+     "lights": [
+      "key",
+      "fill"
+     ]
+    }
+   },
+   "expected": "A net 12 mm in front of the far wall's inner face (y 0.177) covers the whole wall, from floor to top panel and from back panel to baffle (x +-0.18, z 0.018-0.846), so its edges sit on the panels and print no line. It takes part of the key and fill off that wall alone: every cut face, driver, cable, the port and the amp box lie in front of it and keep their light. The key-side zone [440,290,470,380] falls from 172.9 to 138-150 and the fill-side zone [370,300,420,400] from 141 to about 115-125, which keeps the key's left-to-right direction. The divider (204), mid-shelf (195) and brace (196) then clear the wall behind them by 45-60. The back panel's inner face (about 140, lit by the fill on its own face) stands 15-25 above the wall and the amp box's side 10-20 above it, so the chamber corners and the box read as volumes. This reaches round 8's c1 aim ([452,290,472,380] into 135-165) through the light that is actually there. inside.specular stays 0, and round 8's falloff, contact and white-face tests are untouched because their regions lie in front of or outside the net.",
+   "accept": {
+    "region": [
+     440,
+     290,
+     470,
+     380
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     135,
+     152
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The bottom panel's cut face, a must-show, does not read: the cabinet floor right behind it prints at the same value, so the sawn edge of the base shows only as a change of texture.",
+   "evidence": {
+    "region": [
+     440,
+     768,
+     530,
+     786
+    ],
+    "measured": "lum_median 170.9 (p5 159.1, p95 178.3), all the bottom panel's top face. The cut face below it prints 172.4 at [440,793,470,801] and 175.8 at [490,797,520,806]. Down the column at x 480 the floor climbs from 131 at y 749 to 180 at y 794, and the cut face holds 171-177 down to y 803 with no step at the arris. Round 8's net took the bottom cut faces down (its critic measured them at 185-189 before the net), but the floor kept its light: the key and fill reach it from 15-40 degrees up through the opening."
+   },
+   "change": {
+    "setting": "lights.floornet",
+    "from": null,
+    "to": {
+     "type": "flag",
+     "size_m": [
+      0.354,
+      0.354
+     ],
+     "position": [
+      0,
+      0.177,
+      0.025
+     ],
+     "target": [
+      0,
+      0.177,
+      1.0
+     ],
+     "density": 0.5,
+     "lights": [
+      "key",
+      "fill"
+     ]
+    }
+   },
+   "expected": "A net lies 7 mm above the cabinet floor from the cut plane back (x +-0.177, y 0 to 0.354). It is square so it covers the floor whichever way its sides run, and the part beyond the far side panel lies under the product, out of sight. It takes part of the key and fill off the floor alone. The floor's front half [440,768,530,786] falls from 170.9 to 138-150 while the bottom panel's cut face keeps 172-176 (it is in front of the net), so the sawn edge stands 22-38 above the floor. The front 1-2 cm of floor, which the lowest key rays still reach under the net's front edge, prints as a thin lit arris. The floor stays above the far wall's lower part after c1 (about 125-135), so it still reads as a lit floor. The floor outside the cabinet is untouched, so round 8's contact test [340,789,360,793] (74.4) holds.",
+   "accept": {
+    "region": [
+     440,
+     768,
+     530,
+     786
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     135,
+     152
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "asset",
+   "problem": "The brightest floor in the frame is the empty lower-left corner, lit by the key's light on the set, so the eye leaks out at the bottom left instead of resting on the product and the glow behind the gable.",
+   "evidence": {
+    "region": [
+     0,
+     750,
+     250,
+     900
+    ],
+    "measured": "lum_median 106.4, against 89.1 for the floor beside the base [620,760,900,840] and 83.1 for the copy-side floor [1000,760,1350,900]. Along row 850 the floor falls from 114 at x 0 to 93 at x 300. The corner is the floor 0.35-0.75 m left of the base, the part nearest the key (azimuth -50, 2.3 m). No setting on the card dims the key on the set without dimming it on the product (shadow_on_set only sets the density of its shadow), and a flag there would shade the base, whose falloff is round 8's c2."
+   },
+   "change": {
+    "setting": "lights.key.set_ramp (not on the card)",
+    "from": "none (the key lights the set at full strength everywhere)",
+    "to": {
+     "axis": "x",
+     "at_m": [
+      -0.7,
+      -0.25
+     ],
+     "values": [
+      0.45,
+      1.0
+     ]
+    }
+   },
+   "expected": "Only the key's light on the set (both the share the product blocks and the unblocked copy that shadow_on_set adds) is scaled by a ramp along world x: 0.45 at x <= -0.7 m, rising to 1.0 at x >= -0.25 m. The key's light and shadows on the product are unchanged. The lower-left floor [0,750,250,900] falls from 106.4 to 90-96 and the top-left of the sweep dims a few levels. The floor at and right of the base, the copy side and the product do not change; round 8's contact region [340,789,360,793] lies at x about -0.14 m, where the gain is 1.0. The pool's glow behind the gable (125.4) is then the brightest part of the backdrop by about 30 levels.",
+   "accept": {
+    "region": [
+     0,
+     750,
+     250,
+     900
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     88,
+     97
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Cap the section cleanly where the cut crosses the 3 mm shadow lines over the plinth, so each groove shows as a small notch in the cut face instead of dark diagonal hairlines across it.",
+   "why": "At [317,705,328,757] (back panel) and [543,738,553,757] (front baffle), thin dark diagonal lines cross the sawn edge, carrying the plinth line's perspective onto the cut face. They read as cracks at both corners of the base. The cut and the product's geometry are fixed."
+  },
+  {
+   "request": "Show the Baltic birch's plies on every cut face, and reproduce a paler, less saturated birch.",
+   "why": "Every cut face prints one smooth tone, from [236,202,157] at the top to [200,167,123] at the bottom (C* 27.5-28 at L* 70-83), so it reads as yellow pine or MDF. Ply lines are what tell a viewer this is sawn Baltic birch, and they are the largest CG tell left on the page. The birch is the product's material, and light colour cannot fix the tone: a neutral key (5600 K to 6000 K) would only move the cut face to about [233,202,161]."
+  },
+  {
+   "request": "Model the amplifier module (the Hypex FusionAmp's board, heatsink and plate) so it reads as an amp inside its box.",
+   "why": "The amp's box is a must-show, and what sits inside it prints as a featureless black block (amp-module median 35.6, p95 40.1, p99 41.1), the weakest object in the section. Its geometry is the product's."
+  }
+ ],
+ "score_if_fixed": 6.3
+}
