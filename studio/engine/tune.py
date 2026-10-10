@@ -144,8 +144,19 @@ def main():
     # before this one saved it and logged what passed there) is worse than one that only misses its own: the fewest
     # broken first, then passing nearest the aim, then nearest to passing
     first_ok = {x['id'] for p in proofs[:2] for x in p[3] if x['pass'] and x['id'] != a.change} | (before_ok - {a.change})
+    tests_by = {x['id']: x for x in tests}
+    def off_by(x):
+        # how far a failing reading sits outside its test's range
+        t_ = tests_by.get(x['id'], {}); v, op, m = t_.get('value'), t_.get('op'), x.get('measured')
+        if not isinstance(m, (int, float)) or v is None:
+            return float('inf')
+        lo_, hi_ = (min(v), max(v)) if isinstance(v, list) else ((v, float('inf')) if op in ('>', '>=') else (float('-inf'), v))
+        return max(lo_ - m, m - hi_, 0.0)
     def broken(p):
-        return [x['id'] for x in p[3] if x['id'] in first_ok and not x['pass']]
+        # a test that slips out of its range by under a level (or 3 % of it) is not broken: 09's reshoot kept a key that
+        # missed its own test by 21 levels because the right one left the band's sheen at 84.8 against 85
+        return [x['id'] for x in p[3] if x['id'] in first_ok and not x['pass']
+                and off_by(x) > max(1.0, 0.03 * abs(x.get('measured') or 0))]
     fewest = min(len(broken(p)) for p in proofs)
     for p in proofs:
         if len(broken(p)) > fewest:
