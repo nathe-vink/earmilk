@@ -1,0 +1,193 @@
+{
+ "stage1": {
+  "impression": "A legible milk-carton speaker sits right of centre on a grey sweep, but the left half of the frame, its copy space, is spoiled by a hard-edged pale crease in the backdrop and a pale blotch on the floor below it. The lighting is flat and grey: the white body reads light grey and the red base is weakly grounded, so it reads as a draft rather than a hero.",
+  "score": 4.0
+ },
+ "blocking_9": [
+  "The sweep in the copy space is seamless: no step above 3 levels/px and no local bump above 5 levels over its own gradient. Today a 2 px edge steps from 97 to 130 along x 257-342, y 302-373, and a floor column at x~310 peaks at 135 against 105 and 115 on either side.",
+  "The white back reads as white lacquer: free white at 205-215, with the clear-coat band at the top peaking at 238-246 and no clipped core (now 199 and 241).",
+  "The back plinth band is lit only by lamps the set also sees: R about 150 under the 193 white just above it (now R 171, and flat from top to floor, 65 to 62).",
+  "The left gable end meets the side panel at a crisp line: the step from the red (43) to the white (176) takes 3 px or less, not the 8-10 px pink haze at x 760-784, y 205-215.",
+  "The amplifier connections show a specular edge on the XLR and IEC sockets (amp-connectors now median 38, p95 54, no glint; glints.0 was skipped because its point mirrors the connector itself).",
+  "The foreground floor still falls off toward the camera: the bottom band at y 860-900 is no brighter than the floor at y 760-800 (now 107 against 117)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The copy space carries a hard-edged crease on paper that should be seamless: a pale wedge whose upper-left edge steps from 97 to 130 within 2 px, running from a sharp point at (257, 373) up and to the right to (342, 302).",
+   "evidence": {
+    "region": [
+     270,
+     320,
+     330,
+     372
+    ],
+    "measured": "lum_range 35.6 (p5 97.1, p95 132.6); same-size boxes of the same sweep at that height read 2.0 ([150,320,210,372]) and 2.0 ([420,320,480,372]). A 4 px column across the edge [298,300,302,380] has an edge of 11.2 levels/px, 10-90 width 3 px. Traced onto the sweep curve (camera model checked against the base corner to 5 px), the point lands at world (-1.31, 2.68, 0.35), on the floor net's left-edge line (x -1.3, z 0.35). All 15 traced edge points lie within 1.5 cm of the plane through that line and the key's centre (0.88, -1.47, 2.55). The net shades the key alone, and no other lamp, card or panel has an edge on that line. Its right edge would land near (1334, 373) and leaves no crease, so the link is geometric rather than a full mechanism."
+   },
+   "change": {
+    "setting": "lights.floor_net.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The crease and the bright lobe under it vanish, and the box reads as a smooth gradient with a range of 3-5. Trade-off: the bottom of the floor, where the net held back about half the key, rises about 6-10 levels ([400,860,700,900] from 107 to about 113-117). If the foreground then needs holding down, a flag that shades all lamps, with its edges outside the frame, does that without linking.",
+   "accept": {
+    "region": [
+     270,
+     320,
+     330,
+     372
+    ],
+    "metric": "lum_range",
+    "op": "<",
+    "value": 6
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "A pale column stands on the floor in the copy space, centred on x~310 and 20-28 levels above the floor either side, with no source in frame: it is the kicker strip's reflection in the semi-gloss sweep.",
+   "evidence": {
+    "region": [
+     285,
+     690,
+     340,
+     830
+    ],
+    "measured": "Median 133.6, against 105.0 at [60,690,115,830] and 115.2 at [520,690,575,830]. A profile across x 120-560 (y 730-790) reads 109, 115, 123, 131, 134.5, 133.5, 129.5, 124, 120, 117, 115. The kicker (az -140, el 8, 2 m: a 0.2 x 1.5 m strip near (-0.92, 1.52), radiance 9.33, receivers [\"*\"]) projects onto image x 268-348, the column's x; the mirror pass meets it at (-0.84, 1.48, 1.41). On the product it appears in only 2 mirror samples, on the gable's left hip at (794-800, 128-136)."
+   },
+   "change": {
+    "setting": "lights.kicker.receivers",
+    "from": [
+     "*"
+    ],
+    "to": [
+     "gable-block"
+    ]
+   },
+   "expected": "The column drops to the floor's own level, about 108-115, and the x 120-560 profile runs smoothly from about 109 to 115. The gable's left-hip rim (135-158 against the 125 sweep), the kicker's only mark on the product, stays as it is; this changes what the kicker lights, not round 14's irradiance for it.",
+   "accept": {
+    "region": [
+     285,
+     690,
+     340,
+     830
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     104,
+     121
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The back plinth band has a lamp of its own and reads as a self-lit strip: it holds one value from its top down to the floor, and its red is brighter than the light on the white just above it allows.",
+   "evidence": {
+    "region": "part:back-panel.plinth",
+    "measured": "r_median 171, lum_median 63.3. Down the band at x 900-935 (y 700-795): 55, 65, 64, 63, 62, 62, i.e. flat. The white directly above reads 193-195, under which #C62828 would show R~150 (0.776 x 193). lights.plinth (area, el 6, irradiance 1, receivers [\"*.plinth\"]) lights the band and nothing around it; the floor at its foot reads 85 rising to 110."
+   },
+   "change": {
+    "setting": "lights.plinth.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The band falls to R~148-158 (luminance about 53-58), lit by the same lamps as the panel above and the floor in front, so it reads as painted wood in the carton's lower light rather than a glowing strip. SHAKE WELL stays white on red, and the dark junction meets a band in the same light.",
+   "accept": {
+    "region": "part:back-panel.plinth",
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     143,
+     163
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The white body sits at the bottom of the range a modelling white lacquer needs, so against the 95-130 set it reads light grey rather than white.",
+   "evidence": {
+    "region": [
+     886,
+     330,
+     912,
+     590
+    ],
+    "measured": "Free white left of the label: median 199 (p5 193, p95 207); down the panel from the eave 212, 206, 200, 195. Right margin [1052,300,1070,590]: 194. The frame's p99 is 210."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 2.5,
+    "to": 2.9
+   },
+   "expected": "The free white rises to about 207-211 and keeps its ~17-level falloff from eave to amp plate; round 14's proofs measured 2.7 -> 205 and 2.9 -> 210 on this face. The side face turns away from the key and rises less, so the 37-level step between back and side grows. This continues round 14's 2.3 -> 2.5 rather than reversing it, and c5 keeps the top band from clipping.",
+   "accept": {
+    "region": [
+     886,
+     330,
+     912,
+     590
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     205,
+     214
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The clear-coat band across the top of the back panel already peaks at 241 under the Standard view, which clips at 255 with no shoulder, and c4 adds about 10% more diffuse light under it, which would flatten its core again.",
+   "evidence": {
+    "region": [
+     890,
+     216,
+     1072,
+     245
+    ],
+    "measured": "lum_p95 241, median 225, clip_pct 0. The mirror pass ties this band to backgloss (20% of the back panel, image y 216-318). Round 14 trimmed it from 8.1 to 6.2 for the same clipping."
+   },
+   "change": {
+    "setting": "lights.backgloss.strength",
+    "from": 6.2,
+    "to": 5.2
+   },
+   "expected": "With c4 in, the band still reads as a graduated highlight, from about 215 below it to a peak of 238-245, with no clipped core. This continues round 14's c6 in the same direction.",
+   "accept": {
+    "region": [
+     890,
+     216,
+     1072,
+     245
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     234,
+     246
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Deepen or widen the 3 mm shadow line under the gable so the left gable end meets the side panel with a dark line instead of the 8-10 px pink haze (43 to 176 over y 205-215, x 760-784).",
+   "why": "At magazine size the gable looks soft and glowing at its base, but the shadow lines are spec geometry. Only what that edge mirrors can change: the mirror pass ties the side panel's top to the sidestrip and sidegloss panels."
+  },
+  {
+   "request": "Make the amplifier connectors larger or set them higher so the connections read at homepage size.",
+   "why": "Connections are a must-show, yet they read as dark shapes (median 38 on a 76 plate, 68 x 25 px). The plate's layout is product geometry, so a glint on the socket rims is the in-scope route; glints.0 was skipped because its point mirrors the connector itself."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
