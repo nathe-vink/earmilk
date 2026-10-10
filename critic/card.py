@@ -152,6 +152,9 @@ def main():
                       f'there is {g["normal_off_deg"]} degrees from the one given, so its lamp was placed from the surface\'s.'
                       for g in rep.get('glints', []) if not g.get('skipped') and g.get('normal_off_deg', 0) > 10]
             notes += [f'- change `{p_["id"]}` was not applied: {p_["why"]}.' for p_ in rep.get('pending', []) if p_.get('why') != 'not selected']
+            notes += [f'- the flag `lights.{c_["flag"]}` runs into the set (`{c_["set"]}`): where a flag meets a surface it draws a '
+                      f'dark line along it, whatever lamps it shades. Keep a flag clear of the set (smaller, or moved), or take it out.'
+                      for c_ in rep.get('flags_crossing_set', [])]
             # only the tuning of the round that made this frame: the shot's tune file keeps every round's, and an
             # older round's c4 is not this one's
             last_ = _last_round(a.shot_id)

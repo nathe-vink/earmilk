@@ -187,6 +187,12 @@ def main():
     for fname, fspec in (sh.get('lights') or {}).items():
         if fspec and not fspec.get('off') and fspec.get('type') == 'flag' and fspec.get('lights'):
             Lt.scope_flag(bpy, bpy.data.objects[fname], set(fspec['lights']))
+    # a flag that runs into a surface of the set draws a dark line where it meets it, whatever lamps it shades (08's
+    # round 10: a net 2.7 m deep at 10 cm over the left floor ran into the sweep's curve 1.1 m back, a black rod across
+    # the copy space that the critic took for a stray object); the report and the card name it
+    flag_cross = _flags_crossing_set(bpy, sh, part_of)
+    for c in flag_cross:
+        print(f"flag {c['flag']} crosses the set ({c['set']})")
     gl = sh.get('glints') or []
     names = list(gl.keys()) if isinstance(gl, dict) else [str(i) for i in range(len(gl))]
     gl = list(gl.values()) if isinstance(gl, dict) else list(gl)
@@ -282,7 +288,8 @@ def main():
 
     report = {'shot': a.shot, 'image': str(out), 'seconds': {'build': round(t1 - t0, 1), 'render': round(t2 - t1, 1)},
               'samples': int(cy.samples), 'size': [scene.render.resolution_x, scene.render.resolution_y],
-              'applied': applied, 'pending': pending, 'sets': a.sets, 'glints': glint_log, 'sun_aim': sun_aim}
+              'applied': applied, 'pending': pending, 'sets': a.sets, 'glints': glint_log, 'sun_aim': sun_aim,
+              'flags_crossing_set': flag_cross}
     tside = Path(a.shot).with_suffix('.tune.json')
     if tside.exists():
         report['tuning'] = json.loads(tside.read_text())
@@ -315,6 +322,36 @@ def main():
         if gl_.get('skipped') or gl_.get('normal_off_deg', 0) > 10:
             print('glint', gl_)
     print(f'{out}  {report["seconds"]}  samples {report["samples"]}')
+
+
+def _flags_crossing_set(bpy, sh, part_of):
+    """The flags (`lights.NAME` of type flag) whose face meets a surface of the set: [{flag, set}]."""
+    from mathutils import Vector
+    from mathutils.bvhtree import BVHTree
+    def world(o):
+        M = o.matrix_world
+        vs = [M @ v.co for v in o.data.vertices]
+        return vs, BVHTree.FromPolygons(vs, [tuple(p.vertices) for p in o.data.polygons])
+    def box(vs):
+        return (Vector((min(v.x for v in vs), min(v.y for v in vs), min(v.z for v in vs))),
+                Vector((max(v.x for v in vs), max(v.y for v in vs), max(v.z for v in vs))))
+    bpy.context.view_layer.update()                  # the lamps were just placed: their matrices are stale until then
+    set_objs = [o for o in bpy.context.scene.objects if o.type == 'MESH' and o.name not in part_of and not o.get('engine_light')
+                and not o.hide_render and o.visible_camera]
+    out = []
+    for fname, fspec in (sh.get('lights') or {}).items():
+        fo = bpy.data.objects.get(fname)
+        if not fspec or fspec.get('off') or fspec.get('type') != 'flag' or fo is None or fo.type != 'MESH':
+            continue
+        fv, fb = world(fo)
+        flo, fhi = box(fv)
+        for o in set_objs:
+            olo, ohi = box([o.matrix_world @ Vector(c) for c in o.bound_box])
+            if any(fhi[k] < olo[k] - 1e-4 or flo[k] > ohi[k] + 1e-4 for k in range(3)):
+                continue
+            if fb.overlap(world(o)[1]):
+                out.append({'flag': fname, 'set': o.name})
+    return out
 
 
 def _parts_2d(scene, cam, objs, part_of):
