@@ -1,0 +1,234 @@
+{
+ "stage1": {
+  "impression": "A clean, readable pair shot of the milk-carton speakers on a sideboard, but it is lit like a catalogue cut-out: soft, directionless light leaves the white bodies, the beige wall and the wood at similar mid-high values, so the cartons barely separate from the wall and barely sit on the top. The set gives it away as CG (evenly pitched zigzag grain on the doors, wire-thin twigs, hot pink patches on the red parts) and the frame spends its top third on blank wall while the yawed set makes the right speaker visibly larger than the left.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Both cartons visibly sit on the top: the top in front of and beside each base reads at least 25 % darker than open top a hand's width away. Now the strip in front of each base is only the pink plinth reflection (RGB about 178,130,115), and beside the bases the top darkens just 6-15 levels (left of the R base 155 to 150, right of it 133 to 144, left of the L base 169 to 161).",
+  "Every silhouette edge of the white cartons clears the wall by at least 18 levels. The L carton's lower-left edge reads 211 against the wall at 204-206 ([145,560,160,700] vs [20,380,125,690]).",
+  "One legible light direction from the room's windows: a soft gradient across each front and shadows on the top that agree with the wall's left-to-right falloff (206 to 184). Now the key is a 2 m strip 0.6 m in front of the pair, so both fronts are evenly lit and no cast shadow reads anywhere on the top.",
+  "The set's colours read as their paints across the frame. Now the wall away from the window has a magenta lift: right of the R carton Lab (74.9, 3.4, 5.2), hue 57 deg, and the top band right 57 deg, against the paint #E7DDD0 at 81 deg. The vase reads 63 deg against its paint's 78 deg, and only the window-lit left wall keeps the paint's a* of 1.2.",
+  "The door veneer reads as wood, not a print. Now there are evenly pitched ring lines at one spacing on all three doors, meeting in sharp chevrons at each door's centre (x about 280 and 600), lum_range 10-13.",
+  "The sideboard's left end shows as a stray triangle of top against the wall at the frame's left edge (x 0-123, y 706-765), with its front corner cut off by the frame. Either the end shows whole or the top runs off both edges.",
+  "The vase's three branches read as wire: uniform, smooth, near-black lines 2-3 px wide rising to y about 80 and crossing the frame's edge.",
+  "The pair matches. Now the L fin's right end carries a pink window reflection (median 150) that the R fin (67) does not."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The cartons do not sit on the sideboard. The only darkening at each base is the pink reflection of the plinth, and the open top around each base is almost unshadowed, so the pair reads placed on top of the picture rather than standing on the wood.",
+   "evidence": {
+    "region": [
+     20,
+     761,
+     215,
+     764
+    ],
+    "measured": "The profile along x, from open top left of the L carton to the strip in front of its base, reads 172.6, 173.5, 170.5, 168.7, 167.0 | 139.9, 135.8, 132.9. The step is the plinth's pink reflection (RGB 178,130,115), not a shadow. Beside the bases the top darkens 6-15 levels. Round 11 raised the 1.6 m top strip from 0.7 to 2.8 and moved its contact falloff only from -13.5 to -16.1, because that strip already shadows both sides of each base and more of it just lifts everything."
+   },
+   "change": {
+    "setting": "lights.back_top",
+    "from": "none",
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.8,
+      0.4
+     ],
+     "position": [
+      0,
+      0.6,
+      1.8
+     ],
+     "target": [
+      0,
+      -0.12,
+      0.56
+     ],
+     "irradiance": 1.2,
+     "color": 5200,
+     "receivers": [
+      "prop0-sideboard*"
+     ]
+    }
+   },
+   "expected": "A soft lamp above and behind the pair lights the sideboard alone, which the card allows for a lamp that lays the products' shadows on the set without lighting them. The cartons, turntable and vase each lay a soft shadow forward onto the front of the top. The open top along the front edge rises 6-15 levels (bins 1-5 to about 176-185), while the strip in front of each base stays about 133-140. The top behind the turntable, between the cartons, rises from about 150 to 175-195, which also answers round 11's 'dull top'. The wall, cartons and doors do not change, because the lamp is linked to the sideboard, so neither the wall nor the gloss on the cartons sees it. The upper bound keeps the middle of the top from outshining the white fronts.",
+   "accept": {
+    "region": [
+     20,
+     761,
+     215,
+     764
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     45,
+     55
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "On its lower half, the left carton's lit front melts into the wall on its window side. The white is 5-10 levels above the beige behind it, so the silhouette is carried only by a 1 px corner line.",
+   "evidence": {
+    "region": [
+     145,
+     560,
+     160,
+     700
+    ],
+    "measured": "The edge strip has median 211; the wall beside it reads 204 in its column and 206 in [20,380,125,690]. The largest edge step is 15.7, and that comes from the 1 px rounded corner (218-221). 91 % of these pixels mirror front_sheen (met at x -1.08). The window_strip_L reflection sits at x 166-222 instead (met at x -0.98 to -0.90; about 0.002 m of panel per px)."
+   },
+   "change": {
+    "setting": "lights.window_strip_L.position",
+    "from": [
+     -0.94,
+     -1.4,
+     0.68
+    ],
+    "to": [
+     -1.0,
+     -1.4,
+     0.68
+    ]
+   },
+   "expected": "The strip's reflection slides about 30 px left onto the carton's lower-left edge (x about 142-190). The edge strip reads 220-226, 15-20 levels above the wall at 204, so the brightest white sits on the window side, as the room's light says it should. x 190-222 falls back to about 212 under front_sheen. The right carton and the vertical falloff tested in round 11's c1 are unchanged.",
+   "accept": {
+    "region": [
+     145,
+     560,
+     160,
+     700
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     218,
+     228
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "Away from the window, the cream wall and the set read pink-beige. Half the frame is wall, so the room looks mauve, not cream.",
+   "evidence": {
+    "region": [
+     1200,
+     380,
+     1335,
+     690
+    ],
+    "measured": "RGB (195,182,175), Lab (74.9, 3.4, 5.2), hue 57 deg, against the paint #E7DDD0 at 81 deg; dE2000 is 2.89 against #C0B7AD, the paint's hue at this lightness. The top band right reads Lab (76.5, 3.9, 6.0), hue 57 deg. The vase reads (46.6, 3.5, 6.9) against its paint's (60.0, 1.8, 8.4). Only the window-lit wall at the left (82.8, 1.2, 4.3) keeps the paint's a*. The lift is magenta (+1.5 to +2.7 a*), not warmth."
+   },
+   "change": {
+    "setting": "render.white_balance_tint",
+    "from": 6,
+    "to": 3
+   },
+   "expected": "The whole set loses about 1-1.5 a*. The wall right of the R carton goes to about a* 2, hue 65-75 deg, and reads cream; dE against #C0B7AD is at most 1.6 and luminance moves by 2 levels or less. The window-lit left wall goes to about a* 0 (still a pale neutral cream, C about 4). The product does not move, because its whites and reds are retouched to their swatches per copy. An overshoot to green raises the dE again, so the test cannot be passed by going too far.",
+   "accept": {
+    "region": [
+     1200,
+     380,
+     1335,
+     690
+    ],
+    "metric": "delta_e",
+    "hex": "#C0B7AD",
+    "op": "<=",
+    "value": 1.6
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "The door veneer still reads as a topographic print: ring lines at one even pitch across all three doors, meeting in sharp chevrons at each door's centre, directly under the pair.",
+   "evidence": {
+    "region": [
+     620,
+     840,
+     720,
+     880
+    ],
+    "measured": "lum_range is 10.0 in this patch and 10-13 everywhere on the doors. The same line spacing repeats on every door, and the chevron peaks sit at x about 280 and 600. At grain 0.3605 (round 11 tuned it from 0.6 for a window of [12, 14.5]), the regularity still reads; the contrast does not."
+   },
+   "change": {
+    "setting": "set.props.0.grain",
+    "from": 0.3605,
+    "to": 0.2
+   },
+   "expected": "The latewood contrast drops to the preset's default. lum_range in the patch falls to 5-7, the chevrons recede to a soft figure, and the doors read as pale lacquered wood; the door median stays at 134 within 3 levels. This deliberately goes below round 11's window. At 12-13 the doors still read as a print, because the pitch is what reads, and nothing in the frame depends on a loud grain. The top keeps visible grain because it is seen at a grazing angle.",
+   "accept": {
+    "region": [
+     620,
+     840,
+     720,
+     880
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     4.5,
+     7.5
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The end of the left carton's fin carries a pink-white hot spot that the right carton's fin does not, so the pair does not match where the eye lands first.",
+   "evidence": {
+    "region": [
+     304,
+     290,
+     336,
+     304
+    ],
+    "measured": "Median 150, RGB (208,134,146). 56 % of these pixels mirror the front-wall window portal (met at x -1.44), so the rays pass just right of the fin_flag's edge: the flag covers mirror rays at x -0.93 to -0.76, and these cross its plane at about x -0.70. The rest of that fin reads 65, and the R fin reads 67 throughout."
+   },
+   "change": {
+    "setting": "lights.fin_flag.size_m",
+    "from": [
+     0.5,
+     0.26
+    ],
+    "to": [
+     0.66,
+     0.26
+    ]
+   },
+   "expected": "The black flag's right edge moves from about x -0.72 to -0.66, over the window's mirror ray. The end of the left fin drops from 150 to 60-80, like the rest of both fins. Nothing else mirrors that part of the flag.",
+   "accept": {
+    "region": [
+     304,
+     290,
+     336,
+     304
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     58,
+     85
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Make the cast 'earmilk' letters read as metal rather than white print. They read as flat white: median 198-205, RGB about (200,207,214), and no highlight.",
+   "why": "Their material and finish are the product's and fixed. Only what they mirror can change (glints.0/1 exist at 0.013-0.017 W). At 10 px tall, a stronger glint risks a sparkle that pulls the eye off the wordmark, so it is not worth a change this round."
+  }
+ ],
+ "score_if_fixed": 6.5
+}

@@ -40,6 +40,9 @@ def main():
     card = yaml.safe_load(Path(a.card).read_text())
     sc = card['shots'][a.shot_id]
     sh = json.loads(Path(a.shot).read_text())
+    # the frame's version from its resolved shot (renders/.../09-e13.shot.json): the rounds that judged it made nothing here
+    fm = re.search(r'-(e\d+)\.shot\.json$', a.shot)
+    frame = fm.group(1) if fm else None
     L = [f'# Shot card: {sc["title"]}', '']
     # the product's description: the shot's own, else the one for its product file, else the card's
     pdef_ = (sh.get('product') or (sh.get('products') or [{}])[0]).get('def', '')
@@ -141,7 +144,7 @@ def main():
             L.append('')
         # the last rounds on this shot: what each changed, and whether the last round's tests pass on this image, so a
         # round does not undo the one before without knowing it (05's round 7 darkened the sweep round 6 had lightened)
-        L += _history(a.shot_id, arr, Me)
+        L += _history(a.shot_id, arr, Me, frame=frame)
         # what the engine could not do in this render, in its own words: the critic's prescriptions meet the physics here
         rp = Path(a.report) if a.report else Path(a.image).with_suffix('.report.json')
         if rp.exists():
@@ -157,7 +160,7 @@ def main():
                       for c_ in rep.get('flags_crossing_set', [])]
             # only the tuning of the round that made this frame: the shot's tune file keeps every round's, and an
             # older round's c4 is not this one's
-            last_ = _last_round(a.shot_id)
+            last_ = _last_round(a.shot_id, frame)
             for tr in rep.get('tuning', []):
                 if last_ is None or Path(tr.get('reply') or '').name != last_.name:
                     continue
@@ -269,15 +272,23 @@ def _reshoot(shot_id, n=5):
     return out
 
 
-def _last_round(shot_id):
-    """The newest critic reply saved for the shot (the round that made the frame now being judged), or None."""
+def _round_files(shot_id, frame=None):
+    """The shot's saved critic replies as (round, mtime, path), oldest first, less any that judged `frame` (its version,
+    "e13"): a round cannot have made the frame it judged, and a reshoot can be staged on the frame its last round judged
+    (09's round 12, at 5.0 with refinements again, went straight to a reshoot of the same frame)."""
     import glob
     files = []
     for f in glob.glob(str(ROOT / 'critic' / 'rounds' / '*' / f'{shot_id}-*-r*.json')):
-        m = re.search(r'-r(\d+)\.json$', f)
-        if m:
-            files.append((int(m.group(1)), Path(f).stat().st_mtime, f))
-    return Path(max(files)[2]) if files else None
+        m = re.search(r'-(e\d+)-r(\d+)\.json$', f)
+        if m and m.group(1) != frame:
+            files.append((int(m.group(2)), Path(f).stat().st_mtime, f))
+    return sorted(files)
+
+
+def _last_round(shot_id, frame=None):
+    """The newest critic reply saved for the shot (the round that made the frame now being judged), or None."""
+    files = _round_files(shot_id, frame)
+    return Path(files[-1][2]) if files else None
 
 
 def _photo_light(sh):
@@ -328,18 +339,12 @@ def _photo_light(sh):
     return L
 
 
-def _history(shot_id, arr, Me, rounds=3):
+def _history(shot_id, arr, Me, rounds=3, frame=None):
     """The card's account of the shot's last rounds: the last round's changes with its tests measured on this image, and
     every setting the last `rounds` rounds changed, in order."""
-    import glob
-    files = []
-    for f in glob.glob(str(ROOT / 'critic' / 'rounds' / '*' / f'{shot_id}-*-r*.json')):
-        m = re.search(r'-r(\d+)\.json$', f)
-        if m:
-            files.append((int(m.group(1)), Path(f).stat().st_mtime, f))
+    files = _round_files(shot_id, frame)
     if not files:
         return []
-    files.sort()
     last = json.loads(Path(files[-1][2]).read_text())
     ver = re.search(rf'{re.escape(shot_id)}-(e\d+)-r', files[-1][2])
     try:
