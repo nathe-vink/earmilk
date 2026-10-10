@@ -1,0 +1,461 @@
+{
+ "stage1": {
+  "impression": "A warm, moody living room whose raking low sun on the plaster and oak is convincing, but the two carton speakers are small, dead frontal and lit flat and identical, so their white fronts read as cut-out cards pasted in front of that light rather than cabinets standing in it. A third of the frame is dark wall, a quarter dark floor and the right third dead shaded wall, so the hero never takes the frame.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The near speaker holds at least 50% of the frame height and reads as a volume: sunlit front at 200-216 median with its gradient printing (p95 <= 226), shade side at 100-135, and the triangular gable end readable as a red face.",
+  "Every lit face is explained by a light the set shares: no linked fill left on fronts, plinths or drivers (inner_fill and gable_fill to be replaced by set-wide light once the new viewpoint is confirmed).",
+  "Both speakers visibly cast the low sun's shadow on floor or wall, and the near speaker's long shadow reads inside the copy space.",
+  "The far front sits 5-25 levels below the near one (sun at cos 0.38 vs 0.53) and the far shade side separates from the wall behind it by at least 20 levels.",
+  "The copy space is calm and lit: no glazing-bar stripe, no prop corner entering a frame corner, no single dark area larger than about 15% of the frame; no edge tangencies (far speaker vs sideboard corner at least 25 px clear or overlapping).",
+  "Lit white faces keep the low sun's warmth (b* +3 to +6 against neutral) while shade faces stay neutral-cool; lit reds within dE 3 of #C62828.",
+  "Palette separates into warm sun on plaster and oak, walnut furniture and the red/white product, with no mauve-grey mud on wall or furniture."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "camera",
+   "problem": "Shot dead frontal from standing height, each speaker shows only its front plane, so it reads as a flat card and the carton's gable end never appears.",
+   "evidence": {
+    "region": [
+     233,
+     357,
+     247,
+     612
+    ],
+    "measured": "side faces are 14 px wide (side-right [233,357,247,612] 178.3; side-left [779,357,793,612] 107.3) against fronts of about 134 px; the fronts are one value edge to edge (x-profiles 211-219 left, 209-222 right); no gable end is visible"
+   },
+   "change": {
+    "setting": "camera.position",
+    "from": [
+     0,
+     -4.1,
+     1.15
+    ],
+    "to": [
+     -2.2,
+     -4.4,
+     0.9
+    ]
+   },
+   "expected": "A 3/4 view from the shade side, about 20 deg off the near speaker's front and 31 deg off the far one's: the near left face shows about 40-50 px wide (x 369-419 in the reshot frame) with its triangular gable end (apex near (393, 286)) as a deep red in shade (lum 25-60); the lens at eave height makes the gable read as a carton; the near speaker's sun shadow runs left from its base along y 700-720. The product does not move, so the glint points stay on the cones and the engine re-places their lamps for the new view. Every accept region in this reply is in the reshot frame's pixels (parts where the product is tested).",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      372,
+      300,
+      416,
+      346
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     12,
+     85
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "camera",
+   "problem": "The pair is small for a hero: the speakers fill 40% of the frame height while dark floor and dark wall take 60%.",
+   "evidence": {
+    "region": [
+     99,
+     298,
+     927,
+     656
+    ],
+    "measured": "speakers span y 298-656 (358 px of 900); floor below them 244 px (median 51.5 in [0,670,1350,900]); wall above 298 px (median 60.5 in [0,0,1350,190])"
+   },
+   "change": {
+    "setting": "camera.lens_mm",
+    "from": 35,
+    "to": 48
+   },
+   "expected": "With c1, the near speaker spans y 270-720 (about 450 px, 50% of the frame) and the far one y 281-648; dark floor under the near base falls from 244 px to about 180 px; the longer lens compresses the pair so the far speaker keeps about 80% of the near one's height and the drivers stay round.",
+   "accept": {
+    "region": {
+     "part": "front-baffle.plinth",
+     "box": [
+      423,
+      680,
+      571,
+      712
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     35,
+     90
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "camera",
+   "problem": "The copy space is the dead shaded right third, while the warm sunlit plaster that could carry copy is hidden behind the left speaker.",
+   "evidence": {
+    "region": [
+     940,
+     0,
+     1350,
+     560
+    ],
+    "measured": "right-third wall median 76.2, p95 88.9, neutral grey [81,75,74]; floor below [940,570,1350,900] median 70.7; the sunlit plaster reads 149.2 [165,147,123] at [255,300,300,400], behind the left speaker"
+   },
+   "change": {
+    "setting": "camera.shift_x",
+    "from": 0.12,
+    "to": -0.13
+   },
+   "expected": "The product group spans x 369-1257 with a 93 px right margin; the left 27% (x 0-365) becomes the copy space: the warm sunlit band on the plaster (lum 125-150) between shaded wall above and a darker band below, crossed at its foot by the near speaker's long floor shadow; the empty right third disappears.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      1078,
+      305,
+      1138,
+      343
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     12,
+     90
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "A lamp linked to front-baffle alone lifts the speaker in front of the shaded wall to exactly the brightness of the one in front of the sunlit wall, so both fronts read self-lit.",
+   "evidence": {
+    "region": [
+     779,
+     364,
+     927,
+     618
+    ],
+    "measured": "right front median 217.7 vs left 217.3; y-profiles 227.4->199.1 vs 227.1->202.3, equal within 3 levels, although the walls beside them read 88.9 (shade, [940,340,1010,460]) and 149.2 (sun) and the sun meets the fronts at cos 0.38 vs 0.53"
+   },
+   "change": {
+    "setting": "lights.right_fill.receivers",
+    "from": [
+     "front-baffle"
+    ],
+    "to": [
+     "*"
+    ]
+   },
+   "expected": "right_fill keeps its strength but now lights the floor, the wall and the sideboard round the far speaker as well as its front, so the lift reads as warm window bounce, not glow: the far front settles at 180-204, 5-20 below the near front; the shaded wall behind the far speaker rises about 8-12 levels; the far shade side (lit by inner_fill, about 110-120) stays darker than its front and brighter than that wall.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      1143,
+      352,
+      1255,
+      600
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     172,
+     206
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "From the new viewpoint the hero's shade side becomes a large face, and the only light on shade sides now is a linked panel, so without a set-wide fill it would read dirty grey beside a glowing far side.",
+   "evidence": {
+    "region": [
+     779,
+     357,
+     793,
+     612
+    ],
+    "measured": "side-left reads 107.3 [110,107,105], lit only by inner_fill (a panel linked to side-left), against 64.2 for the wall beside it [745,300,775,440]; the near speaker's left face (about 40 x 300 px in the new frame) has no light the set shares"
+   },
+   "change": {
+    "setting": "lights.fill_left",
+    "from": "absent",
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.0,
+      1.4
+     ],
+     "position": [
+      -2.75,
+      -1.2,
+      1.0
+     ],
+     "target": [
+      -0.9,
+      -0.1,
+      0.5
+     ],
+     "irradiance": 0.2,
+     "color": 5800
+    }
+   },
+   "expected": "A soft cool fill from the camera's left, outside the frame, that lights the floor and wall in its path as well: the near left face reads 105-125, about 1.5-2 stops under its sunlit front, darker than the sunlit plaster behind its upper half and well above the dark band behind its lower half; the white turns warm-to-cool across the corner; the darkest band on the copy-space wall lifts from about 28 to 45-55.",
+   "accept": {
+    "region": {
+     "part": "side-left",
+     "box": [
+      375,
+      380,
+      412,
+      600
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     100,
+     135
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "post",
+   "problem": "The top quarter of each front sits above the PBR Neutral knee, so the reflection gradient flattens into one value there.",
+   "evidence": {
+    "region": [
+     99,
+     364,
+     233,
+     618
+    ],
+    "measured": "front y-profile bins 227.1, 226.1, 220.3 ... 202.3 (left) and 227.4, 227.4, 221.4 ... 199.1 (right); p95 229.4"
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.8424,
+    "to": "-0.15"
+   },
+   "expected": "After c4 and c5 add light to the near front, the near front settles at a 200-216 median with p95 at or below 226, so its upper gradient prints; the sunlit plaster stays about 125-150.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      421,
+      352,
+      573,
+      655
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     200,
+     216
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "set",
+   "problem": "From the new camera the rug's back corner would cut into the bottom-right corner of the frame as a taupe wedge.",
+   "evidence": {
+    "region": [
+     1067,
+     852,
+     1350,
+     900
+    ],
+    "measured": "outside the current frame; projected from the card (props.0 at [0, -2.85], 2.6 x 1.7 m, back edge at y -2.0): from the c1-c3 camera its edge crosses the bottom edge at x 1067 and the right edge at y 852 (a wedge of about 283 x 48 px); the oak there is in shade, like [0,840,300,900] here at [62,39,18]"
+   },
+   "change": {
+    "setting": "set.props.0.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The bottom-right corner of the reshot frame shows only shaded oak (b_median 15-28) instead of a cut-off rug corner.",
+   "accept": {
+    "region": [
+     1250,
+     872,
+     1350,
+     900
+    ],
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     8,
+     32
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The plinth fronts are lifted by a lamp linked to them alone, so the left plinth front reads brighter than its own sunlit side and both copies match despite different sun angles.",
+   "evidence": {
+    "region": [
+     99,
+     615,
+     248,
+     656
+    ],
+    "measured": "plinth fronts 67.4 (left) and 68.7 (right) although the sun meets them at cos 0.53 and 0.38; the left copy's sunlit plinth side (side-right.plinth, sun at cos 0.82) reads only 65.9"
+   },
+   "change": {
+    "setting": "lights.plinth_fill.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The plinth fronts take their light from the sun, right_fill and fill_left only: they settle at 50-65, the near one a few levels above the far one; the retouch (lightness 0.5) keeps them within dE 3-4 of #C62828.",
+   "accept": {
+    "region": "part:front-baffle.plinth",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     40,
+     75
+    ]
+   }
+  },
+  {
+   "id": "c9",
+   "rank": 9,
+   "kind": "set",
+   "problem": "The glazing bar throws a hard dark stripe across the sunlit plaster that, in the reshot frame, falls inside the copy space near the left edge, plus a dark line across the floor.",
+   "evidence": {
+    "region": [
+     45,
+     330,
+     70,
+     450
+    ],
+    "measured": "the bar's stripe on the plaster: median 73.7, p5 51.0 against 129.1 beside it at [20,330,45,450]; on the floor a dark line (profile x 1000-1010: 79.0 -> 47.6 -> 69.7)"
+   },
+   "change": {
+    "setting": "set.windows.0.mullions",
+    "from": [
+     2,
+     1
+    ],
+    "to": [
+     1,
+     1
+    ]
+   },
+   "expected": "The sun patch on the copy-space wall becomes one clean warm band (p5 at least 110 where the stripe now drops it to about 51) and the bar's line on the floor in front of the far speaker disappears; the head edge and jambs still read as window light.",
+   "accept": {
+    "region": [
+     50,
+     320,
+     180,
+     440
+    ],
+    "metric": "lum_p5",
+    "op": "between",
+    "value": [
+     105,
+     185
+    ]
+   }
+  },
+  {
+   "id": "c10",
+   "rank": 10,
+   "kind": "set",
+   "problem": "The sideboard, which becomes the frame's central mass, renders a mauve-grey whose wave grain reads printed, dragging the palette into the brown-mauve blind critics called muddy.",
+   "evidence": {
+    "region": [
+     300,
+     480,
+     430,
+     580
+    ],
+    "measured": "sunlit veneer [105,84,73] (lum 87.6, range 26.2); shaded end [61,55,58] (56.5, [660,480,730,580]); in the reshot frame the sideboard is about 457 px wide between the speakers"
+   },
+   "change": {
+    "setting": "set.props.1.color",
+    "from": "#705A48",
+    "to": "#5A3C26"
+   },
+   "expected": "The sideboard reads as deep walnut (sunlit about [85,56,38]), darker and warmer than now, so the white fronts and red gables separate from it and the cathedral grain loses absolute contrast.",
+   "accept": {
+    "region": [
+     790,
+     510,
+     895,
+     575
+    ],
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     18,
+     52
+    ]
+   }
+  },
+  {
+   "id": "c11",
+   "rank": 11,
+   "kind": "light",
+   "problem": "The right mid cone is lit by a lamp linked to it alone, so its trim-ring shadow is filled while the left one's is black, and in the new view this lamp would double right_fill on the far mid.",
+   "evidence": {
+    "region": [
+     770,
+     394,
+     900,
+     450
+    ],
+    "measured": "right mid cone p5 20.7 (median 29.8) against p5 2.8 (median 34.5) on the left one"
+   },
+   "change": {
+    "setting": "lights.mid_fill_r.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "This reverses round 11's c2. The trade holds because right_fill now lights the far cone together with its surroundings (c4) and fill_left lights into the near cone from the left (c5), so neither trim-ring shadow goes black: both cones read 25-40.",
+   "accept": {
+    "region": "part:mid-cone",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     20,
+     48
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Make the white lacquer glossier so the fronts mirror more of the room and stop reading flat",
+   "why": "the paint and clear coat are the product's fixed finish; the fronts have to take their modelling from viewpoint, light and what they face (c1, c5, c6)"
+  },
+  {
+   "request": "A shallower waveguide or the tweeter set further forward so the dome reads from the lower camera",
+   "why": "the waveguide's profile and the tweeter's place in it are set by acoustic simulation; at 0.9 m the lens still looks into the mouth at about 52 deg off its axis, and tweeter_catch keeps the dome visible"
+  },
+  {
+   "request": "Lighten the shaded gable ends and plinth sides toward #C62828",
+   "why": "the accent colour is fixed and the retouch already matches lit faces; a red in shade must read darker, so the fix is fill light (c5), not colour"
+  }
+ ],
+ "score_if_fixed": 7.0
+}
