@@ -1,0 +1,283 @@
+{
+ "stage1": {
+  "impression": "A legible, well-modelled cutaway of the carton speaker, but lit like a technical illustration: the pale cut faces sit at one bright value with no direction, the white shell is a thin sliver and the interior is evenly filled. A black rod runs in from the left edge straight into the port as the darkest, heaviest shape in the frame, and the carton stands on a dull cool-grey sweep, so the piece reads as a competent engineering draft, not a homepage hero.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Nothing but the set in the left third: the black cylinder running from the left edge into the port ([0, 487, 316, 560], core lum 4-6, mask id 0) is gone, so [0, 470, 300, 565] has lum_p5 above 30 (now 5.0).",
+  "Section caps below the view transform's knee, and modelled: the upper back-panel cut strip [319, 290, 327, 420] reads R <= 225 (now 238, lum 208, range 4.4 over 130 px), and the cut face falls 25-40 levels from the gable to the bottom panel across the whole height (now flat at 204-208 down to y 420, then 196 -> 175 in the lower third).",
+  "The background is a deliberate charcoal pool, brightest behind the product's upper body and falling to all four edges: now the top edge [400, 0, 700, 100] is the brightest at 126.6, the field [700, 100, 1300, 500] is a cool mid-grey at 98.2 (rgb 96/98/106), and the bottom band [330, 850, 560, 900] at 96.7 is brighter than the floor beside the base [700, 600, 900, 700] at 82.9.",
+  "The must-show drivers and amplifier read as forms: part:woofer-cone lum_median 30-46 (now 27.4), part:amp-module 20-34 (now 19.0).",
+  "The white shell is lit as one object: the white above the plinth [568, 676, 578, 698] (225) no brighter than the white at the eave [562, 255, 580, 330] (214), with no jump up from the 172 beside the woofer [560, 470, 580, 530].",
+  "The connector bay and the tweeter in section are large enough to read at page size: the connector plug and socket print at about 8 x 8 px (54 and 62 px) and the tweeter frame at 359 px."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "A black cylinder that is no part of the product and no set prop (mask id 0) runs from the frame's left edge straight into the port, so the carton reads as skewered on a rod and the darkest, highest-contrast shape in the frame sits in its empty left third.",
+   "evidence": {
+    "region": [
+     0,
+     470,
+     316,
+     565
+    ],
+    "measured": "lum_p5 5.0 against 74-100 of set around it; top edge y 488 at x 20 and y 513 at x 290, a 20 px core at lum 4-6 then a 26 px ramp to the floor at 74-76; its slope (0.093) matches a line along world -x at the port's height (z about 0.41 m), diameter about 50 mm (30 px at 3.1 m)."
+   },
+   "change": {
+    "setting": "lights.leftfloornet.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The left third shows only floor and curve: [0, 470, 300, 565] has no pixel near black, lum_p5 from 5.0 to about 45-70 (after c2's darker paper); the port reads as a half-tube opening in the back panel, not a rod through the cabinet.",
+   "accept": {
+    "region": [
+     0,
+     470,
+     300,
+     565
+    ],
+    "metric": "lum_p5",
+    "op": "between",
+    "value": [
+     30,
+     110
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The paper prints as a cool mid-grey only a few levels below the cut-open interior, so the section separates from the set by hue alone and the frame reads dull rather than studio-lit.",
+   "evidence": {
+    "region": [
+     700,
+     100,
+     1300,
+     500
+    ],
+    "measured": "lum_median 98.2, rgb 96/98/106; whole background median 94.2 (p5 74, p95 121); the interior far wall part:side-right is 110.9 against 106-111 of set beside the product ([200, 150, 310, 450] 106.3, [600, 260, 700, 460] 111.2)."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#6A6D71",
+    "to": "#555659"
+   },
+   "expected": "The field right of the product drops from 98 to about 66-70 and the corners to about 50-60 (the view transform's toe deepens them, a natural vignette); the interior then sits 30-40 levels above the set, the caps and the white shell gain contrast, and the red roof and waveguide, which mirror the sweep (60 % and 40 % of their pixels), lose grey sheen. Round 10's floor tests (leftfloornet 88-97, key shadow 68-76) were absolute values on the old paper; the net and the shadow keep their relative effect on the darker paper, so this does not undo them.",
+   "accept": {
+    "region": [
+     700,
+     100,
+     1300,
+     500
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     58,
+     78
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The birch caps sit in the PBR Neutral shoulder, so the upper half of the section prints as one flat cream value with its grain and the key's falloff compressed away.",
+   "evidence": {
+    "region": [
+     319,
+     290,
+     327,
+     420
+    ],
+    "measured": "back-panel cut strip lum 208.0, p5-p95 205.9-210.3 (range 4.4 over 130 px), rgb 238/204/159, R above the 226 knee; gable cut face [335, 225, 400, 248] the same (208.3, range 5.3, R 238); cut-face rows by 50 px: 207, 208, 207, 204, 205, 204 down to y 420, then 196, 198, 196, 191, 183, 181, 175."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 3.6,
+    "to": 2.4
+   },
+   "expected": "The caps leave the shoulder: the upper strip goes from R 238 / lum 208 to about R 220 / lum 190-195 and the gable cut face likewise, so the birch reads warmer, its grain shows and the key's existing top-to-bottom falloff appears in the upper half (strip range above 6). The white shell is untouched (the key at azimuth -50 does not reach the +x face), and the key's spill on the floor in front of the base, the brightest floor in the frame (96.7), drops by about a quarter.",
+   "accept": {
+    "region": [
+     319,
+     290,
+     327,
+     420
+    ],
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     208,
+     225
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The background's brightest band is the frame's top edge above the gable, so the eye drifts up and out of the frame instead of resting on the product.",
+   "evidence": {
+    "region": [
+     600,
+     0,
+     720,
+     360
+    ],
+    "measured": "the column right of the gable falls +12.4 from the top down to y 360 (124 at the top, 113 at the bottom bin); [400, 0, 700, 100] is 126.6 against 111 beside the body [600, 260, 700, 460] and 106 left of it; the pool lamp's target (-0.6, 3.21, 0.7) projects to about (572, 173) and from z 1.8 it lights the upper curve as strongly as its target."
+   },
+   "change": {
+    "setting": "lights.pool.position",
+    "from": [
+     -0.5,
+     1,
+     1.8
+    ],
+    "to": [
+     -0.6,
+     1.4,
+     0.9
+    ]
+   },
+   "expected": "Lowered and brought nearer the curve, the pool lights the lower curve and the floor behind the carton (about y 170-500 in frame, largely behind the product) more than the top of the curve, which gets about 25 % less than the new peak: the column [600, 0, 720, 360] goes from +12.4 to about -5 to -12 (the top darker), and the brightest set sits round the gable and shoulders. The lamp faces +y, away from the product, so it still lights only the set.",
+   "accept": {
+    "region": [
+     600,
+     0,
+     720,
+     360
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -25,
+     -2
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The 12 in anodised cone, the largest driver in the section, is still a near-black wedge with one soft streak because round 10's tuning stopped below its own window.",
+   "evidence": {
+    "region": [
+     519,
+     532,
+     568,
+     683
+    ],
+    "measured": "part:woofer-cone lum_median 27.4 (p5 8.2, p95 152.2); 63 % of its pixels mirror the conecard; round 10's proofs: 27.1 at strength 0.2092, 54.1 at 1.2, 67.1 at 2.0, against its window 30-46."
+   },
+   "change": {
+    "setting": "lights.conecard.strength",
+    "from": 0.2092,
+    "to": 0.6
+   },
+   "expected": "A broad soft ramp runs down the cone's slope and its conical form separates from the magnet and surround: part:woofer-cone median from 27.4 to about 38 (round 10's proofs interpolate to 0.6 for 38; c2's darker sweep, which the cone also mirrors, may need a little more), the surround's rim highlight still the brightest point.",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     32,
+     44
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The plate amplifier inside its box is still a black mass, missing round 10's window by one level.",
+   "evidence": {
+    "region": [
+     319,
+     628,
+     380,
+     704
+    ],
+    "measured": "part:amp-module lum_median 19.0; amp-pcb 7.6, amp-caps 2.7, amp-plate 3.7; round 10's proofs: 19.3 at 0.1973, 52.4 at 0.8, 81.9 at 1.5, against its window 20-34."
+   },
+   "change": {
+    "setting": "lights.ampcard.strength",
+    "from": 0.1973,
+    "to": 0.34
+   },
+   "expected": "The module's housing separates from the shadow in the box: part:amp-module median from 19.0 to about 27 (interpolated from round 10's proofs), PCB and caps still dark.",
+   "accept": {
+    "region": "part:amp-module",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     22,
+     32
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The linked plinth lamp makes the foot of the white shell glow: the white just above the band is the brightest white in the frame while the white beside the woofer above it is grey, a reverse gradient nothing on the set explains.",
+   "evidence": {
+    "region": [
+     568,
+     676,
+     578,
+     698
+    ],
+    "measured": "lum_median 225 (p5 221, p95 228) against 172 beside the woofer [560, 470, 580, 530] and 214 at the eave [562, 255, 580, 330]; the lamp (receivers front-baffle and the letters) sits 0.26 m off the face at z 0.07 m and lights the white above the split-off band and nothing round it."
+   },
+   "change": {
+    "setting": "lights.plinth.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The white above the plinth falls to the level of the white beside the woofer (about 175-190), so the shell reads top-lit (214 at the eave, 172-190 low) instead of glowing at its foot; the plinth letters lose the lamp but are unreadable at this grazing angle.",
+   "accept": {
+    "region": [
+     568,
+     676,
+     578,
+     698
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     160,
+     205
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Show the Baltic birch ply laminations (alternating plies and glue lines) on every cut face.",
+   "why": "The caps print as uniform cream strips (back-panel strip range 4.4 levels over 130 px), so the section reads as solid timber or MDF rather than the Baltic birch the cabinet is built from; the birch is the product's own finish and is fixed."
+  },
+  {
+   "request": "If the stray cylinder in c1 turns out to be part of the product model (an unlisted cable or port extension), take it out of the model.",
+   "why": "It is in no part mask, so c1 treats it as a scene object; if it is product geometry the change belongs to the product owner, and the frame cannot ship with it either way."
+  }
+ ],
+ "score_if_fixed": 7.4,
+ "revisions": [
+  {
+   "change": "c1",
+   "by": "engine",
+   "why": "the cylinder is no object: it is where round 10's net over the left floor (lights.leftfloornet, 2.7 x 2.7 m at 10 cm, centred 0.65 m back) runs into the sweep's curve, 1.12 m back; crop proofs showed it gone with the net off and unchanged with the net scoped to the key alone or to every lamp but the key. The net goes, which is what the change asks (the rod removed); c2's darker paper takes the left floor down with the rest of the set",
+   "was": {
+    "setting": "asset: stray cylinder on the port axis (not in the card)",
+    "from": "black cylinder about 50 mm in diameter, in no part mask, from the back panel's port opening (x -0.195 m) along world -x at z about 0.41 m, y about 0, out past the frame's left edge",
+    "to": "removed"
+   }
+  }
+ ]
+}
