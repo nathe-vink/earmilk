@@ -1,0 +1,264 @@
+{
+ "stage1": {
+  "impression": "A crisp, clean cutaway of a gabled cabinet with a glossy red horn and a compression-style driver on a near-black field. The horn's long streak reflections are the only surfaces that read as a photographed material, while the birch and grey section faces are filled so evenly that they read as a CAD section; the interior below is a muddy brown field running off the bottom crop under a band of dead space at the top, the fin's red face is a chalky pink unlike the horn, and the tweeter assembly sits as a black mass between the white connector and the red.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The tweeter assembly holds detail in print: part:tweeter-frame crush_pct < 5 (now 26.96; its pocket [673,362,694,538] is 3.3 and 46% crushed), part:tweeter-retainer lum_median >= 30 (now 22.1), part:tweeter-dome lum_range >= 15 (now 6.5, a flat disc).",
+  "The roof section is lit with a shape, not filled: birch column [496,392,526,638] falloff >= 30 (now 21.0) and the grey insert section falling >= 35 levels from the tweeter flange (149) to its foot at the top panel (now 149 to 128), with nothing below the eaves brighter than the eaves.",
+  "The lower quarter recedes: part:side-right lum_median <= 66 (now 74.2, getting brighter toward the crop, 67.6 to 89.2) and the box bars falling >= 25 levels to the crop (back-panel [172,650,212,898] now 18.1), while the cable stays >= 35 levels below the wall behind it.",
+  "The fin face reads as the accent lacquer: g_median <= 50 and dE2000 <= 7 to #C62828 on [695,135,740,240] (now 77 and 14.62), with a sheen still visible.",
+  "Whites model below the view transform's shoulder: part:connector-plug lum_median <= 222 (now 228.3, p95 230.6, above the 226 knee).",
+  "Neutral darks: backdrop [20,20,300,300] within dE2000 1.5 of the paper's own #252423 (now 3.77, a* +2.8), and black parts without the plum tint (tweeter-retainer now [26,21,24]).",
+  "Gloss highlights on the horn have hot cores: lum_p95 >= 185 on [1000,515,1090,545] (now 166.5, a flat pink plateau at [238,145,156])."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The key lights the roof's foot, the top panel and the box bars as strongly as the subject, so the section is filled evenly from the peak to the crop and the light has no shape that holds the eye on the tweeter.",
+   "evidence": {
+    "region": [
+     496,
+     392,
+     526,
+     638
+    ],
+    "measured": "All-birch column profile y 192.3, 188.6, 187.5, 188.6, 178.6, 183.5, 174.1, 171.3 (falloff 21.0). Birch under the peak [590,300,650,330] 196.1 vs eave band [215,610,300,636] 173.8. The box bars still read 151.5 at the crop (back-panel [172,650,212,898], 169.6 to 151.5) and 147.1 (front-baffle [1156,665,1196,898]), as bright as the eaves. Top-panel section 169 to 155 along x."
+   },
+   "change": {
+    "setting": "lights.key_net",
+    "from": null,
+    "to": {
+     "type": "flag",
+     "size_m": [
+      0.7,
+      0.12
+     ],
+     "position": [
+      0.0,
+      -0.1,
+      0.86
+     ],
+     "target": [
+      0.0,
+      -0.285,
+      1.146
+     ],
+     "density": 0.7,
+     "lights": [
+      "key"
+     ]
+    }
+   },
+   "expected": "A net under the lower half of the key, 10 cm in front of the cut. Traced from 225 points on the key (at [-0.164,-0.285,1.146]), it cuts none of the key at z >= 0.89, so the seal, connector, sleeve and tweeter keep the full key. It cuts 11 to 46% (times density) across the grey band's foot and the eaves (z 0.88 to 0.86), 58 to 68% across the top panel (z 0.85 to 0.84) and 80 to 93% in the box (z <= 0.82). At density ~0.7 the birch column's last bin drops from 171 to ~160 and its falloff grows from 21 to ~34, the grey band darkens toward the top panel, and the box bars fall from ~160 under the top panel to ~130 at the crop. The key's azimuth (changed in rounds 6 and 8) is not touched, and the grey band's falloff along x is unchanged.",
+   "accept": {
+    "region": [
+     496,
+     392,
+     526,
+     638
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     30,
+     50
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The inside lamp sits 13 degrees left of the lens and below the top panel (az -5, el 10, about [-0.08,-0.88,0.68]), so it fills every face that looks at the camera and lights the box most, leaving the interior a flat brown field that gets brighter toward the bottom crop and pushing the connector into the shoulder.",
+   "evidence": {
+    "region": [
+     600,
+     712,
+     850,
+     898
+    ],
+    "measured": "part:side-right lum_median 74.2, rgb [98,71,36] (L 35.6, C 25: the birch's chroma at half its lightness), 12% of the frame. Profile y on this region 67.6, 71.0, 75.2, 80.2, 85.1, 89.2, brightest at the crop. This lamp is what 69% of side-right, 74.3% of the grey band [670,590,1000,645] and 81.7% of part:connector-plug (median 228.3) mirror."
+   },
+   "change": {
+    "setting": "lights.inside.irradiance",
+    "from": 0.6,
+    "to": 0.15
+   },
+   "expected": "part:side-right lum_median ~64 (L ~31), so the box reads as a recess under the lit roof, and its climb toward the crop shrinks to ~15 levels. connector-plug median ~221, under the 226 knee. The box bars drop ~8 levels. The key's share of the light on the roof section rises from ~65% to ~72%, adding ~3 levels to the birch column falloff. The sleeve and dome lose ~5% (the snoot and the mouth lamp light them most). The cable (15.9) stays ~45 levels below the wall behind it.",
+   "accept": {
+    "region": "part:side-right",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     54,
+     70
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The fin's red front face mirrors the white fin_sheen panel over its whole area at a near-grazing angle, so a white veil lifts green and blue and the accent prints as a chalky dusty rose beside the horn's clean red.",
+   "evidence": {
+    "region": [
+     695,
+     135,
+     740,
+     240
+    ],
+    "measured": "rgb median [149,77,84], dE2000 14.62 to #C62828 (the horn's lit face [820,420,960,480] is 2.65). 100% of the face mirrors panel fin_sheen at radiance 0.21 to 0.40. lum p5 77.6, p95 102.6, so no part of the face is free of the veil. The slope band that mirrors the same panel reads 76 to 86."
+   },
+   "change": {
+    "setting": "lights.fin_sheen.color",
+    "from": "#FFFFFF",
+    "to": "#FF8A78"
+   },
+   "expected": "The sheen keeps its place and shape (the face's hump 89, 95, 97, 94, 89, 77 down its height, and the slope band's edge accent) but carries little green and blue. g/b on the face fall from 77/84 to ~45/50, and its dE2000 to #C62828 from 14.62 to ~8 (~6.5 once c5 removes the magenta). The slope band settles to ~65 and still separates from the backdrop (16 to 18). The face keeps a visible reflection, so this keeps what round 8's c3 added the panel for rather than reversing it.",
+   "accept": {
+    "region": [
+     695,
+     135,
+     740,
+     240
+    ],
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     30,
+     52
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "asset",
+   "problem": "The tweeter assembly the frame exists to show is a black mass: the frame's pocket is crushed and the sleeve, dome and surround sit at 20 to 37. These parts are matte, and nothing in the card can lift them without first lifting the grey boss, birch and connector that share their plane.",
+   "evidence": {
+    "region": [
+     600,
+     330,
+     760,
+     570
+    ],
+    "measured": "part:tweeter-frame median 3.9, crush_pct 26.96 (pocket [673,362,694,538] 3.3, 45.6% crushed). part:tweeter-retainer 22.1 (cup [620,380,662,520] 20.4). part:tweeter-dome 37.4, lum_range 6.5. Dome pixels that mirror the inside lamp read 37.4, the same as those that mirror the dome itself, and the motor reads 68.4 vs 67.4, so these parts are matte and no reflection card or glint will model them. Profile across the assembly at y 440-460: 33, 41, 2-4, 16-25, 37."
+   },
+   "change": {
+    "setting": "asset: masked shadow lift (dodge) in the finish stage, which the card lacks",
+    "from": null,
+    "to": {
+     "parts": [
+      "tweeter-retainer",
+      "tweeter-frame",
+      "tweeter-motor",
+      "tweeter-magnet",
+      "tweeter-dome",
+      "tweeter-surround"
+     ],
+     "lift_ev": 1.0,
+     "apply_below_srgb": 70,
+     "soft_knee_srgb": 15,
+     "mask_feather_px": 3
+    }
+   },
+   "expected": "The assembly separates into its parts in print: sleeve cup ~20 to ~30, sleeve flange 56 to ~66, frame pocket 3.3 to ~7 (crush under 5%), dome 37 to ~52, and the motor stays at 68, above the lift's knee. The grey boss (150), birch (175), seal and connector lie outside the mask and do not move, so their edges show no glow.",
+   "accept": {
+    "region": "part:tweeter-retainer",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     28,
+     42
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "post",
+   "problem": "The raw frame carries a magenta cast (the retouch measured a* +2.62 on the white) that the retouch removes only from the paints, so the backdrop is plum-black, the black parts are plum and the horn's highlight cores are pink-magenta.",
+   "evidence": {
+    "region": [
+     20,
+     20,
+     300,
+     300
+    ],
+    "measured": "backdrop rgb [40,35,37], Lab (14.3, +2.8, -0.5), dE2000 3.77 to the paper's own chromaticity at that lightness (#252423). Right side [1220,600,1340,890] [20,17,21], dE 3.98. tweeter-retainer [26,21,24]. Streak core [240,147,159], with blue above green."
+   },
+   "change": {
+    "setting": "render.white_balance_tint",
+    "from": 10,
+    "to": 4
+   },
+   "expected": "Backdrop to ~[37,36,37] (a* ~0.5, dE2000 ~1.5 to #252423; what remains is the paper's slight warmth). The black parts go neutral and the streak cores go to ~[240,151,150]. The retouch re-matches the paints as it does now. The birch shifts slightly from pink toward yellow (a* 5.9 to ~3.5).",
+   "accept": {
+    "region": [
+     20,
+     20,
+     300,
+     300
+    ],
+    "metric": "delta_e",
+    "hex": "#252423",
+    "op": "<=",
+    "value": 1.8
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The horn's main streak is a flat-topped pink band that never reaches a hot core, so the insert reads as satin rather than lacquer.",
+   "evidence": {
+    "region": [
+     1000,
+     515,
+     1090,
+     545
+    ],
+    "measured": "lum_p95 166.5. ~985 insert pixels lie within 3 levels of the 167.7 maximum, the commonest values [238,145,156] and [238,144,155]. Cross-section at x 1000: 79, 118, then 159 to 166 flat for ~5 px, 146, 88. 42% of the region mirrors bowl_streak at radiance 7.5 to 8.5."
+   },
+   "change": {
+    "setting": "lights.bowl_streak.strength",
+    "from": 8.9938,
+    "to": "x1.6"
+   },
+   "expected": "The streak's core breaks to a near-white pink (~[245,190,188] with c5) and lum_p95 on the region rises from 166.5 to ~190, while its flanks stay red. It is capped at 205 so it does not become a blown stripe that pulls the eye from the tweeter.",
+   "accept": {
+    "region": [
+     1000,
+     515,
+     1090,
+     545
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     178,
+     205
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Render the sectioned faces of the tweeter's frame, top plate and pole as bare machined metal.",
+   "why": "In a real sectioned driver the cut metal is bright and the parts separate at a glance. Here they carry the black anodised finish (frame median 3.9, 27% crushed), but the drivers' materials and what is cut are fixed."
+  },
+  {
+   "request": "Give the birch section's plies varied thickness and tone with darker glue lines.",
+   "why": "The laminations are a perfectly regular stripe of one tone over about 10% of the frame and read as CG, but the birch is the product's material and is fixed."
+  },
+  {
+   "request": "Remove the black tab on the cabinet's left edge (letters-back-3, x 165-169, y 740-803, median 5.9).",
+   "why": "It reads as a stray mark at the frame's left edge, but it is a cast letter on the back seen edge-on, and the marks and geometry are fixed."
+  }
+ ],
+ "score_if_fixed": 6.5
+}

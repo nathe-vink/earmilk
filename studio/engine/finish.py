@@ -18,6 +18,12 @@ sharpening halos, a cyan LED bleached white, grain raised 40 %. This is that fin
 - **sharpen**: an unsharp mask on luminance at `sharpen_px` (scaled with the frame's width, at 1350 px), cored (a
   difference under `sharpen_core` levels is noise, not an edge) and clamped to its 3 x 3 neighbourhood's range, so an
   edge gets crisper without a halo past either side.
+- **dodge**: a retoucher's masked lift on named parts, for detail a lamp cannot reach without lighting its
+  neighbours: `[{"parts": ["tweeter-frame", "tweeter-dome*"], "lift_ev": 1.0, "below": 70, "knee": 15,
+  "feather_px": 3}]`. Each pixel of the parts (from the frame's part mask) darker than `below` (sRGB) gains up to
+  `lift_ev` stops in linear light, the gain fading to none over `knee` levels above `below`. The mask is feathered
+  over `feather_px`, so nothing outside the parts moves and no edge glows (08b's round 9: the tweeter's matte black
+  parts crushed at 3 to 37, with nothing on the card to separate them).
 
 The post chain is raw -> tone (white point, contrast, clarity) -> retouch (the paints matched to their swatches, on the
 toned frame, so the reds stay on their swatch) -> sharpen -> the frame. The raw frame stays beside it as IMG.raw.png.
@@ -39,7 +45,7 @@ from scipy.ndimage import gaussian_filter, maximum_filter, minimum_filter
 
 DEFAULTS = {'enabled': False, 'white_in': 215.0, 'white_out': 236.0, 'peak': 251.0, 'contrast': 0.12,
             'clarity': 0.08, 'clarity_px': 25.0, 'sharpen': 0.35, 'sharpen_px': 0.7, 'sharpen_core': 2.0,
-            'max_gain': 1.12}
+            'max_gain': 1.12, 'dodge': []}
 W = np.array([0.2126, 0.7152, 0.0722])
 
 
@@ -76,8 +82,9 @@ def _scale_lin(lin, k, cap):
     return lin * k[..., None]
 
 
-def tone(rgb8, spec):
-    """The white point, contrast and clarity on an sRGB uint8 frame; returns a float sRGB frame (0 to 255)."""
+def tone(rgb8, spec, mask=None):
+    """The white point, contrast, dodge and clarity on an sRGB uint8 frame; returns a float sRGB frame (0 to 255).
+    `mask` is (ids, legend): the part mask a dodge reads."""
     f = {**DEFAULTS, **(spec or {})}
     srgb = rgb8.astype(np.float64) / 255
     lin = s2l(srgb)
@@ -92,6 +99,8 @@ def tone(rgb8, spec):
     ye = l2s(lin @ W)
     y2 = curve(ye, f['white_in'] / 255, f['white_out'] / 255, hi)
     lin = _scale_lin(lin, s2l(y2) / np.maximum(s2l(ye), 1e-9), cap)
+    if f.get('dodge') and mask is not None:
+        lin = _dodge(lin, f['dodge'], mask, cap)
     if f['clarity']:
         w_ = lin.shape[1]
         ye = l2s(lin @ W)
@@ -99,6 +108,32 @@ def tone(rgb8, spec):
         y2 = ye + f['clarity'] * 4 * ye * (1 - ye) * (ye - bl)
         lin = _scale_lin(lin, s2l(np.clip(y2, 0, 1)) / np.maximum(s2l(ye), 1e-9), cap)
     return l2s(lin) * 255
+
+
+def _dodge(lin, rules, mask, cap):
+    """Each rule's parts lifted by up to `lift_ev` stops below `below` (sRGB), feathered; see the module's doc."""
+    import fnmatch
+    ids, legend = mask
+    ye = l2s(lin @ W) * 255
+    for r in rules:
+        pats = r.get('parts') or []
+        keys = [k for k, name in legend.items() if any(fnmatch.fnmatch(name.split('#')[0], p_) or fnmatch.fnmatch(name, p_) for p_ in pats)]
+        if not keys:
+            continue
+        m = np.isin(ids, keys)
+        fp = float(r.get('feather_px', 3)) * lin.shape[1] / 1350
+        if fp > 0:
+            # the feather inside the parts' edge: eroded by its radius first, so the neighbours keep their values
+            from scipy.ndimage import binary_erosion
+            m = np.clip(gaussian_filter(binary_erosion(m, iterations=max(1, int(round(fp)))).astype(np.float64), fp / 2), 0, 1)
+        else:
+            m = m.astype(np.float64)
+        below, knee = float(r.get('below', 70)), max(float(r.get('knee', 15)), 1e-3)
+        t = np.clip((below + knee - ye) / (2 * knee), 0, 1)
+        w = m * t * t * (3 - 2 * t)
+        lin = _scale_lin(lin, 2.0 ** (float(r.get('lift_ev', 1.0)) * w), cap)
+        ye = l2s(lin @ W) * 255
+    return lin
 
 
 def sharpen(rgb, spec):
@@ -121,7 +156,7 @@ def _save(rgb, path):
     Image.fromarray(np.clip(np.rint(rgb), 0, 255).astype(np.uint8)).save(path)
 
 
-def post(raw_png, out_png, fin=None, ret=None, swatch_png=None, legend=None):
+def post(raw_png, out_png, fin=None, ret=None, swatch_png=None, legend=None, mask_png=None, mask_legend=None):
     """The post chain: raw -> tone -> retouch (when on and a swatch mask is given) -> sharpen -> out.
     Returns {'finish': {...}, 'retouch': report or None}."""
     f = {**DEFAULTS, **(fin or {})}
@@ -129,7 +164,11 @@ def post(raw_png, out_png, fin=None, ret=None, swatch_png=None, legend=None):
     a = np.asarray(Image.open(raw_png).convert('RGB'))
     rep = {'finish': None, 'retouch': None}
     if on:
-        _save(tone(a, f), out_png)
+        mask = None
+        if f.get('dodge') and mask_png and Path(mask_png).exists() and mask_legend:
+            mask = (np.asarray(Image.open(mask_png).convert('RGB'))[..., 0].astype(int),
+                    {int(k): v for k, v in mask_legend.items()})
+        _save(tone(a, f, mask), out_png)
         src = out_png
     else:
         src = raw_png
@@ -143,6 +182,8 @@ def post(raw_png, out_png, fin=None, ret=None, swatch_png=None, legend=None):
         _save(sharpen(b, f), out_png)
         g = f['white_out'] / f['white_in']
         rep['finish'] = {k: f[k] for k in ('white_in', 'white_out', 'peak', 'contrast', 'clarity', 'sharpen', 'sharpen_px')}
+        if f.get('dodge'):
+            rep['finish']['dodge'] = f['dodge']
         rep['finish']['gain'] = round(g, 4)
     return rep
 

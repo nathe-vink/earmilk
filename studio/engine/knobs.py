@@ -49,6 +49,7 @@ KNOBS = [
     ('finish.sharpen', '0 to 1', (0, 1), 'an unsharp mask on luminance, cored and clamped to each pixel\'s 3 x 3 neighbours, so edges get crisper without halos'),
     ('finish.sharpen_px', 'px at 1350 wide', (0.3, 2), 'the sharpening radius'),
     ('finish.sharpen_core', 'levels', (0, 8), 'a difference under this many levels is noise and is not sharpened'),
+    ('finish.dodge', '[{parts, lift_ev, below, knee, feather_px}]', None, 'a retoucher\'s masked lift on named parts (part names or globs from the mask): pixels of those parts darker than `below` (sRGB) gain up to `lift_ev` stops, fading to none over `knee` levels above it, the mask feathered over `feather_px` so nothing else moves; for matte detail no lamp can reach without lighting its neighbours'),
     # sun and sky
     ('sun.azimuth_deg', 'deg', (-180, 180), 'compass direction the sun shines FROM, 0 = from in front of the product (-y), +90 = from +x'),
     ('sun.elevation_deg', 'deg', (0, 90), 'the sun\'s height above the horizon'),

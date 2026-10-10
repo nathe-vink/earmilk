@@ -117,7 +117,7 @@ def main():
                          'render.exposure', 'render.white_balance_k', 'render.white_balance_tint', 'render.look',
                          'retouch.enabled', 'retouch.match', 'retouch.lightness', 'retouch.neutral', 'retouch.adapt',
                          'finish.enabled', 'finish.white_in', 'finish.white_out', 'finish.contrast', 'finish.clarity',
-                         'finish.sharpen')
+                         'finish.sharpen', 'finish.dodge')
              if k not in seen]
     for k in extra:
         unit, rng, meaning = K.describe(k)
@@ -127,7 +127,7 @@ def main():
                 'retouch.adapt': '1 (the default)', 'finish.enabled': 'false (the default)',
                 'finish.white_in': '215 (the default)', 'finish.white_out': '236 (the default)',
                 'finish.contrast': '0.12 (the default)', 'finish.clarity': '0.08 (the default)',
-                'finish.sharpen': '0.35 (the default)'}.get(k, '(default)')
+                'finish.sharpen': '0.35 (the default)', 'finish.dodge': '[] (none)'}.get(k, '(default)')
         L.append(f'| `{k}` | {dflt} | {unit} | {rtxt} | {meaning} |')
     L.append('')
     L.append('The set\'s materials take their preset\'s keys (`materials.oak.plank_contrast`, `materials.plaster.bump`, ...): '

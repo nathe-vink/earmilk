@@ -81,9 +81,11 @@ def main():
             for k in knobs:
                 (rs if k.startswith('retouch.') else fs)[k.split('.', 1)[1]] = v
             sw = base.with_suffix('.swatch.png')
+            ml = base.with_suffix('.mask.json')
             Fn.post(str(base.with_suffix('.raw.png')), str(out), fs if fs.get('enabled') else None,
                     rs if rs.get('enabled') and sw.exists() else None, str(sw) if sw.exists() else None,
-                    json.loads(base.with_suffix('.swatch.json').read_text()) if sw.exists() else None)
+                    json.loads(base.with_suffix('.swatch.json').read_text()) if sw.exists() else None,
+                    str(base.with_suffix('.mask.png')), json.loads(ml.read_text()) if ml.exists() else None)
             for suf in ('.mask.png', '.mask.json'):
                 if base.with_suffix(suf).exists():
                     shutil.copy(base.with_suffix(suf), out.with_suffix(suf))

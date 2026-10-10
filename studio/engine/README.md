@@ -214,6 +214,14 @@ A photographer sets the white point in post. `finish.py` does the same, in the o
   (differences under `sharpen_core` levels are noise) and clamped to each pixel's 3 x 3 neighbourhood, so an edge
   gets crisper without a halo either side.
 
+A **dodge** is a retoucher's masked lift: `finish.dodge` lists rules such as `{"parts": ["tweeter-frame",
+"tweeter-dome"], "lift_ev": 1.0, "below": 70, "knee": 15, "feather_px": 3}`. Each named part's pixels (from the frame's
+part mask) that are darker than `below` gain up to `lift_ev` stops in linear light, fading to none over `knee` levels
+above it. The mask is eroded, then feathered inside the parts' edges, so the neighbours move by two levels at most.
+08b's round 9 asked for it: the tweeter's matte black parts, crushed at 3 to 37, had nothing on the card to separate
+them without lighting the cut faces around them. On 08b e11 it took the retainer from 22 to 34 and the frame's crush
+from 27 % to 5 %.
+
 `python3 studio/engine/finish.py calibrate IMG` reads the white paint's lit face off `IMG.raw.png` (its 75th
 percentile of luminance, from the swatch mask) and prints the `white_in` that puts it at `white_out`, the gain capped
 at 1.12 so a white the light leaves in shade is not dragged up to a lit one. The tuner treats `finish.*` like

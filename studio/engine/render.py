@@ -317,8 +317,10 @@ def main():
         if not raw.exists():
             shutil.copy(out, raw)
         leg = json.loads(out.with_suffix('.swatch.json').read_text()) if ret_on else None
+        mlp = out.with_suffix('.mask.json')
         pr = Fn.post(str(raw), str(out), fin if fin_on else None, ret if ret_on else None,
-                     str(out.with_suffix('.swatch.png')) if ret_on else None, leg)
+                     str(out.with_suffix('.swatch.png')) if ret_on else None, leg,
+                     str(out.with_suffix('.mask.png')), json.loads(mlp.read_text()) if mlp.exists() else None)
         if pr['retouch']:
             report['retouch'] = pr['retouch']
             for p_ in report['retouch']['paints']:
