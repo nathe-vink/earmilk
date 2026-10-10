@@ -1,0 +1,643 @@
+{
+ "stage1": {
+  "impression": "A glossy red gable-top speaker roof with its horn waveguide and tweeter, shot from a high front three-quarter on a grey gradient; the waveguide reads and the right slope falls off enough to give form. It reads as clinical CG rather than a hero shot: the front slope is a near-uniform red field with soft, unfocused highlights, the white body is a flat cropped slab with a stray dark nick at its front edge, the tweeter is small and dull, and the frame is tight at the top and right without looking deliberate.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The waveguide spans at least 60% of the frame width with the fin's top edge at least 100 px below the frame top and the white walls at most 9% of the frame (now 52% / 705 px, 66 px, and 15.7% / 190,731 px)",
+  "The roof slope grades at least 15 levels from under the fin to the eave and at least 8 levels left to right (now 21 levels over the full height of the right slope and 7 across), with no pink wash: mid-slope red within dE2000 4 of #C62828 (now 7.7 on the upper-left slope [110,300,260,600])",
+  "The horn reads as a concave, machined form: the shaded left wall sits at least 25 levels under the lit floor (now the left wall is 5 levels brighter than the floor, 94.6 vs 89.5), the floor's sheen grades and its edge follows the floor's curve (now 84-92 top to bottom), the throat sits at or below 45 with the dome's catchlight at or above 200, and there is no hard-edged sheen band anywhere in the horn",
+  "A continuous, crisp rim highlight (10-90% edge width at most 3 px) along the whole arch of the mouth, from the apex down to both ends of the mouth",
+  "The backdrop is a graduated dark field at about 40-80 with the fin's top edge standing at least 30 levels off it (now a flat 126-156 mid-grey that is brighter than the roof)",
+  "The white band under the eave reads 200-220 along its whole length with no flag shadow (now 175 at the left end against 216 in the centre)",
+  "The pull-loop tab and the insert's seam line catch no stray highlight and do not read as damage"
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "camera",
+   "problem": "The camera sits 23.5 deg right of the product's axis and 20 deg above the aim point, so the white front and side walls fill the bottom quarter of the frame and the tweeter is seen about 35 deg off its axis, as a squashed ellipse tucked under the hood.",
+   "evidence": {
+    "region": [
+     240,
+     730,
+     640,
+     775
+    ],
+    "measured": "front-baffle 135,027 + side-right 53,189 + back-panel 2,515 px = 15.7% of the frame; this band (the horn's mouth in the new frame) is white wall today, median 209; the dome+surround mask fits an ellipse of axis ratio 0.82 (second-moment fit), which means about 35 deg off-axis"
+   },
+   "change": {
+    "setting": "camera.position",
+    "from": [
+     0.15,
+     -1.27,
+     1.385
+    ],
+    "to": [
+     -0.121,
+     -1.4,
+     1.292
+    ]
+   },
+   "expected": "Move to 12 deg right of the product's front axis, 16 deg above the horn's centre and 1.35 m from the new aim point (do not move the product). Together with c2 and c3: the white walls drop to about 8% of the frame (a band 30-110 px tall under the eave, plus a strip about 70 px wide of the right side that shows the box's volume). The tweeter is seen about 19 deg off its axis (outline ratio about 0.95), round and centred in its throat. The band [240,730,640,775] becomes the horn's mouth floor at 70-125. At 16 deg the lower floor still mirrors the overhead panel; a camera below about 15 deg would have most of the floor mirror the red fin instead.",
+   "accept": {
+    "region": [
+     240,
+     730,
+     640,
+     775
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     55,
+     140
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "camera",
+   "problem": "The fin's top-left corner sits 66 px (7%) under the top edge of the frame and its top edge runs at a slant toward that edge, so the fin crowds the frame.",
+   "evidence": {
+    "region": [
+     260,
+     50,
+     700,
+     100
+    ],
+    "measured": "gable-block box top y=66; the fin's corner and top edge fall inside this band: lum_range 57.7 (p5 91.5 fin, p95 149.1 backdrop)"
+   },
+   "change": {
+    "setting": "camera.target",
+    "from": [
+     -0.011,
+     -0.043,
+     0.927
+    ],
+    "to": [
+     -0.028,
+     -0.094,
+     0.962
+    ]
+   },
+   "expected": "Aim the camera at a point on the slope above the throat. Projected positions: the fin's top edge runs from about (226,123) to (1268,160), the ridge from (225,248) to (1262,292), the apex at about (693,350), the tweeter centre at about (737,472), the mouth's ends at about (201,794) and (1038,853), and the eave from about (62,784) to (1208,866). The band [260,50,700,100] is backdrop only, so lum_range falls from 57.7 to 30 or less.",
+   "accept": {
+    "region": [
+     260,
+     50,
+     700,
+     100
+    ],
+    "metric": "lum_range",
+    "op": "<=",
+    "value": 30
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "camera",
+   "problem": "At 88 mm the waveguide covers only half the frame width and the tweeter dome is 66 px across, which is wide for a close engineering detail.",
+   "evidence": {
+    "region": [
+     112,
+     705,
+     145,
+     750
+    ],
+    "measured": "waveguide-insert box [178,306,883,820] = 705 px = 52% of 1350; tweeter-dome box [663,378,729,446] = 66 px; the roof spans x 67-1281 only because the 3/4 view adds the right gable; today this region is off the roof (white wall, r 190, lum 190)"
+   },
+   "change": {
+    "setting": "camera.lens_mm",
+    "from": 88,
+    "to": 103
+   },
+   "expected": "From the new position, the waveguide spans about 835 px (62% of the width) and the dome about 75 px. The roof fills x of about 62 to 1279, with 60-70 px of backdrop at each side. The fin, slope, mouth and tweeter all stay in frame, and the fin's top edge stays at least 100 px below the top (any longer and the fin would crowd the top edge again). The region [112,705,145,750] falls on the roof's lower-left slope, red with r about 170-225.",
+   "accept": {
+    "region": [
+     112,
+     705,
+     145,
+     750
+    ],
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     150,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The real key of this frame is the 4.2 m overhead panel. It both lights the roof and is what its gloss mirrors, so the slope and the horn floor are each one soft value: the generic overhead wash every first look has named.",
+   "evidence": {
+    "region": [
+     900,
+     320,
+     1000,
+     800
+    ],
+    "measured": "mirror pass: gable-block mirrors panel top on 66% of its pixels and waveguide-insert on 47%; right-slope profile y 95.6, 92.7, 88.6, 84.7, 82.3, 79.7, 76.9, 74.2 (21 levels over the whole slope); profile x [880,400,1160,500] 93.9 to 86.6; horn floor profile y [480,560,760,790] 87.6, 89.4, 85.9, 85.7, 85.9, 91.8, 84.0 (flat)"
+   },
+   "change": {
+    "setting": "lights.top",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      4.2,
+      4.2
+     ],
+     "position": [
+      0.1,
+      -0.2,
+      2.05
+     ],
+     "target": [
+      0.1,
+      -0.2,
+      0.9
+     ],
+     "strength": 1.35,
+     "color": 5700,
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -1,
+       -0.45,
+       0,
+       0.3,
+       0.7
+      ],
+      "values": [
+       0.3,
+       0.15,
+       1,
+       1,
+       0.3
+      ]
+     },
+     "diffuse": true
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      4.2,
+      4.2
+     ],
+     "position": [
+      0.1,
+      -0.2,
+      2.05
+     ],
+     "target": [
+      0.1,
+      -0.2,
+      0.9
+     ],
+     "strength": 1.8,
+     "color": 5700,
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -0.45,
+       -0.3,
+       0.15,
+       0.5,
+       0.85,
+       1.5
+      ],
+      "values": [
+       0.55,
+       0.3,
+       1.0,
+       0.75,
+       0.4,
+       0.08
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The panel stops lighting and is seen only in the gloss, ramped for the new camera; tune its strength. From the new camera, the slope mirrors y from -0.3 (eave) to +0.15 (ridge), so its sheen runs bright under the fin and dark at the eave; across [1105,320,1180,780] the mirrored radiance falls from 1.37 to 0.68, which should give a 14-36 level falloff, capped so the ridge does not wash pink. The floor mirrors y 0.5-0.8, giving a sheen band at the mouth. The fin's reflection cuts a dark curved line across the upper floor near the throat, which draws the floor's contour. The hood's front mirrors y about -0.4, giving a moderate sheen there. The panel's edges are never seen.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      1105,
+      320,
+      1180,
+      780
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     14,
+     36
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The front-left key, a 0.6 m box 1.6 m out, carries well under half the light on the front faces, so its direction never shows: the left wall of the horn, which faces away from it, is brighter than the floor it lights.",
+   "evidence": {
+    "region": [
+     300,
+     440,
+     560,
+     560
+    ],
+    "measured": "left wall median 94.6, p95 115.5 vs horn floor [420,600,800,770] median 89.5; front-baffle lit face 213-216 with only 7 levels top to bottom (profile y 213, 217, 215, 210, 206)"
+   },
+   "change": {
+    "setting": "lights.key",
+    "from": {
+     "type": "area",
+     "size_m": [
+      0.6,
+      0.6
+     ],
+     "orbit": {
+      "azimuth_deg": -50,
+      "elevation_deg": 48,
+      "distance_m": 1.6
+     },
+     "target": [
+      0,
+      0,
+      0.95
+     ],
+     "irradiance": 3,
+     "color": "#FFF4E3"
+    },
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.6,
+      0.6
+     ],
+     "orbit": {
+      "azimuth_deg": -60,
+      "elevation_deg": 50,
+      "distance_m": 1.3
+     },
+     "target": [
+      -0.03,
+      -0.1,
+      0.92
+     ],
+     "irradiance": 3.4,
+     "color": "#FFF4E3"
+    }
+   },
+   "expected": "The key moves to about [-0.72, -0.42, 1.52], 56 deg left of the lens and 0.99 m from the horn's centre; tune its irradiance. With c4 and c6 it carries most of the light. Cosines: slope 0.80, front wall 0.51, the horn's right wall 0.96, its left wall 0.23, its floor 0.76, so the right wall is bright and the left wall is in shade. It falls off about 35% left to right across the roof (0.87 m to 1.10 m), and the white wall gets less of it than the slope, so the white holds 196-222 while the red stays rich. Simulated, its reflection lands only on the hood's lip just above the tweeter, at about (725,389): a highlight that draws the hood's lip. It never reaches the flat slope, unlike positions at 55 deg elevation and above, which put a glare at the lower-left eave.",
+   "accept": {
+    "region": [
+     300,
+     870,
+     950,
+     896
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     196,
+     222
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The gradient dome at 0.5 lights from every direction, so nothing on the product falls into shadow.",
+   "evidence": {
+    "region": [
+     1080,
+     400,
+     1230,
+     650
+    ],
+    "measured": "part:waveguide-insert lum_p5 63.9 (the darkest 5% of the horn is a mid-tone); right gable end, the only face turned from the key, median 49.2"
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 0.5,
+    "to": 0.15
+   },
+   "expected": "The dome stops filling the shadows. The darkest 5% of the waveguide (the throat, the hood's underside, the foot of the shaded left wall) falls from 63.9 to 22-50, and surfaces that mirror the sky go darker, so the horn's right wall reads as a lit red band against dark reflections.",
+   "accept": {
+    "region": "part:waveguide-insert",
+    "metric": "lum_p5",
+    "op": "between",
+    "value": [
+     22,
+     50
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The 1.5 m fill at 50 deg right faces the horn's left wall almost head-on (cosine 0.93), so that wall, which should be the shadow side, is filled up to the floor's value.",
+   "evidence": {
+    "region": [
+     300,
+     440,
+     560,
+     560
+    ],
+    "measured": "left wall median 94.6 vs floor [420,600,800,770] 89.5, a ratio of 1.06 where the key alone would give 0.47 (cosine 0.38 vs 0.80); fill at irradiance 1.8 against key 3, with the fill-to-left-wall cosine at 0.93"
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": 1.8,
+    "to": 0.8
+   },
+   "expected": "Key to fill on the faces both reach goes to about 4:1. In the new frame the shaded left wall [490,528,590,556] sits at 40-72 against the lit floor at about 95-120, a step of 25 levels or more across the horn. Tune between 0.5 and 1.2.",
+   "accept": {
+    "region": {
+     "part": "waveguide-insert",
+     "box": [
+      490,
+      528,
+      590,
+      556
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     40,
+     72
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The backdrop is a flat mid-grey brighter than the red roof, so the red reads darker than its surround and the white walls stand only about 60 levels off it.",
+   "evidence": {
+    "region": [
+     500,
+     15,
+     900,
+     85
+    ],
+    "measured": "lum_median 149.4 (range 8.3), r 150 g 149 b 152; top-left [0,0,160,90] 128.1 (range 6); top-band profile x 128.1 to 156.4; roof median 87.7"
+   },
+   "change": {
+    "setting": "lights.bg_pool.irradiance",
+    "from": 1.3,
+    "to": 0.7
+   },
+   "expected": "With the dome at 0.15 and the top panel lighting nothing, the pool on the sweep behind and below the product becomes the backdrop's main light: the backdrop above the fin reads 42-78, about 35-55 in the top corners, and brighter low beside the roof's hips, a neutral graduated dark field. The fin's top edge stands at least 30 levels off it and the white band is about 140 above it. Tune between 0.3 and 1.0.",
+   "accept": {
+    "region": [
+     500,
+     15,
+     900,
+     85
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     42,
+     78
+    ]
+   }
+  },
+  {
+   "id": "c9",
+   "rank": 9,
+   "kind": "light",
+   "problem": "The fin's sheen card was placed for the old camera. From the new viewpoint the fin's top band and its right end mirror past the card's top and side edges, which would draw a hard diagonal edge and a hard vertical edge across the fin.",
+   "evidence": {
+    "region": [
+     320,
+     100,
+     1150,
+     160
+    ],
+    "measured": "today 82.2% of the fin band mirrors fin_sheen (mirrors command); the fin face runs 86.8 (x 320) to 59.3 (x 1150); simulated for the new camera, the old card covers 71% of the fin, and the top 40-60 px of the fin (y 120-170 from x 230 to 1010) and its right end (x over 1140) see nothing panel-lit"
+   },
+   "change": {
+    "setting": "lights.fin_sheen",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      1,
+      0.25
+     ],
+     "position": [
+      -0.65,
+      -0.82,
+      0.735
+     ],
+     "target": [
+      0,
+      0,
+      1.03
+     ],
+     "strength": 1.6,
+     "color": 5700,
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.7,
+       0.79
+      ],
+      "values": [
+       0.05,
+       1
+      ]
+     },
+     "diffuse": false
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.8,
+      0.16
+     ],
+     "position": [
+      -0.36,
+      -0.7,
+      0.884
+     ],
+     "target": [
+      0,
+      0,
+      1.03
+     ],
+     "strength": 1.6,
+     "color": 5700,
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.85,
+       0.92
+      ],
+      "values": [
+       0.12,
+       1.0
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The whole fin face mirrors the new card: simulated, 100% of the fin, met within the inner 80% of its width and height, so no card edge shows. The card also hides fin_vsheen from the fin. The ramp along z makes the fin run from a bright band under its top edge to dark at its base, a falloff of 12-40 levels across [320,172,980,235], so the dark base sets off the bright slope under the ridge. Tune its strength.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      320,
+      172,
+      980,
+      235
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     40
+    ]
+   }
+  },
+  {
+   "id": "c10",
+   "rank": 10,
+   "kind": "light",
+   "problem": "wall_sheen, the card that lays the pink band down the horn's left wall, would be mirrored up to its unramped side edge from the new camera, bringing back the hard-edged stripe that round 12 feathered.",
+   "evidence": {
+    "region": [
+     300,
+     440,
+     560,
+     560
+    ],
+    "measured": "today the band lifts the left wall to p95 115.5 over a median of 94.6, and the mirror pass shows glint5 over wall_sheen on 4.2% of the waveguide; simulated for the new camera, its hits run to lx 0.49 of the card, with 4.7% of them within 5% of that hard edge, across (280-560, 560-720)"
+   },
+   "change": {
+    "setting": "lights.wall_sheen.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The left wall carries the key's shade and the dim sky, with no band: p95 in [450,565,550,598] is 50-105 instead of the 120 or more the band would give. The wall's shading follows its curve from the floor up to the hood. This reverses round 12's c1/c2 by removing the card; the stripe they feathered cannot come back without the card.",
+   "accept": {
+    "region": {
+     "part": "waveguide-insert",
+     "box": [
+      450,
+      565,
+      550,
+      598
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     50,
+     105
+    ]
+   }
+  },
+  {
+   "id": "c11",
+   "rank": 11,
+   "kind": "light",
+   "problem": "base_flag, the black card placed to shade the lower body, blocks part of the key from the front wall's left end, so the white greys toward the left. With the new key it would also cut a third of the key's area off the white band and off the lower-left slope at the eave.",
+   "evidence": {
+    "region": [
+     110,
+     830,
+     400,
+     896
+    ],
+    "measured": "median 181 vs 213 in [300,870,950,896]; front-baffle profile x 175, 192, 205, 213, 216, 215, 215, 215; occlusion of the key's area by the flag, sampled at 9 points over the key: 0.33 along the white band from x 76 to 760 and the slope's last 10 cm from x 81 to 620"
+   },
+   "change": {
+    "setting": "lights.base_flag.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The white band reads evenly white along its length, slightly brighter at the left where the key is nearest: [110,830,400,896] 192-226. The lower-left slope and the mouth's lip get the full key. The lower body it was placed for is now out of frame.",
+   "accept": {
+    "region": [
+     110,
+     830,
+     400,
+     896
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     192,
+     226
+    ]
+   }
+  },
+  {
+   "id": "c12",
+   "rank": 12,
+   "kind": "light",
+   "problem": "The 26 W snoot puts about 2.2 W/m2 on the throat, two thirds of the new key. In the darker frame it would read as a spot pool round the tweeter and keep the dome a lit grey ball.",
+   "evidence": {
+    "region": [
+     663,
+     378,
+     729,
+     446
+    ],
+    "measured": "part:tweeter-dome median 66.2, p5 13.2, p95 164.2, rgb [85, 60, 64] (grey with a red cast from mirroring the insert); snoot 26.275 W at 0.97 m"
+   },
+   "change": {
+    "setting": "lights.throat_snoot.power_w",
+    "from": 26.275,
+    "to": 8
+   },
+   "expected": "The throat falls into the hood's shade and the snoot only lifts the dark dome enough to model its curvature. The dome reads as a dark dome whose auto-placed glint is the brightest point, with the key's highlight on the hood's lip just above it: part:tweeter-dome median 30-62. Tune between 4 and 14 W.",
+   "accept": {
+    "region": "part:tweeter-dome",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     30,
+     62
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Remove or hide the pull-loop tab on the eave below the mouth (part pull-loop, box [497,743,525,752], 142 px, a red tab with a dark outline), which first looks keep reading as a chip or render artefact",
+   "why": "It is the product's ribbon pull loop, part of the fixed geometry. In the new frame it sits on the eave at about (558,821), right under the mouth, so it stays visible. Light can only keep it from catching a stray highlight."
+  },
+  {
+   "request": "Soften or remove the hairline seam that outlines the horn on the slope (a 1-2 px dark line just outside the rim highlight)",
+   "why": "It is the insert's parting line, part of the fixed product geometry and of the waveguide's shape, which is set by acoustics. It cheapens the read (round 9 named it), so lighting should not rake across it."
+  },
+  {
+   "request": "A darker or more neutral tweeter dome than the grey that reads today (rgb [85,60,64])",
+   "why": "The dome's material is the SB Satori TW29DN-B's own and is fixed. Only what it mirrors and how it is lit can change (c12, and the auto-placed glint)."
+  },
+  {
+   "request": "Lose the white band under the eave entirely",
+   "why": "The mouth's floor ends at the eave, and the brief requires the mouth. Any frame that shows the mouth's lip shows the wall below it, so it can only be kept thin and properly white (c1-c3, c5, c11)."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
