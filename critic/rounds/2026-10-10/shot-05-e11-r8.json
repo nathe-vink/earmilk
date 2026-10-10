@@ -1,0 +1,321 @@
+{
+ "stage1": {
+  "impression": "A clean, legible lineup of six milk-carton speakers on a raised diagonal, but it sits on a dull, flat mid-grey sweep under even frontal light, so the white bodies read light grey and the units are held down only by faint, soft shadows. It reads as a competent catalogue draft, not a homepage hero: the set has no shape of light, the shaded sides go soft where they meet the grey, and there is dead grey above and below the row.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Each accent reads as one paint on roof and plinth: every front plinth band within dE 4.5 of its swatch and of its own roof (now Skim's band is dE 14.2 from #6FA5DC and 11.3 from its own roof, Chocolate's cream band 12.6 and 10.0, Whole's red 8.6 and 6.6, 2%'s blue 7.5 and 6.0).",
+  "Body colours true on the lit front: Matcha and Oat within dE 3 of #A4C26B and #D9BC92 (now 5.4 and 5.5; the retouch table leaves 6.3 and 6.0, almost all lightness).",
+  "Every silhouette at least 20 levels off the ground behind it (now Skim's side back edge 116-121 against 108-113, Matcha's mid-side 100-105 against 106, Oat's side 106-117 against 118, Chocolate's cream right roof slope 122-136 against 117).",
+  "White fronts at a 209-216 median, keeping their eave-to-plinth falloff of about 20 levels, with p95 under 226 (now 200/204/205; nothing in the frame is above 225).",
+  "The lacquer reads as gloss on the vertical faces: a crisp, continuous highlight down each unit's front-right corner, the same on all six (now there is none: 2%'s corner runs 203, 188, 165, 157 with no peak, and Whole has a 3-level bump).",
+  "An even rhythm along the row: visible gaps within about 20 % of each other (now 15, 23, 30, 38, 45 px left to right, so the three white units crowd together while Chocolate and Oat stand apart).",
+  "A ground whose light falls off by design instead of sitting at one value: outside the cast shadows the cove and floor are 110-122 across the whole frame (top band p5-p95 113-122)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The plinth band is part of each panel, so no lamp can lift the bands without also lifting the bodies above them, and the bands are where four accents miss their swatch.",
+   "evidence": {
+    "region": [
+     540,
+     517,
+     600,
+     536
+    ],
+    "measured": "The part mask has no *.plinth part (front-baffle holds both body and band). In this box Skim's band reads (71,124,172), lum 116, dE 14.21 from #6FA5DC, while its own roof reads (97,156,211), dE 3.06."
+   },
+   "change": {
+    "setting": "product.zone_parts",
+    "from": false,
+    "to": true
+   },
+   "expected": "No visible change on its own: each panel gains a .plinth zone (front-baffle.plinth, side-right.plinth, ...) that c2's lamp can be linked to. part:front-baffle still measures panel plus band, so every other region and test reads as it does now; this test passes once the band exists as its own part.",
+   "accept": {
+    "region": "part:front-baffle.plinth",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     20,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Every front plinth band reads darker and deeper than its own roof in the same paint, so four of the six accents show as two colours on one unit and miss their swatch where the wordmark sits.",
+   "evidence": {
+    "region": [
+     540,
+     517,
+     600,
+     536
+    ],
+    "measured": "front-baffle in this box (Skim band): (71,124,172), lum 116.2, dE 14.21 from #6FA5DC; its roof is (97,156,211), dE 3.06; roof to band dE 11.3. Chocolate's cream band [960,564,1060,578]: (188,176,155), lum 177, dE 12.59 (roof 2.69, roof to band 10.0). Whole's red [150,481,215,497]: (164,1,18), dE 8.60. 2%'s blue [340,502,420,516]: (5,60,169), dE 7.46. Matcha BRG 3.71, Oat dark 3.92. Side bands sit at about 0.45x the front band's linear light (Skim side band lum 79)."
+   },
+   "change": {
+    "setting": "lights.plinth_lift",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      7.0,
+      0.4
+     ],
+     "position": [
+      0.0,
+      -1.3,
+      0.3
+     ],
+     "target": [
+      0.0,
+      0.0,
+      0.08
+     ],
+     "strength": 1.6,
+     "color": 5800,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -1.7,
+       1.6
+      ],
+      "values": [
+       1.0,
+       0.8
+      ]
+     },
+     "diffuse": 1,
+     "receivers": [
+      "*.plinth"
+     ]
+    }
+   },
+   "expected": "Every plinth band gets about 1.6x its light. The ramp evens out the row's 1.24 m to 0.99 m distance, and the side bands get about 0.44x the front's increase, so each band keeps the bodies' front:side ratio of about 2.2. Skim's front band goes to about (90-100, 150-160, 210-218), lum 145-158, dE <= 4.5 from its swatch (from 14.2) and within about 4 of its roof. Chocolate's cream band goes from lum 177 to 210-222, dE <= 4. Red and blue bands go from 8.6 and 7.5 to <= 4.5. BRG and dark bands move by 2 dE or less. Bodies, roofs, letters and floor are unchanged (linked lamp). Overshoot shows as a band brighter than its roof and drives dE back up, so the test limits the lamp from both sides.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      540,
+      517,
+      600,
+      536
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#6FA5DC",
+    "op": "<=",
+    "value": 4.5
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "Matcha and Oat bodies read a step darker and duller than their swatches because the retouch takes out only half of their lightness error.",
+   "evidence": {
+    "region": [
+     740,
+     280,
+     855,
+     420
+    ],
+    "measured": "front-baffle in this box (Matcha front): (144,175,89), lum 162.2, dE 5.37 from #A4C26B (swatch luma 181); about 5.35 of that is lightness. Oat front [1179,310,1310,450]: (196,168,127), lum 171, dE 5.45 from #D9BC92 (luma 191). Chocolate 2.84. The card's retouch table leaves 6.32 and 5.95 after retouch at lightness 0.5."
+   },
+   "change": {
+    "setting": "retouch.lightness",
+    "from": 0.5,
+    "to": 0.8
+   },
+   "expected": "Colour paints keep only 20 % of their lightness error. Matcha front goes from lum 162 to about 175, dE 5.4 to about 2. Oat goes from 171 to about 185, dE 5.5 to about 2. Chocolate goes from 2.8 to about 1.2. Accent and insert errors shrink the same way. Whites are untouched, because white paints are only cast-corrected. It is a gain, so every face keeps its gradient. The Oat and Matcha sides rise with it (Oat about 111 to about 120), which c4 and c5 allow for. Too much would push the lit face past the swatch and raise dE again.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      740,
+      280,
+      855,
+      420
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#A4C26B",
+    "op": "<=",
+    "value": 3.0
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "Behind the row, the far floor and lower cove are lit to the same value as the shaded side faces, so Skim's right edge, Matcha's side and Oat's side melt into the grey.",
+   "evidence": {
+    "region": [
+     712,
+     290,
+     738,
+     400
+    ],
+    "measured": "Ground beside Skim's side (far floor and lower cove at world y 1.36-2.36 m, x about -0.4, lit by the key and by gap_lift's far spill): median 112.3 (p5 105, p95 117). Skim side's last pixels read 121-116, then 108 (anti-aliasing), then 111-113: edge step 4.4. Matcha mid-side 100-105 against 106.2 in [920,280,950,400]. Oat side 106-117 against 118.2 in [1362,300,1420,420]."
+   },
+   "change": {
+    "setting": "lights.bg_flag",
+    "from": "absent",
+    "to": {
+     "type": "flag",
+     "size_m": [
+      4.0,
+      1.1
+     ],
+     "position": [
+      0.525,
+      1.3,
+      0.6
+     ],
+     "target": [
+      0.525,
+      0.0,
+      0.6
+     ],
+     "lights": [
+      "key",
+      "gap_lift"
+     ],
+     "density": 0.6
+    }
+   },
+   "expected": "The flag stands 1.3 m behind the row, out of the camera's and gloss's sight, and shades the world y > 1.3 m floor and lower cove from the key and from gap_lift's far spill. In frame that is a band from about y 285 to 445, running from the 2%-Skim gap to the right edge. Simulated against the key's 3 x 2 m face, it covers 93-100 % of the three bg regions named here and only 19 % of the cove behind Skim's roof slope. Ground beside Skim goes from 112 to 88-96, so Skim's back edge stands 20 or more levels clear. The Matcha-Chocolate gap goes from 106 to about 92 (Matcha side about 113 after c3, 18 or more levels clear). Ground right of Oat goes from 118 to about 98, 20 or more levels clear. The upper cove behind the roofs, the left margin (112), the floor in front, the products and the cast shadows in the gaps (about 80, gap_lift still reaches them) are unchanged. Below 86 the gaps would read as holes.",
+   "accept": {
+    "region": [
+     712,
+     290,
+     738,
+     400
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     86,
+     98
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The cove behind the Chocolate and Oat roofs, brightened by bg_right, matches the value of Chocolate's cream right roof slope, so that roof edge dissolves.",
+   "evidence": {
+    "region": [
+     1140,
+     250,
+     1172,
+     285
+    ],
+    "measured": "Ground between the Chocolate and Oat roofs (cove at world x 1.17, y 2.5-2.7 m, where bg_right's ramp is 0.69): 118.3 (p5 116.5, p95 119.3). Chocolate's cream right roof slope runs 136, 132, 128, then 122 at its edge (row 265), only 4-10 levels off the ground. c4's flag reaches only 8 % of this region."
+   },
+   "change": {
+    "setting": "lights.bg_right.strength",
+    "from": 1.8387,
+    "to": 0.5
+   },
+   "expected": "The cove behind Chocolate and Oat goes from 118-121 to about 100-106. Chocolate's cream right roof slope (122-136, about 130-142 after c3) then stands 24 or more levels clear, and the dark Oat roof (40) keeps 60 or more. The cove behind the white units lies mostly outside bg_right's x 0-3 m span and barely moves, so the frame falls off gently from upper left to right. Below 96 the top right would start to read as a vignette.",
+   "accept": {
+    "region": [
+     1140,
+     250,
+     1172,
+     285
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     96,
+     106
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The white fronts sit at the bottom of the 200-220 band the card sets for white lacquer, so the three white units read light grey and nothing in the frame rises above 225.",
+   "evidence": {
+    "region": [
+     335,
+     250,
+     436,
+     440
+    ],
+    "measured": "front-baffle in this box (2% front): median 204, p95 211. Whole 200/209, Skim 205/212. Eave rows 208-211, rows just above the plinth 188-193. Frame p99 211, clip 0 %. front_ramp sits 0.4 m in front at z 1.1, so by its placement it lights the eave about 4.8x more than the plinth; raising it would steepen the falloff instead of lifting the white."
+   },
+   "change": {
+    "setting": "lights.front_lift",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      7.0,
+      1.0
+     ],
+     "position": [
+      0.0,
+      -2.2,
+      0.9
+     ],
+     "target": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "strength": 0.5,
+     "color": 5800,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -1.7,
+       1.55
+      ],
+      "values": [
+       1.0,
+       0.88
+      ]
+     },
+     "diffuse": 1,
+     "receivers": [
+      "front-baffle"
+     ]
+    }
+   },
+   "expected": "A broad, even front lift: about 1.13:1 from eave to plinth, with the ramp offsetting the row's 2.14 to 1.89 m spread. The fronts mirror the floor in front of it, so they cannot see it. White fronts go from a median of 200/204/205 to about 209/213/214, with eave rows at 217-222 and p95 at 224 or below, so they read white and keep their 20-level falloff. Sides stay near 155, so front:side rises from about 1.8 to about 2.0. On the colour fronts the retouch absorbs most of it. Above 216 the eave rows would run into the PBR Neutral shoulder (226) and flatten.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      335,
+      250,
+      436,
+      440
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     209,
+     216
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Larger radii on the vertical corners and hips (6 mm today), so each edge can carry a readable highlight line.",
+   "why": "At this scale a 6 mm round is about 2 px wide, so any highlight it carries is a hairline (2%'s front-to-side corner runs 203, 188, 165, 157 with no peak). An edge highlight is what would make the lacquer read as lacquer and draw every silhouette, but the rounds are spec."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

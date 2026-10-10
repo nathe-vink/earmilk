@@ -1,0 +1,292 @@
+{
+ "stage1": {
+  "impression": "A clean, centred, straight-on shot of the milk-carton speaker on a warm grey sweep: the red gable and the printed graphics read crisply, but the white back is lit almost flat and a little grey, so the carton reads as a printed card rather than a volume. The base is cut off just below the port with no ground or shadow, so the frame feels top-heavy, and the dead-black port is the strongest shape after the gable.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The white back models from the gable down: the left strip [205, 350, 265, 1125] falls 24 to 32 levels top to bottom (now 17.9: 233.1 to 215.2) and its top zone [205, 350, 265, 600] sits at 218 to 226 (now 231.9, inside PBR Neutral's shoulder). The panel then reads as a lit volume, and the bottom edge cuts into shade instead of an evenly lit white column 93 px under the port.",
+  "The port has a floor: part woofer-motor sits at a median of 8 to 20 (now 0.0, with 99 % of its 6098 px at 3 or less), not a dead-black hole under the Facts panel.",
+  "The cast letters read as metal: each face carries a 28 to 42 level ramp from the ascenders' tops to the baseline (now 2.0, flat at 176 to 180). The word holds one value end to end; now the 'e' runs 131.6 to 173.0 left to right and the 'k' 173.0 to 134.9.",
+  "The backdrop's bottom corners are within about 6 levels of each other (now 156.8 left against 145.6 right)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The white back is lit almost evenly from the gable to the frame's bottom edge, so the carton reads as a printed card and the bottom crop slices through an evenly lit white column.",
+   "evidence": {
+    "region": [
+     205,
+     350,
+     265,
+     1125
+    ],
+    "measured": "Left strip, 8-bin y-profile: 233.1, 231.1, 229.0, 226.0, 223.0, 220.0, 217.2, 215.2 (falloff 17.9). Right strip [635, 350, 695, 1125]: 219.1 to 207.2 (11.9). The panel mirrors only sweep (70 %) and sky (29 %), so all its modelling comes from diffuse light. By my estimate (orbit centre about z 0.53 m), the 1.6 m key's lower edge hangs at z of about 0.63 m, level with the Facts panel's bottom rows and about 0.5 m from the panel, so it lights the lower back almost as hard as the top."
+   },
+   "change": {
+    "setting": "lights.key.size_m",
+    "from": [
+     0.8,
+     1.6
+    ],
+    "to": [
+     0.8,
+     1.0
+    ]
+   },
+   "expected": "At about 1.0 m tall, the key's lower edge rises to about z 0.9 m, so the lower back is lit only from above and from farther away. The left strip falls about 28 levels (bottom bin from 215 to about 205; with c5, about 224 down to 197), the right strip about 20, the area round the port drops to about 200, and the frame's bottom edge cuts into shade. The top of the panel, near the key's target height, keeps its value. The smaller key also hardens the letters' shadows and the gable's 3 mm shadow line, which is now a 4 px blend (rows 344 to 347: 120, 170, 195, 212). The key's own 2 px glint on the left round (x 194 to 196, y 348 to 554) brightens with it; ease kicker_l if round 7's left-round window [246, 250] breaks.",
+   "accept": {
+    "region": [
+     205,
+     350,
+     265,
+     1125
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     24,
+     32
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The port's far end, the woofer motor seen through the tube, is dead black, so the port reads as a hole punched in the frame, its only sizeable dead-black area, right under the Facts panel.",
+   "evidence": {
+    "region": [
+     394,
+     898,
+     506,
+     972
+    ],
+    "measured": "Part woofer-motor (6098 px): lum_median 0.0, p95 1.6, crush_pct 99.0. It holds 92 % of the frame's 6653 pixels at 3 or less. A y-profile down the bore (x 420 to 480, y 895 to 1012) reads 0.0, 1.1, 1.0, 1.0, 0.1, 0.0, 0.0, 0.3 before the lit lower wall (12 to 68). port_fill is light-linked to port-tube alone, so round 7's c3 lit the wall but cannot reach the motor."
+   },
+   "change": {
+    "setting": "lights.port_deep",
+    "from": null,
+    "to": {
+     "type": "point",
+     "position": [
+      0,
+      -0.28,
+      0.39
+     ],
+     "power_w": 0.5,
+     "radius_m": 0.02,
+     "color": 6300,
+     "receivers": [
+      "woofer-motor",
+      "woofer-magnet"
+     ]
+    }
+   },
+   "expected": "The motor at the port's far end comes up from 0 to about 12, a near-black floor with its plate faintly readable, so the port reads as a short tube rather than a hole. The frame's dead-black pixels fall from 6653 to about 600 (the tube's own deepest shadow). The bore wall, the ring and the panel stay as they are: the lamp, on the port axis 8.5 cm in front of the mouth, is light-linked to the motor and magnet only, and lamps do not show to the camera (port_fill hangs in front of the Facts panel unseen).",
+   "accept": {
+    "region": "part:woofer-motor",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     8,
+     20
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The cast letters, a must-show, print as one flat warm grey from cap to baseline, so 'earmilk' reads as grey paint or a sticker rather than cast metal.",
+   "evidence": {
+    "region": [
+     334,
+     385,
+     565,
+     429
+    ],
+    "measured": "Part letters-back-*: y-profile 178.0, 176.4, 179.8, 179.2, 178.1, 177.8, 177.1, 176.0 (falloff 2.0), median 178.0. Letters 1 to 6 mirror the letters_sheen glint disc for 97 to 100 % of their pixels, one even source, so their faces carry no ramp. The faces are flat and face the camera, so they mirror back toward it: at 1.0 m in front (y -1.2) the word's reflection spans z 0.730 (baseline) to 0.780 (ascenders' tops) and x within \u00b10.13 m."
+   },
+   "change": {
+    "setting": "lights.letters_ramp",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.4,
+      0.12
+     ],
+     "position": [
+      0,
+      -1.2,
+      0.755
+     ],
+     "target": [
+      0,
+      0,
+      0.755
+     ],
+     "strength": 0.9,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.73,
+       0.78
+      ],
+      "values": [
+       0.6,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "letters-back-*"
+     ]
+    }
+   },
+   "expected": "The letters' faces mirror a vertical ramp instead of a flat disc: the ascenders' tops near 185, the baselines near 152, a 30 to 38 level ramp down every letter. The word's median stays about 170 (inside round 7's c2 window [170, 195]) and about 55 levels under the panel beside it, so 'earmilk' reads as polished cast metal. The panel is light-linked to the letters and unseen by the camera, so nothing else changes.",
+   "accept": {
+    "region": "part:letters-back-*",
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     28,
+     42
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The glint disc the letters mirror is narrower than the word, so the word's ends fall off as if under a spotlight: the outer halves of 'e' and 'k' mirror sky past the disc's edge and run about 40 levels darker than their inner halves.",
+   "evidence": {
+    "region": [
+     334,
+     396,
+     370,
+     429
+    ],
+    "measured": "The 'e' (letters-back-0) x-profile reads 131.6, 140.8, 148.8, 160.0, 165.1, 168.3, 171.3, 173.0 (falloff -41.4), with 24.9 % of it mirroring sky. The 'k' (letters-back-7) runs 173.0 down to 134.9, with 9.4 % sky. Their medians are 160.7 and 165.1, against 177.4 to 181.0 for the other six."
+   },
+   "change": {
+    "setting": "glints.letters_sheen.power_w",
+    "from": 0.0823,
+    "to": 0
+   },
+   "expected": "With the disc gone, the ramp panel (c3) is all the letters mirror, and it spans \u00b10.2 m against the word's \u00b10.13 m reflection, so 'e' and 'k' lose their dark outer halves and match the middle letters within about 5 levels. It also rules out the glint's lamp, placed along the same mirror ray, sitting in front of the panel and hiding it. This undoes round 7's c2 tuning of the glint (0.139 to 0.0823) but keeps its aim: the letters stay well under the white, with c3 holding them about 55 levels under the panel.",
+   "accept": {
+    "region": "part:letters-back-0",
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -8,
+     8
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "post",
+   "problem": "The upper-left quarter of the back sits above PBR Neutral's 226 knee, so the key's gradient there prints at about half contrast.",
+   "evidence": {
+    "region": [
+     205,
+     350,
+     265,
+     600
+    ],
+    "measured": "lum_median 231.9, p5 229.1, p95 234.1 (5 levels across 250 px). The left strip's first three 8-bin values are 233.1, 231.1, 229.0. Round 7's c1 brought the panel's median to 217.0 but left this zone in the shoulder."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.05,
+    "to": -0.06
+   },
+   "expected": "The top zone of the left strip falls from 231.9 to about 222, so the upper-left quarter's gradient prints at full contrast. The panel's median goes from 217 to about 207 (inside the card's 200 to 220 lacquer range), the backdrop from about 150 to 145, and the fin's white type from 233.6 to about 227; the retouch holds the red (dE under 1.5). This carries round 7's c1 on toward its own aim (the white out of the shoulder) rather than reversing it. c1's median window [214, 220] is left behind because the median was only its proxy, and this zone is what that proxy missed.",
+   "accept": {
+    "region": [
+     205,
+     350,
+     265,
+     600
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     218,
+     226
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "Behind a symmetric, straight-on product the backdrop is lop-sided at the bottom: the key spills onto the floor behind the carton's left while the carton's key shadow darkens the floor at its right.",
+   "evidence": {
+    "region": [
+     0,
+     950,
+     185,
+     1125
+    ],
+    "measured": "lum_median 156.8 (161.6 in the bin beside the carton), against 145.6 at [715, 950, 900, 1125]. The left column (x 20 to 170) rises from 150.6 to 159.5 over the frame's lower third while the right column falls from 155.8 to 145.6. At mid-height the two sides match (150.8 and 149.8)."
+   },
+   "change": {
+    "setting": "lights.floor_flag_l",
+    "from": null,
+    "to": {
+     "type": "flag",
+     "size_m": [
+      0.5,
+      0.5
+     ],
+     "position": [
+      -0.6,
+      -0.1,
+      0.8
+     ],
+     "target": [
+      -0.63,
+      -0.81,
+      1.33
+     ],
+     "lights": [
+      "key"
+     ],
+     "density": 0.7
+    }
+   },
+   "expected": "[0, 950, 185, 1125] goes from 156.8 to about 142, level with the bottom-right (145.6 now, about 141 after c5), so the backdrop is even under the symmetric frame and darkens slightly toward the bottom. The flag sits beside the carton, out of the key's path to every visible part: rays to the back stop at y -0.195, and rays to the gable cross y -0.1 right of x -0.29. The product is unchanged; the wall above stays lit, since rays to it pass over the flag.",
+   "accept": {
+    "region": [
+     0,
+     950,
+     185,
+     1125
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     137,
+     148
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Frame the whole carton down to the red plinth band and its SHAKE WELL, so the red closes the bottom of the frame as the gable closes the top.",
+   "why": "It needs about 0.68x the scale (lens near 72 mm, or the camera about 1 m farther back). The Facts rows' caps would drop from about 11 px to 7 or 8 px, and 'Contains no milk.' (the punchline, now about 7 px x-height) to about 5 px. The frame's purpose fixes the Facts panel as legible, so the crop through the body stays; c1's falloff is how this prescription settles the cut instead."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

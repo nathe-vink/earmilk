@@ -1,0 +1,220 @@
+{
+ "stage1": {
+  "impression": "A milk-carton speaker stands in a sun-raked room beside a small table and vase, its carton silhouette thrown crisply onto the wall: a strong, coherent idea on a believable set. But the product is not the hero of the light: its white front reads as flat grey card beside the brighter cream sun patch, its edges carry no highlights, and the left half of the room sinks into dusk-grey while busy orange planks fill the bottom of the frame.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The left half of the room lifted to a bright-room level: far-left wall [20,120,150,420] at least 150 (now 132.8), left skirting [20,505,100,535] at least 120 (now 90.1, against 223.7 on the right), the off-white vase [200,360,245,435] at least 125 (now 91.6), foreground floor [0,720,1350,900] at least 108 (now 96.1).",
+  "The white front between 198 and 220 over its whole face, with only highlights above 226 (now 186 on the lower third [395,600,515,636] and 187 on the right strip [505,330,517,635]).",
+  "The front reads as lacquer, not paint: a visible graded reflection across the face (46% of its pixels mirror the lacquer_ramp panel, now at strength 0.52, about 0.03 in reflection, so nothing shows) and a highlight on the 6 mm vertical round (now none: 191, 188, 178, 169, 162 across it at y 450).",
+  "Accent red within dE 2 of #C62828 on every lit face (plinth front 5.12, fin 5.99, waveguide insert 7.67 with its green channel clipped to 0) and the roof's front slope graded rather than a uniform pink veil (178/100/106 at every row from y 270 to 318).",
+  "The sun's cast shadow on the floor joins the plinth to the wall silhouette as one legible band (now a 14-level step hidden among 11-16-level plank steps).",
+  "The sun patch no longer out-shines and out-contrasts the product: the patch [920,370,1120,540] is 226.5 and flat (range 8.5) with a 74-level hard silhouette inside it (152), against a front that reads 186-215 (197 between the drivers).",
+  "The white body carries a trace of the morning light's colour (now exactly neutral 197/197/197 beside a 223/209/197 wall), so it sits in the room rather than on it."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The room is lit almost only by sun bounced off the right-hand patch, so its left half sinks to dusk: the back wall falls from 209 at the right edge to 140 at the left, the white skirting on the left reads 90 against 224 on the right, the off-white vase 92 and the foreground floor 96, which is not a bright, airy morning room.",
+   "evidence": {
+    "region": [
+     20,
+     120,
+     150,
+     420
+    ],
+    "measured": "far-left wall lum_median 132.8 (rgb 142/131/123); wall profile at y 120-200, 14 bins left to right: 140, 152, 157, 160, 164, 168, 171, 176, 181, 188, 195, 203, 209, 209; skirting [20,505,100,535] 90.1 vs [950,560,1100,600] 223.7; vase [200,360,245,435] 91.6; floor [0,720,1350,900] 96.1; the front's lower third [395,600,515,636] 186, where round 8 c3's own test reads 186 against [200, 212]; the engine took the sky to 0.9489, far under the 5.5 round 8 prescribed"
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 0.9489,
+    "to": 4.0
+   },
+   "expected": "Skylight through both windows becomes a real fill (about +0.07 scene-linear wherever it reaches): far-left wall about 150-160, upper-left wall [300,30,600,230] 165 to about 178, left skirting and vase about 115-125, foreground floor about 110, the speaker's wall silhouette 152 to about 168 (a softer morning shadow), the side face 166 to about 175 (white in shade), and the front's lower third 186 to about 198-203, which brings round 8 c3's failing test back into range. This partly reverses round 8 c3, but 4 stays under the 5.5 it prescribed and near a third of the 11.5 that flooded the floor, so the sun stays the main light on the front and on the floor beam. The test's upper bound (168) stops the engine short of a flood, and c2 keeps the front's upper-left out of the shoulder.",
+   "accept": {
+    "region": [
+     20,
+     120,
+     150,
+     420
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     146,
+     168
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The upper-left quarter of the front already sits at the PBR Neutral knee because 91% of its pixels mirror glint2's 0.5 m lamp, so c1's added skylight would push it into the shoulder and print it flat, bringing back round 8 c1's problem.",
+   "evidence": {
+    "region": [
+     392,
+     330,
+     420,
+     450
+    ],
+    "measured": "median 223, p95 226 (the knee is about 226); mirrors: lamp glint2 over panel lacquer_ramp 91.3%; the front's left strip [392,330,400,636] falls 226, 226, 225, 221, 206, 202, 198, 194, 190, 188 from top to bottom"
+   },
+   "change": {
+    "setting": "glints.2.power_w",
+    "from": 3,
+    "to": 2.2
+   },
+   "expected": "After c1 the glow's p95 stays at or under 229 and its median near 220, keeping the front's diagonal gradient (about 222 at the upper left, falling to about 200 at the lower right) with no part of the white face above 230.",
+   "accept": {
+    "region": [
+     392,
+     330,
+     420,
+     450
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     218,
+     229
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "The accent red is matched in hue and chroma but left 5.8 L* too dark, so the plinth, fin and waveguide read blood-red rather than the brand red, and the waveguide insert, at L* 35 with full chroma, falls out of gamut with its green channel clipped to 0, so the bowl prints as flat crimson.",
+   "evidence": {
+    "region": [
+     395,
+     645,
+     415,
+     680
+    ],
+    "measured": "plinth front rgb 180/14/27, Lab 38.0/60.4/40.6 against the swatch's 43.8/60.3/40.3, dE2000 5.12, all of it lightness; fin [445,247,560,262] 176/11/28, dE 5.99; part:waveguide-insert median 169/0/21, dE 7.67"
+   },
+   "change": {
+    "setting": "retouch.lightness",
+    "from": 0.5,
+    "to": 0.9
+   },
+   "expected": "The plinth front's lit face reads about 194/36/38, dE2000 about 1. The fin and insert lift by the same gain: the insert's green channel comes off 0 (median G about 25-35), so the bowl's shading shows. The plinth side and the roof's right slope stay about 11 L* below their lit faces, so the shade is kept.",
+   "accept": {
+    "region": [
+     395,
+     645,
+     415,
+     680
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 2.0
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "Plank-to-plank tone steps of 11-16 levels are as strong as the sun's cast shadow on the floor (about 14 levels), so the shadow that should run from the plinth to the silhouette on the wall is camouflaged, the silhouette floats, and striped planks compete with the product across 40% of the frame.",
+   "evidence": {
+    "region": [
+     1060,
+     680,
+     1160,
+     730
+    ],
+    "measured": "lum_range 14.9 across one dark and one light plank (row medians 123-125, then 133-135); inside the shadow band [640,618,720,656] median 102.3 with range 20.8, beside it [700,680,900,740] 120.6; down the column at x 700 the band alternates 98-103 and 114-122 plank by plank"
+   },
+   "change": {
+    "setting": "set.floor.plank_contrast",
+    "from": 0.6,
+    "to": 0.3
+   },
+   "expected": "Plank steps fall to about 5-6 levels while grain and seams keep the oak readable. The cast shadow, still about 14 levels below the lit floor, reads as one band from the plinth's right corner (515, 712) to the skirting under the wall silhouette (734-903, 595-611), and the floor reads calmer.",
+   "accept": {
+    "region": [
+     1060,
+     680,
+     1160,
+     730
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     8.5,
+     11
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The 6 mm vertical round between the front and the side carries no highlight at any height, so the cabinet's corner reads as a soft CG fold rather than a radiused lacquer edge; the round mirrors only the dim front wall and the floor.",
+   "evidence": {
+    "region": [
+     512,
+     345,
+     516,
+     600
+    ],
+    "measured": "lum_p95 190, median 175; across x 511-515 the value steps 191, 188, 178, 169, 162 at y 450 and falls with no peak at y 360, 560 and 620 as well; mirrors over x 510-522: lacquer_ramp 31.9%, wall-back 29.1%, floor 26.6%, wall-front 7.2% (the round itself)"
+   },
+   "change": {
+    "setting": "lights.edge_round",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.2,
+      0.85
+     ],
+     "position": [
+      0.59,
+      -0.77,
+      0.43
+     ],
+     "target": [
+      0.142,
+      -0.236,
+      0.43
+     ],
+     "strength": 40,
+     "color": 5950,
+     "diffuse": false,
+     "receivers": [
+      "front-baffle",
+      "side-right"
+     ]
+    }
+   },
+   "expected": "A highlight line about 1 px wide along the round, from about 0.2 m above the plinth up to the eave, peaking at about 215-228. The panel faces the corner from 0.7 m away, out to the front-right on the camera's side, where only the round's in-between normals mirror it. The front mirrors the room's front-left and the side its back-right, and the panel is in neither, so neither face moves by more than a level. The receivers keep the floor and the drivers from mirroring it.",
+   "accept": {
+    "region": [
+     512,
+     345,
+     516,
+     600
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     205,
+     230
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Deliver the frame at print size (at least 5100 px wide for a spread) instead of 1350 x 900.",
+   "why": "The card fixes the frame size, and at 1350 px the 6 mm rounds and 3 mm shadow lines that define the cabinet are 1-2 px wide, so on a magazine spread they vanish or alias however well they are lit."
+  }
+ ],
+ "score_if_fixed": 7.2
+}

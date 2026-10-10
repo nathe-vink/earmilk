@@ -1,0 +1,186 @@
+{
+ "stage1": {
+  "impression": "A clean, glossy close-up of a red gable-roofed speaker whose horn waveguide and tweeter read clearly, carried by a strong highlight on the horn's left flank. But the light is broad and soft, so the red slopes read as near-flat fields, the white body goes grey and is chopped by the bottom edge, and small artifacts (a white chip at the eave centre, a hairline outline round the horn) cheapen it.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The waveguide's left-wall reflection graded at least 20 levels from foot to throat end, brightest at the tweeter, with the foot box [300, 552, 335, 566] at 113 or below and green under 80 (now one flat 136 to 138 plateau, green 113, dE2000 19.3 against #C62828).",
+  "The white body separated from the backdrop by at least 20 levels on both silhouettes (now the side-right strip [1230, 600, 1268, 900] at 166.9 sits 13 below its backdrop's 180.3, and the flagged front's bottom-left reads 144 to 152 beside a 147.9 backdrop).",
+  "The fin reading as lacquer: at least 7 levels of vertical sheen in [600, 132, 800, 214] (now -2.0) while it keeps 10 or more levels of left-to-right falloff (now 68.9 to 54.4).",
+  "No hot spot off the hero: the front baffle's white tab showing through the notch in the insert's lower edge [498, 744, 524, 756] (p95 235.1, the brightest pixel in the frame, above the dome catchlight's 223.6) resolved in CAD or confirmed as designed; light cannot remove it.",
+  "A closer hero: the waveguide insert at 22 % or more of the frame (now 17.6 %) and the tweeter surround 120 px or more across (now 101), with the fin still legible across the top (its top-left corner may leave the frame). Make it a separate camera pass once these light fixes hold, because a camera move invalidates the box tests."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The waveguide's left wall is one flat pink plateau, 136 to 138 from its foot to the throat, the mirrored interior of the 1.5 m fill softbox, so the largest bright shape on the hero reads as a pink card with no direction and the accent red there is lost.",
+   "evidence": {
+    "region": [
+     300,
+     552,
+     335,
+     566
+    ],
+    "measured": "Foot box 137.2, rgb (226, 113, 117); middle [370, 495, 430, 522] 136.0; throat end [480, 462, 520, 487] 137.0, green 112; dE2000 to #C62828 19.34 at [330, 540, 360, 565]. Inverted through PBR Neutral, the band is the slope's own diffuse red (R about 0.62 scene-linear) plus a neutral reflection of 0.179. That reflection was 0.121 in e10 and rose x1.48 when lights.fill.irradiance went 1.2 to 1.8 (x1.5). From e11 to e12 it held (136.9 to 137.2) while the key's radiance rose x2.8, bg_pool fell 37 %, and rim_left took a ramp (engine: 136.9 at both 0.05 and 0.4), so rim_left is not the source. Ray traces through the card's camera (fin corners land within 2 px) put the wall normal at about (0.45, -0.83, 0.34): on the engine's 31.2 degree cone round glint 5, with the band 0 to 30 mm below the slope. Every band ray then lands inside the fill, and the mirror point crosses only about 0.4 of its half-width from foot to throat, so a uniform lamp gives a uniform band. 0.179 is about the fill's full radiance (5.0) x 0.04, so its 0.1 specular share is not attenuating the reflection."
+   },
+   "change": {
+    "setting": "lights.wall_sheen",
+    "from": "none",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.5,
+      0.25
+     ],
+     "position": [
+      0.3,
+      -0.49,
+      1.09
+     ],
+     "target": [
+      -0.1,
+      -0.078,
+      0.916
+     ],
+     "strength": 4.0,
+     "color": 5700,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       0.2,
+       0.37
+      ],
+      "values": [
+       0.35,
+       1.0
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The panel sits 0.6 m out along the band's mirror direction, between the band and the fill. Traced for normals phi 42 to 50, every band ray meets it before the fill, and its mirror point moves +0.14 m in world x from foot to throat. Tuned so the foot box is about 104, the band runs about 97 at the far foot, 110 to 117 in the middle box and 120 to 132 at the throat end, a 25 to 35 level ramp brightening toward the tweeter, with green falling from 113 to about 75 at the foot (accent red, not pink). The floor beside the band (85 to 90), the slope, the rim lines and the fill's diffuse light are unchanged; the dome gains a small second catchlight on its right. If no strength takes the foot box below about 137, panels do not occlude gloss here and the fill's reflection must be cut at the fill instead.",
+   "accept": {
+    "region": [
+     300,
+     552,
+     335,
+     566
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     96,
+     113
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The white body barely separates from the grey sweep (its shaded right side is 13 levels darker than the backdrop behind it and its flagged front's bottom-left is the backdrop's own value), so the Whole white reads as grey card melting into the ground, while the dark gable end against a 187 backdrop is the hardest edge in the frame, at its edge.",
+   "evidence": {
+    "region": [
+     1290,
+     600,
+     1350,
+     900
+    ],
+    "measured": "Backdrop here 180.3 against the side-right's edge strip [1230, 600, 1268, 900] 166.9; left backdrop [0, 700, 60, 900] 147.9 against the front's bottom-left [72, 700, 120, 900] 157.4, the row at y 860 reading 144 to 152 beside 147; backdrop beside the gable [1290, 300, 1350, 480] 187.2 against the gable end's 34 to 47; top-right backdrop [1210, 0, 1350, 140] 193.2 against the front-baffle median 198.6."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#9C9F9E",
+    "to": "#7C7E7D"
+   },
+   "expected": "The sweep's albedo falls to about 0.6 in linear light: this strip to 130 to 145, the left strip to about 105 to 120, the top-right to about 145 to 155. The side-right (about 165) then stands 20 to 35 levels above its backdrop, and the front's bottom-left 30 to 40 above the left backdrop, so the white body has a clean silhouette on both sides and reads white. The gable silhouette falls from about 145 to about 100 levels, and the red reads richer against the darker ground. The front-baffle median stays within 6 levels of 198.6, because only the floor's bounce drops. This deepens round 8's c3 (backdrop below the white) rather than reversing it; c3's top-right box will read about 150, below its old [186, 200], by design.",
+   "accept": {
+    "region": [
+     1290,
+     600,
+     1350,
+     900
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     128,
+     146
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The fin's lacquered face is one value from its top round to the ridge (falloff -2.0), so it reads as satin paint; round 8's fin_vsheen cannot change that, because it hangs 1 cm behind fin_sheen (y -0.83 against -0.82, same size and target), so every fin reflection ray meets fin_sheen first.",
+   "evidence": {
+    "region": [
+     600,
+     132,
+     800,
+     214
+    ],
+    "measured": "Profile along y 63.1, 63.5, 63.7, 63.9, 64.3, 64.6, 64.9, 65.1; left [330, 80, 400, 175] 69.7 to 68.9; right [950, 150, 1050, 255] 54.4 to 53.4; along the fin 68.9 to 54.4. Traced fin rays reach fin_sheen at 1.02 to 1.16 m with fin_vsheen 6 to 10 mm behind, matching the engine's finding that strengths 0.4 and 0.9 both gave -1.8. The fin's foot mirrors fin_sheen's plane at world z 0.68 to 0.74 and its top at z 0.75 to 0.80 (the left end higher than the right), but fin_sheen's ramp runs along x only."
+   },
+   "change": {
+    "setting": "lights.fin_sheen.ramp",
+    "from": {
+     "axis": "x",
+     "at_m": [
+      -1,
+      -0.3
+     ],
+     "values": [
+      1,
+      0.1
+     ]
+    },
+    "to": {
+     "axis": "z",
+     "at_m": [
+      0.7,
+      0.79
+     ],
+     "values": [
+      0.05,
+      1.0
+     ]
+    }
+   },
+   "expected": "One z ramp grades the fin both ways. Its top mirrors z 0.75 to 0.80 (values 0.6 to 1.0) and its foot z 0.68 to 0.74 (0.05 to 0.5), so the face falls about 10 to 15 levels from below the top round to the ridge. Because the left end mirrors higher z, a left-to-right falloff of about 15 levels remains (modelled 72.6 to 55.8 at mid-height, against 68.9 to 54.4 now). The fin median stays about 60 to 68, the step from slope down to fin at the ridge stays 25 or more, and the top round's highlight is unchanged. fin_vsheen stays hidden and can be switched off.",
+   "accept": {
+    "region": [
+     600,
+     132,
+     800,
+     214
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     7,
+     18
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Close or fill the notch in the waveguide insert's lower edge at the eave, where the front baffle's white top edge shows through [498, 744, 524, 756].",
+   "why": "The insert's rim is set by acoustic simulation, and geometry is the spec. But the tab is the brightest pixel in the frame (p95 235.1, above the dome catchlight's 223.6), right under the mouth of the hero, so engineering should confirm it is a designed notch (cable or lift) and not a modelling gap."
+  },
+  {
+   "request": "Blend the creases that bound the horn's left wall, so wall and floor read as one flowing surface rather than a planar facet.",
+   "why": "The waveguide's profile is fixed by acoustic simulation. The planar facet is why any uniform lamp makes a flat band; c1 grades what the facet mirrors instead, which is as far as light can go."
+  },
+  {
+   "request": "Narrow or remove the dark hairline seam drawn around the waveguide insert.",
+   "why": "It is the insert's joint, part of the fixed geometry. At 1 to 2 px and near-black it reads like a CAD outline, and light cannot change its width."
+  }
+ ],
+ "score_if_fixed": 7.2
+}

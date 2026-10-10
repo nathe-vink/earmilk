@@ -1,0 +1,418 @@
+{
+ "stage1": {
+  "impression": "A tidy, believable lifestyle set with a clear left-third hero and a smart colour echo in the books, but it is lit like a showroom ceiling: the white carton faces sit at nearly one value, the hero barely separates from a warm wall, and contact shadows are thin. The brown sideboard reads as striped cardboard and the top third of the frame is an unbroken beige wall with a soft hotspot, so it reads as a good draft, not a homepage image.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The brightest set area must sit near the products, not on the empty wall above them: wall [540,40,830,180] lum_median <= 172 (now 200.4), with no centre hotspot in the top band [0,0,1350,120] (now 157 -> 202 -> 166, peaking under roof_top).",
+  "The hero's white front must model like the 2%'s: falloff 17-23 on front-baffle in [280,330,440,680], top bin <= 233 (now 11.3: 221.1 -> 209.8; the 2%'s front runs 230.1 -> 207.2, falloff 22.9).",
+  "The hero's wordmark must read as bright cast metal: letters-front-* in [300,690,420,745] lum_median 150-200 (now 84.8, rgb 116,79,57; the 2%'s letters 183.3).",
+  "The sideboard must read as wood, not cardboard: no regular vertical stripe (now 1.8 levels p2p every 3.8-4.4 px on all three doors, 0.03 levels row variation) and visible figure (lum_range >= 9 in [690,545,750,590], now 5.0).",
+  "No horizontal band on the back wall: largest row-to-row step <= 0.5 levels/px in [560,120,630,380] (now 0.94 at y 227, 195 -> 155 across the 2%'s roofline).",
+  "Every roof panel reads as its flavour: the 2%'s right gable end delta E <= 12.5 vs #1F4FCF (now 21.1, rgb 122,134,186, mirroring blue_side_ramp 100 %).",
+  "Plinth bands within delta E 4.5 of their swatches on the lit fronts (now 7.67 red at [296,696,320,728], 8.15 blue at [843,466,862,490]).",
+  "The front/side corner rounds should catch a thin highlight instead of reading as a dark seam (now 217 -> 193 -> 196 across x 424-442 at y 470-510).",
+  "The set needs a perceptible light direction: the wall behind the hero varies 7.9 levels over [150,260,280,520] and no product casts a readable shadow on the wall, so the room reads as flat ambient."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The roof_top lamp added in round 7 for the roofs also washes the back wall, so the brightest set area is the empty wall above and between the products.",
+   "evidence": {
+    "region": [
+     540,
+     40,
+     830,
+     180
+    ],
+    "measured": "lum_median 200.4; top band [0,0,1350,120] profile x 157 -> 202 (x 675-870, world x ~0 under the lamp) -> 166; the wall beside the products is 170.3 left of the hero [150,260,280,520] and 143.2 right of it [540,280,635,520]; round 7 put the upper wall at (161,147,134) before this lamp existed, now (210,197,187)."
+   },
+   "change": {
+    "setting": "lights.roof_top.receivers",
+    "from": null,
+    "to": [
+     "gable-block",
+     "waveguide-insert",
+     "tweeter-*"
+    ]
+   },
+   "expected": "The lamp lights only the roofs and waveguides, so round 7's c3 holds (red front slope [300,280,340,330] stays at delta E <= 3.3, now 2.98). The upper wall falls from 200 to about 140-160, the top band's centre hotspot flattens to within ~12 levels edge to centre, and the side faces lose 5-10 levels at their tops that this lamp gave them at a grazing angle.",
+   "accept": {
+    "region": [
+     540,
+     40,
+     830,
+     180
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     120,
+     172
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The hero's white front reads as one value because the only thing its upper two-thirds mirror, red_front_ramp, is too weak to show, while the 2%'s front beside it models clearly under front_sheen.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      280,
+      330,
+      440,
+      680
+     ]
+    },
+    "measured": "falloff 11.3 (profile 221.1, 220.1, 218.3, 217.1, 215.3, 211.3, 209.9, 209.8), p95 222.1; strip [395,345,428,515] lum_range 5.7, x-profile 219.3 -> 218.3; mirrors: panel red_front_ramp 95-97 % for y 340-520, floor 65 % for y 600-690; the 2%'s front profile 230.1 -> 207.2 (falloff 22.9)."
+   },
+   "change": {
+    "setting": "lights.red_front_ramp.strength",
+    "from": 0.9688,
+    "to": 4.0
+   },
+   "expected": "The top three bins rise to about 229-232, 226-228 and 223-225 as a highlight fading down the face (z > 0.6 mirrors the ramp's bright end); the lower half stays 210-216, so falloff goes from 11.3 to 17-23, matching the 2%. This partly reverses round 7's c2 (6.52 -> 0.97), made when the sun was 1.1067 and the whole front sat in the shoulder; with the sun at 0.4664 the base is 209-217, so only the top quarter crosses 226, as a highlight, and the cap (falloff <= 23, top bin <= ~233) keeps the shoulder problem from returning. The trim rings that also mirror this panel (mid-ring 85 %) gain a soft sheen.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      280,
+      330,
+      440,
+      680
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     17,
+     23
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The hero's cast wordmark mirrors the occluded oak floor just in front of the plinth, so 'earmilk' reads as a dull brown smudge, while the 2%'s letters, which have a card, read bright silver.",
+   "evidence": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      300,
+      690,
+      420,
+      745
+     ]
+    },
+    "measured": "lum_median 84.8, rgb (116,79,57), p95 91.5 on a plinth of lum 49; mirrors [320,705,395,735]: floor 93.6 %; the 2%'s letters lum 183.3, rgb (184,182,188); from the camera model the letters' centre (-0.599,-0.192,0.054) mirrors along (-0.798,-0.528,-0.293) and meets the floor 0.19 m out."
+   },
+   "change": {
+    "setting": "lights.red_letters_card",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.16,
+      0.045
+     ],
+     "position": [
+      -0.663,
+      -0.234,
+      0.031
+     ],
+     "target": [
+      -0.599,
+      -0.192,
+      0.054
+     ],
+     "strength": 0.4,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.0,
+       0.1
+      ],
+      "values": [
+       1,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "letters-front-*"
+     ]
+    }
+   },
+   "expected": "A reflection-only card 8 cm out along the letters' mirror direction, linked to the letters alone: the cast metal reads light neutral silver like the 2%'s, lum_median from 85 to 160-195. The plinth is not a receiver, so it cannot mirror the card as a sticker rectangle (round 7's c4 problem).",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      300,
+      690,
+      420,
+      745
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     150,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "asset",
+   "problem": "The sideboard's surface is a perfectly regular vertical pinstripe with no grain or figure, so the largest prop in the frame reads as corrugated cardboard or ribbed laminate.",
+   "evidence": {
+    "region": [
+     660,
+     530,
+     820,
+     680
+    ],
+    "measured": "detrended column means repeat every 3.84 / 4.11 / 4.38 px (left / middle / right door, about 8-9 mm at 3.2 m) at 1.8 levels peak-to-peak; row variation 0.03 levels (no grain); patch [690,545,750,590] lum_range 5.0."
+   },
+   "change": {
+    "setting": "set.props.0 surface material (asset; the card exposes only color and turntable)",
+    "from": "procedural vertical pinstripe, no grain or figure",
+    "to": {
+     "material": "walnut veneer under a satin clear lacquer",
+     "base_color": "#8A6548",
+     "grain": "horizontal, book-matched, continuous across the three doors and the top",
+     "figure_scale_m": [
+      0.02,
+      0.12
+     ],
+     "grain_value_contrast": 0.08,
+     "roughness": 0.42,
+     "edge_radius_m": 0.002,
+     "pinstripe": false
+    }
+   },
+   "expected": "The sideboard reads as wood at spread size: figure gives about +/-6-10 % value variation inside a door (patch lum_range 12-20), the regular 4 px stripe is gone, and the base colour stays #8A6548 so round 7's c5 separation holds (left door [650,520,830,690] median 93.8, wanted 80-108).",
+   "accept": {
+    "region": [
+     690,
+     545,
+     750,
+     590
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     9,
+     26
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "flag0 sits 0.45 m from the back wall, so its shadow from the front window has a short penumbra and draws a horizontal band across the wall at the 2%'s roofline, from behind the hero to the right edge.",
+   "evidence": {
+    "region": [
+     560,
+     120,
+     630,
+     380
+    ],
+    "measured": "largest row-to-row step 0.94 levels/px at y 227 (195 at y 190 -> 155 at y 290); 0.8 at [700,120,820,380]; 0.1 on the wall left of the hero [20,120,250,380], outside the flag's span; profile y over [560,60,630,470]: 199, 198, 195, 173, 155, 149, 143, 135."
+   },
+   "change": {
+    "setting": "set.flags.0.center_m",
+    "from": [
+     0.19,
+     0.65,
+     0.78
+    ],
+    "to": [
+     0.04,
+     0.32,
+     0.78
+    ]
+   },
+   "expected": "With the flag 0.33 m nearer the products (still 7 cm behind the sideboard's back at y 0.245 and the hero's back corner at y 0.24), its penumbra on the wall roughly doubles, so the band's top edge spreads from ~70 to ~140 px and reads as a gentle falloff: largest step in [560,120,630,380] from 0.94 to <= 0.5. The flag still covers the sun's window patch (at its plane x -0.82 to 0.98, z 0.42-1.14), so no sun shape reaches the wall, and the 0.15 m shift left keeps its left penumbra (image x ~390-505) behind the hero.",
+   "accept": {
+    "region": [
+     560,
+     120,
+     630,
+     380
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     0,
+     0.5
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The 2%'s right gable end mirrors the bright top of blue_side_ramp, the panel meant for its white side, so a must-show roof panel reads pale lavender instead of its blue.",
+   "evidence": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      952,
+      226,
+      980,
+      254
+     ]
+    },
+    "measured": "rgb (122,134,186), lum 135, delta E 21.14 vs #1F4FCF; mirrors: panel blue_side_ramp 100 %; the same roof's front slope [845,222,880,248] is delta E 1.93."
+   },
+   "change": {
+    "setting": "lights.blue_side_ramp.receivers",
+    "from": null,
+    "to": [
+     "side-right",
+     "back-panel"
+    ]
+   },
+   "expected": "The panel shows only on the side and back panels; the gable end mirrors the back wall beyond it and shows its own blue in shade, about (40-60, 60-75, 140-160), delta E from 21.1 to <= 12.5, like the hero's shaded gable end (163,24,22). The 2%'s white side keeps its ramp (falloff now 44.8).",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      952,
+      226,
+      980,
+      254
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#1F4FCF",
+    "op": "between",
+    "value": [
+     0,
+     12.5
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "set",
+   "problem": "Both plinth bands render about 8 delta E dark, and no lamp can lift them without also lifting the white panels until the bands are split off as their own parts.",
+   "evidence": {
+    "region": [
+     296,
+     696,
+     320,
+     728
+    ],
+    "measured": "hero plinth front (170,17,11), lum 49.1, delta E 7.67 vs #C62828; it mirrors floor 100 %; the light that holds the white at 209-222 leaves the red short of the swatch."
+   },
+   "change": {
+    "setting": "product.zone_parts",
+    "from": false,
+    "to": true
+   },
+   "expected": "No visible change by itself: '*.plinth' becomes a receiver for c8, and the plinth holds its current value (delta E ~7.7) until then.",
+   "accept": {
+    "region": [
+     296,
+     696,
+     320,
+     728
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     9
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The plinth bands render darker and more orange than their swatches, so the accent colour under the wordmark reads maroon while the roofs, which have their own lamp, sit at the swatch.",
+   "evidence": {
+    "region": [
+     296,
+     696,
+     320,
+     728
+    ],
+    "measured": "hero plinth front (170,17,11), delta E 7.67 vs #C62828 (7.52 at [392,714,425,748]); the 2%'s plinth front [843,466,862,490] (16,58,165), delta E 8.15 vs #1F4FCF; the front roof slopes are 2.98 and 1.93."
+   },
+   "change": {
+    "setting": "lights.plinth_kick",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.6,
+      0.2
+     ],
+     "position": [
+      0.2,
+      -2.2,
+      0.4
+     ],
+     "target": [
+      -0.05,
+      -0.15,
+      0.33
+     ],
+     "irradiance": 0.55,
+     "color": 5800,
+     "receivers": [
+      "*.plinth"
+     ]
+    }
+   },
+   "expected": "A soft lamp below the bottom edge of the frame (it projects to y > 990), about equally far from both plinths (2.2 and 2.1 m), lighting the bands alone: the hero's plinth front rises to about (195-205, 28-38, 25-35), delta E from 7.7 to <= 4.5, and the 2%'s from 8.2 to about 4-5. The white faces, letters and set are not receivers, so c2 and the set are untouched; the upper bound also stops the red going lighter than the swatch.",
+   "accept": {
+    "region": [
+     296,
+     696,
+     320,
+     728
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     4.5
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the Whole's cast letters a brighter, less mirror-like metal so they read without a card.",
+   "why": "The product's metals are its finish and fixed; c3 changes what they mirror instead. It matters because a mirror-finish wordmark low on a dark plinth will always pick up the floor."
+  },
+  {
+   "request": "Deepen the 3 mm shadow line over the plinth so the white/red joint reads as a groove (now a soft 6 px ramp, 207 -> 52, at [300,668,330,700]).",
+   "why": "The shadow lines are spec geometry, and at the fixed frame size 3 mm is about 1.1 px, so the joint has to rely on the colour change."
+  },
+  {
+   "request": "Repaint the plinth bands lighter to reach their swatches.",
+   "why": "The flavours' colours are fixed; only light, exposure and white balance may move them, which c7-c8 do."
+  }
+ ],
+ "score_if_fixed": 7.8
+}

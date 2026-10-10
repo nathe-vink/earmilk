@@ -1,0 +1,435 @@
+{
+ "stage1": {
+  "impression": "A clean, noise-free exploded view of a milk-carton speaker on a flat mid-grey sweep, but the light is flat and mid-key: the blank white side dominates the frame as a light-grey slab while the driver face is foreshortened, and the dark drivers sink into the grey. The explosion reads only partly: the woofer and mid track their holes, but the tweeter and the floating red-and-white roof piece hang without a clear path back to the body, so the frame looks like parts arranged rather than a product taken apart.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The waveguide bowl reads as a recess: the far wall is graded from about 85 at the throat to 140+ just under the rim band. Now it is one flat value: median 83.9, range 20 in [1003, 315, 1040, 360], profile 81.7 to 85.7.",
+  "The front face is seen at no more than about 57 deg, not 67.2 deg, so the driver rebates, the drivers' faces, the trim rings and the pocket's back wall stop being 0.39-aspect slivers. To get there, orbit the camera about 10 deg round its target to about [1.41, -3.64, 2.6], and draw product.explode.4 (woofer ring) out to about 0.72 m so it keeps 20+ px clear of the woofer. Do this in a round of its own, because it moves every test region and every mirrored panel.",
+  "The pocket's boss bore and magnets can be read. Now the magnets are 33 px and the bore cannot be resolved; this needs the more frontal view above and a framing that gives the roof more pixels.",
+  "One red: the plinth band is within dE 3 of #C62828 (now 8.2 on the side face and 6.4 on the front) while the roof stays at or under 1.5 (now 0.5 to 0.9).",
+  "Neutral, matched whites: the body's white is within dE 1 of neutral (now 1.6 to 2.2, b* +1.5 to +2.1) and the insert's white body matches it. Now the insert's white is dE 3.4 from the body's (a* -1.0 to -1.5, b* -0.4 to -1.1) and only 190 at its top, below the 200-220 band.",
+  "The front baffle's white sits at 210-222, with only its corner round above 226, while staying 10+ levels apart from the side-left (201-226). Now it is 225-234 over its upper two thirds, hottest and warmest next to the corner where insert_kick spills onto it.",
+  "The gloss shows a few crisp specular accents at 230-245 on the lacquer's edges. Now the red never goes above lum 203, and the only 106 px in the frame above 240 are all on one corner round.",
+  "The tweeter's face can be read: dome and surround are now median 82.6, barely above the 47-59 of its body."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The waveguide bowl in the insert's red cap is the hero of this build frame, but it reads as a flat red plate: most of its far wall mirrors the gloss panel below where that panel's ramp starts, where it is a constant 0.47, and the bowl_sheen panel sits where none of the bowl looks.",
+   "evidence": {
+    "region": [
+     1003,
+     315,
+     1040,
+     360
+    ],
+    "measured": "lum_median 83.9, p5 79.6, p95 99.6, range 20.0; profile y 81.7 to 85.7. mirrors: panel gloss 95.8 % (radiance 0.469 at p5 and median, 1.025 at p95: 1.5636 times the ramp's clamped 0.3 below z 2.04), met at x 1.66-1.84, y 1.10-1.43, z 1.72-2.17; sweep 4.2 %. Across the whole red cap, the 886 gloss-mirroring cells meet the gloss panel at z 1.68-2.36, and the upper rows (312-328) meet it highest. The band above (rows 280-296, lum 147-182) mirrors the drivers panel (radiance 6.5-10.6). In the precheck frame, the first relocation covered only 14.8 % of the region (13.6 % over gloss, 1.2 % over sweep)."
+   },
+   "change": {
+    "setting": "lights.bowl_sheen",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      0.6,
+      0.5
+     ],
+     "position": [
+      2,
+      -0.9,
+      1.05
+     ],
+     "target": [
+      0.97,
+      -0.31,
+      0.9
+     ],
+     "strength": 2,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.8,
+       1.3
+      ],
+      "values": [
+       0.3,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "waveguide-insert"
+     ]
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.66,
+      1.0
+     ],
+     "position": [
+      1.67,
+      1.15,
+      2.0
+     ],
+     "target": [
+      0.97,
+      -0.3,
+      0.92
+     ],
+     "strength": 3,
+     "color": 6150,
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       1.8,
+       2.15
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "waveguide-insert"
+     ]
+    }
+   },
+   "expected": "The panel sits 0.1 m in front of the gloss panel, where the bowl's reflections meet it, facing the cap. Every gloss-mirroring cell of the red cap crosses it (886 of 886, and 381 of 381 in the test region), with about 0.1 m of margin on each side. 66 red-cap cells that now mirror the sweep also cross it, and no white-body ray does. Keep the gloss panel's share: this linked panel adds to it, and its flat 0.47 is the bowl's floor; cutting it would drop the floor to about 62 and darken the cap's red. The ramp runs along z, the axis the hits spread over (1.64 to 2.36 on this panel, highest in the upper rows). Rows 312-328 rise from about 82 to 115-121, and the dark patches at rows 300-314 (now 61-90) fill in. Rows 336-360 stay about 85 as the bowl's floor, and rows 368-384 lift to about 98-104 toward the near rim. The result is a lit far wall under the drivers-panel band falling into a dark floor, so the bowl reads as a recess. In the test region, p95 goes from 99.6 to about 139 at strength 2 and 154 at strength 3; the median goes from 84 to 92-96. 6150 K keeps the added sheen neutral.",
+   "accept": {
+    "region": [
+     1003,
+     315,
+     1040,
+     360
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     118,
+     170
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The plinth band cannot be lit apart from the white above it: the only lamp that reaches it (low_fill, receivers side-left) also holds the side-left's lower white at 199-206 (round 9's c7), so the band cannot rise without lifting that white.",
+   "evidence": {
+    "region": [
+     310,
+     660,
+     440,
+     700
+    ],
+    "measured": "The white just above the band is 199.9, at the floor of the 200-220 white band. The band below it, [310, 745, 430, 765], is rgb [158, 35, 34]."
+   },
+   "change": {
+    "setting": "product.zone_parts",
+    "from": false,
+    "to": true
+   },
+   "expected": "No visible change on its own: a zone still answers to its panel's name (as the measuring tool and the engine match it), so low_fill and plinth_sheen keep reaching the band. The change creates side-left.plinth, front-baffle.plinth, back-panel.plinth and side-right.plinth for c3's lamp; if the band dims, c3 makes it up.",
+   "accept": {
+    "region": [
+     300,
+     600,
+     450,
+     690
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     199,
+     206
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The accent on the plinth band renders a darker, browner red than the same accent on the roof, so the carton shows two reds.",
+   "evidence": {
+    "region": [
+     310,
+     745,
+     430,
+     765
+    ],
+    "measured": "Side-left band: rgb [158, 35, 34], lum 61.1, dE 8.24 vs #C62828. Front band [472, 755, 496, 778]: rgb [167, 35, 32], dE 6.43. Roof slope [490, 140, 545, 190]: rgb [201, 43, 41], dE 0.88. The accent's own luminance is 73.6."
+   },
+   "change": {
+    "setting": "lights.plinth_fill",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.8,
+      0.25
+     ],
+     "position": [
+      0.53,
+      -1.05,
+      0.14
+     ],
+     "target": [
+      0.125,
+      -0.246,
+      0.06
+     ],
+     "irradiance": 1.2,
+     "color": 6150,
+     "specular": 0,
+     "receivers": [
+      "*.plinth"
+     ]
+    }
+   },
+   "expected": "A low soft strip 0.9 m off the front-left plinth corner, about 45 deg to both visible bands, lights only the bands and shows no reflection in their clear coat. The side band rises to about [185-195, 37-40, 36-39] (dE under 3) and the front band to about [195-202, 39-42, 38-41]. The side band stays a few levels darker than the front, as the white planes above do, and each band falls off gently toward its far end. The white above, the letters and the floor do not change.",
+   "accept": {
+    "region": [
+     310,
+     745,
+     430,
+     765
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 3.0
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The tweeter must read between the insert and the pocket, but it is a dark 41 x 55 px plug whose dome and surround sit at about the same value as its body, so its face does not read as a tweeter.",
+   "evidence": {
+    "region": [
+     719,
+     219,
+     760,
+     274
+    ],
+    "measured": "part:tweeter-dome|tweeter-surround (251 px) median 82.6, p95 110.4; tweeter-frame 58.9; tweeter-retainer (rear can) 46.8; sweep behind it about 165. No lamp is aimed at its face (mid_kick lights only mid-cone and mid-cap)."
+   },
+   "change": {
+    "setting": "lights.tweeter_kick",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.2,
+      0.2
+     ],
+     "position": [
+      0.87,
+      -0.5,
+      1.04
+     ],
+     "target": [
+      0.567,
+      -0.184,
+      0.937
+     ],
+     "irradiance": 2.5,
+     "color": 6150,
+     "specular": 0.5,
+     "receivers": [
+      "tweeter-dome",
+      "tweeter-surround",
+      "tweeter-frame"
+     ]
+    }
+   },
+   "expected": "The lamp is 0.45 m away, 31 deg off the tweeter's axis on the camera side. The dome lifts to about 125-135 with a small soft highlight, the surround ring to about 100-110 and the frame's face to about 80, against the unlit 47 of the rear can. It reads as a dome tweeter while staying a dark part on the 165 sweep. The lamp lights nothing else.",
+   "accept": {
+    "region": "part:tweeter-dome|tweeter-surround",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     100,
+     140
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "post",
+   "problem": "Every neutral carries the same warm cast, the Whole body's #FFFFFF and the sweep alike, and the tint that round 9's c2 tuned cannot remove it, because the cast lies on the blue-yellow axis.",
+   "evidence": {
+    "region": [
+     300,
+     450,
+     450,
+     550
+    ],
+    "measured": "Side-left: rgb [209, 209, 206], a* -0.54, b* +1.48, dE 1.63 vs #D1D1D1. Front baffle [505, 230, 560, 290]: [228, 224, 221], b* +2.13. Sweep [600, 60, 700, 200]: [166, 165, 162], b* +1.68, dE 1.64 vs #A5A5A5. c2's tint sweep was flat: 1 gave 3.34, 3 gave 2.5, 7 gave 2.56."
+   },
+   "change": {
+    "setting": "render.white_balance_k",
+    "from": 6300,
+    "to": 6150
+   },
+   "expected": "About -1.3 b* on every neutral (white point 6150 K instead of 6300 K, at L* 85). The side-left goes to about [208, 209, 208] and the sweep to about [165, 165, 165]; the roof red moves under 1 dE. This partly reverses rounds 7-8 (6000 to 6300). Stopping at 6150 rather than 6000 keeps the neutrals just on the warm side (b* about +0.2 to +0.8), so the cool cast those rounds removed at 6000 does not come back.",
+   "accept": {
+    "region": [
+     300,
+     450,
+     450,
+     550
+    ],
+    "metric": "delta_e",
+    "hex": "#D1D1D1",
+    "op": "<=",
+    "value": 1.0
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The gloss lacquer never shows a specular accent, so a high-gloss clear coat reads as satin.",
+   "evidence": {
+    "region": [
+     421,
+     116,
+     433,
+     128
+    ],
+    "measured": "lum_p95 162, from the sweep. The fin's top round is a 1-2 px line at 105-117 between the sweep (162) and the fin face (70). gable-block p99 191.6, max 202.6. The whole frame has 106 px above 240, all on the front corner's round, and clip 0.0%."
+   },
+   "change": {
+    "setting": "glints.0",
+    "from": null,
+    "to": {
+     "at": [
+      0.0,
+      0.0,
+      1.053
+     ],
+     "normal": [
+      0.48,
+      -0.16,
+      0.86
+     ],
+     "size_m": 0.08,
+     "power_w": 2,
+     "receivers": [
+      "gable-block"
+     ]
+    }
+   },
+   "expected": "A crisp near-white streak about 2 px wide and 20-30 px long along the fin's top round, centred near (427, 121), at lum 210-245. The round mirrors the sweep wall up and behind it, about 4 m away, so the glint lamp has room. The top of the silhouette then reads as high-gloss lacquer, and nothing else changes.",
+   "accept": {
+    "region": [
+     421,
+     116,
+     433,
+     128
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     195,
+     250
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Enlarge the pocket's magnets and boss bore, or give the waveguide mouth a chamfered lip that could catch a line of light.",
+   "why": "The magnets are 33 px, the bore cannot be resolved and the mouth has no lip to light, so the empty pocket and the insert's opening read weakly. But the pocket's geometry and the waveguide's mouth, rim and profile are fixed (the waveguide by acoustic simulation), so only the camera (blocking_9) and light (c1) can help."
+  },
+  {
+   "request": "A lighter, light-catching finish on the trim rings.",
+   "why": "At 67 deg they render as thin black ellipses (woofer-ring median 69.9, mid-ring 57.8) and read more like gaskets than trim rings, but their finish is the product's own and fixed."
+  }
+ ],
+ "score_if_fixed": 6.5,
+ "revisions": [
+  {
+   "id": "c1",
+   "why": "engine precheck: the first bowl_sheen placement was mirrored by 15 % of its test region; the critic re-placed it with the mirror map (886 of 886 gloss-mirroring cells of the red cap cross it)",
+   "first": {
+    "setting": "lights.bowl_sheen",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      0.6,
+      0.5
+     ],
+     "position": [
+      2,
+      -0.9,
+      1.05
+     ],
+     "target": [
+      0.97,
+      -0.31,
+      0.9
+     ],
+     "strength": 2,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.8,
+       1.3
+      ],
+      "values": [
+       0.3,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "waveguide-insert"
+     ]
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.0,
+      1.0
+     ],
+     "position": [
+      1.82,
+      -0.14,
+      1.75
+     ],
+     "target": [
+      0.965,
+      -0.314,
+      0.93
+     ],
+     "strength": 4,
+     "color": 6150,
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -1.1,
+       0.8
+      ],
+      "values": [
+       1,
+       0.15
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "waveguide-insert"
+     ]
+    }
+   }
+  }
+ ]
+}
