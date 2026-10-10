@@ -71,9 +71,10 @@
    "roughness": 0.12
   },
   "trim": {
-   "preset": "gunmetal",
-   "color": "#2C2C2E",
-   "roughness": 0.34
+   "preset": "satin_paint",
+   "color": "#1E1E1F",
+   "roughness": 0.4,
+   "specular": 0.5
   },
   "frame": {
    "preset": "satin_paint",
