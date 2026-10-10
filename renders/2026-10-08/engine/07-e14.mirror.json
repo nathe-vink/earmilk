@@ -1,0 +1,1056 @@
+{
+ "legend": {
+  "1": "sweep",
+  "2": "panel gloss",
+  "3": "gable-block",
+  "4": "lamp bg_pool over sweep",
+  "5": "lamp floor + lamp key over sweep",
+  "6": "lamp key over sweep",
+  "7": "lamp floor over sweep",
+  "8": "world (sky)",
+  "9": "top-panel",
+  "10": "front-baffle",
+  "11": "lamp top over world (sky)",
+  "12": "lamp top + lamp key over world (sky)",
+  "13": "lamp key over world (sky)",
+  "14": "tweeter-retainer",
+  "15": "tweeter-frame",
+  "16": "tweeter-surround",
+  "17": "pull-loop",
+  "18": "panel drivers",
+  "19": "waveguide-insert",
+  "20": "lamp tweeter_kick.specular + lamp fill over world (sky)",
+  "21": "lamp fill over world (sky)",
+  "22": "side-left",
+  "23": "tweeter-dome",
+  "24": "mid-frame",
+  "25": "mid-ring",
+  "26": "mid-cone",
+  "27": "mid-surround",
+  "28": "panel bowl_sheen over sweep",
+  "29": "mid-divider",
+  "30": "side-right",
+  "31": "panel bowl_sheen over panel gloss",
+  "32": "mid-shelf",
+  "33": "woofer-ring",
+  "34": "mid-spider",
+  "35": "mid-motor",
+  "36": "lamp bg_pool over panel gloss",
+  "37": "mid-magnet",
+  "38": "woofer-frame",
+  "39": "woofer-spider",
+  "40": "woofer-cone",
+  "41": "panel motor_strip + lamp key over world (sky)",
+  "42": "panel motor_strip over world (sky)",
+  "43": "mid-coil",
+  "44": "lamp insert_kick over world (sky)",
+  "45": "mid-cap",
+  "46": "letters-front-0",
+  "47": "front-baffle.plinth",
+  "48": "letters-front-7",
+  "49": "amp-box-front",
+  "50": "woofer-surround",
+  "51": "woofer-coil",
+  "52": "bottom-panel",
+  "53": "amp-box-floor",
+  "54": "lamp sweep.001 over sweep",
+  "55": "lamp floor + lamp sweep.001 over sweep",
+  "56": "woofer-motor",
+  "57": "woofer-magnet",
+  "58": "window-brace",
+  "59": "back-panel",
+  "60": "amp-box-lid",
+  "61": "port-tube",
+  "62": "woofer-cap",
+  "63": "letters-front-5",
+  "64": "letters-front-1",
+  "65": "panel letters_sheen over sweep",
+  "66": "panel plinth_sheen over sweep",
+  "67": "letters-front-6",
+  "68": "letters-front-4",
+  "69": "side-left.plinth",
+  "70": "letters-front-3",
+  "71": "letters-front-2"
+ },
+ "step": 2,
+ "parts": {
+  "side-left": {
+   "pixels": 79480,
+   "seen": [
+    [
+     "sweep",
+     0.841
+    ],
+    [
+     "lamp key over sweep",
+     0.141
+    ],
+    [
+     "panel plinth_sheen over sweep",
+     0.013
+    ],
+    [
+     "side-left",
+     0.004
+    ],
+    [
+     "side-left.plinth",
+     0.001
+    ]
+   ]
+  },
+  "front-baffle": {
+   "pixels": 38264,
+   "seen": [
+    [
+     "sweep",
+     0.86
+    ],
+    [
+     "front-baffle",
+     0.08
+    ],
+    [
+     "side-left",
+     0.012
+    ],
+    [
+     "mid-divider",
+     0.008
+    ],
+    [
+     "lamp key over sweep",
+     0.007
+    ],
+    [
+     "side-right",
+     0.006
+    ]
+   ]
+  },
+  "gable-block": {
+   "pixels": 26680,
+   "seen": [
+    [
+     "panel gloss",
+     0.409
+    ],
+    [
+     "lamp key over sweep",
+     0.269
+    ],
+    [
+     "sweep",
+     0.16
+    ],
+    [
+     "top-panel",
+     0.078
+    ],
+    [
+     "gable-block",
+     0.05
+    ],
+    [
+     "lamp key over world (sky)",
+     0.016
+    ]
+   ]
+  },
+  "waveguide-insert": {
+   "pixels": 17504,
+   "seen": [
+    [
+     "world (sky)",
+     0.463
+    ],
+    [
+     "panel bowl_sheen over panel gloss",
+     0.202
+    ],
+    [
+     "sweep",
+     0.122
+    ],
+    [
+     "panel drivers",
+     0.08
+    ],
+    [
+     "waveguide-insert",
+     0.052
+    ],
+    [
+     "lamp top over world (sky)",
+     0.048
+    ]
+   ]
+  },
+  "side-left.plinth": {
+   "pixels": 11948,
+   "seen": [
+    [
+     "panel plinth_sheen over sweep",
+     0.753
+    ],
+    [
+     "sweep",
+     0.226
+    ],
+    [
+     "side-left",
+     0.021
+    ]
+   ]
+  },
+  "side-right": {
+   "pixels": 9076,
+   "seen": [
+    [
+     "bottom-panel",
+     0.651
+    ],
+    [
+     "side-left",
+     0.221
+    ],
+    [
+     "mid-divider",
+     0.058
+    ],
+    [
+     "amp-box-floor",
+     0.027
+    ],
+    [
+     "amp-box-front",
+     0.022
+    ],
+    [
+     "mid-shelf",
+     0.021
+    ]
+   ]
+  },
+  "front-baffle.plinth": {
+   "pixels": 6376,
+   "seen": [
+    [
+     "sweep",
+     0.985
+    ],
+    [
+     "letters-front-6",
+     0.006
+    ],
+    [
+     "letters-front-0",
+     0.003
+    ],
+    [
+     "letters-front-3",
+     0.003
+    ],
+    [
+     "letters-front-2",
+     0.002
+    ],
+    [
+     "letters-front-7",
+     0.001
+    ]
+   ]
+  },
+  "woofer-surround": {
+   "pixels": 4700,
+   "seen": [
+    [
+     "sweep",
+     0.598
+    ],
+    [
+     "world (sky)",
+     0.158
+    ],
+    [
+     "panel drivers",
+     0.063
+    ],
+    [
+     "woofer-cone",
+     0.037
+    ],
+    [
+     "woofer-surround",
+     0.033
+    ],
+    [
+     "lamp fill over world (sky)",
+     0.026
+    ]
+   ]
+  },
+  "woofer-cone": {
+   "pixels": 4656,
+   "seen": [
+    [
+     "sweep",
+     0.455
+    ],
+    [
+     "panel drivers",
+     0.282
+    ],
+    [
+     "world (sky)",
+     0.146
+    ],
+    [
+     "woofer-spider",
+     0.06
+    ],
+    [
+     "woofer-ring",
+     0.033
+    ],
+    [
+     "woofer-surround",
+     0.021
+    ]
+   ]
+  },
+  "top-panel": {
+   "pixels": 4376,
+   "seen": [
+    [
+     "gable-block",
+     0.97
+    ],
+    [
+     "sweep",
+     0.029
+    ],
+    [
+     "pull-loop",
+     0.001
+    ]
+   ]
+  },
+  "back-panel": {
+   "pixels": 3472,
+   "seen": [
+    [
+     "sweep",
+     0.782
+    ],
+    [
+     "lamp key over sweep",
+     0.218
+    ]
+   ]
+  },
+  "woofer-frame": {
+   "pixels": 3280,
+   "seen": [
+    [
+     "sweep",
+     0.371
+    ],
+    [
+     "woofer-surround",
+     0.201
+    ],
+    [
+     "world (sky)",
+     0.065
+    ],
+    [
+     "back-panel",
+     0.056
+    ],
+    [
+     "amp-box-lid",
+     0.038
+    ],
+    [
+     "woofer-frame",
+     0.035
+    ]
+   ]
+  },
+  "woofer-magnet": {
+   "pixels": 2728,
+   "seen": [
+    [
+     "sweep",
+     0.371
+    ],
+    [
+     "world (sky)",
+     0.166
+    ],
+    [
+     "woofer-motor",
+     0.117
+    ],
+    [
+     "lamp key over world (sky)",
+     0.098
+    ],
+    [
+     "panel motor_strip over world (sky)",
+     0.072
+    ],
+    [
+     "lamp top + lamp key over world (sky)",
+     0.053
+    ]
+   ]
+  },
+  "woofer-ring": {
+   "pixels": 1992,
+   "seen": [
+    [
+     "sweep",
+     0.789
+    ],
+    [
+     "world (sky)",
+     0.143
+    ],
+    [
+     "panel gloss",
+     0.016
+    ],
+    [
+     "lamp top over world (sky)",
+     0.016
+    ],
+    [
+     "panel drivers",
+     0.014
+    ],
+    [
+     "lamp bg_pool over sweep",
+     0.006
+    ]
+   ]
+  },
+  "mid-frame": {
+   "pixels": 1788,
+   "seen": [
+    [
+     "sweep",
+     0.521
+    ],
+    [
+     "front-baffle",
+     0.186
+    ],
+    [
+     "world (sky)",
+     0.078
+    ],
+    [
+     "mid-surround",
+     0.063
+    ],
+    [
+     "mid-frame",
+     0.043
+    ],
+    [
+     "lamp key over world (sky)",
+     0.027
+    ]
+   ]
+  },
+  "woofer-spider": {
+   "pixels": 1516,
+   "seen": [
+    [
+     "sweep",
+     0.261
+    ],
+    [
+     "woofer-coil",
+     0.224
+    ],
+    [
+     "woofer-cone",
+     0.179
+    ],
+    [
+     "woofer-frame",
+     0.142
+    ],
+    [
+     "woofer-surround",
+     0.098
+    ],
+    [
+     "woofer-spider",
+     0.095
+    ]
+   ]
+  },
+  "mid-cone": {
+   "pixels": 1104,
+   "seen": [
+    [
+     "sweep",
+     0.435
+    ],
+    [
+     "panel drivers",
+     0.254
+    ],
+    [
+     "world (sky)",
+     0.163
+    ],
+    [
+     "mid-ring",
+     0.072
+    ],
+    [
+     "mid-surround",
+     0.022
+    ],
+    [
+     "woofer-ring",
+     0.022
+    ]
+   ]
+  },
+  "woofer-motor": {
+   "pixels": 1088,
+   "seen": [
+    [
+     "sweep",
+     0.309
+    ],
+    [
+     "woofer-magnet",
+     0.235
+    ],
+    [
+     "world (sky)",
+     0.221
+    ],
+    [
+     "lamp key over world (sky)",
+     0.096
+    ],
+    [
+     "lamp top + lamp key over world (sky)",
+     0.051
+    ],
+    [
+     "lamp floor over sweep",
+     0.044
+    ]
+   ]
+  },
+  "mid-ring": {
+   "pixels": 1040,
+   "seen": [
+    [
+     "sweep",
+     0.762
+    ],
+    [
+     "world (sky)",
+     0.119
+    ],
+    [
+     "panel gloss",
+     0.015
+    ],
+    [
+     "lamp top over world (sky)",
+     0.015
+    ],
+    [
+     "woofer-frame",
+     0.012
+    ],
+    [
+     "lamp bg_pool over sweep",
+     0.008
+    ]
+   ]
+  },
+  "mid-surround": {
+   "pixels": 932,
+   "seen": [
+    [
+     "sweep",
+     0.567
+    ],
+    [
+     "world (sky)",
+     0.172
+    ],
+    [
+     "panel drivers",
+     0.069
+    ],
+    [
+     "mid-ring",
+     0.043
+    ],
+    [
+     "mid-frame",
+     0.03
+    ],
+    [
+     "mid-cone",
+     0.03
+    ]
+   ]
+  },
+  "mid-shelf": {
+   "pixels": 856,
+   "seen": [
+    [
+     "mid-divider",
+     0.533
+    ],
+    [
+     "side-right",
+     0.467
+    ]
+   ]
+  },
+  "mid-magnet": {
+   "pixels": 816,
+   "seen": [
+    [
+     "sweep",
+     0.314
+    ],
+    [
+     "mid-motor",
+     0.142
+    ],
+    [
+     "lamp key over world (sky)",
+     0.132
+    ],
+    [
+     "world (sky)",
+     0.108
+    ],
+    [
+     "panel motor_strip over world (sky)",
+     0.074
+    ],
+    [
+     "lamp top + lamp key over world (sky)",
+     0.059
+    ]
+   ]
+  },
+  "tweeter-frame": {
+   "pixels": 800,
+   "seen": [
+    [
+     "sweep",
+     0.53
+    ],
+    [
+     "world (sky)",
+     0.235
+    ],
+    [
+     "lamp top over world (sky)",
+     0.05
+    ],
+    [
+     "lamp key over world (sky)",
+     0.045
+    ],
+    [
+     "tweeter-surround",
+     0.04
+    ],
+    [
+     "panel gloss",
+     0.035
+    ]
+   ]
+  },
+  "tweeter-retainer": {
+   "pixels": 732,
+   "seen": [
+    [
+     "sweep",
+     0.322
+    ],
+    [
+     "tweeter-retainer",
+     0.23
+    ],
+    [
+     "world (sky)",
+     0.219
+    ],
+    [
+     "lamp key over world (sky)",
+     0.066
+    ],
+    [
+     "lamp top over world (sky)",
+     0.038
+    ],
+    [
+     "mid-cone",
+     0.033
+    ]
+   ]
+  },
+  "back-panel.plinth": {
+   "pixels": 508,
+   "seen": [
+    [
+     "sweep",
+     1.0
+    ]
+   ]
+  },
+  "mid-motor": {
+   "pixels": 304,
+   "seen": [
+    [
+     "mid-magnet",
+     0.289
+    ],
+    [
+     "sweep",
+     0.237
+    ],
+    [
+     "world (sky)",
+     0.145
+    ],
+    [
+     "lamp key over world (sky)",
+     0.105
+    ],
+    [
+     "front-baffle",
+     0.092
+    ],
+    [
+     "lamp top + lamp key over world (sky)",
+     0.039
+    ]
+   ]
+  },
+  "woofer-coil": {
+   "pixels": 304,
+   "seen": [
+    [
+     "woofer-spider",
+     0.987
+    ],
+    [
+     "woofer-frame",
+     0.013
+    ]
+   ]
+  },
+  "mid-spider": {
+   "pixels": 272,
+   "seen": [
+    [
+     "mid-cone",
+     0.456
+    ],
+    [
+     "mid-frame",
+     0.235
+    ],
+    [
+     "sweep",
+     0.132
+    ],
+    [
+     "mid-surround",
+     0.088
+    ],
+    [
+     "mid-coil",
+     0.074
+    ],
+    [
+     "mid-spider",
+     0.015
+    ]
+   ]
+  },
+  "mid-divider": {
+   "pixels": 240,
+   "seen": [
+    [
+     "side-right",
+     0.7
+    ],
+    [
+     "mid-shelf",
+     0.3
+    ]
+   ]
+  },
+  "letters-front-3": {
+   "pixels": 164,
+   "seen": [
+    [
+     "panel letters_sheen over sweep",
+     0.561
+    ],
+    [
+     "front-baffle.plinth",
+     0.439
+    ]
+   ]
+  },
+  "tweeter-surround": {
+   "pixels": 152,
+   "seen": [
+    [
+     "sweep",
+     0.605
+    ],
+    [
+     "tweeter-frame",
+     0.184
+    ],
+    [
+     "world (sky)",
+     0.105
+    ],
+    [
+     "panel drivers",
+     0.026
+    ],
+    [
+     "waveguide-insert",
+     0.026
+    ],
+    [
+     "tweeter-dome",
+     0.026
+    ]
+   ]
+  },
+  "letters-front-7": {
+   "pixels": 120,
+   "seen": [
+    [
+     "panel letters_sheen over sweep",
+     0.6
+    ],
+    [
+     "front-baffle.plinth",
+     0.4
+    ]
+   ]
+  },
+  "letters-front-1": {
+   "pixels": 112,
+   "seen": [
+    [
+     "panel letters_sheen over sweep",
+     0.786
+    ],
+    [
+     "front-baffle.plinth",
+     0.214
+    ]
+   ]
+  },
+  "tweeter-dome": {
+   "pixels": 104,
+   "seen": [
+    [
+     "sweep",
+     0.577
+    ],
+    [
+     "world (sky)",
+     0.154
+    ],
+    [
+     "waveguide-insert",
+     0.077
+    ],
+    [
+     "panel drivers",
+     0.077
+    ],
+    [
+     "tweeter-surround",
+     0.038
+    ],
+    [
+     "lamp tweeter_kick.specular + lamp fill over world (sky)",
+     0.038
+    ]
+   ]
+  },
+  "letters-front-0": {
+   "pixels": 96,
+   "seen": [
+    [
+     "panel letters_sheen over sweep",
+     0.708
+    ],
+    [
+     "front-baffle.plinth",
+     0.292
+    ]
+   ]
+  },
+  "pull-loop": {
+   "pixels": 52,
+   "seen": [
+    [
+     "sweep",
+     0.538
+    ],
+    [
+     "gable-block",
+     0.231
+    ],
+    [
+     "top-panel",
+     0.154
+    ],
+    [
+     "front-baffle",
+     0.077
+    ]
+   ]
+  },
+  "letters-front-2": {
+   "pixels": 44,
+   "seen": [
+    [
+     "panel letters_sheen over sweep",
+     0.818
+    ],
+    [
+     "front-baffle.plinth",
+     0.182
+    ]
+   ]
+  },
+  "letters-front-6": {
+   "pixels": 40,
+   "seen": [
+    [
+     "panel letters_sheen over sweep",
+     0.9
+    ],
+    [
+     "front-baffle.plinth",
+     0.1
+    ]
+   ]
+  },
+  "mid-cap": {
+   "pixels": 32,
+   "seen": [
+    [
+     "mid-cone",
+     0.75
+    ],
+    [
+     "sweep",
+     0.125
+    ],
+    [
+     "mid-surround",
+     0.125
+    ]
+   ]
+  },
+  "letters-front-5": {
+   "pixels": 32,
+   "seen": [
+    [
+     "panel letters_sheen over sweep",
+     0.875
+    ],
+    [
+     "front-baffle.plinth",
+     0.125
+    ]
+   ]
+  },
+  "magnets-pocket": {
+   "pixels": 28,
+   "seen": [
+    [
+     "gable-block",
+     0.714
+    ],
+    [
+     "top-panel",
+     0.286
+    ]
+   ]
+  },
+  "mid-coil": {
+   "pixels": 12,
+   "seen": [
+    [
+     "mid-spider",
+     1.0
+    ]
+   ]
+  },
+  "bottom-panel": {
+   "pixels": 8,
+   "seen": [
+    [
+     "side-right",
+     1.0
+    ]
+   ]
+  },
+  "letters-front-4": {
+   "pixels": 8,
+   "seen": [
+    [
+     "panel letters_sheen over sweep",
+     1.0
+    ]
+   ]
+  },
+  "pins-insert": {
+   "pixels": 4,
+   "seen": [
+    [
+     "lamp top over world (sky)",
+     1.0
+    ]
+   ]
+  }
+ },
+ "lamps": {
+  "key": 0.5017,
+  "fill": 4.9699,
+  "top": 0.7625,
+  "sweep.001": 0.5159,
+  "floor": 1.4388,
+  "insert_kick": 9.2429,
+  "bg_pool": 3.1715,
+  "mid_kick.specular": 6.5193,
+  "tweeter_kick.specular": 13.7546,
+  "floor_shadow": 4.0,
+  "glint0": 300.2843
+ }
+}
