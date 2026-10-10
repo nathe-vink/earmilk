@@ -1,0 +1,914 @@
+{
+ "1": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "back-panel",
+  "paint_key": "body@whole"
+ },
+ "2": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "back-panel",
+  "paint_key": "accent@whole"
+ },
+ "3": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "back-panel.plinth",
+  "paint_key": "body@whole"
+ },
+ "4": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "back-panel.plinth",
+  "paint_key": "accent@whole"
+ },
+ "5": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "front-baffle",
+  "paint_key": "body@whole"
+ },
+ "6": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "front-baffle",
+  "paint_key": "accent@whole"
+ },
+ "7": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "front-baffle.plinth",
+  "paint_key": "body@whole"
+ },
+ "8": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "front-baffle.plinth",
+  "paint_key": "accent@whole"
+ },
+ "9": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "gable-block",
+  "paint_key": "accent@whole"
+ },
+ "10": {
+  "material": "ribbon",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "pull-loop",
+  "paint_key": "ribbon@whole"
+ },
+ "11": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "side-left",
+  "paint_key": "body@whole"
+ },
+ "12": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "side-left",
+  "paint_key": "accent@whole"
+ },
+ "13": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "side-left.plinth",
+  "paint_key": "body@whole"
+ },
+ "14": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "side-left.plinth",
+  "paint_key": "accent@whole"
+ },
+ "15": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "side-right",
+  "paint_key": "body@whole"
+ },
+ "16": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "side-right",
+  "paint_key": "accent@whole"
+ },
+ "17": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "side-right.plinth",
+  "paint_key": "body@whole"
+ },
+ "18": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "side-right.plinth",
+  "paint_key": "accent@whole"
+ },
+ "19": {
+  "material": "insert",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "waveguide-insert",
+  "paint_key": "insert@whole"
+ },
+ "20": {
+  "material": "body",
+  "instance": 1,
+  "hex": "#FFFFFF",
+  "flavour": "two",
+  "part": "back-panel",
+  "paint_key": "body@two"
+ },
+ "21": {
+  "material": "accent",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two",
+  "part": "back-panel",
+  "paint_key": "accent@two"
+ },
+ "22": {
+  "material": "body",
+  "instance": 1,
+  "hex": "#FFFFFF",
+  "flavour": "two",
+  "part": "back-panel.plinth",
+  "paint_key": "body@two"
+ },
+ "23": {
+  "material": "accent",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two",
+  "part": "back-panel.plinth",
+  "paint_key": "accent@two"
+ },
+ "24": {
+  "material": "body",
+  "instance": 1,
+  "hex": "#FFFFFF",
+  "flavour": "two",
+  "part": "front-baffle",
+  "paint_key": "body@two"
+ },
+ "25": {
+  "material": "accent",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two",
+  "part": "front-baffle",
+  "paint_key": "accent@two"
+ },
+ "26": {
+  "material": "body",
+  "instance": 1,
+  "hex": "#FFFFFF",
+  "flavour": "two",
+  "part": "front-baffle.plinth",
+  "paint_key": "body@two"
+ },
+ "27": {
+  "material": "accent",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two",
+  "part": "front-baffle.plinth",
+  "paint_key": "accent@two"
+ },
+ "28": {
+  "material": "accent",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two",
+  "part": "gable-block",
+  "paint_key": "accent@two"
+ },
+ "29": {
+  "material": "ribbon",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two",
+  "part": "pull-loop",
+  "paint_key": "ribbon@two"
+ },
+ "30": {
+  "material": "body",
+  "instance": 1,
+  "hex": "#FFFFFF",
+  "flavour": "two",
+  "part": "side-left",
+  "paint_key": "body@two"
+ },
+ "31": {
+  "material": "accent",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two",
+  "part": "side-left",
+  "paint_key": "accent@two"
+ },
+ "32": {
+  "material": "body",
+  "instance": 1,
+  "hex": "#FFFFFF",
+  "flavour": "two",
+  "part": "side-left.plinth",
+  "paint_key": "body@two"
+ },
+ "33": {
+  "material": "accent",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two",
+  "part": "side-left.plinth",
+  "paint_key": "accent@two"
+ },
+ "34": {
+  "material": "body",
+  "instance": 1,
+  "hex": "#FFFFFF",
+  "flavour": "two",
+  "part": "side-right",
+  "paint_key": "body@two"
+ },
+ "35": {
+  "material": "accent",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two",
+  "part": "side-right",
+  "paint_key": "accent@two"
+ },
+ "36": {
+  "material": "body",
+  "instance": 1,
+  "hex": "#FFFFFF",
+  "flavour": "two",
+  "part": "side-right.plinth",
+  "paint_key": "body@two"
+ },
+ "37": {
+  "material": "accent",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two",
+  "part": "side-right.plinth",
+  "paint_key": "accent@two"
+ },
+ "38": {
+  "material": "insert",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two",
+  "part": "waveguide-insert",
+  "paint_key": "insert@two"
+ },
+ "39": {
+  "material": "body",
+  "instance": 2,
+  "hex": "#FFFFFF",
+  "flavour": "skim",
+  "part": "back-panel",
+  "paint_key": "body@skim"
+ },
+ "40": {
+  "material": "accent",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim",
+  "part": "back-panel",
+  "paint_key": "accent@skim"
+ },
+ "41": {
+  "material": "body",
+  "instance": 2,
+  "hex": "#FFFFFF",
+  "flavour": "skim",
+  "part": "back-panel.plinth",
+  "paint_key": "body@skim"
+ },
+ "42": {
+  "material": "accent",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim",
+  "part": "back-panel.plinth",
+  "paint_key": "accent@skim"
+ },
+ "43": {
+  "material": "body",
+  "instance": 2,
+  "hex": "#FFFFFF",
+  "flavour": "skim",
+  "part": "front-baffle",
+  "paint_key": "body@skim"
+ },
+ "44": {
+  "material": "accent",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim",
+  "part": "front-baffle",
+  "paint_key": "accent@skim"
+ },
+ "45": {
+  "material": "body",
+  "instance": 2,
+  "hex": "#FFFFFF",
+  "flavour": "skim",
+  "part": "front-baffle.plinth",
+  "paint_key": "body@skim"
+ },
+ "46": {
+  "material": "accent",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim",
+  "part": "front-baffle.plinth",
+  "paint_key": "accent@skim"
+ },
+ "47": {
+  "material": "accent",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim",
+  "part": "gable-block",
+  "paint_key": "accent@skim"
+ },
+ "48": {
+  "material": "ribbon",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim",
+  "part": "pull-loop",
+  "paint_key": "ribbon@skim"
+ },
+ "49": {
+  "material": "body",
+  "instance": 2,
+  "hex": "#FFFFFF",
+  "flavour": "skim",
+  "part": "side-left",
+  "paint_key": "body@skim"
+ },
+ "50": {
+  "material": "accent",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim",
+  "part": "side-left",
+  "paint_key": "accent@skim"
+ },
+ "51": {
+  "material": "body",
+  "instance": 2,
+  "hex": "#FFFFFF",
+  "flavour": "skim",
+  "part": "side-left.plinth",
+  "paint_key": "body@skim"
+ },
+ "52": {
+  "material": "accent",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim",
+  "part": "side-left.plinth",
+  "paint_key": "accent@skim"
+ },
+ "53": {
+  "material": "body",
+  "instance": 2,
+  "hex": "#FFFFFF",
+  "flavour": "skim",
+  "part": "side-right",
+  "paint_key": "body@skim"
+ },
+ "54": {
+  "material": "accent",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim",
+  "part": "side-right",
+  "paint_key": "accent@skim"
+ },
+ "55": {
+  "material": "body",
+  "instance": 2,
+  "hex": "#FFFFFF",
+  "flavour": "skim",
+  "part": "side-right.plinth",
+  "paint_key": "body@skim"
+ },
+ "56": {
+  "material": "accent",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim",
+  "part": "side-right.plinth",
+  "paint_key": "accent@skim"
+ },
+ "57": {
+  "material": "insert",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim",
+  "part": "waveguide-insert",
+  "paint_key": "insert@skim"
+ },
+ "58": {
+  "material": "body",
+  "instance": 3,
+  "hex": "#A4C26B",
+  "flavour": "matcha",
+  "part": "back-panel",
+  "paint_key": "body@matcha"
+ },
+ "59": {
+  "material": "accent",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha",
+  "part": "back-panel",
+  "paint_key": "accent@matcha"
+ },
+ "60": {
+  "material": "body",
+  "instance": 3,
+  "hex": "#A4C26B",
+  "flavour": "matcha",
+  "part": "back-panel.plinth",
+  "paint_key": "body@matcha"
+ },
+ "61": {
+  "material": "accent",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha",
+  "part": "back-panel.plinth",
+  "paint_key": "accent@matcha"
+ },
+ "62": {
+  "material": "body",
+  "instance": 3,
+  "hex": "#A4C26B",
+  "flavour": "matcha",
+  "part": "front-baffle",
+  "paint_key": "body@matcha"
+ },
+ "63": {
+  "material": "accent",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha",
+  "part": "front-baffle",
+  "paint_key": "accent@matcha"
+ },
+ "64": {
+  "material": "body",
+  "instance": 3,
+  "hex": "#A4C26B",
+  "flavour": "matcha",
+  "part": "front-baffle.plinth",
+  "paint_key": "body@matcha"
+ },
+ "65": {
+  "material": "accent",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha",
+  "part": "front-baffle.plinth",
+  "paint_key": "accent@matcha"
+ },
+ "66": {
+  "material": "accent",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha",
+  "part": "gable-block",
+  "paint_key": "accent@matcha"
+ },
+ "67": {
+  "material": "ribbon",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha",
+  "part": "pull-loop",
+  "paint_key": "ribbon@matcha"
+ },
+ "68": {
+  "material": "body",
+  "instance": 3,
+  "hex": "#A4C26B",
+  "flavour": "matcha",
+  "part": "side-left",
+  "paint_key": "body@matcha"
+ },
+ "69": {
+  "material": "accent",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha",
+  "part": "side-left",
+  "paint_key": "accent@matcha"
+ },
+ "70": {
+  "material": "body",
+  "instance": 3,
+  "hex": "#A4C26B",
+  "flavour": "matcha",
+  "part": "side-left.plinth",
+  "paint_key": "body@matcha"
+ },
+ "71": {
+  "material": "accent",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha",
+  "part": "side-left.plinth",
+  "paint_key": "accent@matcha"
+ },
+ "72": {
+  "material": "body",
+  "instance": 3,
+  "hex": "#A4C26B",
+  "flavour": "matcha",
+  "part": "side-right",
+  "paint_key": "body@matcha"
+ },
+ "73": {
+  "material": "accent",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha",
+  "part": "side-right",
+  "paint_key": "accent@matcha"
+ },
+ "74": {
+  "material": "body",
+  "instance": 3,
+  "hex": "#A4C26B",
+  "flavour": "matcha",
+  "part": "side-right.plinth",
+  "paint_key": "body@matcha"
+ },
+ "75": {
+  "material": "accent",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha",
+  "part": "side-right.plinth",
+  "paint_key": "accent@matcha"
+ },
+ "76": {
+  "material": "insert",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha",
+  "part": "waveguide-insert",
+  "paint_key": "insert@matcha"
+ },
+ "77": {
+  "material": "body",
+  "instance": 4,
+  "hex": "#5E3A1F",
+  "flavour": "chocolate",
+  "part": "back-panel",
+  "paint_key": "body@chocolate"
+ },
+ "78": {
+  "material": "accent",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate",
+  "part": "back-panel",
+  "paint_key": "accent@chocolate"
+ },
+ "79": {
+  "material": "body",
+  "instance": 4,
+  "hex": "#5E3A1F",
+  "flavour": "chocolate",
+  "part": "back-panel.plinth",
+  "paint_key": "body@chocolate"
+ },
+ "80": {
+  "material": "accent",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate",
+  "part": "back-panel.plinth",
+  "paint_key": "accent@chocolate"
+ },
+ "81": {
+  "material": "body",
+  "instance": 4,
+  "hex": "#5E3A1F",
+  "flavour": "chocolate",
+  "part": "front-baffle",
+  "paint_key": "body@chocolate"
+ },
+ "82": {
+  "material": "accent",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate",
+  "part": "front-baffle",
+  "paint_key": "accent@chocolate"
+ },
+ "83": {
+  "material": "body",
+  "instance": 4,
+  "hex": "#5E3A1F",
+  "flavour": "chocolate",
+  "part": "front-baffle.plinth",
+  "paint_key": "body@chocolate"
+ },
+ "84": {
+  "material": "accent",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate",
+  "part": "front-baffle.plinth",
+  "paint_key": "accent@chocolate"
+ },
+ "85": {
+  "material": "accent",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate",
+  "part": "gable-block",
+  "paint_key": "accent@chocolate"
+ },
+ "86": {
+  "material": "ribbon",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate",
+  "part": "pull-loop",
+  "paint_key": "ribbon@chocolate"
+ },
+ "87": {
+  "material": "body",
+  "instance": 4,
+  "hex": "#5E3A1F",
+  "flavour": "chocolate",
+  "part": "side-left",
+  "paint_key": "body@chocolate"
+ },
+ "88": {
+  "material": "accent",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate",
+  "part": "side-left",
+  "paint_key": "accent@chocolate"
+ },
+ "89": {
+  "material": "body",
+  "instance": 4,
+  "hex": "#5E3A1F",
+  "flavour": "chocolate",
+  "part": "side-left.plinth",
+  "paint_key": "body@chocolate"
+ },
+ "90": {
+  "material": "accent",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate",
+  "part": "side-left.plinth",
+  "paint_key": "accent@chocolate"
+ },
+ "91": {
+  "material": "body",
+  "instance": 4,
+  "hex": "#5E3A1F",
+  "flavour": "chocolate",
+  "part": "side-right",
+  "paint_key": "body@chocolate"
+ },
+ "92": {
+  "material": "accent",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate",
+  "part": "side-right",
+  "paint_key": "accent@chocolate"
+ },
+ "93": {
+  "material": "body",
+  "instance": 4,
+  "hex": "#5E3A1F",
+  "flavour": "chocolate",
+  "part": "side-right.plinth",
+  "paint_key": "body@chocolate"
+ },
+ "94": {
+  "material": "accent",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate",
+  "part": "side-right.plinth",
+  "paint_key": "accent@chocolate"
+ },
+ "95": {
+  "material": "insert",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate",
+  "part": "waveguide-insert",
+  "paint_key": "insert@chocolate"
+ },
+ "96": {
+  "material": "body",
+  "instance": 5,
+  "hex": "#D9BC92",
+  "flavour": "oat",
+  "part": "back-panel",
+  "paint_key": "body@oat"
+ },
+ "97": {
+  "material": "accent",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat",
+  "part": "back-panel",
+  "paint_key": "accent@oat"
+ },
+ "98": {
+  "material": "body",
+  "instance": 5,
+  "hex": "#D9BC92",
+  "flavour": "oat",
+  "part": "back-panel.plinth",
+  "paint_key": "body@oat"
+ },
+ "99": {
+  "material": "accent",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat",
+  "part": "back-panel.plinth",
+  "paint_key": "accent@oat"
+ },
+ "100": {
+  "material": "body",
+  "instance": 5,
+  "hex": "#D9BC92",
+  "flavour": "oat",
+  "part": "front-baffle",
+  "paint_key": "body@oat"
+ },
+ "101": {
+  "material": "accent",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat",
+  "part": "front-baffle",
+  "paint_key": "accent@oat"
+ },
+ "102": {
+  "material": "body",
+  "instance": 5,
+  "hex": "#D9BC92",
+  "flavour": "oat",
+  "part": "front-baffle.plinth",
+  "paint_key": "body@oat"
+ },
+ "103": {
+  "material": "accent",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat",
+  "part": "front-baffle.plinth",
+  "paint_key": "accent@oat"
+ },
+ "104": {
+  "material": "accent",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat",
+  "part": "gable-block",
+  "paint_key": "accent@oat"
+ },
+ "105": {
+  "material": "ribbon",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat",
+  "part": "pull-loop",
+  "paint_key": "ribbon@oat"
+ },
+ "106": {
+  "material": "body",
+  "instance": 5,
+  "hex": "#D9BC92",
+  "flavour": "oat",
+  "part": "side-left",
+  "paint_key": "body@oat"
+ },
+ "107": {
+  "material": "accent",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat",
+  "part": "side-left",
+  "paint_key": "accent@oat"
+ },
+ "108": {
+  "material": "body",
+  "instance": 5,
+  "hex": "#D9BC92",
+  "flavour": "oat",
+  "part": "side-left.plinth",
+  "paint_key": "body@oat"
+ },
+ "109": {
+  "material": "accent",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat",
+  "part": "side-left.plinth",
+  "paint_key": "accent@oat"
+ },
+ "110": {
+  "material": "body",
+  "instance": 5,
+  "hex": "#D9BC92",
+  "flavour": "oat",
+  "part": "side-right",
+  "paint_key": "body@oat"
+ },
+ "111": {
+  "material": "accent",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat",
+  "part": "side-right",
+  "paint_key": "accent@oat"
+ },
+ "112": {
+  "material": "body",
+  "instance": 5,
+  "hex": "#D9BC92",
+  "flavour": "oat",
+  "part": "side-right.plinth",
+  "paint_key": "body@oat"
+ },
+ "113": {
+  "material": "accent",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat",
+  "part": "side-right.plinth",
+  "paint_key": "accent@oat"
+ },
+ "114": {
+  "material": "insert",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat",
+  "part": "waveguide-insert",
+  "paint_key": "insert@oat"
+ }
+}
