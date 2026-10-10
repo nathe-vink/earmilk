@@ -1,0 +1,293 @@
+{
+ "stage1": {
+  "impression": "A clean, correctly built three-quarter render of the carton speaker on a grey sweep, with legible graphics and plausible satin materials. But the set is a dull mid-grey and the light is flat: the two white faces barely separate, the front face looks like one value, the eave has a soft glow and the grounding is thin, so it reads as a competent draft rather than a hero frame.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The roof slope outside its highlight reads as the swatch: [980,150,1035,200] lum 74-84 and dE2000 <= 3 vs #C62828 (now 87.0, 3.72), and [900,140,960,190] G <= 54 (now 67, a pink wash).",
+  "The roof shows a lacquer reflection with an edge: one highlight zone at least 30 lum above the deep red, covering less than half the slope (now a smooth 22-level wash over 97% of it, cut by the polariser).",
+  "The back plinth band reads as the accent in shade, not maroon: R >= 150, dE <= 9 (now 142, 11.7). Both plinth bands carry >= 8 levels of top-to-bottom modelling (now 3 and 2, flat slabs).",
+  "The shaded side reds stay red: side plinth R >= 124 and side gable triangle R >= 135 (now 113 and 123), while the side white stays >= 35 levels below the back's 211.",
+  "The side eave is as crisp as the back eave: 10-90 edge width <= 4 px (now 9 px vs 3 px), with no pink haze: [770,204,795,211] <= 58 (now 68.9 against 47.4 for the same red above).",
+  "The sweep falls off toward the camera: the bottom strip [0,850,1350,900] is at least 12 levels darker than the wall beside the gable [600,80,730,220] (now 125.9 vs 127.0).",
+  "The connections read as modelled hardware: highlights on the socket lips and bezels, amp-connectors lum_p95 >= 70 (now 56.8, flat dark shapes on a 79-90 plate).",
+  "No clipped print: the OPEN OTHER SIDE letters stay below 252 (now 20.6% of [828,97,960,113] at 255).",
+  "The back white holds at 205-214 with >= 18 levels of top-to-bottom falloff (now 211, falling 234 -> 208)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The key at 51.3 deg elevation lands about 9 deg off the back roof slope's normal but 53 deg off the back panel's, so the roof takes about 1.6x the back's key light and its red goes pale; that pulls the retouch's single accent gain down to 0.86, which darkens both plinth bands, and the same steep key lights the foreground floor as brightly as the wall beside the gable.",
+   "evidence": {
+    "region": [
+     980,
+     150,
+     1035,
+     200
+    ],
+    "measured": "The roof's least-reflective part: lum 87.0, rgb (209,54,52), against the swatch's lum 73.6. Roof middle [900,140,960,190]: lum 98.5, dE 7.12. Card retouch table: accent gain 0.86, back plinth dE 9.29 -> 10.96, side plinth 16.02 -> 16.82. Bottom strip [0,850,1350,900] 125.9 vs the wall beside the gable [600,80,730,220] 127.0."
+   },
+   "change": {
+    "setting": "lights.key.orbit.elevation_deg",
+    "from": 51.3,
+    "to": 40
+   },
+   "expected": "With c2 holding the back panel, the roof's key share falls from about 1.63x to about 1.30x the back's. [980,150,1035,200] drops to lum ~78-82, about (200,46,45), dE <= 3. The retouch gain rises toward ~0.93, lifting the back plinth from R 142 to ~150 and the side plinth from 113 to ~119. The key's share on the floor drops by about a third: the bottom strip falls to ~108-115 while the wall beside the gable stays ~127, so the sweep darkens toward the camera. The gentler top-to-bottom falloff should also bring the fin's clipped letters under 252. The key's shadow lengthens to about 1.3 m behind-left, a soft tone left of the base.",
+   "accept": {
+    "region": [
+     980,
+     150,
+     1035,
+     200
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     74,
+     84
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "At 40 deg the key strikes the vertical back panel 23% more squarely (cos 40 / cos 51.3), which would lift its white from 211 to about 228, where it prints flat and the backgloss band under the eave clips.",
+   "evidence": {
+    "region": [
+     880,
+     455,
+     950,
+     590
+    ],
+    "measured": "Back white lum_median 211 (p5 206, p95 216). Band under the eave [890,222,1065,232]: 240, p95 245. Left-strip falloff 234 -> 208 (profile [885,215,910,595])."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 3.1,
+    "to": 2.5
+   },
+   "expected": "Holds the back white at 205-214. That is the window round 15's c4 (2.5 -> 2.9, tuned to 3.1) was for, and this test keeps it, so the white cannot slip back to light grey. The number returns to 2.5 only because c1's angle delivers 23% more of the same light to the back; the roof and the floor keep c1's drop. The band's p95 stays inside c5's [234, 246], and the left strip keeps >= 18 levels of falloff.",
+   "accept": {
+    "region": [
+     880,
+     455,
+     950,
+     590
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     205,
+     214
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The roof slope mirrors the gloss panel over 97% of its pixels along a slow ramp, so instead of a reflection it carries a chalky left-to-right pink wash with no edge (G 74 -> 54 over about 200 px), which reads as uneven paint and keeps the middle of the slope off the swatch.",
+   "evidence": {
+    "region": [
+     900,
+     140,
+     960,
+     190
+    ],
+    "measured": "rgb (216,67,65), dE 7.12, mirrors gloss at radiance 0.77 (z 1.70). Left [835,130,885,170]: (221,74,72) at 1.14 (z 1.78). Right [980,150,1035,200]: (209,54,52) at 0.31 (z 1.61). [850,130,1030,200] mirrors the gloss panel 97.1%."
+   },
+   "change": {
+    "setting": "lights.gloss.ramp.at_m",
+    "from": [
+     1.55,
+     1.84
+    ],
+    "to": [
+     1.735,
+     1.755
+    ]
+   },
+   "expected": "Only the slope's left third (where it mirrors z > 1.755) sees the panel at full strength, ending in an edge about 20 px wide that runs diagonally across the slope. The middle and right mirror the panel's dark end and read as the deep accent: [900,140,960,190] G 67 -> ~45-50, dE <= 4. The roof reads as one red with a reflection on it.",
+   "accept": {
+    "region": [
+     900,
+     140,
+     960,
+     190
+    ],
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     38,
+     54
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "camera",
+   "problem": "The polariser at 0.9 meets the roof slope at about 62 deg incidence, close to Brewster's angle, so it removes roughly three-quarters of the clear coat's reflection there and the roof reads as satin paint, while the uncut vertical white faces read as lacquer.",
+   "evidence": {
+    "region": [
+     835,
+     130,
+     885,
+     170
+    ],
+    "measured": "lum 105.3, rgb (221,74,72) while it mirrors the gloss panel at radiance ~1.14: only ~18 levels above the dark end (lum 87.0, G 54), where an uncut coat (~10% Fresnel at 62 deg) would show about 4x that. The card says the 90 deg axis covers roof slopes and floors."
+   },
+   "change": {
+    "setting": "camera.polariser.strength",
+    "from": 0.9,
+    "to": 0
+   },
+   "expected": "With c3 confining the panel to the left third, that zone shows a clear lacquer highlight near (225,105,100), lum 115-130, against deep red at ~80 on the rest of the slope. The rest of the slope does not change (it mirrors the panel's dark end), and the vertical faces do not either (the 90 deg axis never cut them). The semi-gloss sweep gains a few levels of sheen and a soft reflection by the base.",
+   "accept": {
+    "region": [
+     835,
+     130,
+     885,
+     170
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     112,
+     135
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The sidestrip's top end (full strength 2.7 up to z 0.84) is mirrored right at the side eave, and the coat smears it across the 3 mm shadow line into a pink haze on the bottom of the red gable triangle, so the side eave reads soft and glowing where the back eave is crisp.",
+   "evidence": {
+    "region": [
+     770,
+     204,
+     795,
+     211
+    ],
+    "measured": "lum 68.9, rgb (131,52,51), against the same red above [765,196,800,203] at 47.4 (124,27,27) and beside the strip [800,204,815,211] at 56.6. Edge [770,195,790,230]: 10-90 width 9 px, vs the back eave [940,200,970,232] at 3 px. The side face's top rows mirror the sidestrip at z 0.815-0.835, radiance 2.7."
+   },
+   "change": {
+    "setting": "lights.sidestrip.size_m",
+    "from": [
+     0.075,
+     0.72
+    ],
+    "to": [
+     0.075,
+     0.6
+    ]
+   },
+   "expected": "The strip's top drops to z ~0.78, so the eave mirrors only the weaker sidegloss: the band falls to ~55 (within ~8 of the red above) and the eave's 10-90 width tightens toward 4-5 px. The strip's sheen on the side starts about 25 px below the eave, as a strip light's end. The side face median stays ~164.",
+   "accept": {
+    "region": [
+     770,
+     204,
+     795,
+     211
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     44,
+     60
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The side lamp is the only light that reaches the side and not the back, and at 0.14 W/m2 it leaves the shaded reds near maroon-black: the side plinth band is one flat value and the side gable triangle barely reads as red.",
+   "evidence": {
+    "region": [
+     770,
+     712,
+     850,
+     745
+    ],
+    "measured": "Side plinth band: rgb (114,20,20), lum 40.1, range 3.1, dE 17.3 vs #C62828 (whole part: 113, range 5.5, dE 17.5). Side gable triangle [765,185,800,200]: (123,23,23), dE 15.5. Side white [790,350,870,600]: 164, vs back 211."
+   },
+   "change": {
+    "setting": "lights.side.irradiance",
+    "from": 0.14,
+    "to": 0.4
+   },
+   "expected": "The side face gains about 0.19 W/m2 (+15%). Side plinth R rises to 124-132 (c1's retouch gain supplies about 6 levels of it), the side triangle's R to ~138, and the side white from 164 to ~172-176, still >= 35 below the back's 211, so the two planes keep separating. The back panel and the roof face away from the lamp and do not change; the floor left of the base gains about 3 levels.",
+   "accept": {
+    "region": "part:side-right.plinth",
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     122,
+     134
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The connectors, a must-show, have no highlight: glint 0 sits on the upper inner wall of the round socket, which mirrors the socket itself, so the engine skipped it and the hardware reads as flat dark shapes on the dark plate.",
+   "evidence": {
+    "region": [
+     997,
+     634,
+     1065,
+     659
+    ],
+    "measured": "amp-connectors lum 42 (p5 21, p95 56.8) on a plate at 79-90. Card: glint 0 skipped (it mirrors amp-connectors#0, 0.00 m away). The round socket spans x 1021-1034, y 641-657, and glint 0 projects onto its top (~y 642)."
+   },
+   "change": {
+    "setting": "glints.0.at",
+    "from": [
+     0.534,
+     -0.118,
+     0.196
+    ],
+    "to": [
+     0.532,
+     -0.115,
+     0.178
+    ]
+   },
+   "expected": "The glint moves to the socket's lower inner lip (image ~(1027, 655)), which faces up and mirrors open space above the plate, so the engine can place it. A small crescent highlight shows on that lip and on the up-facing lips of the IEC inlet and the switch; the connectors' p95 rises to ~80-120 while their median stays ~40-50.",
+   "accept": {
+    "region": "part:amp-connectors",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     70,
+     130
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Deepen or sharpen the 3 mm shadow line under the gable on the side so a reflection cannot bleed across it.",
+   "why": "The shadow lines are product geometry, which is fixed; the bleed has to be handled through what the coat mirrors (c5)."
+  },
+  {
+   "request": "A smoother clear coat on the accent so reflections stop crisply at edges and the roof's highlight edge is sharper.",
+   "why": "The product's paint and clear coat are its finish and fixed; only what they mirror can change (c3, c4, c5)."
+  },
+  {
+   "request": "A lighter red on the plinth band to offset its low, less-lit position.",
+   "why": "#C62828 is the flavour's fixed accent; only its reproduction through light and retouch may move it (c1, c6)."
+  },
+  {
+   "request": "Glossier connector housings, or a larger connector cluster set higher on the plate, so the connections read at homepage size.",
+   "why": "The Hypex plate and its connectors are a real product with its own materials and layout; c7 can only place a glint where their surfaces already mirror one."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
