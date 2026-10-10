@@ -143,6 +143,14 @@ def main():
         ob = {'area': Lt.area, 'spot': Lt.spot, 'point': Lt.point, 'panel': Lt.panel, 'flag': Lt.flag}[kind](bpy, name, spec, centre)
         if spec.get('receivers') and kind != 'flag':
             recv = [o for o in objs if any(Pr._match(part_of[o.name], r) for r in spec['receivers'])]
+            if not recv:
+                # receivers matching no part: Cycles lights everything from a lamp whose receiver collection is empty
+                # (07 e12: '*.plinth' in an exploded view lit the whole product, the white side 200 to 234); left out,
+                # and the card says so
+                for o in [ob] + Lt.twins(bpy, ob):
+                    o.hide_render = True
+                pending.append({'id': f'lights.{name}', 'why': f'its receivers {spec["receivers"]} match no part in this frame, so the engine left it out'})
+                continue
             for o in [ob] + Lt.twins(bpy, ob):
                 Lt.link_receivers(bpy, o, recv)
         elif kind in ('area', 'spot', 'point') and spec.get('shadow_on_set', 1.0) < 1.0:
@@ -161,6 +169,9 @@ def main():
         if not g:
             continue                                                       # a gap in a list of glints
         recv = [o for o in objs if any(Pr._match(part_of[o.name], r) for r in g['receivers'])] if g.get('receivers') else objs
+        if not recv:
+            glint_log.append({'glint': gname, 'skipped': f'its receivers {g.get("receivers")} match no part in this frame'})
+            continue
         g, note = Lt.true_glint(bpy, g, recv, C)
         glint_log.append({'glint': gname, **note})
         if note.get('skipped'):

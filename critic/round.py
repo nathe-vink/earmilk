@@ -136,6 +136,13 @@ def precheck(a):
     sys.path.insert(0, str(ROOT / 'critic'))
     import measure as Me
     _, arr = Me.load(out); Me.load_mask(out); Me.load_mirror(out)
+    rep = json.loads(out.with_suffix('.report.json').read_text())
+    for p_ in rep.get('pending', []):
+        if 'match no part' in str(p_.get('why', '')):
+            print(f"  {p_['id']}: {p_['why']}")
+    for g in rep.get('glints', []):
+        if 'match no part' in str(g.get('skipped', '')):
+            print(f"  glints.{g['glint']}: {g['skipped']}")
     lights = json.loads(shot.read_text()).get('lights', {})
     for c in reply.get('changes', []):
         st = (c.get('change') or {}).get('setting') or ''

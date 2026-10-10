@@ -428,8 +428,10 @@ def place(bpy, pdef, templates, shot, root):
             # the zones that name a part, split off as parts of their own when the shot asks (04b's red plinth, to be
             # lit without the white above it)
             pieces = [(pname, me)]
-            if zones and prod.get('zone_parts') and any(z.get('part') for z in zones) and not inner:
-                pieces = _split_zones(bpy, me, pname, zones)
+            if zones and prod.get('zone_parts') and any(z.get('part') for z in zones):
+                # in a cutaway or an exploded view the inside's faces (the last material) stay with the panel; only its
+                # outside's zone goes to the zone part (07 e12: skipped there, '*.plinth' matched nothing)
+                pieces = _split_zones(bpy, me, pname, zones, inner_idx=len(me.materials) - 1 if inner else None)
             for pn, me_ in pieces:
                 ob = bpy.data.objects.new(f'{pn}#{i}', me_)
                 bpy.context.scene.collection.objects.link(ob)
@@ -620,9 +622,10 @@ def _zone_of(zones, cz):
     return hit
 
 
-def _split_zones(bpy, me, pname, zones):
+def _split_zones(bpy, me, pname, zones, inner_idx=None):
     """A zoned mesh in pieces: [(part name, mesh)], the faces outside every named zone under the part's own name, each
-    named zone's as "part.zone" (its faces, materials and normals as they were; one mesh per flavour, as the zoned mesh)."""
+    named zone's as "part.zone" (its faces, materials and normals as they were; one mesh per flavour, as the zoned mesh).
+    Faces with material `inner_idx` (the inside of a cut or exploded panel) stay with the part."""
     import bmesh
     named = [z for z in zones if z.get('part')]
     out = []
@@ -637,6 +640,8 @@ def _split_zones(bpy, me, pname, zones):
             for f in bm.faces:
                 z = _zone_of(zones, f.calc_center_median().z * 1000.0)
                 z = z if (z is not None and z.get('part')) else None
+                if inner_idx is not None and f.material_index == inner_idx:
+                    z = None
                 if z is not target:
                     kill.append(f)
             bmesh.ops.delete(bm, geom=kill, context='FACES')
