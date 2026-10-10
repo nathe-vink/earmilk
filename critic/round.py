@@ -31,7 +31,7 @@ def stage(a):
     src = Path(a.image)
     img = d / f'render-{a.tag}.png'
     shutil.copy(src, img)
-    for suf in ('.mask.png', '.mask.json'):
+    for suf in ('.mask.png', '.mask.json', '.mirror.png', '.mirror.json'):
         m = src.with_suffix(suf)
         if m.exists():
             shutil.copy(m, img.with_suffix(suf))
@@ -68,6 +68,46 @@ def save(a):
     for c in data['changes']:
         ch = c.get('change', {})
         print(f"  {c.get('id')} [{c.get('kind')}] {ch.get('setting')}: {ch.get('from')} -> {ch.get('to')}   {c.get('problem', '')[:110]}")
+    for w in mirror_warnings(data, a.shot_id, a.version):
+        print('  MIRROR', w)
+
+
+def mirror_warnings(data, shot_id, version):
+    """Changes to a reflection-only panel whose test region does not mirror it: the engine's mirror map of the judged
+    image (its mask pass) says what the region's product pixels see, so a sheen prescribed on a panel they do not see
+    cannot move the test (03's round 8: the waveguide wall mirrors glint5, the fin the base flag). One line each."""
+    import glob
+    num = shot_id.split('-', 1)[1]
+    imgs = sorted(glob.glob(str(ROOT / 'renders' / '*' / 'engine' / f'{num}-{version}.png')))
+    shots = sorted(glob.glob(str(ROOT / 'studio' / 'shots' / '*' / f'{num}.json')))
+    if not imgs or not shots or not Path(imgs[-1]).with_suffix('.mirror.png').exists():
+        return []
+    sys.path.insert(0, str(ROOT / 'critic'))
+    import measure as Me
+    _, arr = Me.load(imgs[-1]); Me.load_mask(imgs[-1]); Me.load_mirror(imgs[-1])
+    lights = json.loads(Path(shots[-1]).read_text()).get('lights', {})
+    out = []
+    for c in data.get('changes', []):
+        st = (c.get('change') or {}).get('setting') or ''
+        reg = (c.get('accept') or {}).get('region')
+        if not st.startswith('lights.') or reg is None:
+            continue
+        name = st.split('.')[1]
+        spec = lights.get(name)
+        if not isinstance(spec, dict) or spec.get('type') != 'panel' or spec.get('diffuse', True) is not False:
+            continue
+        try:
+            m = Me.mirrors(arr, reg)
+        except SystemExit:
+            continue
+        if not m['mirrors']:
+            continue
+        share = sum(x['share_pct'] for x in m['mirrors'] if x['what'] == f'panel {name}')
+        if share < 10:
+            top = ', '.join(f"{x['what']} {x['share_pct']} %" for x in m['mirrors'][:3])
+            out.append(f"{c.get('id')}: `{name}` is a reflection-only panel, and the test's region mirrors it on {share:.0f} % of "
+                       f"its product pixels; they mirror {top}")
+    return out
 
 
 def check(a):

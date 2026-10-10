@@ -132,6 +132,17 @@ pixels in the frame and the band of directions they look along, so a card or a l
 pixels that should light up (on 05 it showed the critic's 8 x 3 m card reaching 5 % of the cones, which mirror the
 open sky in front). Nothing is rendered.
 
+## The mirror map
+
+Every mask pass (`--masks`, `--masks-only`) also writes `IMG.mirror.png` and `IMG.mirror.json`: for one pixel in four
+on the product, what the camera's ray meets after reflecting about the render's shading normal there (the hit face's
+corner normals interpolated at the hit, so a smooth cone mirrors as it shades). Red holds the id of what is mirrored,
+the legend names it (`lamp key`, `panel top`, `sweep`, `world (sky)`), and the render's report keeps each part's
+shares. The critic's card prints them per part, its measuring tool answers `mirrors X0 Y0 X1 Y1` (or `part:NAME`) for
+any region, and `critic/round.py save` warns when a change grades a reflection-only panel that its test's region does
+not mirror: on 03's round 8 the waveguide wall the critic ramped through `rim_left` mirrors `glint5` on 98 % of its
+pixels and the fin it gave a sheen panel mirrors the black flag on 99 %, so neither setting could move its test.
+
 ## What the engine makes exact
 
 - **Glints** are placed from the surface the camera sees at their point, with that surface's own normal (the camera's

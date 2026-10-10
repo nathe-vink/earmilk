@@ -26,6 +26,14 @@ region as one argument:
     python3 critic/measure.py IMAGE stats part:front-baffle
     python3 critic/measure.py IMAGE delta-e part:gable-block '#C62828'
 
+Reflections: the engine's mask pass also writes IMAGE.mirror.png and IMAGE.mirror.json, what every product pixel
+mirrors (the camera's ray reflected about the surface's shading normal, followed to the first lamp face, panel, surface
+or the sky). A highlight, sheen or dark band on a glossy part is whatever its pixels mirror, so prescribe a change to
+that (its strength, ramp, position, colour), not to a lamp those pixels do not see:
+
+    python3 critic/measure.py IMAGE mirrors X0 Y0 X1 Y1       (what a region of the product mirrors, by share)
+    python3 critic/measure.py IMAGE mirrors part:waveguide-insert
+
 A test is {"id", "region": [x0, y0, x1, y1], "metric", "op", "value"}; metrics: lum_median, lum_mean, lum_p5,
 lum_p95, lum_range (p95 - p5), r/g/b_median, clip_pct, crush_pct, falloff (first bin minus last bin of a profile
 along "axis"), delta_e (needs "hex"), edge (the largest step across "axis"); ops: <, <=, >, >=, between (value
@@ -64,6 +72,34 @@ def load_mask(image_path):
     if mp.exists() and lp.exists():
         MASK['ids'] = np.asarray(Image.open(mp).convert('RGB'))[..., 0].astype(int)
         MASK['legend'] = {int(k): v for k, v in json.loads(lp.read_text()).items()}
+
+
+MIRROR = {}  # what each product pixel mirrors: {'ids': HxW array, 'legend': {id: label}}
+
+
+def load_mirror(image_path):
+    mp, lp = Path(image_path).with_suffix('.mirror.png'), Path(image_path).with_suffix('.mirror.json')
+    if mp.exists() and lp.exists():
+        MIRROR['ids'] = np.asarray(Image.open(mp).convert('RGB'))[..., 0].astype(int)
+        MIRROR['legend'] = {int(k): v for k, v in json.loads(lp.read_text())['legend'].items()}
+
+
+def mirrors(a, r):
+    """What the product's pixels in a region mirror: each thing seen (an area lamp, a panel, a surface, the sky) with
+    its share of those pixels and where they are."""
+    if 'ids' not in MIRROR:
+        raise SystemExit('no mirror map beside this image (the engine writes it in its mask pass)')
+    _, ys, xs = select(a, r)
+    v = MIRROR['ids'][ys, xs]
+    on = v > 0
+    if not on.any():
+        return {'region': describe_region(r), 'pixels_on_product': 0, 'mirrors': []}
+    seen = []
+    for i in sorted(set(v[on].tolist()), key=lambda i: -(v == i).sum()):
+        m = v == i
+        seen.append({'what': MIRROR['legend'].get(i, f'id {i}'), 'share_pct': round(100 * float(m.sum()) / float(on.sum()), 1),
+                     'box': [int(xs[m].min()), int(ys[m].min()), int(xs[m].max()) + 1, int(ys[m].max()) + 1]})
+    return {'region': describe_region(r), 'pixels_on_product': int(on.sum()), 'mirrors': seen}
 
 
 def parse_region(r):
@@ -252,15 +288,16 @@ def check(a, tests):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('image'); ap.add_argument('cmd', choices=['summary', 'parts', 'stats', 'profile', 'delta-e', 'edge', 'grid', 'crop', 'check'])
+    ap.add_argument('image'); ap.add_argument('cmd', choices=['summary', 'parts', 'mirrors', 'stats', 'profile', 'delta-e', 'edge', 'grid', 'crop', 'check'])
     ap.add_argument('args', nargs='*'); ap.add_argument('--axis', default=None); ap.add_argument('--bins', type=int, default=8)
     ap.add_argument('--out'); ap.add_argument('--step', type=int, default=100); ap.add_argument('--scale', type=int, default=3)
-    o = ap.parse_args(); im, a = load(o.image); load_mask(o.image)
+    o = ap.parse_args(); im, a = load(o.image); load_mask(o.image); load_mirror(o.image)
     nums = lambda k: [float(v) for v in o.args[:k]]
     # a region is four numbers, or one argument naming a part ("part:NAME")
     reg = lambda: (o.args[0], o.args[1:]) if o.args and o.args[0].startswith('part:') else (nums(4), o.args[4:])
     if o.cmd == 'summary': res = summary(a)
     elif o.cmd == 'parts': res = parts(a)
+    elif o.cmd == 'mirrors': res = mirrors(a, reg()[0])
     elif o.cmd == 'stats': res = stats(a, reg()[0])
     elif o.cmd == 'profile': res = {'axis': o.axis or 'y', 'bins': profile(a, reg()[0], o.axis or 'y', o.bins)}
     elif o.cmd == 'delta-e': r, rest = reg(); res = delta_e(a, r, rest[0])

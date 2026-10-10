@@ -173,6 +173,24 @@ def main():
                                     f'from the test, so something else sets it')
                 notes.append(f'- the engine tuned `{tr["setting"]}` for {tr["change"]} ({tr["test"].get("metric")} {tr["test"].get("op")} '
                              f'{tr["test"].get("value")}) by proof renders: {tried}; {verdict}.')
+            mir = (rep.get('mirrors') or {}).get('parts') or {}
+            if mir:
+                tot = sum(v['pixels'] for v in mir.values())
+                L += ['## What the product\'s surfaces mirror', '',
+                      'A glossy part shows what lies along its mirror direction. The engine followed the camera\'s ray '
+                      f'through one pixel in {(rep.get("mirrors") or {}).get("step", 2) ** 2} to the part, reflected it about the '
+                      'surface\'s shading normal, and followed it to the first area lamp\'s face, panel (a panel shows only '
+                      'on the parts its light linking reaches), surface of the set or the product, or the sky. A highlight, '
+                      'a sheen or a dark band is whatever those pixels mirror: change that (its strength, ramp, position, '
+                      'size or colour), not a lamp they do not see. For any region, the measuring tool\'s `mirrors` command '
+                      'gives the same breakdown (`mirrors X0 Y0 X1 Y1`, or `mirrors part:NAME`), with where each share sits.', '',
+                      '| part | pixels | what its pixels mirror (share) |', '|---|---|---|']
+                for n, v in list(mir.items())[:14]:
+                    if v['pixels'] < 0.004 * tot:
+                        continue
+                    seen = ', '.join(f'{w} {sh * 100:.0f} %' for w, sh in v['seen'] if sh >= 0.03)
+                    L.append(f'| {n} | {v["pixels"]} | {seen} |')
+                L.append('')
             if notes:
                 L += ['## What the engine did and could not do in this render', '',
                       'A glint is placed from the surface the camera sees at its point: where that surface mirrors a part of '

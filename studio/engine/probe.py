@@ -180,3 +180,140 @@ def shadow_map(bpy, scene, cam, objs, part_of, pattern, match, box, out_png):
                 img[py - y0, li * bw + px - x0] = pal[what]; counts[key] = counts.get(key, 0) + 1
     Image.fromarray(img).save(out_png)
     return {'lamps': [l.name for l in lamps], 'counts': counts, 'colours': {k: list(v) for k, v in pal.items()}}
+
+
+class _Normals:
+    """The render's shading normal at a ray's hit: the corner normals of the hit face's triangle, interpolated at the
+    hit (smooth parts mirror as the render shades them, not facet by facet). Per object, cached."""
+    def __init__(self, dg):
+        self.dg, self.cache = dg, {}
+
+    def _mesh(self, ob):
+        import numpy as np
+        c = self.cache.get(ob.name)
+        if c is None:
+            me = ob.evaluated_get(self.dg).data
+            nt = len(me.loop_triangles)
+            poly = np.empty(nt, np.int64); me.loop_triangles.foreach_get('polygon_index', poly)
+            loops = np.empty(nt * 3, np.int64); me.loop_triangles.foreach_get('loops', loops)
+            verts = np.empty(nt * 3, np.int64); me.loop_triangles.foreach_get('vertices', verts)
+            co = np.empty(len(me.vertices) * 3); me.vertices.foreach_get('co', co)
+            cn = np.empty(len(me.corner_normals) * 3); me.corner_normals.foreach_get('vector', cn)
+            order = np.argsort(poly, kind='stable')
+            c = self.cache[ob.name] = {'poly': poly[order], 'tri': order, 'loops': loops.reshape(-1, 3),
+                                       'verts': verts.reshape(-1, 3), 'co': co.reshape(-1, 3), 'cn': cn.reshape(-1, 3)}
+        return c
+
+    def at(self, ob, index, loc, geo):
+        """The world-space shading normal of `ob` at `loc` on face `index`; `geo` (the face's normal) where the face
+        cannot be read or the two disagree by more than 40 degrees (a stale index)."""
+        import numpy as np
+        try:
+            c = self._mesh(ob)
+        except Exception:
+            return geo
+        lo, hi = np.searchsorted(c['poly'], [index, index + 1])
+        if hi <= lo:
+            return geo
+        Mi = ob.matrix_world.inverted(); p = Mi @ loc
+        best = None
+        for t in c['tri'][lo:hi]:
+            a, b, d = (Vector(c['co'][v]) for v in c['verts'][t])
+            v0, v1, v2 = b - a, d - a, p - a
+            d00, d01, d11, d20, d21 = v0.dot(v0), v0.dot(v1), v1.dot(v1), v2.dot(v0), v2.dot(v1)
+            den = d00 * d11 - d01 * d01
+            if abs(den) < 1e-18:
+                continue
+            w1 = (d11 * d20 - d01 * d21) / den; w2 = (d00 * d21 - d01 * d20) / den; w0 = 1 - w1 - w2
+            score = min(w0, w1, w2)
+            if best is None or score > best[0]:
+                best = (score, t, (w0, w1, w2))
+        if best is None:
+            return geo
+        _, t, w = best
+        n = sum((Vector(c['cn'][l]) * wi for l, wi in zip(c['loops'][t], w)), Vector())
+        n = (Mi.transposed().to_3x3() @ n)
+        if n.length < 1e-9:
+            return geo
+        n.normalize()
+        return n if math.degrees(n.angle(geo if n.dot(geo) >= 0 else -geo)) <= 40 else geo
+
+
+def mirror_map(bpy, scene, cam, objs, part_of, out_png, step=2):
+    """What every product pixel mirrors, for the critic: the camera's ray through each pixel (every `step`) is followed
+    to its part, reflected about the render's shading normal there, and followed again to the first thing it meets (an
+    area lamp's face, a panel that lights the part, a surface of the set or the product, or the sky). Writes `out_png`
+    (red = the id of what is mirrored, 0 off the product, at the frame's full size) and beside it a .json with the
+    legend; returns {'legend': {id: label}, 'step', 'parts': {part: {'pixels', 'seen': [[label, share], ...]}}}."""
+    import numpy as np
+    from PIL import Image
+    dg = bpy.context.evaluated_depsgraph_get()
+    W, H = scene.render.resolution_x, scene.render.resolution_y
+    M = cam.matrix_world; origin = M.translation
+    tr, br, bl, tl = [M @ v for v in cam.data.view_frame(scene=scene)]
+    parts = {o.name: part_of[o.name] for o in objs if not o.hide_render}
+    lamps = []
+    for o in scene.objects:
+        if o.type == 'LIGHT' and o.data.type == 'AREA' and o.data.specular_factor > 0 and not o.hide_render:
+            L = o.data
+            col = o.light_linking.receiver_collection
+            lamps.append((o.name, o.matrix_world.inverted(), o.matrix_world.to_3x3(), L.shape in ('DISK', 'ELLIPSE'), L.size / 2,
+                          (L.size_y if L.shape in ('RECTANGLE', 'ELLIPSE') else L.size) / 2,
+                          None if col is None else {x.name for x in col.objects}))
+    normals = _Normals(dg)
+    ids = np.zeros((H, W), np.uint8)
+    labels, counts = {}, {}
+    for py in range(0, H, step):
+        for px in range(0, W, step):
+            u, v = (px + 0.5) / W, (py + 0.5) / H
+            d = ((tl + (tr - tl) * u + (bl - tl) * v) - origin).normalized()
+            dist = 1e4; o = origin
+            while True:     # the camera's ray, through panels and hidden helpers (as _cast)
+                hit, loc, nrm, idx, hob, _ = scene.ray_cast(dg, o, d, distance=dist)
+                if hit and (hob.hide_render or hob.get('engine_light')):
+                    dist -= (loc - o).length; o = loc + d * 1e-4
+                    continue
+                break
+            if not hit or hob.name not in parts:
+                continue
+            geo = nrm if nrm.dot(d) < 0 else -nrm
+            n = normals.at(hob, idx, loc, geo)
+            if n.dot(d) > 0:
+                n = -n
+            r = (d - 2 * d.dot(n) * n).normalized()
+            o2 = loc + geo * 1e-4
+            hit2, loc2, _, hob2 = _cast(scene, dg, o2, r, through_panels=False, receiver=hob.name)
+            best, what = ((loc2 - o2).length, ('panel ' if hob2.get('engine_light') else '') + _clean(hob2.name)) if hit2 \
+                else (math.inf, 'world (sky)')
+            for name, Mi, M3, round_, sx, sy, recv in lamps:
+                if recv is not None and hob.name not in recv:
+                    continue
+                ol, dl = Mi @ o2, Mi.to_3x3() @ r
+                if abs(dl.z) < 1e-9 or ol.z >= 0:
+                    continue
+                t = -ol.z / dl.z
+                if t <= 1e-6:
+                    continue
+                q = ol + dl * t
+                if (round_ and (q.x / sx) ** 2 + (q.y / sy) ** 2 <= 1) or (not round_ and abs(q.x) <= sx and abs(q.y) <= sy):
+                    tw = t * (M3 @ dl).length
+                    if tw < best:
+                        best, what = tw, f'lamp {name}'
+            if what not in labels:
+                if len(labels) >= 254:
+                    what = 'other'
+                labels.setdefault(what, len(labels) + 1)
+            ids[py:py + step, px:px + step] = labels[what]
+            pc = counts.setdefault(parts[hob.name], {})
+            pc[what] = pc.get(what, 0) + 1
+    Image.fromarray(np.stack([ids, ids, ids], -1)).save(out_png)
+    summary = {}
+    for p, c in sorted(counts.items(), key=lambda kv: -sum(kv[1].values())):
+        n = sum(c.values())
+        summary[p] = {'pixels': n * step * step,
+                      'seen': [[w, round(k / n, 3)] for w, k in sorted(c.items(), key=lambda kv: -kv[1])[:6]]}
+    res = {'legend': {str(i): w for w, i in labels.items()}, 'step': step, 'parts': summary}
+    from pathlib import Path
+    import json
+    Path(out_png).with_suffix('.json').write_text(json.dumps(res, indent=1) + '\n')
+    return res

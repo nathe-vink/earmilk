@@ -248,6 +248,12 @@ def main():
 
     report['parts_2d'] = _parts_2d(scene, cam, objs, part_of)
     if a.masks:
+        # what each product pixel mirrors (probe.py), before the mask pass overrides the materials and hides the lamps:
+        # the critic reads which lamp, panel or surface draws a reflection instead of guessing (03's round 8 graded
+        # rim_left for the waveguide's wall, which mirrors the top panel)
+        import probe as Pb
+        mm = Pb.mirror_map(bpy, scene, cam, objs, part_of, str(out.with_suffix('.mirror.png')))
+        report['mirrors'] = {'image': str(out.with_suffix('.mirror.png')), 'step': mm['step'], 'parts': mm['parts']}
         report['masks'] = _masks(bpy, scene, objs, part_of, out)
     S.save(sh, out.with_suffix('.shot.json'))
     out.with_suffix('.report.json').write_text(json.dumps(report, indent=1, default=str) + '\n')
