@@ -1,0 +1,222 @@
+{
+ "stage1": {
+  "impression": "A clean, noise-free exploded view whose milk-carton concept reads at once, but it is lit flat and grey: the white body reads light grey against a dull mid-grey sweep, so nothing pops and it looks like a default studio. The baffle with the drivers is seen almost edge-on while the blank side panel takes most of the product, the explode axes wander, and the thin gaskets and the glossy red cap read as stray shapes rather than parts.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The side-left, the largest product face, at median 190-200 with its top band under 224 and a step of 18 levels or more to the front baffle; now 182 (205 top band to 171 foot) against 217.",
+  "The insert's bowl reads as one continuous gradient, with no dark gap but the self-reflection streak by the rim: lum_p5 of 80 or more on its lower wall [1003,315,1035,360] (now 61), under the 166 drivers stripe.",
+  "The insert's shade red within about 5 dE of the gable's at the same luminance, with no clipped blue: now [173,38,0] against [170,33,37], dE 8.75, and 24% of its red pixels at b = 0.",
+  "The white lacquer shows a shaped reflection (a soft strip or gradient on the side-left, the face still under 226): today the side-left and front baffle mirror the grey floor (76% and 87% of their pixels) and read as matte card.",
+  "The drivers and baffle read face-on enough to show their cones and the pocket's boss bore reads: they are seen 67 degrees off their axis (12 in ring a 60 x 226 px ellipse, mid cone 23 px wide), and the pocket shows only its magnets (33 px).",
+  "The cast letters read as metal: now a dull pinkish grey (median [150,133,132], lum about 137) with no bright edge."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The side-left, the largest product face (79,923 px), reads light grey, not white: it sits under the 200-220 band a white lacquer needs while the front baffle beside it is at 217, and nothing on the cabinet reaches white (frame p99 211).",
+   "evidence": {
+    "region": [
+     300,
+     380,
+     440,
+     600
+    ],
+    "measured": "lum_median 182 (p5 173, p95 192), rgb [182,182,182]; y-profile over [300,270,440,690] 206, 198, 191, 186, 181, 177, 174, 171; front-baffle strip [466,300,482,620] median 217; the corner steps 188 to 181 to 223. Its direct light is the key grazing it from above (the face mirrors the key at x -0.45..-0.24, y -0.57..-0.21, z 0.52..0.79, just off its upper half, facing down and away) plus the fill at about 0.36 incidence."
+   },
+   "change": {
+    "setting": "lights.side_fill",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.0,
+      1.2
+     ],
+     "position": [
+      -1.2,
+      -1.8,
+      0.85
+     ],
+     "target": [
+      -0.06,
+      -0.19,
+      0.48
+     ],
+     "irradiance": 0.32,
+     "color": 6150,
+     "specular": 0.3,
+     "shadow_on_set": 0.4
+    }
+   },
+   "expected": "A soft, set-wide fill from camera-left, 2 m out and level with the face's upper third, lifts the side-left by about 13: middle band 182 to about 195, top band 205 to about 216 (under the 226 knee), foot 171 to about 185. The top-to-foot falloff stays about 31-35, so round 11's c4 window of 28-36 holds, and the foot now gets light that the floor beside it also gets. The lamp is behind the front baffle's plane, so the baffle stays about 217 and the corner keeps a step of about 20; the floor left of the base lifts about 8 (118 to about 126), and its long shadow behind the cabinet is held at 40% on the sweep. It does not undo round 11's sky cut, since it never reaches the baffle.",
+   "accept": {
+    "region": [
+     300,
+     380,
+     440,
+     600
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     190,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The waveguide insert's bowl, the hero of this frame, reads crumpled: between the hot stripe where it mirrors the drivers panel and its lower wall runs a jagged dark Z, where it mirrors the sweep past the small bowl_sheen panel's edges and the panel's own zero end.",
+   "evidence": {
+    "region": [
+     1003,
+     315,
+     1035,
+     360
+    ],
+    "measured": "lum_p5 61, median 106, p95 141, with 97% of its pixels mirroring bowl_sheen. On the bowl, luminance follows the ramp: where it mirrors z 1.50-1.65 (value 0) lum 50, 1.65-1.75 lum 76, 1.85-1.95 lum 112, 2.10-2.50 lum 143. Across the bowl's red pixels: sweep 1,711 px at lum 64 (met on the back wall at x 2.2-6.1, z 1.6-5.9, just past the 0.66 x 1.0 m panel's sides and top), self-reflection 904 px at 69, drivers panel 1,407 px at 166 [246,144,141]."
+   },
+   "change": {
+    "setting": "lights.bowl_sheen",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      0.66,
+      1
+     ],
+     "position": [
+      1.67,
+      1.15,
+      2
+     ],
+     "target": [
+      0.97,
+      -0.3,
+      0.92
+     ],
+     "strength": 2.5128,
+     "color": 6150,
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       1.65,
+       2.15
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "waveguide-insert"
+     ]
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.5,
+      1.5
+     ],
+     "position": [
+      1.5,
+      0.85,
+      1.75
+     ],
+     "target": [
+      0.97,
+      -0.3,
+      0.92
+     ],
+     "strength": 2.5128,
+     "color": 6150,
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       1.15,
+       2.35
+      ],
+      "values": [
+       0.3,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "waveguide-insert"
+     ]
+    }
+   },
+   "expected": "The panel moves 0.43 m nearer along the same line (its reflection stays centred where it is) and grows to 1.5 x 1.5 m, about 27 degrees half-width seen from the bowl, which covers the sweep-gap directions (21-26 degrees off its centre). The ramp runs 0.3 to 1 over its height, so nothing the bowl sees is black. The Z (lum 50-75) lifts to about 95-110 and the far wall reads as one gradient from about 100 to about 145 under the 166 drivers stripe; the self-reflection streak by the left rim stays about 60 and keeps the concavity. This finishes round 11's c3, which moved the zero lower for the same flat dark step, rather than reversing it: with no zero left, the step cannot return. The flush rim, now [173,38,0] mirroring the sweep, will mirror the panel's lower edge and lighten to about lum 90.",
+   "accept": {
+    "region": [
+     1003,
+     315,
+     1035,
+     360
+    ],
+    "metric": "lum_p5",
+    "op": "between",
+    "value": [
+     80,
+     108
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "The insert's red turns orange in shade: the retouch read its lit face off reflection-washed pink highlights and applied chroma x1.432 and hue +6.5 deg to the whole part, which drives its shade pixels' blue channel to zero.",
+   "evidence": {
+    "region": [
+     978,
+     322,
+     988,
+     332
+    ],
+    "measured": "Self-reflection streak rgb [157,38,0], b_median 0; 92 of its 100 px mirror the insert itself, so c2 leaves it alone. 24.3% of the insert's red pixels have b = 0 (gable, plinths and pull-loop 0%). Its rim (insert pixels in [1040,340,1068,395]) reads [173,38,0] against the gable's [170,33,37] at the same lum 63: dE2000 8.75, Lab b* 51 vs 34. Retouch table: insert before 9.43, after 3.45, chroma x1.432, hue +6.5 deg; every other paint moved chroma x0.88-0.99 and hue under 3.5 deg."
+   },
+   "change": {
+    "setting": "retouch.match",
+    "from": 1,
+    "to": 0.4
+   },
+   "expected": "The insert's correction drops to about chroma x1.17 and hue +2.6 deg. The streak goes to about [150,47,25], red pixels at b = 0 fall from 24% to under 3%, and the shade red sits about 5 dE from the gable's instead of 8.75. Gable, plinths and pull-loop move under 1 dE, since their corrections were small. The insert's lit face, which is mirrored panel light, reads slightly pinker (dE 3.45 to about 5), as a highlight on red gloss should.",
+   "accept": {
+    "region": [
+     978,
+     322,
+     988,
+     332
+    ],
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     14,
+     40
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Look down the pocket's drawer axis (camera well toward +x, in front of the roof slope) so the boss bore reads.",
+   "why": "The pocket is seen 67 degrees off its axis, so only the magnets (33 px) show and the bore does not; but that camera looks along every explode axis and stacks the insert, tweeter, drivers and rings over the cabinet, which the frame's purpose rules out (every part distinct, nothing overlapping)."
+  },
+  {
+   "request": "Thicker or lighter trim rings.",
+   "why": "At this angle the rings are thin dark ellipses (woofer-ring box 60 x 226 px, lum 60; mid-ring lum 54) that read as stray lines; but they are the drivers' own trim rings, mounted as the owner decided."
+  },
+  {
+   "request": "Bring the tweeter onto the line from the pocket to the insert.",
+   "why": "It hangs about 25 px above that line, so the top row reads as a second explode direction; but it travels on the axis of its own screws, which the card fixes."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
