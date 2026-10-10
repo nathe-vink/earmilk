@@ -189,8 +189,7 @@ the power with the other ray type off (as a panel's fractions do); a glint lamp 
 ignores a lamp's diffuse and specular factors, which are EEVEE's (a test scene renders the same at 0 and at 1), so
 until 2026-10-10 every share rendered at full strength: a fill at specular 0.1 mirrored at its whole radiance (03's
 waveguide band), a lamp at specular 0 laid a pale plate across 08b's bowl (gone with the fix), and every glint lamp lit
-its part as well as glinting on it. `EARMILK_LAMP_SHARES=1` turns the shares on for jobs begun after the fix; it becomes
-the default once the jobs begun before it have finished.
+its part as well as glinting on it. The shares are the default (`EARMILK_LAMP_SHARES=0` keeps the old rendering).
 
 ## What the engine makes exact
 

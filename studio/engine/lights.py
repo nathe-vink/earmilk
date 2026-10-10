@@ -261,8 +261,8 @@ def lamp_shares(bpy, ob, spec):
     the power that only lights (or only reflects), as a panel's does. Until 2026-10-10 every lamp's shares rendered at
     full strength: a fill at specular 0.1 mirrored at its whole radiance (03's waveguide band), a lamp at specular 0 laid a
     pale plate across 08b's bowl, and every glint lamp lit its part as well as glinting on it. Returns the twins' names
-    (in ob['engine_twins']); EARMILK_LAMP_SHARES=0 keeps the old rendering, for a job whose proofs began under it."""
-    if os.environ.get('EARMILK_LAMP_SHARES', '0') != '1':
+    (in ob['engine_twins']); the default since 2026-10-10 04:00 (EARMILK_LAMP_SHARES=0 keeps the old rendering)."""
+    if os.environ.get('EARMILK_LAMP_SHARES', '1') != '1':
         return []
     d, s = _share(spec.get('diffuse', 1.0)), _share(spec.get('specular', 1.0))
     if d >= 1.0 and s >= 1.0:
