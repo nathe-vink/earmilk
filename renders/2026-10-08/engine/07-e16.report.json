@@ -1,0 +1,3930 @@
+{
+ "shot": "studio/shots/earmilk/07.json",
+ "image": "renders/2026-10-08/engine/07-e16.png",
+ "seconds": {
+  "build": 16.8,
+  "render": 0.0
+ },
+ "samples": 192,
+ "size": [
+  1350,
+  900
+ ],
+ "applied": [],
+ "pending": [],
+ "sets": [],
+ "glints": [
+  {
+   "glint": "0",
+   "on": "seen surface (gable-block#0)",
+   "moved_mm": 5.0,
+   "normal_off_deg": 17.2
+  }
+ ],
+ "sun_aim": null,
+ "flags_crossing_set": [],
+ "tuning": [
+  {
+   "change": "c6",
+   "setting": "lights.key.orbit.distance_m",
+   "test": {
+    "metric": "falloff",
+    "op": "between",
+    "value": [
+     12,
+     30
+    ]
+   },
+   "proofs": [
+    [
+     1.5,
+     8.0
+    ],
+    [
+     2.0,
+     4.7
+    ],
+    [
+     0.6667,
+     18.0
+    ]
+   ],
+   "set": 0.6667,
+   "passes": true,
+   "moves_the_test": true
+  },
+  {
+   "change": "c4",
+   "setting": "lights.drivers.strength",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     22,
+     60
+    ]
+   },
+   "proofs": [
+    [
+     1.0,
+     40.6
+    ],
+    [
+     2.0,
+     41.6
+    ]
+   ],
+   "set": 1.0,
+   "passes": true,
+   "moves_the_test": true
+  },
+  {
+   "change": "c5",
+   "setting": "lights.sweep.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     170,
+     192
+    ]
+   },
+   "proofs": [
+    [
+     1.5,
+     196.2
+    ],
+    [
+     2.5,
+     214.4
+    ],
+    [
+     0.6648,
+     177.8
+    ]
+   ],
+   "set": 0.6648,
+   "passes": true,
+   "moves_the_test": true
+  },
+  {
+   "change": "c8",
+   "setting": "lights.gloss.strength",
+   "test": {
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     115,
+     200
+    ]
+   },
+   "proofs": [
+    [
+     1.0,
+     94.2
+    ],
+    [
+     2.0,
+     118.2
+    ],
+    [
+     3.6375,
+     143.7
+    ]
+   ],
+   "set": 3.6375,
+   "passes": true,
+   "moves_the_test": true
+  },
+  {
+   "change": "c4",
+   "setting": "lights.fill.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     208,
+     222
+    ]
+   },
+   "proofs": [
+    [
+     1.7,
+     215.0
+    ],
+    [
+     2.1,
+     226.3
+    ],
+    [
+     1.7,
+     215.0
+    ]
+   ],
+   "set": 1.7,
+   "passes": true,
+   "moves_the_test": true
+  },
+  {
+   "change": "c5",
+   "setting": "lights.gloss.strength",
+   "test": {
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     64,
+     88
+    ]
+   },
+   "proofs": [
+    [
+     1.2,
+     66.0
+    ],
+    [
+     2.0,
+     88.0
+    ],
+    [
+     1.5636,
+     77.0
+    ]
+   ],
+   "set": 1.5636,
+   "passes": true,
+   "moves_the_test": true
+  },
+  {
+   "change": "c1",
+   "setting": "lights.drivers.strength",
+   "test": {
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     100,
+     160
+    ]
+   },
+   "proofs": [
+    [
+     5.0,
+     98.8
+    ],
+    [
+     10.0,
+     126.9
+    ],
+    [
+     10.5516,
+     129.9
+    ]
+   ],
+   "set": 10.5516,
+   "passes": true,
+   "moves_the_test": true
+  },
+  {
+   "change": "c1",
+   "setting": "lights.floor.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     138,
+     158
+    ]
+   },
+   "proofs": [
+    [
+     0.7,
+     139.8
+    ],
+    [
+     1.3,
+     154.1
+    ],
+    [
+     1.0441,
+     148.1
+    ]
+   ],
+   "set": 1.0441,
+   "passes": true,
+   "moves_the_test": true
+  },
+  {
+   "change": "c2",
+   "setting": "lights.key.orbit.azimuth_deg",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     179,
+     195
+    ]
+   },
+   "proofs": [
+    [
+     -60.0,
+     201.0
+    ],
+    [
+     -68.0,
+     198.9
+    ],
+    [
+     -84.0,
+     194.9
+    ]
+   ],
+   "set": -84.0,
+   "passes": true,
+   "moves_the_test": true
+  },
+  {
+   "change": "c1",
+   "setting": "lights.drivers.diffuse",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     224,
+     238
+    ]
+   },
+   "proofs": [
+    [
+     0.08,
+     238.4
+    ],
+    [
+     0.25,
+     238.4
+    ]
+   ],
+   "set": 0.08,
+   "passes": false,
+   "moves_the_test": false
+  },
+  {
+   "change": "c2",
+   "setting": "lights.key.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     184,
+     196
+    ]
+   },
+   "proofs": [
+    [
+     2.2,
+     197.6
+    ],
+    [
+     2.9,
+     203.5
+    ],
+    [
+     1.2983,
+     189.4
+    ]
+   ],
+   "set": 1.2983,
+   "passes": true,
+   "moves_the_test": true
+  },
+  {
+   "change": "c3",
+   "setting": "lights.insert_kick.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     178,
+     200
+    ]
+   },
+   "proofs": [
+    [
+     0.5,
+     164.6
+    ],
+    [
+     1.2,
+     177.2
+    ],
+    [
+     1.8556,
+     187.5
+    ]
+   ],
+   "set": 0.5,
+   "passes": false,
+   "moves_the_test": true
+  },
+  {
+   "change": "c4",
+   "setting": "lights.top.irradiance",
+   "test": {
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     202,
+     222
+    ]
+   },
+   "proofs": [
+    [
+     0.5,
+     218.0
+    ],
+    [
+     0.9,
+     224.0
+    ],
+    [
+     0.1,
+     211.0
+    ]
+   ],
+   "set": 0.1,
+   "passes": true,
+   "moves_the_test": true
+  },
+  {
+   "change": "c5",
+   "setting": "lights.motor_strip.strength",
+   "test": {
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     50,
+     100
+    ]
+   },
+   "proofs": [
+    [
+     2.0,
+     19.9
+    ],
+    [
+     5.0,
+     21.4
+    ],
+    [
+     11.0,
+     24.1
+    ]
+   ],
+   "set": 11.0,
+   "passes": false,
+   "moves_the_test": true
+  },
+  {
+   "change": "c1",
+   "setting": "lights.drivers.diffuse",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     224,
+     238
+    ]
+   },
+   "proofs": [
+    [
+     0.15,
+     216.7
+    ],
+    [
+     0.22,
+     221.5
+    ],
+    [
+     0.3585,
+     228.5
+    ]
+   ],
+   "set": 0.3585,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c4"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e6-r6.json",
+   "shot_sha": "6daceda0054dee48095d409b9b25f0efa25ac8a6"
+  },
+  {
+   "change": "c2",
+   "setting": "lights.key.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     184,
+     196
+    ]
+   },
+   "proofs": [
+    [
+     2.5,
+     190.8
+    ],
+    [
+     2.8,
+     193.7
+    ],
+    [
+     2.4172,
+     190.0
+    ]
+   ],
+   "set": 2.4172,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c4"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e6-r6.json",
+   "shot_sha": "76029bb2f5f1f97db6d1b6547c2fd7dbd8bb1e33"
+  },
+  {
+   "change": "c4",
+   "setting": "lights.top.irradiance",
+   "test": {
+    "metric": "r_median",
+    "op": "between",
+    "value": [
+     202,
+     222
+    ]
+   },
+   "proofs": [
+    [
+     0.7,
+     218.0
+    ],
+    [
+     0.9,
+     221.0
+    ],
+    [
+     0.3,
+     212.0
+    ]
+   ],
+   "set": 0.3,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c4"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e6-r6.json",
+   "shot_sha": "cbb7296a5013c92a765ef8d65d09188acf709de0"
+  },
+  {
+   "change": "c3",
+   "setting": "lights.insert_kick.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     178,
+     200
+    ]
+   },
+   "proofs": [
+    [
+     0.8,
+     155.4
+    ],
+    [
+     1.2,
+     162.7
+    ],
+    [
+     2.0,
+     176.6
+    ]
+   ],
+   "set": 2.0,
+   "passes": false,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c4"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e6-r6.json",
+   "shot_sha": "c294f72f42279b78b577fa8b98dda181d661abc6"
+  },
+  {
+   "change": "c5",
+   "setting": "lights.motor_strip.strength",
+   "test": {
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     50,
+     100
+    ]
+   },
+   "proofs": [
+    [
+     3.0,
+     28.1
+    ],
+    [
+     8.0,
+     37.4
+    ],
+    [
+     18.0,
+     56.6
+    ]
+   ],
+   "set": 18.0,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c4",
+    "c5"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e6-r6.json",
+   "shot_sha": "7f5b0cb8019d5d0576a44d952437de129edebce3"
+  },
+  {
+   "change": "c2",
+   "setting": "lights.drivers.diffuse",
+   "test": {
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     216,
+     227
+    ]
+   },
+   "proofs": [
+    [
+     0.1,
+     226.6
+    ],
+    [
+     0.16,
+     229.2
+    ],
+    [
+     0.0333,
+     224.1
+    ]
+   ],
+   "set": 0.1,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c3"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e8-r7.json",
+   "shot_sha": "6511ca0dbda419f261a8df402966da50c13ae792"
+  },
+  {
+   "change": "c3",
+   "setting": "lights.gloss.ramp.at_m.0",
+   "test": {
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     52,
+     66
+    ]
+   },
+   "proofs": [
+    [
+     2.0,
+     65.0
+    ],
+    [
+     2.15,
+     42.0
+    ],
+    [
+     2.0391,
+     61.0
+    ]
+   ],
+   "set": 2.0391,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c3"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e8-r7.json",
+   "shot_sha": "56a61006e03b16f67a10fe2cbeea9f122898d9fe"
+  },
+  {
+   "change": "c4",
+   "setting": "render.white_balance_k",
+   "test": {
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     193,
+     197
+    ]
+   },
+   "proofs": [
+    [
+     6200.0,
+     192.0
+    ],
+    [
+     6400.0,
+     189.0
+    ],
+    [
+     6000.0,
+     196.0
+    ]
+   ],
+   "set": 6000.0,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c3",
+    "c4"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e8-r7.json",
+   "shot_sha": "b6d55bf38c263db24bb23d8336294a32c4f765b3"
+  },
+  {
+   "change": "c1",
+   "setting": "lights.bg_pool.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     138,
+     155
+    ]
+   },
+   "proofs": [
+    [
+     1.2,
+     142.9
+    ],
+    [
+     2.0,
+     157.0
+    ],
+    [
+     1.4043,
+     146.8
+    ]
+   ],
+   "set": 1.4043,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c3",
+    "c5",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e9-r8.json",
+   "shot_sha": "5886a658f82ddfa85e5b65e13ca112a67c65566d"
+  },
+  {
+   "change": "c2",
+   "setting": "lights.low_fill.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     189,
+     198
+    ]
+   },
+   "proofs": [
+    [
+     0.35,
+     184.9
+    ],
+    [
+     0.7,
+     193.0
+    ]
+   ],
+   "set": 0.7,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c3",
+    "c5",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e9-r8.json",
+   "shot_sha": "a458e822e864f966ec775fdbd4e8b2ba9c7ae2d4"
+  },
+  {
+   "change": "c3",
+   "setting": "lights.plinth_sheen.strength",
+   "test": {
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     22,
+     38
+    ]
+   },
+   "proofs": [
+    [
+     0.3,
+     21.0
+    ],
+    [
+     0.6,
+     32.0
+    ],
+    [
+     0.5455,
+     30.0
+    ]
+   ],
+   "set": 0.5455,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c3",
+    "c5",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e9-r8.json",
+   "shot_sha": "3738896d5d8a3534565c7d1cc712e9097b81f334"
+  },
+  {
+   "change": "c4",
+   "setting": "lights.mid_kick.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     66,
+     90
+    ]
+   },
+   "proofs": [
+    [
+     1.0,
+     58.3
+    ],
+    [
+     2.0,
+     67.8
+    ],
+    [
+     3.0737,
+     76.3
+    ]
+   ],
+   "set": 3.0737,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c3",
+    "c4",
+    "c5",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e9-r8.json",
+   "shot_sha": "60a82f7f5397fcdbfc44d076fae273292ba9056e"
+  },
+  {
+   "change": "c5",
+   "setting": "render.white_balance_k",
+   "test": {
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     177,
+     182
+    ]
+   },
+   "proofs": [
+    [
+     6200.0,
+     181.0
+    ],
+    [
+     6400.0,
+     178.0
+    ],
+    [
+     6300.0,
+     180.0
+    ]
+   ],
+   "set": 6300.0,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c3",
+    "c4",
+    "c5",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e9-r8.json",
+   "shot_sha": "bbd5e08184a0e0eaca368b2cacb3673ebad30a22"
+  },
+  {
+   "change": "c6",
+   "setting": "lights.letters_sheen.strength",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     95,
+     150
+    ]
+   },
+   "proofs": [
+    [
+     0.3,
+     120.7
+    ],
+    [
+     0.6,
+     154.4
+    ],
+    [
+     0.316,
+     123.1
+    ]
+   ],
+   "set": 0.316,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c3",
+    "c4",
+    "c5",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e9-r8.json",
+   "shot_sha": "13420096638d3e5fa0421f0a069ef1f199e33b14"
+  },
+  {
+   "change": "c2",
+   "setting": "render.white_balance_tint",
+   "test": {
+    "metric": "delta_e",
+    "op": "<=",
+    "value": 1.2
+   },
+   "proofs": [
+    [
+     3.0,
+     2.5
+    ],
+    [
+     7.0,
+     2.56
+    ],
+    [
+     1.0,
+     3.34
+    ]
+   ],
+   "set": 3.0,
+   "passes": false,
+   "moves_the_test": true,
+   "asked": [
+    10,
+    4
+   ],
+   "passing": [
+    "c1",
+    "c3",
+    "c4"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e10-r9.json",
+   "shot_sha": "4b08c22a9e58f96b00d47c0359d695517e4f5ed9"
+  },
+  {
+   "change": "c4",
+   "setting": "lights.insert_kick.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     196,
+     210
+    ]
+   },
+   "proofs": [
+    [
+     2.5,
+     194.0
+    ],
+    [
+     3.5,
+     211.4
+    ],
+    [
+     3.0172,
+     204.1
+    ]
+   ],
+   "set": 3.0172,
+   "passes": true,
+   "moves_the_test": true,
+   "asked": [
+    2,
+    3
+   ],
+   "passing": [
+    "c1",
+    "c3",
+    "c4"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e10-r9.json",
+   "shot_sha": "cc42522b938a1a49fb6ebf24258e5796b3da4cee"
+  },
+  {
+   "change": "c5",
+   "setting": "lights.bowl_sheen.strength",
+   "test": {
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     120,
+     170
+    ]
+   },
+   "proofs": [
+    [
+     2.0,
+     90.2
+    ],
+    [
+     4.0,
+     90.2
+    ]
+   ],
+   "set": 2.0,
+   "passes": false,
+   "moves_the_test": false,
+   "passing": [
+    "c1",
+    "c3",
+    "c4"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e10-r9.json",
+   "shot_sha": "3f01e18030f8b5541bed87bffcd52d55fa60baee"
+  },
+  {
+   "change": "c7",
+   "setting": "lights.low_fill.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     199,
+     206
+    ]
+   },
+   "proofs": [
+    [
+     0.9,
+     204.9
+    ],
+    [
+     1.3,
+     211.1
+    ],
+    [
+     0.7452,
+     201.9
+    ]
+   ],
+   "set": 0.7452,
+   "passes": true,
+   "moves_the_test": true,
+   "asked": [
+    0.7,
+    1.1
+   ],
+   "passing": [
+    "c1",
+    "c3",
+    "c4",
+    "c7"
+   ],
+   "reply": "critic/rounds/2026-10-09/shot-07-e10-r9.json",
+   "shot_sha": "0193faaab4b6ab5481f3f7a8cd4f8e6917cc9513"
+  },
+  {
+   "change": "c1",
+   "setting": "lights.bowl_sheen.strength",
+   "test": {
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     118,
+     170
+    ]
+   },
+   "proofs": [
+    [
+     2.0,
+     137.3
+    ],
+    [
+     3.5,
+     156.9
+    ],
+    [
+     2.5128,
+     145.4
+    ]
+   ],
+   "set": 2.5128,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c4",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e11-r10.json",
+   "shot_sha": "6b442099af5b4bcf655a3de3c46ef4ddd8aa1b43"
+  },
+  {
+   "change": "c3",
+   "setting": "lights.plinth_fill.irradiance",
+   "test": {
+    "metric": "delta_e",
+    "op": "<=",
+    "value": 3.0
+   },
+   "proofs": [
+    [
+     0.9,
+     4.85
+    ],
+    [
+     1.5,
+     3.4
+    ],
+    [
+     2.0793,
+     2.0
+    ]
+   ],
+   "set": 2.0793,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c3",
+    "c4",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e11-r10.json",
+   "shot_sha": "6826a37ddb6057837915172d972cf83ee5e0f57e"
+  },
+  {
+   "change": "c4",
+   "setting": "lights.tweeter_kick.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     100,
+     140
+    ]
+   },
+   "proofs": [
+    [
+     1.8,
+     97.9
+    ],
+    [
+     3.2,
+     106.4
+    ],
+    [
+     5.44,
+     118.9
+    ]
+   ],
+   "set": 5.44,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c3",
+    "c4",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e11-r10.json",
+   "shot_sha": "ca8ed1b66e376be36ede9b8d09783e1800b11c29"
+  },
+  {
+   "change": "c6",
+   "setting": "glints.0.power_w",
+   "test": {
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     195,
+     250
+    ]
+   },
+   "proofs": [
+    [
+     1.5,
+     187.3
+    ],
+    [
+     3.0,
+     204.6
+    ],
+    [
+     4.552,
+     214.5
+    ]
+   ],
+   "set": 4.552,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c3",
+    "c4",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e11-r10.json",
+   "shot_sha": "290e54522a733c3311693e02889d0dac5a755213"
+  },
+  {
+   "change": "c3",
+   "setting": "lights.plinth_fill.irradiance",
+   "test": {
+    "metric": "delta_e",
+    "op": "<=",
+    "value": 3.0
+   },
+   "proofs": [
+    [
+     0.9,
+     5.93
+    ],
+    [
+     1.8,
+     3.5
+    ],
+    [
+     2.3556,
+     2.26
+    ]
+   ],
+   "set": 2.3556,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c3",
+    "c4",
+    "c5",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e11-r10.json",
+   "shot_sha": "f5ec1c50796f169d3b214398c041cbcb45c61b23"
+  },
+  {
+   "change": "c6",
+   "setting": "glints.0.power_w",
+   "test": {
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     195,
+     250
+    ]
+   },
+   "proofs": [
+    [
+     3.0,
+     209.9
+    ],
+    [
+     6.0,
+     231.6
+    ],
+    [
+     4.7419,
+     224.4
+    ]
+   ],
+   "set": 4.7419,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c3",
+    "c4",
+    "c5",
+    "c6"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e11-r10.json",
+   "shot_sha": "4c6369bef5bc06fc129f2ba7dec08c68e8948f06"
+  },
+  {
+   "change": "c1",
+   "setting": "sky.strength",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     214,
+     225
+    ]
+   },
+   "proofs": [
+    [
+     0.38,
+     227.0
+    ],
+    [
+     0.3,
+     224.0
+    ],
+    [
+     0.18,
+     219.0
+    ]
+   ],
+   "set": 0.18,
+   "passes": true,
+   "moves_the_test": true,
+   "asked": [
+    0.55,
+    0.38
+   ],
+   "passing": [
+    "c1",
+    "c2",
+    "c3",
+    "c4"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e13-r11.json",
+   "shot_sha": "1a2c89a77795840a8768fe6ff848e07cfdc85e14"
+  },
+  {
+   "change": "c2",
+   "setting": "lights.floor_shadow.irradiance",
+   "test": {
+    "metric": "falloff",
+    "op": "between",
+    "value": [
+     -30,
+     -15
+    ]
+   },
+   "proofs": [
+    [
+     0.6,
+     -17.6
+    ],
+    [
+     1.0,
+     -21.7
+    ]
+   ],
+   "set": 1.0,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2",
+    "c3",
+    "c4"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e13-r11.json",
+   "shot_sha": "45b4d1666bf6bde53cf99165ee20731ac921824c"
+  },
+  {
+   "change": "c4",
+   "setting": "lights.low_fill.irradiance",
+   "test": {
+    "metric": "falloff",
+    "op": "between",
+    "value": [
+     28,
+     36
+    ]
+   },
+   "proofs": [
+    [
+     0.52,
+     34.0
+    ],
+    [
+     0.4,
+     37.0
+    ],
+    [
+     0.6,
+     33.0
+    ]
+   ],
+   "set": 0.6,
+   "passes": true,
+   "moves_the_test": true,
+   "asked": [
+    0.745,
+    0.52
+   ],
+   "passing": [
+    "c1",
+    "c2",
+    "c3",
+    "c4"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e13-r11.json",
+   "shot_sha": "3c325cc7e9cdb2665f718b366db79f1236455df3"
+  },
+  {
+   "change": "c1",
+   "setting": "lights.side_fill.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     190,
+     200
+    ]
+   },
+   "proofs": [
+    [
+     0.32,
+     197.0
+    ],
+    [
+     0.45,
+     202.0
+    ],
+    [
+     0.268,
+     194.0
+    ]
+   ],
+   "set": 0.268,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e14-r12.json",
+   "shot_sha": "449ce229ac11ee49a9133714329948dd687708b6"
+  },
+  {
+   "change": "c2",
+   "setting": "lights.bowl_sheen.strength",
+   "test": {
+    "metric": "lum_p5",
+    "op": "between",
+    "value": [
+     80,
+     108
+    ]
+   },
+   "proofs": [
+    [
+     2.5,
+     110.4
+    ],
+    [
+     3.5,
+     118.7
+    ],
+    [
+     0.5241,
+     84.6
+    ]
+   ],
+   "set": 0.5241,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c2"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e14-r12.json",
+   "shot_sha": "afe5dea8c3971d79bcfcf6f545673f7b1fc71546"
+  },
+  {
+   "change": "c3",
+   "setting": "retouch.match",
+   "test": {
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     14,
+     40
+    ]
+   },
+   "proofs": [
+    [
+     0.4,
+     2.0
+    ],
+    [
+     0.25,
+     3.0
+    ],
+    [
+     0.0833,
+     5.0
+    ]
+   ],
+   "set": 0.0833,
+   "passes": false,
+   "moves_the_test": true,
+   "asked": [
+    1,
+    0.4
+   ],
+   "passing": [
+    "c1",
+    "c2"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e14-r12.json",
+   "shot_sha": "ee7441e5f9170da5d87e24dad8e6dd6b2bca911c"
+  },
+  {
+   "change": "c4",
+   "setting": "lights.key.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     200,
+     220
+    ]
+   },
+   "proofs": [
+    [
+     2.5,
+     211.0
+    ],
+    [
+     3.0,
+     223.0
+    ],
+    [
+     2.4583,
+     210.0
+    ]
+   ],
+   "set": 2.4583,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c11",
+    "c12",
+    "c2",
+    "c3",
+    "c4",
+    "c5",
+    "c8",
+    "c9"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e15-r14.json",
+   "shot_sha": "817662c13c0ec2a39a952b069a65ae20a3cddbf6"
+  },
+  {
+   "change": "c5",
+   "setting": "lights.fill.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     152,
+     175
+    ]
+   },
+   "proofs": [
+    [
+     0.6,
+     175.0
+    ],
+    [
+     0.8,
+     185.0
+    ],
+    [
+     0.37,
+     163.0
+    ]
+   ],
+   "set": 0.37,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c11",
+    "c12",
+    "c2",
+    "c3",
+    "c4",
+    "c5",
+    "c8",
+    "c9"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e15-r14.json",
+   "shot_sha": "25755fba4753a7572bbb31c99310c97430d5f476"
+  },
+  {
+   "change": "c7",
+   "setting": "lights.sweep.irradiance",
+   "test": {
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     165,
+     188
+    ]
+   },
+   "proofs": [
+    [
+     1.3,
+     203.6
+    ],
+    [
+     1.8,
+     211.8
+    ],
+    [
+     0.4333,
+     186.3
+    ]
+   ],
+   "set": 0.4333,
+   "passes": true,
+   "moves_the_test": true,
+   "passing": [
+    "c1",
+    "c11",
+    "c12",
+    "c2",
+    "c3",
+    "c4",
+    "c5",
+    "c7",
+    "c8",
+    "c9"
+   ],
+   "reply": "critic/rounds/2026-10-10/shot-07-e15-r14.json",
+   "shot_sha": "2400e8498096ea123c1156812e4b8992dec95f9f"
+  }
+ ],
+ "parts_2d": {
+  "amp-box-floor#0": {
+   "part": "amp-box-floor",
+   "centre_px": [
+    379.0,
+    634.7
+   ],
+   "box_px": [
+    282,
+    583,
+    470,
+    692
+   ],
+   "depth_m": 3.657
+  },
+  "amp-box-front#0": {
+   "part": "amp-box-front",
+   "centre_px": [
+    398.8,
+    596.7
+   ],
+   "box_px": [
+    322,
+    520,
+    470,
+    681
+   ],
+   "depth_m": 3.632
+  },
+  "amp-box-lid#0": {
+   "part": "amp-box-lid",
+   "centre_px": [
+    379.0,
+    545.3
+   ],
+   "box_px": [
+    282,
+    498,
+    470,
+    598
+   ],
+   "depth_m": 3.657
+  },
+  "amp-caps#0": {
+   "part": "amp-caps",
+   "centre_px": [
+    367.9,
+    573.7
+   ],
+   "box_px": [
+    312,
+    538,
+    421,
+    611
+   ],
+   "depth_m": 3.687
+  },
+  "amp-coils#0": {
+   "part": "amp-coils",
+   "centre_px": [
+    330.2,
+    601.4
+   ],
+   "box_px": [
+    314,
+    588,
+    346,
+    615
+   ],
+   "depth_m": 3.626
+  },
+  "amp-connectors#0": {
+   "part": "amp-connectors",
+   "centre_px": [
+    310.9,
+    600.9
+   ],
+   "box_px": [
+    279,
+    576,
+    341,
+    626
+   ],
+   "depth_m": 3.616
+  },
+  "amp-heatsink#0": {
+   "part": "amp-heatsink",
+   "centre_px": [
+    355.5,
+    606.0
+   ],
+   "box_px": [
+    308,
+    578,
+    401,
+    635
+   ],
+   "depth_m": 3.687
+  },
+  "amp-led#0": {
+   "part": "amp-led",
+   "centre_px": [
+    341.6,
+    583.0
+   ],
+   "box_px": [
+    340,
+    581,
+    343,
+    585
+   ],
+   "depth_m": 3.684
+  },
+  "amp-module#0": {
+   "part": "amp-module",
+   "centre_px": [
+    360.9,
+    583.9
+   ],
+   "box_px": [
+    281,
+    517,
+    435,
+    656
+   ],
+   "depth_m": 3.68
+  },
+  "amp-pcb#0": {
+   "part": "amp-pcb",
+   "centre_px": [
+    355.4,
+    582.0
+   ],
+   "box_px": [
+    289,
+    522,
+    417,
+    646
+   ],
+   "depth_m": 3.687
+  },
+  "amp-plate#0": {
+   "part": "amp-plate",
+   "centre_px": [
+    348.4,
+    579.6
+   ],
+   "box_px": [
+    273,
+    505,
+    418,
+    661
+   ],
+   "depth_m": 3.697
+  },
+  "amp-rca#0": {
+   "part": "amp-rca",
+   "centre_px": [
+    325.0,
+    591.5
+   ],
+   "box_px": [
+    319,
+    585,
+    331,
+    598
+   ],
+   "depth_m": 3.651
+  },
+  "amp-screws#0": {
+   "part": "amp-screws",
+   "centre_px": [
+    347.9,
+    579.5
+   ],
+   "box_px": [
+    276,
+    508,
+    414,
+    657
+   ],
+   "depth_m": 3.697
+  },
+  "amp-switch#0": {
+   "part": "amp-switch",
+   "centre_px": [
+    296.8,
+    607.0
+   ],
+   "box_px": [
+    294,
+    601,
+    300,
+    613
+   ],
+   "depth_m": 3.594
+  },
+  "back-panel#0": {
+   "part": "back-panel",
+   "centre_px": [
+    351.6,
+    438.9
+   ],
+   "box_px": [
+    267,
+    165,
+    430,
+    738
+   ],
+   "depth_m": 3.692
+  },
+  "back-panel.plinth#0": {
+   "part": "back-panel.plinth",
+   "centre_px": [
+    351.6,
+    656.0
+   ],
+   "box_px": [
+    267,
+    581,
+    430,
+    738
+   ],
+   "depth_m": 3.692
+  },
+  "bottom-panel#0": {
+   "part": "bottom-panel",
+   "centre_px": [
+    434.0,
+    713.4
+   ],
+   "box_px": [
+    282,
+    638,
+    582,
+    799
+   ],
+   "depth_m": 3.588
+  },
+  "front-baffle#0": {
+   "part": "front-baffle",
+   "centre_px": [
+    521.2,
+    487.8
+   ],
+   "box_px": [
+    439,
+    196,
+    596,
+    808
+   ],
+   "depth_m": 3.484
+  },
+  "front-baffle.plinth#0": {
+   "part": "front-baffle.plinth",
+   "centre_px": [
+    521.2,
+    717.8
+   ],
+   "box_px": [
+    439,
+    636,
+    596,
+    808
+   ],
+   "depth_m": 3.484
+  },
+  "gable-block#0": {
+   "part": "gable-block",
+   "centre_px": [
+    434.0,
+    148.4
+   ],
+   "box_px": [
+    267,
+    57,
+    596,
+    254
+   ],
+   "depth_m": 3.588
+  },
+  "gland-amp-1#0": {
+   "part": "gland-amp-1",
+   "centre_px": [
+    436.2,
+    516.1
+   ],
+   "box_px": [
+    429,
+    502,
+    444,
+    530
+   ],
+   "depth_m": 3.764
+  },
+  "gland-amp-2#0": {
+   "part": "gland-amp-2",
+   "centre_px": [
+    423.1,
+    523.1
+   ],
+   "box_px": [
+    416,
+    509,
+    431,
+    537
+   ],
+   "depth_m": 3.735
+  },
+  "gland-amp-3#0": {
+   "part": "gland-amp-3",
+   "centre_px": [
+    409.8,
+    530.1
+   ],
+   "box_px": [
+    402,
+    516,
+    417,
+    544
+   ],
+   "depth_m": 3.706
+  },
+  "letters-back-0#0": {
+   "part": "letters-back-0",
+   "centre_px": [
+    375.9,
+    208.9
+   ],
+   "box_px": [
+    371,
+    200,
+    381,
+    218
+   ],
+   "depth_m": 3.758
+  },
+  "letters-back-1#0": {
+   "part": "letters-back-1",
+   "centre_px": [
+    365.0,
+    212.6
+   ],
+   "box_px": [
+    359,
+    204,
+    371,
+    221
+   ],
+   "depth_m": 3.735
+  },
+  "letters-back-2#0": {
+   "part": "letters-back-2",
+   "centre_px": [
+    355.7,
+    215.5
+   ],
+   "box_px": [
+    352,
+    208,
+    359,
+    224
+   ],
+   "depth_m": 3.715
+  },
+  "letters-back-3#0": {
+   "part": "letters-back-3",
+   "centre_px": [
+    343.4,
+    219.7
+   ],
+   "box_px": [
+    335,
+    210,
+    351,
+    229
+   ],
+   "depth_m": 3.689
+  },
+  "letters-back-4#0": {
+   "part": "letters-back-4",
+   "centre_px": [
+    332.2,
+    213.5
+   ],
+   "box_px": [
+    330,
+    211,
+    334,
+    216
+   ],
+   "depth_m": 3.666
+  },
+  "letters-back-5#0": {
+   "part": "letters-back-5",
+   "centre_px": [
+    332.2,
+    223.6
+   ],
+   "box_px": [
+    330,
+    216,
+    334,
+    231
+   ],
+   "depth_m": 3.666
+  },
+  "letters-back-6#0": {
+   "part": "letters-back-6",
+   "centre_px": [
+    326.9,
+    222.8
+   ],
+   "box_px": [
+    325,
+    213,
+    329,
+    233
+   ],
+   "depth_m": 3.656
+  },
+  "letters-back-7#0": {
+   "part": "letters-back-7",
+   "centre_px": [
+    318.0,
+    225.8
+   ],
+   "box_px": [
+    312,
+    215,
+    324,
+    237
+   ],
+   "depth_m": 3.638
+  },
+  "letters-front-0#0": {
+   "part": "letters-front-0",
+   "centre_px": [
+    497.7,
+    741.3
+   ],
+   "box_px": [
+    492,
+    730,
+    503,
+    753
+   ],
+   "depth_m": 3.418
+  },
+  "letters-front-1#0": {
+   "part": "letters-front-1",
+   "centre_px": [
+    508.8,
+    733.7
+   ],
+   "box_px": [
+    503,
+    722,
+    515,
+    745
+   ],
+   "depth_m": 3.441
+  },
+  "letters-front-2#0": {
+   "part": "letters-front-2",
+   "centre_px": [
+    517.9,
+    727.2
+   ],
+   "box_px": [
+    514,
+    718,
+    521,
+    737
+   ],
+   "depth_m": 3.461
+  },
+  "letters-front-3#0": {
+   "part": "letters-front-3",
+   "centre_px": [
+    529.8,
+    719.1
+   ],
+   "box_px": [
+    522,
+    707,
+    537,
+    732
+   ],
+   "depth_m": 3.487
+  },
+  "letters-front-4#0": {
+   "part": "letters-front-4",
+   "centre_px": [
+    540.2,
+    701.5
+   ],
+   "box_px": [
+    538,
+    698,
+    542,
+    705
+   ],
+   "depth_m": 3.51
+  },
+  "letters-front-5#0": {
+   "part": "letters-front-5",
+   "centre_px": [
+    540.2,
+    712.0
+   ],
+   "box_px": [
+    538,
+    704,
+    542,
+    720
+   ],
+   "depth_m": 3.51
+  },
+  "letters-front-6#0": {
+   "part": "letters-front-6",
+   "centre_px": [
+    545.1,
+    706.1
+   ],
+   "box_px": [
+    543,
+    695,
+    547,
+    717
+   ],
+   "depth_m": 3.521
+  },
+  "letters-front-7#0": {
+   "part": "letters-front-7",
+   "centre_px": [
+    553.1,
+    700.5
+   ],
+   "box_px": [
+    548,
+    687,
+    558,
+    714
+   ],
+   "depth_m": 3.539
+  },
+  "magnets-insert#0": {
+   "part": "magnets-insert",
+   "centre_px": [
+    921.7,
+    267.3
+   ],
+   "box_px": [
+    893,
+    234,
+    949,
+    302
+   ],
+   "depth_m": 3.074
+  },
+  "magnets-pocket#0": {
+   "part": "magnets-pocket",
+   "centre_px": [
+    430.6,
+    174.3
+   ],
+   "box_px": [
+    397,
+    148,
+    463,
+    202
+   ],
+   "depth_m": 3.592
+  },
+  "mid-cap#0": {
+   "part": "mid-cap",
+   "centre_px": [
+    671.7,
+    363.6
+   ],
+   "box_px": [
+    661,
+    344,
+    682,
+    383
+   ],
+   "depth_m": 3.318
+  },
+  "mid-coil#0": {
+   "part": "mid-coil",
+   "centre_px": [
+    662.1,
+    361.3
+   ],
+   "box_px": [
+    646,
+    341,
+    678,
+    382
+   ],
+   "depth_m": 3.328
+  },
+  "mid-cone#0": {
+   "part": "mid-cone",
+   "centre_px": [
+    675.5,
+    364.5
+   ],
+   "box_px": [
+    648,
+    317,
+    702,
+    413
+   ],
+   "depth_m": 3.314
+  },
+  "mid-divider#0": {
+   "part": "mid-divider",
+   "centre_px": [
+    469.9,
+    300.8
+   ],
+   "box_px": [
+    394,
+    200,
+    540,
+    410
+   ],
+   "depth_m": 3.544
+  },
+  "mid-frame#0": {
+   "part": "mid-frame",
+   "centre_px": [
+    671.6,
+    363.5
+   ],
+   "box_px": [
+    630,
+    294,
+    711,
+    436
+   ],
+   "depth_m": 3.318
+  },
+  "mid-magnet#0": {
+   "part": "mid-magnet",
+   "centre_px": [
+    650.5,
+    358.6
+   ],
+   "box_px": [
+    628,
+    319,
+    673,
+    399
+   ],
+   "depth_m": 3.34
+  },
+  "mid-motor#0": {
+   "part": "mid-motor",
+   "centre_px": [
+    650.5,
+    358.6
+   ],
+   "box_px": [
+    625,
+    318,
+    676,
+    400
+   ],
+   "depth_m": 3.34
+  },
+  "mid-ring#0": {
+   "part": "mid-ring",
+   "centre_px": [
+    771.2,
+    387.0
+   ],
+   "box_px": [
+    741,
+    317,
+    800,
+    460
+   ],
+   "depth_m": 3.216
+  },
+  "mid-shelf#0": {
+   "part": "mid-shelf",
+   "centre_px": [
+    491.1,
+    387.4
+   ],
+   "box_px": [
+    394,
+    346,
+    582,
+    434
+   ],
+   "depth_m": 3.519
+  },
+  "mid-spider#0": {
+   "part": "mid-spider",
+   "centre_px": [
+    662.1,
+    361.3
+   ],
+   "box_px": [
+    643,
+    321,
+    680,
+    403
+   ],
+   "depth_m": 3.328
+  },
+  "mid-surround#0": {
+   "part": "mid-surround",
+   "centre_px": [
+    683.3,
+    366.3
+   ],
+   "box_px": [
+    657,
+    310,
+    709,
+    424
+   ],
+   "depth_m": 3.305
+  },
+  "pins-insert#0": {
+   "part": "pins-insert",
+   "centre_px": [
+    920.4,
+    265.0
+   ],
+   "box_px": [
+    888,
+    248,
+    951,
+    283
+   ],
+   "depth_m": 3.075
+  },
+  "port-tube#0": {
+   "part": "port-tube",
+   "centre_px": [
+    382.8,
+    462.5
+   ],
+   "box_px": [
+    320,
+    403,
+    446,
+    525
+   ],
+   "depth_m": 3.652
+  },
+  "pull-loop#0": {
+   "part": "pull-loop",
+   "centre_px": [
+    518.7,
+    223.0
+   ],
+   "box_px": [
+    510,
+    221,
+    527,
+    225
+   ],
+   "depth_m": 3.487
+  },
+  "seal-channel#0": {
+   "part": "seal-channel",
+   "centre_px": [
+    418.1,
+    179.4
+   ],
+   "box_px": [
+    412,
+    172,
+    424,
+    187
+   ],
+   "depth_m": 3.613
+  },
+  "side-left#0": {
+   "part": "side-left",
+   "centre_px": [
+    358.2,
+    500.3
+   ],
+   "box_px": [
+    275,
+    214,
+    447,
+    805
+   ],
+   "depth_m": 3.434
+  },
+  "side-left.plinth#0": {
+   "part": "side-left.plinth",
+   "centre_px": [
+    358.2,
+    733.7
+   ],
+   "box_px": [
+    275,
+    667,
+    447,
+    805
+   ],
+   "depth_m": 3.434
+  },
+  "side-right#0": {
+   "part": "side-right",
+   "centre_px": [
+    503.4,
+    428.0
+   ],
+   "box_px": [
+    423,
+    167,
+    588,
+    704
+   ],
+   "depth_m": 3.742
+  },
+  "side-right.plinth#0": {
+   "part": "side-right.plinth",
+   "centre_px": [
+    503.4,
+    642.2
+   ],
+   "box_px": [
+    423,
+    583,
+    588,
+    704
+   ],
+   "depth_m": 3.742
+  },
+  "top-panel#0": {
+   "part": "top-panel",
+   "centre_px": [
+    434.0,
+    211.8
+   ],
+   "box_px": [
+    282,
+    169,
+    582,
+    261
+   ],
+   "depth_m": 3.588
+  },
+  "tweeter-coil#0": {
+   "part": "tweeter-coil",
+   "centre_px": [
+    744.4,
+    219.2
+   ],
+   "box_px": [
+    738,
+    207,
+    751,
+    231
+   ],
+   "depth_m": 3.243
+  },
+  "tweeter-dome#0": {
+   "part": "tweeter-dome",
+   "centre_px": [
+    748.7,
+    220.0
+   ],
+   "box_px": [
+    741,
+    208,
+    757,
+    232
+   ],
+   "depth_m": 3.239
+  },
+  "tweeter-frame#0": {
+   "part": "tweeter-frame",
+   "centre_px": [
+    740.1,
+    218.4
+   ],
+   "box_px": [
+    722,
+    189,
+    758,
+    248
+   ],
+   "depth_m": 3.247
+  },
+  "tweeter-magnet#0": {
+   "part": "tweeter-magnet",
+   "centre_px": [
+    742.2,
+    218.8
+   ],
+   "box_px": [
+    729,
+    192,
+    755,
+    246
+   ],
+   "depth_m": 3.245
+  },
+  "tweeter-motor#0": {
+   "part": "tweeter-motor",
+   "centre_px": [
+    742.8,
+    218.9
+   ],
+   "box_px": [
+    728,
+    192,
+    757,
+    246
+   ],
+   "depth_m": 3.244
+  },
+  "tweeter-retainer#0": {
+   "part": "tweeter-retainer",
+   "centre_px": [
+    728.2,
+    216.2
+   ],
+   "box_px": [
+    707,
+    181,
+    749,
+    252
+   ],
+   "depth_m": 3.259
+  },
+  "tweeter-surround#0": {
+   "part": "tweeter-surround",
+   "centre_px": [
+    747.1,
+    219.7
+   ],
+   "box_px": [
+    738,
+    201,
+    756,
+    239
+   ],
+   "depth_m": 3.24
+  },
+  "waveguide-insert#0": {
+   "part": "waveguide-insert",
+   "centre_px": [
+    978.5,
+    271.8
+   ],
+   "box_px": [
+    863,
+    194,
+    1090,
+    359
+   ],
+   "depth_m": 3.024
+  },
+  "window-brace#0": {
+   "part": "window-brace",
+   "centre_px": [
+    434.0,
+    415.5
+   ],
+   "box_px": [
+    282,
+    360,
+    582,
+    480
+   ],
+   "depth_m": 3.588
+  },
+  "woofer-cap#0": {
+   "part": "woofer-cap",
+   "centre_px": [
+    714.5,
+    615.2
+   ],
+   "box_px": [
+    688,
+    560,
+    740,
+    672
+   ],
+   "depth_m": 3.273
+  },
+  "woofer-coil#0": {
+   "part": "woofer-coil",
+   "centre_px": [
+    696.6,
+    609.7
+   ],
+   "box_px": [
+    661,
+    552,
+    731,
+    669
+   ],
+   "depth_m": 3.292
+  },
+  "woofer-cone#0": {
+   "part": "woofer-cone",
+   "centre_px": [
+    723.0,
+    617.9
+   ],
+   "box_px": [
+    667,
+    513,
+    776,
+    730
+   ],
+   "depth_m": 3.264
+  },
+  "woofer-frame#0": {
+   "part": "woofer-frame",
+   "centre_px": [
+    714.7,
+    615.3
+   ],
+   "box_px": [
+    634,
+    473,
+    790,
+    771
+   ],
+   "depth_m": 3.273
+  },
+  "woofer-magnet#0": {
+   "part": "woofer-magnet",
+   "centre_px": [
+    674.1,
+    602.7
+   ],
+   "box_px": [
+    635,
+    532,
+    712,
+    677
+   ],
+   "depth_m": 3.315
+  },
+  "woofer-motor#0": {
+   "part": "woofer-motor",
+   "centre_px": [
+    674.1,
+    602.7
+   ],
+   "box_px": [
+    629,
+    530,
+    718,
+    679
+   ],
+   "depth_m": 3.315
+  },
+  "woofer-ring#0": {
+   "part": "woofer-ring",
+   "centre_px": [
+    870.6,
+    663.7
+   ],
+   "box_px": [
+    815,
+    519,
+    922,
+    821
+   ],
+   "depth_m": 3.121
+  },
+  "woofer-spider#0": {
+   "part": "woofer-spider",
+   "centre_px": [
+    695.8,
+    609.4
+   ],
+   "box_px": [
+    665,
+    537,
+    726,
+    685
+   ],
+   "depth_m": 3.292
+  },
+  "woofer-surround#0": {
+   "part": "woofer-surround",
+   "centre_px": [
+    740.1,
+    623.2
+   ],
+   "box_px": [
+    684,
+    497,
+    792,
+    759
+   ],
+   "depth_m": 3.247
+  }
+ },
+ "mirrors": {
+  "image": "renders/2026-10-08/engine/07-e16.mirror.png",
+  "step": 2,
+  "parts": {
+   "side-left": {
+    "pixels": 76600,
+    "seen": [
+     [
+      "sweep",
+      0.983
+     ],
+     [
+      "panel plinth_sheen over sweep",
+      0.012
+     ],
+     [
+      "side-left",
+      0.003
+     ],
+     [
+      "side-left.plinth",
+      0.001
+     ]
+    ]
+   },
+   "front-baffle": {
+    "pixels": 55656,
+    "seen": [
+     [
+      "sweep",
+      0.907
+     ],
+     [
+      "front-baffle",
+      0.064
+     ],
+     [
+      "gable-block",
+      0.008
+     ],
+     [
+      "mid-divider",
+      0.006
+     ],
+     [
+      "side-left",
+      0.006
+     ],
+     [
+      "side-right",
+      0.003
+     ]
+    ]
+   },
+   "gable-block": {
+    "pixels": 29288,
+    "seen": [
+     [
+      "sweep",
+      0.613
+     ],
+     [
+      "panel gloss",
+      0.143
+     ],
+     [
+      "top-panel",
+      0.083
+     ],
+     [
+      "gable-block",
+      0.076
+     ],
+     [
+      "lamp glint0 over sweep",
+      0.031
+     ],
+     [
+      "lamp sweep.001 over panel gloss",
+      0.022
+     ]
+    ]
+   },
+   "waveguide-insert": {
+    "pixels": 19352,
+    "seen": [
+     [
+      "world (sky)",
+      0.341
+     ],
+     [
+      "panel bowl_sheen over panel gloss",
+      0.179
+     ],
+     [
+      "lamp top over world (sky)",
+      0.109
+     ],
+     [
+      "lamp fill.specular + lamp side_fill.specular over world (sky)",
+      0.102
+     ],
+     [
+      "waveguide-insert",
+      0.101
+     ],
+     [
+      "panel bowl_sheen over sweep",
+      0.096
+     ]
+    ]
+   },
+   "side-right": {
+    "pixels": 13724,
+    "seen": [
+     [
+      "amp-box-front",
+      0.508
+     ],
+     [
+      "bottom-panel",
+      0.292
+     ],
+     [
+      "amp-box-lid",
+      0.094
+     ],
+     [
+      "amp-box-floor",
+      0.071
+     ],
+     [
+      "side-left",
+      0.016
+     ],
+     [
+      "back-panel",
+      0.011
+     ]
+    ]
+   },
+   "side-left.plinth": {
+    "pixels": 11480,
+    "seen": [
+     [
+      "panel plinth_sheen over sweep",
+      0.555
+     ],
+     [
+      "sweep",
+      0.427
+     ],
+     [
+      "side-left",
+      0.018
+     ]
+    ]
+   },
+   "front-baffle.plinth": {
+    "pixels": 9756,
+    "seen": [
+     [
+      "sweep",
+      0.991
+     ],
+     [
+      "letters-front-6",
+      0.004
+     ],
+     [
+      "letters-front-0",
+      0.002
+     ],
+     [
+      "letters-front-7",
+      0.001
+     ],
+     [
+      "letters-front-2",
+      0.001
+     ],
+     [
+      "letters-front-4",
+      0.0
+     ]
+    ]
+   },
+   "woofer-cone": {
+    "pixels": 7204,
+    "seen": [
+     [
+      "sweep",
+      0.449
+     ],
+     [
+      "panel drivers",
+      0.183
+     ],
+     [
+      "world (sky)",
+      0.182
+     ],
+     [
+      "woofer-cone",
+      0.103
+     ],
+     [
+      "woofer-surround",
+      0.031
+     ],
+     [
+      "woofer-ring",
+      0.03
+     ]
+    ]
+   },
+   "woofer-surround": {
+    "pixels": 6524,
+    "seen": [
+     [
+      "sweep",
+      0.556
+     ],
+     [
+      "world (sky)",
+      0.172
+     ],
+     [
+      "woofer-cone",
+      0.065
+     ],
+     [
+      "panel drivers",
+      0.056
+     ],
+     [
+      "woofer-frame",
+      0.046
+     ],
+     [
+      "lamp key over world (sky)",
+      0.029
+     ]
+    ]
+   },
+   "woofer-frame": {
+    "pixels": 4004,
+    "seen": [
+     [
+      "sweep",
+      0.558
+     ],
+     [
+      "woofer-surround",
+      0.168
+     ],
+     [
+      "woofer-magnet",
+      0.069
+     ],
+     [
+      "world (sky)",
+      0.043
+     ],
+     [
+      "woofer-coil",
+      0.026
+     ],
+     [
+      "woofer-cone",
+      0.021
+     ]
+    ]
+   },
+   "back-panel": {
+    "pixels": 3636,
+    "seen": [
+     [
+      "sweep",
+      1.0
+     ]
+    ]
+   },
+   "woofer-ring": {
+    "pixels": 3364,
+    "seen": [
+     [
+      "sweep",
+      0.841
+     ],
+     [
+      "world (sky)",
+      0.061
+     ],
+     [
+      "lamp fill.specular + lamp side_fill.specular over world (sky)",
+      0.021
+     ],
+     [
+      "panel drivers",
+      0.017
+     ],
+     [
+      "lamp top over world (sky)",
+      0.017
+     ],
+     [
+      "panel gloss",
+      0.007
+     ]
+    ]
+   },
+   "top-panel": {
+    "pixels": 3328,
+    "seen": [
+     [
+      "gable-block",
+      0.992
+     ],
+     [
+      "magnets-pocket",
+      0.008
+     ]
+    ]
+   },
+   "woofer-magnet": {
+    "pixels": 2892,
+    "seen": [
+     [
+      "sweep",
+      0.372
+     ],
+     [
+      "woofer-motor",
+      0.165
+     ],
+     [
+      "lamp fill.specular over world (sky)",
+      0.134
+     ],
+     [
+      "world (sky)",
+      0.09
+     ],
+     [
+      "panel motor_strip over world (sky)",
+      0.064
+     ],
+     [
+      "front-baffle",
+      0.062
+     ]
+    ]
+   },
+   "mid-divider": {
+    "pixels": 2880,
+    "seen": [
+     [
+      "side-right",
+      0.726
+     ],
+     [
+      "mid-shelf",
+      0.236
+     ],
+     [
+      "front-baffle",
+      0.037
+     ]
+    ]
+   },
+   "mid-frame": {
+    "pixels": 2340,
+    "seen": [
+     [
+      "sweep",
+      0.699
+     ],
+     [
+      "mid-cone",
+      0.07
+     ],
+     [
+      "world (sky)",
+      0.055
+     ],
+     [
+      "front-baffle",
+      0.053
+     ],
+     [
+      "mid-divider",
+      0.034
+     ],
+     [
+      "lamp fill.specular over world (sky)",
+      0.031
+     ]
+    ]
+   },
+   "mid-cone": {
+    "pixels": 1800,
+    "seen": [
+     [
+      "sweep",
+      0.384
+     ],
+     [
+      "world (sky)",
+      0.147
+     ],
+     [
+      "panel drivers",
+      0.131
+     ],
+     [
+      "mid-cone",
+      0.102
+     ],
+     [
+      "lamp key over world (sky)",
+      0.06
+     ],
+     [
+      "waveguide-insert",
+      0.053
+     ]
+    ]
+   },
+   "mid-ring": {
+    "pixels": 1680,
+    "seen": [
+     [
+      "sweep",
+      0.824
+     ],
+     [
+      "world (sky)",
+      0.064
+     ],
+     [
+      "lamp fill.specular + lamp side_fill.specular over world (sky)",
+      0.019
+     ],
+     [
+      "lamp floor over sweep",
+      0.012
+     ],
+     [
+      "lamp key over world (sky)",
+      0.01
+     ],
+     [
+      "lamp top over world (sky)",
+      0.01
+     ]
+    ]
+   },
+   "woofer-cap": {
+    "pixels": 1676,
+    "seen": [
+     [
+      "woofer-cone",
+      0.456
+     ],
+     [
+      "sweep",
+      0.442
+     ],
+     [
+      "woofer-surround",
+      0.05
+     ],
+     [
+      "world (sky)",
+      0.019
+     ],
+     [
+      "woofer-ring",
+      0.019
+     ],
+     [
+      "panel drivers",
+      0.014
+     ]
+    ]
+   },
+   "mid-surround": {
+    "pixels": 1348,
+    "seen": [
+     [
+      "sweep",
+      0.496
+     ],
+     [
+      "world (sky)",
+      0.16
+     ],
+     [
+      "mid-cone",
+      0.08
+     ],
+     [
+      "mid-frame",
+      0.062
+     ],
+     [
+      "panel drivers",
+      0.047
+     ],
+     [
+      "lamp key over world (sky)",
+      0.03
+     ]
+    ]
+   },
+   "woofer-spider": {
+    "pixels": 1144,
+    "seen": [
+     [
+      "woofer-cone",
+      0.465
+     ],
+     [
+      "woofer-coil",
+      0.248
+     ],
+     [
+      "woofer-spider",
+      0.091
+     ],
+     [
+      "woofer-surround",
+      0.084
+     ],
+     [
+      "woofer-frame",
+      0.056
+     ],
+     [
+      "sweep",
+      0.056
+     ]
+    ]
+   },
+   "tweeter-frame": {
+    "pixels": 1060,
+    "seen": [
+     [
+      "sweep",
+      0.604
+     ],
+     [
+      "world (sky)",
+      0.147
+     ],
+     [
+      "lamp fill.specular over world (sky)",
+      0.064
+     ],
+     [
+      "lamp floor over sweep",
+      0.03
+     ],
+     [
+      "mid-surround",
+      0.026
+     ],
+     [
+      "panel gloss",
+      0.023
+     ]
+    ]
+   },
+   "tweeter-retainer": {
+    "pixels": 848,
+    "seen": [
+     [
+      "tweeter-retainer",
+      0.354
+     ],
+     [
+      "sweep",
+      0.297
+     ],
+     [
+      "world (sky)",
+      0.127
+     ],
+     [
+      "lamp fill.specular over world (sky)",
+      0.085
+     ],
+     [
+      "mid-frame",
+      0.033
+     ],
+     [
+      "panel gloss",
+      0.024
+     ]
+    ]
+   },
+   "mid-magnet": {
+    "pixels": 840,
+    "seen": [
+     [
+      "sweep",
+      0.248
+     ],
+     [
+      "mid-motor",
+      0.167
+     ],
+     [
+      "lamp fill.specular over world (sky)",
+      0.129
+     ],
+     [
+      "world (sky)",
+      0.114
+     ],
+     [
+      "panel motor_strip over world (sky)",
+      0.086
+     ],
+     [
+      "lamp floor over sweep",
+      0.076
+     ]
+    ]
+   },
+   "woofer-motor": {
+    "pixels": 772,
+    "seen": [
+     [
+      "sweep",
+      0.389
+     ],
+     [
+      "front-baffle",
+      0.15
+     ],
+     [
+      "woofer-magnet",
+      0.15
+     ],
+     [
+      "lamp fill.specular over world (sky)",
+      0.14
+     ],
+     [
+      "world (sky)",
+      0.124
+     ],
+     [
+      "lamp floor over sweep",
+      0.021
+     ]
+    ]
+   },
+   "back-panel.plinth": {
+    "pixels": 528,
+    "seen": [
+     [
+      "sweep",
+      1.0
+     ]
+    ]
+   },
+   "mid-cap": {
+    "pixels": 328,
+    "seen": [
+     [
+      "sweep",
+      0.402
+     ],
+     [
+      "mid-cone",
+      0.293
+     ],
+     [
+      "panel drivers",
+      0.146
+     ],
+     [
+      "world (sky)",
+      0.11
+     ],
+     [
+      "mid-surround",
+      0.024
+     ],
+     [
+      "mid-ring",
+      0.024
+     ]
+    ]
+   },
+   "mid-shelf": {
+    "pixels": 304,
+    "seen": [
+     [
+      "mid-divider",
+      1.0
+     ]
+    ]
+   },
+   "tweeter-surround": {
+    "pixels": 236,
+    "seen": [
+     [
+      "sweep",
+      0.525
+     ],
+     [
+      "tweeter-frame",
+      0.169
+     ],
+     [
+      "world (sky)",
+      0.153
+     ],
+     [
+      "lamp key over sweep",
+      0.034
+     ],
+     [
+      "lamp key over world (sky)",
+      0.034
+     ],
+     [
+      "tweeter-dome",
+      0.034
+     ]
+    ]
+   },
+   "letters-front-3": {
+    "pixels": 196,
+    "seen": [
+     [
+      "panel letters_sheen over sweep",
+      0.694
+     ],
+     [
+      "front-baffle.plinth",
+      0.306
+     ]
+    ]
+   },
+   "mid-motor": {
+    "pixels": 180,
+    "seen": [
+     [
+      "sweep",
+      0.289
+     ],
+     [
+      "world (sky)",
+      0.222
+     ],
+     [
+      "lamp fill.specular over world (sky)",
+      0.156
+     ],
+     [
+      "lamp floor over sweep",
+      0.089
+     ],
+     [
+      "mid-magnet",
+      0.067
+     ],
+     [
+      "front-baffle",
+      0.044
+     ]
+    ]
+   },
+   "tweeter-dome": {
+    "pixels": 176,
+    "seen": [
+     [
+      "sweep",
+      0.432
+     ],
+     [
+      "world (sky)",
+      0.205
+     ],
+     [
+      "tweeter-surround",
+      0.182
+     ],
+     [
+      "panel drivers",
+      0.068
+     ],
+     [
+      "lamp key over world (sky)",
+      0.045
+     ],
+     [
+      "waveguide-insert",
+      0.045
+     ]
+    ]
+   },
+   "letters-front-1": {
+    "pixels": 144,
+    "seen": [
+     [
+      "panel letters_sheen over sweep",
+      0.861
+     ],
+     [
+      "front-baffle.plinth",
+      0.139
+     ]
+    ]
+   },
+   "letters-front-7": {
+    "pixels": 140,
+    "seen": [
+     [
+      "panel letters_sheen over sweep",
+      0.486
+     ],
+     [
+      "front-baffle.plinth",
+      0.343
+     ],
+     [
+      "sweep",
+      0.171
+     ]
+    ]
+   },
+   "letters-front-0": {
+    "pixels": 140,
+    "seen": [
+     [
+      "panel letters_sheen over sweep",
+      0.8
+     ],
+     [
+      "front-baffle.plinth",
+      0.2
+     ]
+    ]
+   },
+   "amp-box-front": {
+    "pixels": 132,
+    "seen": [
+     [
+      "side-right",
+      1.0
+     ]
+    ]
+   },
+   "letters-front-6": {
+    "pixels": 84,
+    "seen": [
+     [
+      "panel letters_sheen over sweep",
+      0.81
+     ],
+     [
+      "sweep",
+      0.143
+     ],
+     [
+      "front-baffle.plinth",
+      0.048
+     ]
+    ]
+   },
+   "letters-front-2": {
+    "pixels": 80,
+    "seen": [
+     [
+      "panel letters_sheen over sweep",
+      0.6
+     ],
+     [
+      "front-baffle.plinth",
+      0.4
+     ]
+    ]
+   },
+   "letters-front-5": {
+    "pixels": 60,
+    "seen": [
+     [
+      "front-baffle.plinth",
+      0.533
+     ],
+     [
+      "panel letters_sheen over sweep",
+      0.467
+     ]
+    ]
+   },
+   "magnets-pocket": {
+    "pixels": 52,
+    "seen": [
+     [
+      "gable-block",
+      1.0
+     ]
+    ]
+   },
+   "mid-spider": {
+    "pixels": 48,
+    "seen": [
+     [
+      "mid-cone",
+      0.833
+     ],
+     [
+      "mid-frame",
+      0.083
+     ],
+     [
+      "mid-surround",
+      0.083
+     ]
+    ]
+   },
+   "pull-loop": {
+    "pixels": 40,
+    "seen": [
+     [
+      "gable-block",
+      0.5
+     ],
+     [
+      "top-panel",
+      0.2
+     ],
+     [
+      "front-baffle",
+      0.2
+     ],
+     [
+      "sweep",
+      0.1
+     ]
+    ]
+   },
+   "amp-box-floor": {
+    "pixels": 24,
+    "seen": [
+     [
+      "side-right",
+      1.0
+     ]
+    ]
+   },
+   "letters-front-4": {
+    "pixels": 16,
+    "seen": [
+     [
+      "front-baffle.plinth",
+      0.5
+     ],
+     [
+      "sweep",
+      0.25
+     ],
+     [
+      "panel letters_sheen over sweep",
+      0.25
+     ]
+    ]
+   }
+  }
+ },
+ "masks": {
+  "image": "renders/2026-10-08/engine/07-e16.mask.png",
+  "parts": 79,
+  "swatch": "renders/2026-10-08/engine/07-e16.swatch.png",
+  "paints": 19
+ },
+ "retouch": {
+  "spec": {
+   "enabled": true,
+   "match": 0.0833,
+   "lightness": 0.5,
+   "neutral": 1.0,
+   "adapt": 1.0
+  },
+  "paints": [
+   {
+    "paint": "body (back-panel)",
+    "copy": 0,
+    "swatch": "#FFFFFF",
+    "mode": "neutral",
+    "pixels": 3179,
+    "cast_before": [
+     0.17,
+     0.25
+    ],
+    "cast_after": [
+     0.0,
+     0.0
+    ],
+    "de_before": 0.36,
+    "de_after": 0.0
+   },
+   {
+    "paint": "body (front-baffle)",
+    "copy": 0,
+    "swatch": "#FFFFFF",
+    "mode": "neutral",
+    "pixels": 49404,
+    "cast_before": [
+     0.48,
+     2.46
+    ],
+    "cast_after": [
+     0.0,
+     0.0
+    ],
+    "de_before": 2.43,
+    "de_after": 0.0
+   },
+   {
+    "paint": "body (side-left)",
+    "copy": 0,
+    "swatch": "#FFFFFF",
+    "mode": "neutral",
+    "pixels": 76586,
+    "cast_before": [
+     -0.19,
+     0.52
+    ],
+    "cast_after": [
+     0.0,
+     0.0
+    ],
+    "de_before": 0.58,
+    "de_after": 0.0
+   },
+   {
+    "paint": "accent (back-panel.plinth)",
+    "copy": 0,
+    "swatch": "#C62828",
+    "mode": "match",
+    "pixels": 465,
+    "adapted_to_white": false,
+    "reference_before": [
+     26.4,
+     44.4,
+     32.7
+    ],
+    "reference_after": [
+     28.7,
+     46.7,
+     34.1
+    ],
+    "de_before": 15.11,
+    "de_after": 13.26,
+    "lightness_gain": 1.172,
+    "chroma_scale": 0.932,
+    "hue_turn_deg": -2.6
+   },
+   {
+    "paint": "accent (front-baffle.plinth)",
+    "copy": 0,
+    "swatch": "#C62828",
+    "mode": "match",
+    "pixels": 9759,
+    "adapted_to_white": false,
+    "reference_before": [
+     36.9,
+     48.2,
+     31.6
+    ],
+    "reference_after": [
+     39.8,
+     51.2,
+     33.6
+    ],
+    "de_before": 7.14,
+    "de_after": 4.57,
+    "lightness_gain": 1.172,
+    "chroma_scale": 1.115,
+    "hue_turn_deg": 0.5
+   },
+   {
+    "paint": "accent (gable-block)",
+    "copy": 0,
+    "swatch": "#C62828",
+    "mode": "match",
+    "pixels": 24635,
+    "adapted_to_white": false,
+    "reference_before": [
+     37.6,
+     59.4,
+     46.8
+    ],
+    "reference_after": [
+     40.5,
+     62.1,
+     48.3
+    ],
+    "de_before": 6.37,
+    "de_after": 4.39,
+    "lightness_gain": 1.172,
+    "chroma_scale": 0.861,
+    "hue_turn_deg": -4.5
+   },
+   {
+    "paint": "accent (side-left.plinth)",
+    "copy": 0,
+    "swatch": "#C62828",
+    "mode": "match",
+    "pixels": 11474,
+    "adapted_to_white": false,
+    "reference_before": [
+     26.3,
+     43.9,
+     32.2
+    ],
+    "reference_after": [
+     28.5,
+     46.2,
+     33.7
+    ],
+    "de_before": 15.23,
+    "de_after": 13.4,
+    "lightness_gain": 1.172,
+    "chroma_scale": 0.941,
+    "hue_turn_deg": -2.5
+   },
+   {
+    "paint": "insert (waveguide-insert)",
+    "copy": 0,
+    "swatch": "#C62828",
+    "mode": "match",
+    "pixels": 10092,
+    "adapted_to_white": false,
+    "reference_before": [
+     46.6,
+     60.0,
+     38.7
+    ],
+    "reference_after": [
+     45.2,
+     58.8,
+     38.0
+    ],
+    "de_before": 2.81,
+    "de_after": 1.63,
+    "lightness_gain": 0.932,
+    "chroma_scale": 1.039,
+    "hue_turn_deg": 1.0
+   }
+  ]
+ }
+}
