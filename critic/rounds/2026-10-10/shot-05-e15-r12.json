@@ -1,0 +1,310 @@
+{
+ "stage1": {
+  "impression": "A clean, instantly legible line-up of six earmilk colourways on a dark grey sweep, but it still reads as a CG draft: the cartons have almost no contact shadow so they hover on the floor, and the white and coloured fronts are lit as flat even cards with no falloff. The dark green and dark brown gables sink into the backdrop without rim separation, and the top third of the frame is empty gradient.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The white fronts sit at a modelled value: lum_median 220-232, at least 35 levels from top to bottom, and no more than 246 at the top. Now 242-243, with the upper half packed into 249 to 243.",
+  "Each accent reads as one paint from roof to plinth and on its swatch: roof front-slope dE <= 4 on all six (now Whole 6.04, 2% 3.94, Skim 4.44, Matcha 8.52, Chocolate 3.69, Oat 12.62). No band is lit by a lamp the floor beside it does not get.",
+  "Every body side falls at least 12 levels from eave to plinth (now 3-5 on all six), and every body front, white or colour, shows the same top-bright graduated lacquer reflection.",
+  "The cast letters read as metal: lum_median <= 236 and no clipped pixels on any copy. Now 248-250, with 42.4% of 2%'s letter pixels clipped.",
+  "The front plinth bands hold one colour down to the floor line, with no 6-10 px strip under a hard step. Now falloff 22.8 over [148,470,162,497], edge width 3 px, and channels at 0-10 in the strip on Whole, 2% and Matcha."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The finish's white point lifts raw 211.6 to 236 and rolls everything above it into a short shoulder. The upper half of each white front comes out one flat paper value, and white_front_card's graduated reflection on it cannot show.",
+   "evidence": {
+    "region": [
+     335,
+     240,
+     436,
+     478
+    ],
+    "measured": "part front-baffle in this box (2% white front): lum_median 243, p95 249, 8-bin y profile 249, 249, 246, 243, 239, 233, 218, 215, so the upper half spans 6 levels. Whole's front [143,226,239,460] is the same: 242; 249, 248, 246, 243, 238, 227, 213, 211. Run back through finish.py's tone curve, the upper bins are raw 218 to 237, all above white_in 211.6, and the shoulder packs them into 243 to 249."
+   },
+   "change": {
+    "setting": "finish.white_in",
+    "from": 211.6,
+    "to": 228
+   },
+   "expected": "Raw 216 to 237 lands at about 228 to 245 instead of 242 to 249. On a curve-inverted copy of this frame, the 2% front reads median 229 with profile 245, 245, 236, 229, 222, 216, 202, 200 (upper half 16 levels, not 6), and Whole's front 227 (245 down to 196). White sides go from 170 to about 158 and the wall from 86 to about 80. The retouch holds the colour paints at their swatch lightness, so they move no more than 1-2 levels.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      335,
+      240,
+      436,
+      478
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     220,
+     232
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "plinth_lift, a 3.5-radiance strip linked to the plinth bands alone, lights each band brighter than the roof of the same paint, while the floor in front of the band gets none of it. The band glows at the contact line, and because the retouch reads one gain per paint from that over-lit band, every roof ends darker than its swatch.",
+   "evidence": {
+    "region": [
+     955,
+     400,
+     1078,
+     640
+    ],
+    "measured": "part front-baffle.plinth (Chocolate's cream band): 232.7, above swatch lum 228. Each band against the lower two bins of its own roof front slope: Chocolate 232.7 vs 208.0 and 202.9; Skim 158.6 vs 134.3 and 123.6; Whole 75.1 vs 63.3 and 48.9. In linear light the band is 1.3 to 2.3 times the roof eave, though the roof faces the key at cos 0.97 and the band at 0.755. The bands sit on swatch (dE 0.38-1.18; paint gains 0.94-1.05), so the roofs are left off swatch: Whole roof front slope rgb [178,66,64], dE 6.04; 2% 3.94; Skim 4.44; Chocolate 3.69. The floor 2-4 px under the bands reads 22-45."
+   },
+   "change": {
+    "setting": "lights.plinth_lift.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The bands fall to the light the set gives them: Chocolate's cream from 233 to about 205-215, Whole's red from 75 to about 66-70. The shared accent gain rises by about 1.2-1.4. With c3's lower sheen, a model fitted to this frame puts roof front-slope dE at about 3-4 for Whole, 2-2.6 for 2%, 1-3.6 for Skim and 1.4-2 for Chocolate. Each roof's lit eave ends at or above its band, as the key's geometry says it should.",
+   "accept": {
+    "region": {
+     "part": "front-baffle.plinth",
+     "box": [
+      955,
+      400,
+      1078,
+      640
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     195,
+     222
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "roof_sheen covers about 70% of every roof's front slope at up to 4.35 radiance, and on the dark roofs it greys the paint: Oat's espresso reads taupe and Matcha's racing green reads sage. Oat, which meets the bright end of the ramp most, is the worst.",
+   "evidence": {
+    "region": [
+     1179,
+     217,
+     1310,
+     323
+    ],
+    "measured": "part gable-block (Oat roof front slope): lum_median 71.4 against its band's 34.6 and swatch lum 34; rgb [75,71,65], dE 12.62 vs #2B2118. Matcha's slope [740,189,855,290] is at dE 8.52. roof_sheen covers 69.8-71.7% of each front slope, at radiance 4.35 at the ridge down to 0.44 at the eave. 73% of Oat's sheen pixels meet the panel above z 2.44, against 51% on Whole."
+   },
+   "change": {
+    "setting": "lights.roof_sheen.strength",
+    "from": 4.3458,
+    "to": 2.6
+   },
+   "expected": "At about x0.6 sheen, Oat's front slope goes from lum 71 to about 50-58 and from dE 12.6 to about 6-9, and Matcha's from 8.5 to about 4-8. A sheen band stays near every ridge: Skim's slope still falls at least 22 levels from ridge to eave (now 42) and Chocolate's at least 10 (now 22). c2's higher accent gain makes up the lift the light roofs lose.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      1179,
+      217,
+      1310,
+      323
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#2B2118",
+    "op": "between",
+    "value": [
+     5,
+     9
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "Every body side holds one value from eave to plinth. Their main light is the fill, a 3 x 3 m source 12 m out at 15 degrees, and it lands evenly, so the sides read as flat cards and the cartons lose volume.",
+   "evidence": {
+    "region": [
+     436,
+     232,
+     507,
+     468
+    ],
+    "measured": "part side-right (2% side): 8-bin y profile 173, 174, 176, 176, 176, 174, 172, 168, falloff 5. Whole 169 to 164 (5), Skim 164 to 159 (5), Matcha 110 to 107 (3), Oat 116 to 111 (5)."
+   },
+   "change": {
+    "setting": "lights.fill_net",
+    "from": "absent",
+    "to": {
+     "type": "flag",
+     "size_m": [
+      8,
+      0.7
+     ],
+     "position": [
+      2.5,
+      -1.3,
+      0.6
+     ],
+     "target": [
+      2.5,
+      0,
+      0.6
+     ],
+     "lights": [
+      "fill"
+     ],
+     "density": 0.3
+    }
+   },
+   "expected": "The net runs parallel to the row, 1.3 m in front of it and 0.25-0.95 m above the floor. It takes 30% of the fill off everything below about 0.45-0.65 m, with a 0.3-0.5 m penumbra. Each side keeps its top value and falls about 15-25 levels to the plinth (2%: about 160 to 140 after c1), and the fall is the same on all six. The lower half of each front loses up to 8%, since the fill is about 26% of the fronts' light. The floor round the bases darkens 1-3 levels with soft edges, because the net stands 0.25 m clear of the floor. The visible wall, all of it inside the 8 m net's shade, darkens evenly by 4-6 levels with no edge. The fill's highlights are unchanged.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      436,
+      232,
+      507,
+      468
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     28
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The white fronts mirror cards that fall off down the face, but Matcha, Chocolate and Oat mirror only floor_card's near-uniform veil. The colour fronts show no lacquer, so the same finish does not read on each copy.",
+   "evidence": {
+    "region": [
+     740,
+     269,
+     855,
+     352
+    ],
+    "measured": "part front-baffle (Matcha front, upper third): lum_median 182.6 against swatch lum 181, so there is no sheen. Matcha, Chocolate and Oat fronts mirror floor_card over 92-97% of their pixels, at radiance 1.25 at the top to 1.03 at the bottom; Matcha's x profile is flat at 172-175. The white fronts mirror white_front_card falling 2.8 to 0 (Whole) and 4.0 to 0.1 (Skim) from top to bottom, plus whites_even_card falling 3.5 to 1.9."
+   },
+   "change": {
+    "setting": "lights.colour_front_card",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      3.8,
+      1.5
+     ],
+     "position": [
+      -0.1,
+      -1.35,
+      0.2
+     ],
+     "target": [
+      -0.1,
+      -1.3,
+      1.2
+     ],
+     "strength": 2.0,
+     "color": "#FFF7EA",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -1.6,
+       -0.7
+      ],
+      "values": [
+       1,
+       0
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "front-baffle#3",
+      "front-baffle#5"
+     ]
+    }
+   },
+   "expected": "Matcha's and Oat's upper fronts mirror the card at ramp 0.9-1.0, adding about 0.06 linear. Matcha's upper third goes from 183 to about 194-200, and Oat's [1179,300,1310,386] from 193 to about 203-209. Lower thirds stay within 3 levels, since the ramp is 0 from y -0.7 back. The panel lies at z 0.2, below which the plinth bands sit, so they never mirror it. Chocolate stays on floor_card alone, because per the card a reflection card at this strength washes out a chocolate front.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      740,
+      269,
+      855,
+      352
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     190,
+     204
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The cast-metal letters on the dark bands mirror letter_card plus floor_card at 2.5 radiance and blow out to one flat white, so they read as printed stickers, not metal.",
+   "evidence": {
+    "region": [
+     143,
+     440,
+     239,
+     640
+    ],
+    "measured": "part letters-front-* on Whole's band: lum_median 249.5, core 249-250, rgb [245,250,251], 10.6% clipped. 2%: 248.2 with 42.4% clipped; Matcha 249.3; Oat 249.4. They mirror letter_card at 1.58 plus floor_card at 0.95."
+   },
+   "change": {
+    "setting": "lights.letter_card.strength",
+    "from": 1.58,
+    "to": 0.6
+   },
+   "expected": "The bright letters drop from 249 to about 220-232 with no clipped pixels, keeping some tone from face to edge so they read as polished cast metal. The dark bronze letters on Skim and Chocolate darken by about 10 levels (from 71 and 75 to about 60-65) and stay legible on their light bands.",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      143,
+      440,
+      239,
+      640
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     212,
+     236
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Reshape the plinth band's lower edge (a deeper round or a chamfered kick) so its lowest ~2 cm stop mirroring bare floor below floor_card's back edge.",
+   "why": "The band and its 6 mm rounds are spec geometry, so the strip has to be handled with light. No single setting reaches every copy. floor_card sits 1.5-3 cm above the floor where the bands mirror it, and they mirror it at different depths (Whole near y 0, Oat near y -0.3). Receivers cannot take the band off the card either, because the zone 'front-baffle.plinth' answers to 'front-baffle'. The strip therefore stays in blocking_9."
+  },
+  {
+   "request": "Lighten Oat's #2B2118 accent so its shaded side plinth holds colour.",
+   "why": "The flavour colours are fixed. The side plinth reads lum 10 (rgb [15,9,5]), and only light could open it, but a fill strong enough would flatten every side, against c4."
+  }
+ ],
+ "score_if_fixed": 7.4
+}
