@@ -72,6 +72,7 @@ def area(bpy, name, spec, centre):
     if spec.get('roll_deg'):
         ob.rotation_euler.rotate_axis('Z', math.radians(spec['roll_deg']))
     _visibility(ob, spec.get('camera', False))
+    lamp_shares(bpy, ob, spec)
     return ob
 
 
@@ -231,7 +232,8 @@ def scope_flag(bpy, flag_ob, keep):
     sees through it (shadow linking, the flag excluded from that lamp's blockers). A card in front of the floor that cuts
     the key alone, where a plain flag would also cut the fill and the edge lamps off the product (04b's round 12)."""
     for L in [o for o in bpy.context.scene.objects if o.type == 'LIGHT']:
-        if L.name in keep or L.name.split('-set')[0] in keep:
+        base = L.name.split('-set')[0].split('.diffuse')[0].split('.specular')[0]
+        if L.name in keep or base in keep:
             continue
         col = L.light_linking.blocker_collection
         if col is None:
@@ -244,12 +246,47 @@ def scope_flag(bpy, flag_ob, keep):
 
 
 def twins(bpy, ob):
-    """A panel's twins (its fractional diffuse or specular share), which light linking has to reach as well."""
+    """A panel's or a lamp's twins (its fractional diffuse or specular share), which light linking has to reach as well."""
     return [bpy.data.objects[n] for n in (ob.get('engine_twins') or '').split(',') if n]
 
 
 def _share(v):
     return (1.0 if v else 0.0) if isinstance(v, bool) else min(1.0, max(0.0, float(v)))
+
+
+def lamp_shares(bpy, ob, spec):
+    """A lamp's `diffuse` and `specular` shares, as Cycles can honour them. Cycles ignores a lamp's diffuse and specular
+    factors (EEVEE's: a test scene renders the same at 0 and 1) but honours ray visibility, in light sampling too: a
+    share of 0 hides the lamp from that ray type, and a fraction goes to a twin lamp in the same place at that share of
+    the power that only lights (or only reflects), as a panel's does. Until 2026-10-10 every lamp's shares rendered at
+    full strength: a fill at specular 0.1 mirrored at its whole radiance (03's waveguide band), a lamp at specular 0 laid a
+    pale plate across 08b's bowl, and every glint lamp lit its part as well as glinting on it. Returns the twins' names
+    (in ob['engine_twins']); EARMILK_LAMP_SHARES=0 keeps the old rendering, for a job whose proofs began under it."""
+    if os.environ.get('EARMILK_LAMP_SHARES', '0') != '1':
+        return []
+    d, s = _share(spec.get('diffuse', 1.0)), _share(spec.get('specular', 1.0))
+    if d >= 1.0 and s >= 1.0:
+        return []
+    E = ob.data.energy
+    roles = [r for r in (('diffuse', d), ('specular', s)) if r[1] > 0]
+    if not roles:
+        ob.hide_render = True
+        return []
+    def role(o, kind, share):
+        o.data.energy = E * share
+        o.visible_diffuse = kind == 'diffuse'
+        o.visible_glossy = kind == 'specular'
+        if kind == 'specular':
+            o.visible_transmission = False; o.visible_volume_scatter = False
+    names = []
+    for kind, share in roles[1:]:
+        tw = ob.copy(); tw.data = ob.data.copy(); tw.name = f'{ob.name}.{kind}'
+        bpy.context.scene.collection.objects.link(tw)
+        role(tw, kind, share)
+        names.append(tw.name)
+    role(ob, *roles[0])
+    ob['engine_twins'] = ','.join(names)
+    return names
 
 
 def spot(bpy, name, spec, centre):
@@ -261,6 +298,7 @@ def spot(bpy, name, spec, centre):
     ob = bpy.data.objects.new(name, L); bpy.context.scene.collection.objects.link(ob)
     ob.location = Vector(spec['position']) if 'position' in spec else orbit_point(spec.get('orbit', {}), centre)
     aim(ob, spec.get('target', centre))
+    lamp_shares(bpy, ob, spec)
     return ob
 
 
@@ -271,6 +309,7 @@ def point(bpy, name, spec, centre):
     set_color(L, spec.get('color', 3000))
     ob = bpy.data.objects.new(name, L); bpy.context.scene.collection.objects.link(ob)
     ob.location = Vector(spec['position']) if 'position' in spec else orbit_point(spec.get('orbit', {}), centre)
+    lamp_shares(bpy, ob, spec)
     return ob
 
 
@@ -463,6 +502,7 @@ def glint(bpy, name, spec, cam_pos):
     ob.location = P + R * spec.get('distance_m', 0.6)
     aim(ob, P)
     ob.visible_camera = False
+    lamp_shares(bpy, ob, {'diffuse': 0.0, 'specular': 1.0})     # a glint only glints (its diffuse factor alone did not)
     return ob
 
 

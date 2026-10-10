@@ -181,6 +181,17 @@ the critic's card prints that table and the `retouch.*` settings, and every test
 without rendering it again. On 01 e11: the reds from dE 7.2 to 9.5 to 3.2 to 5.1 (the rest is the half of the
 lightness left), both whites from 2.4 and 3.5 to 0.
 
+## Lamp shares
+
+A lamp's `diffuse` and `specular` (0 to 1) are made with ray visibility, which Cycles honours in light sampling too:
+a share of 0 hides the lamp from that ray type, and a fraction goes to a twin lamp in the same place at that share of
+the power with the other ray type off (as a panel's fractions do); a glint lamp is specular only the same way. Cycles
+ignores a lamp's diffuse and specular factors, which are EEVEE's (a test scene renders the same at 0 and at 1), so
+until 2026-10-10 every share rendered at full strength: a fill at specular 0.1 mirrored at its whole radiance (03's
+waveguide band), a lamp at specular 0 laid a pale plate across 08b's bowl (gone with the fix), and every glint lamp lit
+its part as well as glinting on it. `EARMILK_LAMP_SHARES=1` turns the shares on for jobs begun after the fix; it becomes
+the default once the jobs begun before it have finished.
+
 ## What the engine makes exact
 
 - **Glints** are placed from the surface the camera sees at their point, with that surface's own normal (the camera's

@@ -76,7 +76,8 @@ def reflections(bpy, scene, cam, objs, part_of, pattern, match, step=2):
     targets = {o.name for o in objs if match(part_of[o.name], pattern)}
     if not targets:
         return {'error': f'no part matches {pattern!r}'}
-    lamps = [o for o in scene.objects if o.type == 'LIGHT' and o.data.type == 'AREA' and o.data.specular_factor > 0]
+    # Cycles ignores a lamp's specular factor; what a reflection sees is set by its glossy ray visibility
+    lamps = [o for o in scene.objects if o.type == 'LIGHT' and o.data.type == 'AREA' and o.visible_glossy and not o.hide_render]
     def lit_by(lob, ob_name):
         col = lob.light_linking.receiver_collection
         return col is None or ob_name in col.objects
@@ -330,12 +331,12 @@ def mirror_map(bpy, scene, cam, objs, part_of, out_png, step=2):
     parts = {o.name: part_of[o.name] for o in objs if not o.hide_render}
     lamps = []
     for o in scene.objects:
-        if o.type == 'LIGHT' and o.data.type == 'AREA' and o.data.specular_factor > 0 and not o.hide_render and o.visible_glossy:
+        if o.type == 'LIGHT' and o.data.type == 'AREA' and not o.hide_render and o.visible_glossy:
             L = o.data
             col = o.light_linking.receiver_collection
             sy_ = (L.size_y if L.shape in ('RECTANGLE', 'ELLIPSE') else L.size)
             area = L.size * sy_ * (math.pi / 4 if L.shape in ('DISK', 'ELLIPSE') else 1.0)
-            rad = round(L.energy / (math.pi * max(area, 1e-9)) * L.specular_factor, 4)
+            rad = round(L.energy / (math.pi * max(area, 1e-9)), 4)     # Cycles ignores specular_factor (lamp_shares)
             lamps.append((o.name, o.matrix_world.inverted(), o.matrix_world.to_3x3(), L.shape in ('DISK', 'ELLIPSE'), L.size / 2,
                           sy_ / 2, None if col is None else {x.name for x in col.objects}, rad))
     normals = _Normals(dg)

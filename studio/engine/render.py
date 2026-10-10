@@ -143,7 +143,7 @@ def main():
         ob = {'area': Lt.area, 'spot': Lt.spot, 'point': Lt.point, 'panel': Lt.panel, 'flag': Lt.flag}[kind](bpy, name, spec, centre)
         if spec.get('receivers') and kind != 'flag':
             recv = [o for o in objs if any(Pr._match(part_of[o.name], r) for r in spec['receivers'])]
-            for o in [ob] + (Lt.twins(bpy, ob) if kind == 'panel' else []):
+            for o in [ob] + Lt.twins(bpy, ob):
                 Lt.link_receivers(bpy, o, recv)
         elif kind in ('area', 'spot', 'point') and spec.get('shadow_on_set', 1.0) < 1.0:
             # the lamp's shadow on the set lightened, the product's light and shadows as they were
@@ -167,7 +167,8 @@ def main():
             continue
         ob = Lt.glint(bpy, f'glint{i}', g, C)
         if g.get('receivers'):
-            Lt.link_receivers(bpy, ob, recv)
+            for o in [ob] + Lt.twins(bpy, ob):
+                Lt.link_receivers(bpy, o, recv)
 
     # --- render settings ---------------------------------------------------------------------------------------------
     R = sh.get('render', {})
