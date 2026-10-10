@@ -1,0 +1,287 @@
+{
+ "stage1": {
+  "impression": "A warm low-sun living room with two red-and-white gable-top speakers flanking a sideboard: the mood is pleasant, but the speakers' white fronts are flat, evenly lit and neutral, ignoring the warm sun that rakes the wall and floor, so the pair reads pasted in. The products are small and sit left of centre, with a quarter of the frame given to a featureless floor and the right third to bare wall; the sideboard's grain looks like a printed wave pattern, and the wordmark's middle letters are blown.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The cabinets read as lit by the room's low sun. Faces turned to the sun carry its warmth (part:side-right b* 3 to 5, now 0.0; fronts b* at least 1, now 0.0), and no paint zone is lifted by a lamp linked to it alone. Today gable_fill, plinth_fill, inner_fill and right_fill each light one part.",
+  "The oak floor reads as boards with figure: lum_range at least 8 in a uniformly lit patch. Now 3.4 in the shaded foreground [300,765,640,898] and 5.0 in the sunlit band [400,652,600,712].",
+  "Both wordmarks are even and unclipped. Now 39.6 % (left) and 38.7 % (right) of letter pixels clip, with 'r','m' at 248 against 'e','k' at 138.",
+  "The copy-space wall reads warm-neutral, not mauve. [940,200,1300,500] is now Lab 36.0/3.26/-0.13, from a paint whose own hue is yellow.",
+  "The white fronts model in both directions, with their top below the 226 knee. Today the top two of eight bins sit at 227; the 24-level falloff runs only top to bottom; across, the fronts are flat (211-219 left, 208-221 right).",
+  "The sideboard reads as wood. Today its latewood is 1-2 px hairlines, 8-9 levels deep, in evenly spaced chevrons.",
+  "A sun cue on the cabinets themselves. Neither speaker's cast shadow is in frame: the right one falls behind the sideboard and turntable, the left one off the left edge. No crisp sun edge or warm key lands on either front.",
+  "Hero presence. The pair spans 40 % of the frame height (y 298-656) and 11 % of its width each. A homepage hero wants about 50 % while keeping the ~31 % copy space, which needs the pair closer together: the 1.4 m sideboard sets their 2.1 m spacing."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The retouch takes every white to exact neutral grey, so the cabinets carry none of the low sun's colour that the wall patch and floor carry: they read as studio-lit cut-outs, and the must-show 'the sun's light on the cabinets' is missing.",
+   "evidence": {
+    "region": [
+     233,
+     357,
+     247,
+     580
+    ],
+    "measured": "part side-right in this box (the left speaker's face turned to the sun, plinth band excluded): rgb 180/180/180, Lab 73.3/0.0/0.0, delta_e 3.52 to warm white #B8B3AD. Fronts Lab 87.1/0/0 (left) and 87.4/0/0 (right). Sunlit wall [445,340,500,400] Lab 62.7/4.6/13.5; sunlit floor [400,640,600,700] Lab 32.3/13.4/30.0. Retouch table: this face's raw cast a*/b* 2.35/6.51 was taken to 0/0. The card says neutral 1 is for a studio, and less where a late sun's colour is the picture's."
+   },
+   "change": {
+    "setting": "retouch.neutral",
+    "from": 1,
+    "to": 0.4
+   },
+   "expected": "The face turned to the sun keeps about 60 % of its raw cast, b* 3.5-4.5 and a* 0.3-1.4, and reads cream against the shaded inner side of the right speaker. The fronts take b* about 1. Lightness holds at L* 73. With c5 removing the magenta lean, the kept cast reads warm rather than pink.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      233,
+      357,
+      247,
+      580
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#B8B3AD",
+    "op": "between",
+    "value": [
+     0,
+     1.5
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "material",
+   "problem": "The oak floor, 27 % of the frame, has no tone or figure from plank to plank and reads as a smooth brown slab, failing the must-show 'a floor that reads as real material'.",
+   "evidence": {
+    "region": [
+     300,
+     765,
+     640,
+     898
+    ],
+    "measured": "Shaded foreground: lum p5 44.9, p95 48.3, range 3.4, of which about 3 is the light's falloff (y profile 45.3, 48.1, 45.1; x profile flat 45.7-46.1). Sunlit band [400,652,600,712]: range 5.0. Seams and end joints barely show at 3x. Last round's rings change did not move the floor (the engine found rings is not the lever). The floor's own override holds plank_contrast at 0.2 against the oak preset's 0.5."
+   },
+   "change": {
+    "setting": "set.floor.plank_contrast",
+    "from": 0.2,
+    "to": 0.5
+   },
+   "expected": "Each 0.2 m plank takes its own tone between the floor's dark and light swatches, about \u00b18 % around the base. Range rises to 9-14 in the shaded foreground and 9-15 in the sunlit band, so the boards read as boards; below 20, no single plank reads as a stripe. Gloss variation (last round's c5) is untouched.",
+   "accept": {
+    "region": [
+     300,
+     765,
+     640,
+     898
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     8,
+     20
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Glint 4 burns the middle of the left speaker's wordmark to a blue-white block, leaving 'ea' and 'lk' grey on either side of it.",
+   "evidence": {
+    "region": [
+     90,
+     620,
+     240,
+     650
+    ],
+    "measured": "part letters-front-* in this box: p5 110, median 199, p95 249, 39.6 % clipped. Profile across the word: 132, 141, 228, 248, 248, 247, 170, 141. Under the glint the letters read 238-249 (rgb 245/248/255); elsewhere median 144. Mirrors: lamp glint4 at radiance 18.0 over panel letters_card at 0.3, 60x what the other letters see."
+   },
+   "change": {
+    "setting": "glints.4.power_w",
+    "from": 4,
+    "to": 0
+   },
+   "expected": "All eight letters mirror the letters_card alone and read as one satin metal: interior about 140, p95 165-175, clip_pct 0 (now 39.6 %). 'r' and 'm' fall from 248 to the level of 'e' and 'k' (median 138). A trace of glint (0.05 W or less) is acceptable if it reads as a sheen; more brings the block back.",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      90,
+      620,
+      240,
+      650
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     140,
+     185
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "Glint 3 does the same to the right speaker's wordmark: a blown block over 'arm', with grey letters on either side.",
+   "evidence": {
+    "region": [
+     785,
+     620,
+     935,
+     650
+    ],
+    "measured": "part letters-front-* in this box: p5 112, median 177, p95 249, 38.7 % clipped. Profile across the word: 137, 227, 248, 248, 248, 183, 146, 133. Under the glint 238-249; elsewhere median 145. Mirrors: lamp glint3 at radiance 18.0 over panel letters_card at 0.3."
+   },
+   "change": {
+    "setting": "glints.3.power_w",
+    "from": 4,
+    "to": 0
+   },
+   "expected": "The right wordmark matches the left after c3: one satin metal at about 140 inside the letters, p95 165-175, clip_pct 0 (now 38.7 %), so the pair's marks read the same.",
+   "accept": {
+    "region": {
+     "part": "letters-front-*",
+     "box": [
+      785,
+      620,
+      935,
+      650
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     140,
+     185
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "post",
+   "problem": "The frame's neutrals lean magenta. The shaded back wall, the largest area and the copy space, renders mauve grey from a yellow-greige paint, and the raw casts on the white fronts are pink rather than warm.",
+   "evidence": {
+    "region": [
+     940,
+     200,
+     1300,
+     500
+    ],
+    "measured": "rgb 90/83/85, Lab 36.0/3.26/-0.13 (hue about 358 deg), from paint #C8BCAB (Lab 76.8/1.4/10.1, hue about 82 deg); delta_e 2.73 to warm-neutral #575454. Retouch table raw front casts a*/b*: 2.03/1.83 (copy 0) and 3.57/1.21 (copy 1), a* above b*. Sunlit floor a* 12-13; sunlit wall a* 4.6."
+   },
+   "change": {
+    "setting": "render.white_balance_tint",
+    "from": 10,
+    "to": 5
+   },
+   "expected": "The shaded wall moves to about Lab 36/1.2/0.4, a warm-neutral grey that takes type. The sunlit wall patch and floor shift from rose-orange toward amber (a* down about 2). The fronts' raw cast loses its pink, so what c1 keeps is cream. The retouch holds the reds on the swatch.",
+   "accept": {
+    "region": [
+     940,
+     200,
+     1300,
+     500
+    ],
+    "metric": "delta_e",
+    "hex": "#575454",
+    "op": "between",
+    "value": [
+     0,
+     1.2
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "The sideboard veneer, the centrepiece between the speakers, renders as 1-2 px dark hairlines in evenly spaced chevrons over a smooth fill, so it reads as inked contour lines rather than wood figure.",
+   "evidence": {
+    "region": [
+     360,
+     480,
+     364,
+     575
+    ],
+    "measured": "The row profile dips 8-9 levels in a single row (86.5, 77.9, 81.0, 86.1; 84.6, 76.5, 81.7, 85.3) about every 7 rows. Largest step 7.1 here, and 6.5-7.3 in strips at x 320, 400, 470 and 560. The door's own falloff is only about 0.27 level per row (101 to 75 over 95 rows)."
+   },
+   "change": {
+    "setting": "set.props.1.grain",
+    "from": 0.6,
+    "to": 0.35
+   },
+   "expected": "The latewood lines fall to 4-5 levels (edge 3-4.5), and the book-matched cathedrals read as soft figure in a satin veneer. The veneer, its lacquer and the door's 101-to-75 falloff stay, so last round's c4 problem (a flat painted box) does not return. Its test (lum_range at least 20, 22.9 here) rides on that falloff, and its proofs gave 23.5 at grain 0.3.",
+   "accept": {
+    "region": [
+     360,
+     480,
+     364,
+     575
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     2,
+     4.8
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The red plinth mirrors the letters_card as well as the letters do, which lays a cool, desaturated band through the brand red at the wordmark's height.",
+   "evidence": {
+    "region": [
+     99,
+     624,
+     927,
+     637
+    ],
+    "measured": "part front-baffle.plinth in this box: rgb 188/43/47, luma 74.3, delta_e 2.81 to #C62828. Rows 640-655 just below: rgb 188/37/37, delta_e 2.20. Mirrors: 41 % of plinth pixels, in rows 620-644, see panel letters_card (radiance 0.3)."
+   },
+   "change": {
+    "setting": "lights.letters_card.receivers",
+    "from": "absent (every gloss part mirrors it)",
+    "to": [
+     "letters-front-*"
+    ]
+   },
+   "expected": "The plinth's middle band mirrors the floor like the rows below: rgb about 188/37/37 and delta_e about 2.2 to #C62828, one even crimson. The letters still see the card (c3 and c4 rely on it) and stand out more against the deeper red.",
+   "accept": {
+    "region": {
+     "part": "front-baffle.plinth",
+     "box": [
+      99,
+      624,
+      927,
+      637
+     ]
+    },
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     31,
+     41
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Warm or lighten the drivers' navy trim rings (woofer-ring rgb 31/38/52, mid-ring 65/73/89), the coolest note on the cabinets in a warm frame.",
+   "why": "The drivers' materials and colours belong to the named products and are fixed. Only what the rings mirror can change (front_gradient, 87 % of their pixels), and warming that card would also tint the white fronts."
+  }
+ ],
+ "score_if_fixed": 6.3
+}
