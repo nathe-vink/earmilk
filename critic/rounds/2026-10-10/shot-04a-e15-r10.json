@@ -1,0 +1,264 @@
+{
+ "stage1": {
+  "impression": "A straight-on render in which the red gable, the fin's type and the Nutrition Facts panel are legible, but the light is flat and frontal: the white body is a near-uniform light-grey card with no visible side plane, and the carton runs off the bottom edge with nothing under it. The 'earmilk' emboss is a soft, low-contrast grey that barely separates from the panel, so the frame reads as a competent draft rather than a finished hero.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The back's letters separate on every edge: part:letters-back-* median 168-186 against a panel of 210 or more round them, with a top-bright falloff of at least 28 (now 199.4, crossing the 213-219 panel at mid-height; top-edge steps of 7-8 levels).",
+  "The white back reads white: lower-right [560,1000,690,1120] at 201 or more (now 194) and part:back-panel median at 208 or more (now 203), with the upper-left [195,350,330,470] held at 226 or less (now 225, p95 229).",
+  "The white's falloff reads as broad studio light, not a lamp at arm's length: left-margin [205,350,265,1125] falloff 13-18 (now 27) and no more than 24 levels corner to corner (now 31).",
+  "The white stands about 1.5 stops over the backdrop: lower-left backdrop [20,950,170,1120] at 134 or less (now 138.6) with the white's bulk at 208 or more.",
+  "The port reads as an opening: woofer-motor p95 at 12 or less (now 25.9, lit by a lamp linked to it alone).",
+  "The body reads as a lacquered volume rather than a printed card: today the back mirrors only the dim floor and sky (sweep 70 %, sky 29 %), so outside two 1-2 px corner lines (245 left, 238 right) nothing on the white shows gloss, and the brief's head-on view hides both side planes."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The back's cast letters, a must-show, cross the panel's value instead of standing off it: their faces run from 217 at the top (lighter than the 213 panel above) to 184 at the baseline, so at mid-height they match the panel and only a 1-2 px line marks their top edges, and 'earmilk' reads as a soft grey emboss.",
+   "evidence": {
+    "region": [
+     334,
+     385,
+     565,
+     429
+    ],
+    "measured": "part:letters-back-* median 199.4 (p5 181, p95 213), 8-bin falloff 215.7 to 184.9 (30.8); panel above [330,360,570,380] 219, beside the e [290,385,330,430] 223, beside the k [570,385,610,430] 212; a column through the l (x 515-522) reads panel 213, edge line 204, face 217 falling to 184, base line 143, panel 208; edge step 7.4 at the l's top and 7.8 at the k's, against 36.7 at the l's base; the faces mirror letters_ramp (93 %, radiance 0.77-1.32)"
+   },
+   "change": {
+    "setting": "lights.letters_ramp",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      0.4,
+      0.13
+     ],
+     "position": [
+      0,
+      -1.2,
+      0.805
+     ],
+     "target": [
+      0,
+      0,
+      0.805
+     ],
+     "strength": 1.4505,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.78,
+       0.83
+      ],
+      "values": [
+       0.5,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "letters-back-*"
+     ]
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.4,
+      0.13
+     ],
+     "position": [
+      0,
+      -1.2,
+      0.805
+     ],
+     "target": [
+      0,
+      0,
+      0.805
+     ],
+     "strength": 1.1,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.78,
+       0.83
+      ],
+      "values": [
+       0.4,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "letters-back-*"
+     ]
+    }
+   },
+   "expected": "Letter faces drop about 20 levels to a median near 178 (tops ~195, baselines ~162), wholly below the 210-223 panel, so every edge steps 15-50 levels and the word reads as crisp metal; with the ramp's floor at 0.4 the top-bright gradient holds at ~30-34 levels (round 9's [30, 38] still passes). Rounds 8 and 9 set this panel: its position, size, target and direction stay as round 9 left them, so the round-8 fault (flat letters with tops darker than baselines) cannot return; only its level drops.",
+   "accept": {
+    "region": "part:letters-back-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     168,
+     186
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The key is only 1.3 m from the product's centre, so its own inverse-square fall across the flat back is about 3:1 from upper-left to lower-left and the white runs on a steep diagonal: the upper-left sits at PBR Neutral's 226 knee while the lower two-thirds sink to 194-205 and read grey.",
+   "evidence": {
+    "region": [
+     205,
+     350,
+     265,
+     1125
+    ],
+    "measured": "left-margin 8-bin profile 226, 222, 217, 212, 208, 204, 201, 199 (falloff 27); right margin [640,350,700,1125] 209 to 193; upper-left [195,350,330,470] 225 (p95 229) against lower-right [560,1000,690,1120] 194, 31 levels corner to corner; lower-left [210,1000,340,1120] 198"
+   },
+   "change": {
+    "setting": "lights.key.orbit.distance_m",
+    "from": 1.3,
+    "to": 2.5
+   },
+   "expected": "With irradiance held at the target, the key's upper-left/lower-left ratio falls from ~3.2 to ~1.7: upper-left ~222, lower-left 198 to ~206, lower-right 194 to ~201, left-margin falloff ~16; the 0.8 x 0.9 m box shrinks from ~38 to ~20 degrees, so the letters' shadows and the 3 mm shadow line under the gable sharpen, the roof's left-to-right fall (85 to 75) eases a few levels, and the key's thin glint on the fin's left corner round gets brighter and narrower. Its spill on the sweep rises (intensity x3.7 at the same target irradiance; floor_flag_l's shadow shifts ~0.25 m toward the product), which c4 takes back.",
+   "accept": {
+    "region": [
+     205,
+     350,
+     265,
+     1125
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     13,
+     18
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "Even with c2 the white's bulk would sit near 207, light grey beside the fin's white type (p95 233) and the corner lines (238-245), and the exposure is held at -0.1 only because the upper-left used to sit in the shoulder.",
+   "evidence": {
+    "region": [
+     560,
+     1000,
+     690,
+     1120
+    ],
+    "measured": "lower-right median 194 (p5 192, p95 195); lower-left [210,1000,340,1120] 198; bottom centre [380,1040,520,1120] 195; part:back-panel median 203, 8-bin y-profile 216 to 195; upper-left [195,350,330,470] 225"
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": -0.1,
+    "to": "+0.1"
+   },
+   "expected": "With c2 taking ~3 levels off the upper-left, +0.03 to +0.1 EV puts the lower-right at 201-205 and part:back-panel's median near 210 while the upper-left ends 223-226 (round 9's c3 test [218, 226] keeps passing); backdrop and red gain 2-4 levels, which c4 takes back on the backdrop. Rounds 7 and 8 lowered exposure only to get the upper-left out of the shoulder; c2 removes that cause, which is what keeps this lift from bringing it back.",
+   "accept": {
+    "region": [
+     560,
+     1000,
+     690,
+     1120
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     201,
+     205
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "The white stands only 1.2 stops over the backdrop (bulk 203 against 137.6-139.6), and c2 and c3 will lift the backdrop further, taking back the white's gain.",
+   "evidence": {
+    "region": [
+     20,
+     950,
+     170,
+     1120
+    ],
+    "measured": "lower-left backdrop 138.6 (p5 132.6, p95 142.6, rgb 143/138/131), mid-left [20,500,170,700] 137.6, mid-right [730,500,880,700] 139.6, lower-right [730,950,880,1120] 134.6, halo [380,10,520,80] 165.6; scene-linear white 0.60 against backdrop 0.25"
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#B9B4AC",
+    "to": "#A7A39C"
+   },
+   "expected": "The paper's reflectance drops ~20 % at the same warm hue: after c2 and c3 the lower-left lands 126-134 and the mid-sides ~128-133, the halo behind the fin ~150-158, still ~70 levels over the red; with the white near 210 the separation grows from 1.2 to ~1.5 stops, so the white reads white by contrast with none of it pushed into the shoulder; the sweep's bounce onto the back drops ~1 level, which c3's test absorbs.",
+   "accept": {
+    "region": [
+     20,
+     950,
+     170,
+     1120
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     126,
+     134
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The woofer motor seen through the port is lit by port_deep, a lamp linked to it alone, which draws a soft crescent across its black dome, so the port reads as a glossy black button in a grey ring instead of an opening into a dark cabinet.",
+   "evidence": {
+    "region": [
+     394,
+     898,
+     506,
+     972
+    ],
+    "measured": "woofer-motor median 12.9, p95 25.9, 8-bin y-profile 1.3, 22.9, 18.9, 15.5, 12.9, 8.9, 2.4, 0.3 (the crescent across the dome's top); port_deep is a 0.8 W point at [0, -0.28, 0.39] with receivers woofer-motor and woofer-magnet"
+   },
+   "change": {
+    "setting": "lights.port_deep.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The motor falls to near-black (p95 at most 12, from 25.9) and the crescent goes; the port reads as depth, its lower inner wall still lit by port_fill (60-72) falling into black, the flare unchanged (port-tube median ~70); nothing outside the port moves.",
+   "accept": {
+    "region": "part:woofer-motor",
+    "metric": "lum_p95",
+    "op": "<=",
+    "value": 12
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Turn the product or the camera a few degrees off-axis so one side plane shows and the body reads as a volume.",
+   "why": "The purpose fixes the panel straight on and level; head-on, both 390 mm side faces are edge-on, so the body's depth rests on two 1-2 px corner highlights (245 left, 238 right) and the roof's perspective, which caps how sculpted this frame can look."
+  },
+  {
+   "request": "Pull back to take in the plinth band, SHAKE WELL and the floor so the carton does not run off the bottom edge.",
+   "why": "Fitting all 1055 mm into the fixed 1125 px frame cuts the scale by about a third and the spec rows' ~9 px cap height to ~6 px, against the purpose (the Facts panel legible); the crop is the brief's."
+  },
+  {
+   "request": "A darker or contrasting finish on the back's cast letters.",
+   "why": "Their material is the product's own and the marks are fixed; only what they mirror can change, which c1 does."
+  },
+  {
+   "request": "Hide the woofer motor seen through the port with a liner or baffle behind it.",
+   "why": "The port and the drivers are engineering geometry; c5 removes the lamp that lights the motor instead."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
