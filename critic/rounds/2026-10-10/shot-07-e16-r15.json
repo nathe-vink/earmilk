@@ -1,0 +1,322 @@
+{
+ "stage1": {
+  "impression": "A clean, softly lit exploded view of a milk-carton speaker on a warm grey sweep, with a strong white, red and black colour story, but the white body reads as nearly one flat value with weak face separation and the gable cut-out carries a hot highlight. The black drivers and gaskets are low-detail silhouettes, and the layout leaves the lower right empty while the red cap floats off its axis.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The white cabinet must print lighter than the paper all along its lit edge. The baffle's right edge (x 580-592) measures +12 against the paper at y 220-240, +1 at y 340-360 and -16 at y 580-640, where the paper is 227-228. Below the mid hole, the white front is darker than the backdrop.",
+  "The side panel facing the camera is the largest surface in the frame (76.6k px) and must show modelling and its lacquer. It measures 159-163 top to bottom and 162 in all 8 bins across, and it mirrors only the floor (98 % sweep). It needs at least 16 levels of falloff.",
+  "No blown highlight should be larger than about 150 px. The glint beside the pocket is 1316 clipped px: a 36x54 px disc, flat at 253-254.",
+  "Every lit red face should be within dE2000 of about 6 from #C62828. The front roof slope prints (216,101,101), dE 15.2, and the insert's front face prints (205,83,83), dE 9.9. The gloss card washes out both.",
+  "The paper behind the product and parts must stay below the 226 shoulder. It is 231.7 behind the drivers, 231.6 under the insert and 230.6 on the lower-right floor, while the left of the frame is 175-191.",
+  "The cabinet needs a contact shadow at least 15 levels deep. The floor 2-11 px under the plinth's front-right foot is 181.8, the same as 25-40 px further out (182.1).",
+  "A build page needs an even explode rhythm. The mid and woofer clear the cabinet by 31 and 35 px and their trim rings by 36 and 41 px, against 113 and 140 px for the tweeter and insert. About 55 px or more per gap would keep the parts apart at thumbnail size.",
+  "The pocket's magnets and bore must be legible. They print as three dots 6-10 px across (magnets-pocket is 52 px).",
+  "The interior seen through the driver holes must not read as a saturated mustard disc. It prints (74,48,5), with blue near 0, over 13.6k px. This is out of scope because the birch interior belongs to the product."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The bg_pool lamp throws a hot pool onto the floor directly behind the drivers and the cabinet's right edge. The paper there prints brighter than the white body and sits on the PBR Neutral shoulder.",
+   "evidence": {
+    "region": [
+     800,
+     450,
+     1000,
+     520
+    ],
+    "measured": "lum_median 231.7 (p5 230.7, p95 232.7), above the 226 shoulder. By the camera geometry this floor is at world (0.8, 1.0, 0), which is bg_pool's target (0.78, 0.95, 0). The right of the frame (1110-1330, 380-600) is 224.7 and the left (20-240, 300-600) is 190.7, a 34-level imbalance across the set. The front baffle's median is only 200.8."
+   },
+   "change": {
+    "setting": "lights.bg_pool.irradiance",
+    "from": 1.4043,
+    "to": 0.1
+   },
+   "expected": "The paper behind the drivers drops to about 195 (about 188 with c5), off the shoulder. The right of the frame drops to about 205, so the set evens out to roughly 180-205. Beside the baffle's right edge the paper drops about 15 levels at y 460-640. The drivers (medians 22-70) and the insert's bowl (54) keep more than 120 levels of contrast against it.",
+   "accept": {
+    "region": [
+     800,
+     450,
+     1000,
+     520
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     180,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The side panel facing the camera prints as one flat grey, so the white lacquered box reads as a card and shows no gloss.",
+   "evidence": {
+    "region": [
+     300,
+     262,
+     420,
+     660
+    ],
+    "measured": "Top-to-bottom profile 159, 160, 161, 162, 163, 163, 163, 162 (falloff -3). Across x it is 162 in all 8 bins. Median 162, against 190-198 paper on its left. Its pixels mirror the floor to its left (sweep 91-98 %, met at x -2.75 to -0.29, y -1.02 to -0.17), and that floor is itself 150-175, so the clear coat shows no reflection."
+   },
+   "change": {
+    "setting": "lights.side_sheen",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      4.0,
+      4.0
+     ],
+     "position": [
+      -2.3,
+      -0.75,
+      0.005
+     ],
+     "target": [
+      -2.3,
+      -0.75,
+      1.0
+     ],
+     "strength": 2.4,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -2.6,
+       -0.4
+      ],
+      "values": [
+       1,
+       0
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "side-left"
+     ]
+    }
+   },
+   "expected": "A soft reflected gradient: about 186 under the eave, falling to about 163 above the plinth (falloff about 23), brightest at the top-back corner, which mirrors the far end of the card. The side-left median rises from 162 to about 170 and stays at least 15 below the baffle's top-left (205), so the vertical corner still reads. The card is reflection-only and linked to side-left, so nothing else in the frame changes.",
+   "accept": {
+    "region": [
+     300,
+     262,
+     420,
+     660
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     16,
+     32
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Glint 0 reflects as a large, flat-topped white disc on the front roof slope at the pocket's left lip. It is a hot spot that pulls the eye off the pocket and wipes out the lip.",
+   "evidence": {
+    "region": [
+     405,
+     115,
+     460,
+     225
+    ],
+    "measured": "clip_pct 21.75: 1316 clipped px in a 36x54 px disc (412-447, 151-204), at 253-254 for about 30 px across before the pocket edge cuts it off. glint0 radiance 300, mirrored on 15.5 % of the area. gable-block clip_pct 4.59 %."
+   },
+   "change": {
+    "setting": "glints.0.size_m",
+    "from": 0.08,
+    "to": 0.025
+   },
+   "expected": "The disc shrinks to a sparkle about 10-15 px across (about 50-180 clipped px) with a soft falloff, and the pocket's left lip reads as an edge.",
+   "accept": {
+    "region": [
+     405,
+     115,
+     460,
+     225
+    ],
+    "metric": "clip_pct",
+    "op": "between",
+    "value": [
+     0.2,
+     3.0
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The gloss card lays an even reflection over the whole front roof slope and the insert's front face, which turns the accent red salmon pink.",
+   "evidence": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      480,
+      100,
+      590,
+      145
+     ]
+    },
+    "measured": "rgb (216,101,101), lum_median 125.4 (p5 120.6, p95 127.2: an even wash), dE2000 15.2 against #C62828. 74 % of these pixels mirror panel gloss at radiance 1.56, with its ramp saturated across the slope. The fin, which mostly misses the card, is (191,19,15), dE 4.6. The insert's front face (1000-1085, 300-355) is (205,83,83), dE 9.9, and mirrors bowl_sheen over gloss."
+   },
+   "change": {
+    "setting": "lights.gloss.strength",
+    "from": 1.5636,
+    "to": 0.45
+   },
+   "expected": "The front slope moves to about (203,66,63), luminance about 92, dE about 6, with a light sheen still falling off toward the eave. The insert's front face moves to about dE 6. The bowl keeps its bowl_sheen streaks.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      480,
+      100,
+      590,
+      145
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     82,
+     100
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "Below the mid hole, the paper to the right of the cabinet is brighter than the white front, so the cabinet's right edge disappears. By the lamps' geometry, floor_shadow supplies about a sixth of that paper's light.",
+   "evidence": {
+    "region": [
+     600,
+     460,
+     625,
+     640
+    ],
+    "measured": "Paper 227.6 (p5 225.5, p95 228.8) against the baffle's right strip (580-592) at 211-214. The difference across the edge is +12 at y 220-240, +1 at y 340-360 and -16 at y 580-640. At y 400-440 the edge step is only 3.6, spread over 12 px. The lower-right floor (960-1300, 600-860) is 230.6, on the shoulder."
+   },
+   "change": {
+    "setting": "lights.floor_shadow.irradiance",
+    "from": 1,
+    "to": 0.5
+   },
+   "expected": "With c1, the strip falls to about 200, so the baffle's right edge sits about 10-14 above the paper from top to bottom instead of crossing to -16. The lower-right floor falls to about 220. The woofer's floor shadow (169.7 at 560-700, 800-860) keeps at least 35 levels against the floor beside it (now 50).",
+   "accept": {
+    "region": [
+     600,
+     460,
+     625,
+     640
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     188,
+     204
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "The cabinet's foot has no contact shadow, so the 1 m floorstander looks placed on the paper rather than standing on it.",
+   "evidence": {
+    "region": [
+     530,
+     751,
+     536,
+     756
+    ],
+    "measured": "The floor 2-11 px under the plinth's front-right foot is 181.8, against 182.1 at 25-40 px out (528-536, 775-790). At columns x 470-560 the floor rises only 2-10 levels over the first 30 px below the edge."
+   },
+   "change": {
+    "setting": "materials.sweep.contact",
+    "from": 0,
+    "to": 0.6
+   },
+   "expected": "A tight contact shadow along the foot: about 135-145 in the first 10 px, fading out within about 15 px (contact_m 0.05). The floating parts are far above its reach and stay unaffected.",
+   "accept": {
+    "region": [
+     530,
+     751,
+     536,
+     756
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     120,
+     150
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The plinth_sheen card's ramp starts at 60 %, so its reflection on the shadow-side plinth begins at a hard diagonal edge.",
+   "evidence": {
+    "region": [
+     320,
+     735,
+     370,
+     745
+    ],
+    "measured": "Row profile 35, 35, 36, 45, 54, 54 across x 336-352: a 19-level step over about 8 px where the mirrored card begins (radiance 0.34 at that edge, 0.49 at the far end). Edge step 3.0."
+   },
+   "change": {
+    "setting": "lights.plinth_sheen.ramp.values",
+    "from": [
+     0.6,
+     1
+    ],
+    "to": [
+     0,
+     1
+    ]
+   },
+   "expected": "The sheen fades in across the band instead of switching on. The largest per-pixel step in the strip drops from 3.0 to under 1.2, and the side plinth's median stays about 45-55.",
+   "accept": {
+    "region": [
+     320,
+     735,
+     370,
+     745
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     0,
+     1.2
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Lacquer the waveguide insert's flank in the accent red",
+   "why": "The flank prints neutral grey (87,90,94) over about 7.1k of the insert's 19.3k px, so the hero part shows the flavour colour only in its bowl and face. The insert's materials are the product's finish, which is fixed."
+  },
+  {
+   "request": "Line or darken the cabinet interior seen through the driver holes",
+   "why": "Light bouncing inside the birch box prints (74,48,5) over 13.6k px, so the woofer hole reads as a mustard disc beside the white front. The interior is the product's material and geometry, which are fixed."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
