@@ -1,0 +1,314 @@
+{
+ "stage1": {
+  "impression": "A clean, legible half-section of the gabled ply roof. The red waveguide and the tweeter assembly sit dead centre and every part is in frame. But it is lit like CAD: the cut faces, the grey insert section and the red bowl each print at close to one value, on a flat mid-grey backdrop the red barely separates from. The apex fin reads as a murky translucent film, and the tweeter's black parts merge into one dark mass.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The waveguide bowl models as lacquer. In [820,445,1000,525] it needs a sheen that follows the flare (p95-p5 >= 15; now 6.6, with the along-axis profile flat at 73.8-74.2). There must be no hard-edged reflection outline anywhere in the bowl, and its lit face must stay within dE 3 of #C62828.",
+  "The red separates from the backdrop by value as well as hue: the roof slope band and the fin face each sit >= 20 levels from the backdrop beside them (now 71.3 vs 89.9 and 76.6 vs 86.9).",
+  "The fin's +x face reads as red lacquer, not a grey film: dE <= 6 to #C62828 (now 11.6 at rgb 146,58,60, one value of 76.4-77.4 over 117 px).",
+  "The section shows where the light comes from: >= 12 levels of falloff across the top panel and across the insert's grey wedge (now 149.9-152.7 and 119.8-121.8).",
+  "The tweeter's black parts hold detail at a glance: rear chamber [672,380,694,520] >= 10 (now 3.6, with 19 % of it at <= 3) and the sleeve's bore >= 28 (now 19.4), while the sleeve's flange (52) stays >= 15 below the frame rim (80). PBR Neutral's toe (x - 6.25x^2 below 0.08 scene-linear in the reference transform) crushes these, and no set-wide lamp lifts them without pushing the ply past 200.",
+  "The backdrop reads as a lit studio, with a pool of >= 15 levels behind the product (now 79-96, brightest in the lower-right corner, and the pool lamp lights nothing).",
+  "The box interior reads as birch rather than mud: side-right lum >= 100 with B/R >= 0.45 (now lum 81.7 at rgb 106,78,42; the right compartment is 46-66)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The waveguide bowl is the hero, but it prints as one flat swatch-red plate: its core mirrors the uniform gradient sky, and the bowl_ramp card hangs on the camera side where the bowl barely sees it, so nothing says curved lacquer.",
+   "evidence": {
+    "region": [
+     820,
+     445,
+     1000,
+     525
+    ],
+    "measured": "Core: lum 69.9-76.4 (p5-p95), range 6.6, rgb 196,41,41 (dE 0.44 to #C62828). Profile along the bowl: 73.8, 74.1, 74.2, 74.0, 74.0, 73.8. What it mirrors: world (sky) 76.9 %, itself 15.3 %, sweep 7.7 %. bowl_ramp is mirrored by only 1.5 % of the insert, all at [780,446,818,474]. Those rays meet the card at x 1.38-1.68, y -0.80 to -0.49, i.e. its +x end, about az -24 deg / el 13 deg from the bowl. The core's other reflections run from there to about az +65 deg toward the product's front: the sweep is hit at az +49 to +69, el 17-24, at image x 940-1100."
+   },
+   "change": {
+    "setting": "lights.bowl_ramp",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      1.6,
+      0.9
+     ],
+     "position": [
+      1.075,
+      -1.05,
+      1.295
+     ],
+     "target": [
+      0.08,
+      0.04,
+      0.92
+     ],
+     "strength": 0.8,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.86,
+       1.3,
+       1.74
+      ],
+      "values": [
+       0,
+       1,
+       0
+      ]
+     },
+     "diffuse": false
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.4,
+      1.8
+     ],
+     "position": [
+      1.045,
+      0.313,
+      1.118
+     ],
+     "target": [
+      0.1,
+      0.06,
+      0.91
+     ],
+     "strength": 0.6,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -0.8,
+       0.3,
+       1.4
+      ],
+      "values": [
+       0,
+       1,
+       0
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The core mirrors the card instead of the sky. A soft white sheen peaks near x 850-920 (about lum 88-100, rgb about 203,60-75,60-75) and rolls off to the swatch red (about 74) toward the throat and toward the mouth. The y-ramp is 0 at both ends, and the card's top and bottom edges (el -29 and +53 deg from the bowl) lie outside the bowl's reflections, so no hard outline appears like round 5's pink plate. p95 goes from 76.4 to 86-104. The sheen is strongest with c3 (polariser off). The slope band, fin and cut faces mirror other directions (about az +83 deg, or back toward the camera), so only the bowl and small chrome parts pick the card up.",
+   "accept": {
+    "region": [
+     820,
+     445,
+     1000,
+     525
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     86,
+     104
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The backdrop is a flat mid-grey almost as light as the accent red, so the hero separates by hue alone, and every grazing red face mirrors that grey as a translucent-looking film.",
+   "evidence": {
+    "region": [
+     1220,
+     60,
+     1340,
+     560
+    ],
+    "measured": "Backdrop lum 88.7, ranging 79-96 across the frame; top-band profile 78.7, 81.6, 83.7, 85.6, 86.9, 86.9, 86.6, 85.9, 84.6. The red slope band (71.3) sits against 89.9 above it, and the fin face (76.6) against 86.9 beside it. The fin's +x face (gable-block in [688,128,745,245]) mirrors the sweep 99.9 %: rgb 146,58,60, dE 11.6, flat at 76.4-77.4. The mouth's lower lip [1050,560,1200,655] mirrors the sweep 58 %: [1100,600,1170,640] is rgb 167,51,54, dE 7.2."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#97948F",
+    "to": "#6D6A67"
+   },
+   "expected": "Backdrop [1220,60,1340,560] goes from 88.7 to about 47 (about 40 top-left to about 52 bottom-right). The drop is steeper than the albedo ratio because PBR Neutral's toe squares values below 0.08. The slope band then sits about 25 above the backdrop instead of about 19 below it. The sweep veil on the fin roughly halves (about rgb 140-150,36-46,38-48, dE about 6-8 instead of 11.6), and the mouth lip moves toward the swatch. Round 5's c1 wanted 92-108 here; this deliberately goes further the same way. Its purpose was to stop the insert's grey wedge (122) reading as a hole, and a 75-level gap holds that better, whereas at 85-93 the red is isoluminant with the backdrop.",
+   "accept": {
+    "region": [
+     1220,
+     60,
+     1340,
+     560
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     40,
+     58
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "camera",
+   "problem": "The polariser strips the clear coat's reflections from the bowl's tilted walls, so the bowl reads as matte paint and would cut the sheen c1 adds.",
+   "evidence": {
+    "region": [
+     820,
+     445,
+     1000,
+     525
+    ],
+    "measured": "camera.polariser.strength 0.8 at 90 deg cuts the s-glare on faces tilted toward or away from the camera. Here that is the bowl's lower and upper far walls (incidence about 35-55 deg, near Brewster) and the roof slope. The core is the bare swatch (rgb 196,41,41, dE 0.44) with lum range 6.6."
+   },
+   "change": {
+    "setting": "camera.polariser.strength",
+    "from": 0.8,
+    "to": 0
+   },
+   "expected": "The bowl's lower far wall shows c1's ramp at full strength, and the core's range goes from 6.6 to 13-34. The slope band's grazing glare roughly doubles, but with c2 it mirrors a sweep half as bright, so the band keeps its rgb 188,39,39 (dE 2.1). The fin is a side face that the 90-deg polariser never covered, so it changes only through c2. Round 5's pale-pink plate cannot return: the mouth lamp's specular is 0, and the only emitter the bowl now mirrors is c1's ramped card.",
+   "accept": {
+    "region": [
+     820,
+     445,
+     1000,
+     525
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     13,
+     34
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The cut plane is lit evenly from side to side, so the top panel and the insert's grey wedge each print as one value and the section reads as a CAD face rather than a lit object.",
+   "evidence": {
+    "region": [
+     220,
+     646,
+     1150,
+     688
+    ],
+    "measured": "Top panel profile along x: 150.1, 151.9, 152.7, 151.9, 152.4, 152.4, 151.3, 149.9 (falloff 0.2). Grey wedge [680,600,1100,640]: 121.8, 121.8, 121.8, 121.8, 120.8, 119.8. The only gradient is vertical (ply 184 at the fin to 151 at the eaves). The key at az -10 sits nearly square to the cut, and the fill from the right balances its two halves."
+   },
+   "change": {
+    "setting": "lights.key.orbit.azimuth_deg",
+    "from": -10,
+    "to": 20
+   },
+   "expected": "Light falls off from the product's front (frame right) toward its back. The top panel runs from about 142 at the left to about 160 at the right (falloff about -18); the left slope goes from 160 to about 149, the apex from 184 to about 181, and the wedge runs about 118 to 130 left to right. The key now reaches the fin's +x face (n.l from 0 to about 0.25) and the roof slope band (about 0.15 to 0.4), lifting the red there. It also adds about 15-20 % light to the bowl's lower wall (n.l 0.44 to 0.73), giving a top-to-bottom gradient while retouch.lightness 0.5 holds the mean. The key sits at about az -88 deg from the bowl, outside its reflections.",
+   "accept": {
+    "region": [
+     220,
+     646,
+     1150,
+     688
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -28,
+     -8
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The pool lamp stands behind the sweep's back wall and lights nothing, so there is no pool behind the product and the backdrop is brightest in its lower-right corner.",
+   "evidence": {
+    "region": [
+     300,
+     150,
+     520,
+     300
+    ],
+    "measured": "Backdrop behind the back slope: 84.6. Top band runs 78.7 (left) to 86.9 to 84.6, and the lower-right [1210,680,1350,900] is 94.8. The fin's and slope band's reflections meet the back wall at y 1.93-2.0, while lights.pool sits at y 2.25 aimed at y 3.33. Round 5 also found 'the pool lamp is not what lights it'."
+   },
+   "change": {
+    "setting": "lights.pool",
+    "from": {
+     "type": "area",
+     "size_m": [
+      1,
+      1
+     ],
+     "position": [
+      -0.55,
+      2.25,
+      1.85
+     ],
+     "target": [
+      -0.55,
+      3.33,
+      0.95
+     ],
+     "irradiance": 0.5,
+     "color": 5600,
+     "specular": 0
+    },
+    "to": {
+     "type": "area",
+     "size_m": [
+      1,
+      1
+     ],
+     "position": [
+      -0.45,
+      1.0,
+      1.6
+     ],
+     "target": [
+      -0.6,
+      2.0,
+      0.9
+     ],
+     "irradiance": 1.2,
+     "color": 5600,
+     "specular": 0
+    }
+   },
+   "expected": "A soft pool appears on the darkened backdrop, centred behind the back slope at about image (345, 280). [300,150,520,300] rises from c2's about 44 to 56-74, falling to about 45-55 at the right edge, so the red side keeps its dark ground and the backdrop reads as a lit studio. The lamp faces the wall (+y), away from the product, so nothing on the product changes.",
+   "accept": {
+    "region": [
+     300,
+     150,
+     520,
+     300
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     56,
+     74
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Take the accent lacquer off the counterbore's bore faces in the gable block.",
+   "why": "Red slivers of gable-block at x 602-615, y 335-430 and 480-525 sit against the black sleeve and read as red light leaking into the counterbore. Which faces carry the paint is the product's finish, which is fixed."
+  },
+  {
+   "request": "Make the pull-loop ribbon read as a ribbon at the mouth.",
+   "why": "pull-loop [1126,656,1202,662] is a 6-px red line ending in a black stub on the bowl's lower lip, and at a glance it reads as a render artefact. Its geometry is the product's, which is fixed."
+  },
+  {
+   "request": "Remove the back letter that pokes out of the left wall.",
+   "why": "letters-back-3 [165,740,169,803] is a 4-px black tab on the back panel's outer face that reads as a stray object at the frame's left edge. The marks are fixed."
+  },
+  {
+   "request": "Give the sleeve and the tweeter's rear cup a lighter section colour.",
+   "why": "The sleeve's bore (19.4) and the frame's rear chamber (3.6, with 19 % of it at <= 3) are black materials and stay near-black under any light the set can carry without blowing the ply. The drivers' and printed parts' materials are fixed."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

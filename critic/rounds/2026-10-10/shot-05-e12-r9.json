@@ -1,0 +1,246 @@
+{
+ "stage1": {
+  "impression": "Six milk-carton speakers in a clean lineup read clearly, and the glossy gables and driver cones are convincingly modelled, but the whole frame sits in a dull mid-grey where the white bodies print as dingy light grey under flat, front-on light. A hard-edged dark slab behind the right two-thirds of the row is the loudest thing in the background and makes the set look unfinished, and the lineup has no sense of a designed space.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The backdrop reads as one smooth surface: no row-to-row step above 3 levels anywhere in the cove or the far floor (now 34.7 at [1140, 280, 1175, 360] and 44.8 at [925, 270, 950, 340]), and the cove behind the roofs at 90-125 (now 44.6 at [1362, 170, 1500, 320]).",
+  "The white fronts at a 203-216 median with a 12-25 level fall from top to bottom and nothing above 226 but highlights (now 168 over the three, 161/167/171 each, dE2000 19.7-22.6 against #FFFFFF); white sides 145-170 (now 131/137/131).",
+  "Every outline stands at least 20 levels off what lies behind it: Matcha's and Oat's fins against the cove (now 0-10 levels), and the Matcha, Oat and Skim side faces against the floor behind the row (in e11 without the flag, 0-10 for Oat and 0 for Skim's back edge).",
+  "The clear coat shows on every face of every unit: side faces and plinth sides carry the reflection of the floor and the neighbouring unit instead of one matte value (Oat's plinth side now 31.2, p95 34.7, with the polariser at 0.85).",
+  "Every unit is grounded: the paper 1-7 px under each plinth at least 15 % darker than the open floor beside it (under Chocolate it is now 90.3 against 82.5, i.e. lighter).",
+  "No face is lit by a lamp the set cannot see: front_lift alone supplies about 18 % of the white fronts' light (0.07 of 0.39 linear) and none of it reaches the floor in front (82.1).",
+  "Every lit face on its swatch within dE2000 3 (now Chocolate's insert 4.97, Skim's insert 3.84, Oat's body 3.59, Whole's gable 3.5, Matcha's body 3.24)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "bg_flag prints as a black slab across the cove behind the right four units that swallows the Matcha and Oat roofs and ends in a hard line on the floor behind the row, and since it went in the key's light has gone from the whole frame.",
+   "evidence": {
+    "region": [
+     500,
+     140,
+     1500,
+     300
+    ],
+    "measured": "Cove behind the right four units lum_median 47.6 (p5 26.9) against 95.0 above it at [600, 20, 1500, 110]; the column [1140, 0, 1175, 520] reads 30.9, 27.9, 18.9 then 99.0 across y 260-340, largest row step 34.7 at [1140, 280, 1175, 360] and 44.8 at [925, 270, 950, 340]; Matcha's fin top 41-45 on a 41-45 background, Oat's 32-35 on 41-45. Against e11 (same lamps, before round 8) the sweep keeps only 0.45-0.66 of its linear light outside the band and 0.06-0.20 inside it, and the white fronts fell from 199/202/203 to 161/167/171 although front_lift was added: no change but this flag can take light off the near floor in front of the units."
+   },
+   "change": {
+    "setting": "lights.bg_flag.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The band is gone: the cove behind the roofs continues the sweep smoothly at about 97 once c2 and c3 are in (e11 without the flag: 120-122 with no row step above 2), Matcha's and Oat's fins stand 45+ levels off it, and the key's light returns (e11: white fronts 203 at this exposure). This reverses round 8's c4; the job it was for, keeping the far floor and lower cove off the value of the shaded sides, passes to c3, which darkens the paper instead of shading two lamps, so the sides stay clear of the floor without a black band or a lost key.",
+   "accept": {
+    "region": [
+     1362,
+     170,
+     1500,
+     320
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     88,
+     125
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "camera",
+   "problem": "The three white fronts print 30-50 levels under the 200-220 the card sets for white lacquer while the retouch lifts every colour paint about 2x to its swatch, so the whites read as grey card next to accents lit about 1.3 EV brighter.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      143,
+      226,
+      641,
+      460
+     ]
+    },
+    "measured": "lum_median 168.0, falling 171, 175, 168, 167, 166, 155 top to bottom; per unit 161/167/171 (dE2000 22.6/20.9/19.7 against #FFFFFF); white sides 131/137/131; retouch gains on the colour paints 1.55-2.27; Whole's red plinth (188, 37, 37) under a 161 body implies 2.5x the body's light. The same region read 203.0 in e11 (no flag, no front_lift)."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": -1.35,
+    "to": -1.25
+   },
+   "expected": "With c1 and c6 in, the fronts return to about 203 (e11) and +0.1 EV centres them near 209 with their fall kept (about 216 in the top bin to 196 in the bottom), nothing on them above 226 but highlights; the white sides follow to about 150-165 and the retouch gains on the colour paints drop toward 1, so whites and accents read as lit by one light.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      143,
+      226,
+      641,
+      460
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     203,
+     216
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "Without the flag, the #909090 paper puts the far floor and lower cove back at the value of the mid-tone side faces, which is what round 8's c4 was for: in e11 Oat's side melted into the floor beside it and Skim's back edge into the gap behind it.",
+   "evidence": {
+    "region": [
+     1362,
+     345,
+     1500,
+     430
+    ],
+    "measured": "Far floor right of Oat 104.2 here and 115.3 in e11; in e11 Oat's side 106-112 sat on 112-121, Matcha's side 80-104 on 98-112 and Skim's back edge 111 on 111; with retouch.lightness now 0.9 those sides print about 116-125 (Oat 125-131, Matcha 99-121 here)."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#909090",
+    "to": "#707070"
+   },
+   "expected": "The paper's albedo drops from 0.28 to 0.16 linear; with c1 and c2 the far floor beside Oat reads about 92, the Matcha-Chocolate gap about 78, the Skim-Matcha gap about 85, the cove behind the roofs about 97 and the near floor about 87, so the Matcha, Oat and Skim sides stand 25-40 levels off the floor behind them while Oat's and Matcha's gables (44, 50) keep 45+ against the cove and Chocolate's side about 15 against the near gaps. It continues round 7's darkening (#C0C0C0 to #909090, made for the same separation) rather than reversing it; it goes below round 6's #8E8E8E, but whatever that lightening was for, the cove at about 97 keeps the darkest parts of the frame well clear of the paper.",
+   "accept": {
+    "region": [
+     1362,
+     345,
+     1500,
+     430
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     80,
+     100
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "camera",
+   "problem": "The polariser at 0.85 (angle 0) strips the clear coat's reflection from every side-turned face, and these sit near Brewster's angle to this camera, so sides and plinth sides print as matte paint and the lacquer finish the brief must show is missing.",
+   "evidence": {
+    "region": {
+     "part": "side-right.plinth",
+     "box": [
+      1310,
+      550,
+      1356,
+      627
+     ]
+    },
+    "measured": "Oat's plinth side lum_median 31.2, p95 34.7, though 68.8 % of it mirrors floor_card at radiance 0.93-0.99 and 29.6 % the sweep; the white sides are smooth occlusion ramps (Whole 138, 135, 128, 107 across x) showing nothing of the neighbour's side they mirror (78 % on Whole); Chocolate's side 39.3 mirrors the sweep (75 %) with no trace of it."
+   },
+   "change": {
+    "setting": "camera.polariser.strength",
+    "from": 0.85,
+    "to": 0
+   },
+   "expected": "Each side face carries a soft reflection of the floor and its neighbour (about +5-8 % on the white sides, a visible sheen on Chocolate's side, which rises to about 45-50), the plinth sides pick up the floor card's ramp (Oat's to about 50-60), and the fronts' floor-card reflection strengthens by about 3 %, so all six read as the same clear-coated lacquer; if the plinth sides wash out, a partial strength keeps them inside the test.",
+   "accept": {
+    "region": {
+     "part": "side-right.plinth",
+     "box": [
+      1310,
+      550,
+      1356,
+      627
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     38,
+     62
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "material",
+   "problem": "The units are not grounded alike: Whole has a real contact shadow, Skim a 5 px line, and the paper under Chocolate's cream plinth is lighter than the open floor, so that unit reads as standing on a glow.",
+   "evidence": {
+    "region": [
+     995,
+     590,
+     1005,
+     596
+    ],
+    "measured": "1-7 px under Chocolate's plinth edge lum_median 90.3 against 82.5 at 20-28 px out ([995, 608, 1005, 616]); under Skim 61-69 at +1-3 px back to 80 by +7 px against 82-84; under Whole 38-44 at +1 px against 75-77."
+   },
+   "change": {
+    "setting": "materials.sweep.core",
+    "from": 0,
+    "to": 0.8
+   },
+   "expected": "A tight contact core (core_m 0.025 m, about 9 px here) darkens the paper where every base meets it: the first 1-7 px under each plinth about 20-35 % darker than the open floor beside it (under Chocolate about 60-66 against about 80 after c1-c3), fading out by about 9 px, with no drawn black outline.",
+   "accept": {
+    "region": [
+     995,
+     590,
+     1005,
+     596
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     40,
+     66
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "front_lift, a panel linked to front-baffle alone, adds light to the fronts that the floor in front of them never receives, the over-lit front the card says critics read as self-glow and a cut-out.",
+   "evidence": {
+    "region": [
+     600,
+     630,
+     900,
+     720
+    ],
+    "measured": "Near floor lum_median 82.1 against the white fronts' 168.0 (4.6x in linear light, where lacquer white at about 0.8 over this paper at 0.28 gives about 2.9x under one light); the engine's round-8 proofs put front_lift's share at about 0.07 of the fronts' 0.39 linear (0.35 gave 158.0, 0.65 gave 162.0, 1.25 gave 168.0)."
+   },
+   "change": {
+    "setting": "lights.front_lift.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The fronts lose about 12 % of their light once the key is back and c2's exposure carries the whites into 203-216 instead, which lifts the floor with them: the near floor lands at about 87 rather than about 82, and the fronts' excess over what the set's light implies falls from about 1.55x to about 1.25x. This reverses round 8's c6, whose own test failed (168 against 209-216); its job, the whites in the 200-220 band, is done by c1 and c2.",
+   "accept": {
+    "region": [
+     600,
+     630,
+     900,
+     720
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     80,
+     102
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Larger rounds on the vertical edges so each carries a highlight line against the backdrop.",
+   "why": "At this scale (1 m is about 370 px) the 6 mm rounds print about 2 px wide, too narrow to hold an edge light, so the shaded sides of Matcha, Oat and Skim can only separate from the floor behind them by tone (c3); the rounds are the spec."
+  }
+ ],
+ "score_if_fixed": 7.5
+}

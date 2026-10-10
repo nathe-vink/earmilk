@@ -1,0 +1,272 @@
+{
+ "stage1": {
+  "impression": "A white-and-red milk-carton speaker on an oak floor in a sunlit room, its carton silhouette cast into a sun patch on the wall: a pleasant, competent interior with a good idea at its centre. The white front reads flat and close to one value, the grounding is weak, and the wall's light patch starts exactly at the speaker's right edge and eave line, pinning the product to the background.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Room light coherent with the windows: the clean wall on the window side [20, 120, 150, 420] within 20 levels of the wall's right end [1150, 20, 1340, 280] (now 145.7 vs 210.9), and no floor outside the sun patch brighter than the sunlit floor (now a 136-149 pool in the bottom right against 98.5-101 where the sun lands).",
+  "The white front reads as lit lacquer: base 203-218 on [504, 520, 513, 636] (now 189.6), a reflected top-to-bottom gradient of 8-16 levels on [504, 335, 513, 640] (now 1.1), only its one highlight above 226, and no flat plateau (now a 215.4 disc with a 6 px edge in the upper left).",
+  "The shade side stays a white in shade: part:side-right at 150-175 (now 168.4), keeping its soft gradient (176 at the top to 159 at the foot).",
+  "No tangency between the set's light and the silhouette: the wall patch's top edge at least 20 px off the eave line, and none of its corners on the product's outline (now 3 px, collinear at y 321 vs 324).",
+  "Brand red on every lit face: the roof's front slope [510, 268, 534, 300] within dE2000 9 of #C62828 (now 18.35), with the plinth front within 2 (now 0.19).",
+  "The product's sun shadow reads as one shape from the plinth to the silhouette on the wall: on the floor at least 30 levels under the sunlit floor beside it (now 108.7 vs 131.9, a 23-level step), and on the wall at least 50 under the patch (now 158.1 vs 228.7).",
+  "The sun reads on the floor: the floor window 0 lights sits at least 15 levels above shaded floor at the same depth (now 98.5 vs 106.9 in the foreground, inverted)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The window side of the room is its darkest part: the back wall falls from 212.6 at the right edge to 144.5 at the left, and the left skirting reads 106.9 against 226.8 in the sun. The room reads lit from the right, where it has no window, and its left third reads as dusk rather than a bright, airy morning.",
+   "evidence": {
+    "region": [
+     20,
+     120,
+     150,
+     420
+    ],
+    "measured": "lum_median 145.7 (round 9's c1 still fails here); back-wall profile x at y 200-290, left to right: 144.5, 154.5, 159.2, 161.5, 164.3, 167.8, 172.8, 177.3, 182.4, 189.3, 197.1, 205.0, 210.9, 212.6; skirting [0, 505, 100, 530] 106.9 vs [940, 560, 1100, 590] 226.8; wall [0, 0, 400, 100] 166.6"
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 3,
+    "to": 8
+   },
+   "expected": "Skylight through both window portals lifts the clean left wall to about 175 (round 9's proofs on this region: 3 gave 146.5, 4.5 gave 154.5, 4.97 gave 157.3, about 0.026 linear per unit). The left skirting rises to about 125, the wall above the patch to about 192 and the front by about 7. With c7, the wall's left-to-right spread falls from 65 to about 26 levels. The value goes past round 8's 5.5 but stays well under the 11.5 it cut from. The sun keeps its punch: the wall shadow [760, 400, 870, 540] stays at least 55 levels under the patch [950, 380, 1100, 520] (now 158.1 vs 228.7; about 164 vs 232 after c1, c2 and c7).",
+   "accept": {
+    "region": [
+     20,
+     120,
+     150,
+     420
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     166,
+     184
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The sunlit white front prints darker than the sunlit plaster behind it, 189.6 on its clean lower strip against 228.7 in the wall's sun patch, though it faces the sun more squarely (cos 0.95 vs 0.88). The front takes almost only the sun (about 3.3 of its 3.6 W/m2, estimated from its value at exposure -1.06), while the patch adds fill_right, wall_wash and bounce (about 2.5 W/m2 over the sun's 3.1), so the product reads greyer than the wall.",
+   "evidence": {
+    "region": [
+     504,
+     520,
+     513,
+     636
+    ],
+    "measured": "lum_median 189.6; whole face part:front-baffle median 191.5, p95 215.4 only inside the glint disc, 0 % clipped; sun patch [950, 380, 1100, 520] 228.7 (p95 232.2); unlit wall above it [700, 150, 1100, 290] 189.5"
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 3.5,
+    "to": 4.0
+   },
+   "expected": "With c1's skylight, the front's white sits at about 210 (within 203-218): above the unlit wall, within about 20 levels of the patch, and in the 200-220 band where a white lacquer models and shows its reflections. The patch rises only a few levels in the PBR Neutral shoulder (about 232, because c7 takes part of its fill away). The sunlit floor and the narrow patch on the left gain about 2-4 levels.",
+   "accept": {
+    "region": [
+     504,
+     520,
+     513,
+     636
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     203,
+     218
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Outside the glint disc the front is one flat value: the clean strip right of the drivers reads 191.6, 191.3, 191.4, 191.6, 190.6, 189.6, 189.6, 190.5 top to bottom, and the face reads 191.4 to 192.4 across. 92 % of the strip mirrors lacquer_ramp at radiance 0 to 0.52, of which the clear coat shows about 0.05 (2 levels), so the lacquer reads as a matte card.",
+   "evidence": {
+    "region": [
+     504,
+     335,
+     513,
+     640
+    ],
+    "measured": "falloff 1.1 (8 bins); mirrors: panel lacquer_ramp 92.1 % (radiance 0 to 0.521, met at z 0.04 to 0.76), floor 7.9 % (y 616-640); whole front: lacquer_ramp 46 %, floor 29 %, glint2 over the panel 20 %"
+   },
+   "change": {
+    "setting": "lights.lacquer_ramp.strength",
+    "from": 0.5208,
+    "to": 4.0
+   },
+   "expected": "The face mirrors the ramp at full strength at its top (panel met at z 0.66-0.76) and not at all at its foot (z 0.02-0.08). That adds about 0.086 linear, about +12 levels, at the top of the strip and nothing above the plinth: top about 222 over a foot about 210 after c1 and c2. The front then reads as lacquer with a soft top-to-bottom sheen. Rounds 7 and 8 cut this panel from 30 and 12. At 4.0 it adds at most about 0.09 linear onto a face that starts 35 levels below the knee, and the test caps the falloff at 16, so the top stays under 226.",
+   "accept": {
+    "region": [
+     504,
+     335,
+     513,
+     640
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     8,
+     16
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "The sun patch's top edge on the back wall is collinear with the carton's eave: at x 616-720 its 50 % point sits at y 321, and the eave meets the side at y 324. The patch's left end is hidden behind the product, so its top-left corner lands exactly on the speaker's right shoulder and the eave line runs straight on into the patch's edge. That pins the product to a wall 0.9 m behind it.",
+   "evidence": {
+    "region": [
+     616,
+     290,
+     724,
+     350
+    ],
+    "measured": "column profiles at x 616, 640, 680, 720: unlit 168-172, lit 224-225, 50 % point at y 321, 321, 321, 320.5, 10-90 % width about 12 px; side-right top rows x 600-612: gable 85-101 to y 323, side 180-184 from y 325; projecting window 0 through the card's camera puts the patch's left end at x 545, behind the product"
+   },
+   "change": {
+    "setting": "set.windows.0.size",
+    "from": [
+     1.8,
+     2
+    ],
+    "to": [
+     1.8,
+     2.1
+    ]
+   },
+   "expected": "Raising window 0's head by 0.1 m lifts the patch's top edge about 31 px (0.1 m on the back wall here is 31-33 px), to y of about 290 at x 640-720. The edge then passes behind the red gable and meets its right hip at about (587, 290) at an angle, which reads as overlap. The eave corner (613, 324) and the gable end stand against sunlit wall, and the carton shadow (top at y of about 350) gets about 60 px of lit wall above it instead of 28. The patch's left end stays hidden behind the gable, and the sun, the product's shadow and the floor patch do not move.",
+   "accept": {
+    "region": [
+     640,
+     282,
+     720,
+     302
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     188,
+     222
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The front's upper-left quarter is a flat disc reflection of glint2: x 392-480, y 330-440 reads 215.4 almost everywhere, 23 levels over the rest of the face, and ends in an edge about 6 px wide at y 440. It reads as a pasted patch, and once c1-c3 lift the face it would print flat in the shoulder above 230.",
+   "evidence": {
+    "region": [
+     394,
+     400,
+     421,
+     480
+    ],
+    "measured": "lum_range 24.2 (p5 191.4, p95 215.6); row y 345-360 in 9 px bins: 214.6-215.4 from x 392 to 464, 213.6 to 473, then 212.6, 199.4, 192.4 by x 500; column x 398-416: 215.4 to y 440, then 192.4; mirrors: lamp glint2 over panel lacquer_ramp 49.4 % (y 400-440, radiance 6.81), panel lacquer_ramp 50.6 % (y 438-480)"
+   },
+   "change": {
+    "setting": "glints.2.power_w",
+    "from": 4.2,
+    "to": 1.0
+   },
+   "expected": "The disc's step drops from 23 to about 6 levels. The upper left becomes a soft brightening on top of c3's ramp, peaking at about 224 as the face's one highlight instead of a flat plateau. This is the direction round 9 asked for (3 to 2.2, to keep this quarter out of the shoulder); its test band [218, 229] drove the engine the other way, to 4.2.",
+   "accept": {
+    "region": [
+     394,
+     400,
+     421,
+     480
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     3,
+     13
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The roof's front slope reads salmon rather than brand red: right of the waveguide it is [195, 111, 117], dE2000 18.35 from #C62828 (the fin is 0.0), and it is flat across the slope (lum p5 126.3, p95 132.2). 94 % of those pixels mirror gable_sheen at radiance 3.1-3.6 near 60 degrees incidence, where the clear coat returns about 8-9 %, so the red round the waveguide is washed rather than glossed.",
+   "evidence": {
+    "region": [
+     510,
+     268,
+     534,
+     300
+    ],
+    "measured": "rgb median [195, 111, 117], delta_e 18.35, lum p5 126.3 / p95 132.2; mirrors: panel gable_sheen 93.8 % (radiance 3.13-3.61, met at z 1.96-2.01), gable-block 6.2 %; left of the waveguide [392, 290, 420, 322] dE 8.59; plinth front [485, 640, 512, 705] dE 0.19"
+   },
+   "change": {
+    "setting": "lights.gable_sheen.strength",
+    "from": 4.4886,
+    "to": 1.5
+   },
+   "expected": "At about a third of the sheen, the slope reads about [190, 68, 71], dE about 7: red with a light gloss, close to the fin and plinth instead of pink. The rest of the front slope (dE 8.6 left of the waveguide) moves toward the swatch with it. The band's floor of 4 keeps a visible sheen, so the lacquer roof does not go matte.",
+   "accept": {
+    "region": [
+     510,
+     268,
+     534,
+     300
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     4,
+     9
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The brightest floor in the frame is a pool from fill_right, off the right edge, on floor that window 0 leaves in shade: row y 760-770 climbs 104, 104, 108, 111, 125, 131, 135, 137, 139, 142, 146, 149 from x 750 to the right edge. The floor the sun reaches has a median of 101.0 and the floor it leaves in shade 113.9 (98.5 vs 106.9 in the foreground). The floor is therefore lit from the side of the room with no window, and the bottom-right corner pulls the eye.",
+   "evidence": {
+    "region": [
+     1000,
+     760,
+     1300,
+     800
+    ],
+    "measured": "lum_median 136.1 (profile x 118.2, 121.4, 135.9, 138.1, 141.7, 145.0); floor classified by projecting window 0 through the card's camera: sunlit median 101.0, shaded 113.9; fill_right's share of this pool estimated at about 3.7 of 4.8 W/m2; it also lights the wall's right end [1150, 20, 1340, 280] to 210.9"
+   },
+   "change": {
+    "setting": "lights.fill_right.irradiance",
+    "from": 1.9986,
+    "to": 1.5
+   },
+   "expected": "The pool falls to about 120 and the wall's right end from 210.9 to about 201, so the room's light falls off away from the windows instead of toward them, and the bright corner calms. This takes back part of rounds 7-8 (0.7 to 1.3, 1 to 2.4), which raised the fill to lift the shade side. At 1.5, part:side-right should read about 155 (now 168.4), still a white in shade above 150, and c1's skylight adds to the bounce it sees.",
+   "accept": {
+    "region": [
+     1000,
+     760,
+     1300,
+     800
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     110,
+     126
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [],
+ "score_if_fixed": 7.4
+}

@@ -189,6 +189,9 @@ def _wainscot(bpy, walls, wins, wa):
     H = wa.get('height', 0.9); col = wa.get('color', '#CFC3AE')
     # its sheen: 0.38 is a satin that mirrors a lamp's panel as a soft halo; eggshell (0.7) blurs lamps into its shade
     paint = M.make(bpy, 'wainscot', 'satin_paint', {'color': col, 'roughness': wa.get('roughness', 0.38), 'specular': 0.5})
+    if wa.get('relief'):
+        # brush ridges in the paint, upright (`relief` their bump strength, `relief_mm` their size)
+        M.add_relief(paint, float(wa['relief']), wa.get('relief_mm', 12.0) / 1000.0)
     out = []
     for name, (a, b) in walls.items():
         if name == 'front' and not wa.get('front', False):

@@ -59,6 +59,15 @@ def _bump_noise(nt, scale_m, strength, distance_scale=0.2, detail=6.0, stretch=N
     return bn.outputs['Normal']
 
 
+def add_relief(m, strength, scale_m=0.012, stretch=(1.0, 1.0, 0.08)):
+    """A brushed paint's relief on material `m`: a bump of noise drawn out along `stretch` (by default upright, as a
+    brush runs down a panel or a stile), `scale_m` its feature size, so a low sun rakes something across a painted
+    board instead of a dead-flat field (02b's round 12: the sunlit wainscot 2.8 levels across a 60 px square)."""
+    nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    prev = b.inputs['Normal'].links[0].from_socket if b.inputs['Normal'].is_linked else None
+    nt.links.new(_bump_noise(nt, scale_m, strength, stretch=stretch, normal_in=prev), b.inputs['Normal'])
+
+
 def make(bpy, name, preset, overrides=None, bevel_mm=0.0):
     """A Blender material from a preset plus overrides. bevel_mm > 0 adds a shader bevel (eases edges the mesh keeps
     sharp; the CAD's own fillets need none)."""

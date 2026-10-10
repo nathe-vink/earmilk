@@ -1,0 +1,252 @@
+{
+ "stage1": {
+  "impression": "A gable-top speaker stands right of centre in a dark slate room, its carton silhouette thrown into a warm window patch beside it, so the idea reads at a glance. The product looks placed into the light rather than standing in it (near-frontal, its white front evenly soft-lit while the face the sun strikes is a thin sliver), and the flat tan patch reads more like beige paint than golden sun.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The sun must visibly strike the product: its sun-side face the brightest, warmest plane on it (part:side-right 228-240, now 218.2 on a 25-px sliver) with a step of 35 levels or more at the front/side corner (now 16.2), instead of the front's top-left (222) out-shining it.",
+  "The window patch must read as golden sunlight on a real surface: C* 28 or more at L* 53-58 (now C* 21 at L* 55; dE2000 4.67 to #A07E50) and visible relief under the raking sun (lum_range 5 or more in a 60-px square of lit panelling; now 2.8).",
+  "No hard-edged reflections on the drivers: the woofer cap's frontsheen sliver at [832, 586, 846, 610] (p95 97.5 on a cap whose median is 4.8) must go.",
+  "The woofer cone must read as black anodised aluminium, not bronze: its reflection of the sunlit floor peaks at 213 (band [785, 590, 815, 640] median RGB 86, 71, 58; whole cone dE2000 8.2 to #202020). That needs the cone's reflectance, which the card fixes."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "composition",
+   "problem": "The camera faces the side the 8-degree sun only grazes (cosine 0.27) and sees the face it strikes (cosine 0.95) almost edge-on, at 82 degrees, so the product reads as studio-lit next to a sunlit wall.",
+   "evidence": {
+    "region": [
+     931,
+     342,
+     956,
+     773
+    ],
+    "measured": "side-right is 25 px wide, median 218.2, profile 218-219 top to bottom, and mirrors the dark back-wall panel (52 %) and floor (31 %) at an 82-degree view, so roughly 40 % of what the camera sees there is coat reflection of a dark wall. front-baffle median is 200.4 and its top band runs 222 to 205 left to right, so its top-left out-shines the sun side. The front/side corner step in [890, 450, 952, 520] is only 16.2 (front 197, side 218-220)."
+   },
+   "change": {
+    "setting": "product.instances.0.rotate_z",
+    "from": -36,
+    "to": -40
+   },
+   "expected": "The sun side turns 4 degrees toward the camera (view 82 to 78 degrees). Its coat reflection share falls from about 40 % to about 30 %, so the side widens from 25 to about 37 px and reads 228-240. The front's sun cosine drops from 0.27 to 0.21, putting the front median near 190, so the corner step rises to about 40 and the sun side becomes the brightest plane on the product. The product turns about its own centre, so its outline (left edge about 743, right edge about 956) and the wall shadow stay put. The silhouette's fin nub narrows from 52 to about 40 px and the roof slopes even out, because the sun sits 12 degrees off the side axis instead of 16. This needs c2: at -40 the current frontsheen misses the front's left third.",
+   "accept": {
+    "region": "part:side-right",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     228,
+     240
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The turn swings the front's mirror directions about 8 degrees left, so with frontsheen where it is the front's left third would mirror past the panel's full-strength left edge (a hard vertical band), and the panel already shows on the woofer cap as a hard-edged sliver.",
+   "evidence": {
+    "region": [
+     744,
+     346,
+     926,
+     638
+    ],
+    "measured": "front-baffle mirrors frontsheen 62 % (met at world x -1.01 to -0.70, ramp about 0.9 at the left edge to 0 at the right), giving falloff 11.0 across the band [760, 482, 905, 522]. Traced at -40, front coverage drops from 67 % to 52 %, with the two left columns missing the panel. The woofer cap mirrors 'glint2 over frontsheen' (8.4 %) at [832, 586, 846, 610], p95 97.5 against a cap median of 4.8."
+   },
+   "change": {
+    "setting": "lights.frontsheen",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      0.6,
+      0.85
+     ],
+     "position": [
+      -0.86,
+      -0.82,
+      0.47
+     ],
+     "target": [
+      -0.115,
+      -0.158,
+      0.6
+     ],
+     "strength": 0.5,
+     "color": 3400,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -1.05,
+       -0.7
+      ],
+      "values": [
+       1,
+       0
+      ]
+     },
+     "diffuse": false
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.9,
+      0.85
+     ],
+     "position": [
+      -0.958,
+      -0.698,
+      0.47
+     ],
+     "target": [
+      -0.125,
+      -0.149,
+      0.6
+     ],
+     "strength": 0.5,
+     "color": 3400,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -1.1,
+       -0.815
+      ],
+      "values": [
+       1,
+       0
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "front-baffle",
+      "woofer-ring",
+      "woofer-frame",
+      "mid-ring",
+      "mid-frame"
+     ]
+    }
+   },
+   "expected": "At -40 the front sees the same ramp as now: about 0.94 at the left edge to 0.06 at the right edge at the height of the drivers, against 0.90 to 0.01 today. The lacquer gradient therefore holds near falloff 11 in the band between the drivers, with no hard edge. At 0.9 m wide the panel keeps its bright end past the front's left edge for any turn from -38 to -43. With receivers limited to the baffle and the trim rings, the woofer cap no longer mirrors the panel: the sliver's p95 falls from about 95 to under 40, leaving glint2's soft highlight. The rubber surrounds lose their 15-19 % share of the panel and go slightly darker.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      760,
+      482,
+      905,
+      522
+     ]
+    },
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     7,
+     18
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The window patch is the frame's 'warm light', and it reads as tan paint rather than golden sun.",
+   "evidence": {
+    "region": [
+     322,
+     225,
+     392,
+     540
+    ],
+    "measured": "median RGB 151, 127, 96; L* 54.3, a* 4.8, b* 20.3 (C* 21, hue 77 degrees); range 9.8; dE2000 4.67 to golden #A07E50 (L* 55, a* 7, b* 30). Its blue (96) sits well above what a 2600 K sun alone would give on this paint (about 77), so sky and fill thin its colour."
+   },
+   "change": {
+    "setting": "sun.color",
+    "from": 2600,
+    "to": 2300
+   },
+   "expected": "The patch moves to about 158, 124, 79 (C* about 30) at the same lightness, within dE2000 2.5 of #A07E50. The sunlit floor band and the plinth's sunlit side warm with it. The white's sun side gains about 4 b* raw and about 2 b* once retouch.neutral 0.5 takes half out, so it stays a warm white and the last round's c3 white test (3.94, wanted 3.0-5.5) should stay inside its range. This goes the same way as the last round's c2 (2600 to 2400), whose proof renders found 2300 closest (2.56 against 3.91 at 2600).",
+   "accept": {
+    "region": [
+     322,
+     225,
+     392,
+     540
+    ],
+    "metric": "delta_e",
+    "hex": "#A07E50",
+    "op": "<=",
+    "value": 2.5
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "material",
+   "problem": "Inside the patch the panelling is a dead-flat field, so the low sun has no surface to rake across and the patch reads as a beige card.",
+   "evidence": {
+    "region": [
+     330,
+     300,
+     390,
+     360
+    ],
+    "measured": "lum_range 2.8 (p5 129.9, p95 132.7) in a 60-px square of sunlit panelling. The card gives the wainscot no bump or texture key; only plaster has one."
+   },
+   "change": {
+    "setting": "set.wainscot.relief",
+    "from": null,
+    "to": 0.2
+   },
+   "expected": "The 8-degree sun, at about 38 degrees incidence on the back wall, picks out 3-4 levels of relief either way across the lit panelling (lum_range 5-11 in the square), while the shade, lit only by soft light, shows none. The patch then reads as sun raking across painted timber. Its median colour is unchanged, so c3's test is unaffected.",
+   "accept": {
+    "region": [
+     330,
+     300,
+     390,
+     360
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     5,
+     11
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Lower the woofer cone's specular reflectance to a black-anodised level.",
+   "why": "The cone's bright band (median RGB 86, 71, 58 in [785, 590, 815, 640], up to 213 lum) mirrors the floor between the speaker and the window (38 %) and the front wall by the window (45 %), measured in [788, 600, 812, 625]; whole cone p95 164, dE2000 8.2 to #202020. It reads as a bronze cone, not the Dayton's black anodised aluminium. The cone's material is fixed, and what it mirrors cannot be hidden: gloss never sees flags, and a flag in the sun's path would cut the wall patch and the floor in frame."
+  }
+ ],
+ "score_if_fixed": 7.0,
+ "revisions": [
+  {
+   "change": "c4",
+   "by": "engine",
+   "why": "the engine now has the asset: set.wainscot.relief, upright brush ridges in the panelling's paint (a stretched bump, relief_mm 12)",
+   "was": {
+    "setting": "set.wainscot paint relief (new asset)",
+    "from": null,
+    "to": {
+     "asset": "tileable normal/bump map for the wainscot paint",
+     "applies_to": "wainscot panels, stiles and rails on all walls; not the rail's top edge, not the plaster above",
+     "relief_mm": [
+      0.2,
+      0.5
+     ],
+     "feature_size_mm": [
+      5,
+      40
+     ],
+     "pattern": "faint brush ridges along the grain (vertical on panels and stiles, horizontal on rails) plus slight board waviness",
+     "scale": "true scale on the back wall (1 frame px is about 2.6 mm there)",
+     "colour_variation": 0,
+     "roughness_variation": 0.05
+    }
+   }
+  }
+ ]
+}

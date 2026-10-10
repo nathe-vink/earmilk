@@ -111,6 +111,8 @@ KNOBS = [
     ('set.wainscot.color', 'hex', None, 'room: the panelling\'s paint'),
     ('set.wainscot.panel_w', 'm', (0.3, 6), 'room: the raised panels\' width (the joints between them fall where it puts them)'),
     ('set.wainscot.roughness', '0 to 1', (0.2, 0.9), 'room: the panelling\'s paint sheen: 0.38 satin mirrors a lamp as a soft halo, 0.7 eggshell blurs it into the shade'),
+    ('set.wainscot.relief', '0 to 1', (0, 1), 'room: brush ridges in the panelling\'s paint, a bump drawn out upright (0 none; 0.2 to 0.5 shows under a low raking sun, flat in soft light)'),
+    ('set.wainscot.relief_mm', 'mm', (3, 60), 'room: the brush ridges\' size'),
     ('set.props.*.position', 'm [x, y]', None, 'room: a prop\'s place on the floor'),
     ('set.props.*.kind', 'choice', ('rug', 'table', 'books', 'sideboard', 'vase', 'lamp', 'sofa', 'curtain', 'frame'), 'room: what the prop is'),
     ('set.props.*.size', 'm [w, d] or [w, d, h]', None, 'room: a prop\'s size (a rug [w, d]; a table, sideboard or sofa [w, d, h]; a curtain or frame [w, h])'),
