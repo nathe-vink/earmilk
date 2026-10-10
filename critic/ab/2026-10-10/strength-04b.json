@@ -1,0 +1,12 @@
+{
+ "order": "gentle_is_A",
+ "reply": {
+  "A": 6.0,
+  "B": 6.3,
+  "prefer": "B",
+  "note": "B (strong) lifts the mids ~5 levels: the set fresher, the shade side and lower front clean white; A (gentle) keeps the upper front's fall (248 to 233 against 248 to 241) and the label's separation",
+  "gentle": 6.0,
+  "strong": 6.3,
+  "prefers": "strong"
+ }
+}

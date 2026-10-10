@@ -1,0 +1,12 @@
+{
+ "order": "gentle_is_A",
+ "reply": {
+  "A": 6.5,
+  "B": 6.2,
+  "prefer": "A",
+  "note": "A (gentle) keeps the cream carton's waveguide contour (gable p5-p95 50 against 39) and the plinth band's modelling; B (strong) cleaner white bodies but the fronts' fall 10 levels against 17",
+  "gentle": 6.5,
+  "strong": 6.2,
+  "prefers": "gentle"
+ }
+}

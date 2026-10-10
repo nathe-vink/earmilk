@@ -1,0 +1,12 @@
+{
+ "order": "gentle_is_B",
+ "reply": {
+  "A": 5.8,
+  "B": 5.6,
+  "prefer": "A",
+  "note": "A (strong) whiter bodies (front 232 against 225) and a slightly lighter set; 'the difference only shows when the two frames are side by side'",
+  "gentle": 5.6,
+  "strong": 5.8,
+  "prefers": "strong"
+ }
+}
