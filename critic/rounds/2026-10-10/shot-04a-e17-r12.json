@@ -1,0 +1,214 @@
+{
+ "stage1": {
+  "impression": "A clean straight-on packshot whose gag, a milk-carton speaker with its specs printed as Nutrition Facts, reads at once, with crisp type and a tidy grey sweep. But it is lit like a packaging mockup: the dead-on view shows no side, the white front is an even matte slab, the red gable is a satin trapezoid with a linear sheen, the letters look like grey plastic, the port is a black disc in a grey washer, and the carton runs off the bottom edge with no base, so nothing in it says lacquer, metal or weight.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The red roof reads as gloss lacquer: it shows a softbox reflection with a defined soft edge (a step of 20 to 30 levels inside about 45 rows). Today it is a linear wash, 89.9 to 67.5 in eight even steps, with a largest per-pixel step of 0.6.",
+  "The white lacquer shows its clear coat somewhere: the band under the eave carries a sheen (median 225 to 233, today a flat 220, p95 224), while the Facts panel's black bars stay at 7 to 12 and its white stays at 207 to 214. Today 99 % of the back panel mirrors an unlit floor or a dome at 0.033.",
+  "The fin, a must-show, reads as the same lacquer as the roof: a sheen that falls 9 to 14 levels down its face (today 5.3, 72.5 to 67.2) and a median within about 10 of the roof's (today 69.7 against 80.4).",
+  "The cast letters read as metal: a light-to-dark reflection of at least 40 levels down each letter. Today the 'm' falls 29.8, from 174 to 145, and sits at a median of 161 on a 220 white.",
+  "The port reads as a moulded black flare, not a flat dark-grey washer lit by a lamp only it sees. Today its ring is constant across its width at every angle (106 to 110 at the top, 74 at the left, 57 at the bottom) around a bore at 0.",
+  "The carton reads as a volume, not a silhouette. Straight on, no side face shows (the outline is exactly the back face, x 189 to 711), and the frame cuts the carton at about 0.25 m with no base or ground. The frame's purpose sets both, so here the gloss cues above have to carry the depth."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The roof slopes mirror roof_ramp as a single linear ramp, from the eave (y 0.225, value 0.1) up to the fin (y 0.435, value 0.94), so the red is one even wash that falls in eight steps of 0.6 to 4 levels and reads as satin plastic, not as a lacquer holding a softbox's reflection.",
+   "evidence": {
+    "region": [
+     230,
+     188,
+     670,
+     342
+    ],
+    "measured": "8-bin profile down the slope: 89.9, 89.3, 85.9, 81.7, 78.4, 74.6, 71.0, 67.5. Largest per-pixel step 0.6. Mirrors panel roof_ramp 100 % (radiance p5 5.0, median 17.0, p95 29.2), and the mirrored y falls linearly, 0.0014 per row, from 0.435 (row 192) to 0.225 (row 342), inside the ramp's [0.2, 0.45] throughout. Upper slope (194, 61, 63), lower slope (191, 37, 37). The middle band [300, 230, 600, 296] falls only 10.9."
+   },
+   "change": {
+    "setting": "lights.roof_ramp.ramp.at_m",
+    "from": [
+     0.2,
+     0.45
+    ],
+    "to": [
+     0.31,
+     0.37
+    ]
+   },
+   "expected": "Rows 186 to 238 mirror the panel at full strength and read about 94 (195, 67, 68). Rows 281 to 344 mirror its dark end and show the bare accent at about 62 (190, 28, 27) before the retouch re-reads it. Between them a soft edge about 43 rows tall crosses the middle of the slope: a softbox's edge reflected in red lacquer. The fin's top round mirrors y 0.377, so it gets the panel's full 32 instead of 23 and a brighter edge line. The middle band's falloff goes from 10.9 to about 30. The polariser stays: the slope sits at Brewster's angle (56 degrees to the view), so here it only scales roof_ramp, and without it the same look would need roof_ramp near 1.",
+   "accept": {
+    "region": [
+     300,
+     230,
+     600,
+     296
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     18,
+     34
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The white lacquer back shows no clear coat at all: its pixels mirror an unlit sweep floor (69.7 %) or a dome at strength 0.033 (29.4 %), so the band under the eave is a flat 220 and the whole face reads as matte paper.",
+   "evidence": {
+    "region": [
+     205,
+     350,
+     690,
+     384
+    ],
+    "measured": "Median 220.0, p5 215, p95 224. part:back-panel mirrors sweep 69.7 %, world (sky) 29.4 % and lamps 0.6 % (only the kicker line on its left round). Rows 346 down to rows 500 to 620 mirror the sky. The Facts panel's black bars [300, 558, 600, 564] read 7 and its white [280, 535, 620, 550] reads 214."
+   },
+   "change": {
+    "setting": "lights.back_sheen",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.0,
+      0.3
+     ],
+     "position": [
+      0,
+      -1.0,
+      0.77
+     ],
+     "target": [
+      0,
+      0,
+      0.77
+     ],
+     "strength": 3.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.68,
+       0.82
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "back-panel"
+     ]
+    }
+   },
+   "expected": "The band from the eave to the logo mirrors the card's bright end (z 0.71 to 0.82 on its plane) and rises from 220 to about 229 (p95 no higher than 235). It fades to the base white by the logo's baseline, with the logo-to-label gap at 217 to 222. From the label's top border (row 465) down, every row mirrors z at or below 0.70, so the Facts panel is untouched: black bars at 7 (never above 12), white at 207 to 214. The face's top-to-bottom range grows from 21 to about 31, the 3 mm shadow line under the gable reads crisper and the letters gain contrast. Last round's c2 set this band to 220 with the key (its test wanted 215 to 224). The rise here is reflection, a highlight that the card says belongs above 226, not diffuse level, and the face below the logo stays where c2 put it (217 down to 199).",
+   "accept": {
+    "region": [
+     205,
+     350,
+     690,
+     384
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     225,
+     233
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The fin, a must-show carrying OPEN OTHER SIDE, is a flat maroon band that falls only 5.3 levels down its face and sits 11 below the roof, because fin_card at 0.9 puts only 0.46 to 0.77 into its mirror, a clear-coat reflection of about 0.02; last round's ramp change (c4) failed at this same 5.3.",
+   "evidence": {
+    "region": [
+     220,
+     113,
+     258,
+     166
+    ],
+    "measured": "8-bin profile 72.5 to 67.2 (falloff 5.3), median 69.7, rgb (188, 38, 38). The right strip [640, 113, 682, 166] runs 66.2 to 60.9. The roof [230, 192, 670, 340] has a median of 80.4. 73 % of the fin mirrors fin_card (radiance 0.456 / 0.612 / 0.768), met at z 1.42 (row 114) down to 1.31 (row 166)."
+   },
+   "change": {
+    "setting": "lights.fin_card.strength",
+    "from": 0.9,
+    "to": 1.8
+   },
+   "expected": "The fin mirrors 0.91 to 1.54 instead of 0.46 to 0.77, and its clear coat shows it. The strip goes from (188, 38, 38) at a median of 69.7 to about (190, 52, 52) at about 81, with its top about 87 and its base about 76: a sheen like the roof's upper slope, so fin and roof read as one lacquer. Falloff rises from 5.3 to 10 to 13. This finishes what last round's c4 set out to do (its band was 6 to 14). OPEN OTHER SIDE stays legible: its white print is already at 236 and moves at most 2.",
+   "accept": {
+    "region": [
+     220,
+     113,
+     258,
+     166
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     9,
+     14
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The cast metal letters read as grey plastic: they mirror letters_ramp at 0.46 to 0.95, so their faces run a soft 174 to 145 down the 'm', and there is no dark in the reflection to say metal.",
+   "evidence": {
+    "region": [
+     438,
+     396,
+     490,
+     428
+    ],
+    "measured": "part:letters-back-3, 8-bin profile 174.3, 170.5, 165.8, 162.6, 157.7, 153.4, 148.6, 144.5 (falloff 29.8). All letters run 180.5 to 143.8, median 160.6, against the white's 220. They mirror panel letters_ramp 89.7 % (radiance 0.461 / 0.69 / 0.948) and the sky 6.1 %."
+   },
+   "change": {
+    "setting": "lights.letters_ramp.ramp.values",
+    "from": [
+     0.4,
+     1
+    ],
+    "to": [
+     0.1,
+     1
+    ]
+   },
+   "expected": "The letters' lower halves mirror 0.16 to 0.5 instead of 0.46 to 0.7. The 'm' runs about 168 at its top down to about 117 at its base (8-bin falloff about 51), a metal's light-to-dark reflection, and every letter separates harder from the white beside it. The tops stay within 7 of today's 174 to 180, so the word does not wash into the white. This keeps the ramp's size and position from rounds 9 and 10.",
+   "accept": {
+    "region": "part:letters-back-3",
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     42,
+     60
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Offset the camera sideways with lens shift, or turn the carton a few degrees, so a sliver of one side face shows.",
+   "why": "Straight on, the outline is exactly the back face (x 189 to 711) and no side face shows, so the carton reads as a flat silhouette. The frame's purpose fixes the label straight on and level."
+  },
+  {
+   "request": "Pull back to include the accent plinth band, SHAKE WELL and the floor contact.",
+   "why": "The frame cuts the carton at about 0.25 m (row 1125), so the box has no base or ground and seems to float. The purpose (the Facts panel legible, with the gable above) and the fixed frame size set the scale, and pulling back about 25 % would shrink the panel's small print (Contains no milk., about 10 px tall) to about 7 px."
+  },
+  {
+   "request": "Give the port flange a rounded, moulded lip profile.",
+   "why": "The ring shades as a flat annulus, constant across its width at every angle (106 to 110 at the top, 74 at the left, 57 at the bottom), so the port reads as a washer around a black disc. The port's geometry is the product's and fixed."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
