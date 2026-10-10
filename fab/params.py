@@ -202,7 +202,25 @@ TRIM_RING = dict(t=3.0, width=20.0)       # PROPOSAL printed trim ring over each
 # and never the surround. PLACEHOLDER from the research's estimates (the RSS315HF-4's surround about 280 to 295, the
 # MR16P-8's not found, about 139 for its 140 cutout): measure each driver's surround and print the rings last.
 TRIM_RING_ID = dict(woofer=290.0, mid=141.0)
+# 2026-10-10, the owner: a non-aluminium woofer, performant and in keeping with the carton. Candidates from
+# fab/research/woofers-nonmetal-2026-10-10.md, each with what the CAD needs: the cut-out, the rebate for its frame and
+# ring (frame + 1.6; flange + 1.0 of gasket + the 3 mm ring deep), the ring's inner edge (the surround's glue line + 2,
+# from Sd and a proportioned roll) and the screws. PLACEHOLDER: from search snippets of the datasheets; the screw
+# circles are proportioned (halfway between the cut-out and the frame's edge). Not chosen yet: DRIVER_SET keeps the
+# RSS315HF-4 until the owner picks. EARMILK_WOOFER=<key> builds with one in its place, for comparisons.
+WOOFER_OPTIONS = {
+    'rss315hf-4': dict(cutout=282.0, rebate=dict(d=315.6, depth=9.0), ring_id=290.0, screws=dict(n=8, pcd=295.0, hole=5.5, start_deg=22.5)),
+    'sb34nrxl75-8': dict(cutout=305.2, rebate=dict(d=347.6, depth=17.0), ring_id=281.0, screws=dict(n=8, pcd=326.0, hole=5.5, start_deg=22.5)),
+    '32w-4878t00': dict(cutout=290.5, rebate=dict(d=321.6, depth=12.0), ring_id=286.0, screws=dict(n=8, pcd=305.0, hole=5.5, start_deg=22.5)),
+    'tiw300-8': dict(cutout=288.0, rebate=dict(d=330.6, depth=10.0), ring_id=281.0, screws=dict(n=8, pcd=309.0, hole=5.5, start_deg=22.5)),
+}
 POST_HOLE = 10.0          # PLACEHOLDER binding-post hole in the plate
+_W = os.environ.get('EARMILK_WOOFER')
+if _W and not BOOK:          # a comparison build with a candidate woofer (WOOFER_OPTIONS) in the RSS315HF-4's place
+    DRIVER_SET = dict(DRIVER_SET, woofer=_W)
+    WOOFER_CUTOUT, WOOFER_REBATE = WOOFER_OPTIONS[_W]['cutout'], WOOFER_OPTIONS[_W]['rebate']
+    TRIM_RING_ID = dict(TRIM_RING_ID, woofer=WOOFER_OPTIONS[_W]['ring_id'])
+    DRIVER_SCREWS = dict(DRIVER_SCREWS, woofer=WOOFER_OPTIONS[_W]['screws'])
 
 # --- Port (DERIVED in fab/acoustics.py; this is the length the files are cut to) ------------------------------------
 PORT_WALL = 4.0           # PROPOSAL printed tube wall: 92 bore + 2 x 4 = 100 OD, which is the spec's port diameter

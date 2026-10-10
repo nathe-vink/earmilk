@@ -6,7 +6,8 @@ drawings come from, and the engine's product file that paints them (studio/engin
 
 A part's `finish` names its material: the product's `materials` maps finish names to the engine's presets
 (paint, satin_paint, metal, rubber, birch, veneer, ... see studio/engine/materials.py). A product with colourways
-lists them as `variants`, each a set of overrides the engine applies as a flavour.
+lists them as `variants`, the engine's flavours: {name: {token: value}}, a material's '$token' taking the flavour's
+value (a colour, or a preset: 'preset': '$bark').
 """
 import json, os
 

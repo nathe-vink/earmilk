@@ -1,0 +1,25 @@
+item,kind,qty,what,size,mass_g,usd_each,finish,supplier,price_date,source
+"left, right",cut,4,"18 mm Baltic birch plywood, BB/BB",460 x 760,4279,25.35,bark,,,cut file dxf/left.dxf
+top,cut,2,"18 mm Baltic birch plywood, BB/BB",484 x 460,2722,16.14,bark,,,cut file dxf/top.dxf
+bottom,cut,2,"18 mm Baltic birch plywood, BB/BB",484 x 460,2725,16.14,bark,,,cut file dxf/bottom.dxf
+baffle,cut,2,"18 mm Baltic birch plywood, BB/BB",484 x 724,2639,25.41,bark,,,cut file dxf/baffle.dxf
+back,cut,2,"18 mm Baltic birch plywood, BB/BB",484 x 724,3916,25.41,bark,,,cut file dxf/back.dxf
+brace,cut,2,"18 mm Baltic birch plywood, BB/BB",484 x 424,1023,14.88,raw,,,cut file dxf/brace.dxf
+"port-1, port-2",print,4,"ASA, FDM (outdoor, paintable)",285 cm3,305,27.94,port,,,stl/port-1.stl
+woofer,buy,2,"FaitalPRO 15PR400-8 15 in woofer (treated paper cone, neodymium, 8 ohm)","393 frame, 356 cut-out, 165 deep",3600,194,99 dB 1 W/1 m (Faital); Xmax 5.75 mm (6 by another source),Thomann (US storefront; EUR 198 in the EU),2026-10-10,https://www.thomannmusic.com/faitalpro_15pr400_8_ohms.htm
+amp-plate,buy,2,"Hypex FusionAmp FA122 DSP plate amplifier, 2 x 125 W into 4 ohm","315 x 120 x 55 plate, 291 x 96 recess",815,422.4,,Parts Express 221-006,2026-10-08,https://www.hypex.nl/
+horn,cnc-lathe,2,"Birch, solid",411 x 414 x 411,1951,862.99,horn-out,,,step/horn.step
+hf,buy,2,"BMS 4550-16 compression driver, 1 in exit, polyester diaphragm, 16 ohm","123 across, 52 deep, 2 x M6 on 76.2",2250,154,113 dB 1 W/1 m on a horn; BMS recommends crossing at 800 Hz or above,Toutlehautparleur (EUR 142),2026-10-10,https://en.toutlehautparleur.com/compression-driver-bms-4550-16-ohm-1-inch-exit.html
+saddle-1,cut,2,"18 mm Baltic birch plywood, BB/BB",300 x 210,554,4.58,saddle,,,cut file dxf/saddle-1.dxf
+saddle-2,cut,2,"18 mm Baltic birch plywood, BB/BB",150 x 210,360,2.29,saddle,,,cut file dxf/saddle-2.dxf
+"foot-1, foot-2, foot-3, foot-4",lathe,8,"White oak, solid",70 x 70 x 40,64,13.53,foot,,,step/foot-1.step
+woofer-fixings,buy,4,"M4 x 20 low-profile button heads (A2) with M4 T-nuts, a driver's set of 4",M4,,4,,any,2026-10-08,
+hf-fixings,buy,2,"M6 x 25 socket caps with washers (the compression driver to the horn's flange), a pair",,,,,any,2026-10-10,
+gasket,buy,4,"1.5 mm closed-cell foam gasket strip, 1 m",,,5,,any,2026-10-08,
+damping,buy,4,"Polyester fibre fill, 150 g",,,8,,"Parts Express, any",2026-10-08,
+amp-fixings,buy,2,"Hypex 4.3 x 16 self-tapping pan heads and 3 mm EPDM tape, a plate's set",,,10,,"Hypex, any",2026-10-08,
+cable,buy,6,"Round-sheathed speaker cable 2 x 1.5 mm2, 1 m",,,2,,any electrical supplier,2026-10-08,
+terminals,buy,8,6.3 mm insulated push-on terminal,,,0.5,,any,2026-10-08,
+hf-pad,buy,2,"Resistor L-pad for the HF channel, about -10 dB at 16 ohm (lowers the amplifier's hiss through a 113 dB driver)",,,,,any,2026-10-10,
+strap,buy,2,"Leather strap 25 mm with a brass buckle, to hold the horn in its saddles",,,,,any,2026-10-10,
+felt,buy,2,"Wool felt tape 3 mm, self-adhesive, 1 m (lines the saddles)",,,,,any,2026-10-10,

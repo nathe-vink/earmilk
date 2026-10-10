@@ -35,6 +35,14 @@ PRESET_DEFAULTS = {
     'glass':      dict(color='#FFFFFF', roughness=0.0, ior=1.5),
     'emit':       dict(color='#FFFFFF', strength=1.0),
     'print':      dict(color='#1E1A17', roughness=0.6),
+    # bark finishes, procedural (no texture download): paper birch's chalky white with dark horizontal lenticels, a few
+    # dark scars and apricot where the outer layer has peeled; a eucalyptus's smooth bark shed in patches of cream,
+    # grey, salmon, ochre and sage, each patch its own colour, its edges a little proud
+    'birch_bark': dict(color='#ECE7DC', warm='#E6D6C4', lenticel='#2B2724', peel='#C9976E', roughness=0.72, lenticels=1.0,
+                       scars=0.6, peel_amount=0.5, scale=1.0, bump=0.35),
+    'eucalyptus_bark': dict(palette=[['#E3DACA', 0.26], ['#C7C2B6', 0.22], ['#EDE6D8', 0.12], ['#CFAA98', 0.12], ['#C5B28F', 0.1],
+                                     ['#A3AA95', 0.11], ['#B3B6B2', 0.07]],
+                            roughness=0.55, patch_m=0.12, stretch=1.9, edge=0.45, mottle=0.07, scale=1.0, bump=0.3),
 }
 
 
@@ -114,6 +122,10 @@ def make(bpy, name, preset, overrides=None, bevel_mm=0.0):
         _planks(nt, b, p)
     elif preset == 'veneer':
         _veneer(nt, b, p)
+    elif preset == 'birch_bark':
+        _birch_bark(nt, b, p, normal)
+    elif preset == 'eucalyptus_bark':
+        _eucalyptus_bark(nt, b, p, normal)
     elif preset in ('plaster', 'sweep'):
         setin('Base Color', hex_lin(p['color'])); setin('Roughness', p['roughness'])
         if preset == 'sweep' and (p.get('contact', 0) > 0 or p.get('core', 0) > 0):
@@ -237,6 +249,214 @@ def _wood(nt, b, color, roughness, grain=0.4, stretch=(1, 1, 10)):
     for ch in ('Red', 'Green', 'Blue'): nt.links.new(mr.outputs['Result'], comb.inputs[ch])
     nt.links.new(comb.outputs['Color'], ins[1]); nt.links.new(outs[0], b.inputs['Base Color'])
     b.inputs['Roughness'].default_value = roughness
+
+
+def _nodes(nt):
+    """Node and math shorthands for the procedural finishes."""
+    def node(t, **kw):
+        n = nt.nodes.new(t)
+        for k, v in kw.items():
+            setattr(n, k, v)
+        return n
+
+    def math_(op, a, b_=None, c=None):
+        m = node('ShaderNodeMath', operation=op)
+        for i, v in enumerate((a, b_, c)):
+            if v is None:
+                continue
+            if isinstance(v, (int, float)):
+                m.inputs[i].default_value = v
+            else:
+                nt.links.new(v, m.inputs[i])
+        return m.outputs['Value']
+
+    def mix(fac, a, b_, blend='MIX'):
+        m = node('ShaderNodeMix', data_type='RGBA', blend_type=blend)
+        ins = [x for x in m.inputs if x.type == 'RGBA']; out = [x for x in m.outputs if x.type == 'RGBA'][0]
+        if isinstance(fac, (int, float)):
+            m.inputs['Factor'].default_value = fac
+        else:
+            nt.links.new(fac, m.inputs['Factor'])
+        for slot, v in zip(ins, (a, b_)):
+            if isinstance(v, tuple):
+                slot.default_value = v
+            else:
+                nt.links.new(v, slot)
+        return out
+
+    def smooth(x, lo, hi):
+        mr = node('ShaderNodeMapRange', interpolation_type='SMOOTHSTEP')
+        nt.links.new(x, mr.inputs['Value']); mr.inputs['From Min'].default_value = lo; mr.inputs['From Max'].default_value = hi
+        return mr.outputs['Result']
+    return node, math_, mix, smooth
+
+
+def _face_uv(nt, node, math_):
+    """Coordinates in the face's own plane, metres: (along, up, 0) on an upright face (along is x on a front or back,
+    y on a side), (x, y, 0) on a level one. A pattern of 2D cells read here keeps its size on every face; a 3D one
+    sliced by a face shows many small cells, the slices of those near the plane."""
+    geo = node('ShaderNodeNewGeometry')
+    sep = node('ShaderNodeSeparateXYZ'); nt.links.new(geo.outputs['Position'], sep.inputs['Vector'])
+    nrm = node('ShaderNodeSeparateXYZ'); nt.links.new(geo.outputs['Normal'], nrm.inputs['Vector'])
+    ax, ay, up = (math_('ABSOLUTE', nrm.outputs[c]) for c in ('X', 'Y', 'Z'))
+    h = math_('ADD', math_('MULTIPLY', sep.outputs['X'], math_('ADD', ay, up)), math_('MULTIPLY', sep.outputs['Y'], ax))
+    v = math_('ADD', math_('MULTIPLY', sep.outputs['Z'], math_('SUBTRACT', 1.0, up)), math_('MULTIPLY', sep.outputs['Y'], up))
+    co = node('ShaderNodeCombineXYZ'); nt.links.new(h, co.inputs['X']); nt.links.new(v, co.inputs['Y'])
+    return co.outputs['Vector'], geo
+
+
+def _birch_bark(nt, b, p, normal_in=None):
+    """Paper birch: a chalky white skin, its lenticels the short dark dashes that run round the trunk (horizontal
+    here, the trunk's axis taken as z), longer and fewer ones among them, a few dark scars, and apricot where the
+    papery outer layer has peeled. World space, metres; `scale` > 1 makes every mark smaller."""
+    node, math_, mix, smooth = _nodes(nt)
+    uv, geo = _face_uv(nt, node, math_)
+    pos = geo.outputs['Position']
+    k = p['scale']
+
+    def mapped(sh, sv, offset=(0.0, 0.0, 0.0)):
+        mp = node('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (sh * k, sv * k, 1.0)
+        mp.inputs['Location'].default_value = offset
+        nt.links.new(uv, mp.inputs['Vector'])
+        return mp.outputs['Vector']
+
+    def voronoi(vec, feature='F1'):
+        vo = node('ShaderNodeTexVoronoi', feature=feature, voronoi_dimensions='2D'); vo.inputs['Randomness'].default_value = 1.0
+        vo.inputs['Scale'].default_value = 1.0              # the mapping sets the size (the node's own default is 5)
+        nt.links.new(vec, vo.inputs['Vector'])
+        return vo
+
+    # the lenticels: 2D Voronoi cells drawn out round the trunk, the dark core of each a dash; a slow noise thins them
+    # in places so they gather in bands as a real trunk's do
+    def dashes(sh, sv, r, keep_lo, gate_scale, gate_lo, offset):
+        vo = voronoi(mapped(sh, sv, offset))
+        core = math_('SUBTRACT', 1.0, smooth(vo.outputs['Distance'], r * 0.6, r))
+        # each dash its own: the cell's random colour keeps some and drops the rest
+        sep = node('ShaderNodeSeparateColor'); nt.links.new(vo.outputs['Color'], sep.inputs['Color'])
+        keep = smooth(sep.outputs['Red'], keep_lo, keep_lo + 0.05)
+        # the gate is drawn out round the trunk too, so the dashes gather in horizontal bands
+        gate = node('ShaderNodeTexNoise'); gate.inputs['Scale'].default_value = gate_scale; gate.inputs['Detail'].default_value = 2.0
+        nt.links.new(mapped(0.7, 6.0, (offset[0] + 4.0, offset[1], 0.0)), gate.inputs['Vector'])
+        band = smooth(gate.outputs['Fac'], gate_lo, gate_lo + 0.15)
+        return math_('MULTIPLY', math_('MULTIPLY', core, keep), band)
+    small = dashes(22.0, 170.0, 0.30, 0.48, 2.0, 0.40, (0.0, 0.0, 0.0))
+    large = dashes(6.0, 85.0, 0.22, 0.5, 1.4, 0.42, (3.1, 1.7, 0.0))
+    marks = math_('MINIMUM', math_('ADD', math_('MULTIPLY', small, 0.8 * p['lenticels']), large), 1.0)
+    # scars: a few dark blots where branches were, sparse
+    sv = voronoi(mapped(3.0, 9.0, (7.0, 2.0, 0.0)))
+    ssep = node('ShaderNodeSeparateColor'); nt.links.new(sv.outputs['Color'], ssep.inputs['Color'])
+    scar = math_('MULTIPLY', math_('SUBTRACT', 1.0, smooth(sv.outputs['Distance'], 0.09, 0.12)), smooth(ssep.outputs['Green'], 0.8, 0.82))
+    marks = math_('MINIMUM', math_('ADD', marks, math_('MULTIPLY', scar, p['scars'])), 1.0)
+    # the skin: chalk white drifting warm, and apricot inner bark where the outer layer has peeled
+    drift = node('ShaderNodeTexNoise'); drift.inputs['Scale'].default_value = 2.2 * k; drift.inputs['Detail'].default_value = 4.0
+    nt.links.new(pos, drift.inputs['Vector'])
+    skin = mix(smooth(drift.outputs['Fac'], 0.35, 0.75), hex_lin(p['color']), hex_lin(p['warm']))
+    pn = node('ShaderNodeTexNoise'); pn.inputs['Scale'].default_value = 5.0 * k; pn.inputs['Detail'].default_value = 6.0
+    pn.inputs['Roughness'].default_value = 0.6
+    nt.links.new(mapped(1.0, 3.0, (11.0, 5.0, 0.0)), pn.inputs['Vector'])
+    peel = math_('MULTIPLY', smooth(pn.outputs['Fac'], 0.66 - 0.06 * p['peel_amount'], 0.70 - 0.06 * p['peel_amount']), p['peel_amount'])
+    col = mix(peel, skin, hex_lin(p['peel']))
+    col = mix(marks, col, hex_lin(p['lenticel']))
+    nt.links.new(col, b.inputs['Base Color'])
+    b.inputs['Roughness'].default_value = p['roughness']
+    if 'Sheen Weight' in b.inputs:
+        b.inputs['Sheen Weight'].default_value = 0.15
+    # relief: the lenticels sit a little proud, the peel's edge is a step, the paper has a fine fibre
+    fib = node('ShaderNodeTexNoise'); fib.inputs['Scale'].default_value = 500.0; fib.inputs['Detail'].default_value = 2.0
+    nt.links.new(mapped(1.0, 4.0), fib.inputs['Vector'])
+    h = math_('ADD', math_('ADD', math_('MULTIPLY', marks, 0.6), math_('MULTIPLY', peel, -0.5)), math_('MULTIPLY', fib.outputs['Fac'], 0.08))
+    bn = node('ShaderNodeBump'); bn.inputs['Strength'].default_value = p['bump']; bn.inputs['Distance'].default_value = 0.0006
+    nt.links.new(h, bn.inputs['Height'])
+    if normal_in is not None:
+        nt.links.new(normal_in, bn.inputs['Normal'])
+    nt.links.new(bn.outputs['Normal'], b.inputs['Normal'])
+
+
+def _eucalyptus_bark(nt, b, p, normal_in=None):
+    """A smooth-barked eucalyptus (a spotted or snow gum): the bark sheds in irregular patches, each its own colour from
+    the palette (weighted: mostly creams and greys, fewer salmon, ochre and sage), taller than wide (`stretch`), their
+    edges wavy (a strong noise bends the plane) and softly blended (smooth Voronoi), a smaller layer of patches over
+    the larger in places, a mottle inside each and a faint lip where a newer layer meets the old. World space, metres."""
+    node, math_, mix, smooth = _nodes(nt)
+    uv, geo = _face_uv(nt, node, math_)
+    pos = geo.outputs['Position']
+    k = p['scale']
+    pm = p['patch_m']
+
+    def warp(vec, scale, amount, seed):
+        wn = node('ShaderNodeTexNoise'); wn.inputs['Scale'].default_value = scale * k; wn.inputs['Detail'].default_value = 4.0
+        wn.inputs['Roughness'].default_value = 0.55
+        ad = node('ShaderNodeVectorMath', operation='ADD'); nt.links.new(pos, ad.inputs[0]); ad.inputs[1].default_value = seed
+        nt.links.new(ad.outputs['Vector'], wn.inputs['Vector'])
+        cen = node('ShaderNodeVectorMath', operation='SUBTRACT'); nt.links.new(wn.outputs['Color'], cen.inputs[0]); cen.inputs[1].default_value = (0.5, 0.5, 0.5)
+        sc = node('ShaderNodeVectorMath', operation='SCALE'); nt.links.new(cen.outputs['Vector'], sc.inputs[0]); sc.inputs['Scale'].default_value = amount
+        out = node('ShaderNodeVectorMath', operation='ADD'); nt.links.new(vec, out.inputs[0]); nt.links.new(sc.outputs['Vector'], out.inputs[1])
+        return out.outputs['Vector']
+
+    ramp = node('ShaderNodeValToRGB')
+    cr = ramp.color_ramp; cr.interpolation = 'CONSTANT'
+    pal = [c if isinstance(c, (list, tuple)) else [c, 1.0] for c in p['palette']]       # [colour, share of the bark]
+    tot = sum(w for _, w in pal)
+    while len(cr.elements) < len(pal):
+        cr.elements.new(0.0)
+    acc = 0.0
+    for el, (hx, w) in zip(cr.elements, pal):
+        el.position = acc / tot; el.color = hex_lin(hx); acc += w
+
+    def patches(size, seed):
+        """Smooth-F1 cells `size` across (taller by `stretch`): a colour from the ramp each, blended at the edges."""
+        v = warp(warp(uv, 3.0 / size * 0.12, 1.1 * size, seed), 1.0 / size * 0.5, 0.35 * size, (seed[1], seed[0], 0.0))
+        mp = node('ShaderNodeMapping'); s_ = k / size
+        mp.inputs['Scale'].default_value = (s_, s_ / p['stretch'], 1.0)
+        nt.links.new(v, mp.inputs['Vector'])
+        vo = node('ShaderNodeTexVoronoi', feature='SMOOTH_F1', voronoi_dimensions='2D')
+        vo.inputs['Scale'].default_value = 1.0; vo.inputs['Randomness'].default_value = 1.0; vo.inputs['Smoothness'].default_value = 0.25
+        nt.links.new(mp.outputs['Vector'], vo.inputs['Vector'])
+        sep = node('ShaderNodeSeparateColor'); nt.links.new(vo.outputs['Color'], sep.inputs['Color'])
+        rr = node('ShaderNodeValToRGB'); rr.color_ramp.interpolation = 'CONSTANT'
+        while len(rr.color_ramp.elements) < len(cr.elements):
+            rr.color_ramp.elements.new(0.0)
+        for e_src, e_dst in zip(cr.elements, rr.color_ramp.elements):
+            e_dst.position = e_src.position; e_dst.color = e_src.color
+        nt.links.new(sep.outputs['Red'], rr.inputs['Fac'])
+        ed = node('ShaderNodeTexVoronoi', feature='DISTANCE_TO_EDGE', voronoi_dimensions='2D')
+        ed.inputs['Scale'].default_value = 1.0; ed.inputs['Randomness'].default_value = 1.0
+        nt.links.new(mp.outputs['Vector'], ed.inputs['Vector'])
+        return rr.outputs['Color'], sep.outputs['Green'], ed.outputs['Distance']
+
+    c1, g1, e1 = patches(pm, (0.0, 0.0, 0.0))
+    c2, g2, e2 = patches(pm * 0.55, (13.7, 5.3, 0.0))
+    # the smaller, newer layer over the larger where a slow noise says so
+    ln = node('ShaderNodeTexNoise'); ln.inputs['Scale'].default_value = 1.4 / pm * 0.12 * k; ln.inputs['Detail'].default_value = 3.0
+    nt.links.new(pos, ln.inputs['Vector'])
+    top = smooth(ln.outputs['Fac'], 0.52, 0.56)
+    col = mix(top, c1, c2)
+    # a mottle inside each patch at two scales, and the faint lip where the layers meet
+    def mottle(scale, amount, seed):
+        mo = node('ShaderNodeTexNoise'); mo.inputs['Scale'].default_value = scale * k; mo.inputs['Detail'].default_value = 5.0
+        ad = node('ShaderNodeVectorMath', operation='ADD'); nt.links.new(pos, ad.inputs[0]); ad.inputs[1].default_value = seed
+        nt.links.new(ad.outputs['Vector'], mo.inputs['Vector'])
+        mr = node('ShaderNodeMapRange'); nt.links.new(mo.outputs['Fac'], mr.inputs['Value'])
+        mr.inputs['To Min'].default_value = 1 - amount; mr.inputs['To Max'].default_value = 1 + amount
+        comb = node('ShaderNodeCombineColor')
+        for ch in ('Red', 'Green', 'Blue'):
+            nt.links.new(mr.outputs['Result'], comb.inputs[ch])
+        return comb.outputs['Color'], mo.outputs['Fac']
+    m1, f1 = mottle(9.0, p['mottle'], (2.0, 7.0, 1.0))
+    m2, _ = mottle(60.0, p['mottle'] * 0.5, (5.0, 1.0, 3.0))
+    col = mix(1.0, mix(1.0, col, m1, 'MULTIPLY'), m2, 'MULTIPLY')
+    lip = math_('MULTIPLY', math_('SUBTRACT', 1.0, smooth(e2, 0.0, 0.05)), top)
+    lip = math_('MAXIMUM', lip, math_('MULTIPLY', math_('SUBTRACT', 1.0, smooth(e1, 0.0, 0.03)), math_('SUBTRACT', 1.0, top)))
+    col = mix(math_('MULTIPLY', lip, 0.18 * p['edge']), col, hex_lin('#6E6352'))
+    nt.links.new(col, b.inputs['Base Color'])
+    b.inputs['Roughness'].default_value = p['roughness']
+    # relief: the newer layer's edge stands a little proud of the one under it
+    h = math_('ADD', math_('MULTIPLY', lip, p['edge']), math_('MULTIPLY', f1, 0.12))
+    bn = node('ShaderNodeBump'); bn.inputs['Strength'].default_value = p['bump']; bn.inputs['Distance'].default_value = 0.0008
+    nt.links.new(h, bn.inputs['Height'])
+    if normal_in is not None:
+        nt.links.new(normal_in, bn.inputs['Normal'])
+    nt.links.new(bn.outputs['Normal'], b.inputs['Normal'])
 
 
 def _veneer(nt, b, p):

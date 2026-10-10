@@ -15,7 +15,7 @@ import components as C
 from build123d import Compound, Face, Polyline, Pos, Wire, export_gltf, extrude, Vector, Unit
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out-bookshelf' if BOOK else 'out', 'render')
-NAME = 'earmilk-bookshelf' if BOOK else 'earmilk-floorstander'
+NAME = ('earmilk-bookshelf' if BOOK else 'earmilk-floorstander') + (f"-{os.environ['EARMILK_WOOFER']}" if os.environ.get('EARMILK_WOOFER') else '')   # a comparison build's own file
 VISIBLE = ['front-baffle', 'back-panel', 'side-left', 'side-right', 'gable-block', 'waveguide-insert', 'port-tube', 'terminal-cup']
 # AMP: the plate amplifier replaces the terminal cup (fab/components.amp_plate)
 # Inside the box, for cutaways and exploded views (no closed-box camera sees them)

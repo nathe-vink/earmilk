@@ -1,0 +1,122 @@
+{
+ "title": "barkhorn, the two barks",
+ "size": [
+  1800,
+  1200
+ ],
+ "product": {
+  "def": "studio/products/barkhorn.json",
+  "instances": [
+   {
+    "position": [
+     -0.42,
+     0.05,
+     0
+    ],
+    "rotate_z": 8,
+    "flavour": "birch"
+   },
+   {
+    "position": [
+     0.42,
+     -0.05,
+     0
+    ],
+    "rotate_z": -8,
+    "flavour": "eucalyptus"
+   }
+  ],
+  "flavour": "birch"
+ },
+ "set": {
+  "kind": "sweep",
+  "color": "#B7AFA4",
+  "width": 9,
+  "front": 7,
+  "depth": 2.0,
+  "radius": 1.6,
+  "height": 5
+ },
+ "camera": {
+  "position": [
+   0.9,
+   -4.3,
+   1.15
+  ],
+  "target": [
+   0.0,
+   0.0,
+   0.62
+  ],
+  "lens_mm": 50,
+  "level": true
+ },
+ "lights": {
+  "key": {
+   "type": "area",
+   "size_m": [
+    2.5,
+    2.0
+   ],
+   "orbit": {
+    "azimuth_deg": -40,
+    "elevation_deg": 38,
+    "distance_m": 7
+   },
+   "target": [
+    0,
+    0,
+    0.7
+   ],
+   "irradiance": 2.0,
+   "color": "#FFF3E1"
+  },
+  "fill": {
+   "type": "area",
+   "size_m": [
+    3.0,
+    3.0
+   ],
+   "orbit": {
+    "azimuth_deg": 45,
+    "elevation_deg": 15,
+    "distance_m": 7
+   },
+   "target": [
+    0,
+    0,
+    0.6
+   ],
+   "irradiance": 0.9,
+   "color": "#FFF7EA"
+  },
+  "rim": {
+   "type": "area",
+   "size_m": [
+    2.0,
+    1.0
+   ],
+   "orbit": {
+    "azimuth_deg": 160,
+    "elevation_deg": 35,
+    "distance_m": 5
+   },
+   "target": [
+    0,
+    0,
+    1.0
+   ],
+   "irradiance": 1.2,
+   "color": "#FFF7EA"
+  }
+ },
+ "render": {
+  "samples": 128,
+  "adaptive": 0.02,
+  "denoise": true,
+  "clamp": 8,
+  "bounces": 10,
+  "view": "Khronos PBR Neutral",
+  "exposure": -0.2
+ }
+}

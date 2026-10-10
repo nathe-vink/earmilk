@@ -30,6 +30,14 @@ DRIVERS = {
                        magnet_d=156.0, magnet_h=62.0, cone='aluminium', cap='convex', cap_d=112.0, cap_h=14.0),
     'mr16p-8': dict(kind='cone', frame_od=165.0, flange_t=7.5, cutout=140.3, depth=75.6, sd_cm2=119.0, surround_w=11.0, roll_h=5.0,
                     magnet_d=95.0, magnet_h=32.0, cone='paper', cap='convex', cap_d=42.0),
+    # 2026-10-10, the non-aluminium candidates (params.WOOFER_OPTIONS): frame, flange, cut-out, depth and Sd from search
+    # snippets of the datasheets; roll, magnet and cap PROPORTIONED
+    'sb34nrxl75-8': dict(kind='cone', frame_od=346.0, flange_t=13.0, cutout=305.2, depth=146.0, sd_cm2=508.0, surround_w=24.0, roll_h=12.0,
+                         magnet_d=156.0, magnet_h=60.0, cone='paper', cap='convex', cap_d=100.0, cap_h=12.0),
+    '32w-4878t00': dict(kind='cone', frame_od=320.0, flange_t=8.0, cutout=290.5, depth=153.0, sd_cm2=531.0, surround_w=24.0, roll_h=12.0,
+                        magnet_d=150.0, magnet_h=70.0, cone='paper', cap='convex', cap_d=110.0, cap_h=12.0),
+    'tiw300-8': dict(kind='cone', frame_od=329.0, flange_t=6.0, cutout=288.0, depth=143.0, sd_cm2=510.0, surround_w=24.0, roll_h=12.0,
+                     magnet_d=156.0, magnet_h=60.0, cone='paper', cap='convex', cap_d=110.0, cap_h=12.0),
     'tw29dn-b': dict(kind='dome', dome_d=29.0, surround_w=8.0, flange_d=73.0, flange_t=6.0, body_d=66.0, body_depth=26.0, dome_h=9.5),
     # the bookshelf's (fab/research/drivers-small.md)
     'sb17nrx2c35-8': dict(kind='cone', frame_od=171.0, flange_t=6.5, cutout=144.9, depth=75.0, sd_cm2=118.0, surround_w=12.0, roll_h=5.5,

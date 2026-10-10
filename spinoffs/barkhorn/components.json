@@ -1,0 +1,27 @@
+{
+ "_note": "barkhorn's own bought parts, on top of the kit's library (studio/fabkit/library/components.json). From the horn-speaker research of 2026-10-10 (search-result snippets of makers' datasheets and retailer listings; pages could not be opened from this environment): confirm every figure on the datasheet before cutting a baffle. Geometry the datasheets leave out (flange thickness, magnet, roll, cap) is proportioned and marked so.",
+
+ "faital-15pr400-8": {"kind": "woofer", "maker": "FaitalPRO", "model": "15PR400-8 15 in woofer (treated paper cone, neodymium, 8 ohm)",
+  "usd": 194, "supplier": "Thomann (US storefront; EUR 198 in the EU)", "price_date": "2026-10-10", "url": "https://www.thomannmusic.com/faitalpro_15pr400_8_ohms.htm",
+  "size": "393 frame, 356 cut-out, 165 deep", "mass_g": 3600, "note": "99 dB 1 W/1 m (Faital); Xmax 5.75 mm (6 by another source)",
+  "ts": {"Re": 5.1, "Le_mH": 0.75, "Fs": 35, "Qms": 6.0, "Qes": 0.34, "Qts": 0.32, "Vas_l": 223, "Sd_cm2": 805, "Xmax_mm": 5.75, "Pe_w": 400, "sens_db": 99.0, "sens_ref": "1W", "nominal_ohm": 8},
+  "geom": {"kind": "cone", "frame_od": 393.0, "flange_t": 10.0, "cutout": 356.0, "depth": 165.0, "sd_cm2": 805.0, "surround_w": 24.0, "roll_h": 12.0,
+           "magnet_d": 125.0, "magnet_h": 52.0, "cone": "paper", "cap": "convex", "cap_d": 100.0, "cap_h": 14.0, "bolt_d": 375.0, "bolts": 8, "bolt_hole": 6.5,
+           "_proportioned": "flange_t, surround_w, roll_h, magnet, cap, bolt circle"}},
+
+ "bms-4550-16": {"kind": "compression", "maker": "BMS", "model": "4550-16 compression driver, 1 in exit, polyester diaphragm, 16 ohm",
+  "usd": 154, "supplier": "Toutlehautparleur (EUR 142)", "price_date": "2026-10-10", "url": "https://en.toutlehautparleur.com/compression-driver-bms-4550-16-ohm-1-inch-exit.html",
+  "size": "123 across, 52 deep, 2 x M6 on 76.2", "mass_g": 2250, "note": "113 dB 1 W/1 m on a horn; BMS recommends crossing at 800 Hz or above",
+  "ts": {"sens_db": 113.0, "sens_ref": "1W", "Pe_w": 80, "nominal_ohm": 16, "xover_min_hz": 800},
+  "geom": {"kind": "compression", "flange_d": 123.0, "flange_t": 10.0, "body_d": 118.0, "body_depth": 42.0, "exit_d": 25.4,
+           "bolts": 2, "bolt_d": 76.2, "bolt_hole": 6.5, "_proportioned": "flange_t, body_d"}},
+
+ "artofsound-jmlc-400": {"kind": "horn", "maker": "Art of Sound (Michelstadt)", "model": "Le Cleac'h round horn, 400 mm mouth, solid beech, 1 in throat (the bought alternative to turning the horn)",
+  "usd": null, "supplier": "Kleinanzeigen listing (EUR 1,200 a pair, dated 2026-06-25)", "price_date": "2026-06-25", "url": "https://www.kleinanzeigen.de/pro/Born-Propeller-SRL",
+  "note": "cut-off, coverage and throat flange not stated: confirm it takes the 4550's 2 x M6 on 76.2"},
+
+ "horn-strap": {"kind": "hardware", "maker": "any", "model": "Leather strap 25 mm with a brass buckle, to hold the horn in its saddles", "usd": null, "supplier": "any", "price_date": "2026-10-10"},
+ "felt-tape": {"kind": "hardware", "maker": "any", "model": "Wool felt tape 3 mm, self-adhesive, 1 m (lines the saddles)", "usd": null, "supplier": "any", "price_date": "2026-10-10"},
+ "m6-hf-screws": {"kind": "hardware", "maker": "any", "model": "M6 x 25 socket caps with washers (the compression driver to the horn's flange), a pair", "usd": null, "supplier": "any", "price_date": "2026-10-10"},
+ "attenuator-l-pad": {"kind": "wiring", "maker": "any", "model": "Resistor L-pad for the HF channel, about -10 dB at 16 ohm (lowers the amplifier's hiss through a 113 dB driver)", "usd": null, "supplier": "any", "price_date": "2026-10-10"}
+}

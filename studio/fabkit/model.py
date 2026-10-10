@@ -117,7 +117,9 @@ class Product:
     notes: list = field(default_factory=list)          # build notes, printed on the notes sheet and in the README
     touching: list = field(default_factory=list)       # (part, part) pairs allowed to overlap: press fits, gaskets
     materials: dict = field(default_factory=dict)      # render materials by finish name, for the engine's product file
-    variants: dict = field(default_factory=dict)       # name -> {finish: material overrides}: colourways
+    variants: dict = field(default_factory=dict)       # colourways, the engine's flavours: {name: {token: value}};
+                                                       # a material's value '$token' (a colour, or even its preset)
+                                                       # takes the flavour's
     origin: tuple = (0.0, 0.0, 0.0) # where the render engine puts the product's origin, mm (default: its footprint's
                                     # centre on the floor, worked out at build time)
     revision: str = 'A'
