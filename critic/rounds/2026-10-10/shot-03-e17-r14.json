@@ -1,0 +1,438 @@
+{
+ "stage1": {
+  "impression": "A tight frontal crop of a glossy red gable-top speaker head with a sculpted arch waveguide round a black tweeter, set on a dead-flat mid-grey backdrop with the white body sliced into a grey strip by the bottom edge. The waveguide rim carries a few crisp speculars, but the big red planes are lit nearly evenly, the white reads as dull grey, and with no backdrop falloff or edge light the frame looks like a clean CAD viewport, not a finished hero.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Backdrop graded and below the red's lit faces: top-left box [0,0,200,110] at or under 62, rising 14-28 levels to the right edge with no hot spot in frame. It now reads 84-95 everywhere (top band p5 89.1, p95 95.1), above the gable-block median of 79.2.",
+  "Both lips of the waveguide mouth traced by a crisp 150-215 line. The left lip peaks at 97-108 (box [404,530,428,552] p95 101.5) while the right lip peaks at 194-196.",
+  "The waveguide's left wall falls off into the throat instead of reading as one flat facet (23,275 px at 42-50; box [398,588,422,608] median 48.1, range 2.9). It should run from about 60-65 toward the mouth to about 45 at the throat, with no hard panel edge.",
+  "The white front at 200-214 median with its key gradient kept. It now reads part:front-baffle 189 and box [100,830,1150,900] 186, running 202 at the left to 172 at the right.",
+  "A soft specular catchlight on the tweeter dome that shows its curvature. The dome now peaks at about 91 (part:tweeter-dome median 23.6, p95 68.3).",
+  "The horn floor reads as the same red lacquer with a graded reflection, not a flat paler plane. Box [330,700,480,770] reads 102-110 (range 7.2, rgb 206/78/84), against the slope's 213/62/60 and the left wall's 150/25/27.",
+  "The white side face reads as white in shadow, about 90-125, not charcoal (part:side-right median 52, p5 41, p95 75), and the gable's right side band reads as red, not a gap (box [1218,600,1240,840] median 35.3)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The backdrop is one flat mid-grey brighter than the red roof, so the roof's silhouette separates from it by hue alone and the frame reads as a CAD viewport.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     200,
+     110
+    ],
+    "measured": "lum_median 90.3. The whole top band [0,0,1350,110] reads 93.3 (p5 89.1, p95 95.1), the left strip [0,300,55,750] 88.3 and the right strip [1295,200,1350,880] 87.4, against a gable-block median of 79.2. Across the slope's left edge at y=400 the ground reads 91.4 and the red face 99-103, a net step of about +9 with a 4 px hip line at 61-65 between them. Just under the fin's top edge the fin face reads 79-93, against 92-95 above it. Round 13's c8 could not get the backdrop down with bg_pool alone: the engine's proofs gave 109.4 at 0.7 and 94.8 at 0.4."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#7C7E7D",
+    "to": "#6A6C6B"
+   },
+   "expected": "The paper's linear reflectance drops about 29 %, and the key's and fill's spill and the sweep's own bounce drop with it. The top-left backdrop falls from 90 to about 54 (46-62), so the slope's lit left edge (about 100) stands about +45 off the ground and the fin's top-left face (88-93) about +35. This gives the result round 13's c8 asked for (42-78) through the paper instead of bg_pool. The white front loses a few levels of floor bounce, which c4 makes good. The red faces are lit by the key and mirror the panels, so they do not move: slope box [250,275,300,640] stays at 94 +/- 4.",
+   "accept": {
+    "region": [
+     0,
+     0,
+     200,
+     110
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     46,
+     62
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Even when darkened, the backdrop has no falloff across the frame, and a uniformly dark ground would swallow the dark right side of the product.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     1350,
+     100
+    ],
+    "measured": "The profile along x in 8 bins reads 90.1, 93.1, 94.1, 95.1, 94.4, 93.4, 92.1, 89.4 (falloff 0.7). The left column runs 89 to 86 from top to bottom and the right column 88 to 84. The right silhouette is dark: the gable's right side band [1218,600,1240,840] has a median of 35.3 and part:side-right 52. By the lamp geometry, bg_pool (1.2 m at [0.35,1,1.7]) spreads about 0.27-0.37 W/m2 evenly over the whole visible sweep, roughly 45 % of its direct light. This matches the engine's c8 proofs (0.3 W/m2 of bg_pool moved the backdrop by 14.6 levels)."
+   },
+   "change": {
+    "setting": "lights.bg_pool",
+    "from": {
+     "type": "area",
+     "size_m": [
+      1.2,
+      1.2
+     ],
+     "position": [
+      0.35,
+      1,
+      1.7
+     ],
+     "target": [
+      0.25,
+      2.3,
+      0.25
+     ],
+     "irradiance": 0.4,
+     "color": 5700,
+     "specular": 0
+    },
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.0,
+      1.0
+     ],
+     "position": [
+      1.5,
+      1.5,
+      0.9
+     ],
+     "target": [
+      0.7,
+      2.6,
+      0.45
+     ],
+     "irradiance": 0.6,
+     "color": 5700,
+     "specular": 0
+    }
+   },
+   "expected": "The lamp rakes the sweep from the right, so the backdrop rises smoothly from about 54 at the left edge to about 70-82 at the right edge (falloff -14 to -28 across the top band). Its brightest point falls beyond the right edge of the frame. The lit left side of the roof then reads against the dark end, and the dark right side (35-52) against the light end. The product sits behind the lamp's emitting face (the cosine to the nearest corner is -0.2) and the lamp has no specular share, so it puts no light on the product, casts no shadow in frame and shows in no reflection. The top band's p5-p95 stays under 30, so round 13's c2 test on the frame edge still reads the edge and not the gradient.",
+   "accept": {
+    "region": [
+     0,
+     0,
+     1350,
+     100
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -28,
+     -14
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Only the right half of the waveguide's mouth carries a crisp highlight; the left lip shows a soft band barely above the slope, so the designed lip reads as half a line.",
+   "evidence": {
+    "region": [
+     404,
+     530,
+     428,
+     552
+    ],
+    "measured": "lum_p95 101.5. Across the left lip at y=540: slope 85-88, seam 69, outer round 96-104 (mirroring panel top at radiance 0.78-1.45), inner round 84-88 falling to 66, wall 41-43. The right lip at y=540 peaks at 194-196, where it mirrors the key at 12.09 and rim_right at 12.5. rim_left (18.5) is mirrored by 0.0 % of the waveguide-insert, only in box [618,366,680,394] near the apex. From the mirror map, every row of the left lip's inner round, from y=370 to y=730, sweeps its mirror rays through x -0.26..0.03 and y -0.47..-0.33 at z 1.9, a region with nothing in it. The flat slope beside the lip mirrors the top panel 0.3-0.4 m further back."
+   },
+   "change": {
+    "setting": "lights.rim_left",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      0.24,
+      0.16
+     ],
+     "position": [
+      -0.062,
+      -0.664,
+      1.643
+     ],
+     "target": [
+      -0.12,
+      -0.08,
+      0.93
+     ],
+     "strength": 18.5241,
+     "color": 5700,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -0.18,
+       0.05
+      ],
+      "values": [
+       0.5,
+       1
+      ]
+     },
+     "diffuse": false
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.36,
+      0.14
+     ],
+     "position": [
+      -0.15,
+      -0.4,
+      1.9
+     ],
+     "target": [
+      -0.12,
+      -0.08,
+      0.93
+     ],
+     "strength": 12,
+     "color": 5700,
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -0.33,
+       -0.15,
+       0.03
+      ],
+      "values": [
+       0.7,
+       1,
+       0.85
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "A 2-4 px line at 150-215 runs along the inner round of the left lip, from the apex (x about 600-700, y about 360) down to y about 730. It matches the right lip, so the whole mouth is traced as one machined edge. About 9 % of the test box mirrors the strip. The soft outer band (about 100) and the right lip do not change. The fin's top round from x about 690 to 1200 picks up the same strip as a thin edge line. Nothing else on the waveguide or the slope mirrors the strip: slope box [250,275,300,640] stays at 94 +/- 4.",
+   "accept": {
+    "region": [
+     404,
+     530,
+     428,
+     552
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     150,
+     215
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The white front reads light grey, below the 200-220 band the card gives for a white lacquer that models.",
+   "evidence": {
+    "region": [
+     100,
+     830,
+     1150,
+     900
+    ],
+    "measured": "lum_median 186 (p95 201), rgb 186/186/186. The profile along x runs 202 at the left to 172 at the right, and part:front-baffle reads 189. Round 13's c5 raised the key from 3.4 to 4.6 W/m2 and its test still read 185. The key grazes this face (cosine about 0.3) while it meets the roof at about 0.84, so more key mostly brightens the roof."
+   },
+   "change": {
+    "setting": "lights.front_card",
+    "from": null,
+    "to": {
+     "type": "flag",
+     "size_m": [
+      1.2,
+      0.4
+     ],
+     "position": [
+      -0.05,
+      -0.7,
+      0.55
+     ],
+     "target": [
+      0.0,
+      -0.2,
+      0.8
+     ],
+     "color": "#F0F0F0"
+    }
+   },
+   "expected": "A white card under the lens catches the key (cosine about 0.5) and faces the front from 0.5 m away, adding about 0.5 W/m2 there. The white front rises to a median of about 205 (left end about 220, right end about 190), so it reads as white lacquer and keeps its 30-level key gradient below the 226 knee. The roof faces up and away from the card (cosine about 0.04) and does not change. The card lies outside the key, fill and snoot paths to the product, so it shades nothing on it, and the camera and gloss cannot see it.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     200,
+     214
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "At the frame's focal point the tweeter dome has only a dim blurred key reflection, so the driver reads as a dark ball rather than a precise dome.",
+   "evidence": {
+    "region": [
+     698,
+     442,
+     726,
+     466
+    ],
+    "measured": "lum_p95 87.7, with a peak of about 91 at (705-712, 448-457), where the dome mirrors the key (7.1 % and 3.0 % of the box). part:tweeter-dome reads median 23.6, p95 68.3. glint 1, meant for the dome, was skipped because its point mirrors the tweeter motor 1 cm away."
+   },
+   "change": {
+    "setting": "glints.1",
+    "from": {
+     "at": [
+      0.0,
+      -0.049,
+      0.953
+     ],
+     "normal": [
+      -0.23,
+      -0.66,
+      0.72
+     ],
+     "size_m": 0.04,
+     "power_w": 14.135,
+     "receivers": [
+      "tweeter-dome"
+     ]
+    },
+    "to": {
+     "at": [
+      -0.011,
+      -0.043,
+      0.948
+     ],
+     "normal": [
+      -0.45,
+      -0.76,
+      0.47
+     ],
+     "size_m": 0.06,
+     "power_w": 8,
+     "receivers": [
+      "tweeter-dome"
+     ]
+    }
+   },
+   "expected": "A soft catchlight about 8-12 px across, peaking at about 140-160, sits on the dome's upper left, exactly where the dome already mirrors the key, so it reads as the key catching the dome and shows its curvature. The dome's median stays at about 24-30, so it is still a black dome and not a grey ball. That point's mirror ray runs about 0.95 m to the key's face, so there is room for the glint's lamp.",
+   "accept": {
+    "region": [
+     698,
+     442,
+     726,
+     466
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     115,
+     175
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The white side face reads charcoal and the gable's right side band near-black, because both mirror the dark foot of side_grad's ramp.",
+   "evidence": {
+    "region": [
+     1210,
+     561,
+     1276,
+     900
+    ],
+    "measured": "part:side-right reads median 52 (p5 41, p95 75), with rows running 80 at the top to 47 at the foot. 96 % of it mirrors side_grad, at radiance median 0.002 (p95 0.063) for z 0.50-0.64, where the ramp ([0.55, 0.74] to [0, 1]) is still near 0. The gable's right band [1218,600,1240,840] reads median 35.3 and 73 % of it mirrors side_grad at 0.021."
+   },
+   "change": {
+    "setting": "lights.side_grad",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      0.7,
+      0.5
+     ],
+     "position": [
+      0.586,
+      0.576,
+      0.562
+     ],
+     "target": [
+      0.17,
+      -0.11,
+      0.9
+     ],
+     "strength": 0.1317,
+     "color": 5700,
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.55,
+       0.74
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.7,
+      0.5
+     ],
+     "position": [
+      0.586,
+      0.576,
+      0.562
+     ],
+     "target": [
+      0.17,
+      -0.11,
+      0.9
+     ],
+     "strength": 0.4,
+     "color": 5700,
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.4,
+       0.72
+      ],
+      "values": [
+       0.3,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The white side lifts from 52 to about 95-115, lighter at the top than at the foot, so it reads as a white in shadow. It stays 10-30 levels off the light right end of the backdrop that c2 makes. The gable's right band takes a grazing sheen, from 35 to about 60-80, and reads as red lacquer instead of a gap. side_grad is a reflection-only card that lights nothing, and it still hides flag_right behind it.",
+   "accept": {
+    "region": "part:side-right",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     85,
+     125
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Smooth the creases between the horn's dark left facet, its mid strip and its floor, which now read as three flat planes at about 46, 70 and 105.",
+   "why": "The waveguide's profile is set by acoustic simulation and is fixed; light can only grade each plane, as c3 and blocking items 3 and 6 describe. The faceted read is the main thing keeping the horn from looking machined rather than folded."
+  },
+  {
+   "request": "Remove the 2 px light point at the dome's apex (716-717, 475-476), which reads 43-44 against 32-34 around it.",
+   "why": "It comes from the tweeter's own geometry or shading (a mesh pole), and the driver is a real, fixed product. At 100 % it sits on the frame's focal point."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
