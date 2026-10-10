@@ -53,7 +53,7 @@
    "id": "c2",
    "rank": 2,
    "kind": "light",
-   "problem": "The left woofer's inner (right) half is crushed to black while the right woofer reads as metal, so the left driver shows a black hole and the pair no longer match.",
+   "problem": "Glints 6 and 7 now render, so they fix the left woofer's black inner half on their own, but their powers were set under the old rule when they did nothing. At those powers they will burn a hot patch over about 43% of that half, and the pair will mismatch the other way. A floor panel cannot help: only 10% of the half reaches the floor, and its dark share mirrors the cone's own cap.",
    "evidence": {
     "region": [
      166,
@@ -61,48 +61,14 @@
      206,
      586
     ],
-    "measured": "woofer-cone|woofer-cap inside [166,490,240,600]: lum_median 4.8, 46.9% of pixels <= 3; the same woofer's outer half 31.9; the right woofer's inner half 33.8. These pixels mirror front_gradient near its unlit near end (17%), the dim letters_card (5.6%), the shaded front wall (7.4%), the ceiling (5.1%) and the cone's own cap (14%): the dark floor and room to the left-front of the left cabinet. Glint 7 (power 1.5 to 3) did not move it (card), because those rays meet the cone itself within 0.17 m."
+    "measured": "e12: woofer-cone|woofer-cap in [166,490,240,600] reads median 4.8, mean 12.8, with 46.9% of pixels <= 3. Its pixels labelled 'lamp glint7 over woofer-cone' read 1.6 and those labelled 'glint6 + glint7 over ...' read 1.4-2.5, so the glints did not render. In the precheck map, glint 7 alone covers 20.3% (radiance 2.43, met 2 cm in front of the cone at -1.057, -0.17, 0.294). Glints 6+7 together cover 20.2% (2.53 + 2.43) and glint 6 alone 2.1%. cone_sheen reaches only 10.4%, at 0.16-0.26. Another 28% stays dark because it mirrors the cap (17.3%), the zero end of roof_ramp, the ceiling and the cone itself. Calibration on e12 cone pixels that did render a glint: glint 1 (3.79) gives 110 and glint 2 (0.84) gives 61-90. That is about 0.023-0.064 of the radiance at +0.84 EV. At current powers that puts the glint pixels at about 90-200 and the half's mean at about 55-85, against the right woofer's inner half at median 33.8, mean 41.7, p95 115.6. The precheck map shows no glint on that right half, so it stays the reference."
    },
    "change": {
-    "setting": "lights.cone_sheen",
-    "from": "none (new lamp)",
-    "to": {
-     "type": "panel",
-     "size_m": [
-      1.5,
-      1.2
-     ],
-     "position": [
-      -1.45,
-      -0.95,
-      0.1
-     ],
-     "target": [
-      -1.45,
-      -0.833,
-      1.093
-     ],
-     "strength": 0.5,
-     "color": "#FFF4E8",
-     "ramp": {
-      "axis": "y",
-      "at_m": [
-       -1.55,
-       -0.35
-      ],
-      "values": [
-       1,
-       0.3
-      ]
-     },
-     "diffuse": false,
-     "receivers": [
-      "woofer-cone",
-      "woofer-cap"
-     ]
-    }
+    "setting": "glints.7.power_w",
+    "from": 1.5,
+    "to": 0.3
    },
-   "expected": "A reflection-only panel lying 5 cm above front_gradient on the floor left-front of the left cabinet (x -2.2 to -0.7, y -1.55 to -0.35), seen only by the cones: the left inner half picks up a graded warm sheen, median 20-34 with crush under 10%, like the right woofer's 33.8; the left outer half may rise a few levels (now 31.9); the right woofer's mirror rays do not reach x < -0.7, and no other surface sees or is lit by the panel.",
+   "expected": "Drop cone_sheen. Glint 7's moved-in lamp becomes a soft highlight across the upper inner half and adds to glint 6 on its lower edge. Expected readings: median about 35-40, mean about 40-48, p95 about 110-130, in step with the right woofer's inner half. The 17% that mirrors the cap stays dark, which keeps the cone's depth. If glint 7 at 0 still leaves the mean above 52, glint 6 (power 1) is setting the floor and is the next lever.",
    "accept": {
     "region": {
      "part": "woofer-cone|woofer-cap",
@@ -113,11 +79,11 @@
       600
      ]
     },
-    "metric": "lum_median",
+    "metric": "lum_mean",
     "op": "between",
     "value": [
-     18,
-     38
+     26,
+     52
     ]
    }
   },
@@ -342,5 +308,50 @@
    "why": "The 6 mm rounds are spec geometry. The outline is what the rounds mirror (the unlit left side of the room), so any fix has to be a light or card they see, not the radius."
   }
  ],
- "score_if_fixed": 6.5
+ "score_if_fixed": 6.5,
+ "revisions": [
+  {
+   "id": "c2",
+   "why": "engine precheck: cone_sheen mirrored by 10 % of the region; with the glint move-in rule now the default, glints 6 and 7 reach about 35 %, so the critic dropped the panel and turned glint 7 down",
+   "first": {
+    "setting": "lights.cone_sheen",
+    "from": "none (new lamp)",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.5,
+      1.2
+     ],
+     "position": [
+      -1.45,
+      -0.95,
+      0.1
+     ],
+     "target": [
+      -1.45,
+      -0.833,
+      1.093
+     ],
+     "strength": 0.5,
+     "color": "#FFF4E8",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -1.55,
+       -0.35
+      ],
+      "values": [
+       1,
+       0.3
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "woofer-cone",
+      "woofer-cap"
+     ]
+    }
+   }
+  }
+ ]
 }
