@@ -191,6 +191,29 @@ until 2026-10-10 every share rendered at full strength: a fill at specular 0.1 m
 waveguide band), a lamp at specular 0 laid a pale plate across 08b's bowl (gone with the fix), and every glint lamp lit
 its part as well as glinting on it. The shares are the default (`EARMILK_LAMP_SHARES=0` keeps the old rendering).
 
+## How light reads as a photograph
+
+Fifteen rounds held the blind scores at 5 to 6 while each round fixed what it measured, and the blind impressions kept
+naming the same things: a white that reads as flat grey card, lacquer that reads as paint, a product that glows or looks
+pasted. Three causes ran through the frames, and the card now spells them out in each frame's own lamps:
+
+- **Lamps linked to one part.** A lamp with `receivers` and a diffuse share lights its parts and nothing round them, so
+  the part brightens while its floor, wall and shadow do not: 05 carried seven such lifts, 09 and 10 read as
+  "self-glow". The card lists them and puts turning them off in scope; `receivers` belongs to reflection-only cards
+  and glints.
+- **The polariser.** Four studio frames (04a at 0.97, 04b, 05, 08b) carried one, and it removes the very reflections
+  that tell lacquer from paint: in a 05 proof the white fronts gained 13 levels of reflection when it came off.
+- **Reflection strength.** A clear coat mirrors 4 to 5 % head-on, so a card shows on a white only at many times the
+  white's own radiance: 05's floor card at strength 1.55 (exposure -1.35) added 5 levels, invisible. The card gives the
+  arithmetic (strength x 0.045 x 2^exposure) and the warning that goes with it.
+
+The warning is measured. A relit 05 (a coherent five-lamp rig, the dome and the polariser off, the floor card at strength
+7 for every copy) lost a blind side-by-side to the frame it replaced, 4.0 to 5.0: the white fronts gained their
+reflections, but the same card blew the Matcha and Oat fronts out to white, turned the Chocolate pink and the plinths'
+sides a frosted grey, and "a colourway the shot exists to sell, shown wrong" outweighed the gloss. Reflections are
+calibrated per face, a dark or coloured face taking a fraction of a white's, and that is the critic's to prescribe with
+the mirror map's radiance in front of it.
+
 ## What the engine makes exact
 
 - **Glints** are placed from the surface the camera sees at their point, with that surface's own normal (the camera's
