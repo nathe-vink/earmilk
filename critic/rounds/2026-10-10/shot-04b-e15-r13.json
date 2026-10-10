@@ -109,12 +109,12 @@
    "problem": "The back panel, the frame's hero face, mirrors the unlit sky across its upper third, so it holds one flat value and nothing on it says clear-coat lacquer.",
    "evidence": {
     "region": [
-     887,
+     1030,
      219,
-     936,
-     264
+     1072,
+     262
     ],
-    "measured": "lum_median 221, range 4; strip [886,214,936,300] 220 -> 218; left strip [885,225,912,595] 221 -> 211 (falloff 10); mirrors [885,220,1070,300]: world (sky) 99.3 % with sky.strength 0; part:back-panel mirrors sweep 42 %, sky 39 %, flag1 15 %. Label print p5 23, so a reflection over the label would veil it; the band above the label (z ~0.78-0.87 m) is free of print apart from the separate cast letters."
+    "measured": "lum_median 218, p5 217, p95 219 (flat); on e15 the band above the label mirrors world (sky) on 99.3 % of [885,220,1070,300] (sky.strength 0) and the left strip [885,225,912,595] falls only 221 -> 211. Engine trace with the round-13 panel in place: the band's rows meet it at z 0.66-0.76, higher toward the eave and toward the right end (eave rows 0.679 at x 887-912 rising to 0.754 at x 1060-1074; this region 0.676 / 0.714 / 0.751); the label's top rule meets it at 0.598-0.670 (0.654-0.670 at its right end, [1040,262,1052,272]) and its title at 0.566-0.631; the 1-2 px lip under the 3 mm shadow line meets it at 0.79-0.82. The old region [887,219,936,264] sat at 0.61 / 0.65 / 0.69, under the old ramp's zero end. Label print p5 25, so any light that reaches the label's rows would veil it."
    },
    "change": {
     "setting": "lights.backgloss",
@@ -123,25 +123,25 @@
      "type": "panel",
      "size_m": [
       0.8,
-      0.4
+      0.22
      ],
      "position": [
       1.91,
       -0.55,
-      0.76
+      0.67
      ],
      "target": [
       0.462,
       -0.16,
-      0.8
+      0.71
      ],
      "strength": 3.5,
      "color": "#FFF7EA",
      "ramp": {
       "axis": "z",
       "at_m": [
-       0.72,
-       0.84
+       0.67,
+       0.77
       ],
       "values": [
        0,
@@ -154,19 +154,19 @@
      ]
     }
    },
-   "expected": "The panel sits where the back panel's top band mirrors (rays from the camera's mirror image through the band meet its plane about 1.4-1.6 m out at z 0.71-0.83, inside its 0.8 x 0.4 m face), so the band under the eave shows a soft graduated sheen: the band's median rises from 221 to about 231, about 245 at the eave, fading to nothing at the label's top rule. The back panel then models about 231 -> 206 top to bottom instead of 221 -> 211 and reads as clear coat. Rays from the label meet the panel below z 0.72, where the ramp is 0, so the label's print stays at p5 <= 30, and the cast letters, which are not receivers, stay dark against a brighter ground.",
+   "expected": "The panel keeps round 13's plane: position and target both move down 0.09 m, so its face and the traced meeting points are unchanged. It is cut to z 0.56-0.78, so the lip under the shadow line (0.79-0.82) still mirrors the sky and gains no hot edge line. The ramp starts at 0.67, just above the label's highest meeting point, and rises toward the eave (the eave's rows meet at the higher z), so the label, its border and its title get none of it. The sheen is a soft glow in the top-right of the back panel, the side that faces the panel: this region's median rises from 218 (about 213 once c1 removes some floor bounce) to about 229 and its top rows to about 241, fading to nothing at the label's top rule and along the eave toward the left end (ramp about 0.1 at x 887-912). The band reads as clear coat catching a soft source on the right, on the key's side. The cast letters are not receivers and stay dark on a slightly brighter ground.",
    "accept": {
     "region": [
-     887,
+     1030,
      219,
-     936,
-     264
+     1072,
+     262
     ],
     "metric": "lum_median",
     "op": "between",
     "value": [
-     227,
-     234
+     225,
+     233
     ]
    }
   },
@@ -207,5 +207,49 @@
    "why": "The amplifier connections, a must-show, span 68 x 25 px (the RCA 9 x 8 px) and the label rows have an x-height of about 6 px at 1350 x 900: legible on a homepage, soft across a spread. The frame size is fixed by the card, and the product already fills 79 % of the frame height with the copy space and floor contact in view, so a tighter crop is not available."
   }
  ],
- "score_if_fixed": 6.8
+ "score_if_fixed": 6.8,
+ "revisions": [
+  {
+   "id": "c3",
+   "why": "engine precheck: the band's reflections met the panel at z 0.61 to 0.69, under its ramp (0.72 to 0.84), radiance 0; the critic moved the ramp onto them and the test region to the band's right end",
+   "first": {
+    "setting": "lights.backgloss",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.8,
+      0.4
+     ],
+     "position": [
+      1.91,
+      -0.55,
+      0.76
+     ],
+     "target": [
+      0.462,
+      -0.16,
+      0.8
+     ],
+     "strength": 3.5,
+     "color": "#FFF7EA",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.72,
+       0.84
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "back-panel"
+     ]
+    }
+   }
+  }
+ ]
 }
