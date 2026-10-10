@@ -1158,5 +1158,247 @@
   ],
   "reply": "critic/rounds/2026-10-10/shot-09-e11-r10.json",
   "shot_sha": "367e418910bd92a3ec088f2e38b4f8a2daadaa79"
+ },
+ {
+  "change": "c2",
+  "setting": "set.props.0.grain",
+  "test": {
+   "metric": "lum_range",
+   "op": "between",
+   "value": [
+    12,
+    14.5
+   ]
+  },
+  "proofs": [
+   [
+    0.4,
+    14.0
+   ],
+   [
+    0.3,
+    12.1
+   ],
+   [
+    0.3605,
+    13.1
+   ]
+  ],
+  "set": 0.3605,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   0.6,
+   0.4
+  ],
+  "passing": [
+   "c2",
+   "c4",
+   "c6"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-09-e12-r11.json",
+  "shot_sha": "c9d3cba93652bc928b7fe67f757079ba167b4113"
+ },
+ {
+  "change": "c3",
+  "setting": "sun.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    200,
+    208
+   ]
+  },
+  "proofs": [
+   [
+    0.25,
+    211.0
+   ],
+   [
+    0.15,
+    208.0
+   ],
+   [
+    0.0167,
+    204.0
+   ]
+  ],
+  "set": 0.0167,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   0.5,
+   0.25
+  ],
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c6"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-09-e12-r11.json",
+  "shot_sha": "8f84f0c01d5bb55a0db5ff316b34c2b777dfeb3b"
+ },
+ {
+  "change": "c4",
+  "setting": "lights.fill.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    157,
+    172
+   ]
+  },
+  "proofs": [
+   [
+    0.42,
+    164.0
+   ],
+   [
+    0.6,
+    176.0
+   ],
+   [
+    0.4275,
+    165.0
+   ]
+  ],
+  "set": 0.42,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   0.1947,
+   0.42
+  ],
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c6"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-09-e12-r11.json",
+  "shot_sha": "8f84f0c01d5bb55a0db5ff316b34c2b777dfeb3b"
+ },
+ {
+  "change": "c5",
+  "setting": "lights.top.irradiance",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    -30,
+    -20
+   ]
+  },
+  "proofs": [
+   [
+    1.3,
+    -13.5
+   ],
+   [
+    1.8,
+    -14.4
+   ],
+   [
+    2.8,
+    -16.1
+   ]
+  ],
+  "set": 1.3,
+  "passes": false,
+  "moves_the_test": true,
+  "asked": [
+   0.7,
+   1.3
+  ],
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c6"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-09-e12-r11.json",
+  "shot_sha": "8f84f0c01d5bb55a0db5ff316b34c2b777dfeb3b"
+ },
+ {
+  "change": "c6",
+  "setting": "lights.plinth_lift.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    60,
+    70
+   ]
+  },
+  "proofs": [
+   [
+    0.5,
+    61.0
+   ],
+   [
+    0.3,
+    59.3
+   ],
+   [
+    0.9,
+    63.9
+   ]
+  ],
+  "set": 0.9,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   1.8,
+   0.5
+  ],
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c6"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-09-e12-r11.json",
+  "shot_sha": "c99947d310b660e441e556aefc0ef87b720709a7"
+ },
+ {
+  "change": "c1",
+  "setting": "lights.front_sheen.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    12,
+    22
+   ]
+  },
+  "proofs": [
+   [
+    2.0,
+    12.0
+   ],
+   [
+    3.0,
+    16.0
+   ]
+  ],
+  "set": 3.0,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c6"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-09-e12-r11.json",
+  "shot_sha": "f1fd5c8b4b0b5d3e7075054bce45e0ebfceff706"
  }
 ]
