@@ -959,5 +959,111 @@
   ],
   "reply": "critic/rounds/2026-10-10/shot-04a-e13-r8.json",
   "shot_sha": "f3034b76d9a2d76d4d002f56dcc093f3b7eeee77"
+ },
+ {
+  "change": "c1",
+  "setting": "lights.letters_ramp.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    30,
+    38
+   ]
+  },
+  "proofs": [
+   [
+    2.0,
+    25.3
+   ],
+   [
+    3.2,
+    6.3
+   ],
+   [
+    1.4505,
+    29.7
+   ]
+  ],
+  "set": 1.4505,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [],
+  "reply": "critic/rounds/2026-10-10/shot-04a-e14-r9.json",
+  "shot_sha": "68a602bb51f33d23710c535fbcaf92a16cb6c779"
+ },
+ {
+  "change": "c2",
+  "setting": "lights.roof_ramp.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    16,
+    24
+   ]
+  },
+  "proofs": [
+   [
+    35.0,
+    22.2
+   ],
+   [
+    50.0,
+    33.9
+   ],
+   [
+    32.1795,
+    19.5
+   ]
+  ],
+  "set": 32.1795,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   23,
+   45
+  ],
+  "passing": [
+   "c2"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-04a-e14-r9.json",
+  "shot_sha": "309dcfa57e5463f81f12c51263aad8a36b809ecc"
+ },
+ {
+  "change": "c3",
+  "setting": "lights.key.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    218,
+    226
+   ]
+  },
+  "proofs": [
+   [
+    1.9,
+    211.0
+   ],
+   [
+    2.4,
+    223.0
+   ]
+  ],
+  "set": 2.4,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   2.8,
+   2.1
+  ],
+  "passing": [
+   "c1",
+   "c2",
+   "c3"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-04a-e14-r9.json",
+  "shot_sha": "d9332784370e286ec91e7f31430ef07648f5caad"
  }
 ]
