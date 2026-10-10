@@ -63,13 +63,29 @@ def main():
     if before_ok:
         print(f"  passing at the shot as it stands (the last tune's proof): {', '.join(sorted(before_ok))}")
 
+    # a retouch setting changes nothing the path tracer sees: one proof is rendered, the others only retouch its raw
+    # frame again (seconds, not minutes)
+    ret0 = S.load(a.shot).get('retouch') or {}
+    retouch_only = all(k.startswith('retouch.') and k != 'retouch.enabled' for k in knobs) and ret0.get('enabled')
+
     def proof(v):
+        import shutil
         out = td / f'proof-{len(proofs)}.png'
-        cmd = [sys.executable, str(HERE / 'render.py'), a.shot, '--out', str(out), '--samples', str(a.samples),
-               '--scale', str(a.scale)] + sum((['--set', f'{k}={v:.6g}'] for k in knobs), []) + (['--masks'] if parts else [])
-        r = subprocess.run(cmd, capture_output=True, text=True)
-        if r.returncode or not out.exists():
-            raise SystemExit(r.stderr[-2000:])
+        base = td / 'proof-0.png'
+        if retouch_only and proofs and base.with_suffix('.raw.png').exists():
+            import retouch as Rt
+            spec = dict(ret0, **{k.split('.', 1)[1]: v for k in knobs})
+            Rt.retouch(str(base.with_suffix('.raw.png')), str(base.with_suffix('.swatch.png')),
+                       json.loads(base.with_suffix('.swatch.json').read_text()), spec, str(out))
+            for suf in ('.mask.png', '.mask.json'):
+                if base.with_suffix(suf).exists():
+                    shutil.copy(base.with_suffix(suf), out.with_suffix(suf))
+        else:
+            cmd = [sys.executable, str(HERE / 'render.py'), a.shot, '--out', str(out), '--samples', str(a.samples),
+                   '--scale', str(a.scale)] + sum((['--set', f'{k}={v:.6g}'] for k in knobs), []) + (['--masks'] if parts else [])
+            r = subprocess.run(cmd, capture_output=True, text=True)
+            if r.returncode or not out.exists():
+                raise SystemExit(r.stderr[-2000:])
         MeMASK = Me.MASK; MeMASK.clear()
         _, arr = Me.load(out); Me.load_mask(out)
         res = Me.check(arr, tests)['tests']
