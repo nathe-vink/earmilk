@@ -226,7 +226,16 @@ def retouch(raw_png, swatch_png, legend, spec, out_png):
         px_lab = lin_lab(px_lin)
         mid = np.median(px_lab[ref], axis=0)
         Cm, hm = math.hypot(mid[1], mid[2]), math.atan2(mid[2], mid[1])
-        Ct, ht = math.hypot(target[1], target[2]), math.atan2(target[2], target[1])
+        # the swatch as this face shows it: the same paint under the face's own light (its chromaticity, at the face's
+        # lightness), so a face in shade is matched to a darker red of lower chroma, not pushed to the lit swatch's
+        # full chroma (04b e15: the side plinth x1.28 to G = 0, a flat crimson beside the shaded gable)
+        t_lin = lab_lin(np.asarray(target, float))
+        Yt_, Ym_ = float(lab_xyz(np.asarray(target, float))[1]), float(lab_xyz(mid)[1])
+        if 0 < Ym_ < Yt_:
+            target_face = lin_lab(t_lin * (Ym_ / Yt_))
+        else:
+            target_face = np.asarray(target, float)
+        Ct, ht = math.hypot(target_face[1], target_face[2]), math.atan2(target_face[2], target_face[1])
         k = min(2.0, max(0.5, Ct / max(Cm, 1e-6)))
         dh = (ht - hm + math.pi) % (2 * math.pi) - math.pi
         s = w * spec['match']
