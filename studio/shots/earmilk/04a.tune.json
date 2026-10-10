@@ -1295,5 +1295,83 @@
   ],
   "reply": "critic/rounds/2026-10-10/shot-04a-e16-r11.json",
   "shot_sha": "2e037192e8aad31dd1a2d5864742a17b0caf3128"
+ },
+ {
+  "change": "c2",
+  "setting": "lights.back_sheen.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    225,
+    233
+   ]
+  },
+  "proofs": [
+   [
+    3.0,
+    231.0
+   ],
+   [
+    4.0,
+    233.0
+   ],
+   [
+    2.0,
+    228.0
+   ]
+  ],
+  "set": 2.0,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-04a-e17-r12.json",
+  "shot_sha": "c301030a9dad28eff0806721112edf52f6df61f8"
+ },
+ {
+  "change": "c3",
+  "setting": "lights.fin_card.strength",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    9,
+    14
+   ]
+  },
+  "proofs": [
+   [
+    1.8,
+    10.0
+   ],
+   [
+    2.4,
+    13.3
+   ],
+   [
+    2.0727,
+    11.5
+   ]
+  ],
+  "set": 2.0727,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   0.9,
+   1.8
+  ],
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-04a-e17-r12.json",
+  "shot_sha": "f0bc90743f3610dea0e2b4bffaf67dfa6838398a"
  }
 ]
