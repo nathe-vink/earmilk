@@ -1,0 +1,154 @@
+{
+ "1": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "back-panel",
+  "paint_key": "body@whole"
+ },
+ "2": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "back-panel",
+  "paint_key": "accent@whole"
+ },
+ "3": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "front-baffle",
+  "paint_key": "body@whole"
+ },
+ "4": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "front-baffle",
+  "paint_key": "accent@whole"
+ },
+ "5": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "gable-block",
+  "paint_key": "accent@whole"
+ },
+ "6": {
+  "material": "ribbon",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "pull-loop",
+  "paint_key": "ribbon@whole"
+ },
+ "7": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "side-left",
+  "paint_key": "body@whole"
+ },
+ "8": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "side-left",
+  "paint_key": "accent@whole"
+ },
+ "9": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "side-right",
+  "paint_key": "body@whole"
+ },
+ "10": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "side-right",
+  "paint_key": "accent@whole"
+ },
+ "11": {
+  "material": "insert",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "waveguide-insert",
+  "paint_key": "insert@whole"
+ },
+ "12": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "back-panel.plinth",
+  "paint_key": "body@whole"
+ },
+ "13": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "back-panel.plinth",
+  "paint_key": "accent@whole"
+ },
+ "14": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "front-baffle.plinth",
+  "paint_key": "body@whole"
+ },
+ "15": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "front-baffle.plinth",
+  "paint_key": "accent@whole"
+ },
+ "16": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "side-left.plinth",
+  "paint_key": "body@whole"
+ },
+ "17": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "side-left.plinth",
+  "paint_key": "accent@whole"
+ },
+ "18": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole",
+  "part": "side-right.plinth",
+  "paint_key": "body@whole"
+ },
+ "19": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole",
+  "part": "side-right.plinth",
+  "paint_key": "accent@whole"
+ }
+}
