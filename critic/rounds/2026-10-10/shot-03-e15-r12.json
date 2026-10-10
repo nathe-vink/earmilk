@@ -1,0 +1,194 @@
+{
+ "stage1": {
+  "impression": "A clean, softly lit CG close-up of the red gable top and its hooded tweeter: the gloss red, fin and roof gradients convince and the tweeter reads, but the waveguide is red-on-red with a hard-edged pink stripe down its left wall, so the horn reads as a faceted hood rather than a smooth machined part. The framing is wide for a 'close' detail, with the fin crowding the top edge and a flat white slab filling the bottom quarter, so it sits a notch above a competent draft.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The left-wall sheen must read as one soft gradient: largest per-pixel step across the band at most ~7 levels (now 18.3 at its upper edge and 12.2 at its lower edge at x 540-550; 19.9 and 9.0 at x 470-480), its peak below the rim line (band p95 136-139 now, left rim 145-189), and no fill-lamp sliver along its edge (1868 px now).",
+  "Close framing: waveguide-insert covers 213k px (17.6% of the frame) and the tweeter is ~100 px across, while 30% of the frame is bare sweep and 11% is the white front (135k px, median 208, 215-217 directly under the mouth), the brightest large area, which pulls the eye off the horn. A 9 needs roughly double the horn's share and a tweeter of 150 px or more, with a cropped fin kept for context. That is a lens or camera move for its own round, tested on part:NAME, because it moves every pixel region used in this round's tests.",
+  "The flare must be drawn by light: along the horn axis from below the tweeter (673,510) to the mouth (576,750) the floor holds 77-93 with no ramp (apart from a 106 crescent at 633,610), and the insert's lower half mirrors the same top-panel band as the roof (83-98 vs 85-100), so the mouth floor merges into the roof. It needs a continuous ramp from 70 or less near the throat to a mouth floor at least 10 levels apart from the roof beside it.",
+  "The rim line must reach both mouth corners: the left rim's per-row peak falls from 142 at y 640 to 89-104 at y 656-680, while the right rim holds 152-161 down to its corner at y ~775."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The left wall's sheen is a hard-edged pink bar. The wall_sheen panel's top and bottom edges (world z 0.97 and 1.21) mirror as two straight lines ~30 px apart, parallel to the rim, so the curved wall reads as a flat chamfer cut into the horn. This is the main reason the waveguide looks faceted.",
+   "evidence": {
+    "region": [
+     470,
+     440,
+     480,
+     530
+    ],
+    "measured": "Column profile, x 470-480: sky band 65 (y 440-468), then 73 -> 92 -> 126 -> 135 within y 470-476 (largest step 19.9/px), plateau 136 -> 124 to y 508, then 115 -> 97 -> 82 within y 510-514 (-9.0/px). At x 540-550 the edges step 18.3 (y 451) and -12.2 (y 480). Mirror trace: y 476-508 mirror panel wall_sheen (radiance 4.58 -> 3.39), met at world z 0.99 at the band's top and 1.19 at its bottom. Above the band is sky (63-67) plus a fill sliver; below it is panel top at 0.405 (79-82). Band median rgb 219/108/111 against a floor of 85.7."
+   },
+   "change": {
+    "setting": "lights.wall_sheen.ramp",
+    "from": {
+     "axis": "x",
+     "at_m": [
+      0.2,
+      0.37
+     ],
+     "values": [
+      0.35,
+      1
+     ]
+    },
+    "to": {
+     "axis": "z",
+     "at_m": [
+      0.97,
+      1.09,
+      1.21
+     ],
+     "values": [
+      0.11,
+      1,
+      0.14
+     ]
+    }
+   },
+   "expected": "The ramp now runs across the band instead of along it, so each long edge rolls off over ~12-17 px (half the band's width) instead of 2-4. The ends, 0.11 and 0.14 of c2's ~2.9 (0.32 and 0.41 radiance), match the sky (~0.33) and the top panel (0.405) beyond them, so no outline forms. The band becomes a soft ridge along the wall from the throat toward the mouth. Its lower-left end (x 200-280) stays dim, because those pixels see the panel's top edge. Simulated on the mirror pass with c2-c4 applied, the largest step at the lower edge (x 540-550) is ~5 (now 12.2).",
+   "accept": {
+    "region": [
+     540,
+     462,
+     550,
+     490
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     1.5,
+     7
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Even feathered, the band would be the brightest thing inside the horn: 136-139, against a floor of 86-100 and only just under the rim line (145-189). At this strength the clear coat's reflection washes the red to pink (rgb 219/108/111; R-G 111 against ~150 on the roof), so the wall reads as a white bar, not red lacquer with a sheen.",
+   "evidence": {
+    "region": [
+     470,
+     472,
+     480,
+     514
+    ],
+    "measured": "lum_p95 136.4 here and 139.0 at x 540-550. Band median 131.4, rgb 219/108/111, over [430, 470, 530, 505]. Floor 85.7 at [470, 600, 600, 680]. Left rim per-row peaks 145-189 (y 336-624)."
+   },
+   "change": {
+    "setting": "lights.wall_sheen.strength",
+    "from": 4.6414,
+    "to": 2.9
+   },
+   "expected": "Band peak ~118, about rgb 214/88/88. Along today's stripe, wall_sheen radiance 2.43 gives luma 113, 2.88 gives 119 and 3.3 gives 123; the c1 ramp simulated at 2.9 gives p95 117.5. That puts the band ~20 above the floor and 30-70 under the rim line, so the rim stays the brightest contour and the wall stays red. Above 124 the band competes with the rim again; below 112 the left wall goes dull.",
+   "accept": {
+    "region": [
+     470,
+     472,
+     480,
+     514
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     112,
+     124
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The fill lamp's reflection lies as a thin bright sliver exactly along the band's upper edge. Even with the band feathered, that edge would keep a line.",
+   "evidence": {
+    "region": [
+     540,
+     436,
+     550,
+     470
+    ],
+    "measured": "Mirror pass: 'lamp fill.specular over world (sky)' covers 1868 px (x 356-558, y 426-508), hugging the band's upper edge, met at world (1.72, -1.76, 1.0). It is the fill's only reflection in the frame. At x 500 it spans y 458-464, rising 69 -> 79 between the sky band (66.6-67.8) and the band's edge (126). Largest step in this region is 18.3 now. Simulating c1+c2 with the sliver kept gives ~29 here: the sliver at ~80 against the feathered band's start at ~67."
+   },
+   "change": {
+    "setting": "lights.fill.specular",
+    "from": 0.1,
+    "to": 0
+   },
+   "expected": "The sliver mirrors the sky like the band above it (~66), so the upper edge rises in one smooth ramp from ~66 into the band (simulated largest step ~5.7; now 18.3). The fill's diffuse light is unchanged: front-baffle stays 208, side-right 179.",
+   "accept": {
+    "region": [
+     540,
+     436,
+     550,
+     470
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     1.5,
+     7.5
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "glints.5, a hard-edged 0.3 x 0.12 m panel seen over wall_sheen, adds a block of 0.1-0.3 radiance across the band's middle. Today it is lost under 3.7-4.6, but once the band is feathered its footprint edges (x 500: y ~470 and ~493) fall inside the roll-offs as faint steps.",
+   "evidence": {
+    "region": [
+     496,
+     462,
+     506,
+     504
+    ],
+    "measured": "The region mirrors 'glint5 over wall_sheen' 55% and wall_sheen 29%. glint5 radiance p5-p95 0.105-0.298, against wall_sheen 1.62-4.64. At x 500, glint5 covers y 470-492 of the band's 466-500. Largest step here is 19.6 now. Simulated with c1-c3 applied: 6.8 with glint5 kept, 5.7 without."
+   },
+   "change": {
+    "setting": "glints.5.strength",
+    "from": 0.3333,
+    "to": 0
+   },
+   "expected": "The band core drops 2-4 levels now, which is invisible. After c1-c3 the cross-section at x 500 is one smooth rise and fall (66 -> ~118 -> 80) with no step inside it.",
+   "accept": {
+    "region": [
+     496,
+     462,
+     506,
+     504
+    ],
+    "metric": "edge",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     1.5,
+     7
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Lose or restyle the pull-loop tab on the eave under the mouth",
+   "why": "At full size the 28 x 9 px red tab (497-525, 743-752; luma 75) reads as a nick in the eave line directly below the waveguide's mouth. It is product geometry, which is fixed."
+  },
+  {
+   "request": "Recess the waveguide's lower floor further below the roof plane",
+   "why": "Its lower half is nearly flush with the roof and mirrors the same top-panel band (83-98 vs 85-100), which is why the flare to the mouth barely reads. The waveguide's depth and profile are set by acoustic simulation, so only light may change how it reads (blocking_9, third item)."
+  },
+  {
+   "request": "Remove the dark hairline seam that outlines the insert",
+   "why": "It runs 5-10 px outside the rim highlight all round the arch and reads like a drawn outline. It is the insert's joint with the roof, which is fixed product geometry."
+  }
+ ],
+ "score_if_fixed": 6.3
+}
