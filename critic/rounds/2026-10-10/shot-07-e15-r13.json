@@ -1,0 +1,141 @@
+{
+ "stage1": {
+  "impression": "A clean, noise-free exploded view of a milk-carton speaker with believable gloss red, birch rebates and detailed drivers, but it reads as a grey, low-contrast technical render: the white body sits close to the mid-grey sweep, the dark drivers float without grounding shadows, and the face with the cut-outs gets little light shaping. The layout is loose and left-heavy, with the red-and-white gable piece stranded at top right far from where it came from, and dead space at top left and bottom right.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Side-left white [300,280,440,680] sits at median 202-212, keeps its ~30-level top-to-bottom falloff, and nothing but highlights goes above 226 (now 194, lower half 183-193; the whole frame's p99 is 216).",
+  "Insert bowl face [1000,320,1040,370] is within dE 3 of #C62828 under one smooth graded sheen (now [186,65,64], dE 5.3, under a stacked 0.78-radiance reflection, with sky-dark streaks beside the veil).",
+  "The waveguide reads as a horn: the bowl opens up and away from this viewpoint, and the pale shell fills 9,056 of the insert's 17,498 px, so the bowl's concavity and throat do not read.",
+  "The pocket details the purpose asks for are legible: no boss bore can be made out in the pocket at 5x, and the pocket magnets are 33 px.",
+  "The drivers read as the named units: they are seen about 70 deg off axis (woofer surround 66 x 197 px), so the papyrus and aluminium cones are slivers, and the mid cone is one flat value (lum range 11.3).",
+  "The white lacquer looks lacquered: the side-left mirrors the ~0.3-radiance sweep over 84% of its pixels, so no reflection shows and it reads as matte board.",
+  "The floating parts are grounded by shaped shadows: today there is one 27-level smudge, 212 px wide (10-90), under the woofer and nothing else."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The side-left, the cabinet's largest face (79,923 px), sits below the white-lacquer band and reads light grey, and nothing in the frame reaches a clean white.",
+   "evidence": {
+    "region": [
+     300,
+     280,
+     440,
+     680
+    ],
+    "measured": "median 194 (p5 181, p95 216); y-profile 215, 208, 202, 197, 193, 189, 186, 183; frame p99 216, only 1,217 px at or above 226 (1,171 on the front-baffle strip x 466-490, 46 on the fin); sweep 126-173; the front baffle already runs 18-23 levels above the side-left at matched heights"
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.15,
+    "to": 0.35
+   },
+   "expected": "Side-left median ~205 (top bin ~226, bottom ~193, so the ~33-level falloff is kept). Front-baffle strip [466,240,490,620] p95 goes from 227 to ~234: it enters the PBR Neutral shoulder but keeps a ~10-level gradient. Sweep rises 8-10 levels (pool behind the parts 170 to ~180, wall left of the cabinet 126-138 to ~135-148) and frame p99 to ~226. The retouch's 0.5 lightness share pulls the reds' lift halfway back.",
+   "accept": {
+    "region": [
+     300,
+     280,
+     440,
+     680
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     201,
+     210
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The hero bowl's red is veiled pink: its main face mirrors bowl_sheen stacked on the gloss panel's 0.47-radiance floor (the ramp's 0.3 low value), which lifts G and B from the swatch's 40 to 65.",
+   "evidence": {
+    "region": [
+     1000,
+     320,
+     1040,
+     370
+    ],
+    "measured": "rgb [186,65,64], dE2000 5.28 vs #C62828, lum range 29; mirrors 'bowl_sheen over gloss' on 90% of its pixels (bowl_sheen 0.27-0.36, gloss 0.469 at median, i.e. the ramp floor); the edge strip [1040,320,1062,380], which sees bowl_sheen over the sweep, reads [184,33,33]; sky-mirroring streaks at [962,290,985,320] read G 30 beside the veil; gable front slope [380,90,470,240] reads [196,68,69] and mirrors the gloss panel on 55% of its pixels"
+   },
+   "change": {
+    "setting": "lights.gloss.ramp.values",
+    "from": [
+     0.3,
+     1
+    ],
+    "to": [
+     0,
+     1
+    ]
+   },
+   "expected": "Insert face goes to about [195,50,50] at this exposure (~[200,55,55] with c1), dE 3.5 or less. The radiance the face mirrors narrows from 0.15-0.78 to 0.15-0.5, so the dark streaks stop reading as crumples. bowl_sheen (round 12's c2) and the drivers-panel stripe are left as they are, so this does not reverse that fix. Gable front slope G median goes from 68 to ~58-62, its sheen graded up from zero at the panel's foot instead of sitting on a flat 0.47 floor. Only the gable, the insert and 1.5% of each trim ring mirror this panel.",
+   "accept": {
+    "region": [
+     1000,
+     320,
+     1040,
+     370
+    ],
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     42,
+     58
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The floating drivers are anchored only by a smudge: the floor_shadow lamp is 1.2 m wide at 2.4 m, so the woofer's shadow is a 27-level dip blurred over 212 px with no shape, and the mid's and tweeter's shadows fall inside it.",
+   "evidence": {
+    "region": [
+     600,
+     770,
+     860,
+     800
+    ],
+    "measured": "x-profile 149.6, 148.6, 147.4, 144.4, 141.4, 143.1, 146.4, 154.1, 159.4, 162.4, 166.1, 168.1, 168.4; 10-90 width 212 px; largest step 0.5/px, the same as open-floor noise (0.4-0.5); [720,780,800,795] lum_range 19.0"
+   },
+   "change": {
+    "setting": "lights.floor_shadow.size_m",
+    "from": [
+     1.2,
+     1.2
+    ],
+    "to": [
+     0.45,
+     0.45
+    ]
+   },
+   "expected": "Penumbra at the woofer's height drops from ~0.19 m to ~0.07 m. The cone and frame block the lamp up to the flange line at x~750 (y~787), so in [720,780,800,795] the floor steps 26-30 levels within ~30-40 px instead of ramping 19 levels over 80 px. The open floor keeps its level, since the lamp still puts 1 W/m2 on its target and lights only the sweep. The cabinet's overhead shadow at its left base sharpens the same way.",
+   "accept": {
+    "region": [
+     720,
+     780,
+     800,
+     795
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     24,
+     40
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the waveguide insert's outer shell the insert's accent colour (the card colours the insert in the accent) instead of the pale grey it renders.",
+   "why": "The shell is 9,056 of the insert's 17,498 px at [180,182,184] (lum 181), brighter than the red bowl (lum ~90), so the frame's hero reads as a grey-and-red wedge and the eye lands on the shell before the bowl. It is the product's own material and is fixed."
+  }
+ ],
+ "score_if_fixed": 6.2
+}
