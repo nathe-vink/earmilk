@@ -2,8 +2,10 @@
 """Stage a critic v2 round: the image under a neutral name, its part mask, its shot card, and the message for the
 critic subagent (critic/PROMPT.md, the text between the rules), so a round is the same every time.
 
-    python3 critic/round.py stage IMAGE.png --shot-id shot-02a --tag e1 [--stage DIR]
+    python3 critic/round.py stage IMAGE.png --shot-id shot-02a --tag e1 [--stage DIR] [--reshoot]
         -> DIR/render-<tag>.png (+ .mask.png/.mask.json), DIR/card-<tag>.md, DIR/message-<tag>.txt
+        (--reshoot: a shot whose blind score has held; its card shows the critic the first looks it held at and asks
+        for the changes a photographer would reshoot with)
 
     python3 critic/round.py save REPLY.json --shot-id shot-02a --version e1 --round 1
         -> critic/rounds/YYYY-MM-DD/shot-02a-e1-r1.json (validated: JSON, the keys PROMPT.md asks for)
@@ -38,7 +40,8 @@ def stage(a):
     shotfile = src.with_suffix('.shot.json')
     card = d / f'card-{a.tag}.md'
     subprocess.run([sys.executable, str(ROOT / 'critic' / 'card.py'), a.shot_id, '--shot', str(shotfile), '--image', str(img),
-                    '--report', str(src.with_suffix('.report.json')), '--out', str(card)], check=True)
+                    '--report', str(src.with_suffix('.report.json')), '--out', str(card)] + (['--reshoot'] if a.reshoot else []),
+                   check=True)
     tool = d / 'measure.py'
     shutil.copy(ROOT / 'critic' / 'measure.py', tool)
     text = prompt_text().replace('TOOL', str(tool)).replace('IMAGE', str(img)).replace('SCRATCH', str(d / f'work-{a.tag}'))
@@ -209,6 +212,7 @@ def check(a):
 def main():
     ap = argparse.ArgumentParser(); sub = ap.add_subparsers(dest='cmd', required=True)
     s = sub.add_parser('stage'); s.add_argument('image'); s.add_argument('--shot-id', required=True); s.add_argument('--tag', required=True); s.add_argument('--stage')
+    s.add_argument('--reshoot', action='store_true', help="a reshoot round: the card shows the first looks the blind score has held at")
     v = sub.add_parser('save'); v.add_argument('reply'); v.add_argument('--shot-id', required=True); v.add_argument('--version', required=True); v.add_argument('--round', type=int, required=True)
     c = sub.add_parser('check'); c.add_argument('image'); c.add_argument('reply')
     pc = sub.add_parser('precheck'); pc.add_argument('reply'); pc.add_argument('--shot-id', required=True)

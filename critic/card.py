@@ -35,6 +35,7 @@ def main():
     ap.add_argument('shot_id'); ap.add_argument('--shot', required=True); ap.add_argument('--image')
     ap.add_argument('--card', default=str(ROOT / 'critic' / 'cards' / 'earmilk.yaml')); ap.add_argument('--out')
     ap.add_argument('--report', help="the render's report (its engine notes), when --image is a staged copy")
+    ap.add_argument('--reshoot', action='store_true', help='a reshoot round: the first looks the blind score has held at')
     a = ap.parse_args()
     card = yaml.safe_load(Path(a.card).read_text())
     sc = card['shots'][a.shot_id]
@@ -46,6 +47,8 @@ def main():
     L += ['## The product', '', ' '.join(ptext.split()), '']
     L += ['## What this frame is for', '', ' '.join(sc['purpose'].split()) if isinstance(sc['purpose'], str) else sc['purpose'], '',
           'It must show: ' + '; '.join(sc['must_show']) + '.', '']
+    if a.reshoot:
+        L += _reshoot(a.shot_id)
     L += ['## Fixed: never prescribe a change to these', '']
     for f in card['fixed'] + sc.get('fixed', []):
         L.append('- ' + ' '.join(f.split()))
@@ -229,6 +232,38 @@ def main():
         Path(a.out).write_text(text)
     else:
         print(text)
+
+
+def _reshoot(shot_id, n=5):
+    """A reshoot round's brief: the blind score has held while each round passed its own measured tests (01 at 5.0 four
+    rounds running, 02b at 6.0 six), and the first looks kept naming the same things (the product lit apart from the
+    room's light, its white a flat card, small in the frame), which no refinement of the present light reaches. The
+    card shows the critic those first looks and asks for the changes a photographer would reshoot with."""
+    import glob
+    rows = []
+    for f in glob.glob(str(ROOT / 'critic' / 'rounds' / '*' / f'{shot_id}-*-r*.json')):
+        m = re.search(r'-(e\d+)-r(\d+)\.json$', f)
+        if not m:
+            continue
+        s1 = json.loads(Path(f).read_text()).get('stage1') or {}
+        if s1.get('score') is not None:
+            rows.append((int(m.group(2)), m.group(1), s1['score'], ' '.join(str(s1.get('impression', '')).split())))
+    rows = sorted(rows)[-n:]
+    if not rows:
+        return []
+    out = ['## This round: a reshoot', '',
+           f'Each of the last {len(rows)} rounds passed its own measured tests, and the first look did not move '
+           f'({", ".join(f"{s:g}" for _, _, s, _ in rows)}). What it kept saying:', '']
+    out += [f'- round {r} ({e}, {s:g}): "{imp}"' for r, e, s, imp in rows]
+    out += ['', 'Refining the present light will not move it. This round, rank first the changes that remove what those '
+            'first looks name, the way a photographer would reshoot the frame: where the camera stands and its lens; where '
+            'the product stands and how it is turned; where the key light comes from and what it falls on (the product '
+            'first, so that its faces carry the light the room or the set shows); what the set shows and how much of the '
+            'frame it takes. Lamps, cards, nets and glints that earlier rounds placed for the old light and that the new '
+            'light makes wrong go in the same round (`lights.NAME.off` true, a glint\'s `power_w` 0), or move with it. A '
+            'reshoot moves every region: test the product by `part:NAME`, and the set only by a region the move leaves '
+            'alone. This round you may prescribe up to twelve changes. Keep to the settings below and to what is fixed.', '']
+    return out
 
 
 def _last_round(shot_id):
