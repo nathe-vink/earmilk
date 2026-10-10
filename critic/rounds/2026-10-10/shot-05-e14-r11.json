@@ -1,0 +1,265 @@
+{
+ "stage1": {
+  "impression": "A clean, legible six-colour lineup on a stepped diagonal with believable gloss gable tops and drivers, but the light is flat and grey: the white sides are one dull value, front and side planes sit close, and the row floats in a featureless mid-grey void with soft, weak grounding and dead space above and below. The plinth corners read oddly translucent, like glass, and the cream unit's waveguide all but disappears, so it is a competent catalogue draft, not a hero.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "No reflected wedges on side faces: every side plinth and side reads as its own paint in shade (Oat's side plinth is 81 [84,80,76] where its sweep-mirroring pixels are 9.7 [27,5,4]; Chocolate's lower side is 75 grey against 37 brown).",
+  "Every unit stands on a contact shadow: the paper 3-15 cm in front of each plinth at least 4 levels darker than 40 cm out (Chocolate is +5.5 lighter; Skim -11.7, 2% -8.5, Oat -4.8).",
+  "The three white fronts read as one white: falloff across Whole, 2% and Skim within +/-5 (now -15, 209 to 224).",
+  "White fronts at 200-215 median with only highlights above the 226 knee (now 213/218/222, top eighth 229-235, Skim's top two bins 235/233).",
+  "Chocolate's cream waveguide modelled below the knee: insert p5-p95 of at least 45 levels (now 202.5-234, 31.5; cream gable 227-234 top to bottom).",
+  "No face lit by a lamp the set does not see: roof_fill, plinth_lift, front_ramp, front_strip and mid_kick are still linked lamps at diffuse 1.",
+  "Dark lacquer roofs keep their colour: Oat's gable median within dE 4 of #2B2118 (now 8.2, [66,58,52]).",
+  "Studio depth: white sides about 1 EV under their fronts, gap shadows at 32 or below and the foreground at 44 or below (now sides 156-166, gaps 34-39, foreground 51.5)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "Every side plinth, and the lower side of Matcha, Chocolate and Oat, carries a pale wedge with a hard diagonal edge that turns the lacquered bands into clear glass: those pixels mirror floor_card, the reflection card laid on the floor for the fronts, whose back edge runs past each unit's side.",
+   "evidence": {
+    "region": [
+     1300,
+     540,
+     1370,
+     640
+    ],
+    "measured": "Oat side-right.plinth median 81 [84,80,76]; its 67.5 % mirroring floor_card (radiance 0.93-0.99, met at y -0.29 to +0.02) reads 81.4, its 30 % mirroring the sweep 9.7 [27,5,4]. floor_card share on side plinths: Whole 25, 2% 35, Skim 45, Matcha 54, Chocolate 61, Oat 68 %; side-plinth dE2000 to the accents 8.3-20.4 against 0.2-2.2 on the front plinths. Chocolate's lower side: floor_card pixels 75 [85,73,67], sweep pixels 37 [58,32,18]; Matcha's side plinth 60 [44,65,53] vs 30 [0,40,20]."
+   },
+   "change": {
+    "setting": "lights.floor_card.receivers",
+    "from": "absent (mirrored by every part)",
+    "to": [
+     "front-baffle",
+     "front-baffle.plinth",
+     "gable-block",
+     "waveguide-insert",
+     "woofer-*",
+     "mid-*",
+     "tweeter-*",
+     "letters-front-*"
+    ]
+   },
+   "expected": "The sides and side plinths stop seeing floor_card and mirror the dark sweep beside them instead, so each band shows its accent in shade with no diagonal edge: Oat's side plinth 81 -> 12-25 dark brown, Matcha's 56 -> ~30 racing green, Skim's 104 -> ~95 shaded blue, Chocolate's lower side 75 -> ~37 brown. The fronts, front plinths, trim rings, letters and gables keep the card exactly as now.",
+   "accept": {
+    "region": {
+     "part": "side-right.plinth",
+     "box": [
+      1300,
+      540,
+      1370,
+      640
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     8,
+     35
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The gradient dome at 0.5 lights every face and shadow from every side, so the frame reads flat and murky: the white sides hold one value top to bottom, the shadows between units are grey, the dome-lit foreground is nearly as light as the open floor, and the white fronts' tops sit in the PBR Neutral shoulder.",
+   "evidence": {
+    "region": [
+     440,
+     245,
+     504,
+     468
+    ],
+    "measured": "2% white side median 166, y-profile 167,168,168,168,167,165,163,158 (Whole 164->155: 9 levels over the height); gap shadows 34.3-39.4 against open floor 61-72; foreground floor [100,680,1400,750] 51.5, lit by dome and fill alone under fg_flag; white fronts' top bins 229/234/235, Skim's top two 235/233."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 0.5,
+    "to": 0.2
+   },
+   "expected": "White sides 166 -> ~150 while the fronts drop only ~8 to ~210 with tops at or under 228 (round 10's exposure window [203, 212] reached without touching exposure); gap shadows 34-39 -> ~27-31, foreground 51 -> ~40, wall band 108 -> ~100, so the row stands in a darker studio that falls off toward the lens. The retouch holds the colour paints' lit faces to their swatches, so the cut shows as form, not as darker colours. The foreground goes under round 10's fg_flag window (45) on purpose: it deepens that falloff rather than reversing it.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      440,
+      245,
+      504,
+      468
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     146,
+     156
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Chocolate's waveguide, the product's signature, nearly vanishes on the cream roof: roof_fill, a 2.13-radiance strip linked to gable-block and waveguide-insert alone, fills the bowl from the front and lifts the cream past the 226 knee, so the bowl prints within 32 levels.",
+   "evidence": {
+    "region": [
+     971,
+     239,
+     1061,
+     301
+    ],
+    "measured": "Chocolate waveguide-insert p5 202.5, median 226, p95 234 (range 31.5; y-profile 229,226,229,226,224,228) against ranges 48-94 on the other five; cream gable median 231.2, p95 236.1, y-profile 227-234; 8.9 % of that insert mirrors roof_fill at 2.13, a highlight worth keeping."
+   },
+   "change": {
+    "setting": "lights.roof_fill.diffuse",
+    "from": 1,
+    "to": 0
+   },
+   "expected": "The roofs lose roof_fill's light (by geometry about a third of what a front slope gets) but keep its reflection in the bowls; the key from the upper left then shades the bowl's far wall: cream insert p5 202 -> ~175, range 31.5 -> 45-60, cream gable median 231 -> ~220. The coloured roofs stay near their swatches through the retouch, and no roof is lit any more by a lamp the set does not see.",
+   "accept": {
+    "region": {
+     "part": "waveguide-insert",
+     "box": [
+      945,
+      180,
+      1140,
+      700
+     ]
+    },
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     45,
+     90
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "Chocolate floats on a glow: the paper just under its cream plinth is lighter than the paper 40 cm out, where every other unit steps down into a contact shadow, because the 0.55-rough sweep mirrors the 219-level plinth (the camera's mirror ray at 19 degrees meets the 0.11 m band for ~30 cm out); round 10's contact_m tuning moved it only 2.7 because the contact term darkens the paper's colour, not its reflection.",
+   "evidence": {
+    "region": [
+     1000,
+     600,
+     1040,
+     650
+    ],
+    "measured": "y-profile 70.3, 68.4, 68.1, 67.1, 66.9, 66.9, 66.0, 64.8 (falloff +5.5), warm [72,69,62]; the same strip under Skim -11.7, 2% -8.5, Oat -4.8. Paper just under each plinth tracks the plinth: Oat 33->23, Matcha 50->38, Whole 71->40, 2% 75->43, Skim 151->54, Chocolate 219->72, about 0.08 of the plinth's linear radiance, roughly four times what a diffuse bounce off 0.10-albedo paper can return."
+   },
+   "change": {
+    "setting": "materials.sweep.roughness",
+    "from": 0.55,
+    "to": 0.85
+   },
+   "expected": "The plinth's reflection spreads into a faint haze and the maxed contact term shows through: the strip under Chocolate's plinth falls 5-12 levels below the paper 40 cm out (falloff +5.5 -> about -5 to -12, like Skim and 2%); the red and blue tints under Whole, 2% and Skim fade; the paper reads as matte seamless. Contact settings stay as they are.",
+   "accept": {
+    "region": [
+     1000,
+     600,
+     1040,
+     650
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -20,
+     -3
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The three whites are not one white: across their fronts the value climbs from Whole's 209 to Skim's 224, because Skim's front mirrors white_front_card at median radiance 2.31 against 2%'s 1.83 and Whole's 1.42, and the right-hand fill reaches Skim harder.",
+   "evidence": {
+    "region": [
+     145,
+     262,
+     637,
+     455
+    ],
+    "measured": "front-baffle x-profile 209, 210, -, 217, 218, -, 222, 224 (falloff -15); body medians Whole 213, 2% 218, Skim 222; mirror points on white_front_card at median x -3.12 (Whole), -2.36 (2%), -1.59 (Skim), y -0.72/-0.81/-0.92, z ~0.18."
+   },
+   "change": {
+    "setting": "lights.whites_even_card",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.9,
+      1.0
+     ],
+     "position": [
+      -2.85,
+      -0.82,
+      0.22
+     ],
+     "target": [
+      -2.85,
+      -0.77,
+      1.22
+     ],
+     "strength": 2.7,
+     "color": "#FFF7EA",
+     "ramp": {
+      "axis": "x",
+      "at_m": [
+       -3.4,
+       -2.0
+      ],
+      "values": [
+       1,
+       0.5
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "front-baffle#0",
+      "front-baffle#1"
+     ]
+    }
+   },
+   "expected": "Whole's front gains about 0.08 linear of even veil and 2%'s about 0.05 (the ramp falls toward 2%'s mirror points), Skim untouched: medians ~222/223/222 before c2's drop, falloff across the three -15 -> within [-5, 3]. Mirror x runs with height on each face, so Whole's top-to-bottom ramp grows ~4 levels and 2%'s ~2, both still inside round 10's 30-40.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      145,
+      262,
+      637,
+      455
+     ]
+    },
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -5,
+     3
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give Chocolate's waveguide insert a contrasting colour or a darker rim so the bowl reads on the cream roof",
+   "why": "The insert takes the flavour's accent #F1E3CC and the waveguide's profile and rim are set by acoustic simulation; only light may change how it reads, which is c3."
+  },
+  {
+   "request": "A satin or matte clear coat on the plinth bands and sides so they stop mirroring the floor",
+   "why": "The lacquer finish is the product's and fixed; c1 changes what the sides see instead."
+  },
+  {
+   "request": "Less gloss on Oat's dark-brown roof so the roof_sheen reflection stops greying it (gable median [66,58,52], dE 8.2 to #2B2118)",
+   "why": "The clear coat is fixed; only what it mirrors can change, which would take a second, weaker roof card linked to that copy alone."
+  }
+ ],
+ "score_if_fixed": 7.4
+}
