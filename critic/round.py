@@ -184,6 +184,10 @@ def precheck(a):
         met = (c.get('accept') or {}).get('metric', '')
         need = 5 if met in ('lum_p95', 'clip_pct') else 25 if met in ('lum_range', 'lum_mean', 'falloff', 'edge') else 45
         verdict = 'enough' if share >= need else 'TOO LITTLE'
+        if st.endswith(('.receivers', '.off')) or (st.endswith('.diffuse') and not (c.get('change') or {}).get('to')):
+            # a change that takes a light off the region (narrower receivers, off, its diffuse share to 0) is judged by
+            # what the region mirrors without it, not by how much of it the region still mirrors (05's round 11)
+            verdict = 'it takes the light off these parts: the share left is what still mirrors it'
         if met == 'falloff' and share > 0:
             # a falloff test wants the first slice brighter than the last (a positive value) or the reverse: the ramp the
             # region mirrors has to run that way (04a's round 8: the letters' panel ran bottom-bright, -50 at full strength)
@@ -196,7 +200,16 @@ def precheck(a):
                 tv = (c.get('accept') or {}).get('value')
                 want = (tv[0] + tv[1]) / 2 if isinstance(tv, list) else tv
                 runs = 1 if prof[0] > prof[-1] else -1
-                ok = (want or 0) * runs > 0
+                # the way the test has to move from the judged frame's own reading: a card that corrects a fall the
+                # frame already has runs against it (05's round 11: the whites climbing -15 across the row, wanted -5 to
+                # 3, by a card brighter at the row's start), so its sign is the gap's, not the target's
+                try:
+                    cur = Me.check(arr, {'changes': [c]})['tests'][0]['measured']
+                except (SystemExit, Exception):
+                    cur = None
+                lo_, hi_ = (min(tv), max(tv)) if isinstance(tv, list) else (tv, tv)
+                gap = (want - cur) if isinstance(cur, (int, float)) and not lo_ <= cur <= hi_ else want
+                ok = (gap or 0) * runs > 0
                 verdict += f"; its radiance along {ax}, first slice to last: {prof} ({'the right way' if ok else 'THE WRONG WAY for this test'})"
         print(f"  {c['id']} {st}: the region mirrors `{name}` on {share:.0f} % of its product pixels"
               + (f" (radiance there: {rad})" if rad else '') + f"; it mirrors {top} [{met} needs about {need} %: {verdict}]")
