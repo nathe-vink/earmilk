@@ -1,0 +1,144 @@
+{
+ "stage1": {
+  "impression": "A clear, legible cutaway of a milk-carton speaker, but the plywood section is lit almost flat and square-on, so the cabinet reads as a die-cut illustration and only the glossy red horn has real modelling. It sits left of centre on a murky charcoal sweep with a smeared hotspot and a visible horizon at left, a thin contact shadow and a red bleed on the floor, and the white carton exterior shows only as a sliver, so it is a competent draft rather than a hero image.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "No visible horizon on the sweep: where the floor meets the curve, no 60-80 px vertical window of paper drops more than 9 levels, and none ends in a sudden flatten onto the floor. Now it drops 17.9 in [80,410,260,470] left of the cabinet and 27.9 in [590,420,650,500] beside the woofer.",
+  "The light on the paper surrounds the cabinet's middle, not the top edge: the column right of the cabinet [600,0,720,440] is darker at the top edge than at the brace's height (now its falloff is +12.7, top brighter), and the band above the gable [330,0,600,110] (median 96.7) is no longer the brightest paper in the frame.",
+  "The chambers read as deep boxes lit from above: the upper chamber's far wall falls at least 20 levels from under the top panel down to the brace (now 14.1), and the ledges are brighter than the walls behind them.",
+  "The plate amplifier holds detail: amp-pcb median at least 15 with no more than 5% of pixels crushed (now 7.1 and 36%), and amp-plate not crushed (now 51% of its pixels at 3 or below)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "Where the paper's floor meets the curve, a horizon line shows behind the cabinet at the brace's height on both sides: the paper falls steeply over the first part of the curve and then stops dead on the flat floor, so the set reads as a wall meeting a floor rather than a seamless sweep.",
+   "evidence": {
+    "region": [
+     80,
+     410,
+     260,
+     470
+    ],
+    "measured": "Left of the cabinet the y profile is 68.5, 63.7, 57.0, 52.4, 51.6, 51.4, 51.4, 50.6 (falloff 17.9). Rows 400-440 fall from 72.3 to 52.1, then rows 445-515 fall only from 51.6 to 49.5 (the knee). Beside the woofer, [590,420,650,500] rows 420-475 fall from 84.5 to 57.4 and then stay flat (falloff 27.9), a step of 0.9 per px with a 37 px 10-90 width. At the far right, [900,380,1100,520] is flat (64.2 to 63.3), so the line is where the lamps' wash meets the start of the curve (world y 2.0)."
+   },
+   "change": {
+    "setting": "set.radius",
+    "from": 1.4,
+    "to": 2.6
+   },
+   "expected": "The curve turns over about twice the depth, so the wash fades into the floor without a knee: [80,410,260,470] falls by 9 levels or less and [590,420,650,500] by about 15 or less, spread over 80 px or more. The paper at the top edge, now farther from the lamps and tilted toward the zenith, dims by a few levels. Round 11's background window (median 58 or more) should still hold.",
+   "accept": {
+    "region": [
+     80,
+     410,
+     260,
+     470
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -4,
+     9
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The brightest paper in the frame is the band above the gable, which runs into the top edge, and beside the cabinet the paper gets brighter toward the top, so the light leads the eye up and out of the frame instead of surrounding the drivers and the cable run.",
+   "evidence": {
+    "region": [
+     600,
+     0,
+     720,
+     440
+    ],
+    "measured": "The y profile is 88.3, 89.5, 89.5, 88.5, 86.6, 85.4, 82.6, 75.6 (falloff +12.7, top brighter). The band above the gable [330,0,600,110] has a median of 96.7 (p95 98.8), against 80.5 beside the cabinet's middle [600,280,720,460] and 50.5-58.6 in the frame corners. Round 11's c4 lowered the pool's position and its test still fails (+4.1)."
+   },
+   "change": {
+    "setting": "lights.pool.target",
+    "from": [
+     -0.6,
+     3.21,
+     0.7
+    ],
+    "to": [
+     -0.5,
+     2.45,
+     0.05
+    ]
+   },
+   "expected": "The pool's wash moves off the upper curve onto the floor and the foot of the curve behind the cabinet (the aim projects to about x 540, y 420). The paper beside the brace and woofer rises 5-10 levels, the top of the column right of the cabinet falls to about 72-80, and the band above the gable drops from 96.7 to about 80-90, still 10 or more levels above the red fin's 69. The floor where it meets the curve also gets light from above, which helps c1. This re-aims the lamp round 11's c4 lowered, in the same direction, so the band at the top edge that c4 was for does not come back.",
+   "accept": {
+    "region": [
+     600,
+     0,
+     720,
+     440
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -24,
+     -4
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The inside lamp fills every chamber almost horizontally from beside the lens (8 degrees up), so the ceilings cast no shadow on the far walls and the ledges get no more light than the walls behind them. The upper chamber's far wall, the largest interior surface, is one tan field and the cavity reads shallow.",
+   "evidence": {
+    "region": [
+     367,
+     272,
+     474,
+     436
+    ],
+    "measured": "side-right inside the box [330,272,475,436] (16,592 px): the y profile is 94.6, 103.9, 108.8, 110.5, 110.6, 109.5, 108.6, 108.7 (falloff -14.1), the x profile runs 103.9 to 123.1, and lum_range is 33.3. The woofer chamber below already falls 39 levels across x."
+   },
+   "change": {
+    "setting": "lights.inside.orbit.elevation_deg",
+    "from": 8,
+    "to": 30
+   },
+   "expected": "With the lamp above the lens, each ceiling (top panel, window brace, mid-shelf) shades the top 8-10 cm of the far wall under it, and the ledges (brace top, amp-box lid, bottom-panel floor) catch more light. The upper chamber's far wall then falls 20-32 levels from under the top panel to the brace. The cut faces move less than 3 levels (the lamp is 0.3 W/m2 against the key's 2.16), the amp module stays inside round 11's c6 window (its sheen is the reflection-only ampcard), and the background is unchanged.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      330,
+      272,
+      475,
+      436
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -32,
+     -20
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Bring the plate amplifier's PCB, caps and plate out of black so the Hypex module reads as electronics. Now amp-pcb median is 7.1 with 36% of pixels at 3 or below, amp-plate 2.9 with 51%, amp-caps 2.5 with 53%.",
+   "why": "The PCB sits in a slot of about 2 cm between the plate and the module housing and faces +x: its reflections land on amp-module 53%, heatsink 20% and caps 18%. No light the whole set sees reaches it without flattening the whole section. It needs the module drawn forward, which is product geometry and fixed, or a lamp linked to amp-pcb, which the card warns reads as self-glow. It matters because the amplifier is the 'active' half of the product's story and now reads as a black slab."
+  },
+  {
+   "request": "Make the cast 'earmilk' letters on the front plinth read as letters.",
+   "why": "At 71 degrees to the lens they print as a dark smudge (letters-front-3/5/6/7 at lum 29-33 on the band's 52.6). Reading them needs the front turned toward the camera by tens of degrees, which the frame's purpose (the cut face toward the lens) rules out, and the marks themselves are fixed. It matters because the brand mark shows as a blemish on the red band."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
