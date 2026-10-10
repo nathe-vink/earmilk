@@ -114,6 +114,25 @@ def _target(swatch, white, share):
     return swatch + (adapt(swatch, white) - swatch) * min(1.0, share)
 
 
+def _into_gamut(lab, steps=10):
+    """Lab colours brought inside sRGB by lowering their chroma (lightness and hue kept), each only as far as it has
+    to go, so a saturated face keeps its modelling instead of clipping a channel to 0 across it."""
+    rgb = lab_lin(lab)
+    out = (rgb < -1e-4).any(axis=1) | (rgb > 1 + 1e-4).any(axis=1)
+    if not out.any():
+        return lab
+    sub = lab[out]; lo = np.zeros(len(sub)); hi = np.ones(len(sub))
+    for _ in range(steps):
+        mid = (lo + hi) / 2
+        t = sub.copy(); t[:, 1:] *= mid[:, None]
+        r = lab_lin(t)
+        ok = ~((r < -1e-4).any(axis=1) | (r > 1 + 1e-4).any(axis=1))
+        lo = np.where(ok, mid, lo); hi = np.where(ok, hi, mid)
+    sub = sub.copy(); sub[:, 1:] *= lo[:, None]
+    lab = lab.copy(); lab[out] = sub
+    return lab
+
+
 def _soft(m):
     """A binary mask softened over its edge pixels (3 x 3 box): 1 inside, a fraction on the edge."""
     p = np.pad(m.astype(float), 1, mode='edge')
@@ -121,13 +140,15 @@ def _soft(m):
 
 
 def _reference(lab, m, colour):
-    """The pixels of mask `m` that read as the paint's lit face: lightness between its 40th (white: 50th) and 90th
-    percentile, and for a colour at least its median chroma."""
+    """The pixels of mask `m` that read as the paint's lit face: for a colour, lightness between its 30th and 95th
+    percentile and among those the most saturated 30 %; for a white, lightness between its 50th and 90th percentile."""
     L = lab[..., 0][m]; C = np.hypot(lab[..., 1], lab[..., 2])[m]
-    lo, hi = np.percentile(L, 40 if colour else 50), np.percentile(L, 90)
+    lo, hi = np.percentile(L, 30 if colour else 50), np.percentile(L, 95 if colour else 90)
     keep = (L >= lo) & (L <= hi)
     if colour:
-        keep &= C >= np.median(C)
+        # the paint as its swatch shows it is its most saturated well-lit pixels: a face mirroring the sweep at a grazing
+        # angle is paler, and set as the reference it made 08b e7's lit slope be pushed x1.65 out of gamut
+        keep &= C >= np.percentile(C[keep] if keep.any() else C, 70)
     if keep.sum() < 20:
         keep = np.ones_like(L, bool)
     return keep
@@ -209,9 +230,15 @@ def retouch(raw_png, swatch_png, legend, spec, out_png):
         k = min(2.0, max(0.5, Ct / max(Cm, 1e-6)))
         dh = (ht - hm + math.pi) % (2 * math.pi) - math.pi
         s = w * spec['match']
-        C = np.hypot(px_lab[:, 1], px_lab[:, 2]) * k ** s
+        C0 = np.hypot(px_lab[:, 1], px_lab[:, 2])
+        C = C0 * k ** s
+        if k > 1:
+            # a boost takes no pixel past the swatch's chroma: a face already as strong as the swatch (a lit slope beside
+            # a pale grazing face that set the reference) keeps its own (08b e7: the slope pushed x1.65 out of gamut)
+            C = np.minimum(C, np.maximum(C0, Ct * 1.05))
         h = np.arctan2(px_lab[:, 2], px_lab[:, 1]) + dh * s
         px_lab[:, 1], px_lab[:, 2] = C * np.cos(h), C * np.sin(h)
+        px_lab = _into_gamut(px_lab)
         lab[m] = px_lab; lin[m] = lab_lin(px_lab)
         after = np.median(px_lab[ref], axis=0)
         report.append({'paint': g['material'] + (f" ({g['part']})" if g.get('part') else ''), 'copy': g['instance'], 'swatch': g['hex'], 'mode': 'match',
