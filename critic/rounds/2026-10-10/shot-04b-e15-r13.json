@@ -1,0 +1,211 @@
+{
+ "stage1": {
+  "impression": "A milk-carton speaker stands right of centre on a flat mid-grey sweep, with clean geometry, legible graphics and a sensible copy-space layout. The lighting is flat and the grey is dull, so the white body reads light grey with weak plane separation, the shadow barely anchors it, and the frame looks like a competent CG draft rather than a hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The set is shaped by light, not held at one value: the copy-side corner at or below ~108 and the cove beside the product's upper body at 125-138, a smooth falloff of 25+ levels across the copy space (today the whole background sits inside 121-149: corner [0,0,250,300] 125, cove [560,120,720,320] 142, copy-space falloff only -20).",
+  "The hero face reads as clear-coated lacquer: a reflection gradient of at least 12 levels on the back panel (today 218-221 across its top 90 px and 221 -> 211 top to bottom; its upper third mirrors the unlit sky in 99 % of its pixels), with the label's print and the cast wordmark staying at or below 30.",
+  "The white body reads white against its surround: at least 45 levels between each white face and the backdrop at its silhouette (side panel 184 vs 141 at its left edge today, a 43-level step).",
+  "One red in light and shade: no channel clipped on any red face (side plinth G = 0, front-baffle plinth G = 7 today) and the shaded faces within about 5 C* of each other (side plinth C* 69 vs gable triangle C* 58 at L* 34 vs 31).",
+  "No full-width light band on the floor: the floor light pools round the base (today a band at y 785-835 runs edge to edge, 135 at the left edge rising to 148-149 in front of and right of the product, between a 131-135 foreground and a 120-131 floor behind).",
+  "The plinth band shows its lacquer: a soft reflection gradient of at least 6 levels along each face instead of a flat fill (back plinth 72.9 -> 70.8 across its width, side plinth 36.4-37.7)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The sweep renders as one dull mid grey everywhere, so neither the white body nor the red has a value to push against and the white reads light grey on grey.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     700,
+     900
+    ],
+    "measured": "copy space lum_median 132.0, p5 121.2, p95 143.2 (range 22); top-left corner [0,0,250,300] 125.2; cove beside the upper body [560,120,720,320] 142.2; right of the product [1100,300,1350,600] 132-133; floor 130-149. Lit back panel 209-211 and side 181-183 are only 2.8x and 2.0x the backdrop in linear light; the side's left silhouette steps 141 -> 184."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#9E9C97",
+    "to": "#7F7D79"
+   },
+   "expected": "The paper's albedo drops to about 0.62x: the copy-side corner falls from 125 to about 103 and the copy-space median from 132 to about 115, so the white faces sit 45-90 levels above the backdrop at their silhouettes and read white; the red gains weight against the darker grey. Less floor bounce costs the back panel about 5 levels (to ~205, still inside the 200-220 lacquer band) and the side about 5. This continues round 11's direction (darker paper) and does not undo round 12: the foreground floor under round 12's net goes to ~105-110, below that test's band but still darker than the light round the base, which is what the net was for, and the plinth's contact core deepens to ~80. c2 keeps the area right round the product near today's value, so only the corners and copy side fall away.",
+   "accept": {
+    "region": [
+     0,
+     0,
+     250,
+     300
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     96,
+     110
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The backdrop has no light shape: it climbs only 20 levels from the copy-side edge to the product and is flat top to bottom, so the frame has no depth and nothing pools where the product stands.",
+   "evidence": {
+    "region": [
+     0,
+     120,
+     720,
+     320
+    ],
+    "measured": "x profile 122.9, 125.9, 128.9, 131.9, 134.9, 137.9, 141.0, 143.2 (falloff -20.3); y profile at x 100-600 holds 128-133 from the top edge to y 700, then a 141 floor band at y 750-850 and 132 at the bottom edge; lights.bg (0.19 W/m2) aims at the far-left wall [-2, 3.1, 0.8], the frame's top-left corner, and no lamp lights the cove behind the product."
+   },
+   "change": {
+    "setting": "lights.pool",
+    "from": "absent",
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.4,
+      1.0
+     ],
+     "position": [
+      0.45,
+      1.2,
+      1.9
+     ],
+     "target": [
+      0.45,
+      2.95,
+      0.7
+     ],
+     "irradiance": 1.0,
+     "color": "#FFF7EA",
+     "specular": 0
+    }
+   },
+   "expected": "A broad, soft pool on the cove behind the product (it peaks behind the upper body and above the fin): with c1 in place the cove beside the upper body holds about 130 instead of dropping to ~110, the wall above the fin about 135, falling to about 103 at the top-left corner, so the copy space falls about 29 levels toward the frame edge (from 20) and the roof (lum 50-107) and the side silhouette keep 45+ levels of separation. The lamp is behind the visible faces (their normals point away from it) and the roof and fin lie behind its emitting plane; with specular 0 no product pixel changes. It also lifts the floor behind the product by about 5-10, which joins today's full-width floor band into light round the base.",
+   "accept": {
+    "region": [
+     0,
+     120,
+     720,
+     320
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -34,
+     -24
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The back panel, the frame's hero face, mirrors the unlit sky across its upper third, so it holds one flat value and nothing on it says clear-coat lacquer.",
+   "evidence": {
+    "region": [
+     887,
+     219,
+     936,
+     264
+    ],
+    "measured": "lum_median 221, range 4; strip [886,214,936,300] 220 -> 218; left strip [885,225,912,595] 221 -> 211 (falloff 10); mirrors [885,220,1070,300]: world (sky) 99.3 % with sky.strength 0; part:back-panel mirrors sweep 42 %, sky 39 %, flag1 15 %. Label print p5 23, so a reflection over the label would veil it; the band above the label (z ~0.78-0.87 m) is free of print apart from the separate cast letters."
+   },
+   "change": {
+    "setting": "lights.backgloss",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.8,
+      0.4
+     ],
+     "position": [
+      1.91,
+      -0.55,
+      0.76
+     ],
+     "target": [
+      0.462,
+      -0.16,
+      0.8
+     ],
+     "strength": 3.5,
+     "color": "#FFF7EA",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.72,
+       0.84
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "back-panel"
+     ]
+    }
+   },
+   "expected": "The panel sits where the back panel's top band mirrors (rays from the camera's mirror image through the band meet its plane about 1.4-1.6 m out at z 0.71-0.83, inside its 0.8 x 0.4 m face), so the band under the eave shows a soft graduated sheen: the band's median rises from 221 to about 231, about 245 at the eave, fading to nothing at the label's top rule. The back panel then models about 231 -> 206 top to bottom instead of 221 -> 211 and reads as clear coat. Rays from the label meet the panel below z 0.72, where the ramp is 0, so the label's print stays at p5 <= 30, and the cast letters, which are not receivers, stay dark against a brighter ground.",
+   "accept": {
+    "region": [
+     887,
+     219,
+     936,
+     264
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     227,
+     234
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "post",
+   "problem": "The retouch pushes the plinth's shaded side face to the swatch's full chroma at a lightness where sRGB cannot hold it, so its green channel clips to zero and it reads as a flat, more vivid crimson than the gable triangle above it on the same side.",
+   "evidence": {
+    "region": [
+     742,
+     676,
+     876,
+     796
+    ],
+    "measured": "part:side-right.plinth rgb median (163, 0, 22), lum range 9.9, x profile 37.7 -> 36.4 -> 37.7 (flat), L* 33.7 C* 69.0; retouch chroma x1.28 on it (x1.369 on front-baffle.plinth, rgb (154, 7, 22)); gable triangle [770,165,850,205] (144, 26, 25) L* 31.2 C* 57.7; the back plinth's paint at the side's 0.67x light would read about (163, 30, 30), C* 63."
+   },
+   "change": {
+    "setting": "retouch.match",
+    "from": 1,
+    "to": 0.5
+   },
+   "expected": "The chroma boost on the side plinth falls from x1.28 to about x1.14: the face goes from (163, 0, 22) to about (156, 22, 29), L* unchanged near 34, C* from 69 to about 62, next to the triangle's 58, so the band reads as one red turning the corner. The lit faces barely move (back plinth dE from 0.67 to about 1.0, gable lit face from 2.86 to about 3.2); hue errors stay under 1.5 deg.",
+   "accept": {
+    "region": "part:side-right.plinth",
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     14,
+     32
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Render this frame larger for the magazine spread (or let the product fill more of it).",
+   "why": "The amplifier connections, a must-show, span 68 x 25 px (the RCA 9 x 8 px) and the label rows have an x-height of about 6 px at 1350 x 900: legible on a homepage, soft across a spread. The frame size is fixed by the card, and the product already fills 79 % of the frame height with the copy space and floor contact in view, so a tighter crop is not available."
+  }
+ ],
+ "score_if_fixed": 6.8
+}

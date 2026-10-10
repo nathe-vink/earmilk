@@ -1,0 +1,194 @@
+{
+ "stage1": {
+  "impression": "A front-on elevation of the milk-carton speaker on warm grey seamless: the graphics are crisp and the joke reads at once, but the light is flat and frontal, the 'white' body is a dull light grey with little modelling, and the 'earmilk' logo is a muddy flat grey. The carton is chopped off through the body below the port with no base, contact or shadow while the gable gets generous headroom, so it reads as a packaging mock-up rather than a hero shot.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The cast letters read as polished metal: part:letters-back-* carries a 30 to 38 level ramp from ascender tops to baselines (now -10.4: tops 97.5, baselines 107.9) at a median of 160 to 190 (now 107.6; 178 in e13).",
+  "The red roof reads as lacquer: [300, 190, 600, 340] falls 16 to 24 levels from the sheen under the fin to the eave (now 10.7: 79.1 to 68.4), with the eave band [300, 320, 600, 340] still within dE 2 of #C62828 (now 1.64).",
+  "The white back's lit face is out of PBR Neutral's shoulder: [205, 350, 265, 600] at 218 to 226 (now 231.0, p5 226), while part:back-panel keeps a median of 200 to 215 (now 210) and the left strip [205, 350, 265, 1125] keeps round 8's 24 to 32 falloff (now 29.0).",
+  "The white back shows that it is lacquer: it mirrors only sweep (70 %) and sky (29 %), so the frame's largest surface (383,879 px) carries no reflection at all; once it sits at 200 to 226 it needs one soft, shaped reflection that stays under 226 outside its own highlight.",
+  "The bottom edge reads as a decision: the frame ends in a flat white band under the port (rows 1032 to 1125, 198 to 205) with no plinth, base or shadow, and the scale the Facts panel needs rules out showing the base in this frame, so light has to carry the cut."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The cast letters, a must-show, print as one dark flat grey with their tops darker than their baselines, so 'earmilk' reads as grey paint: round 8's ramp panel sits below their reflection, which meets its plane (y -1.2) between z 0.78 at the baselines and 0.83 at the ascenders' tops, so every letter sees the ramp's flat top value and the ascenders look past the panel's top edge (z 0.815) to sky.",
+   "evidence": {
+    "region": [
+     334,
+     385,
+     565,
+     429
+    ],
+    "measured": "Part letters-back-*: median 107.6 (178 in e13), 8-bin y-profile 97.5, 99.1, 103.8, 105.5, 107.8, 108.6, 108.8, 107.9 (falloff -10.4), x-profile flat (106.6 to 107.9). Mirror map: rows 385 to 397 of the 'i', 'l' and 'k' mirror only glint1 (power 0) over sky, and every letter row from 398 down mirrors the panel, so the panel's top edge (z 0.815) lands on row 397.5. The reflection magnifies 1.51x (1 + 1.0 m / 1.95 m) at 1346 px/m, so rows 385 to 429 meet the panel's plane at z 0.829 to 0.780, all above the ramp's at_m [0.73, 0.78], where it holds 1. The engine's proofs fit: more strength lit only the rows that see the panel (0.7: -36.6, 1.1: -50.2) while the sky-only ascender tops held 97.5; from those, the letters return about 15 % of the panel's radiance over a sky floor of about 0.12 linear."
+   },
+   "change": {
+    "setting": "lights.letters_ramp",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      0.4,
+      0.12
+     ],
+     "position": [
+      0,
+      -1.2,
+      0.755
+     ],
+     "target": [
+      0,
+      0,
+      0.755
+     ],
+     "strength": 0.2333,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.73,
+       0.78
+      ],
+      "values": [
+       0.6,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "letters-back-*"
+     ]
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.4,
+      0.13
+     ],
+     "position": [
+      0,
+      -1.2,
+      0.805
+     ],
+     "target": [
+      0,
+      0,
+      0.805
+     ],
+     "strength": 2.6,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.78,
+       0.83
+      ],
+      "values": [
+       0.5,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "letters-back-*"
+     ]
+    }
+   },
+   "expected": "The panel spans z 0.74 to 0.87 round the word's reflection (0.78 to 0.83) with its ramp laid across it, so every letter pixel mirrors it: ascender tops at about 0.96 of the ramp, x-height tops 0.87, baselines 0.53. The letters go from 108 flat to about 190 at the ascenders' tops and about 158 at the baselines, median about 175 (round 7 aimed at 170 to 195; e13 had 178), a ramp down every letter that reads as polished cast metal while staying 30 to 60 levels under the white beside them. Nothing else changes: the panel is light-linked to the letters and unseen by the camera, and its 0.2 m half-width covers the word's 0.13 m reflection, so 'e' and 'k' keep their ends (round 8's c4 holds, letters_sheen stays at 0). Above 38 the ascenders' tops pass about 205 and start to merge with the white.",
+   "accept": {
+    "region": "part:letters-back-*",
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     30,
+     38
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The red roof, the frame's largest colour area, reads as matte paint: the slope is seen about 56 degrees off its normal, at Brewster's angle, so the polariser (0.97 at 90 degrees) strips nearly all its glare and the 23-radiance roof_ramp it mirrors leaves only a faint sheen toward the ridge.",
+   "evidence": {
+    "region": [
+     300,
+     190,
+     600,
+     340
+    ],
+    "measured": "8-bin y-profile 79.1, 78.6, 77.0, 75.2, 73.7, 71.9, 70.2, 68.4 (falloff 10.7). The ridge band [300, 188, 600, 210] is RGB 190, 49, 51 (dE 2.77 to #C62828) and the eave band [300, 320, 600, 340] 192, 35, 35 (dE 1.64), so the panel adds only about 14 levels of green and blue at the ridge. The region mirrors panel roof_ramp for 100 % of its pixels; the ramp runs from 0 where the eave's reflection meets it (y 0.20) to 1 at the ridge's (y 0.45)."
+   },
+   "change": {
+    "setting": "lights.roof_ramp.strength",
+    "from": 23,
+    "to": 45
+   },
+   "expected": "The sheen toward the ridge roughly doubles: the ridge band goes from 79 to about 88 (green and blue from about 50 to about 60) while the eave band, which mirrors the ramp's zero end, stays at about 66 to 68 and on the swatch, so the slope reads as gloss lacquer under an overhead light, darkest where it meets the white. Nothing else mirrors roof_ramp (the fin mirrors fin_card, the back sweep and sky), so only the roof changes. Above 24 the ridge turns pink (green past about 70).",
+   "accept": {
+    "region": [
+     300,
+     190,
+     600,
+     340
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     16,
+     24
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The upper-left of the white back, where the key is hottest, still sits in PBR Neutral's shoulder above 226, so its gradient prints compressed: round 8's exposure step was held at -0.1 and its test fails.",
+   "evidence": {
+    "region": [
+     205,
+     350,
+     265,
+     600
+    ],
+    "measured": "lum_median 231.0, p5 226, p95 235 (round 8's c5 wanted 218 to 226). The left strip's 16-bin profile runs 234, 233, 231, 229, 227 through this zone, then 224 down to 204; the band [192, 440, 708, 460] runs 233 to 215 left to right. The key, at about (-0.63, -0.81, 1.33) and 0.6 m off the face, aims its axis at x -0.15, z 0.89, the back's top-left corner, so its share is largest here. The engine's exposure proofs: 0 gave 235, -0.1 231, -0.3 219."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 2.8,
+    "to": 2.1
+   },
+   "expected": "The zone drops to about 222 and its p5 to p95 spread opens from 9 to about 12 levels, the key's gradient printing at full contrast. The left strip stays inside round 8's c1 window [24, 32] (8-bin top about 229 from 234, bottom about 198 from 205), part:back-panel's median goes from 210 to about 203 (inside the card's 200 to 220) and the bottom strip [200, 1040, 700, 1125] from 201 to about 195, further into the shade c1 wanted. Exposure would darken the backdrop as much as the white; the key falls off across the back, so trimming it darkens the white where it is hottest. The key reaches round 8's floor region [0, 950, 185, 1125] only through floor_flag_l, about 12 levels' worth by its density proofs, so that region drops about 3 (140.6 to about 137.5, inside c6's [137, 148]) and the bottom corners stay balanced (about 137 against 133). The gable loses some key and the retouch puts back half its lightness (roof [250, 200, 650, 330] about 75 to 72).",
+   "accept": {
+    "region": [
+     205,
+     350,
+     265,
+     600
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     218,
+     226
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Frame the whole carton down to the red plinth band and SHAKE WELL, standing on the sweep with a contact shadow, so the base closes the frame as the gable opens it.",
+   "why": "It needs about 0.68x the scale (lens near 72 mm, or the camera about 1 m back). The Facts rows' caps would drop from about 11 px to 7 or 8 px and 'Contains no milk.' to about 5 px x-height; the purpose fixes the panel as legible, so the crop through the body stays and light (the falloff into shade) has to carry it."
+  },
+  {
+   "request": "A brighter, more polished finish on the cast letters, so they read as metal without a strong panel.",
+   "why": "They return only about 15 % of what they mirror (round 8's proofs), but their finish is the product's own and fixed; the panel's strength in c1 carries it instead."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
