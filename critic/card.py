@@ -268,7 +268,9 @@ def _photo_light(sh):
              'a white only when what it mirrors is many times brighter than the white itself: on a white at scene-linear '
              f'0.6 (about 200), a soft gradient across the face takes a card of strength about 4 to 8 at exposure 0 (it adds '
              f'about 0.045 times the strength times 2^exposure; this frame\'s exposure is {ev:+g}, so x{2 ** ev:.2f}). '
-             'A dark or coloured face needs far less: the same card washes out a chocolate or a green. The mirror map '
+             'A dark or coloured face needs far less: the same card washes out a chocolate or a green; in a frame of several '
+             'copies, `"receivers": ["front-baffle#0", "front-baffle#2"]` gives a card to those copies\' fronts alone (copies '
+             'count from 0 in `product.instances` order). The mirror map '
              '(below) says what each face sees and its radiance; ramp the card along the axis its reflection runs on the face.'
              + (f' Reflection cards here: {", ".join(f"`{n}`" for n in cards)}.' if cards else ''))
     L.append('')

@@ -25,6 +25,21 @@ sys.path.insert(0, str(HERE))
 import shot as S  # noqa: E402
 
 
+_PART_OF = {}
+
+
+def _receives(o, pattern, part_of=None):
+    """Whether object `o` answers to a receiver `pattern`: a part's name (`front-baffle`, `*.plinth`), or with `#N` one
+    copy of it (`front-baffle#3`: the fourth copy's front alone, so a reflection card can be set for a white front and
+    held off a chocolate one in the same row; 05's relit proof, where one card blew the coloured fronts out)."""
+    import product as Pr  # noqa: E402  (bpy's modules load in main)
+    part_of = part_of if part_of is not None else _PART_OF
+    if '#' in pattern:
+        name, _, copy = pattern.partition('#')
+        return Pr._match(part_of[o.name], name) and str(o.get('instance', '')) == copy.strip()
+    return Pr._match(part_of[o.name], pattern)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('shot')
@@ -72,6 +87,7 @@ def main():
         # not say otherwise (10 round 8 set it and nothing split, so its plinth lamp lit nothing)
         blocks = [{**b, 'zone_parts': b.get('zone_parts', True)} for b in blocks]
     objs, part_of = [], {}
+    globals()['_PART_OF'] = part_of           # the receivers' matcher reads the parts as they are built
     centre = Vector((0, 0, 0.5))
     for blk in blocks:
         pdef = Pr.load_def(blk['def'], ROOT)
@@ -146,7 +162,7 @@ def main():
         kind = spec.get('type', 'area')
         ob = {'area': Lt.area, 'spot': Lt.spot, 'point': Lt.point, 'panel': Lt.panel, 'flag': Lt.flag}[kind](bpy, name, spec, centre)
         if spec.get('receivers') and kind != 'flag':
-            recv = [o for o in objs if any(Pr._match(part_of[o.name], r) for r in spec['receivers'])]
+            recv = [o for o in objs if any(_receives(o, r) for r in spec['receivers'])]
             if not recv:
                 # receivers matching no part: Cycles lights everything from a lamp whose receiver collection is empty
                 # (07 e12: '*.plinth' in an exploded view lit the whole product, the white side 200 to 234); left out,
@@ -172,7 +188,7 @@ def main():
     for i, (gname, g) in enumerate(zip(names, gl)):
         if not g:
             continue                                                       # a gap in a list of glints
-        recv = [o for o in objs if any(Pr._match(part_of[o.name], r) for r in g['receivers'])] if g.get('receivers') else objs
+        recv = [o for o in objs if any(_receives(o, r) for r in g['receivers'])] if g.get('receivers') else objs
         if not recv:
             glint_log.append({'glint': gname, 'skipped': f'its receivers {g.get("receivers")} match no part in this frame'})
             continue
