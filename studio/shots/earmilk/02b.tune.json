@@ -1166,5 +1166,88 @@
   ],
   "reply": "critic/rounds/2026-10-10/shot-02b-e15-r12.json",
   "shot_sha": "2f9d3c5b8d8cd25677b07296288813a72219398a"
+ },
+ {
+  "change": "c3",
+  "setting": "set.wainscot.relief",
+  "test": {
+   "metric": "lum_range",
+   "op": "between",
+   "value": [
+    5,
+    11
+   ]
+  },
+  "proofs": [
+   [
+    0.6,
+    7.2
+   ],
+   [
+    0.8,
+    9.8
+   ],
+   [
+    0.6615,
+    8.1
+   ]
+  ],
+  "set": 0.6615,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   0.2,
+   0.6
+  ],
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-02b-e16-r13.json",
+  "shot_sha": "5a7079684e29545b75d2772ca6adaab80a2f778f"
+ },
+ {
+  "change": "c5",
+  "setting": "glints.2.power_w",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    42,
+    70
+   ]
+  },
+  "proofs": [
+   [
+    0.55,
+    34.3
+   ],
+   [
+    0.9,
+    53.2
+   ],
+   [
+    0.9519,
+    55.3
+   ]
+  ],
+  "set": 0.9519,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   0.1667,
+   0.55
+  ],
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c5"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-02b-e16-r13.json",
+  "shot_sha": "a90816ad1bb90d2cf7a9133dbea7f65af32cf163"
  }
 ]
