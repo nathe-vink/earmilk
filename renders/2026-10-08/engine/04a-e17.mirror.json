@@ -1,0 +1,256 @@
+{
+ "legend": {
+  "1": "sweep",
+  "2": "panel roof_ramp",
+  "3": "world (sky)",
+  "4": "lamp key over world (sky)",
+  "5": "panel fin_card",
+  "6": "lamp fill.specular over world (sky)",
+  "7": "gable-block",
+  "8": "back-panel",
+  "9": "lamp kicker_l over world (sky)",
+  "10": "panel letters_ramp + lamp glint1 over world (sky)",
+  "11": "letters-back-6",
+  "12": "letters-back-0",
+  "13": "letters-back-1",
+  "14": "letters-back-3",
+  "15": "panel letters_ramp over world (sky)",
+  "16": "letters-back-2",
+  "17": "letters-back-7",
+  "18": "lamp fill.specular over sweep",
+  "19": "lamp kicker_l over sweep",
+  "20": "port-tube",
+  "21": "woofer-frame",
+  "22": "woofer-cone",
+  "23": "top-panel",
+  "24": "cable-mid",
+  "25": "side-right",
+  "26": "side-left",
+  "27": "window-brace",
+  "28": "woofer-motor",
+  "29": "woofer-surround"
+ },
+ "step": 2,
+ "parts": {
+  "back-panel": {
+   "pixels": 383964,
+   "seen": [
+    [
+     "sweep",
+     0.699
+    ],
+    [
+     "world (sky)",
+     0.294
+    ],
+    [
+     "lamp kicker_l over world (sky)",
+     0.002
+    ],
+    [
+     "lamp kicker_l over sweep",
+     0.002
+    ],
+    [
+     "lamp fill.specular over world (sky)",
+     0.002
+    ],
+    [
+     "port-tube",
+     0.0
+    ]
+   ]
+  },
+  "gable-block": {
+   "pixels": 116252,
+   "seen": [
+    [
+     "panel roof_ramp",
+     0.665
+    ],
+    [
+     "panel fin_card",
+     0.218
+    ],
+    [
+     "gable-block",
+     0.08
+    ],
+    [
+     "sweep",
+     0.014
+    ],
+    [
+     "world (sky)",
+     0.012
+    ],
+    [
+     "back-panel",
+     0.009
+    ]
+   ]
+  },
+  "port-tube": {
+   "pixels": 11764,
+   "seen": [
+    [
+     "sweep",
+     0.49
+    ],
+    [
+     "woofer-motor",
+     0.383
+    ],
+    [
+     "woofer-surround",
+     0.049
+    ],
+    [
+     "woofer-cone",
+     0.032
+    ],
+    [
+     "woofer-frame",
+     0.024
+    ],
+    [
+     "back-panel",
+     0.015
+    ]
+   ]
+  },
+  "woofer-motor": {
+   "pixels": 6092,
+   "seen": [
+    [
+     "port-tube",
+     0.592
+    ],
+    [
+     "back-panel",
+     0.337
+    ],
+    [
+     "woofer-frame",
+     0.02
+    ],
+    [
+     "top-panel",
+     0.02
+    ],
+    [
+     "woofer-cone",
+     0.013
+    ],
+    [
+     "side-right",
+     0.009
+    ]
+   ]
+  },
+  "letters-back-3": {
+   "pixels": 1192,
+   "seen": [
+    [
+     "panel letters_ramp + lamp glint1 over world (sky)",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-7": {
+   "pixels": 928,
+   "seen": [
+    [
+     "panel letters_ramp + lamp glint1 over world (sky)",
+     0.94
+    ],
+    [
+     "panel letters_ramp over world (sky)",
+     0.06
+    ]
+   ]
+  },
+  "letters-back-1": {
+   "pixels": 884,
+   "seen": [
+    [
+     "panel letters_ramp + lamp glint1 over world (sky)",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-0": {
+   "pixels": 828,
+   "seen": [
+    [
+     "panel letters_ramp + lamp glint1 over world (sky)",
+     0.816
+    ],
+    [
+     "panel letters_ramp over world (sky)",
+     0.179
+    ],
+    [
+     "back-panel",
+     0.005
+    ]
+   ]
+  },
+  "letters-back-2": {
+   "pixels": 488,
+   "seen": [
+    [
+     "panel letters_ramp + lamp glint1 over world (sky)",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-6": {
+   "pixels": 420,
+   "seen": [
+    [
+     "panel letters_ramp + lamp glint1 over world (sky)",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-5": {
+   "pixels": 360,
+   "seen": [
+    [
+     "panel letters_ramp + lamp glint1 over world (sky)",
+     1.0
+    ]
+   ]
+  },
+  "woofer-magnet": {
+   "pixels": 144,
+   "seen": [
+    [
+     "woofer-frame",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-4": {
+   "pixels": 96,
+   "seen": [
+    [
+     "panel letters_ramp + lamp glint1 over world (sky)",
+     1.0
+    ]
+   ]
+  }
+ },
+ "lamps": {
+  "key": 24.9468,
+  "fill.specular": 0.4192,
+  "bg": 54.6801,
+  "sweep_wash": 0.5814,
+  "kicker_r": 7.7647,
+  "halo": 2.8929,
+  "kicker_l": 10.1681,
+  "glint0": 1080.7606,
+  "glint1": 0.0
+ }
+}
