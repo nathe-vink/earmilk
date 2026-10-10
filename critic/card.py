@@ -105,12 +105,14 @@ def main():
         seen.add(path)
     # knobs the shot does not set yet but may (the common ones)
     extra = [k for k in ('camera.fstop', 'camera.shift_x', 'camera.shift_y', 'camera.polariser.strength', 'camera.polariser.angle_deg',
-                         'render.exposure', 'render.white_balance_k', 'render.white_balance_tint', 'render.look')
+                         'render.exposure', 'render.white_balance_k', 'render.white_balance_tint', 'render.look',
+                         'retouch.enabled', 'retouch.match', 'retouch.lightness', 'retouch.neutral')
              if k not in seen]
     for k in extra:
         unit, rng, meaning = K.describe(k)
         rtxt = '' if rng is None else (f'{rng[0]:g} to {rng[1]:g}' if isinstance(rng, tuple) and all(isinstance(x, (int, float)) for x in rng) else ', '.join(map(str, rng)))
-        dflt = {'render.white_balance_tint': '10 (the default)'}.get(k, '(default)')
+        dflt = {'render.white_balance_tint': '10 (the default)', 'retouch.enabled': 'false (the default)',
+                'retouch.match': '1 (the default)', 'retouch.lightness': '0.5 (the default)', 'retouch.neutral': '1 (the default)'}.get(k, '(default)')
         L.append(f'| `{k}` | {dflt} | {unit} | {rtxt} | {meaning} |')
     L.append('')
     L.append('The set\'s materials take their preset\'s keys (`materials.oak.plank_contrast`, `materials.plaster.bump`, ...): '
@@ -173,6 +175,20 @@ def main():
                                     f'from the test, so something else sets it')
                 notes.append(f'- the engine tuned `{tr["setting"]}` for {tr["change"]} ({tr["test"].get("metric")} {tr["test"].get("op")} '
                              f'{tr["test"].get("value")}) by proof renders: {tried}; {verdict}.')
+            rt = rep.get('retouch')
+            if rt and rt.get('paints'):
+                L += ['## The retouch', '',
+                      'The frame you judged is retouched (`retouch.*`): each paint matched to its swatch per copy, read off '
+                      'its lit face (the pixels between the 40th and 90th percentile of its lightness that carry at least its '
+                      'median chroma), every pixel by how much it is the paint, so highlights and edges move less. A '
+                      'colour\'s remaining error in dE2000 is mostly the lightness `retouch.lightness` leaves; a white\'s is '
+                      'its cast against a neutral of its own lightness. Before and after, on that lit face:', '',
+                      '| paint | copy | swatch | before | after | how |', '|---|---|---|---|---|---|']
+                for p_ in rt['paints']:
+                    how = (f'cast {p_["cast_before"]} to {p_["cast_after"]} (a*, b*)' if p_['mode'] == 'neutral' else
+                           f'gain {p_["lightness_gain"]}, chroma x{p_["chroma_scale"]}, hue {p_["hue_turn_deg"]:+g} deg')
+                    L.append(f'| {p_["paint"]} | {p_["copy"]} | {p_["swatch"]} | {p_["de_before"]} | {p_["de_after"]} | {how} |')
+                L.append('')
             mir = (rep.get('mirrors') or {}).get('parts') or {}
             if mir:
                 tot = sum(v['pixels'] for v in mir.values())

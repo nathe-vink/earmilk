@@ -39,6 +39,7 @@ def main():
     ap.add_argument('--threads', type=int, default=0)
     ap.add_argument('--no-render', action='store_true', help='apply and save the shot (--save-shot) without rendering')
     ap.add_argument('--probe', action='append', default=[], help='what a part mirrors into the camera (probe.py); no render')
+    ap.add_argument('--mirrors', action='store_true', help='with the masks, the mirror map (probe.py); --masks-only writes it anyway')
     a = ap.parse_args()
     if not a.out and not a.no_render:
         ap.error('--out is required unless --no-render')
@@ -236,6 +237,8 @@ def main():
             ap.error(f'--masks-only: {out} is not rendered yet')
         a.masks = True
     else:
+        # a new frame: the raw kept by the last retouch at this path is stale
+        out.with_suffix('.raw.png').unlink(missing_ok=True)
         bpy.ops.render.render(write_still=True)
     t2 = time.time()
 
@@ -247,14 +250,27 @@ def main():
         report['tuning'] = json.loads(tside.read_text())
 
     report['parts_2d'] = _parts_2d(scene, cam, objs, part_of)
-    if a.masks:
+    # the retouch (retouch.py) matches the paints to their swatches in the finished frame; it needs the swatch mask
+    ret = sh.get('retouch') or {}
+    ret_on = bool(ret.get('enabled')) and R.get('format') != 'EXR'
+    if a.masks_only or (a.masks and a.mirrors):
         # what each product pixel mirrors (probe.py), before the mask pass overrides the materials and hides the lamps:
         # the critic reads which lamp, panel or surface draws a reflection instead of guessing (03's round 8 graded
-        # rim_left for the waveguide's wall, which mirrors the top panel)
+        # rim_left for the waveguide's wall, which mirrors the glint5 panel)
         import probe as Pb
         mm = Pb.mirror_map(bpy, scene, cam, objs, part_of, str(out.with_suffix('.mirror.png')))
         report['mirrors'] = {'image': str(out.with_suffix('.mirror.png')), 'step': mm['step'], 'parts': mm['parts']}
+    if a.masks or ret_on:
         report['masks'] = _masks(bpy, scene, objs, part_of, out)
+    if ret_on:
+        import shutil, retouch as Rt
+        raw = out.with_suffix('.raw.png')
+        if not raw.exists():
+            shutil.copy(out, raw)
+        report['retouch'] = Rt.retouch(str(raw), str(out.with_suffix('.swatch.png')),
+                                       json.loads(out.with_suffix('.swatch.json').read_text()), ret, str(out))
+        for p_ in report['retouch']['paints']:
+            print(f"retouch {p_['paint']}#{p_['copy']} ({p_['mode']}): dE {p_['de_before']} -> {p_['de_after']}")
     S.save(sh, out.with_suffix('.shot.json'))
     out.with_suffix('.report.json').write_text(json.dumps(report, indent=1, default=str) + '\n')
     for gl_ in glint_log:
@@ -319,10 +335,43 @@ def _masks(bpy, scene, objs, part_of, out):
     mp = out.with_suffix('.mask.png')
     scene.render.filepath = str(mp.resolve())
     bpy.ops.render.render(write_still=True)
-    vl.material_override = None; scene.world = W
+    vl.material_override = None
     legend = {str(v): k for k, v in ids.items()}
     out.with_suffix('.mask.json').write_text(json.dumps(legend, indent=1) + '\n')
-    return {'image': str(mp), 'parts': len(ids)}
+    # the swatch mask, for the retouch: each product pixel carries the id of its paint and copy (the materials a
+    # flavour colours carry their swatch, product.build_materials), every other surface 0. Per slot, so a zoned part's
+    # plinth is its accent; linked on the object for the pass, so copies sharing a mesh keep their own ids
+    def flat(name, v):
+        m_ = bpy.data.materials.new(name); m_.use_nodes = True; t_ = m_.node_tree; t_.nodes.clear()
+        e_ = t_.nodes.new('ShaderNodeEmission'); e_.inputs['Color'].default_value = (v / 255.0, 0, 0, 1)
+        o2 = t_.nodes.new('ShaderNodeOutputMaterial'); t_.links.new(e_.outputs['Emission'], o2.inputs['Surface'])
+        return m_
+    zero = flat('swatch-0', 0); sw_ids, sw_mats, sw_leg, saved = {}, {}, {}, []
+    inst_of = {o.name: o.get('instance', 0) for o in objs}
+    for ob in scene.objects:
+        if ob.type != 'MESH':
+            continue
+        for sl in ob.material_slots:
+            src = sl.material
+            link = sl.link; sl.link = 'OBJECT'; saved.append((sl, link, sl.material))
+            key = (inst_of[ob.name], src.name) if (ob.name in inst_of and src is not None and src.get('swatch')) else None
+            if key is None:
+                sl.material = zero
+                continue
+            if key not in sw_ids:
+                sw_ids[key] = len(sw_ids) + 1
+                sw_mats[key] = flat(f'swatch-{sw_ids[key]}', sw_ids[key])
+                sw_leg[str(sw_ids[key])] = {'material': src['swatch_name'], 'instance': key[0], 'hex': src['swatch'],
+                                            'flavour': src.name.split('@', 1)[-1]}
+            sl.material = sw_mats[key]
+    sp = out.with_suffix('.swatch.png')
+    scene.render.filepath = str(sp.resolve())
+    bpy.ops.render.render(write_still=True)
+    for sl, link, m_ in saved:
+        sl.material = m_; sl.link = link
+    scene.world = W
+    out.with_suffix('.swatch.json').write_text(json.dumps(sw_leg, indent=1) + '\n')
+    return {'image': str(mp), 'parts': len(ids), 'swatch': str(sp), 'paints': len(sw_leg)}
 
 
 if __name__ == '__main__':

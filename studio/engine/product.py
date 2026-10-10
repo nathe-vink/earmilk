@@ -270,6 +270,11 @@ def build_materials(bpy, pdef, flavour_name, shot_mats, tag):
         ov = {**spec, **shot_mats.get(preset, {}), **shot_mats.get(name, {})}
         ov = {k: v for k, v in ov.items() if k in M.PRESET_DEFAULTS[preset]}
         out[name] = M.make(bpy, f'{name}@{tag}', preset, ov, bevel_mm=bevel)
+        # a colour the flavour sets on a paint (body, accent, insert) is a swatch the retouch matches (retouch.py)
+        raw = pdef['materials'][name].get('color', '')
+        if isinstance(raw, str) and raw.startswith('$') and preset not in ('metal', 'gunmetal', 'emit') \
+                and isinstance(ov.get('color'), str) and ov['color'].startswith('#'):
+            out[name]['swatch'] = ov['color']; out[name]['swatch_name'] = name
     return out
 
 

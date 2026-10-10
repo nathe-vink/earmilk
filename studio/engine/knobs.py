@@ -32,6 +32,11 @@ KNOBS = [
     ('render.clamp', 'radiance', (0, 100), 'indirect clamp against fireflies; 0 for none'),
     ('render.bounces', 'count', (4, 32), 'light bounces'),
     ('render.denoise', 'bool', None, 'OpenImageDenoise'),
+    # the retouch (retouch.py): the paints matched to their swatches in the finished frame, as a retoucher does
+    ('retouch.enabled', 'bool', None, 'retouch the frame: each paint a flavour colours (body, accent, insert) matched to its swatch per copy, read off its lit face; the raw frame is kept beside it and the tests read the retouched one'),
+    ('retouch.match', '0 to 1', (0, 1), 'the share of a colour paint\'s hue and chroma error taken out (1: its lit face reads as the swatch in hue and chroma, as the swatch looks under the light the copy\'s white shows)'),
+    ('retouch.lightness', '0 to 1', (0, 1), 'the share of a colour paint\'s lightness error taken out, as a gain on its light (a lighter or darker paint); 1 makes its lit face as light as the swatch, which can flatten a deliberate shade'),
+    ('retouch.neutral', '0 to 1', (0, 1), 'the share of a white paint\'s colour cast taken out (1 in a studio; less in a room where the light\'s colour is the picture\'s: a late sun\'s warm white)'),
     # sun and sky
     ('sun.azimuth_deg', 'deg', (-180, 180), 'compass direction the sun shines FROM, 0 = from in front of the product (-y), +90 = from +x'),
     ('sun.elevation_deg', 'deg', (0, 90), 'the sun\'s height above the horizon'),
