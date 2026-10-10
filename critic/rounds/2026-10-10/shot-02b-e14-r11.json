@@ -1,0 +1,306 @@
+{
+ "stage1": {
+  "impression": "A strong concept: the milk-carton speaker throws its own carton silhouette into a hard, warm patch of low sun on a dark navy wall, and the red-cream-navy-oak palette holds together. But the hero feels flat and slightly pasted: the cream front reads as nearly one value, the big tan wall patch competes with it for the eye, and the frame is murky and underexposed around it, so it reads as a well-composed CG draft rather than a homepage hero.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The woofer reads black anodised: part:woofer-cone|woofer-cap median within dE2000 5.5 of neutral #2E2E2E (now 9.07), with no blue highlight on the cap (its brightest 5% now Lab b* -32).",
+  "The sun patch reads golden, not beige: [310,220,400,580] within dE2000 2.5 of #9B7A50, Lab 53.5/7/28 (now 3.94), and the same above the rail [625,140,695,162] (now 3.70).",
+  "The body white reads white in late sun, not cream paint: front white [748,352,790,530] within dE2000 3.0 to 5.5 of the same-lightness neutral #D6D6D6 (now 7.31), sunlit side about 9 or less against #DCDCDC (now 13.42).",
+  "The red roof reads as lacquer: a ridge-to-eave sheen falling 12 to 30 levels on [905,284,928,344] (now 2.5).",
+  "The plinth reads as one red: no reflected strip behind the wordmark ([752,726,790,744] now 61.3 against 46.7 just above it).",
+  "The waveguide reads unambiguously as a recessed horn: its right rim catches a line of light as its left lip does (now the shaded right inner wall, about 38, runs into the roof, about 66, with no edge)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "asset",
+   "problem": "The woofer reads as a blue cone, not the black anodised aluminium the card specifies, because the two glint lamps on it carry no colour and the 3450 K white balance renders their light as saturated blue.",
+   "evidence": {
+    "region": [
+     780,
+     555,
+     889,
+     666
+    ],
+    "measured": "part:woofer-cone|woofer-cap median RGB [38,46,62], dE2000 9.07 from neutral #2E2E2E. Cap median [5,25,46] (Lab 8.3, 1.0, -16.5); its brightest 5% is [79,121,173] (Lab 50, 1, -32) where it mirrors glint2. The glint1 sweep [852,590,889,638] has median [27,61,96] (b* -24). The sunlit crescent on the same cone [776,560,806,650] has a warm brightest 5% of [244,208,169], so the metal is neutral and the blue comes from the glint lamps."
+   },
+   "change": {
+    "setting": "glints.1.color + glints.2.color (new key: a colour for glint lamps, as lights.*.color takes; the card's glint spec has none)",
+    "from": null,
+    "to": 3200
+   },
+   "expected": "The cone's right-hand sweep and the cap's highlight render warm-neutral grey instead of blue: cap highlight b* rises from -32 to above -8, and the glint1 sweep moves from [27,61,96] toward about [60,62,66]. The cone reads as black metal with a warm sun crescent on its left, and the woofer median comes within dE 5.5 of #2E2E2E. Glint powers are untouched, so round 10's cap lift (p95 112.6, test 50 to 120) holds.",
+   "accept": {
+    "region": "part:woofer-cone|woofer-cap",
+    "metric": "delta_e",
+    "hex": "#2E2E2E",
+    "op": "<=",
+    "value": 5.5
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The sun patch, the frame's 'warm light', reads as beige paint rather than golden sun: it is a flat, low-chroma tan.",
+   "evidence": {
+    "region": [
+     310,
+     220,
+     400,
+     580
+    ],
+    "measured": "Median 128.9, RGB [150,126,95] (Lab about 54.3, 5, 20.5: chroma 21, hue 76 degrees), range 10.4. dE2000 3.94 from the golden target #9B7A50 (Lab 53.5, 7, 28). The strip right of the silhouette [650,220,698,580] measures 4.12, and above the rail [625,140,695,162] 3.70."
+   },
+   "change": {
+    "setting": "sun.color",
+    "from": 2600,
+    "to": 2400
+   },
+   "expected": "The patch turns amber-gold at about the same lightness: near Lab (53.5, 7, 28), RGB about [155,122,80], within dE 2.5 of #9B7A50, matched above and below the rail because one sun lights both. The floor's sun band and the sunlit side follow. Chroma rises from 21 to about 29 at the same 76 degree hue, which moves the patch further from the olive-khaki round 10's c1 removed rather than back toward it, so that fix holds. c3 takes out the warmth this adds to the white body.",
+   "accept": {
+    "region": [
+     310,
+     220,
+     400,
+     580
+    ],
+    "metric": "delta_e",
+    "hex": "#9B7A50",
+    "op": "<=",
+    "value": 2.5
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "post",
+   "problem": "The body white reads as cream on the front and peach on the sunlit side, so on a homepage the Whole flavour's white looks like ivory paint rather than white in late sun.",
+   "evidence": {
+    "region": [
+     748,
+     352,
+     790,
+     530
+    ],
+    "measured": "Front white median RGB [226,212,200] (L* 85.7), dE2000 7.31 against #D6D6D6, a neutral of the same lightness. part:side-right [242,214,186] (Lab 87.2, 5.5, 17.4), dE 13.42 against #DCDCDC. The front-baffle part as a whole is Lab 80.9, 3.6, 9.2. The retouch table shows the body casts untouched at neutral 0 (7.9 front, 13.18 side)."
+   },
+   "change": {
+    "setting": "retouch.neutral",
+    "from": 0,
+    "to": 0.4
+   },
+   "expected": "The front white's cast falls from dE 7.31 to about 4.5 (b* about 9 to 5.5), and the sunlit side's from 13.4 to about 9: still a late-sun warm white, but read as white. Lightness is unchanged. The patch, floor and room keep the sun's colour, because the retouch acts on the body paint only, and it absorbs the warmth c2 adds.",
+   "accept": {
+    "region": [
+     748,
+     352,
+     790,
+     530
+    ],
+    "metric": "delta_e",
+    "hex": "#D6D6D6",
+    "op": "between",
+    "value": [
+     3.0,
+     5.5
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The red roof slope shows no lacquer sheen where it most needs one: its right third mirrors roofsheen's ramp below the ramp's start (y 0.05 to 0.20 against at_m [0.14, 0.35]) and is dead flat, while the left two-thirds, which mirror y 0.21 to 0.45, carry only a faint 16-level lift, so the gable reads as painted card.",
+   "evidence": {
+    "region": [
+     768,
+     282,
+     930,
+     345
+    ],
+    "measured": "Gable-block pixels in this box: lum_range 19.8 (p5 66.1, p95 85.9). Right of the waveguide [905,284,928,344]: profile along y 68.8, 67.8, 66.3, 66.1, 66.3, 66.3, 66.3, 66.3 (falloff 2.5). The precheck trace meets the panel at y 0.151 to 0.196 on its ridge rows and 0.054 to 0.099 on its eave rows: ramp 0.05 to 0.27 and 0. Left of the waveguide [748,284,766,345] meets y 0.278 to 0.453 (ramp 0.66 to 1; radiance 0.675 median at 0.8) and reads 81.9 at [748,303,766,345]. The band above the waveguide [770,280,900,289] meets y 0.212 to 0.383 and falls 85.7 to 69.4 from left to right. The waveguide's roofsheen pixels (20%) meet y -0.015 to 0.402."
+   },
+   "change": {
+    "setting": "lights.roofsheen",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      1.2,
+      1.2
+     ],
+     "position": [
+      -0.09,
+      0.23,
+      1.89
+     ],
+     "target": [
+      0.02,
+      -0.1,
+      0.93
+     ],
+     "strength": 0.1167,
+     "color": 3200,
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       0.14,
+       0.35
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.2,
+      1.2
+     ],
+     "position": [
+      -0.09,
+      0.23,
+      1.89
+     ],
+     "target": [
+      0.02,
+      -0.1,
+      0.93
+     ],
+     "strength": 0.28,
+     "color": 3200,
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       0.05,
+       0.34
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The ramp now spans the slope's reflections, so the whole slope carries one diagonal sheen: brightest at the top left (ramp 1, about 95 to 104) and fading to the bottom-right eave (ramp near 0, about 66 to 70), slope lum_range 27 to 38. The right third, now flat, sits on the ramp's slope (0.35 to 0.50 on its ridge rows, 0.01 to 0.17 on its eave rows), so its ridge rows rise about 7 to 17 above its eave rows. At about a third of the earlier 0.8, the left half meets about 0.22 to 0.28 instead of 0.675, so it reads as a sheen, not a pink glare. The fin still mirrors the left wall and stays the darker band above; the waveguide's upward-facing flare (median ramp 0.52) gains a matching soft sheen.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      768,
+      282,
+      930,
+      345
+     ]
+    },
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     27,
+     38
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The letterkick strip mirrors in the plinth's lacquer as a lighter band behind the wordmark, so the red plinth reads two-tone: a printed stripe the product does not have, lit by a studio light the room does not have.",
+   "evidence": {
+    "region": [
+     752,
+     726,
+     790,
+     744
+    ],
+    "measured": "lum_median 61.3 against 46.7 just above at [752,708,790,722]. The band mirrors panel letterkick at 92.4%; the red above it mirrors the floor at 98.5%. Plinth profile along y at x 760-790: 47.1, 45.7, 48.2, 61.3, 61.5, 61.2, 45.7, 60.3, 61.6."
+   },
+   "change": {
+    "setting": "lights.letterkick.receivers",
+    "from": null,
+    "to": [
+     "letters-front-*"
+    ]
+   },
+   "expected": "The band leaves the plinth: its median falls from 61.3 to about 47 to 50, matching the red above it, so the plinth reads as one colour. The cast letters mirror the panel at 87 to 100% and keep their lift, so round 10's letter test (now 163.5, wanted 148 to 178) still passes and the two rounds of letterkick strength are not undone.",
+   "accept": {
+    "region": [
+     752,
+     726,
+     790,
+     744
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     42,
+     53
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The shadow edges are sharper than the sun makes them: the silhouette steps from lit wall to shadow within 2 px, the penumbra of a 0.3 degree source, which reads as rendered on a large print.",
+   "evidence": {
+    "region": [
+     625,
+     450,
+     655,
+     550
+    ],
+    "measured": "Edge step 47.6, 10-90% width 2 px. The left edge [390,450,420,550] steps 41.7 within 2 px. The window patch's edges are 5 px (right) and 10 px (left) wide."
+   },
+   "change": {
+    "setting": "sun.angle_deg",
+    "from": 0.3,
+    "to": 0.53
+   },
+   "expected": "The silhouette's edges widen to about 3 to 4 px (a 9 mm penumbra at about 0.95 m from the product) and their step drops to about 28 to 34, still crisp enough for the carton to read. The window patch's edges soften to about 9 to 16 px, as real low sun through a window does.",
+   "accept": {
+    "region": [
+     625,
+     450,
+     655,
+     550
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     22,
+     36
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Make the woofer cone satin rather than mirror-like, so it stops carrying coloured sweeps (a bronze crescent at left reaching p95 210, a blue sweep at right).",
+   "why": "The cone is the Dayton's own black anodised aluminium, and the product's materials are fixed; what it shows can only change through what it mirrors, which is what c1 does."
+  },
+  {
+   "request": "A crisper lip on the waveguide's right half, where the shaded inner wall (about 38) runs into the roof (about 66) with no edge, so the horn reads unmistakably as a recess.",
+   "why": "The waveguide's profile, mouth and rim are set by acoustic simulation; only light and camera may change how it reads (c4's sheen reaches its upward-facing flare)."
+  }
+ ],
+ "score_if_fixed": 7.5,
+ "revisions": [
+  {
+   "id": "c4",
+   "why": "engine precheck: the slope mirrors roofsheen's ramp at 0.05 to 0.27 on its ridge rows and 0 on its eave rows, not the 0.76 the critic assumed; the critic moved the ramp to span the slope's reflections",
+   "first": {
+    "setting": "lights.roofsheen.strength",
+    "from": 0.1167,
+    "to": 0.8
+   }
+  }
+ ]
+}

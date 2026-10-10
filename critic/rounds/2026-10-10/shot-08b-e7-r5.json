@@ -1,0 +1,197 @@
+{
+ "stage1": {
+  "impression": "A clean, legible cutaway of the gable roof with its red horn and driver, but it reads as a CAD section on grey rather than a photograph: flat, directionless light, a grey driver body at the backdrop's own value so it reads as a hole, and the whole frame in one mid-grey band. The red horn carries the image, but a flat, hard-edged pale-pink plate across it reads as plastic, the roof edge is a flat neon ribbon, the black driver parts merge into one black mass, and small strays (a black clip on the left edge, a white speck at the horn mouth) undercut the finish.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Set separated from the product: backdrop [0,0,1350,115] between 92 and 108 (now 134.1, with the insert's grey section at 125.8), so the section reads at least 20 levels lighter than the set instead of as a hole through it.",
+  "No pink on the waveguide: the lower-far-wall wedge [900,466,1040,512] at G <= 108 and dE2000 <= 15 against #C62828 (now G 149, dE 28.0), with a highlight that grades instead of plateauing (now 162.6 to 170.3 across 70 px between two edges that each step about 100 levels in G within 6 px).",
+  "Roof band (gable-block pixels in [760,250,1000,460]) within dE 4 of #C62828 with G and B unclipped (now 229,0,0, dE 7.87, G = 0 from the 5th to the 75th percentile).",
+  "Tweeter blacks with detail: part:tweeter-frame crush_pct <= 10 (now 55.2; its rear cup [676,366,698,540] 87.6) and the sleeve's bore at 15 or more under cut faces near 55 (now 1-8 in its upper half under faces of 42-49).",
+  "The cut plane modelled by light: at least 12 levels of falloff across the insert section (x profile of [690,585,1110,640] now 126.7 to 123.0) and down the lower birch ([300,450,520,640] now 164.1 to 157.5), so the section reads as a lit plane, not a diagram.",
+  "Neutral greys: backdrop and insert section within 1.5 of neutral in a* and b*, or of the paper's own warmth (backdrop now a* +1.9, b* +0.7 from a paper at a* 0.1, b* 4.0; insert section b* -5.1)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The sweep renders at the insert section's own value, so the grey wedge under the bowl reads as a hole through the product and the whole frame sits in one 123-142 mid-grey band; the pool lamp is not what lights it.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     1350,
+     115
+    ],
+    "measured": "lum_median 134.1 (p5 123.8, p95 137.1), rgb 138,133,133; right of the product [1215,20,1340,640] 136.1; insert section (waveguide-insert in [680,560,1140,648]) 125.8, rgb 124,126,135; backdrop runs 123 at the left edge to 142 at the lower right; the card's pool proofs moved it only 2.2 levels across 0.5 to 1.25 W/m2"
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#C9C5BE",
+    "to": "#97948F"
+   },
+   "expected": "The paper's reflectance falls to 0.53x, which scales every light on the sweep (sky, bg, pool, spill, bounce) alike: top band 134 to about 100, right band 136 to about 102, same hue and left-to-right gradient as now; the insert section (126, about 130 with c2) reads 25-30 levels lighter than the set, as a solid; the fin's grazing face, which mirrors only the sweep, loses about half its grey (187,76,71 to about 175,60,57) and the sweep-reflecting bands of the bowl deepen. Reaches what round 4's c1 wanted without touching the pool.",
+   "accept": {
+    "region": [
+     0,
+     0,
+     1350,
+     115
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     92,
+     108
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "A quarter of the waveguide is a flat, hard-edged pale-pink plate: the bowl's lower far wall mirrors a small, very bright lamp on the product's right, so the accent turns pink there and the bowl reads as a cut-out rather than a glossy curve.",
+   "evidence": {
+    "region": [
+     900,
+     466,
+     1040,
+     512
+    ],
+    "measured": "lum_median 167.6, rgb 235,149,154, dE2000 28.0 against #C62828; profile down x 1000-1010 (y 440-560): 51.0, 153.8, 162.6 ... 170.3, 77.7, a plateau between two one-bin edges; its upper edge at x 825-845 steps 39 in luminance over a 3 px 10-90 width. The trace labels it world (sky) 88%, but the band just above it [840,436,1000,450], also world (sky) 74%, is 194,39,35: the 0.3 sky cannot add G +105, which needs a radiance near 10 at a clear coat's ~5%. The only emitter that bright in that mirror direction (toward +x, about 20-25 degrees up) is the 0.6 m mouth lamp, radiance about 15, which the trace leaves out because its specular is 0; the polariser at 90 degrees did not move it (169.6 at 0.8 and at 0.95), as expected of glare reflected sideways, whose polarisation a vertical pass axis transmits."
+   },
+   "change": {
+    "setting": "lights.mouth.size_m",
+    "from": [
+     0.6,
+     0.6
+    ],
+    "to": [
+     1.2,
+     1.2
+    ]
+   },
+   "expected": "Irradiance stays 5.47 W/m2 at the bowl, so the diffuse red the lamp was set for is unchanged (walls about 203,53,53), while its radiance falls to about 0.34x (about 15 to 5): the plate's G 149 to about 95, luminance 168 to about 125, rgb about 230,95,98; the reflection spreads to about twice the area (the band above may take a share), with its edges moved outward and their G step about halved, a broad soft sheen instead of a hard plate. Side effect: the lamp's front half adds about 0.4 W/m2 to the cut faces (birch and insert section +5 to 8 levels).",
+   "accept": {
+    "region": [
+     900,
+     466,
+     1040,
+     512
+    ],
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     70,
+     108
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The tweeter's rear cup and the retaining sleeve's bore are crushed to black, so the sleeve, its flange and the tweeter body merge into one black mass at the centre of the frame and the tweeter held in its counterbore by the sleeve does not read at a glance.",
+   "evidence": {
+    "region": [
+     612,
+     336,
+     725,
+     563
+    ],
+    "measured": "part:tweeter-frame lum_median 2.3, crush_pct 55.2; its rear cup [676,366,698,540] 1.2 with 87.6% at 3 or below; part:tweeter-retainer 14.7: cut faces 42-49 (y 336-368), bore 1-8 in its upper half (y 376-424) and 11-29 in its lower half, so the key from above reaches only the lower half of each cavity"
+   },
+   "change": {
+    "setting": "lights.snoot",
+    "from": "(none)",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.3,
+      0.3
+     ],
+     "position": [
+      0.0,
+      -0.4,
+      0.72
+     ],
+     "target": [
+      -0.01,
+      0.02,
+      0.93
+     ],
+     "irradiance": 1.8,
+     "color": 5600,
+     "specular": 0.3,
+     "receivers": [
+      "tweeter-retainer",
+      "tweeter-frame",
+      "seal-channel"
+     ]
+    }
+   },
+   "expected": "A small lamp below the frame, 0.4 m in front of the cut and 27 degrees under its normal, linked to the three black parts only, lights the upper halves of the cavities the key leaves dark: tweeter-frame median 2.3 to about 20 and crush 55% to under 10%, the rear cup 1 to about 25; the sleeve's bore 1-8 to about 20-28 and its cut faces 42-49 to about 55-62, so faces separate from bores by about 30 levels and the flange reads as its own part; the seal 35 to about 50. No other part receives it, so birch, insert, bowl and set are unchanged.",
+   "accept": {
+    "region": "part:tweeter-frame",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     12,
+     34
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "post",
+   "problem": "The roof's front slope beyond the cut is a flat neon band with G and B clipped to 0: the retouch reads the accent's lit face off the fin's grazing face, which is pale because it mirrors the sweep, and pushes every accent pixel's chroma x1.65 and hue +8.4 degrees, driving the already saturated slope out of gamut.",
+   "evidence": {
+    "region": [
+     760,
+     250,
+     1000,
+     460
+    ],
+    "measured": "gable-block pixels in the box: rgb 229,0,0, dE2000 7.87 against #C62828, G 0 from the 5th to the 75th percentile; the same band in e5, before the retouch: 207,27,32, dE 1.78; fin face (gable-block in [690,130,742,240]) 187,76,71, mirroring the sweep 100%; retouch table: accent gain 0.867, chroma x1.65, hue +8.4"
+   },
+   "change": {
+    "setting": "retouch.match",
+    "from": 1,
+    "to": 0.2
+   },
+   "expected": "The hue and chroma correction drops to a fifth (about x1.1 once c1 makes the fin less pale): the slope band back to about 210,22,28, dE 2 to 3.5, with its gloss modelling back in G and B; the fin face stays a little paler (about 175,62,58, dE about 5.4), which is how gloss at 82 degrees grazing should read; the bowl walls' correction x0.87 becomes about x0.97 (walls about 205,50,48, dE about 2.4). retouch.lightness and retouch.neutral are untouched.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      760,
+      250,
+      1000,
+      460
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "<=",
+    "value": 4.0
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the insert's grey section the printed part's layer texture or a cut-face finish instead of a flat cap (rgb 124,126,135, 125.8 +/- 2 across 450 px).",
+   "why": "The insert's material is the product's own finish; untextured, the section reads as a void even when lit, so only light and the set (c1) can separate it."
+  },
+  {
+   "request": "Lose the black letter that stands proud of the back panel at the frame's left edge (letters-back-3, x 165-169, y 740-803, lum 61).",
+   "why": "Back marks are fixed; in this silhouette it reads as a stray clip on the cabinet edge."
+  },
+  {
+   "request": "Lose the white corner speck where the horn mouth meets the front panel (x 1195-1203, y 659-670, p95 217).",
+   "why": "It is the white body's 6 mm corner round, fixed geometry and colour; it reads as a hot pixel at the end of the hero curve."
+  }
+ ],
+ "score_if_fixed": 6.8
+}

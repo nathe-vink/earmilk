@@ -1,0 +1,346 @@
+{
+ "stage1": {
+  "impression": "A moody, sun-raked living room where the window light on the wall and floor is the most convincing element, but the two white-and-red carton speakers read as flat, evenly front-lit cut-outs that don't belong to that light (the one in front of the shaded wall is exactly as bright as the one in the sun) and barely ground on the floor. The pair sits left of a dead dark right third, the orange-brown floor carries blurry light blotches in the foreground, and the muddy brown-mauve palette drags down the white and red, so it is a competent draft, not a hero.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The floor reads as oak at 1x: figure visible inside every plank (within-plank lum_range >= 6; now 2.9 in the sun band and 1.3 in shade, 5-px high-pass std 0.44, the same noise floor as the smooth white lacquer) and no glossy-plank light bars (step from a bar to its neighbour plank <= 3; now 7.1 under the right cabinet, 6.7 under the left).",
+  "Both woofers read as anodised metal with a continuous sheen: no cone half below lum 18 (left woofer's inner half now 4.8 with 47% of its pixels <= 3; the right woofer's inner half 33.8).",
+  "The room has air and clean shade: the shaded back wall at lum >= 70 / L* >= 30 (now 62.5 / 26.5) and near neutral rather than mauve (now a* +3.0; skirting a* +2.4, b* -3.9 violet; upper-left wall L* 12).",
+  "One brand red: plinth fronts and gables each within 3 dE2000 of #C62828 (plinth fronts now 5.02, gables 2.87 / 2.16).",
+  "The cabinets belong to the room's light, not a studio's: 76% of each front mirrors the invisible front_gradient panel and no room surface, the near vertical rounds draw 1-px dark outlines (81 between wall 120 and front 217 on the left cabinet, 64 on the right), and the left cabinet's sun-facing side (177) reads darker than its front (217).",
+  "The pair commands the frame and keeps ~30% copy space: each cabinet >= 13% of the frame width (now 11%), >= 120 px from the left edge (now 99), foreground floor <= 20% of the height (now 27%, most of it a lum-43 shadow wedge).",
+  "The set reads as real: the sideboard shows wood figure and finish (now a flat (101,75,63) box, high-pass std 0.40), and the sunlit plaster shows texture under the raking sun (clean patch now lum_range 2-5, no fine detail; bump 0.1 to 0.75 did not move it).",
+  "Floor hue golden oak rather than orange (sunlit planks now (111,75,43), a* 11.5, b* 25 at L* 35), so the red accents do not sit on a competing red-orange and the orange bounce stops tinting the shade pink."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "material",
+   "problem": "The oak floor, 27% of the frame, has no grain or figure at all: planks are flat colour fields split by 1-level seams, so it reads as painted MDF and fails the must-show 'a floor that reads as a real material'.",
+   "evidence": {
+    "region": [
+     1050,
+     760,
+     1250,
+     775
+    ],
+    "measured": "sunlit plank interior lum_range 2.9 (p5 78.6, p95 81.6), 5-px high-pass std 0.44 vs 0.45 on the smooth white front; shaded foreground plank [300,850,500,865] lum_range 1.3; seams step ~1 level. materials.oak.grain is already 1.6 (2.7x the preset) with no visible effect, so the figure's spacing (rings 60, about 3 mm against ~3 mm per pixel at the cabinets) averages out below a pixel."
+   },
+   "change": {
+    "setting": "materials.oak.rings",
+    "from": 60,
+    "to": 16
+   },
+   "expected": "Ring figure (cathedrals on the flat-sawn planks) spaced roughly 4-7 px becomes visible in every plank: within-plank lum_range 6-14 in the sun band and ~3-6 in shade, plank medians within +/-3 of now, seams and sun edges unchanged. If rings alone cannot reach the range, materials.oak.figure (0.22) is the companion lever; grain 1.6 then carries the contrast.",
+   "accept": {
+    "region": [
+     1050,
+     760,
+     1250,
+     775
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     6,
+     16
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The left woofer's inner (right) half is crushed to black while the right woofer reads as metal, so the left driver shows a black hole and the pair no longer match.",
+   "evidence": {
+    "region": [
+     166,
+     505,
+     206,
+     586
+    ],
+    "measured": "woofer-cone|woofer-cap inside [166,490,240,600]: lum_median 4.8, 46.9% of pixels <= 3; the same woofer's outer half 31.9; the right woofer's inner half 33.8. These pixels mirror front_gradient near its unlit near end (17%), the dim letters_card (5.6%), the shaded front wall (7.4%), the ceiling (5.1%) and the cone's own cap (14%): the dark floor and room to the left-front of the left cabinet. Glint 7 (power 1.5 to 3) did not move it (card), because those rays meet the cone itself within 0.17 m."
+   },
+   "change": {
+    "setting": "lights.cone_sheen",
+    "from": "none (new lamp)",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.5,
+      1.2
+     ],
+     "position": [
+      -1.45,
+      -0.95,
+      0.1
+     ],
+     "target": [
+      -1.45,
+      -0.833,
+      1.093
+     ],
+     "strength": 0.5,
+     "color": "#FFF4E8",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -1.55,
+       -0.35
+      ],
+      "values": [
+       1,
+       0.3
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "woofer-cone",
+      "woofer-cap"
+     ]
+    }
+   },
+   "expected": "A reflection-only panel lying 5 cm above front_gradient on the floor left-front of the left cabinet (x -2.2 to -0.7, y -1.55 to -0.35), seen only by the cones: the left inner half picks up a graded warm sheen, median 20-34 with crush under 10%, like the right woofer's 33.8; the left outer half may rise a few levels (now 31.9); the right woofer's mirror rays do not reach x < -0.7, and no other surface sees or is lit by the panel.",
+   "accept": {
+    "region": {
+     "part": "woofer-cone|woofer-cap",
+     "box": [
+      166,
+      490,
+      240,
+      600
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     18,
+     38
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "The back wall, the frame's largest area and the copy space, renders near-black mauve in shade, so the room has no air and the frame reads heavy and muddy.",
+   "evidence": {
+    "region": [
+     1000,
+     200,
+     1340,
+     300
+    ],
+    "measured": "shaded back wall lum_median 62.5, rgb (68,61,61), L* 26.5 a* +3.0 for a #B0A595 wall (L* 68); upper-left wall [60,60,300,160] L* 12.2; sun patch [300,300,400,330] 129.7. The cabinets' sides mirror this wall (62-63%), which is why the sun-facing side of the left cabinet reads 177, darker than its front at 217."
+   },
+   "change": {
+    "setting": "set.wall.color",
+    "from": "#B0A595",
+    "to": "#C8BCAB"
+   },
+   "expected": "The same warm greige at +35% albedo (L* 77 vs 68, same a*/b*): shaded wall 72-80 (L* ~31), sun patch ~145-155 (still well under the 217 white), cabinet sides +5-10 from brighter wall reflections, more warm-neutral bounce into the shade. White type on the copy-space wall keeps >= 7:1 contrast. Front whites may rise 2-3 from the lighter front wall; c6's guard holds their median <= 223.",
+   "accept": {
+    "region": [
+     1000,
+     200,
+     1340,
+     300
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     70,
+     84
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "The sideboard, the centrepiece between the speakers, is a flat painted taupe box with no grain or finish, the plainest CG object in a room that must read as real and lived-in.",
+   "evidence": {
+    "region": [
+     310,
+     480,
+     420,
+     570
+    ],
+    "measured": "left door lum_median 79.6, lum_range 13.5 (a smooth gradient only), 5-px high-pass std 0.40; rgb (101,75,63), uniform across all three doors apart from the mullion shadow and the right speaker's shadow."
+   },
+   "change": {
+    "setting": "set.props.1.wood",
+    "from": "not set (flat lacquered colour)",
+    "to": "veneer"
+   },
+   "expected": "Sliced veneer under satin lacquer, grain along the piece with book-matched cathedrals per door (figure_m 0.022 m, about 6-7 px at this distance): sunlit door lum_range 22-35, door median within +/-10 of now, so the right end in the right speaker's sun shadow stays in round 8's c2 band (36-56). The mullion shadow band and the speaker's shadow keep falling across it.",
+   "accept": {
+    "region": [
+     310,
+     480,
+     420,
+     570
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     20,
+     45
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "material",
+   "problem": "Single planks under each cabinet glow as soft-ended light bars: only the glossier planks mirror the white fronts, so the floor shows blotches under the product and in the copy-space foreground.",
+   "evidence": {
+    "region": [
+     885,
+     712,
+     945,
+     782
+    ],
+    "measured": "1-px rows: plank above 85.0, bar 90.7-91.8, plank below 83.6-84.6 (two-bin step [885,726,945,782] = 7.1); the same plank beside it [960,728,1030,752] 80.6 and [800,728,870,752] 81.6. Under the left cabinet [110,788,230,850]: 45.7 / 50.6 / 43.7 (step 6.7), the same row elsewhere 44.8-44.9. The bar's end fades over 25 px (a blurred reflection, not a plank colour), and round 8 showed plank_contrast moves it only 81.8-84.3, so per-plank gloss is the remaining per-plank variable."
+   },
+   "change": {
+    "setting": "materials.oak.gloss_vary",
+    "from": 0.3,
+    "to": 0.1
+   },
+   "expected": "All planks take nearly the same sheen, so each cabinet's floor reflection becomes one soft continuous glow instead of isolated bars: step between the bar's plank and the next <= 3 levels (now 7.1), the bar under the left cabinet within 3 of its row. This completes round 8's c6 with the lever that actually sets the streak.",
+   "accept": {
+    "region": [
+     885,
+     726,
+     945,
+     782
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "bins": 2,
+    "op": "between",
+    "value": [
+     -3,
+     3
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The plinth band cannot be lit on its own because it is part of front-baffle, so any lamp that lifts the band also lifts the white front above it; this is the prerequisite for c7.",
+   "evidence": {
+    "region": [
+     99,
+     618,
+     930,
+     657
+    ],
+    "measured": "the front-baffle part covers both the white (median 217) and the red band (179,20,30); this frame's mask has no '.plinth' parts."
+   },
+   "change": {
+    "setting": "product.zone_parts",
+    "from": false,
+    "to": true
+   },
+   "expected": "No visible change by itself: the band becomes front-baffle.plinth (still inside part:front-baffle, so every region and test keeps its meaning) and c7's lamp can be linked to it alone. The white front stays 211-223, which also guards c3's bounce from pushing the white into the flat shoulder.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      99,
+      364,
+      235,
+      614
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     211,
+     223
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The plinth fronts render a deeper crimson than the gables, so the brand red reads as two reds on one cabinet: the band sits at the dark foot of the front's falloff and the retouch's per-copy gain leaves half of its lightness error.",
+   "evidence": {
+    "region": [
+     99,
+     618,
+     930,
+     657
+    ],
+    "measured": "plinth fronts of both copies (179,20,30), L* 38.2, dE2000 5.02 vs #C62828 (L* 43.8); gables (193,45,51) / (191,36,42) at 2.87 / 2.16; the white just above the band reads 202-204 against 225-227 at the top of the front."
+   },
+   "change": {
+    "setting": "lights.plinth_fill",
+    "from": "none (new lamp)",
+    "to": {
+     "type": "area",
+     "size_m": [
+      2.8,
+      0.4
+     ],
+     "position": [
+      0,
+      -1.5,
+      0.22
+     ],
+     "target": [
+      0,
+      -0.2,
+      0.06
+     ],
+     "irradiance": 0.5,
+     "color": "#FFF1E0",
+     "specular": 0,
+     "receivers": [
+      "front-baffle.plinth"
+     ]
+    }
+   },
+   "expected": "Both plinth fronts take about 25% more light, to roughly (192,34,38): dE <= 3 vs #C62828, in step with the gables. Diffuse only (specular 0), so the lacquer gains no new streak; the white front, sides, gables and floor are untouched because the lamp is linked to the band.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      99,
+      618,
+      930,
+      657
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     3.0
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Lighter trim rings and a lighter cone finish on the woofers and mids, which read as navy rims (31,38,52) / (64,73,89) around near-black cones",
+   "why": "The drivers are named products mounted flush under trim rings by the owner's decision; their materials and colours are fixed. The left woofer's black half is fixed with light (c2), not finish."
+  },
+  {
+   "request": "A shallower or wider waveguide bowl so the insert's red stops falling 6.5 / 7.5 dE dark inside the throat",
+   "why": "The waveguide's depth, profile and mouth are set by acoustic simulation; only light and camera may change how it reads (roof_ramp already supplies 27% of what it mirrors)."
+  },
+  {
+   "request": "Larger corner rounds so the near vertical edges stop drawing 1-px dark outlines (81 between wall 120 and front 217 on the left cabinet, 64 on the right)",
+   "why": "The 6 mm rounds are spec geometry. The outline is what the rounds mirror (the unlit left side of the room), so any fix has to be a light or card they see, not the radius."
+  }
+ ],
+ "score_if_fixed": 6.5
+}

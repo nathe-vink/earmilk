@@ -1,0 +1,203 @@
+{
+ "stage1": {
+  "impression": "A clean, legible cutaway of the milk-carton speaker on a grey sweep: the internals read and the red gable has a convincing gloss. But the section is lit as one flat beige value with no modelling, the driver blacks go featureless, the base barely touches the floor, and the product sits small and left in a dull grey field, so it reads as a competent engineering render, not a photograph.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The section carries a deliberate light falloff: the back panel's cut face falls at least 28 levels from the eave to the plinth ([318,262,326,790] falloff is 16.4 now: 209.2 to 192.8), instead of every cut face (gable 208, top panel 204-209, brace 205-207, mid-divider 205, amp box front 195-200) printing one value.",
+  "Each chamber wall's cut face clears what lies behind it by at least 40 levels: the mid-divider's cut face (204.7) sits against a 178.5 sheen on the far wall ([452,290,472,380]) and rises out of it in 11-12-level column steps, so the mid's sealed chamber loses its wall.",
+  "The base is planted on a contact line: the floor 1-5 px under the cut edge at 82 or below ([340,789,360,793] is 91.5 now, recovering to the open floor's 97 within 6 px).",
+  "White lacquer prints 200-226 everywhere outside true highlights: the face below the woofer prints 236 (part front-baffle in [560,645,583,700]), above PBR Neutral's 226 knee.",
+  "The Baltic birch cut faces show their plies, and the waveguide insert's section reads as a material, not a flat (161,163,168) slab at 162-163 (product materials; out of scope).",
+  "The tweeter's rear chamber reads in section, not as a crushed 5x40 px slot at L 1.7-4.7 (out of scope)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The inside lamp's reflection lays a hard-edged bright stripe on the far wall of the upper chamber, directly behind the mid-divider, so the divider's cut face melts into it and the mid's sealed chamber (a must-show) loses the outline of its wall.",
+   "evidence": {
+    "region": [
+     436,
+     280,
+     472,
+     400
+    ],
+    "measured": "Side-right pixels that mirror 'lamp inside' (6187 px, box [388,263,548,444]) print a median 171.2 against 144.8 where the wall mirrors the sweep; at row 330 the wall jumps from 146 at x 428 to 168 at x 436 (a reflection edge, 22 levels in 8 px) and climbs to 187 at the divider; [436,280,472,400] has a median of 172.2 and [452,290,472,380] 178.5. The divider's cut face (x 477-484, median 204.7) rises out of it in two column steps of 10.8 and 12.3 (edge [462,290,484,380]: 12.3), while the back panel's cut edge steps 56 in 1 px. The matte cut faces show no lamp: top panel 205.3 where it mirrors the lamp vs 208.9 where it mirrors the sweep."
+   },
+   "change": {
+    "setting": "lights.inside.specular",
+    "from": 0.2,
+    "to": 0
+   },
+   "expected": "The stripe goes: the wall beside the divider [452,290,472,380] drops from 178.5 to about 150-160, matching the 143-146 wall left of x 432 plus its own diffuse gradient, and the reflection edge at x 432 disappears. The divider's cut face (205) then stands about 45 levels above the wall behind it, so the sealed mid chamber reads as a box. The lamp's diffuse fill into the cabinet and every matte cut face stay as they are (204-209). The port loses only its small inside-lamp streak (372 px at 74) and keeps its sky reflection (1448 px at 73).",
+   "accept": {
+    "region": [
+     452,
+     290,
+     472,
+     380
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     135,
+     165
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The whole section is one value from the gable apex to the plinth, so the cut reads as a printed card rather than a sawn solid in light, and the base carries no weight.",
+   "evidence": {
+    "region": [
+     318,
+     262,
+     326,
+     790
+    ],
+    "measured": "The back panel's cut strip profiles 209.2, 208.2, 207.0, 205.0, (port 98.3), 200.8, (amp 45.8), 192.8, a falloff of 16.4 over 530 px (about a quarter stop). Every other cut face sits in the same band: gable 208.1, top panel 204-209, brace 205-207, mid-divider 204.7, amp box front 195-200, bottom panel 185-189. The key (3.6 W/m2, a 1.4 m box at 2.3 m) is about 70 % of the light on the section and lights it almost evenly."
+   },
+   "change": {
+    "setting": "lights.lownet",
+    "from": null,
+    "to": {
+     "type": "flag",
+     "size_m": [
+      0.38,
+      0.31
+     ],
+     "position": [
+      -0.345,
+      -0.198,
+      0.205
+     ],
+     "target": [
+      0,
+      0.09,
+      0.205
+     ],
+     "density": 0.4,
+     "lights": [
+      "key"
+     ]
+    }
+   },
+   "expected": "The net sits square to the key, 0.39 m out from the product's centre, spanning z 0.05-0.36 and sized to the product's silhouette as the key sees it. It takes up to 40 % of the key off the section below about z 0.35, with a soft edge about 0.2 m wide. The back panel's cut face holds 205-210 above frame y 560 and falls smoothly to 165-180 in the bottom bin (y 724-790, now 193), a falloff of 28-45. The amp box's front cut face (about 197) goes to about 175 and the bottom panel's cut face (187) to about 165, so weight settles at the base and the eye climbs to the waveguide. The brace, the mid chamber, the waveguide and tweeter, and the woofer's upper half are untouched. On the floor its shade stays within about 0.3 m of the base, as a soft pool from frame x 225 to 660 along y 770-850 (in front of the base and just right of the plinth); the copy floor right of x 700, which c5 cleared, holds within about 3 levels. The key does not reach the white face, plinth band or red roof slope, so they do not change.",
+   "accept": {
+    "region": [
+     318,
+     262,
+     326,
+     790
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     28,
+     45
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "On the cut side the base meets the floor in a single 1-px line that recovers to the open floor within 6 px, so the product reads as barely touching the sweep.",
+   "evidence": {
+    "region": [
+     340,
+     789,
+     360,
+     793
+    ],
+    "measured": "At x 350, the floor rows under the cut edge read 81, 85, 89.5, 92, 94, 96, 97 (rows 788-794); the region's median is 91.5 against an open floor of 97-103 ([150,760,250,840] median 102.6). The floor left of the base is 86-92. Only the plinth side has a real contact (44-57 for about 10 px under the band). The key's shadow on the set is at 0.16 (c5), and the sweep's core term is at its preset 0, so nothing else plants the cut side."
+   },
+   "change": {
+    "setting": "materials.sweep.core",
+    "from": 0,
+    "to": 0.6
+   },
+   "expected": "A tight core shadow under the base: the rows 1-5 px below the cut edge fall from 91.5 to 62-82 and recover to the open floor within about 10 px, so the box sits on the sweep. The floor under the plinth (44-57 now) stays above about 35, and the open floor 30 px out is unchanged (97-103). If c2's net has already darkened this strip, the core is needed only for the last few levels.",
+   "accept": {
+    "region": [
+     340,
+     789,
+     360,
+     793
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     62,
+     82
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The white lacquer below the woofer prints above PBR Neutral's knee as flat paper, because the plinth lamp aimed at the red band spills almost undiminished onto the white face above it.",
+   "evidence": {
+    "region": [
+     560,
+     645,
+     583,
+     700
+    ],
+    "measured": "Part front-baffle in [560,645,583,700]: median 236.0, p95 238 (column at x 574 reads 234-238 from y 648 to 696). These pixels mirror sweep 88 % and sky 11 %, with no lamp in them, so the value is diffuse light. The plinth lamp (2.6 W/m2 at its target, the band at z 0.05) sits 0.555 m out at z 0.07, so by geometry the face up to z 0.22 still gets about 85-90 % of the band's irradiance. The face above the woofer, lit by whitetop, prints 214-224."
+   },
+   "change": {
+    "setting": "lights.plinth.position",
+    "from": [
+     0.75,
+     0.05,
+     0.07
+    ],
+    "to": [
+     0.45,
+     0.05,
+     0.07
+    ]
+   },
+   "expected": "At 0.255 m from the face instead of 0.555 m, the lamp still puts its tuned irradiance on the band, its target, but its light falls off with height about a third faster. The face below the woofer drops from 236 to 204-224, inside the linear range where the lacquer can model. The band ([552,712,583,775], 73.2) holds within about 4 levels, and the face above the woofer (214-224) is unchanged. The lamp's stray 88-px highlight streak on the face between the drivers (242) leaves the face.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      560,
+      645,
+      583,
+      700
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     204,
+     224
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Show the plies of the Baltic birch on every cut face (the alternating laminations a sawn plywood edge shows) instead of one uniform beige.",
+   "why": "Every cut face prints a single smooth tone (back panel's cut strip 207-210, rgb about [238,204,159], no structure even at 3x), so the section reads as solid plastic or MDF rather than Baltic birch. This is the largest remaining CG tell on the inside page, and the birch is the product's own fixed material."
+  },
+  {
+   "request": "Give the waveguide insert's cut face a material read, a texture or a tone that separates its core from a flat fill.",
+   "why": "Its section prints a flat cool grey (161,163,168) at 162-163 across about 145 px directly under the red bowl, a matte plane that light cannot texture. It is the largest single area of the frame's hero detail, but the insert and its material are fixed by the waveguide's engineering and the product's finish."
+  },
+  {
+   "request": "Make the tweeter's rear chamber read in section.",
+   "why": "The chamber prints as a 5x40 px slot at L 1.7-4.7 (crushed). Round 7's tweeter lamp barely moves it (its test region went from 21.4 to 26.8 as the lamp went from 0.67 to 3.5 W/m2), so the slot is black material or occluded geometry, not a lighting gap. The tweeter in section is a must-show."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
