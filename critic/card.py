@@ -85,7 +85,7 @@ def main():
           '`set.props.N` (N one past the last), e.g. `{"kind": "rug", "position": [x, y], "rotate_z": 0, "size": [2.0, 1.4], '
           '"color": "#C9C1B4"}`; position is its centre on the floor (a frame\'s on its wall). The kinds and their keys: '
           'rug (size [w, d], color); table (size [w, d, h], color); books (colors [hex, ...], z: the height they lie on); '
-          'sideboard (size [w, d, h], color, turntable true/false); vase (height, z, color, branches); lamp (height, '
+          'sideboard (size [w, d, h], color, turntable true/false, wood "birch" or "veneer": a sliced veneer under satin lacquer, its grain along the piece with book-matched cathedrals per door; with veneer, grain (latewood contrast, 0.2), figure_m (ring spacing, 0.022), leaf_m (a leaf\'s width, 0.4), arch_m (0.06), streak (0.8), roughness, coat); vase (height, z, color, branches); lamp (height, '
           'shade); sofa (size [w, d, h], color); curtain (size [w, h], folds, depth, color, translucent); frame (size '
           '[w, h], z, frame, art, artwork). To take one out, set `set.props.N.off` to true. A photographed environment '
           'lights the set and shows in every gloss surface: `sky.kind` "hdri" with `sky.file` (studio_small_03_1k, a small '

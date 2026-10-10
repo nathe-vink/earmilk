@@ -27,6 +27,7 @@ PRESET_DEFAULTS = {
     'plastic':    dict(color='#202020', roughness=0.45, specular=0.5),
     'gloss_plastic': dict(color='#101010', roughness=0.15, coat=0.6, coat_roughness=0.05),
     'birch':      dict(color='#EAD8B0', roughness=0.55),
+    'veneer':     dict(color='#8A6548', roughness=0.42, grain=0.2, figure_m=0.022, leaf_m=0.4, arch_m=0.06, streak=0.8, coat=0.5),
     'oak':        dict(base='#B8905F', dark='#9C7448', light='#C9A273', plank_w=0.18, plank_l=1.6, roughness=0.42, grain=0.6, seam=0.0015, plank_contrast=0.5,
                        figure=0.22, rings=60.0, arch=4.0, flat_sawn=0.6, gloss_vary=0.3),
     'plaster':    dict(color='#DDD6CA', roughness=0.92, bump=0.025, drift=0.03),
@@ -102,6 +103,8 @@ def make(bpy, name, preset, overrides=None, bevel_mm=0.0):
         _wood(nt, b, p['color'], p['roughness'], grain=0.35, stretch=(1.0, 1.0, 12.0))
     elif preset == 'oak':
         _planks(nt, b, p)
+    elif preset == 'veneer':
+        _veneer(nt, b, p)
     elif preset in ('plaster', 'sweep'):
         setin('Base Color', hex_lin(p['color'])); setin('Roughness', p['roughness'])
         if preset == 'sweep' and (p.get('contact', 0) > 0 or p.get('core', 0) > 0):
@@ -225,6 +228,71 @@ def _wood(nt, b, color, roughness, grain=0.4, stretch=(1, 1, 10)):
     for ch in ('Red', 'Green', 'Blue'): nt.links.new(mr.outputs['Result'], comb.inputs[ch])
     nt.links.new(comb.outputs['Color'], ins[1]); nt.links.new(outs[0], b.inputs['Base Color'])
     b.inputs['Roughness'].default_value = roughness
+
+
+def _veneer(nt, b, p):
+    """A sliced-veneer panel (walnut, oak) under a satin lacquer, for furniture: the grain runs horizontally along the
+    piece (world x) on its fronts and sides and along it on its top, as a cabinetmaker lays it. The growth rings are
+    lines across the grain at about `figure_m` apart, warped by a slow noise so they wander, crowd and spread as a
+    flat-sawn leaf's do (`grain`: how much darker the latewood line is), with long streaks of colour in the leaf
+    (`streak`) and a clear coat (`coat`, its weight). 10's round 8: the birch shader's grain ran vertically on a
+    sideboard's doors, a regular 4 px pinstripe that read as corrugated card."""
+    def node(t, **kw):
+        n = nt.nodes.new(t)
+        for k, v in kw.items():
+            setattr(n, k, v)
+        return n
+    def math_(op, a, b_=None, c=None):
+        m = node('ShaderNodeMath', operation=op)
+        for i, v in enumerate((a, b_, c)):
+            if v is None:
+                continue
+            if isinstance(v, (int, float)):
+                m.inputs[i].default_value = v
+            else:
+                nt.links.new(v, m.inputs[i])
+        return m.outputs['Value']
+    geo = node('ShaderNodeNewGeometry')
+    sep = node('ShaderNodeSeparateXYZ'); nt.links.new(geo.outputs['Position'], sep.inputs['Vector'])
+    nrm = node('ShaderNodeSeparateXYZ'); nt.links.new(geo.outputs['Normal'], nrm.inputs['Vector'])
+    # across the grain: height on an upright face, depth on a level one (the face's normal decides)
+    up = math_('ABSOLUTE', nrm.outputs['Z'])
+    across = math_('ADD', math_('MULTIPLY', sep.outputs['Z'], math_('SUBTRACT', 1.0, up)), math_('MULTIPLY', sep.outputs['Y'], up))
+    along = sep.outputs['X']
+    # the leaf's figure: a slow noise over (along, across) bends the rings; a second, slower one sets their spacing
+    co = node('ShaderNodeCombineXYZ'); nt.links.new(along, co.inputs['X']); nt.links.new(across, co.inputs['Y'])
+    sc = node('ShaderNodeMapping'); sc.inputs['Scale'].default_value = (1.6, 5.0, 1.0)
+    nt.links.new(co.outputs['Vector'], sc.inputs['Vector'])
+    nz = node('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 1.0; nz.inputs['Detail'].default_value = 3.0
+    nz.inputs['Roughness'].default_value = 0.55; nt.links.new(sc.outputs['Vector'], nz.inputs['Vector'])
+    warp = math_('MULTIPLY', math_('SUBTRACT', nz.outputs['Fac'], 0.5), 9.0 * p['figure_m'])
+    # cathedrals: each leaf (`leaf_m` wide along the grain, a door's width) bends its rings into nested arches about
+    # its middle, so neighbouring leaves read as book-matched
+    u = math_('SUBTRACT', math_('FRACT', math_('DIVIDE', along, p['leaf_m'])), 0.5)
+    arch = math_('MULTIPLY', math_('POWER', math_('ABSOLUTE', u), 1.5), p['arch_m'] * 2.83)
+    v = math_('ADD', math_('ADD', across, warp), arch)
+    rings = math_('FRACT', math_('DIVIDE', v, p['figure_m']))
+    # the latewood line: dark at the ring's end, fading into the next ring's earlywood
+    late = math_('POWER', math_('MAXIMUM', math_('SUBTRACT', math_('MULTIPLY', rings, 1.6), 0.6), 0.0), 2.0)
+    # and the fine grain between the rings, a fifth of their spacing, faint
+    fine = math_('FRACT', math_('DIVIDE', v, p['figure_m'] * 0.2))
+    fine_l = math_('POWER', math_('MAXIMUM', math_('SUBTRACT', math_('MULTIPLY', fine, 1.6), 0.6), 0.0), 2.0)
+    shade = math_('SUBTRACT', math_('SUBTRACT', 1.0, math_('MULTIPLY', late, p['grain'])), math_('MULTIPLY', fine_l, p['grain'] * 0.25))
+    # streaks: long, slow variations of the leaf's colour along the grain
+    sc2 = node('ShaderNodeMapping'); sc2.inputs['Scale'].default_value = (0.25, 9.0, 1.0)
+    nt.links.new(co.outputs['Vector'], sc2.inputs['Vector'])
+    nz2 = node('ShaderNodeTexNoise'); nz2.inputs['Scale'].default_value = 1.0; nz2.inputs['Detail'].default_value = 2.0
+    nt.links.new(sc2.outputs['Vector'], nz2.inputs['Vector'])
+    streak = math_('ADD', 1.0, math_('MULTIPLY', math_('SUBTRACT', nz2.outputs['Fac'], 0.5), 0.35 * p['streak']))
+    val = math_('MULTIPLY', shade, streak)
+    tint = node('ShaderNodeMix', data_type='RGBA', blend_type='MULTIPLY'); tint.inputs['Factor'].default_value = 1.0
+    ins = [x for x in tint.inputs if x.type == 'RGBA']; outs = [x for x in tint.outputs if x.type == 'RGBA']
+    ins[0].default_value = hex_lin(p['color'])
+    g = node('ShaderNodeCombineColor')
+    for ch in ('Red', 'Green', 'Blue'): nt.links.new(val, g.inputs[ch])
+    nt.links.new(g.outputs['Color'], ins[1]); nt.links.new(outs[0], b.inputs['Base Color'])
+    b.inputs['Roughness'].default_value = p['roughness']
+    b.inputs['Coat Weight'].default_value = p['coat']; b.inputs['Coat Roughness'].default_value = 0.25
 
 
 def _planks(nt, b, p):

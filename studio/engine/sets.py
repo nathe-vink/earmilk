@@ -457,7 +457,12 @@ def prop(bpy, name, p, mats):
     elif kind == 'sideboard':
         w, d, hh = p.get('size', [1.6, 0.42, 0.56])
         leg = 0.14
-        wood = M.make(bpy, name + '-oak', 'birch', {'color': p.get('color', '#A27B52'), 'roughness': 0.4})
+        if p.get('wood', 'birch') == 'veneer':
+            # a sliced veneer under satin lacquer, its grain along the piece (materials._veneer)
+            wood = M.make(bpy, name + '-veneer', 'veneer', {'color': p.get('color', '#8A6548'), **{k: p[k] for k in
+                          ('roughness', 'grain', 'figure_m', 'leaf_m', 'arch_m', 'streak', 'coat') if k in p}})
+        else:
+            wood = M.make(bpy, name + '-oak', 'birch', {'color': p.get('color', '#A27B52'), 'roughness': 0.4})
         dark = M.make(bpy, name + '-dark', 'satin_paint', {'color': '#151413', 'roughness': 0.5, 'specular': 0.3})
         made.append(box(bpy, name + '-body', -w / 2, -d / 2, leg, w / 2, d / 2, hh, wood, bevel=0.005))
         for k in range(1, 3):   # door seams
