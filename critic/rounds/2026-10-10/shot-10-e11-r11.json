@@ -1,0 +1,495 @@
+{
+ "stage1": {
+  "impression": "Two carton speakers in a plausible living-room set: the red floorstander and the blue bookshelf unit read clearly and the composition balances, but the light is a soft wash with no source, so the white bodies sit as flat grey-white panels and the red unit has no visible contact shadow and floats. The set (a procedural brown sideboard, an orange plank floor, an empty beige wall) looks like stock CG and the whole frame is slightly soft from denoising, so this is a competent draft rather than a hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Daylight reads from one side across the whole frame: each carton casts a visible shadow beside it (gap floor [484,690,545,735] at most 0.55 of the floor on the window side [100,700,220,760]) and the back wall falls at least 35 levels from the window side to the far side, with no pools or bands that no light explains.",
+  "Both white fronts model like lacquer: the floorstander's front median is 202-216 with a reflected ramp of at least 25 levels and p95 at most 228, and the bookshelf's front is within 25 levels of it; each shade side is at least 65 levels below its front, yet at least 15 levels off the wall along the whole silhouette.",
+  "No lamp lights one part alone: roofs and plinths take the room's light, the plinth bands fall off at least 3 levels toward the window, and each roof shows a lit front slope against a shaded gable end.",
+  "Tighter framing once the light holds: a lens near 45 mm with the target lowered about 6 cm, so empty wall above the cartons is at most 15% of the frame height (now about 22%) and the empty strip beside the floorstander is at most 9% of the frame width (now 17%), tested on parts.",
+  "The set stops reading as CG: a sideboard with a believable veneer figure and satin edge highlights (neither contour lines nor a blank block), and floor planks whose texture survives at 100%.",
+  "Detail resolves at 100%: the Nutrition Facts copy, the cones' anodising and the wood grain are crisp, not smeared by the denoiser (sampling is fixed; see out_of_scope)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The room's daylight comes through a 1.8 x 2 m window directly behind the camera (front wall, x -2.78 to -0.98 m), only about 3 degrees off the floorstander's front normal, so both cartons are lit head-on, no cast shadow falls where the camera can see it, and the floorstander floats.",
+   "evidence": {
+    "region": [
+     484,
+     690,
+     545,
+     735
+    ],
+    "measured": "the floor in the gap right of the floorstander's base has lum_median 74.9, against 99.6 on the floor left of it [100,700,220,760] and 92 just in front of its right side [485,712,575,770]; under its front edge the floor is only 84-88 at 2-6 px against 92-99 at 20 px; the back wall's top band [0,20,1350,180] falls only 147 to 128 across the whole frame"
+   },
+   "change": {
+    "setting": "set.windows.0",
+    "from": {
+     "wall": "front",
+     "along": 2.08,
+     "sill": 0.4,
+     "size": [
+      1.8,
+      2
+     ],
+     "mullions": [
+      2,
+      1
+     ]
+    },
+    "to": {
+     "wall": "left",
+     "along": 0.8,
+     "sill": 0.45,
+     "size": [
+      1.5,
+      2.0
+     ],
+     "mullions": [
+      2,
+      1
+     ]
+    }
+   },
+   "expected": "The key becomes window light from camera left, about 50 degrees off both fronts. The opening spans y -1.35 to 0.15 m on the left wall. Its back half sits behind the existing curtain, which keeps it off the back wall's left corner. Its front edge sits 0.12 m behind the wall strip (y -1.8 to -1.47 m) that the red roof's window_key reflection continues to, so neither roof picks up a window reflection; besides the cone cells that already mirror the curtain, the mirror map has only stray cells there. The floorstander's shadow falls right across the gap toward the sideboard: this region drops to 36-62 while the floor left of it rises to about 110-125. The back wall falls about 40 levels from the left edge to the right edge, and the bookshelf's shadow falls on the sideboard top toward the books.",
+   "accept": {
+    "region": [
+     484,
+     690,
+     545,
+     735
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     36,
+     62
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The 1.6 x 2 m right-wall window (y -2.6 to -1.0 m) faces both visible right sides almost square-on, so each carton's shade side is filled to within 40-56 levels of its front and the boxes model weakly; the same window throws a second set of shadows to the left.",
+   "evidence": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      378,
+      330,
+      480,
+      655
+     ]
+    },
+    "measured": "the floorstander's white side has lum_median 157, profile 172, 168, 162, 150, 136, 127, against its front's 213; the bookshelf's side ({part side-right, box [880,250,930,455]}) is 159 against its front's 199"
+   },
+   "change": {
+    "setting": "set.windows.1",
+    "from": {
+     "wall": "right",
+     "along": 0.4,
+     "sill": 0.4,
+     "size": [
+      1.6,
+      2
+     ],
+     "mullions": [
+      2,
+      3
+     ]
+    },
+    "to": {
+     "wall": "front",
+     "along": 0.2,
+     "sill": 0.6,
+     "size": [
+      1.0,
+      1.6
+     ],
+     "mullions": [
+      2,
+      3
+     ]
+    }
+   },
+   "expected": "A small window behind the camera (x -0.5 to 0.5 m) becomes the room's only fill. It reaches both fronts from 3.9 m at 8-24 degrees, which evens the two products. It meets the right sides at about 65 degrees, with about 70% less direct light than now, and its shadows fall straight back behind the cartons. Only 22 mirror cells see it (cone caps and rings, the waveguide), as small glints. The floorstander's side settles at 110-135 against a 205-215 front.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      378,
+      330,
+      480,
+      655
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     100,
+     140
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The 0.47 W/m2 sun (azimuth -25, elevation 15) comes through the front window square onto both fronts, roughly 30% of their light and all of it frontal. It also lays a pale streak across the gap floor, and once window 0 is on the left wall it would print a hard-edged, window-shaped patch on the back wall at the frame's left edge.",
+   "evidence": {
+    "region": [
+     10,
+     60,
+     200,
+     520
+    ],
+    "measured": "this stretch of back wall (x -2.19 to -1.53 m) is an even 158 (lum_range 17.6); c1's opening, projected along the sun direction, lands on the back wall at x -2.36 to -1.66 m, which is image x 0-162 and y up to 520; the present streak across the gap floor at y 730-760 reads 99 against 89 beside it"
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 0.4664,
+    "to": 0
+   },
+   "expected": "No sun patch or streak anywhere. This wall keeps only the window's soft falloff, with its median within 130-180 and no bright parallelogram, and the fronts lose their frontal component so that c1's side light is the key.",
+   "accept": {
+    "region": [
+     10,
+     60,
+     200,
+     520
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     130,
+     180
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "post",
+   "problem": "With the frontal window and the sun gone, the light on the fronts drops by about a third (about 0.5 EV), and the white has to come back to 202-216 with only its reflected highlight near PBR Neutral's 226 shoulder.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      200,
+      330,
+      385,
+      680
+     ]
+    },
+    "measured": "the floorstander's white front has lum_median 213 and p95 227; its y profile is 226, 222, 217, 213, 208, 202, 201, 200, so the top already sits at the shoulder; its x profile is a flat 214-217"
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.55,
+    "to": 1.0
+   },
+   "expected": "Median 204-214. The red_front_ramp reflection keeps its strength while the diffuse light falls, so the front shows a ramp of about 33 levels below the shoulder (about 219 at the top to 186 at the bottom) instead of 26 levels pressed into it.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      200,
+      330,
+      385,
+      680
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     202,
+     216
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "Set flag 0 (2.2 x 0.72 m at y 0.32 m and z 0.42-1.14 m, behind the cartons) was placed to shade the wall from the frontal light. Under c1's side light it would cast an unexplained soft band on the wall behind the sideboard (x 0-1.8 m, below about z 0.95 m), right behind the bookshelf carton and the books.",
+   "evidence": {
+    "region": [
+     930,
+     200,
+     1060,
+     440
+    ],
+    "measured": "this wall column above the sideboard (x 0.68-1.03 m, z 0.52-1.19 m) now falls smoothly from 141 to 123 (falloff 18.3, lum_range 10); rays from c1's opening to its lower half cross the flag's plane at x -0.7 to -1.0 m and z 0.9-1.1 m"
+   },
+   "change": {
+    "setting": "set.flags.0.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The column keeps a smooth window falloff with no step or band: falloff between -6 and 22 and a median of 115-140. If set flags take no off key, size_m [0.01, 0.01] removes the flag the same way.",
+   "accept": {
+    "region": [
+     930,
+     200,
+     1060,
+     440
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -6,
+     22
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "wall_fill (a 2 x 0.6 m diffuse panel 0.4 m in front of the back wall) was raised to fill the stretch that flag 0 shaded. With the flag gone and the wall lit from the left, it would leave a lit band behind the cartons that no window explains, the soft hotspot that earlier first looks named.",
+   "evidence": {
+    "region": [
+     500,
+     150,
+     770,
+     430
+    ],
+    "measured": "the wall between the speakers has lum_median 126 and lum_range 46.4: p5 103.6 under the flag's shade, p95 150.1 where the panel lifts it"
+   },
+   "change": {
+    "setting": "lights.wall_fill.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "This stretch of wall is lit by the windows alone: a median of about 135-140 inside the wall's left-to-right falloff (about 157 at the left edge, 113 at the right), with no pool and no band.",
+   "accept": {
+    "region": [
+     500,
+     150,
+     770,
+     430
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     110,
+     150
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "roof_top (a 1.8 x 0.3 m lamp at z 2.3 m, 1.5 W/m2) lights only the gables, waveguide inserts and tweeters, so the roofs brighten while the wall and ceiling around them do not, which reads as self-glow.",
+   "evidence": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      220,
+      190,
+      500,
+      345
+     ]
+    },
+    "measured": "the red gable has lum_median 83.1, p95 104.7 and rgb median [195, 52, 57]; the card lists roof_top as a lamp that lights one part alone"
+   },
+   "change": {
+    "setting": "lights.roof_top.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The roofs take c1's key (the front slope sees the opening at about 0.53 and the window_key lamp at about 0.64) plus the ceiling bounce. The red front slope stays a lit red near the swatch, about 72 before highlights with the retouch holding #C62828, and the right gable end falls into shade. Its existing window_key reflection reads as gloss. Gable median 75-95.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      220,
+      190,
+      500,
+      345
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     62,
+     104
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "plinth_kick (a 0.6 x 0.2 m lamp linked to *.plinth) lights the plinth bands alone, so the red band is one flat value from end to end and reads as a pasted strip rather than paint standing on the floor.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle.plinth",
+     "box": [
+      220,
+      450,
+      500,
+      770
+     ]
+    },
+    "measured": "the red front band has lum_median 70.8; its x profile is 70.7, 70.7, 70.8, 70.9, 71.0, 70.8 (falloff 0.0), its y profile 70.6-71.0 and its lum_range 8.4; the blue band's x profile is 74.4-74.9"
+   },
+   "change": {
+    "setting": "lights.plinth_kick.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The bands take the room light: the red front band is about 15-20% brighter at its window end (x falloff 5-12 levels), with a median of 60-75 once the retouch holds the swatch.",
+   "accept": {
+    "region": {
+     "part": "front-baffle.plinth",
+     "box": [
+      220,
+      450,
+      500,
+      770
+     ]
+    },
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     3,
+     24
+    ]
+   }
+  },
+  {
+   "id": "c9",
+   "rank": 9,
+   "kind": "light",
+   "problem": "The floorstander's right side mirrors red_side_ramp so brightly that at mid-height it matches the wall behind it and the silhouette disappears; once that side is the shade side and the exposure rises about 0.45 EV, the card would make it glow.",
+   "evidence": {
+    "region": [
+     450,
+     505,
+     515,
+     575
+    ],
+    "measured": "the edge across the floorstander's right silhouette is 5.8 (side 128 against wall 109-121 at y 500-560); every side pixel here mirrors red_side_ramp, at radiance 0.74-1.17"
+   },
+   "change": {
+    "setting": "lights.red_side_ramp.strength",
+    "from": 2,
+    "to": 1.0
+   },
+   "expected": "The side reads as a shade side, about 134 at the top falling to about 107 near the plinth and darker than the window-lit wall behind it (about 139): a silhouette step of 20-35 at mid-height.",
+   "accept": {
+    "region": [
+     450,
+     505,
+     515,
+     575
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     16,
+     70
+    ]
+   }
+  },
+  {
+   "id": "c10",
+   "rank": 10,
+   "kind": "light",
+   "problem": "The bookshelf carton stands 1.1 m further from c1's window than the floorstander, so its white front would fall about 0.4 EV below the red one's; it has to stay within about 25 levels of it.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      770,
+      250,
+      890,
+      455
+     ]
+    },
+    "measured": "the blue carton's white front has lum_median 199 (the red's is 213) and y profile 213, 208, 205, 202, 197, 191; 90.9% of its pixels mirror front_sheen (radiance 0.03-2.84), which only 1% of the red front sees"
+   },
+   "change": {
+    "setting": "lights.front_sheen.strength",
+    "from": 3,
+    "to": 4.5
+   },
+   "expected": "The blue front holds 186-200 with a reflected ramp of about 30 levels from top to bottom; the red front is untouched.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      770,
+      250,
+      890,
+      455
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     184,
+     208
+    ]
+   }
+  },
+  {
+   "id": "c11",
+   "rank": 11,
+   "kind": "light",
+   "problem": "With the right window gone, the bookshelf's right side loses about 70% of its diffuse light and would sink toward 100, a muddy side next to a front near 190; its only other light is the blue_side_ramp reflection.",
+   "evidence": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      880,
+      250,
+      930,
+      455
+     ]
+    },
+    "measured": "the blue carton's white side has lum_median 159 and profile 185, 174, 166, 159, 149, 146; 99.5% of it mirrors blue_side_ramp (radiance 0-1.0, median 0.42)"
+   },
+   "change": {
+    "setting": "lights.blue_side_ramp.strength",
+    "from": 1,
+    "to": 1.2
+   },
+   "expected": "The blue side settles at 115-135, a front-to-side step like the floorstander's, with its reflected ramp brighter at the top.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      880,
+      250,
+      930,
+      455
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     108,
+     140
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Raise the sample count or reduce denoising so the frame is sharp at 100%: the Nutrition Facts panel is unreadable mush and the floor and veneer grain are smeared.",
+   "why": "The card fixes the frame size and the sampling settings. The softness alone keeps the image off a magazine spread and below a 9, whatever the light does."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
