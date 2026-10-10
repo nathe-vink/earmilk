@@ -1,0 +1,93 @@
+{
+ "_note": "Birch Box: a first look, written by studio/fabkit/render.py (edit freely; a rebuild keeps it).",
+ "title": "Birch Box, proof",
+ "size": [
+  1500,
+  1200
+ ],
+ "product": {
+  "def": "studio/products/birchbox.json",
+  "instances": [
+   {
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "rotate_z": 0
+   }
+  ]
+ },
+ "set": {
+  "kind": "sweep",
+  "color": "#8C8A86",
+  "width": 6.0,
+  "front": 5.0,
+  "depth": 1.5,
+  "radius": 1.2,
+  "height": 4.0
+ },
+ "camera": {
+  "position": [
+   -0.846,
+   -1.591,
+   0.589
+  ],
+  "target": [
+   0.0,
+   0.0,
+   0.206
+  ],
+  "lens_mm": 70.0,
+  "level": true
+ },
+ "lights": {
+  "key": {
+   "type": "area",
+   "size_m": [
+    2.0,
+    1.5
+   ],
+   "orbit": {
+    "azimuth_deg": -40,
+    "elevation_deg": 38,
+    "distance_m": 4.62
+   },
+   "target": [
+    0.0,
+    0.0,
+    0.206
+   ],
+   "irradiance": 2.0,
+   "color": "#FFF3E1"
+  },
+  "fill": {
+   "type": "area",
+   "size_m": [
+    2.5,
+    2.5
+   ],
+   "orbit": {
+    "azimuth_deg": 50,
+    "elevation_deg": 15,
+    "distance_m": 4.62
+   },
+   "target": [
+    0.0,
+    0.0,
+    0.206
+   ],
+   "irradiance": 0.8,
+   "color": "#FFF7EA"
+  }
+ },
+ "render": {
+  "samples": 128,
+  "adaptive": 0.02,
+  "denoise": true,
+  "clamp": 8,
+  "bounces": 10,
+  "view": "Khronos PBR Neutral",
+  "exposure": 0.0
+ }
+}

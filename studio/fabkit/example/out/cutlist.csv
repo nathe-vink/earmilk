@@ -1,0 +1,7 @@
+part,qty per set,width mm,height mm,thickness mm,material,through cuts,pockets (depth mm),underside pockets (depth mm),not in the 2D file
+left,2,260.0,400.0,18,baltic-birch,0,,,
+right,2,260.0,400.0,18,baltic-birch,0,,,
+top,2,194.0,260.0,18,baltic-birch,0,,,
+bottom,2,194.0,260.0,18,baltic-birch,0,,,
+baffle,2,194.0,364.0,18,baltic-birch,6,5 7.5,,
+back,2,194.0,364.0,18,baltic-birch,1,4.5,,

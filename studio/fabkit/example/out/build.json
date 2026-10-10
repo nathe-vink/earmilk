@@ -1,0 +1,18 @@
+{
+ "product": "birchbox",
+ "title": "Birch Box",
+ "parts": 20,
+ "seconds": 6,
+ "sheets": {
+  "baltic-birch-18": 1
+ },
+ "budget_usd": {
+  "cut": 65,
+  "print": 158,
+  "buy": 1390,
+  "lathe": 85
+ },
+ "checks_ok": true,
+ "drawings": null,
+ "render": "studio/fabkit/example/out/render/birchbox.glb"
+}

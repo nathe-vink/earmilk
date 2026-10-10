@@ -1,0 +1,116 @@
+{
+ "_note": "Birch Box for the engine, written by studio/fabkit/render.py from the fabrication CAD; part names are the parts' names, materials the parts' finishes.",
+ "model": "studio/fabkit/example/out/render/birchbox.glb",
+ "origin_mm": [
+  115.0,
+  127.2,
+  -12.0
+ ],
+ "materials": {
+  "amp": {
+   "preset": "metal",
+   "color": "#2a2a2a"
+  },
+  "birch": {
+   "preset": "birch"
+  },
+  "driver-cap": {
+   "preset": "paper_cone"
+  },
+  "driver-coil": {
+   "preset": "metal",
+   "color": "#b87333"
+  },
+  "driver-cone": {
+   "preset": "paper_cone"
+  },
+  "driver-dome": {
+   "preset": "dome"
+  },
+  "driver-frame": {
+   "preset": "satin_paint",
+   "color": "#202020"
+  },
+  "driver-magnet": {
+   "preset": "satin_paint",
+   "color": "#2b2b2b"
+  },
+  "driver-motor": {
+   "preset": "metal",
+   "color": "#3a3a3a"
+  },
+  "driver-spider": {
+   "preset": "rubber",
+   "color": "#c8b88a"
+  },
+  "driver-surround": {
+   "preset": "rubber",
+   "color": "#141414"
+  },
+  "oak": {
+   "preset": "veneer",
+   "color": "#b08a5a"
+  },
+  "waveguide": {
+   "preset": "satin_paint",
+   "color": "#1c1c1c"
+  }
+ },
+ "assign": [
+  {
+   "match": "amp-plate",
+   "material": "amp"
+  },
+  {
+   "match": "left|right|top|bottom|baffle|back",
+   "material": "birch"
+  },
+  {
+   "match": "woofer-cap",
+   "material": "driver-cap"
+  },
+  {
+   "match": "woofer-coil|tweeter-coil",
+   "material": "driver-coil"
+  },
+  {
+   "match": "woofer-cone",
+   "material": "driver-cone"
+  },
+  {
+   "match": "tweeter-dome",
+   "material": "driver-dome"
+  },
+  {
+   "match": "woofer-frame|tweeter-frame",
+   "material": "driver-frame"
+  },
+  {
+   "match": "woofer-magnet|tweeter-magnet",
+   "material": "driver-magnet"
+  },
+  {
+   "match": "woofer-motor|tweeter-motor",
+   "material": "driver-motor"
+  },
+  {
+   "match": "woofer-spider",
+   "material": "driver-spider"
+  },
+  {
+   "match": "woofer-surround|tweeter-surround",
+   "material": "driver-surround"
+  },
+  {
+   "match": "foot-1|foot-2|foot-3|foot-4",
+   "material": "oak"
+  },
+  {
+   "match": "waveguide",
+   "material": "waveguide"
+  }
+ ],
+ "flavours": {
+  "default": {}
+ }
+}

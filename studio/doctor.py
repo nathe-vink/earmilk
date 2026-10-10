@@ -89,6 +89,17 @@ def check_xover():
     return code == 0 and 'xover ok' in out, out.splitlines()[-1] if out else '', dt
 
 
+def check_fabkit():
+    """The fab kit end to end on its example, without the drawings and render (the CAD check covers those tools)."""
+    import tempfile
+    out = tempfile.mkdtemp(prefix='doctor-fabkit-')
+    code, txt, dt = run([str(VENV_PY), str(ROOT / 'studio' / 'fabkit' / 'build.py'), str(ROOT / 'studio' / 'fabkit' / 'example' / 'product.py'),
+                         '--out', out, '--skip', 'drawings,render'], timeout=300)
+    last = [ln for ln in txt.splitlines() if ln.strip()]
+    ok = code == 0 and 'checks: ok' in txt
+    return ok, (last[-1] if last else ''), dt
+
+
 def check_spec():
     code, out, dt = run(['npm', 'run', '--silent', 'check'], cwd=ROOT / 'render')
     bad = [l for l in out.splitlines() if l.startswith('FAIL') or l.startswith('fail')]
@@ -98,6 +109,7 @@ def check_spec():
 def main():
     checks = [('Chromium + WebGL 2 (real-time renders)', check_chromium), ('Blender Cycles via bpy (path tracing)', check_bpy),
               ('CAD venv: build123d, ezdxf, HarfBuzz', check_cad), ('crossover simulator (studio/xover)', check_xover),
+              ('fab kit on its example (studio/fabkit)', check_fabkit),
               ('earmilk spec check (render/)', check_spec)]
     failed = 0
     for name, fn in checks:
