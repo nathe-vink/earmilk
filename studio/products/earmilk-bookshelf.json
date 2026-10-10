@@ -192,6 +192,23 @@
    "color": "$insert",
    "roughness": 0.75,
    "specular": 0.25
+  },
+  "pcb": {
+   "preset": "satin_paint",
+   "color": "#1F3A2B",
+   "roughness": 0.35,
+   "specular": 0.5
+  },
+  "alu": {
+   "preset": "metal",
+   "color": "#A8AAAD",
+   "roughness": 0.38
+  },
+  "cap": {
+   "preset": "satin_paint",
+   "color": "#24252B",
+   "roughness": 0.3,
+   "specular": 0.5
   }
  },
  "assign": [
@@ -262,6 +279,22 @@
   {
    "match": "port-tube|terminal-cup|tweeter-retainer",
    "material": "black"
+  },
+  {
+   "match": "amp-pcb",
+   "material": "pcb"
+  },
+  {
+   "match": "amp-heatsink",
+   "material": "alu"
+  },
+  {
+   "match": "amp-caps",
+   "material": "cap"
+  },
+  {
+   "match": "amp-coils",
+   "material": "copper"
   },
   {
    "match": "amp-plate|amp-module",

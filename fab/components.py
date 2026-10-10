@@ -278,8 +278,47 @@ def amp_plate(spec, centre_x, face_y, centre_z):
     for h in holes:
         plate -= h
     parts = {'amp-plate': plate}
-    # the module behind the plate (through the cutout)
-    parts['amp-module'] = boxy(0, 0, spec['cut_w'] - 8, spec['cut_h'] - 8, -T - spec['module_depth'], -T)
+    # the module behind the plate (through the cutout), within the maker's outline and depth: a sheet-metal tray, the
+    # board on standoffs a little behind the plate, a finned bar carrying the output stage's heat into the plate, and
+    # the power supply's capacitors and the output filters' inductors standing off the board's back. The layout is
+    # schematic (a FusionAmp's own is not published); it is there so a cutaway shows an amplifier, not a black block
+    # (08's round 9), and its parts never leave the maker's envelope
+    mw, mh, D = spec['cut_w'] - 8, spec['cut_h'] - 8, spec['module_depth']
+    wall = 1.2
+    tray = boxy(0, 0, mw, mh, -T - D, -T) - boxy(0, 0, mw - 2 * wall, mh - 2 * wall, -T - D + wall, -T + 1)
+    parts['amp-module'] = tray
+    a, b = (mh, mw) if portrait else (mw, mh)        # along the long side, across it
+    def lb(t, s_):    # a point t along the long side from its middle, s_ across it, as plate (u, v)
+        return (s_, t) if portrait else (t, s_)
+    pcb_y = -T - 14.0
+    bw, bh = (mw - 8, mh - 8)
+    parts['amp-pcb'] = boxy(0, 0, bw, bh, pcb_y - 1.6, pcb_y)
+    # the heat bar: on the plate's inside along one long edge, its fins reaching back past the board's edge
+    hb_s = -(b / 2 - wall - 9.0)                  # across: near one long edge of the tray
+    hu, hv = lb(0.0, hb_s)
+    hw, hh = ((14.0, a * 0.62) if portrait else (a * 0.62, 14.0))
+    sink = boxy(hu, hv, hw, hh, -T - 6.0, -T)
+    for k in range(9):
+        t = -a * 0.28 + k * (a * 0.56) / 8
+        fu, fv = lb(t, hb_s)
+        fw, fh = ((14.0, 2.0) if portrait else (2.0, 14.0))
+        sink += boxy(fu, fv, fw, fh, -T - 30.0, -T - 6.0)
+    parts['amp-heatsink'] = sink
+    # capacitors standing back off the board: two large reservoirs and a row of smaller ones
+    caps = None
+    for (t, s_, d, h) in ((-a * 0.36, b * 0.12, 25.0, 34.0), (-a * 0.24, b * 0.12, 25.0, 34.0), (-a * 0.08, b * 0.22, 12.5, 22.0),
+                          (0.0, b * 0.22, 12.5, 22.0), (a * 0.08, b * 0.22, 12.5, 22.0), (a * 0.30, b * 0.18, 16.0, 26.0)):
+        cu, cv = lb(t, s_)
+        c = cyl(cu, cv, d, pcb_y - 1.6 - h, pcb_y - 1.6)
+        caps = c if caps is None else caps + c
+    parts['amp-caps'] = caps
+    # the output filters' inductors: squat drums, one per channel
+    coils = None
+    for k in range(3):
+        cu, cv = lb(a * 0.14 + k * 24.0, -b * 0.05)
+        c = cyl(cu, cv, 18.0, pcb_y - 1.6 - 12.0, pcb_y - 1.6) - cyl(cu, cv, 6.0, pcb_y - 14.0, pcb_y)
+        coils = c if coils is None else coils + c
+    parts['amp-coils'] = coils
     # connectors: bodies a little proud of the plate, their sockets recessed
     sw = (0, 15) if portrait else (15, 0)       # the switch beside the inlet's socket, along the long side
     if portrait:
