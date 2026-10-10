@@ -1,0 +1,210 @@
+{
+ "stage1": {
+  "impression": "A clean, legible, dead-frontal milk-carton speaker on a warm grey sweep: the red gable, the OPEN OTHER SIDE fin and the Nutrition Facts label read at once and the joke lands. But no side face shows and the white body is one flat value with no fall of light or grounding, so it reads as a printed card, and the grey bevelled 'earmilk' looks like an emboss filter.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The white back models as a lit face: the key-side margin [205,352,262,1120] falls 16-28 levels from the eave to the frame bottom (now 11), and the band under the label [200,822,700,872] falls 9-15 from left to right (now 4). The eave band sits at 215-224 (now 228, p95 230, inside PBR Neutral's shoulder above 226), and only the corner rounds go above 226.",
+  "The white stands at least 1.4 stops off the sweep beside it (now about 1.2: bulk 220 against 147-150 at the mid-sides [0,500,150,650] and [750,500,900,650]), and the halo behind the gable stays a soft glow (top-centre no more than about 30 levels above the mid-sides).",
+  "The fin carrying OPEN OTHER SIDE reads as lacquered red with a soft sheen lighter at its top: falloff 6-14 on [225,112,255,168] (now 2.6, 72.0 to 69.4), with the type still crisp.",
+  "The port flare reads as dark plastic in the set's light: top lip 95-120 on [430,883,470,893] (now 143), and the lower inner wall keeps a dim gradient (p95 at least 25 on [420,985,480,1005], now 48.6) so the opening keeps its depth.",
+  "The brief fixes a square view, so no side face shows and the volume has to come from light alone. Against the darker, modelled face, the corner rounds must stay crisp 2-5 px highlights at 235-250 (now 242-246), and the eave's 3 mm shadow line must stay a dark break near 160 between the red (70) and the white."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The white back is nearly one value: 228 under the eave (p95 230, in the shoulder) down to 217 and 214 at the frame bottom, a fall of 11 on the key-side margin and 4 across. The 0.45 gradient dome lights it from every direction and buries the key's own fall, so it reads as a printed card.",
+   "evidence": {
+    "region": [
+     205,
+     352,
+     262,
+     1120
+    ],
+    "measured": "12-bin profile 230, 228, 227, 226, 225, 223, 222, 221, 221, 220, 219, 218 (falloff 11 at 8 bins); right margin [638,352,695,1120] 225 to 214 (falloff 11); band under the label 221 to 217 across x; whole face 213-231. A fit of this profile against the key's geometric fall (about 1.6:1 from the eave to the frame bottom, for a 2.5 m key 38 deg up and 38 deg off axis) puts the key at about 29 % of the white's light at mid-height; the other 71 % is flat."
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 0.45,
+    "to": 0.15
+   },
+   "expected": "With the ambient cut to a third, the key's fall shows through. Together with c2 and c3, the key-side margin falls about 17-20 levels from the eave (about 220) to the frame bottom (about 200), and the eave band leaves the shoulder. The sweep beside the product darkens about 15-30 levels (mid-sides from 148-150 to about 120-133), so the white stands about 1.4-1.5 stops off it, and the product's floor shadow in the bottom-right corner deepens. The red slope and fin lose some sky fill; c2's key and the retouch's lightness share make that up. No earlier change is reversed.",
+   "accept": {
+    "region": [
+     205,
+     352,
+     262,
+     1120
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     16,
+     28
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Cutting the dome (c1) and the fill (c3) takes about a quarter of the white's light: the eave band would drop from 228 to about 203 and the bulk would turn light grey. The level must come back from the key, the one light that models the face, not from exposure or ambient that flatten it again.",
+   "evidence": {
+    "region": [
+     200,
+     352,
+     700,
+     380
+    ],
+    "measured": "eave band median 228, p95 230 (shoulder from 226); band between label and port [285,820,615,875] 219; key 2.4 W/m2 at 38 deg elevation and 38 deg off the camera axis, so the back gets only cos 0.54-0.58 of it; the profile fit above gives the key about 29 % of the white's light"
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 2.4,
+    "to": 3.2
+   },
+   "expected": "The eave band settles at 216-222, just under the shoulder so its fall can show. The band between the label and the port sits at about 203-208, and the key-side fall gains 3-5 levels. The red slope stays within about 5 levels of its current 70-92 (more key offsets the sky it loses), and the short cast shadows of the letters and port on the white deepen a little. Round 10 moved the key out to 2.5 m for an even spread; that distance stays, and only the key's output rises.",
+   "accept": {
+    "region": [
+     200,
+     352,
+     700,
+     380
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     215,
+     224
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Across the face the white falls only 4 levels from the key side to the fill side, because the 2 x 2 m fill from the right (0.9 W/m2, 10 deg up) nearly cancels the key's left-to-right fall on the back, so the box has no shadow side.",
+   "evidence": {
+    "region": [
+     200,
+     822,
+     700,
+     872
+    ],
+    "measured": "8-bin profile across x 221, 221, 220, 219, 219, 218, 218, 217 (falloff 4); eave band 231 to 225 across; frame-bottom band 218 to 213 across"
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": 0.9,
+    "to": 0.55
+   },
+   "expected": "The band under the label falls about 10-13 levels from the key side to the fill side, so the right of the box reads as its shadow side and the whole face falls on one diagonal from the upper left (about 220 at the top-left to about 190-195 at the bottom-right). The right half of the slope and the right side of the port flare darken a few levels; the right corner round keeps a highlight above 230 from kicker_r.",
+   "accept": {
+    "region": [
+     200,
+     822,
+     700,
+     872
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     9,
+     15
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The fin, a must-show carrying OPEN OTHER SIDE, is one flat maroon, 72.0 at its top to 69.4 above its base, so it reads as a sticker rather than a lacquered fin. The reason: the fin mirrors fin_card only between 1.31 and 1.42 m, the flat middle of a ramp laid over 1.08-1.58 m.",
+   "evidence": {
+    "region": [
+     225,
+     112,
+     255,
+     168
+    ],
+    "measured": "8-bin profile 72.0, 71.5, 71.3, 71.3, 70.5, 70.4, 69.7, 69.4 (falloff 2.6); rgb (187, 39, 39), dE2000 2.3 to #C62828; mirrors: the fin's pixels see panel fin_card at z 1.312 / 1.364 / 1.416 m (p5 / median / p95), radiance 0.61 / 0.667 / 0.723"
+   },
+   "change": {
+    "setting": "lights.fin_card.ramp.at_m",
+    "from": [
+     1.08,
+     1.58
+    ],
+    "to": [
+     1.28,
+     1.46
+    ]
+   },
+   "expected": "The ramp's rise now spans the heights the fin mirrors: its top sees about 0.77 and its foot about 0.46. The lacquer shows a soft sheen lighter at the top, about 8-10 levels from top to foot, deepening to full red at the foot. The fin's mean value hardly moves (mirrored radiance averages about 0.61, against 0.667 now), and OPEN OTHER SIDE stays crisp (type about 235 against a ground of about 64-73).",
+   "accept": {
+    "region": [
+     225,
+     112,
+     255,
+     168
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     6,
+     14
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The port flare is lit mainly by port_fill, a 4.2 W point lamp about 15 cm in front of the port and linked to the port tube alone. It renders the black flare as an evenly lit mid-grey ring (top lip 143, sides 101 and 98, bottom 80), brighter than the set's light allows and lit from dead centre while everything else is lit from the upper left.",
+   "evidence": {
+    "region": [
+     430,
+     883,
+     470,
+     893
+    ],
+    "measured": "top lip 143.1; left side [377,940,387,970] 100.8, right side [513,940,523,970] 97.5; bottom lip [430,1018,470,1028] 79.8; rgb (146, 142, 145), a faint magenta (a* +2.1) that the neutral white around it does not have; lower inner wall [420,985,480,1005] median 25.9, p95 48.6"
+   },
+   "change": {
+    "setting": "lights.port_fill.power_w",
+    "from": 4.2,
+    "to": 2.2
+   },
+   "expected": "The flare drops to charcoal (top lip about 100-115, sides about 70-78, bottom about 55-62) and reads as black plastic catching some light from above. The lower inner wall keeps a dim gradient (about 10-35), so the port still reads as a flared opening rather than a flat black disc. Switching the lamp off entirely would remove that depth cue, which is why it is reduced and not turned off.",
+   "accept": {
+    "region": [
+     430,
+     883,
+     470,
+     893
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     95,
+     120
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Turn the carton 6-10 degrees (product.instances.0.rotate_z 180 to about 188), or move the camera off the centre line, so a sliver of side face shows and the box reads as a volume.",
+   "why": "The brief fixes the Facts panel straight on and level. From dead centre no side face is visible, only the 6 mm corner rounds (242-246), and that is the main reason the body reads as a card; the light (c1-c3) and the corner highlights have to carry the volume instead."
+  },
+  {
+   "request": "Give the cast 'earmilk' letters a darker or more polished finish so they read as cast metal rather than an emboss.",
+   "why": "The letters' metal is the product's own finish and the wordmark is a fixed mark, so only what they mirror can change. letters_ramp was re-tuned in rounds 8-10 and now passes (faces 193 at the top to 161 at the baseline, median 178.7)."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
