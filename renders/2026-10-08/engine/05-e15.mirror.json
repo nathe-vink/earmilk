@@ -1,0 +1,729 @@
+{
+ "legend": {
+  "1": "sweep",
+  "2": "panel floor_card over world (sky)",
+  "3": "world (sky)",
+  "4": "panel floor_card over sweep",
+  "5": "panel roof_sheen",
+  "6": "panel roof_fill over world (sky)",
+  "7": "gable-block",
+  "8": "lamp cone_card over world (sky)",
+  "9": "lamp cone_card + panel roof_fill over world (sky)",
+  "10": "waveguide-insert",
+  "11": "tweeter-surround",
+  "12": "tweeter-dome",
+  "13": "side-left",
+  "14": "lamp fill.specular over world (sky)",
+  "15": "lamp fill.specular + panel roof_fill over world (sky)",
+  "16": "back-panel",
+  "17": "side-right",
+  "18": "front-baffle",
+  "19": "panel whites_even_card + panel white_front_card + panel floor_card over sweep",
+  "20": "panel white_front_card + panel whites_even_card + panel floor_card over sweep",
+  "21": "panel white_front_card + panel floor_card over sweep",
+  "22": "mid-ring",
+  "23": "mid-surround",
+  "24": "mid-frame",
+  "25": "mid-cone",
+  "26": "lamp key + lamp cone_card over world (sky)",
+  "27": "mid-cap",
+  "28": "panel mid_kick + lamp cone_card over world (sky)",
+  "29": "panel mid_kick over world (sky)",
+  "30": "lamp key + panel mid_kick + lamp cone_card over world (sky)",
+  "31": "side-right.plinth",
+  "32": "panel whites_even_card + panel floor_card + panel white_front_card over sweep",
+  "33": "panel floor_card + panel white_front_card over sweep",
+  "34": "woofer-frame",
+  "35": "woofer-ring",
+  "36": "woofer-surround",
+  "37": "woofer-cone",
+  "38": "woofer-cap",
+  "39": "panel cone_scrim over world (sky)",
+  "40": "panel cone_scrim + lamp cone_card over world (sky)",
+  "41": "panel floor_card over side-right.plinth",
+  "42": "side-left.plinth",
+  "43": "back-panel.plinth",
+  "44": "front-baffle.plinth",
+  "45": "panel floor_card over side-left.plinth",
+  "46": "lamp fill.specular + panel cone_scrim over world (sky)",
+  "47": "panel letter_card + panel floor_card over sweep",
+  "48": "letters-front-3",
+  "49": "letters-front-7",
+  "50": "letters-front-1",
+  "51": "letters-front-0",
+  "52": "letters-front-2",
+  "53": "letters-front-6",
+  "54": "letters-front-5",
+  "55": "panel letter_card over sweep"
+ },
+ "step": 2,
+ "parts": {
+  "front-baffle": {
+   "pixels": 113720,
+   "seen": [
+    [
+     "panel floor_card over sweep",
+     0.625
+    ],
+    [
+     "panel white_front_card + panel floor_card over sweep",
+     0.105
+    ],
+    [
+     "panel whites_even_card + panel white_front_card + panel floor_card over sweep",
+     0.095
+    ],
+    [
+     "panel whites_even_card + panel floor_card + panel white_front_card over sweep",
+     0.055
+    ],
+    [
+     "panel white_front_card + panel whites_even_card + panel floor_card over sweep",
+     0.043
+    ],
+    [
+     "panel floor_card + panel white_front_card over sweep",
+     0.026
+    ]
+   ]
+  },
+  "side-right": {
+   "pixels": 92952,
+   "seen": [
+    [
+     "sweep",
+     0.479
+    ],
+    [
+     "side-left",
+     0.414
+    ],
+    [
+     "side-left.plinth",
+     0.072
+    ],
+    [
+     "back-panel",
+     0.026
+    ],
+    [
+     "back-panel.plinth",
+     0.004
+    ],
+    [
+     "side-right",
+     0.004
+    ]
+   ]
+  },
+  "gable-block": {
+   "pixels": 46404,
+   "seen": [
+    [
+     "panel roof_sheen",
+     0.533
+    ],
+    [
+     "panel floor_card over sweep",
+     0.205
+    ],
+    [
+     "sweep",
+     0.108
+    ],
+    [
+     "side-left",
+     0.091
+    ],
+    [
+     "world (sky)",
+     0.028
+    ],
+    [
+     "gable-block",
+     0.019
+    ]
+   ]
+  },
+  "front-baffle.plinth": {
+   "pixels": 23092,
+   "seen": [
+    [
+     "panel floor_card over sweep",
+     0.722
+    ],
+    [
+     "sweep",
+     0.27
+    ],
+    [
+     "letters-front-3",
+     0.002
+    ],
+    [
+     "letters-front-7",
+     0.001
+    ],
+    [
+     "letters-front-0",
+     0.001
+    ],
+    [
+     "letters-front-1",
+     0.001
+    ]
+   ]
+  },
+  "waveguide-insert": {
+   "pixels": 17992,
+   "seen": [
+    [
+     "sweep",
+     0.286
+    ],
+    [
+     "waveguide-insert",
+     0.284
+    ],
+    [
+     "panel roof_sheen",
+     0.153
+    ],
+    [
+     "panel roof_fill over world (sky)",
+     0.078
+    ],
+    [
+     "world (sky)",
+     0.075
+    ],
+    [
+     "gable-block",
+     0.04
+    ]
+   ]
+  },
+  "woofer-cone": {
+   "pixels": 16444,
+   "seen": [
+    [
+     "panel floor_card over sweep",
+     0.24
+    ],
+    [
+     "woofer-cone",
+     0.149
+    ],
+    [
+     "woofer-cap",
+     0.143
+    ],
+    [
+     "world (sky)",
+     0.143
+    ],
+    [
+     "panel cone_scrim over world (sky)",
+     0.12
+    ],
+    [
+     "panel cone_scrim + lamp cone_card over world (sky)",
+     0.068
+    ]
+   ]
+  },
+  "side-right.plinth": {
+   "pixels": 13924,
+   "seen": [
+    [
+     "sweep",
+     0.981
+    ],
+    [
+     "side-right",
+     0.018
+    ],
+    [
+     "back-panel",
+     0.001
+    ]
+   ]
+  },
+  "woofer-surround": {
+   "pixels": 13352,
+   "seen": [
+    [
+     "panel floor_card over sweep",
+     0.414
+    ],
+    [
+     "world (sky)",
+     0.193
+    ],
+    [
+     "woofer-ring",
+     0.096
+    ],
+    [
+     "woofer-cone",
+     0.09
+    ],
+    [
+     "lamp cone_card over world (sky)",
+     0.048
+    ],
+    [
+     "side-right",
+     0.035
+    ]
+   ]
+  },
+  "woofer-ring": {
+   "pixels": 6900,
+   "seen": [
+    [
+     "panel floor_card over sweep",
+     0.853
+    ],
+    [
+     "front-baffle",
+     0.046
+    ],
+    [
+     "woofer-frame",
+     0.045
+    ],
+    [
+     "woofer-surround",
+     0.024
+    ],
+    [
+     "world (sky)",
+     0.017
+    ],
+    [
+     "side-right",
+     0.006
+    ]
+   ]
+  },
+  "woofer-cap": {
+   "pixels": 6504,
+   "seen": [
+    [
+     "panel floor_card over sweep",
+     0.401
+    ],
+    [
+     "woofer-cone",
+     0.243
+    ],
+    [
+     "panel cone_scrim over world (sky)",
+     0.168
+    ],
+    [
+     "world (sky)",
+     0.115
+    ],
+    [
+     "woofer-surround",
+     0.038
+    ],
+    [
+     "panel cone_scrim + lamp cone_card over world (sky)",
+     0.02
+    ]
+   ]
+  },
+  "mid-cone": {
+   "pixels": 4416,
+   "seen": [
+    [
+     "panel floor_card over sweep",
+     0.264
+    ],
+    [
+     "world (sky)",
+     0.214
+    ],
+    [
+     "mid-cone",
+     0.143
+    ],
+    [
+     "mid-cap",
+     0.105
+    ],
+    [
+     "lamp cone_card over world (sky)",
+     0.076
+    ],
+    [
+     "panel mid_kick + lamp cone_card over world (sky)",
+     0.068
+    ]
+   ]
+  },
+  "mid-ring": {
+   "pixels": 3448,
+   "seen": [
+    [
+     "panel floor_card over sweep",
+     0.855
+    ],
+    [
+     "world (sky)",
+     0.036
+    ],
+    [
+     "front-baffle",
+     0.034
+    ],
+    [
+     "mid-surround",
+     0.026
+    ],
+    [
+     "mid-frame",
+     0.024
+    ],
+    [
+     "lamp cone_card over world (sky)",
+     0.014
+    ]
+   ]
+  },
+  "back-panel": {
+   "pixels": 2960,
+   "seen": [
+    [
+     "sweep",
+     0.995
+    ],
+    [
+     "side-right",
+     0.004
+    ],
+    [
+     "side-right.plinth",
+     0.001
+    ]
+   ]
+  },
+  "mid-surround": {
+   "pixels": 2944,
+   "seen": [
+    [
+     "panel floor_card over sweep",
+     0.36
+    ],
+    [
+     "world (sky)",
+     0.217
+    ],
+    [
+     "mid-ring",
+     0.09
+    ],
+    [
+     "lamp cone_card over world (sky)",
+     0.087
+    ],
+    [
+     "mid-cone",
+     0.073
+    ],
+    [
+     "side-right",
+     0.049
+    ]
+   ]
+  },
+  "woofer-frame": {
+   "pixels": 1060,
+   "seen": [
+    [
+     "panel floor_card over sweep",
+     0.702
+    ],
+    [
+     "woofer-ring",
+     0.204
+    ],
+    [
+     "woofer-surround",
+     0.079
+    ],
+    [
+     "front-baffle",
+     0.011
+    ],
+    [
+     "sweep",
+     0.004
+    ]
+   ]
+  },
+  "mid-cap": {
+   "pixels": 928,
+   "seen": [
+    [
+     "mid-cone",
+     0.332
+    ],
+    [
+     "panel floor_card over sweep",
+     0.297
+    ],
+    [
+     "world (sky)",
+     0.207
+    ],
+    [
+     "panel mid_kick + lamp cone_card over world (sky)",
+     0.073
+    ],
+    [
+     "mid-surround",
+     0.034
+    ],
+    [
+     "panel mid_kick over world (sky)",
+     0.026
+    ]
+   ]
+  },
+  "mid-frame": {
+   "pixels": 492,
+   "seen": [
+    [
+     "panel floor_card over sweep",
+     0.65
+    ],
+    [
+     "mid-ring",
+     0.301
+    ],
+    [
+     "front-baffle",
+     0.033
+    ],
+    [
+     "mid-surround",
+     0.016
+    ]
+   ]
+  },
+  "back-panel.plinth": {
+   "pixels": 436,
+   "seen": [
+    [
+     "sweep",
+     0.991
+    ],
+    [
+     "back-panel.plinth",
+     0.009
+    ]
+   ]
+  },
+  "letters-front-3": {
+   "pixels": 424,
+   "seen": [
+    [
+     "panel letter_card + panel floor_card over sweep",
+     0.877
+    ],
+    [
+     "front-baffle.plinth",
+     0.123
+    ]
+   ]
+  },
+  "tweeter-surround": {
+   "pixels": 396,
+   "seen": [
+    [
+     "waveguide-insert",
+     0.465
+    ],
+    [
+     "tweeter-dome",
+     0.182
+    ],
+    [
+     "world (sky)",
+     0.162
+    ],
+    [
+     "panel floor_card over sweep",
+     0.091
+    ],
+    [
+     "sweep",
+     0.051
+    ],
+    [
+     "lamp cone_card over world (sky)",
+     0.051
+    ]
+   ]
+  },
+  "tweeter-dome": {
+   "pixels": 360,
+   "seen": [
+    [
+     "waveguide-insert",
+     0.589
+    ],
+    [
+     "tweeter-surround",
+     0.178
+    ],
+    [
+     "world (sky)",
+     0.111
+    ],
+    [
+     "lamp cone_card over world (sky)",
+     0.078
+    ],
+    [
+     "sweep",
+     0.022
+    ],
+    [
+     "panel floor_card over sweep",
+     0.022
+    ]
+   ]
+  },
+  "letters-front-7": {
+   "pixels": 360,
+   "seen": [
+    [
+     "panel letter_card + panel floor_card over sweep",
+     0.9
+    ],
+    [
+     "front-baffle.plinth",
+     0.089
+    ],
+    [
+     "panel letter_card over sweep",
+     0.011
+    ]
+   ]
+  },
+  "letters-front-1": {
+   "pixels": 288,
+   "seen": [
+    [
+     "panel letter_card + panel floor_card over sweep",
+     0.944
+    ],
+    [
+     "front-baffle.plinth",
+     0.056
+    ]
+   ]
+  },
+  "letters-front-0": {
+   "pixels": 256,
+   "seen": [
+    [
+     "panel letter_card + panel floor_card over sweep",
+     0.922
+    ],
+    [
+     "front-baffle.plinth",
+     0.062
+    ],
+    [
+     "letters-front-0",
+     0.016
+    ]
+   ]
+  },
+  "letters-front-6": {
+   "pixels": 220,
+   "seen": [
+    [
+     "panel letter_card + panel floor_card over sweep",
+     0.764
+    ],
+    [
+     "front-baffle.plinth",
+     0.236
+    ]
+   ]
+  },
+  "letters-front-2": {
+   "pixels": 168,
+   "seen": [
+    [
+     "panel letter_card + panel floor_card over sweep",
+     0.976
+    ],
+    [
+     "front-baffle.plinth",
+     0.024
+    ]
+   ]
+  },
+  "letters-front-5": {
+   "pixels": 128,
+   "seen": [
+    [
+     "panel letter_card + panel floor_card over sweep",
+     0.969
+    ],
+    [
+     "front-baffle.plinth",
+     0.031
+    ]
+   ]
+  },
+  "letters-front-4": {
+   "pixels": 40,
+   "seen": [
+    [
+     "panel letter_card + panel floor_card over sweep",
+     0.8
+    ],
+    [
+     "front-baffle.plinth",
+     0.2
+    ]
+   ]
+  },
+  "pull-loop": {
+   "pixels": 12,
+   "seen": [
+    [
+     "sweep",
+     0.667
+    ],
+    [
+     "waveguide-insert",
+     0.333
+    ]
+   ]
+  },
+  "side-left.plinth": {
+   "pixels": 4,
+   "seen": [
+    [
+     "front-baffle.plinth",
+     1.0
+    ]
+   ]
+  }
+ },
+ "lamps": {
+  "key": 88.9243,
+  "fill.specular": 7.5637,
+  "cone_card": 5.25
+ }
+}
