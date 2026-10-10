@@ -1382,5 +1382,129 @@
   ],
   "reply": "critic/rounds/2026-10-10/shot-03-e16-r13.json",
   "shot_sha": "bee1fe7c2e342b5568b0d781f8e3ca2ed0bc7279"
+ },
+ {
+  "change": "c2",
+  "setting": "lights.bg_pool.irradiance",
+  "test": {
+   "metric": "falloff",
+   "op": "between",
+   "value": [
+    -28,
+    -14
+   ]
+  },
+  "proofs": [
+   [
+    0.6,
+    7.9
+   ],
+   [
+    0.9,
+    5.0
+   ],
+   [
+    1.5,
+    -1.3
+   ]
+  ],
+  "set": 1.5,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [
+   "c3"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-03-e17-r14.json",
+  "shot_sha": "199b01e504716e5e89028273b45c7b40ec590b3a"
+ },
+ {
+  "change": "c3",
+  "setting": "lights.rim_left.strength",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    150,
+    215
+   ]
+  },
+  "proofs": [
+   [
+    12.0,
+    182.6
+   ],
+   [
+    18.0,
+    200.4
+   ]
+  ],
+  "set": 12.0,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c3"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-03-e17-r14.json",
+  "shot_sha": "1150f2f94eff74fa71e8ebdd84f946ac3071e854"
+ },
+ {
+  "change": "c6",
+  "setting": "lights.side_grad.strength",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    85,
+    125
+   ]
+  },
+  "proofs": [
+   [
+    0.4,
+    131.0
+   ],
+   [
+    0.6,
+    154.0
+   ]
+  ],
+  "set": 0.4,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [
+   "c3"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-03-e17-r14.json",
+  "shot_sha": "1150f2f94eff74fa71e8ebdd84f946ac3071e854"
+ },
+ {
+  "change": "c5",
+  "setting": "glints.1.power_w",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    115,
+    175
+   ]
+  },
+  "proofs": [
+   [
+    8.0,
+    199.6
+   ],
+   [
+    14.0,
+    232.3
+   ]
+  ],
+  "set": 8.0,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [
+   "c3"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-03-e17-r14.json",
+  "shot_sha": "8245568855c6ebf951633138a3477fe64486dd56"
  }
 ]
