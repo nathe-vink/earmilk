@@ -1,0 +1,291 @@
+{
+ "stage1": {
+  "impression": "A warm, moody sunlit living room in which the two red-and-white carton speakers are small, frontal and evenly lit, so their white fronts read as flat cards while the low sun lights up the wall and the empty floor rather than the product. The scene is coherent and the materials believable, but the pair sits left of centre above a large dark floor and looks placed into the room rather than lit by it.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The product must hold the frame: the pair is 358 px tall (40% of 900) above 244 px of dark floor (y 656-900, medians 41-67). For a hero the cabinets should approach 50% of the height with at least 28% copy space kept. The current stereo spacing (pair spans x 99-927, 61% of the width) rules that out unless the speakers come in toward a narrower sideboard and the lens pushes in.",
+  "The sun must model the cabinets as well as the room: the fronts facing the camera are the brightest planes (median 217, flat across x at 210-219). The left cabinet's sun-facing side is darker (178), and the right cabinet shows only a 14 px shade side (109). The sunlit faces should read as the brightest, warmest planes of the cabinets.",
+  "The mirrored pair's drivers must match: the right woofer cone has median 22.9 with 23% crushed pixels against 45.3 on the left; the right mid cone is 12.6 against 34.5.",
+  "The gable must read as one red: the roof slopes are rgb (194, 73, 83), dE2000 9.6, against the fin's (193, 38, 38), dE 1.1.",
+  "The tweeters must read as domes, not holes: tweeter-dome median 7.1, p95 27.7.",
+  "The wordmark must read as cast metal: letters median 141, rgb (152, 139, 137), with no change in value across them."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The right woofer reads as a black hole beside the left speaker's grey metal cone: only glint 1 lights it, so about 12% of its pixels mirror a lamp against about 30% on the left.",
+   "evidence": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      760,
+      300,
+      1000,
+      700
+     ]
+    },
+    "measured": "Right woofer cone: lum_median 22.9, crush 23.1%, profile across x [48, 36, 16, 19, 7, 5], brightest 10% rgb (106, 113, 123), b* -6.4. Left cone (box [90,300,260,670]): 45.3, profile [60, 60, 40, 50, 40, 30], brightest 10% rgb (144, 142, 138), b* 2.2. Mirror map: on the right cone only glint 1 is seen (7.5 + 2.3 + 1.9%). The left cone sees glints 2 and 6 and the right-wall window on about 28% of its pixels. Glint 6 (radiance 2.53) lights the left cone's inner lower wall and has no counterpart on the right."
+   },
+   "change": {
+    "setting": "glints.8",
+    "from": "absent",
+    "to": {
+     "at": [
+      0.989,
+      -0.17,
+      0.261
+     ],
+     "normal": [
+      0.281,
+      -0.853,
+      0.44
+     ],
+     "size_m": 0.5,
+     "power_w": 1.0,
+     "receivers": [
+      "woofer-cone",
+      "woofer-cap"
+     ]
+    }
+   },
+   "expected": "This is glint 6 mirrored across x=0. It puts a soft sheen on the right woofer's inner lower wall, as on the left. Right woofer-cone median rises from 22.9 to 34-46 (left is 45.3) and crushed pixels fall from 23% to under 12%. Its brightest 10% turns neutral (b* near 0) instead of blue. A glint lights nothing, so the baffle, the floor and the left woofer stay as they are.",
+   "accept": {
+    "region": {
+     "part": "woofer-cone",
+     "box": [
+      760,
+      300,
+      1000,
+      700
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     32,
+     50
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Half of the right speaker's papyrus mid is black, because its own trim ring shades the right half of the cone from the low sun, while the left mid is lit over two thirds of its cone, so the pair's mids do not match.",
+   "evidence": {
+    "region": {
+     "part": "mid-cone",
+     "box": [
+      760,
+      300,
+      1000,
+      700
+     ]
+    },
+    "measured": "Right mid cone: lum_median 12.6, rgb (14, 12, 19), profile across x [62.5, 53.2, 33.4, 9.4, 9.6, 8.9]. Left mid (box [90,300,260,670]): 34.5, rgb (44, 33, 22), profile [55.8, 50.4, 39.5, 26.5, 3.8, 3.0]. Mid-cap 15.9 vs 32.5. The sun meets the right baffle at about 68 degrees from its normal (cos 0.38) against 58 degrees on the left (cos 0.53). Glint 5 on this cone shows on only 5% of it, because a paper cone spreads a glint to nothing."
+   },
+   "change": {
+    "setting": "lights.mid_fill_r",
+    "from": "absent",
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.4,
+      0.4
+     ],
+     "position": [
+      0.45,
+      -1.1,
+      0.95
+     ],
+     "target": [
+      1.03,
+      -0.19,
+      0.69
+     ],
+     "irradiance": 0.8,
+     "color": 4600,
+     "receivers": [
+      "mid-cone#1",
+      "mid-cap#1"
+     ]
+    }
+   },
+   "expected": "Light from the front-left, about 30 degrees off the baffle normal, lifts the cone's shaded right wall toward the brown of its sunlit half. Median rises from 12.6 to 26-34 (left is 34.5). The profile goes from [62, 53, 33, 9, 10, 9] to roughly [62, 55, 42, 28, 25, 22], and mid-cap from 15.9 to about 28, with a softer sun shading still readable. The lamp is linked to copy 1's mid cone and cap only, so the baffle, the set and the left speaker do not change.",
+   "accept": {
+    "region": {
+     "part": "mid-cone",
+     "box": [
+      760,
+      300,
+      1000,
+      700
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     24,
+     38
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The roof slopes, the largest lit area of the red gable, read pink-lavender against the on-swatch red fin above them.",
+   "evidence": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      105,
+      318,
+      920,
+      330
+     ]
+    },
+    "measured": "Slope rgb (194, 73, 83), so b is above g. Lab hue 22 degrees and chroma 54, against 34 degrees and 72 for the swatch #C62828; dE2000 9.58. The fin band (box 105-235 x 299-314) is (193, 38, 38), dE 1.14. 90% of the slope mirrors panel roof_ramp (#FFF8F0, median radiance 0.71), which renders as a cool white at the 4900 K white point."
+   },
+   "change": {
+    "setting": "lights.roof_ramp.color",
+    "from": "#FFF8F0",
+    "to": 3800
+   },
+   "expected": "The slope's sheen turns warm-neutral: b_median falls from 83 to 64-74, with b at or below g (about 70). Hue moves from 22 to about 29 degrees, and dE2000 against #C62828 drops from 9.6 to about 7. The gradient from ridge to eave (gable profile 101 to 69) stays, because strength and ramp do not change. The small roof_ramp reflections on the waveguide insert and the cones lose their blue too.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      105,
+      318,
+      920,
+      330
+     ]
+    },
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     62,
+     75
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "Both tweeter domes read as black holes at the throat of the waveguide; nothing on them shows that a dome is there.",
+   "evidence": {
+    "region": "part:tweeter-dome",
+    "measured": "lum_median 7.1, p95 27.7, rgb (21, 2, 9), 2.1% crushed. The domes mirror the red insert (44%), their own surround (23%), the dark front wall (11%) and the ceiling (9%); only 2% sees the front window."
+   },
+   "change": {
+    "setting": "lights.tweeter_catch",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      3.6,
+      0.8
+     ],
+     "position": [
+      0,
+      -1.5,
+      2.1
+     ],
+     "target": [
+      0,
+      0,
+      0.94
+     ],
+     "strength": 3.0,
+     "color": 5000,
+     "diffuse": false,
+     "receivers": [
+      "tweeter-dome"
+     ]
+    }
+   },
+   "expected": "A 3-6 px catchlight appears on the upper inner quarter of each dome, peaking at lum 90-130, so each tweeter reads as a dome at the waveguide throat. The domes' median stays near 10. The panel is reflection-only (it sits 10-30 degrees up, inside the cone of rays that leave the throat) and is linked to the domes, so the insert, the gable and the set are untouched.",
+   "accept": {
+    "region": "part:tweeter-dome",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     50,
+     140
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The cast-metal wordmark reads as flat grey paint with a red cast, not as metal.",
+   "evidence": {
+    "region": "part:letters-front-*",
+    "measured": "lum_median 141.2, p95 162.2 (left word 152.1, right word 164.2), rgb (152, 139, 137). 72% of the letter pixels mirror letters_card at radiance 0.3 and 18% mirror the floor."
+   },
+   "change": {
+    "setting": "lights.letters_card.strength",
+    "from": 0.3,
+    "to": 0.38
+   },
+   "expected": "Letters median rises from 141 to 150-158 and turns a more neutral silver (about rgb 165/155/153). Left-word p95 goes from 152 to about 167 and right-word p95 from 164 to about 180. Both stay inside round 10's [140, 185], so the burned block from glints 3 and 4 does not come back. The card is linked to the letters, so the plinth does not change.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     149,
+     160
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Larger wordmark letters on the plinth",
+   "why": "The 'earmilk' letters are 9-13 px tall (part boxes y 629-642) and blur to a grey bar at homepage width, so the brand barely reads. The marks' size and tracking are fixed, so only their reflection (c5) can be improved."
+  }
+ ],
+ "score_if_fixed": 5.8,
+ "revisions": [
+  {
+   "change": "c4",
+   "by": "precheck",
+   "why": "the probe of the domes (37 pixels) finds their escaping rays in two bands only: near level toward the front wall (elevation 0.4 to 2.2 deg) and up toward the ceiling (35 to 40 deg, azimuth -23 to 14); the panel as given spans 3.5 to 31 deg and meets neither (0 %). It moves up and in to the ceiling band, 1.5 m in front at 2.1 m, 3.6 x 0.8 m, still reflection-only and linked to the domes, so the catchlight lands on each dome's upper quarter",
+   "was": {
+    "setting": "lights.tweeter_catch",
+    "from": "absent",
+    "to": {
+     "type": "panel",
+     "size_m": [
+      3.2,
+      1.4
+     ],
+     "position": [
+      0,
+      -2.6,
+      1.8
+     ],
+     "target": [
+      0,
+      0,
+      0.94
+     ],
+     "strength": 3.0,
+     "color": 5000,
+     "diffuse": false,
+     "receivers": [
+      "tweeter-dome"
+     ]
+    }
+   }
+  }
+ ]
+}
