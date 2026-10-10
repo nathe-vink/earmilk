@@ -1,0 +1,235 @@
+{
+ "legend": {
+  "1": "sweep",
+  "2": "panel top",
+  "3": "world (sky)",
+  "4": "lamp key over panel top",
+  "5": "lamp key over world (sky)",
+  "6": "panel fin_sheen",
+  "7": "panel fin_vsheen",
+  "8": "panel wall_sheen",
+  "9": "gable-block",
+  "10": "panel side_grad",
+  "11": "panel glint6 over panel top",
+  "12": "top-panel",
+  "13": "lamp glint2 over world (sky)",
+  "14": "lamp glint2 over panel top",
+  "15": "panel rim_left",
+  "16": "side-left",
+  "17": "waveguide-insert",
+  "18": "tweeter-surround",
+  "19": "panel glint6 over world (sky)",
+  "20": "panel glint5 over panel wall_sheen",
+  "21": "tweeter-dome",
+  "22": "panel rim_right",
+  "23": "lamp glint3 over panel fin_sheen",
+  "24": "lamp glint1 over panel rim_left",
+  "25": "lamp glint3 over sweep",
+  "26": "back-panel",
+  "27": "side-right",
+  "28": "panel glint6 over gable-block",
+  "29": "front-baffle",
+  "30": "pull-loop"
+ },
+ "step": 2,
+ "parts": {
+  "gable-block": {
+   "pixels": 440504,
+   "seen": [
+    [
+     "panel top",
+     0.655
+    ],
+    [
+     "panel fin_sheen",
+     0.221
+    ],
+    [
+     "panel side_grad",
+     0.095
+    ],
+    [
+     "sweep",
+     0.013
+    ],
+    [
+     "world (sky)",
+     0.011
+    ],
+    [
+     "lamp key over panel top",
+     0.003
+    ]
+   ]
+  },
+  "waveguide-insert": {
+   "pixels": 213512,
+   "seen": [
+    [
+     "panel top",
+     0.472
+    ],
+    [
+     "waveguide-insert",
+     0.211
+    ],
+    [
+     "panel glint6 over panel top",
+     0.142
+    ],
+    [
+     "panel glint5 over panel wall_sheen",
+     0.042
+    ],
+    [
+     "world (sky)",
+     0.036
+    ],
+    [
+     "tweeter-surround",
+     0.028
+    ]
+   ]
+  },
+  "front-baffle": {
+   "pixels": 134564,
+   "seen": [
+    [
+     "sweep",
+     0.943
+    ],
+    [
+     "front-baffle",
+     0.052
+    ],
+    [
+     "panel side_grad",
+     0.005
+    ],
+    [
+     "gable-block",
+     0.0
+    ]
+   ]
+  },
+  "side-right": {
+   "pixels": 53076,
+   "seen": [
+    [
+     "panel side_grad",
+     0.97
+    ],
+    [
+     "gable-block",
+     0.023
+    ],
+    [
+     "side-right",
+     0.006
+    ],
+    [
+     "back-panel",
+     0.0
+    ]
+   ]
+  },
+  "tweeter-surround": {
+   "pixels": 4472,
+   "seen": [
+    [
+     "waveguide-insert",
+     0.525
+    ],
+    [
+     "tweeter-dome",
+     0.192
+    ],
+    [
+     "world (sky)",
+     0.092
+    ],
+    [
+     "panel fin_sheen",
+     0.088
+    ],
+    [
+     "lamp glint3 over panel fin_sheen",
+     0.035
+    ],
+    [
+     "sweep",
+     0.028
+    ]
+   ]
+  },
+  "tweeter-dome": {
+   "pixels": 3532,
+   "seen": [
+    [
+     "waveguide-insert",
+     0.524
+    ],
+    [
+     "tweeter-surround",
+     0.227
+    ],
+    [
+     "world (sky)",
+     0.114
+    ],
+    [
+     "panel fin_sheen",
+     0.036
+    ],
+    [
+     "panel top",
+     0.032
+    ],
+    [
+     "sweep",
+     0.031
+    ]
+   ]
+  },
+  "back-panel": {
+   "pixels": 2508,
+   "seen": [
+    [
+     "panel side_grad",
+     0.994
+    ],
+    [
+     "side-right",
+     0.005
+    ],
+    [
+     "gable-block",
+     0.002
+    ]
+   ]
+  },
+  "pull-loop": {
+   "pixels": 140,
+   "seen": [
+    [
+     "sweep",
+     0.486
+    ],
+    [
+     "waveguide-insert",
+     0.457
+    ],
+    [
+     "front-baffle",
+     0.057
+    ]
+   ]
+  }
+ },
+ "lamps": {
+  "key": 14.4481,
+  "glint1": 3580.4375,
+  "glint2": 11.2669,
+  "glint3": 216.1518
+ }
+}

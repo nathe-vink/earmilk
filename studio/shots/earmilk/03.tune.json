@@ -1048,5 +1048,46 @@
   ],
   "reply": "critic/rounds/2026-10-10/shot-03-e14-r11.json",
   "shot_sha": "8881480a47f96dfffa41ea9366c708b4d1e8ad2b"
+ },
+ {
+  "change": "c2",
+  "setting": "lights.wall_sheen.strength",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    112,
+    124
+   ]
+  },
+  "proofs": [
+   [
+    2.9,
+    115.5
+   ],
+   [
+    3.4,
+    121.9
+   ],
+   [
+    3.0953,
+    117.7
+   ]
+  ],
+  "set": 3.0953,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   4.6414,
+   2.9
+  ],
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-03-e15-r12.json",
+  "shot_sha": "24ebf6235aa61890fb009793c9f1c478d09c0868"
  }
 ]
