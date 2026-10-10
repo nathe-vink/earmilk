@@ -1,0 +1,285 @@
+{
+ "stage1": {
+  "impression": "A glossy red gable roof with a sculpted horn waveguide and a recessed dark dome, seen from a high three-quarter on a grey sweep: the modelling is clean and the lips catch thin highlights, but the big red planes carry one even pinkish sheen, so the lacquer reads as plastic and the bowl barely separates from the roof around it. The white body along the bottom is a hot, featureless slab that pulls the eye off the hero, and nothing in the light gives the waveguide or the small, dull dome priority.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Roof reads as lacquer: the front slope right of the waveguide [950,280,1050,700] falls >= 20 levels from ridge to eave in one graduated reflection (now 16.1), the ridge band [350,225,600,300] is not one value (range now 2.3 at 105.6), and the eave-side red [930,560,1040,680] is within dE2000 3 of #C62828 at the frame's white (now 4.15, RGB 212,54,48).",
+  "No white in the 230-245 flat zone: part:front-baffle median 196-214 (now 232.4, p95 242) and the band under the mouth [560,800,690,900] falling >= 12 levels to the frame edge (now 4: 241 to 237).",
+  "The bowl separates from the roof: waveguide floor [480,620,720,700] >= 12 levels above the lower slope [930,560,1040,680] (now 92.1 vs 87.2, and level with the slope beside it, 92.9 at [900,450,1000,560]).",
+  "The hero holds the frame's brightest small details: both lip lines peak >= 185 along their full length (left lower half now 152-162, right lower half 159-170) and the dome's catchlight p95 >= 198 (now 189.9), all above the slope's sheen and the white band's modelling.",
+  "The right gable side shows a gloss cue: a graduated reflection of >= 15 levels across [1150,410,1200,590] (now 10, values 45-56) while the hip keeps >= 15 levels of contrast to the front slope.",
+  "At least ~90 px of air above the fin's left end (now 68 px at x 290), so the gable silhouette is not pinned to the top edge."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The front slope mirrors only the flat bright middle of panel top, so it carries one even pinkish sheen: the lacquer reads as plastic, the ridge band is a single value, the eave never reaches the paint's own red, and the waveguide bowl reads level with the roof around it.",
+   "evidence": {
+    "region": [
+     950,
+     280,
+     1050,
+     700
+    ],
+    "measured": "profile 100.7, 99.2, 97.2, 94.5, 90.9, 88.9, 86.7, 84.6 (falloff 16.1); 100 % mirrors panel top, radiance 1.24 at the top (panel y -0.04) to 0.60 at the bottom (y -0.29); ridge band [350,225,600,300] 105.6, range 2.3, RGB (223,74,73), dE2000 9.63 vs #C62828; lower slope [930,560,1040,680] 87.2, RGB (212,54,48), dE 4.15; waveguide floor [480,620,720,700] 92.1 vs the slope beside it [900,450,1000,560] 92.9"
+   },
+   "change": {
+    "setting": "lights.top.ramp",
+    "from": {
+     "axis": "y",
+     "at_m": [
+      -1,
+      -0.45,
+      0,
+      0.3,
+      0.7
+     ],
+     "values": [
+      0.3,
+      0.15,
+      1,
+      1,
+      0.3
+     ]
+    },
+    "to": {
+     "axis": "y",
+     "at_m": [
+      -1,
+      -0.3,
+      0.1,
+      0.3,
+      0.7
+     ],
+     "values": [
+      0.3,
+      0,
+      1,
+      1,
+      0.3
+     ]
+    }
+   },
+   "expected": "The slope mirrors panel y -0.29 to +0.12, which becomes a 0 to 1 ramp instead of 0.45 to 1, while the bowl's mirror band (panel y 0.45 to 0.68) is untouched: column [950,280,1050,700] falls ~24 levels after c2 (about 82 to 58, now 100.7 to 84.6), lower slope [930,560,1040,680] 87.2 to ~63 with G 54 to ~36 (dE2000 4.15 to under 3 at the frame's white), the ridge band [350,225,600,300] gains a ~6-level gradient instead of range 2.3, and the waveguide floor [480,620,720,700] (~81 after c2) ends ~18 levels above the lower slope instead of level with the roof beside it.",
+   "accept": {
+    "region": [
+     950,
+     280,
+     1050,
+     700
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     20,
+     40
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "post",
+   "problem": "The finish lifts the raw white face (214.4) to 236, past the ~226 knee where PBR Neutral compresses, so the band under the waveguide's mouth prints as one value at 237-242: the brightest and largest light area in the frame, flat as a card and pulling the eye off the hero.",
+   "evidence": {
+    "region": [
+     560,
+     800,
+     690,
+     900
+    ],
+    "measured": "lum_median 239, range 6 (profile 241, 241, 240, 239, 239, 238, 238, 237); [560,830,880,900] 239, range 4; part:front-baffle median 232.4, p95 242; the same 1.10 lift puts the background at 139-173 and the red at 94"
+   },
+   "change": {
+    "setting": "finish.white_out",
+    "from": 236,
+    "to": 208
+   },
+   "expected": "The white face lands at ~208 instead of 236, inside the 200-220 band where lacquer models: part:front-baffle median 232.4 to ~205, the band [560,800,690,900] 239 to ~210-216 with its gradient no longer crushed in the shoulder; everything under the white point x0.88: gable-block median 94.2 to ~83, background [0,100,55,640] 139 to ~122 and [1200,0,1350,150] 173 to ~152, side-right 201 to ~177; lip and dome highlights drop ~12 %, which c4-c6 restore.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     196,
+     214
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Under the mouth the white band has no falloff toward the frame edge while its left third falls 49 levels under base_flag, so the right two-thirds reads as a flat card butted against the red eave.",
+   "evidence": {
+    "region": [
+     560,
+     800,
+     690,
+     900
+    ],
+    "measured": "profile 241, 241, 240, 239, 239, 238, 238, 237 (falloff 4.0); left column [100,690,200,900] 225, 217, 209, 202, 195, 188, 182, 176; the mirror pass meets the key at x -0.98 to -0.53, y -0.88 to -0.44, z 1.58 to 1.94, about 46 degrees above this face from the front-left"
+   },
+   "change": {
+    "setting": "lights.front_card",
+    "from": null,
+    "to": {
+     "type": "flag",
+     "size_m": [
+      0.3,
+      0.25
+     ],
+     "position": [
+      -0.08,
+      -0.242,
+      0.749
+     ],
+     "target": [
+      -0.064,
+      -0.184,
+      0.749
+     ],
+     "lights": [
+      "key"
+     ],
+     "density": 0.6
+    }
+   },
+   "expected": "A 30 x 25 cm net 6 cm in front of the front face and parallel to it, top edge at z 0.874, cutting the key alone; its soft edge (about 11 cm wide on the face) centres near z 0.785, where the frame's bottom edge crosses the band under the mouth: [560,800,690,900] falls ~15-20 levels from the eave to the frame edge (about 212 to 195 with c2), the eave and the red slope stay lit (lower slope [930,560,1040,680] moves < 2 levels), and the left third keeps its base_flag falloff.",
+   "accept": {
+    "region": [
+     560,
+     800,
+     690,
+     900
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     32
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The left lip, the longest contour of the mouth, peaks at 186-189 near the throat but only 152-162 on its lower half, and c2 takes another 12 % off, leaving the waveguide's defining edge dimmer than the white band below it.",
+   "evidence": {
+    "region": [
+     425,
+     425,
+     465,
+     450
+    ],
+    "measured": "lum_p95 163.5, max 189; the line mirrors rim_left at radiance 12-17; along the left lip the peak is 186-189 at y 370-460 but 152-162 at y 580-640 ([230,590,275,625] p95 114.7, the line only ~2 % of its pixels)"
+   },
+   "change": {
+    "setting": "lights.rim_left.strength",
+    "from": 18.5241,
+    "to": 32
+   },
+   "expected": "The left lip line ~1.7x brighter in reflection only (rim_left is diffuse false): [425,425,465,450] p95 ~190 after c2, upper lip peaks ~205 and the lower half ~180, one continuous bright edge from the mouth's left tip to the hood; slope and bowl values unchanged.",
+   "accept": {
+    "region": [
+     425,
+     425,
+     465,
+     450
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     176,
+     215
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The tweeter dome at the frame's focal point carries only a soft catchlight, which c2 would drop to ~167, so the driver reads as a dark ball in a dark surround rather than a precise dome.",
+   "evidence": {
+    "region": [
+     663,
+     378,
+     729,
+     446
+    ],
+    "measured": "part:tweeter-dome median 69.5, p95 189.9; vertical profile 24.5, 81.7, 104.0, 87.9, 71.6, 61.3, 53.6, 45.2; it mirrors the red insert 52 % and the surround 23 %, so the catchlight is its only bright cue"
+   },
+   "change": {
+    "setting": "glints.1.power_w",
+    "from": 14.135,
+    "to": 22
+   },
+   "expected": "A brighter catchlight at the same spot on the dome's upper right: part:tweeter-dome p95 ~205 after c2 without clipping, dome median staying ~60-70, so the dome reads as a crisp, machined part at the focal point.",
+   "accept": {
+    "region": "part:tweeter-dome",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     198,
+     228
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The right lip, the mouth's other defining edge, peaks 184-195 at the top and 159-170 down its length, and after c2 it would sit near 160, dimmer than the white band and out of step with c4.",
+   "evidence": {
+    "region": [
+     785,
+     440,
+     812,
+     480
+    ],
+    "measured": "lum_p95 180.8, max 186; mirrors rim_right at radiance 10.5-11.7 (sky 17 %); right lip peaks 184-195 at y 370-460 and 159-170 at y 610-760; [840,600,865,680] p95 154"
+   },
+   "change": {
+    "setting": "lights.rim_right.strength",
+    "from": 18.5,
+    "to": 30
+   },
+   "expected": "The right lip line ~1.6x brighter in reflection only: [785,440,812,480] p95 ~200 after c2, the lower right lip [840,600,865,680] p95 154 to ~170, matched to c4 so the mouth reads as one continuous machined edge.",
+   "accept": {
+    "region": [
+     785,
+     440,
+     812,
+     480
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     190,
+     226
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Remove, move or recolour the pull-loop tab on the eave [497,743,525,752]",
+   "why": "At this scale it reads as a nick in the eave line directly under the waveguide's mouth; it is the product's geometry in its accent colour, both fixed."
+  },
+  {
+   "request": "Soften or hide the insert's seam, the dark hairline that traces the bowl just outside the lip",
+   "why": "It outlines the waveguide like a CAD edge beside the lip highlight; the insert, its rim and its place are set by acoustic simulation and the product's geometry, so only light and camera may change how it reads."
+  },
+  {
+   "request": "A lighter or glossier tweeter dome",
+   "why": "The dome reads dark (median 69.5) mostly because it mirrors the red insert (52 %); the SB Satori TW29DN-B dome's material and colour are the product's own, so only its catchlight (glints.1) is in scope."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
