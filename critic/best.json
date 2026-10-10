@@ -1,0 +1,62 @@
+{
+ "shot-01": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/01-e16.png",
+  "since": "2026-10-10"
+ },
+ "shot-02a": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/02a-e10.png",
+  "since": "2026-10-10"
+ },
+ "shot-02b": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/02b-e16.png",
+  "since": "2026-10-10"
+ },
+ "shot-03": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/03-e16.png",
+  "since": "2026-10-10"
+ },
+ "shot-04a": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/04a-e13.png",
+  "since": "2026-10-10"
+ },
+ "shot-04b": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/04b-e18.png",
+  "since": "2026-10-10"
+ },
+ "shot-05": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/05-e14.png",
+  "since": "2026-10-10"
+ },
+ "shot-07": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/07-e14.png",
+  "since": "2026-10-10"
+ },
+ "shot-08": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/08-e15.png",
+  "since": "2026-10-10"
+ },
+ "shot-08b": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/08b-e9.png",
+  "since": "2026-10-10"
+ },
+ "shot-09": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/09-e11.png",
+  "since": "2026-10-10"
+ },
+ "shot-10": {
+  "record": [],
+  "frame": "renders/2026-10-10/finished/10-e10.png",
+  "since": "2026-10-10"
+ }
+}
