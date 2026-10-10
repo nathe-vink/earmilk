@@ -1,0 +1,496 @@
+{
+ "stage1": {
+  "impression": "A witty, well-composed set-up: low window sun throws the gable-top speaker's carton silhouette into a warm patch on a dark navy wainscot, and the red-and-white product reads instantly. But the product is the least convincing thing in the frame: its white front and the sliver of sunlit side read as one flat, slightly grey value with no sun modelling to match the crisp shadow it casts, while the streaky tan patch, the murky floor and the near-black right third keep it a good draft rather than a homepage hero.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The product carries the sun: side-right 226-238 and at least 40% of the product's width, the front 35-60 levels below it with at least 25 levels of fall-off from under the gable to above the plinth (now: side 37 px wide at 218.2, front 205-219, front/side corner step 17).",
+  "The carton silhouette reads at a glance: flanks no wider than 6 px, core at most 34, eave corners level within 10 px, fin chimney visible, at least 60 px clear of the product and inside the patch with at least 0.1 m to spare.",
+  "The patch reads as low sun on painted panelling: median 145-175, warm (R minus B at least 70), relief range 4.5-7 levels with no vertical veneer streaks, soft (about 20 px) window edges against the crisp silhouette flanks.",
+  "No dead near-black field: the wall left of the patch and right of the product each at most 20% of the width with median at least 30 and visible panelling; plaster band above the rail at most 12% of the height (now right third 30.8, top band 26.8, upper right wall 18.7).",
+  "The floor grounds the product: sunlit band at least 65 with the product's shadow running unbroken from its base to the wall silhouette, and the shaded lower-left floor at least 35 with readable planks (now 28.3).",
+  "The white reads as clear-coated lacquer: a soft, motivated reflection gradient of at least 8 levels on the shaded front or the roof that does not lift the front out of its band.",
+  "The sunlit accent holds to the swatch: side-right plinth and gable triangle within dE2000 5 of #C62828 (side-right plinth now 13.0, RGB 243/76/60).",
+  "The drivers read as the named products: black anodised woofer and papyrus mid with soft motivated highlights, no stray hot spot and no dead-black disc (mid-cone median now 6.4)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "camera",
+   "problem": "The face the sun strikes square-on (side-right, cos 0.97) is a 37 px sliver beside a 184 px front lit by the frontal fill and a hidden reflector, so both faces read one value and the product does not belong to the sun that casts its shadow.",
+   "evidence": {
+    "region": [
+     923,
+     342,
+     960,
+     776
+    ],
+    "measured": "side-right 37 px wide, median 218.2 (RGB 236/215/200); front upper band [745,352,920,388] 218.8, left strip [742,352,785,530] 218.7; profile across both faces at y 480-525: 216, 215, 214, 212, 209, 207, 204, 202, 199, 198 | 220, 218; corner step 17.2 (edge [910,400,940,650]); falloff across part:front-baffle|side-right -4.8"
+   },
+   "change": {
+    "setting": "camera.position",
+    "from": [
+     -1.35,
+     -3,
+     1
+    ],
+    "to": [
+     0.11,
+     -3.45,
+     0.9
+    ]
+   },
+   "expected": "The camera moves round to the sun's side, 3.2 m from the product on a bearing of +2 deg (eye 0.9 m), seeing the front at 42 deg and the sunlit side at 48 deg. With c2, c3, c7 and c8 the side-right runs x 964-1113 (about 150 px, 48% of the product's width) beside the front at x 800-964; the side reads about 232 and the front's far edge 185-195, so the profile across the two faces falls 40-50 levels from side to front.",
+   "accept": {
+    "region": "part:front-baffle|side-right",
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -65,
+     -25
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "From the new camera position the 38 deg sun would sit only 36 deg off the lens axis: the silhouette would land about 36 px from the product with its left part out of the patch, and the sun would rake the front at cos 0.21, blunting the split.",
+   "evidence": {
+    "region": [
+     395,
+     290,
+     655,
+     690
+    ],
+    "measured": "silhouette flanks crisp (edge [395,450,430,560] step 25.8, 5 px wide; [620,450,655,560] step 29.2, 4 px), eaves level at y 385-388, fin chimney about 40 px; camera-sun separation now 62 deg; projected for the new view at 38 deg: silhouette x 528-764 against the product's left edge at x 800"
+   },
+   "change": {
+    "setting": "sun.azimuth_deg",
+    "from": 38,
+    "to": 42
+   },
+   "expected": "The sun sits 8 deg in front of square to the side-right: side cos 0.97, front a raking cos 0.14 that picks out the trim rings and letters. The silhouette's outline diagonal stays parallel to the wall (eave corners level within about 1 cm), keeps a 30 px fin chimney and lands at x 480-716 inside a patch spanning x 292-761, about 84 px clear of the product; this box, left of the silhouette, is sunlit patch at about 150-160.",
+   "accept": {
+    "region": [
+     315,
+     300,
+     405,
+     560
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     135,
+     180
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "composition",
+   "problem": "Seen from the sun's side, a product standing 0.75 m from the wall would sit in front of its own silhouette, and the first looks already call the hero small beside its shadow.",
+   "evidence": {
+    "region": [
+     408,
+     300,
+     961,
+     778
+    ],
+    "measured": "silhouette about 380 px tall vs product 525 px (72%); the 99 px gap exists only because the camera-sun separation is 62 deg; product floor shadow [560,700,700,725] 31.4 vs sunlit band [250,700,420,740] 57.0"
+   },
+   "change": {
+    "setting": "product.instances.0.position",
+    "from": [
+     0,
+     0,
+     0
+    ],
+    "to": [
+     0,
+     -0.25,
+     0
+    ]
+   },
+   "expected": "0.25 m toward the camera lengthens the shadow's throw by 0.34 m: the silhouette moves 0.22 m left on the wall (body x 480-716), clear of the product (left edge x 800) with a dark wall strip between the patch's right edge (x 761) and the product; the product's shadow runs 1.3 m across the sunlit floor from its base to the wall; the silhouette's visible height is about 52% of the product's. This box is silhouette body in both frames.",
+   "accept": {
+    "region": [
+     490,
+     420,
+     530,
+     590
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     8,
+     40
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The fill sits in front (azimuth 0, 45 deg up) and lights both visible faces about equally (front 0.54, side 0.46), holding the front level with the sunlit side; from the new view it would light the sunlit side more than the shaded front.",
+   "evidence": {
+    "region": [
+     739,
+     346,
+     923,
+     778
+    ],
+    "measured": "part:front-baffle median 205.1 vs part:side-right 218.2; front fall-off only 222 to 211 down the left strip above the woofer and 214 to 183 down the right strip; 64% of the front's pixels mirror the frontsheen panel"
+   },
+   "change": {
+    "setting": "lights.fill",
+    "from": {
+     "type": "area",
+     "size_m": [
+      1.2,
+      1.2
+     ],
+     "orbit": {
+      "azimuth_deg": 0,
+      "elevation_deg": 45.18,
+      "distance_m": 1.436
+     },
+     "irradiance": 0.2383,
+     "color": 4000
+    },
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.2,
+      1.2
+     ],
+     "position": [
+      -1.13,
+      -0.78,
+      1.25
+     ],
+     "target": [
+      0.0,
+      -0.25,
+      0.53
+     ],
+     "irradiance": 0.27,
+     "color": 4000
+    }
+   },
+   "expected": "A 1.2 m soft source camera-left on the shade side, 30 deg up and 1.44 m from the product's centre, meets the front at about 0.7 and the sunlit side not at all. Front white about 195 under the gable falling to about 160 above the plinth (30-40 levels, light from above-left), part median 175-185, 40-60 levels below the side and slightly cooler than it.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     166,
+     192
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The sun is too weak to read as the key: the face it strikes square-on (218) is no brighter than the fill-lit front, and the wall patch (135-144) reads as tan paint.",
+   "evidence": {
+    "region": [
+     300,
+     220,
+     400,
+     600
+    ],
+    "measured": "patch 135.3 (RGB 171/130/85), [560,220,630,290] 143.8; side-right 218.2, of which the sun gives about 0.57 of 0.70 linear; shaded wainscot 32-48"
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 0.9784,
+    "to": 1.45
+   },
+   "expected": "Side-right 228-236, the brightest surface in the frame, in PBR Neutral's shoulder but still warm; patch 150-165 and more golden; sunlit floor 70-85; shadow values unchanged.",
+   "accept": {
+    "region": "part:side-right",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     226,
+     238
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The moved fill would reach the wall behind the product and lift the carton silhouette from near-black to an estimated 60-90 while washing the patch with cool light; the silhouette is dense today only because the product happens to block the frontal fill.",
+   "evidence": {
+    "region": [
+     500,
+     420,
+     620,
+     590
+    ],
+    "measured": "silhouette core 13.6 (RGB 16/13/12) vs shaded wainscot [50,220,240,560] 34.6 and [1000,220,1300,560] 31.7; patch [315,300,405,560] 134.8"
+   },
+   "change": {
+    "setting": "lights.fillcut",
+    "from": "absent",
+    "to": {
+     "type": "flag",
+     "size_m": [
+      1.4,
+      1.2
+     ],
+     "position": [
+      -1.2,
+      0.45,
+      0.73
+     ],
+     "target": [
+      -1.2,
+      -1.0,
+      0.73
+     ],
+     "lights": [
+      "fill"
+     ]
+    }
+   },
+   "expected": "A black flag 0.3 m off the back wall, behind and left of the product, shades only the fill from the wall at x -1.95 to -0.45 m (the whole patch and silhouette). It stands 0.4 m behind the product's rear corner, so the fill still reaches the product and the floor in front of it. The silhouette stays 15-30 and the patch keeps the sun's warm colour.",
+   "accept": {
+    "region": [
+     500,
+     420,
+     620,
+     590
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     8,
+     34
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "camera",
+   "problem": "The hero fills 58% of the frame height, and the right third and the band above the rail are empty near-black wall.",
+   "evidence": {
+    "region": [
+     960,
+     0,
+     1350,
+     900
+    ],
+    "measured": "product box [739,253,961,778] = 58% of the height; right third median 30.8, top band [0,0,1350,100] 26.8, upper right wall [1000,20,1300,160] 18.7; 54.8% of the frame below 40"
+   },
+   "change": {
+    "setting": "camera.lens_mm",
+    "from": 40,
+    "to": 47
+   },
+   "expected": "With c1 and c8 the product spans y 147-793 (72% of the height), right margin about 18%, the rail at y 85-107 with only a thin plaster strip above. The front plinth (red with the letters) lies across this box in both frames; at 40 mm from the new position the box would be bare floor.",
+   "accept": {
+    "region": [
+     860,
+     718,
+     935,
+     745
+    ],
+    "metric": "r_median",
+    "op": ">=",
+    "value": 110
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "camera",
+   "problem": "The current aim leaves a 390 px strip of empty wall right of the product and 110-170 px of dead plaster above the patch.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     1350,
+     180
+    ],
+    "measured": "plaster above the rail (y 0-170) median 27-34, upper right wall 18.7; the group (patch left edge x 275 to product right edge x 961) sits left of a 389 px empty right margin"
+   },
+   "change": {
+    "setting": "camera.target",
+    "from": [
+     -0.4,
+     0.2,
+     0.62
+    ],
+    "to": [
+     -0.65,
+     0.2,
+     0.46
+    ]
+   },
+   "expected": "Frames the group: patch x 292-761 with its whole slanted top edge inside the frame (y about 260 at left to 120-160 at right), silhouette x 480-716, product x 800-1113, floor about 33% of the height. The woofer covers this box in both frames (x 815-947, y 487-672 in the new one).",
+   "accept": {
+    "region": [
+     850,
+     565,
+     885,
+     635
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     8,
+     100
+    ]
+   }
+  },
+  {
+   "id": "c9",
+   "rank": 9,
+   "kind": "light",
+   "problem": "At 8 deg the sun meets the floor at cos 0.14, so the sunlit band is barely brighter than the shade and the lower frame reads murky; the tall patch's top would also run out of the tighter frame.",
+   "evidence": {
+    "region": [
+     250,
+     700,
+     420,
+     740
+    ],
+    "measured": "sunlit floor band 57.0 (RGB 84/53/19) vs shaded floor [50,800,300,880] 28.3; floor right of the speaker [1140,810,1260,885] 51.7; floor band [0,650,1350,900] median 46.9"
+   },
+   "change": {
+    "setting": "sun.elevation_deg",
+    "from": 8,
+    "to": 11
+   },
+   "expected": "Floor irradiance x1.37 and a wider sunlit footprint: with c5 the floor right of and in front of the product reads 70-90 and carries the product's crisp shadow; the patch's top edge drops 0.25 m and the silhouette 0.06 m, still at least 0.14 m below the patch's top.",
+   "accept": {
+    "region": [
+     1140,
+     810,
+     1260,
+     885
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     60,
+     105
+    ]
+   }
+  },
+  {
+   "id": "c10",
+   "rank": 10,
+   "kind": "light",
+   "problem": "The frontsheen panel fakes the front's gradient; from the new view the front still mirrors it (about 12 deg off its mirror direction), which would add an unmotivated sheen of about +0.2 linear and flatten the shade face again.",
+   "evidence": {
+    "region": [
+     739,
+     346,
+     923,
+     778
+    ],
+    "measured": "front-baffle mirrors frontsheen over 64% of its pixels (radiance median 0.76 upper, 0.58 middle); mid-ring mirrors it over 85% (median 72.7)"
+   },
+   "change": {
+    "setting": "lights.frontsheen.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The front is lit only by the fill and the raking sun, so its fall-off is the fill's; the trim rings drop to their own dark metal (25-60) with the fill's highlight on their left.",
+   "accept": {
+    "region": "part:mid-ring",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     18,
+     70
+    ]
+   }
+  },
+  {
+   "id": "c11",
+   "rank": 11,
+   "kind": "set",
+   "problem": "With a 1.5x sun at a more raking 42 deg azimuth the brush-ridge streaks would rise from about 8 to about 10 levels and read as wood veneer again.",
+   "evidence": {
+    "region": [
+     315,
+     300,
+     405,
+     560
+    ],
+    "measured": "patch lum_range 8.2 (p5 130.7, p95 138.9); [560,220,630,290] 7.2"
+   },
+   "change": {
+    "setting": "set.wainscot.relief",
+    "from": 0.5111,
+    "to": 0.3
+   },
+   "expected": "Streak range held at 5-7 levels in the patch: brushed paint, not grain. This continues round 14's cut (0.66 to 0.51), scaled for the stronger, more raking sun, rather than reversing it; the lower bound keeps enough texture that the patch does not go back to flat beige (round 12).",
+   "accept": {
+    "region": [
+     315,
+     300,
+     405,
+     560
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     4.5,
+     7.0
+    ]
+   }
+  },
+  {
+   "id": "c12",
+   "rank": 12,
+   "kind": "light",
+   "problem": "The glints are pinned to the woofer's old surface points; with the product moved 0.25 m and re-lit from camera-left they would land as stray highlights at arbitrary spots (round 13's odd bent white highlight).",
+   "evidence": {
+    "region": [
+     807,
+     576,
+     863,
+     634
+    ],
+    "measured": "woofer-cap p95 65.1 with 38% of its pixels mirroring glint2; woofer-cone p95 108.6 with 13% mirroring glint1"
+   },
+   "change": {
+    "setting": "glints",
+    "from": "[glints.0 0 W; glints.1 0.4 W on woofer-cone; glints.2 0.952 W on woofer-cap]",
+    "to": []
+   },
+   "expected": "No glint lamps (equivalent to glints.1 and glints.2 power_w 0): the woofer reads by the fill's soft reflection on its upper left and the raking sun on its trim ring, with no isolated hot spot on the cap.",
+   "accept": {
+    "region": "part:woofer-cap",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     10,
+     110
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Reshape the tweeter waveguide (shallower bowl, softer rim) so it reads less like an eye in the roof slope",
+   "why": "Its depth, profile and mouth are set by acoustic simulation and are fixed; only light and camera may change how it reads, which c1, c2 and c4 do by putting a raking sun and the camera-left fill across that slope."
+  },
+  {
+   "request": "Hide the grey outer lip of the woofer trim ring on the driver's left",
+   "why": "The drivers are real products mounted flush under trim rings by the owner's decision; their geometry, materials and colours are fixed."
+  }
+ ],
+ "score_if_fixed": 7.5
+}
