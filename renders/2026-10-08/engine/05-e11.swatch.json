@@ -1,0 +1,110 @@
+{
+ "1": {
+  "material": "body",
+  "instance": 0,
+  "hex": "#FFFFFF",
+  "flavour": "whole"
+ },
+ "2": {
+  "material": "accent",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole"
+ },
+ "3": {
+  "material": "insert",
+  "instance": 0,
+  "hex": "#C62828",
+  "flavour": "whole"
+ },
+ "4": {
+  "material": "body",
+  "instance": 1,
+  "hex": "#FFFFFF",
+  "flavour": "two"
+ },
+ "5": {
+  "material": "accent",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two"
+ },
+ "6": {
+  "material": "insert",
+  "instance": 1,
+  "hex": "#1F4FCF",
+  "flavour": "two"
+ },
+ "7": {
+  "material": "body",
+  "instance": 2,
+  "hex": "#FFFFFF",
+  "flavour": "skim"
+ },
+ "8": {
+  "material": "accent",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim"
+ },
+ "9": {
+  "material": "insert",
+  "instance": 2,
+  "hex": "#6FA5DC",
+  "flavour": "skim"
+ },
+ "10": {
+  "material": "body",
+  "instance": 3,
+  "hex": "#A4C26B",
+  "flavour": "matcha"
+ },
+ "11": {
+  "material": "accent",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha"
+ },
+ "12": {
+  "material": "insert",
+  "instance": 3,
+  "hex": "#004225",
+  "flavour": "matcha"
+ },
+ "13": {
+  "material": "body",
+  "instance": 4,
+  "hex": "#5E3A1F",
+  "flavour": "chocolate"
+ },
+ "14": {
+  "material": "accent",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate"
+ },
+ "15": {
+  "material": "insert",
+  "instance": 4,
+  "hex": "#F1E3CC",
+  "flavour": "chocolate"
+ },
+ "16": {
+  "material": "body",
+  "instance": 5,
+  "hex": "#D9BC92",
+  "flavour": "oat"
+ },
+ "17": {
+  "material": "accent",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat"
+ },
+ "18": {
+  "material": "insert",
+  "instance": 5,
+  "hex": "#2B2118",
+  "flavour": "oat"
+ }
+}
