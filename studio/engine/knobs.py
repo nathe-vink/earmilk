@@ -120,6 +120,8 @@ KNOBS = [
     ('set.props.*.off', 'true/false', None, 'room: take the prop out of the set'),
     ('set.flags', 'list of {center_m: [x, y, z], size_m: [w, h], normal: [x, y, z]}', None, 'black cards the camera cannot see: they cast shadows (a flag to cut sun off a wall) and soak up bounce light; out of reflections unless "glossy": true; with "reflect_only": true, seen only in reflections (no shadow, no bounce), "color" its shade, and one-sided ("one_sided", true by default for these): seen only from the side its normal faces, so a card on the floor shows in the product\'s lacquer and not in the floor\'s own gloss'),
     ('set.bounces', 'list of {center_m, size_m, normal}', None, 'white cards the camera cannot see: bounce fill, and seen in reflections'),
+    ('set.flags.*.off', 'true/false', None, 'take the flag out of the set (its slot stays, so later flags keep their indices)'),
+    ('set.bounces.*.off', 'true/false', None, 'take the bounce card out of the set (its slot stays)'),
     ('set.props.*.rotate_z', 'deg', (-180, 180), 'room: a prop\'s turn'),
     ('set.props.*.artwork', '{bands: [[hex, share], ...], ground: hex, seed: n}', None, 'frame: a colour-field painting in the print (bands top to bottom, soft-edged, canvas grain) instead of the flat art colour'),
     ('set.props.*.z', 'm', (0.3, 3), 'frame: the print\'s centre height'),

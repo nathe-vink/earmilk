@@ -109,10 +109,13 @@ def _card(bpy, name, f, color, glossy=False):
 
 def cards(bpy, spec):
     """A set's flags (black cards: shadow and negative fill) and bounces (white cards), for any kind of set."""
+    # a card taken out (`off`) keeps its slot, so later indices hold (10's round 11 took flag 0 out of a reshoot)
     for i, f in enumerate(spec.get('flags', [])):
-        _card(bpy, f'flag{i}', f, '#050505')
+        if f and not f.get('off'):
+            _card(bpy, f'flag{i}', f, '#050505')
     for i, f in enumerate(spec.get('bounces', [])):
-        _card(bpy, f'bounce{i}', f, '#F2F2F2', glossy=True)
+        if f and not f.get('off'):
+            _card(bpy, f'bounce{i}', f, '#F2F2F2', glossy=True)
 
 
 # --- room ----------------------------------------------------------------------------------------------------------
