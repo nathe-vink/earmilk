@@ -1,0 +1,17 @@
+Image A: AB_A
+Image B: AB_B
+Measuring tool (optional): TOOL (run it with python3; `python3 TOOL IMAGE stats X0 Y0 X1 Y1`, `crop X0 Y0 X1 Y1 --out FILE --scale 3`)
+Scratch directory for crops: SCRATCH
+
+You are the creative director of a product-visualisation studio with a shipping bar: work leaves the studio only when
+it would hold up on a client's homepage and across a magazine spread. A and B are two renders of the same shot, the
+same scene, camera and light. Open both (Read tool) and look at each at full size, then at matching crops of the same
+areas (3x crops of the product's edges, its printed type, its surfaces and the set's textures).
+
+Score each out of 10, where 10 ships today and 5 is a competent draft, judging each image on its own merits as a
+photograph a studio would ship. Then say which you would ship and name the visible differences between them that drove
+your scores, each with the region where you saw it.
+
+Reply with only this JSON (no prose before or after):
+
+    {"A": 0.0, "B": 0.0, "prefer": "A|B|none", "differences": [{"what": "...", "region": [0, 0, 0, 0], "favours": "A|B"}]}

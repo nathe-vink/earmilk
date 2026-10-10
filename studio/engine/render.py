@@ -298,6 +298,9 @@ def main():
     # the retouch (retouch.py) matches the paints to their swatches in the finished frame; it needs the swatch mask
     ret = sh.get('retouch') or {}
     ret_on = bool(ret.get('enabled')) and R.get('format') != 'EXR'
+    # the finish (finish.py): the white point, contrast and sharpening set in post, around the retouch
+    fin = sh.get('finish') or {}
+    fin_on = bool(fin.get('enabled')) and R.get('format') != 'EXR'
     if a.masks_only or (a.masks and a.mirrors):
         # what each product pixel mirrors (probe.py), before the mask pass overrides the materials and hides the lamps:
         # the critic reads which lamp, panel or surface draws a reflection instead of guessing (03's round 8 graded
@@ -307,15 +310,23 @@ def main():
         report['mirrors'] = {'image': str(out.with_suffix('.mirror.png')), 'step': mm['step'], 'parts': mm['parts']}
     if a.masks or ret_on:
         report['masks'] = _masks(bpy, scene, objs, part_of, out)
-    if ret_on:
-        import shutil, retouch as Rt
+    if ret_on or fin_on:
+        # the post chain: raw -> the finish's tone -> the retouch -> the finish's sharpening -> the frame
+        import shutil, finish as Fn
         raw = out.with_suffix('.raw.png')
         if not raw.exists():
             shutil.copy(out, raw)
-        report['retouch'] = Rt.retouch(str(raw), str(out.with_suffix('.swatch.png')),
-                                       json.loads(out.with_suffix('.swatch.json').read_text()), ret, str(out))
-        for p_ in report['retouch']['paints']:
-            print(f"retouch {p_['paint']}#{p_['copy']} ({p_['mode']}): dE {p_['de_before']} -> {p_['de_after']}")
+        leg = json.loads(out.with_suffix('.swatch.json').read_text()) if ret_on else None
+        pr = Fn.post(str(raw), str(out), fin if fin_on else None, ret if ret_on else None,
+                     str(out.with_suffix('.swatch.png')) if ret_on else None, leg)
+        if pr['retouch']:
+            report['retouch'] = pr['retouch']
+            for p_ in report['retouch']['paints']:
+                print(f"retouch {p_['paint']}#{p_['copy']} ({p_['mode']}): dE {p_['de_before']} -> {p_['de_after']}")
+        if pr['finish']:
+            report['finish'] = f_ = pr['finish']
+            print(f"finish: white {f_['white_in']:g} -> {f_['white_out']:g} (gain {f_['gain']}), contrast {f_['contrast']:g}, "
+                  f"clarity {f_['clarity']:g}, sharpen {f_['sharpen']:g} at {f_['sharpen_px']:g} px")
     S.save(sh, out.with_suffix('.shot.json'))
     out.with_suffix('.report.json').write_text(json.dumps(report, indent=1, default=str) + '\n')
     for gl_ in glint_log:

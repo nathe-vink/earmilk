@@ -38,6 +38,17 @@ KNOBS = [
     ('retouch.lightness', '0 to 1', (0, 1), 'the share of a colour paint\'s lightness error taken out, as a gain on its light (a lighter or darker paint); 1 makes its lit face as light as the swatch, which can flatten a deliberate shade'),
     ('retouch.adapt', '0 to 1', (0, 1), 'how far a colour paint\'s target follows the light its copy\'s white shows: 1 the swatch as that light colours it, 0 the plain swatch (keep the reds on the swatch while the white keeps a trace of a room\'s warmth)'),
     ('retouch.neutral', '0 to 1', (0, 1), 'the share of a white paint\'s colour cast taken out (1 in a studio; less in a room where the light\'s colour is the picture\'s: a late sun\'s warm white)'),
+    # the finish (finish.py): the white point, contrast, clarity and sharpening a photographer sets in post
+    ('finish.enabled', 'bool', None, 'finish the frame in post: a white point, a mild contrast curve, clarity and sharpening, around the retouch (raw -> tone -> retouch -> sharpen); the tests read the finished frame'),
+    ('finish.white_in', 'sRGB level', (150, 250), 'the level in the raw frame that the white point takes to finish.white_out (the white paint\'s lit face; `finish.py calibrate IMG` reads it); lower lifts the whole frame more'),
+    ('finish.white_out', 'sRGB level', (200, 248), 'where finish.white_in lands; above it a smooth shoulder rolls the rest of the range into white_out to finish.peak, so nothing clips'),
+    ('finish.peak', 'sRGB level', (240, 254), 'the brightest level the shoulder reaches'),
+    ('finish.contrast', '0 to 0.4', (0, 0.4), 'a mild S about mid-grey, on luminance: deeper shadows, brighter highlights'),
+    ('finish.clarity', '0 to 0.3', (0, 0.3), 'local contrast at a large radius, in the midtones only (a surface\'s modelling)'),
+    ('finish.clarity_px', 'px at 1350 wide', (5, 80), 'the radius clarity works at'),
+    ('finish.sharpen', '0 to 1', (0, 1), 'an unsharp mask on luminance, cored and clamped to each pixel\'s 3 x 3 neighbours, so edges get crisper without halos'),
+    ('finish.sharpen_px', 'px at 1350 wide', (0.3, 2), 'the sharpening radius'),
+    ('finish.sharpen_core', 'levels', (0, 8), 'a difference under this many levels is noise and is not sharpened'),
     # sun and sky
     ('sun.azimuth_deg', 'deg', (-180, 180), 'compass direction the sun shines FROM, 0 = from in front of the product (-y), +90 = from +x'),
     ('sun.elevation_deg', 'deg', (0, 90), 'the sun\'s height above the horizon'),

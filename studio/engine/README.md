@@ -183,6 +183,37 @@ the critic's card prints that table and the `retouch.*` settings, and every test
 without rendering it again. On 01 e11: the reds from dE 7.2 to 9.5 to 3.2 to 5.1 (the rest is the half of the
 lightness left), both whites from 2.4 and 3.5 to 0.
 
+## The finish
+
+    "finish": {"enabled": true, "white_in": 213, "white_out": 236, "contrast": 0.12, "clarity": 0.08,
+               "sharpen": 0.35, "sharpen_px": 0.7}
+
+A frame out of the view transform has no white. Every blind critic from 2026-10-08 to 10 read the white lacquer as
+"flat grey", and the frames bear it out: the white paint's lit face at 205 to 218 of 255 on every shot, under 0.4 %
+of any frame above 235. Lights cannot fix it: the view transform's shoulder starts near 200, so a brighter key
+flattens the face before it whitens it, and the critics' own tests held the faces under 216 to keep their gradients.
+A photographer sets the white point in post. `finish.py` does the same, in the order a retoucher works:
+
+- **tone**, on the raw frame: a mild S about mid-grey (`contrast`), then a gain on luminance that takes `white_in`
+  (the white paint's lit face as rendered) to `white_out`, with a smooth shoulder above it into `white_out` to `peak`
+  (251), so nothing clips; the gain is applied to all three channels in linear light and lowered wherever it would
+  take a channel past the peak, so colours keep their hue and a saturated light (the amplifier's cyan LED) its colour;
+  then `clarity`, local contrast at a large radius in the midtones only;
+- **the retouch**, on the toned frame, so the paints still land on their swatches;
+- **sharpen**, last: an unsharp mask on luminance at `sharpen_px` (scaled with the frame's width from 1350 px), cored
+  (differences under `sharpen_core` levels are noise) and clamped to each pixel's 3 x 3 neighbourhood, so an edge
+  gets crisper without a halo either side.
+
+`python3 studio/engine/finish.py calibrate IMG` reads the white paint's lit face off `IMG.raw.png` (its 75th
+percentile of luminance, from the swatch mask) and prints the `white_in` that puts it at `white_out`, the gain capped
+at 1.12 so a white the light leaves in shade is not dragged up to a lit one. The tuner treats `finish.*` like
+`retouch.*`: one proof is rendered, the rest only rerun the post chain on its raw frame. A `--masks-only` pass
+re-finishes a frame from its raw without rendering it again.
+
+Blind A/B judges (critic/ab/2026-10-10-finish.md), the same frame with and without: 04b 7.0 against 6.0, 09 6.2
+against 5.3, the first version; its faults (a shoulder that clipped the top of 04b's face, halos, the LED bleached,
+grain up 40 %) are what the shoulder, the cap, the clamp and the coring above take out.
+
 ## Lamp shares
 
 A lamp's `diffuse` and `specular` (0 to 1) are made with ray visibility, which Cycles honours in light sampling too:

@@ -64,20 +64,26 @@ def main():
     if before_ok:
         print(f"  passing at the shot as it stands (the last tune's proof): {', '.join(sorted(before_ok))}")
 
-    # a retouch setting changes nothing the path tracer sees: one proof is rendered, the others only retouch its raw
-    # frame again (seconds, not minutes)
+    # a retouch or finish setting changes nothing the path tracer sees: one proof is rendered, the others only run the
+    # post chain on its raw frame again (seconds, not minutes)
     ret0 = S.load(a.shot).get('retouch') or {}
-    retouch_only = all(k.startswith('retouch.') and k != 'retouch.enabled' for k in knobs) and ret0.get('enabled')
+    fin0 = S.load(a.shot).get('finish') or {}
+    post_only = (all(k.startswith(('retouch.', 'finish.')) and k not in ('retouch.enabled', 'finish.enabled') for k in knobs)
+                 and all((ret0 if k.startswith('retouch.') else fin0).get('enabled') for k in knobs))
 
     def proof(v):
         import shutil
         out = td / f'proof-{len(proofs)}.png'
         base = td / 'proof-0.png'
-        if retouch_only and proofs and base.with_suffix('.raw.png').exists():
-            import retouch as Rt
-            spec = dict(ret0, **{k.split('.', 1)[1]: v for k in knobs})
-            Rt.retouch(str(base.with_suffix('.raw.png')), str(base.with_suffix('.swatch.png')),
-                       json.loads(base.with_suffix('.swatch.json').read_text()), spec, str(out))
+        if post_only and proofs and base.with_suffix('.raw.png').exists():
+            import finish as Fn
+            rs, fs = dict(ret0), dict(fin0)
+            for k in knobs:
+                (rs if k.startswith('retouch.') else fs)[k.split('.', 1)[1]] = v
+            sw = base.with_suffix('.swatch.png')
+            Fn.post(str(base.with_suffix('.raw.png')), str(out), fs if fs.get('enabled') else None,
+                    rs if rs.get('enabled') and sw.exists() else None, str(sw) if sw.exists() else None,
+                    json.loads(base.with_suffix('.swatch.json').read_text()) if sw.exists() else None)
             for suf in ('.mask.png', '.mask.json'):
                 if base.with_suffix(suf).exists():
                     shutil.copy(base.with_suffix(suf), out.with_suffix(suf))
