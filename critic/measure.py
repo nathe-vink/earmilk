@@ -125,6 +125,32 @@ def mirrors(a, r):
                     'near grazing); met_at_m: where the nearest of them was met, world metres (p5, median, p95)'}
 
 
+def mirror_profile(a, r, name, axis='y', bins=4):
+    """How bright the emitter `name` is where a region's product pixels mirror it, in `bins` slices along `axis`
+    (median radiance per slice; None where no pixel there mirrors it): which way a reflected ramp runs across a part."""
+    if 'label' not in MIRROR:
+        return None
+    _, ys, xs = select(a, r)
+    st = MIRROR['step']
+    cells = sorted({(int(y) // st, int(x) // st) for y, x in zip(ys, xs)})
+    vals = []
+    for (j, i) in cells:
+        w = MIRROR['legend'].get(int(MIRROR['label'][j, i]), '')
+        comps = (w.split(' over ')[0].split(' + ') + w.split(' over ')[1:]) if ' over ' in w else [w]
+        for k, c in enumerate(comps[:3]):
+            if c.split(' ', 1)[-1] == name and np.isfinite(MIRROR['radiance'][j, i, k]):
+                vals.append(((j if axis == 'y' else i), float(MIRROR['radiance'][j, i, k])))
+    if not vals:
+        return None
+    c = np.array([v[0] for v in vals]); v = np.array([v[1] for v in vals])
+    lo, hi = c.min(), c.max() + 1
+    out = []
+    for b in range(bins):
+        m = (c >= lo + (hi - lo) * b / bins) & (c < lo + (hi - lo) * (b + 1) / bins)
+        out.append(round(float(np.median(v[m])), 3) if m.any() else None)
+    return out
+
+
 def parse_region(r):
     """A region from the command line or a test: four numbers, 'part:NAME', or {'part': ..., 'box': [...]}."""
     if isinstance(r, str):

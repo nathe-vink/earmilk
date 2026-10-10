@@ -181,6 +181,20 @@ def precheck(a):
         met = (c.get('accept') or {}).get('metric', '')
         need = 5 if met in ('lum_p95', 'clip_pct') else 25 if met in ('lum_range', 'lum_mean', 'falloff', 'edge') else 45
         verdict = 'enough' if share >= need else 'TOO LITTLE'
+        if met == 'falloff' and share > 0:
+            # a falloff test wants the first slice brighter than the last (a positive value) or the reverse: the ramp the
+            # region mirrors has to run that way (04a's round 8: the letters' panel ran bottom-bright, -50 at full strength)
+            ax = (c.get('accept') or {}).get('axis', 'y')
+            prof = Me.mirror_profile(arr, reg, name, ax)
+            known = [v for v in (prof or []) if v is not None]
+            if known and max(known) - min(known) <= 0.02 * max(max(known), 1e-6):
+                verdict += f"; its radiance along {ax} is FLAT across the region ({known[0]}): the reflections meet the panel beyond its ramp, so no strength makes a falloff"
+            elif prof and prof[0] is not None and prof[-1] is not None and prof[0] != prof[-1]:
+                tv = (c.get('accept') or {}).get('value')
+                want = (tv[0] + tv[1]) / 2 if isinstance(tv, list) else tv
+                runs = 1 if prof[0] > prof[-1] else -1
+                ok = (want or 0) * runs > 0
+                verdict += f"; its radiance along {ax}, first slice to last: {prof} ({'the right way' if ok else 'THE WRONG WAY for this test'})"
         print(f"  {c['id']} {st}: the region mirrors `{name}` on {share:.0f} % of its product pixels"
               + (f" (radiance there: {rad})" if rad else '') + f"; it mirrors {top} [{met} needs about {need} %: {verdict}]")
     print(f'  (the mirror map with the changes: {out.with_suffix(".mirror.png")})')
