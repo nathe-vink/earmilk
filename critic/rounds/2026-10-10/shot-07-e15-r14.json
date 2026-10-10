@@ -1,0 +1,583 @@
+{
+ "stage1": {
+  "impression": "A clean, legible exploded view of the earmilk carton speaker: the red-and-white carton, the birch-lined driver cut-outs and the floating drivers, rings and gable piece all read clearly. But it is lit and staged like a test render, with a drab mid-grey sweep and a heavy, dirty vignette to the top right, a white body that reads grey, glary red plastic and parts that float with no depth cues or grounding, so nothing comes off the page.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The driver baffle leads the frame: no more than 45 degrees off the lens and at least as wide as the side panel (this round's turn to 60 degrees leaves it at about 148 px against 181), with the explode distances raised so that no two parts come within 30 px of each other.",
+  "One readable key: the baffle's white at 200-220, falling 15-30 levels from eave to plinth; the side panel 35-60 levels below it; every floating part casting a soft floor shadow that agrees with that key; no lamp lighting one part alone.",
+  "A clean, light set: the floor behind the parts at 175-195, the top band and the corners within 20 levels of it, no dark vignette, and the drivers and trim rings reading as crisp dark shapes against it.",
+  "The waveguide insert reads as the red roof part drawn out of its pocket: its red face and bowl lead, its neutral flank sits in shade, the whole part's median colour is within dE 15 of #C62828 (now 31), and the empty pocket with its magnets reads behind it.",
+  "Gloss under control: one shaped highlight each on the red roof and on the insert, no washed-pink patches, and the white lacquer showing a soft reflection gradient instead of one flat value."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "composition",
+   "problem": "The baffle that carries the drivers is turned 63-67 degrees off the lens, so it prints as a 101 px sliver beside a 199 px blank side panel, and the drivers and rings drawn off it are seen almost edge-on.",
+   "evidence": {
+    "region": [
+     272,
+     81,
+     573,
+     819
+    ],
+    "measured": "Side-left spans x 273-472 (199 px) and the front baffle x 472-573 (101 px). Woofer-cone box is 64x159 px (aspect 0.40), woofer-ring 60x226 (0.27), mid-ring 36x112 (0.32). A projection from the card's camera reproduces every part box in this frame to within 3 px; it puts the baffle 63-67 degrees and the woofer's face 72 degrees off the lens."
+   },
+   "change": {
+    "setting": "product.instances.0.rotate_z",
+    "from": 72,
+    "to": 60
+   },
+   "expected": "The baffle turns 12 degrees toward the lens (about 56 degrees off-axis) and widens from 101 to about 148 px, against about 181 px of side panel; its near corner moves from x 472 to about 448. The woofer ring opens to about 113x252 px (aspect 0.45) and the mid ring to about 66x131 (0.50), so the cones, rims and bowl show their faces. At the unchanged explode distances, the projection of c1-c3 together keeps every gap at 28 px or more: cabinet/mid 28, cabinet/woofer 29, mid/mid ring 29, woofer/ring 36.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      450,
+      320,
+      462,
+      620
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     130,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "camera",
+   "problem": "The camera stands 2.6 m up, looking 30 degrees down, so the frame reads as a top-down technical view: roof and floor dominate, the parts look laid out on a table rather than drawn out of the body, and empty sweep sits at top left and bottom right.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     1350,
+     900
+    ],
+    "measured": "Camera elevation is 29.9 degrees to the target, and the floor starts 60-100 rows from the top. Empty sweep at [0,0,270,250] reads 132-135 and at [1000,550,1350,900] 148-170. The tweeter's top is at y 219, and the assembly box is [272, 81, 1064, 819]."
+   },
+   "change": {
+    "setting": "camera.position",
+    "from": [
+     0.757,
+     -3.75,
+     2.6
+    ],
+    "to": [
+     0.66,
+     -3.55,
+     1.84
+    ]
+   },
+   "expected": "The camera drops to 1.84 m: 21 degrees down, 3.6 m from the target, same lens and azimuth, still square to the sweep. The cabinet's near corner runs from y 256 to 808 (552 px, now 517) and the parts rise into two rows, the tweeter's top moving from y 219 to about 183. The woofer's face goes to about 62 degrees off the lens (with c1). The pocket stays visible at about 55 degrees off its normal (now 54). The sweep's curve fills rows 0 to about 230 (c7 lights it).",
+   "accept": {
+    "region": {
+     "part": "tweeter-*",
+     "box": [
+      700,
+      175,
+      765,
+      210
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     20,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "camera",
+   "problem": "With the camera lowered, the old target would frame the explode 21 px left of centre and 14 px low, adding to the left-heavy read the bright cabinet already gives.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     1350,
+     900
+    ],
+    "measured": "The bright cabinet and both red masses sit left of x 573, and only small dark parts sit to its right. Projected with c2 and the old target, the assembly frames at margins L244 R286 T83 B78."
+   },
+   "change": {
+    "setting": "camera.target",
+    "from": [
+     0.44,
+     0.035,
+     0.47
+    ],
+    "to": [
+     0.42,
+     -0.2,
+     0.54
+    ]
+   },
+   "expected": "The target moves to the assembly's centre, so the level camera frames it at about [267, 70, 1086, 808]: margins L267 R264 T70 B92, filling about 82% of the height. The bottom margin leaves room for c4's floor shadows. The baffle's far edge lands at x about 596 (now 572).",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      584,
+      280,
+      594,
+      420
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     150,
+     235
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The key hangs 0.67 m off the camera-facing side panel at azimuth -84 and only grazes it, so no light direction reads on the cabinet and the two white faces print 7-12 levels apart.",
+   "evidence": {
+    "region": [
+     281,
+     205,
+     572,
+     752
+    ],
+    "measured": "Side-left reads 193, its x-profile flat at 190-194. The front baffle reads 200 (its neutral pixels 205). The side-left's top mirrors the key over 12.3% of the face, met at x -0.45 to -0.24, y -0.57 to -0.21, z 0.52-0.79 m: the lamp sits just in front of the camera-facing face."
+   },
+   "change": {
+    "setting": "lights.key",
+    "from": {
+     "type": "area",
+     "size_m": [
+      0.6,
+      1.4
+     ],
+     "orbit": {
+      "azimuth_deg": -84,
+      "elevation_deg": 45,
+      "distance_m": 0.6667
+     },
+     "target": [
+      0.2,
+      0,
+      0.7
+     ],
+     "irradiance": 2.4172,
+     "color": 6300
+    },
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.4,
+      1.8
+     ],
+     "position": [
+      2.2,
+      0.19,
+      2.48
+     ],
+     "target": [
+      0.25,
+      -0.15,
+      0.5
+     ],
+     "irradiance": 2.5,
+     "color": 5800
+    }
+   },
+   "expected": "A 1.4x1.8 m softbox high on the right, just behind the baffle plane (azimuth 100, elevation 45, 2.8 m). It lights the baffle at about 57 degrees incidence and the roof's front slope and the insert's red face at about 27, and leaves the side panel unlit. With c5, the band between the holes sits at 200-220, falling about 20-30 levels from eave to plinth, with rim light on the drivers' right edges. The cabinet's and the parts' soft shadows fall to the left-front onto floor the camera sees; the projection puts none of them on the baffle. The irradiance (start 2.5) is tuned on the band.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      476,
+      388,
+      580,
+      416
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     200,
+     220
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The 2x2 m fill at azimuth 50 is the light this frame actually runs on, and after the turn it would sit 10 degrees off the baffle's normal, flatten it, and leave nothing to make the side panel a shadow side.",
+   "evidence": {
+    "region": [
+     466,
+     420,
+     572,
+     450
+    ],
+    "measured": "The baffle's row profile reads 221, 218, 213, 202, 197, 192, evenly lit by the 1.7 W/m2 fill. The side-left reads 196 in [290,300,430,640], only 4-9 levels under the baffle."
+   },
+   "change": {
+    "setting": "lights.fill",
+    "from": {
+     "type": "area",
+     "size_m": [
+      2,
+      2
+     ],
+     "orbit": {
+      "azimuth_deg": 50,
+      "elevation_deg": 18,
+      "distance_m": 3.2
+     },
+     "target": [
+      0.2,
+      0,
+      0.6
+     ],
+     "irradiance": 1.7,
+     "color": 6200,
+     "specular": 1
+    },
+    "to": {
+     "type": "area",
+     "size_m": [
+      2,
+      2
+     ],
+     "position": [
+      -2.3,
+      -2.0,
+      1.3
+     ],
+     "target": [
+      -0.1,
+      -0.15,
+      0.5
+     ],
+     "irradiance": 0.6,
+     "color": 6500,
+     "specular": 0.5
+    }
+   },
+   "expected": "The fill moves to the camera-left, opposite the key (azimuth -50, elevation 15, 3 m). It lights the side panel about 20 degrees off square and the baffle not at all, so the side reads as the shadow side, 35-60 levels under the baffle and still a white in shade. Its specular share of 0.5 keeps it to a soft gradient at the top of the lacquer. The irradiance (start 0.6) is tuned with side_fill and the sky still contributing.",
+   "accept": {
+    "region": {
+     "part": "side-left",
+     "box": [
+      290,
+      300,
+      430,
+      640
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     152,
+     175
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "The sweep paper is a dull mid-grey (#9A9A9A) that prints 125-170, so the white body sits only 30-60 levels above it and the black drivers sit in murk.",
+   "evidence": {
+    "region": [
+     1180,
+     420,
+     1350,
+     560
+    ],
+    "measured": "The floor behind the parts reads 146. The top left [0,0,250,110] reads 135 and behind the cabinet [100,300,250,500] 133. At y 380-520 the sweep runs 128, 135 ... 155, 142 from edge to edge."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#9A9A9A",
+    "to": "#C6C4C0"
+   },
+   "expected": "A light, faintly warm grey paper. The floor behind the parts goes from 146 to 174-192, below the lit baffle (200-220) and above the shaded side (152-175). The drivers (35-65) and the 2-3 px trim rings then read as crisp dark shapes on light paper, and c4's cast shadows read as shadows. The foreground floor nearest the key should land around 210-222, not clipped.",
+   "accept": {
+    "region": [
+     1180,
+     420,
+     1350,
+     560
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     174,
+     192
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The only lamp on the sweep's curve is centred at x -0.7, so the back of the set falls into a dark top-right corner, and the lowered camera will show that curve across the top quarter of the frame.",
+   "evidence": {
+    "region": [
+     700,
+     0,
+     1350,
+     110
+    ],
+    "measured": "The median is 139, falling 151, 148, 143, 135, 127, 120 from x 700 to 1350. The right column [1180,0,1350,900] climbs from 122 at the top to 164 at the bottom."
+   },
+   "change": {
+    "setting": "lights.sweep",
+    "from": {
+     "type": "area",
+     "size_m": [
+      5,
+      2.5
+     ],
+     "position": [
+      -0.7,
+      2.3,
+      3
+     ],
+     "target": [
+      -0.7,
+      4.4,
+      0.7
+     ],
+     "irradiance": 0.6648,
+     "color": 5800
+    },
+    "to": {
+     "type": "area",
+     "size_m": [
+      7,
+      2.5
+     ],
+     "position": [
+      0.1,
+      2.2,
+      3.0
+     ],
+     "target": [
+      0.1,
+      4.2,
+      0.6
+     ],
+     "irradiance": 1.3,
+     "color": 5800
+    }
+   },
+   "expected": "The wash is re-centred on the frame (x 0.1) and widened to 7 m. Its irradiance (start 1.3) is tuned so the top band sits at 165-188, within about 15 levels of the floor behind the parts, with no left-to-right fall like today's 151 to 120. The top corners stop reading as a vignette.",
+   "accept": {
+    "region": [
+     700,
+     0,
+     1350,
+     110
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     165,
+     188
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "insert_kick (3.0 W/m2, unlinked) sits 0.5 m in front of the waveguide insert on the camera side and lights its neutral flank square-on, so the hero part reads as a pale fragment with a red sliver.",
+   "evidence": {
+    "region": [
+     905,
+     280,
+     960,
+     380
+    ],
+    "measured": "The flank reads RGB 181/184/186 (dE 40.1 from #C62828), and 83% of it mirrors the sky. The whole insert's median is RGB 186/157/158 (dE 31.0), against the roof's 185/40/41 (dE 2.8)."
+   },
+   "change": {
+    "setting": "lights.insert_kick.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The flank drops into the key's shade, lit only by the fill and the sky: about 110-150 instead of 182. The insert's red face and bowl, square to c4's key, then carry the part, and it reads as the red roof piece drawn out of its pocket. The floor under the insert loses its extra pool.",
+   "accept": {
+    "region": {
+     "part": "waveguide-insert",
+     "box": [
+      878,
+      270,
+      940,
+      370
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     80,
+     160
+    ]
+   }
+  },
+  {
+   "id": "c9",
+   "rank": 9,
+   "kind": "light",
+   "problem": "tweeter_kick (5.44 W/m2, linked to the dome, surround and frame) lights the tweeter and nothing around it, and after the turn its fixed spot lands square on the tweeter's new face, so the dome would glow like a pasted-on part.",
+   "evidence": {
+    "region": [
+     751,
+     242,
+     759,
+     260
+    ],
+    "measured": "The dome reads 116, against its own frame at 69 and retainer at 36. The floor and the neighbouring parts get none of this lamp's light; at the turned geometry the projection puts the dome at about 150 with the kick on."
+   },
+   "change": {
+    "setting": "lights.tweeter_kick.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The tweeter takes the key like its neighbours: the dome at about 80-115, with a rim highlight on its right edge.",
+   "accept": {
+    "region": "part:tweeter-dome",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     55,
+     122
+    ]
+   }
+  },
+  {
+   "id": "c10",
+   "rank": 10,
+   "kind": "light",
+   "problem": "mid_kick (3.07 W/m2, linked to the mid cone and cap) lights the papyrus cone alone, and after the turn it sits on the mid's new axis and would roughly double the cone's light against the key's, giving a flat lit disc.",
+   "evidence": {
+    "region": [
+     677,
+     348,
+     700,
+     420
+    ],
+    "measured": "The mid-cone reads 69.8 (p5 61.7, p95 73.0): one flat value, against the mid frame at 50 and the mid magnet at 48."
+   },
+   "change": {
+    "setting": "lights.mid_kick.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The cone takes the key like its frame: about 50-80, darker toward the left, instead of about 94 projected with the kick on the new axis.",
+   "accept": {
+    "region": "part:mid-cone",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     40,
+     84
+    ]
+   }
+  },
+  {
+   "id": "c11",
+   "rank": 11,
+   "kind": "light",
+   "problem": "low_fill (0.6 W/m2, linked to side-left) lights the base of the face that becomes the shadow side from floor level, which under the new key reads as light from below that nothing in the set explains.",
+   "evidence": {
+    "region": [
+     300,
+     310,
+     440,
+     680
+    ],
+    "measured": "Side-left's vertical profile reads 213, 205, 200, 196, 191, 188, 185, 183 with the lamp on. At the turned geometry the lamp adds about a third to the face's base and about an eighth to its top."
+   },
+   "change": {
+    "setting": "lights.low_fill.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The shadow side carries only the fill, side_fill, the sky and the floor's own bounce. Its top-to-bottom falloff should be about -10 to +20, against about -25 projected with low_fill on.",
+   "accept": {
+    "region": {
+     "part": "side-left",
+     "box": [
+      290,
+      300,
+      430,
+      640
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -15,
+     25
+    ]
+   }
+  },
+  {
+   "id": "c12",
+   "rank": 12,
+   "kind": "light",
+   "problem": "plinth_fill (2.36 W/m2, linked to *.plinth) lights the red band alone from a low point in front, so after the turn the shadow-side plinth would glow under a shaded wall.",
+   "evidence": {
+    "region": [
+     281,
+     617,
+     572,
+     818
+    ],
+    "measured": "side-left.plinth reads 66.5 and front-baffle.plinth 70.2: two red faces 90 degrees apart print 4 levels apart."
+   },
+   "change": {
+    "setting": "lights.plinth_fill.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The red band follows the key: the key-side band stays lit, and the shadow-side band falls to about 50-62 after the retouch's half-correction of lightness, against about 70 projected with the lamp.",
+   "accept": {
+    "region": "part:side-left.plinth",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     40,
+     64
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Paint the waveguide insert's flank in the accent colour.",
+   "why": "From any camera that shows the drivers, that neutral flank (RGB 181/184/186, dE 40 from #C62828) faces the lens and takes about half the part, so the hero part reads red-and-white. Its colour and shape are the product's; only light (c4, c8) can push it back."
+  },
+  {
+   "request": "Thicker sections on the trim rings.",
+   "why": "At 2-3 px in frame they read as stray lines rather than parts. Their geometry is fixed; only their size in frame and their contrast against the sweep (c1, c2, c6) can help."
+  },
+  {
+   "request": "Move the insert and tweeter off their drawer axis, closer to the roof.",
+   "why": "The insert lands about 270 px clear of the cabinet. Along its own axis it cannot come closer in this view: the projection gives a 67 px gap to the mid ring at 0.92 m and an overlap (0 px) at 0.80 m."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
