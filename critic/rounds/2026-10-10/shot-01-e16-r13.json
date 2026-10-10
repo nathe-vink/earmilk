@@ -1,0 +1,162 @@
+{
+ "stage1": {
+  "impression": "A warm, believable sunlit living room in which the pair reads at once and the red-and-white livery is strong, but the speakers look lit by a soft frontal fill rather than by the low sun raking the room, so the fronts read as even studio whites and the far speaker's faces flatten into a lit box. Grounding is light, twig and blob shadows crowd the wall around the hero, and the bottom fifth of the frame is dark, empty floor.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "Sideboard doors [610,485,975,600] read as walnut, not mauve-grey: b_median <= 52 and Lab hue 50-65 deg. Now b 70, and the top strip (102,86,85) is h 25 deg C 7.1, while the end panel reads true walnut (63,33,9), h 59 deg C 23.8.",
+  "Hero roof slope [405,300,440,340] within dE2000 4.5 of #C62828, with a sheen that grades toward the ridge and stays >= 15 levels above the fin's 70 so the ridge reads. Now (202,87,76), dE 9.3, one flat value of 110-112 down the slope.",
+  "No linked diffuse lamp on the product. The far speaker's shade side [1084,360,1132,580] should take only light the room has. Now 148 from inner_fill, against the hero's side at 117 and the wall beside it at 89, with an 86 seam on its corner between faces of 155 and 190.",
+  "Shaded plaster reads as warm grey at the plaster's own hue (Lab h 70-85 deg), not pink-brown. Now h 45-56 deg at C 7-12, and 39 deg above the sideboard: the shade is blue skylight mixed with red floor bounce.",
+  "The sun's warmth reads on the sunlit product faces against their shade sides: hero front b* >= 3 after retouch, with its shade side cooler. Now front 1.2 and side 1.2. The raw front cast is only 2.6 because 67 % of the front mirrors a near-white panel.",
+  "The cast-metal wordmark reads as metal: letters lum_median 170-195. Now 150, flat light grey.",
+  "Foreground oak shows real grain: within-plank lum_range >= 15 with fine figure. Now 8-14 with smooth, low-frequency streaks, e.g. [700,860,950,880] has a range of 8.4."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The sideboard is the frame's central mass, and it renders mauve-grey because its satin doors mirror front_gradient, an unlinked 4.4 m reflection panel lying on the floor in front of the pair, so the walnut never shows and the palette goes muddy.",
+   "evidence": {
+    "region": [
+     610,
+     485,
+     975,
+     600
+    ],
+    "measured": "Doors: rgb (95,74,70), b_median 70, lum 78, Lab h 35 deg C 10.6, against the paint #5A3C26 at h 61 deg C 21.5. They grade the way the panel's ramp does: top strip [615,485,970,497] is (102,86,85), h 25 deg C 7.1; bottom strip [615,590,970,603] is (85,57,47), h 46 deg C 15.7. The end panel [580,470,600,600] faces away from the panel and reads true walnut (63,33,9), h 59 deg C 23.8. The turntable plinth front [600,440,790,470] carries the same cast, (78,66,67). By the card's geometry the doors' reflected rays meet the panel between y -0.9 and -2.7 m (ramp 0.08-0.49 x strength 4). Round 12's paint change (c10) still fails at b 71."
+   },
+   "change": {
+    "setting": "lights.front_gradient.receivers",
+    "from": "absent",
+    "to": [
+     "front-baffle",
+     "front-baffle.plinth",
+     "woofer-*",
+     "mid-*",
+     "tweeter-*",
+     "waveguide-insert",
+     "letters-front-*"
+    ]
+   },
+   "expected": "The doors show their own diffuse walnut: b_median about 35-45, lum about 55-62, hue 50-65 deg, with the veneer cathedrals visible. The turntable plinth loses the grey cast too. The list holds every product part that mirrors the panel now (front-baffle 54 %, plinth 34 %, woofer ring 77 %, woofer frame 56 %, mid ring 30 %, caps, surrounds, cones, tweeter, letters 6 and 7), so the hero front keeps its reflected ramp and a lum_median of 205-215.",
+   "accept": {
+    "region": [
+     610,
+     485,
+     975,
+     600
+    ],
+    "metric": "b_median",
+    "op": "between",
+    "value": [
+     18,
+     52
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The hero's roof slope mirrors roof_ramp at full radiance across 90 % of its pixels, which washes the brand red into one flat coral value; the far roof mirrors the dark ceiling and does not share it.",
+   "evidence": {
+    "region": [
+     405,
+     300,
+     440,
+     340
+    ],
+    "measured": "Slope: rgb (202,87,76), lum 110, g 87, Lab L 51.7 C 53.6, dE2000 9.3 to #C62828. Down the slope it runs 111.7 at the ridge to 102 near the eave and 95 at the eave line, effectively flat. The fin above [395,272,540,290] is (193,37,36), dE 1.3; the far slope [1110,310,1150,344] is (179,34,34), dE 4.2. Mirrors: panel roof_ramp 89.9 % at radiance 1.015 (p5 0.93). The retouch reports gable dE 1.16 only because its lit-face sample skips these low-chroma pixels."
+   },
+   "change": {
+    "setting": "lights.roof_ramp.strength",
+    "from": 1.0155,
+    "to": 0.4
+   },
+   "expected": "Slope near (196,61,55): g about 59, lum 88-92, dE about 3.5, still about 20 levels above the fin's 70 so the ridge reads. The hero waveguide's sheen (855 px mirroring this panel, lum 94) drops to about 65 while its throat stays near 43, so the bowl still reads. The mid-cone sheen dims slightly (median 18.8 to about 17). The far roof does not change (110 px see the panel).",
+   "accept": {
+    "region": [
+     405,
+     300,
+     440,
+     340
+    ],
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     52,
+     66
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The far speaker's shade side is lifted by inner_fill, a panel linked to side-left alone, so it glows brighter than both the hero's shade side and the wall beside it, and its corner turns into a dark seam between two lit faces.",
+   "evidence": {
+    "region": [
+     1084,
+     360,
+     1132,
+     580
+    ],
+    "measured": "Far side: lum_median 147.6 (p95 164.6). Back to front it runs 95, 124, 143, 154, 159, 159, a hotspot where the panel aims. Hero side [380,360,412,640] is 116.8; the wall beside the far speaker [1040,300,1074,560] is 89.1. Across the corner [1120,360,1160,420] it goes 155, then 86, then 190."
+   },
+   "change": {
+    "setting": "lights.inner_fill.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The far side falls to about 75-95 with a soft gradient toward its front edge. It sits deeper than the hero's side because it faces away from both windows and the sideboard boxes it in, so both speakers read as lit by the one sun from the right. The 86 seam no longer reads darker than the side, and the front stays near 196. fill_left (c5) keeps the hero's side at 100-135, so c5's purpose holds.",
+   "accept": {
+    "region": [
+     1084,
+     360,
+     1132,
+     580
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     62,
+     118
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The cast-metal wordmark reads as flat grey print because the letters_card it mirrors is too weak for the metal to read against the red.",
+   "evidence": {
+    "region": "part:letters-front-*",
+    "measured": "lum_median 150, p95 170.7, rgb (157,148,146). 70 % of letter pixels mirror letters_card (radiance 0.364) over the floor. Glints 3 and 4 are at 0 W."
+   },
+   "change": {
+    "setting": "lights.letters_card.strength",
+    "from": 0.3643,
+    "to": 0.7
+   },
+   "expected": "The letters rise to a median of about 180-190 and read as polished metal against the plinth's 59. The plinth and floor do not change, because the card is linked to letters-front-* alone.",
+   "accept": {
+    "region": "part:letters-front-*",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     168,
+     196
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Make the gable's lacquer less reflective, or matte the roof slope, so the red stays saturated under the bright ceiling.",
+   "why": "The paint and clear coat are the product's fixed finish. c2 deals with the coral slope (dE 9.3) by changing what the slope mirrors, but a coat this glossy will pick up any bright surface overhead, so any future overhead card must stay weak or be linked away from gable-block."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

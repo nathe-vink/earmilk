@@ -166,5 +166,19 @@
    "sharpen_px": 0.7,
    "gain": 1.0564
   }
+ },
+ "01-e16": {
+  "slot": "close",
+  "face": 202.9,
+  "finish": {
+   "white_in": 210.7,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.1201
+  }
  }
 }
