@@ -1,0 +1,249 @@
+{
+ "stage1": {
+  "impression": "A clean, legible cutaway of a house-shaped birch-ply roof with a glossy red waveguide, set on a flat charcoal field. The section faces and grey fill read as near-flat values, the driver body is a near-black mass, the backdrop has no gradient or floor, and the frame cuts the cabinet mid-body, so it reads as a competent CG technical draft rather than a hero image.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The red silhouettes separate from the backdrop by luminance as well as hue (at least 12 levels). Today the fin's red face reads 60.2 on a ground of 65.9, with a 1.9-level step across its right edge, and the bowl (red median 76.7) sits on 62-66, so in a luminance read the hero melts into the backdrop.",
+  "The waveguide's lacquer shows a defined highlight that follows its flare (mid-flare lum_p95 130-180) while its body stays on #C62828. Today its red runs p5 55 to p95 91 and its brightest pixel is 113, so it reads as satin paint, not gloss.",
+  "The backdrop reads as a lit sweep: a soft pool at least 8 levels above the opposite side, kept away from the red edges. Today it is a 58-67 field with a left-right falloff of +1.0 along the top.",
+  "The birch section reads as pale birch: cut-face median at least 160 (today 150, rgb 177/149/112, L* 63), with the cream connector still under the 226 knee (today p95 202).",
+  "The tweeter assembly reads as separate parts at viewing size. The retaining sleeve, its flange, the tweeter frame and the motor should be told apart without zooming, with no cavity crushed. Today the frame's cavity reads 3.6 (18% crushed), the sleeve's interior 9-23 and its lit flange 46. The near-black matte material of these parts sets the limit (see out_of_scope).",
+  "The magnets and pins kept from the cut-away half read as mounted hardware, not as chrome parts floating about 7 cm in front of the section with no contact shadow.",
+  "The insert's section face and the seal read as real sliced materials, not as flat fills. Today the insert's lower wedge is one value (118-125) over about 50k px, and the seal is a matte block at 43.7."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The backdrop is as light as the accent red, so the fin, the red roof slope and the bowl separate from it by hue alone, and their grazing faces mirror the grey sweep as a film that dulls the red.",
+   "evidence": {
+    "region": [
+     760,
+     120,
+     900,
+     230
+    ],
+    "measured": "The backdrop beside the fin reads lum_median 65.9. The fin's red face [690,140,735,240] reads 60.2, rgb (147,37,37), a* 45 against the swatch's 60. The edge across the fin's right side [720,170,780,200] along x has a largest step of only 1.9 levels. The red bowl's median is 76.7 against a backdrop of 62-66. Gable-block pixels that mirror the sweep make up 28% of the part, and the bowl's lower lip, which mirrors it, reads 63-67."
+   },
+   "change": {
+    "setting": "set.color",
+    "from": "#6D6A67",
+    "to": "#3E3C3A"
+   },
+   "expected": "The backdrop beside the fin and behind the bowl drops to about 42, so the fin's red face sits about 15 levels above it, the red roof slope (about 70) about 25 above, and the bowl body about 35 above. The red faces that mirror the sweep lose some of their grey film (more chroma at the fin and the bowl's lower lip). This continues round 6's c2 in the same direction (its test still fails at 60.2), so nothing is reversed. The hue stays the warm neutral of the current paper.",
+   "accept": {
+    "region": [
+     760,
+     120,
+     900,
+     230
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     36,
+     48
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The waveguide is the hero, but its lacquer carries no highlight. The bowl_ramp card gives only a broad sheen of about 15 levels, so the bowl reads as satin red paint and its flare has nothing that draws it.",
+   "evidence": {
+    "region": [
+     860,
+     455,
+     1060,
+     540
+    ],
+    "measured": "Red bowl pixels (waveguide-insert, R > 1.8G) read lum p5 55.1, median 76.7, p95 91.0, max 113. The waveguide-insert pixels in this mid-flare box read lum_p95 91.3 and median 84.1. In the mirror map, a diagonal band along the flare from about (775,457) to (1150,575) mirrors the bowl_ramp plane at z 1.22-1.34 m, y -0.42 to 0.75 m, x 0.89-1.21 m. Round 6's tuning showed 0.022 linear per unit of panel radiance at these pixels."
+   },
+   "change": {
+    "setting": "lights.bowl_streak",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.3,
+      0.09
+     ],
+     "position": [
+      1.02,
+      0.16,
+      1.265
+     ],
+     "target": [
+      0.075,
+      -0.093,
+      1.057
+     ],
+     "strength": 8,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "y",
+      "at_m": [
+       -0.45,
+       0.15,
+       0.8
+      ],
+      "values": [
+       0.15,
+       1,
+       0.15
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "waveguide-insert"
+     ]
+    }
+   },
+   "expected": "A soft pink-white streak, 10-20 px wide, follows the flare from near the throat (about 775,457) toward the mouth (about 1150,575). It peaks at about 150 luma mid-flare and fades at both ends, so the bowl reads as gloss lacquer and its curvature is drawn by the highlight. The strip lies in the bowl_ramp's plane, linked to the insert alone, so it lights nothing and leaves the gable-block's red alone. Round 6's bowl_ramp (c1) is untouched and its broad sheen stays. Its region will read a higher p95 because of the streak, and that is intended; the body's median in this box stays about 80-90.",
+   "accept": {
+    "region": {
+     "part": "waveguide-insert",
+     "box": [
+      860,
+      455,
+      1060,
+      540
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     130,
+     180
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The birch section prints as a dull kraft tan, not pale Baltic birch, and it is the largest product area in the frame.",
+   "evidence": {
+    "region": [
+     330,
+     560,
+     520,
+     630
+    ],
+    "measured": "The gable-block cut face here reads lum_median 150.0. The ply's rgb median is (177,149,112), L* 63.4, b* 23. The apex reads about 176 and the lower-left eave 142. The connector's lum_p95 is 201.8, about 0.3 EV under the 226 knee. The top panel shades the visible interior from the key, and its spill lands on the floor behind the product, below the frame."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 2.9,
+    "to": 3.9
+   },
+   "expected": "The lower gable cut face rises from 150 to about 163 and the apex from about 176 to about 190, so the section reads as pale birch and its top-to-bottom falloff grows slightly. The grey section goes from about 123 to 134 and the connector's p95 from about 202 to about 212, still linear under the knee. The key does not reach the visible interior and barely reaches the visible sweep, so the interior stays at about 77 and recedes under the brighter section, and c1's backdrop level holds. Round 6's c4 changed the key's azimuth; its strength is a separate setting, so nothing is reversed.",
+   "accept": {
+    "region": [
+     330,
+     560,
+     520,
+     630
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     160,
+     172
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The backdrop is a flat field with no pool of light behind the product. The pool lamp hangs about 2.4 m from the sweep, so its 1 m face spreads its light almost evenly across the frame.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     1350,
+     110
+    ],
+    "measured": "A profile along x across the top strip gives bins 58.9, 63.1, 65.9, 66.9, 66.2, 64.2, 61.2, 57.9: a 9-level central hump with a left-right falloff of +1.0. Corner cells read 57-65. The pool lamp at [-0.45, 1, 1.6] lands on the sweep near (-0.6, 3.3, 0.9), 2.41 m away."
+   },
+   "change": {
+    "setting": "lights.pool",
+    "from": {
+     "type": "area",
+     "size_m": [
+      1,
+      1
+     ],
+     "position": [
+      -0.45,
+      1,
+      1.6
+     ],
+     "target": [
+      -0.6,
+      2,
+      0.9
+     ],
+     "irradiance": 1.2587,
+     "color": 5600,
+     "specular": 0
+    },
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.5,
+      0.5
+     ],
+     "position": [
+      -1.0,
+      2.85,
+      1.55
+     ],
+     "target": [
+      -1.05,
+      3.26,
+      0.8
+     ],
+     "irradiance": 4.0,
+     "color": 5600,
+     "specular": 0
+    }
+   },
+   "expected": "A soft pool of light on the sweep is centred behind the left roof slope at about (240,300) and falls off to the right. The pale ply slope stands against the brighter ground, about 55, while the red fin, slope and bowl keep c1's dark ground: about 25% of the pool's lift reaches [760,120,900,230], which c1's test keeps under 48. The lamp sits 0.85 m from the sweep, above the frame (its lowest edge projects to about y -200), and faces away from the product, so it lights nothing on the product and shows in no reflection. Round 6's c5 put this lamp where it lights the sweep at all. This moves it closer and to the left so the pool reads and stays off the red. Its earlier region will read lower once c1 darkens the paper.",
+   "accept": {
+    "region": [
+     0,
+     0,
+     1350,
+     110
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     6,
+     18
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Print the retaining sleeve (and its flange) in a lighter or contrasting colour, for example the insert's grey, or a satin finish that takes a reflection.",
+   "why": "The sleeve, the tweeter frame and their cavities are matte near-black. The sleeve's lit flange reads 46 under the same key that puts the ply at 151 (about 2% albedo), the frame's cavity reads 3.6 with 18% crushed, and the sleeve's pixels do not brighten where they mirror the snoot or the key (radiance 2-4): 41-44 and 22 against 45 where they mirror the sky. No studio light can separate the sleeve and its flange from the tweeter without the linked-lamp glow, and the must-show 'retaining sleeve and its flange' needs that separation to read at a glance. The product's materials and colours are fixed."
+  },
+  {
+   "request": "Show the insert's magnets and pins seated in the section (cut with it, or ghosted in place) instead of whole and floating.",
+   "why": "They are kept whole from the cut-away half and hang about 7 cm in front of the section plane (mirror hits at y -0.07 to -0.08 m) with no support or contact shadow. The upper pair overlaps the tweeter's cable lead and reads as a ferrite bead on the wire, not as the magnets that hold the insert. What is cut or hidden is fixed."
+  },
+  {
+   "request": "Give the insert's cut face a surface character (print layers or bead-blast) and the seal a lighter, translucent silicone.",
+   "why": "The insert's section is one untextured value (lower wedge 118-125, upper boss 132-136, about 50k px), which reads as a CAD fill rather than a sliced part. The seal is a matte dark-grey block (43.7, uniform whatever it mirrors) that reads as black plastic, not silicone. Light can only grade them; their materials are the product's and are fixed."
+  }
+ ],
+ "score_if_fixed": 7.0
+}

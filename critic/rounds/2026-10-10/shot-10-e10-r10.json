@@ -1,0 +1,278 @@
+{
+ "stage1": {
+  "impression": "A clean, legible pair of milk-carton speakers in a muted living-room set, but the light is flat and grey, the white carton fronts read as near-single values and the contact shadows are so weak the floorstander barely sits on the floor. The set gives it away as CG (wavy procedural sideboard grain, slab books, a plain wall with an empty top third), so it reads as a competent previz rather than a homepage hero.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "Daylight with a direction: the wall's upper band (y 90-190) falls 15-30 levels from the left edge to the right (now 141.2 -> 137.3, falloff 3.9) and each speaker's lit side sits 55+ levels under its white front (now 215 vs 171 on the floorstander, 207 vs 175 on the bookshelf).",
+  "Both speakers visibly sit down: a soft shadow from the floorstander's base across the floor to its right, 40+ levels under the lit floor left of it (now 59 vs 86); no brightening of the floor at its front edge (now 93.4 in the 8 px under the plinth vs 89.5 at 40 px out); the bookshelf's shadow on the sideboard top, not just a blue-purple reflection (rgb 93, 80, 114 under it).",
+  "Gables that read as lacquer: an 18-38 level sheen from ridge to eave on both front slopes (floorstander now 10.7; bookshelf a flat 76, range 7.3).",
+  "A set that reads as photographed: no regular ring lines on the sideboard doors (now a 6 px period with 7-8 level dips, patch range 9.3); the right door not a dead flat 68 (range 7.4 vs 14.3 on the left door); books with boards and page blocks (top book a flat 30.7).",
+  "Speakers that own the frame: the floorstander at 65%+ of the frame height (now 510 of 900 px, 57%), no empty band of wall above both roofs (now y 0-199), and the vase branches clear of the top edge.",
+  "A centre that reads as shadow, not murk: the wall between the speakers at 110 or above (now 112; c1 and c2 alone would take it to about 100), while every white edge keeps 15+ levels over the wall beside it (tightest is the bookshelf's right edge, 168 vs 137 now)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The room's light has no direction. It comes square-on from behind the camera (the front-wall window, plus a 0.47 W/m2 sun from 25 deg left of straight-on at 15 deg), so the wall is one value across the frame and every shadow falls behind the speakers where the camera can't see it: nothing models them or sits them down.",
+   "evidence": {
+    "region": [
+     0,
+     90,
+     1350,
+     190
+    ],
+    "measured": "Wall band 8-bin x-profile 141.2, 142.0, 142.6, 142.8, 143.3, 143.4, 140.8, 137.3 (falloff 3.9). Left wall [20,300,200,500] 145.1, range 4.1. Floor in the 8 px under the floorstander's front plinth [240,760,375,768] 93.4 vs 89.5 at 40 px out [240,800,375,808]. Floorstander white front 215 vs side 171."
+   },
+   "change": {
+    "setting": "lights.window_key",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.4,
+      1.8
+     ],
+     "position": [
+      -2.35,
+      -1.2,
+      1.5
+     ],
+     "target": [
+      -0.1,
+      0.05,
+      0.55
+     ],
+     "irradiance": 0.4,
+     "color": 5600
+    }
+   },
+   "expected": "Window light from the left that the whole set sees. The wall band falls about 20-28 levels left to right (left about 152, right about 130; now 141 -> 137). The floor left of the floorstander [100,690,228,760] rises from 86 to about 100-108, while its soft shadow holds the floor right of its base [482,600,585,700] at about 50-56 (now 59): a 45+ level step that sits it down. Its front gains about 8 levels of left-to-right falloff, and with c2 its side drops from 171 to about 150. The bookshelf throws a long soft shadow across the sideboard top and onto the wall to its right. The lamp is about 35 deg left of the lens axis (outside the about 26 deg half-view) and outside every product face's mirror direction (the fronts mirror red_front_ramp, front_sheen and the floor; the roofs mirror roof_sheen and the back and left walls), so it adds only diffuse light and shadow, with no new glare.",
+   "accept": {
+    "region": [
+     0,
+     90,
+     1350,
+     190
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     14,
+     32
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "post",
+   "problem": "With c1's key in, the floorstander's white front rises about 0.4 EV into PBR Neutral's shoulder above 226, where it prints as one value and loses the reflected ramp that models it.",
+   "evidence": {
+    "region": [
+     225,
+     330,
+     385,
+     678
+    ],
+    "measured": "part front-baffle inside this box (floorstander, white only): median 215, p95 228, 8-bin y-profile 227, 224, 219, 215, 210, 204, 202, 203. Its top already sits at the 226 shoulder."
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 0.9,
+    "to": 0.55
+   },
+   "expected": "The floorstander's white front back at a median of 206-219, keeping its roughly 25-level top-to-bottom ramp with the top at or under about 230. The bookshelf's front ends about 198-204 (now 207). The unlit sides fall to about 150-158, widening the front/side gap from 44 (floorstander) and 32 (bookshelf) to about 55-65. The right of the room, which the key barely reaches, ends about 0.35 EV darker; the left ends brighter.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      225,
+      330,
+      385,
+      678
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     206,
+     219
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The lacquered gables read as flat matte colour. Nothing bright enough lies in their mirror direction, so neither roof shows a sheen and the floorstander's front slope is one red from ridge to eave.",
+   "evidence": {
+    "region": [
+     240,
+     295,
+     375,
+     337
+    ],
+    "measured": "part gable-block inside this box (floorstander front slope): median 73.5, range 12.5, 8-bin y-profile 78.6 -> 67.9 (falloff 10.7). 69% of it mirrors roof_sheen at radiance 0.16 under the ridge falling to 0.02 at the eave (median 0.09); a clear coat returns about 0.05 of that, under 0.01 linear. The bookshelf's front slope [788,228,880,252] mirrors roof_sheen on 98.8% of its pixels and is a flat 76 (range 7.3)."
+   },
+   "change": {
+    "setting": "lights.roof_sheen.strength",
+    "from": 0.1908,
+    "to": 1.0
+   },
+   "expected": "A soft sheen under each ridge, fading to full colour at the eave: the floorstander's front slope runs about 95-105 under the ridge to 65-70 at the eave (falloff about 25-32, now 10.7), and the bookshelf's slope gets the same lighter band. Lit-face colour stays within dE 4 of #C62828 and #1F4FCF, because the retouch reads only full-chroma pixels. The waveguide insert, which mirrors roof_sheen on 21% of its pixels, gains a rim of sheen that shows its bowl.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      240,
+      295,
+      375,
+      337
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     18,
+     38
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "Under c1 and c2, the wall between the speakers would sink from 112 to about 100 while the wall left of the floorstander rises to about 152, leaving a muddy hole in the middle of the frame. Set flag 0 shades that stretch of wall from both the windows and the new key.",
+   "evidence": {
+    "region": [
+     500,
+     330,
+     760,
+     420
+    ],
+    "measured": "Median 112.1 (p5 104, p95 120), against 145.1 at the left edge [20,300,200,500] and 137.5 right of the bookshelf [930,260,1050,440]. Beside the floorstander's side the wall is 95-111 (x 484-498, y 345-470), against a side of 177-189."
+   },
+   "change": {
+    "setting": "lights.wall_fill.strength",
+    "from": 0.1778,
+    "to": 0.24
+   },
+   "expected": "With c1 and c2 in, the wall between the speakers holds at about 108-116 and reads as the floorstander's shadow side rather than murk. The floorstander's right edge keeps about 60 levels over the wall beside it (side about 165-175 vs wall about 100-110), and the bookshelf's right edge keeps 12 or more (side about 155 vs wall about 140), so the flag still separates the white bodies.",
+   "accept": {
+    "region": [
+     500,
+     330,
+     760,
+     420
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     106,
+     120
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "The sideboard veneer still reads as a contour map: every door carries parallel wavy ring lines at a 6 px period with dips of 7-8 levels.",
+   "evidence": {
+    "region": [
+     650,
+     560,
+     680,
+     640
+    ],
+    "measured": "Left-door patch lum_range 9.3: about 6.0 of it is ring lines (the residual after a 13 px blur) and 6.2 is smooth figure and gradient. The lines sit at a median 6 px spacing, with 17-18 minima per 170 px on the left and middle doors."
+   },
+   "change": {
+    "setting": "set.props.0.grain",
+    "from": 0.36,
+    "to": 0.2
+   },
+   "expected": "Ring-line dips fall to about 3-4 levels, and the left-door patch range to about 6-8 even with the key's extra light on it; the doors read as satin walnut with a soft figure. This continues round 9's c1 (it asked for 0.22; the engine stopped at 0.36 to hold that test's lower bound of 6). What still reads as a map is the lines' contrast, so the 11 mm spacing and the leaf and arch figure are kept.",
+   "accept": {
+    "region": [
+     650,
+     560,
+     680,
+     640
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     4,
+     8.5
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "set",
+   "problem": "The book stack under the vase is three painted slabs with no boards, page blocks or spines, and reads as toy blocks next to a photo-real product.",
+   "evidence": {
+    "region": [
+     1022,
+     457,
+     1124,
+     469
+    ],
+    "measured": "The top book's camera-facing side has median 30.7 (rgb 88, 15, 15) and range 7.5. The cream book [1018,472,1126,482] at 114.8 and the navy book [1015,486,1132,496] at 37.9 are each one flat value too."
+   },
+   "change": {
+    "setting": "set.props.1.pages",
+    "from": null,
+    "to": "#EEE6D3"
+   },
+   "expected": "The stack reads as real hardbacks. Cream page blocks between thin boards on the camera-facing fore-edges lift the top book's side from 31 to about 110-150, with red board edges above and below, and the vase still sits on the stack.",
+   "accept": {
+    "region": [
+     1022,
+     457,
+     1124,
+     469
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     95,
+     180
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A wider frame (about 2:1) to drop the empty top fifth of wall without shrinking the speakers.",
+   "why": "The card fixes the frame size. The top 199 px (22%) above the bookshelf's roof, and 248 px above the floorstander, are empty wall. Inside this frame the only fix is a longer lens, and that pushes the vase branches (top at y 35) into the top edge, so it needs a framing decision (or a shorter vase) first."
+  }
+ ],
+ "score_if_fixed": 6.5,
+ "revisions": [
+  {
+   "change": "c6",
+   "by": "engine",
+   "why": "the engine now builds every books prop as hardbacks: cloth boards and a spine round a page block set in 3 mm, fore-edges to the camera, every other one spine out; `pages` is the page block's colour",
+   "was": {
+    "setting": "asset: set.props.1 books geometry",
+    "from": "three flat-colour slab books",
+    "to": {
+     "what": "modelled hardback books replacing the three slabs",
+     "where": "set.props.1 at [0.98, 0.02], z 0.56, same order and colours (red top, cream middle, navy bottom), total stack height kept at about 85 mm so the vase (z 0.645) still sits on it",
+     "size": "same footprint as now, about 0.30 x 0.20 m, about 28 mm thick each",
+     "boards": "3 mm cloth-covered boards, roughness about 0.7, overhanging the page block by 3 mm on top, bottom and fore-edge, rounded spine",
+     "page_block": "matte #EEE6D3 with faint page striation",
+     "orientation": "fore-edges of the top and bottom books toward the camera, the middle book's spine toward the camera, the stack 3-5 deg askew"
+    }
+   }
+  }
+ ]
+}
