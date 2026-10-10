@@ -143,6 +143,30 @@ any region, and `critic/round.py save` warns when a change grades a reflection-o
 not mirror: on 03's round 8 the waveguide wall the critic ramped through `rim_left` mirrors `glint5` on 98 % of its
 pixels and the fin it gave a sheen panel mirrors the black flag on 99 %, so neither setting could move its test.
 
+## The retouch
+
+    "retouch": {"enabled": true, "match": 1.0, "lightness": 0.5, "neutral": 1.0}
+
+A path tracer reproduces a paint's swatch only in the even white light the view transform is built for; under a
+studio's lamps a red lacquer's lit face mirrors a dark room, and PBR Neutral's toe takes its green and blue to nothing
+(#C62828 rendered as (182, 14, 15), dE 4 to 9 off the swatch on most shots of 2026-10-09's critic rounds). The retouch
+does what a retoucher does before a product shot ships. The mask pass renders a swatch mask (each product pixel's
+paint and copy, from the materials a flavour colours: body, accent, insert); `retouch.py` reads each paint's lit face
+off the frame (the pixels between the 40th and 90th percentile of its lightness that carry at least its median
+chroma) and corrects every pixel of it, weighted by how much it is the paint (the mask softened over its edge, times
+its chroma against the face's), so highlights and edges move less:
+
+- a white loses the share `neutral` of its cast (1 in a studio; 0 for 02b's late sun, whose warm white is the
+  picture);
+- a colour takes the swatch's hue and chroma by the share `match`, as the swatch reads under the light the copy's own
+  white shows (Bradford adaptation from D65), and the share `lightness` of its lightness, as a gain on its light.
+
+The raw frame stays as `IMG.raw.png`, the render's report lists each paint's lit face before and after in dE2000,
+the critic's card prints that table and the `retouch.*` settings, and every test reads the retouched frame. A
+`--masks-only` pass retouches a frame already rendered (from its raw when there is one), so a shot can be retouched
+without rendering it again. On 01 e11: the reds from dE 7.2 to 9.5 to 3.2 to 5.1 (the rest is the half of the
+lightness left), both whites from 2.4 and 3.5 to 0.
+
 ## What the engine makes exact
 
 - **Glints** are placed from the surface the camera sees at their point, with that surface's own normal (the camera's
