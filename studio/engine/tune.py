@@ -9,9 +9,10 @@ A critic says what the next image must measure ("the slope falls at least 10 lev
 and which setting moves it; how far to move it is a guess until something is rendered. This renders proofs at the
 critic's scale (0.75, so its regions line up) with the setting at the two values given, reads the test exactly as
 `critic/round.py check` will, and moves the setting along the secant between the last two proofs toward a reading a
-margin inside the test (the middle of a "between"), up to --max proofs. It prints every proof's reading, and every
-other test of the reply on that proof, and with --save writes the best value into the shot: the passing one nearest
-the aim, else the nearest to passing.
+margin inside the test (the middle of a "between"), up to --max proofs. Once the proofs fall either side of the aim
+it steps between the nearest two instead (and allows one proof past --max for it when none has passed yet). It prints
+every proof's reading, and every other test of the reply on that proof, and with --save writes the best value into
+the shot: the passing one nearest the aim, else the nearest to passing.
 """
 import argparse, hashlib, json, subprocess, sys, tempfile
 from pathlib import Path
@@ -99,16 +100,31 @@ def main():
     print(f"{a.shot}: {a.change} wants {t['metric']} {t['op']} {t['value']}; tuning {a.knob}")
     f0, f1 = proof(a.v0), proof(a.v1)
     v0, v1 = a.v0, a.v1
-    while len(proofs) < a.max:
+
+    def bracket():
+        # the nearest proofs either side of the aim, once there are some: the step between them, not the secant through
+        # the last two, since a curved response sends the secant past it (08's cone card: 1.2 and 2 read 54 and 67, the
+        # secant's 0.21 read 27 against 30 to 46, and the run stopped there with the aim between its proofs)
+        lo_ = [p for p in proofs if p[1] < goal]; hi_ = [p for p in proofs if p[1] > goal]
+        if not lo_ or not hi_:
+            return None
+        return max(lo_, key=lambda p: p[1]), min(hi_, key=lambda p: p[1])
+
+    while len(proofs) < a.max + (1 if bracket() and not any(p[2] for p in proofs) else 0):
         if Me.passes(f1, t['op'], t['value']) and abs(f1 - goal) <= max(1.0, 0.25 * abs(goal - t['value'] if t['op'] != 'between' else 1.0)):
             break
         if f1 == f0:
             print(f'  the test does not move with {a.knob} between {v0:g} and {v1:g}: not this setting\'s to fix'); break
-        v2 = v1 + (goal - f1) * (v1 - v0) / (f1 - f0)
+        br = bracket()
+        if br:
+            (va, fa), (vb, fb) = br[0][:2], br[1][:2]
+            v2 = va + (goal - fa) * (vb - va) / (fb - fa)
+        else:
+            v2 = v1 + (goal - f1) * (v1 - v0) / (f1 - f0)
         # a strength (a power, an irradiance) never crosses zero, and where the reading saturates (a highlight in the
         # view's shoulder) the secant overshoots: then step by a factor of three toward the aim instead
         positive = (v0 > 0 and v1 > 0) or knobs[0].split('.')[-1] in ('power_w', 'irradiance', 'strength')
-        if positive and (v2 <= 0 or v2 > 10 * max(v0, v1) or v2 < min(v0, v1) / 10):
+        if not br and positive and (v2 <= 0 or v2 > 10 * max(v0, v1) or v2 < min(v0, v1) / 10):
             # a factor of three past the furthest value tried that way (from v1 it could land back on v0: 08's glint
             # proofed 1 W twice, at 3 W the secant went below zero and a third of 3 is the 1 it started from)
             up = (goal - f1) * (f1 - f0) * (v1 - v0) > 0
