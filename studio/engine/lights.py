@@ -415,9 +415,9 @@ def true_glint(bpy, spec, receivers, cam_pos, ray_m=0.05, snap_m=0.03, agree_deg
     hit, loc, _, hob = cast(P + N * 1e-3, R, dist, occluding=True)
     if hit:
         gap = (loc - P).length
-        # EARMILK_GLINT_MOVE_IN=1 while jobs started before 2026-10-09 21:00 finish with the old rule (their proofs
-        # must agree with each other); then the default
-        if gap >= 0.05 and os.environ.get('EARMILK_GLINT_MOVE_IN', '0') == '1':
+        # the move-in rule is the default from 2026-10-10 (EARMILK_GLINT_MOVE_IN=0 keeps the old placement, for a
+        # job whose proofs began under it)
+        if gap >= 0.05 and os.environ.get('EARMILK_GLINT_MOVE_IN', '1') == '1':
             # the lamp moves in, in front of what the surface mirrors, to 60 % of the gap: as seen from the point it is
             # the same lamp (its size scaled with its distance, its power with the square, so its radiance holds), and
             # linked to its receivers it lights nothing else (01's round 7: the cone's inner half mirrors its own
