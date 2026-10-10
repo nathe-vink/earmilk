@@ -1,0 +1,151 @@
+{
+ "stage1": {
+  "impression": "Clean, symmetrical living-room set with two milk-carton speakers flanking a turntable; the product reads instantly and the red/white identity is strong. But the lighting is flat and frontal: the white bodies sit near one value with a bright lift toward their bases that reads as self-glow, the speakers sit on the sideboard without convincing contact shadows, and a third of the frame is empty beige wall.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The sideboard must read as veneered furniture: grain and figure on the doors (middle-door lum_range 12-32), not a flat tan slab whose only texture is a 6.4 px vertical ribbing of +/-1.9 levels (lum_range 8.7 now).",
+  "The drivers must read as hi-fi drivers: woofer-cone median 21-30 with lower cone, upper cone and dust cap separated (now 14.2; upper cone 7-8, cap 17).",
+  "Both roofs must hold #C62828: no front-slope patch beyond dE 6 (right roof above-left of the insert is (213, 85, 87), dE 11.3; the left roof's matching patch is dE 7.5).",
+  "The lacquer fronts' window reflections must grade instead of plateauing: both strips print a flat band about 60 px wide over their full 160 px height (228-231 left, 224-228 right), above the 226 knee, so they read as glow rather than a reflected window.",
+  "The room must read lived-in: at least one organic or personal accent besides the turntable and the single print, placed without crowding the pair (the sideboard top has only 0.14-0.16 m free beside the turntable, and the band above the speakers is bare wall).",
+  "The pair must carry the frame: the speakers fill 58% of the frame height under a 285 px (32%) band of bare wall; a 9 holds them nearer 65-70% so the waveguides and drivers read at homepage size."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "set",
+   "problem": "The sideboard, the bottom fifth of the frame and the furniture carrying the pair, reads as a tan cardboard slab: its doors are one flat value whose only texture is a regular vertical ribbing, with no wood figure, which undercuts the premium read.",
+   "evidence": {
+    "region": [
+     420,
+     845,
+     820,
+     895
+    ],
+    "measured": "middle door lum_median 135.2, lum_range 8.7 (p5 132.0, p95 140.7); rows 850-890 trace a strictly periodic ribbing, period 6.4 px, +/-1.9 levels (peak-to-peak 3.8), and no other figure; left door [0, 830, 360, 897] lum_range 6.3; front band [0, 820, 1350, 900] rgb (149, 133, 113)."
+   },
+   "change": {
+    "setting": "set.props.0.wood",
+    "from": "(default)",
+    "to": "veneer"
+   },
+   "expected": "Doors and top take a sliced veneer under satin lacquer, grain along the piece with a book-matched figure per door; middle-door lum_range rises from 8.7 to about 16-26 while its median stays within 128-146 (the band c3 set), the 6.4 px ribbing disappears and the top reads as lacquered wood; nothing on the speakers changes.",
+   "accept": {
+    "region": [
+     420,
+     845,
+     820,
+     895
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     12,
+     32
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The woofers read as black holes: the paper cones sit at a median of 14 with their upper half at 7-8, so the cone's flare, the dust cap and the surround roll, the details that say hi-fi, barely separate.",
+   "evidence": {
+    "region": [
+     1050,
+     395,
+     1070,
+     545
+    ],
+    "measured": "vertical trace through the right woofer: trim ring 82, surround 48 then 30, upper cone 7.2-7.6, dust cap 17, lower cone 17-20, lower surround 34-41, ring 57; part:woofer-cone lum_median 14.2, p5 6.9, p95 24.0; the cone mirrors lamp key over ceiling 28%, rug 20%, floor 12%."
+   },
+   "change": {
+    "setting": "lights.cone_kick",
+    "from": "none",
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.6,
+      0.3
+     ],
+     "position": [
+      0.0,
+      -0.95,
+      1.45
+     ],
+     "target": [
+      0.0,
+      -0.11,
+      0.94
+     ],
+     "irradiance": 0.6,
+     "color": 5200,
+     "receivers": [
+      "woofer-cone",
+      "woofer-surround",
+      "woofer-cap"
+     ]
+    }
+   },
+   "expected": "A soft strip about 31 degrees above the woofer axis, linked to the drivers alone: the lower cone rises to about 30-40 while the upper cone stays near 10-14, so the flare reads as a gradient; the dust cap takes a highlight on its upper half (about 30); the surround's top roll prints 60-90; cone median about 25, p95 about 40; the white baffle, trim ring, plinth and wall do not change.",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     21,
+     30
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The roofs' front slopes go coral where they mirror the brightest part of the roof_sheen ramp: the closer right speaker's slope lifts to (213, 85, 87) above-left of the waveguide, so the brand red reads salmon on the roof beside a deeper fin and plinth.",
+   "evidence": {
+    "region": [
+     988,
+     318,
+     1005,
+     350
+    ],
+    "measured": "rgb (213, 85, 87), lum 112.1, dE2000 11.3 vs #C62828; mirrors panel roof_sheen 100%; down the slope the sheen falls 120 to 85; right of the insert [1136, 325, 1157, 372] dE 4.6; the left roof's matching patch [177, 316, 190, 336] (203, 70, 74) dE 7.5; the fin [990, 289, 1160, 306] (184, 29, 20) dE 4.7."
+   },
+   "change": {
+    "setting": "lights.roof_sheen.strength",
+    "from": 1.8638,
+    "to": 1.0
+   },
+   "expected": "The sheen keeps its ramp from the fin down at about half the lift: the right slope's patch comes to about (204, 62, 64), dE 4-5.5, and the left roof's to about dE 3-4; both slopes still lighten 15-25 levels toward the fin so the lacquer reads, and the gable-block's lit face stays within dE 1.",
+   "accept": {
+    "region": [
+     988,
+     318,
+     1005,
+     350
+    ],
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     3.0,
+     6.0
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A lighter grey or textured cone on the woofers so the drivers show detail without extra light",
+   "why": "The SB17NRX2C35-8's black paper cone is the product's own material and is fixed; at median 14 it is the darkest product part, so light linked to the drivers (c2) is the only lever."
+  },
+  {
+   "request": "Print the Nutrition Facts on each speaker's outer side, mirrored, so the right speaker's panel faces the camera",
+   "why": "The panel's place and layout are fixed marks; from this camera the right speaker shows its panel edge-on, 27 px wide and illegible, against 55 px on the left, so the pair reads less like a mirrored set."
+  }
+ ],
+ "score_if_fixed": 6.8
+}
