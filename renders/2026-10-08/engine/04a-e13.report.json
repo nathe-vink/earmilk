@@ -2,7 +2,7 @@
  "shot": "studio/shots/earmilk/04a.json",
  "image": "renders/2026-10-08/engine/04a-e13.png",
  "seconds": {
-  "build": 21.6,
+  "build": 10.9,
   "render": 0.0
  },
  "samples": 192,
@@ -2092,6 +2092,58 @@
  },
  "masks": {
   "image": "renders/2026-10-08/engine/04a-e13.mask.png",
-  "parts": 76
+  "parts": 76,
+  "swatch": "renders/2026-10-08/engine/04a-e13.swatch.png",
+  "paints": 3
+ },
+ "retouch": {
+  "spec": {
+   "enabled": true,
+   "match": 1.0,
+   "lightness": 0.5,
+   "neutral": 1.0
+  },
+  "paints": [
+   {
+    "paint": "body",
+    "copy": 0,
+    "swatch": "#FFFFFF",
+    "mode": "neutral",
+    "pixels": 383879,
+    "cast_before": [
+     0.52,
+     -0.25
+    ],
+    "cast_after": [
+     0.0,
+     0.0
+    ],
+    "de_before": 0.8,
+    "de_after": 0.0
+   },
+   {
+    "paint": "accent",
+    "copy": 0,
+    "swatch": "#C62828",
+    "mode": "match",
+    "pixels": 115758,
+    "adapted_to_white": false,
+    "reference_before": [
+     43.6,
+     63.9,
+     44.5
+    ],
+    "reference_after": [
+     43.7,
+     60.3,
+     40.3
+    ],
+    "de_before": 1.46,
+    "de_after": 0.07,
+    "lightness_gain": 1.004,
+    "chroma_scale": 0.93,
+    "hue_turn_deg": -1.1
+   }
+  ]
  }
 }

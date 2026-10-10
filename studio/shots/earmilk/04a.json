@@ -317,5 +317,11 @@
    ]
   },
   "port_well": null
+ },
+ "retouch": {
+  "enabled": true,
+  "match": 1.0,
+  "lightness": 0.5,
+  "neutral": 1.0
  }
 }
