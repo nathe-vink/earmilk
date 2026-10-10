@@ -13,7 +13,7 @@ A glint is a small area lamp placed where a curved surface would mirror it into 
 diffuse share and invisible to the camera: a highlight on an edge or a rim exactly where it should be, lighting
 nothing else. `receivers` limits it to some parts (light linking).
 """
-import math, os
+import json, math, os
 
 from mathutils import Vector
 
@@ -156,6 +156,9 @@ def panel(bpy, name, spec, centre):
             nt.links.new(bw.outputs['Val'], mul.inputs[0]); nt.links.new(mul.outputs['Value'], em.inputs['Strength'])
     else:
         em.inputs['Strength'].default_value = peak
+    # what the mirror map (probe.py) reads to say how bright this panel is where a reflection meets it
+    ob['emit'] = json.dumps({'peak': peak, 'axis': list(Vector(ax).normalized()) if ramp else None,
+                             'at': list(at) if ramp else None, 'values': list(vals) if ramp else None})
     # one-sided: the back face is transparent
     gm = nt.nodes.new('ShaderNodeNewGeometry'); tr = nt.nodes.new('ShaderNodeBsdfTransparent'); mix = nt.nodes.new('ShaderNodeMixShader')
     nt.links.new(gm.outputs['Backfacing'], mix.inputs['Fac'])

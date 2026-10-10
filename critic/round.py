@@ -102,12 +102,64 @@ def mirror_warnings(data, shot_id, version):
             continue
         if not m['mirrors']:
             continue
-        share = sum(x['share_pct'] for x in m['mirrors'] if x['what'] == f'panel {name}')
+        comp = lambda w: w.split(' over ')[0].split(' + ') + w.split(' over ')[1:] if ' over ' in w else [w]
+        share = sum(x['share_pct'] for x in m['mirrors'] if f'panel {name}' in comp(x['what']))
         if share < 10:
             top = ', '.join(f"{x['what']} {x['share_pct']} %" for x in m['mirrors'][:3])
             out.append(f"{c.get('id')}: `{name}` is a reflection-only panel, and the test's region mirrors it on {share:.0f} % of "
                        f"its product pixels; they mirror {top}")
     return out
+
+
+def precheck(a):
+    """A reply's reflections, tried on geometry before any proof is rendered: its changes applied to a copy of the
+    judged frame's shot, the mirror map run on that (no render, about 40 s), and for every change to a light or a glint,
+    what its test's region mirrors then: whether the light it adds or moves is in the region's reflections at all, how
+    bright it is there and where on it they land. A reflection-only light its region does not mirror cannot move its
+    test, at any strength (03's round 8, 07's round 9)."""
+    import glob, tempfile
+    num = a.shot_id.split('-', 1)[1]
+    imgs = sorted(glob.glob(str(ROOT / 'renders' / '*' / 'engine' / f'{num}-{a.version}.png')))
+    if not imgs:
+        raise SystemExit(f'no render {num}-{a.version}.png')
+    img = Path(imgs[-1]); reply = json.loads(Path(a.reply).read_text())
+    td = Path(tempfile.mkdtemp(prefix='precheck-', dir=os.environ.get('CLAUDE_SCRATCH')))
+    shot = td / 'shot.json'; out = td / 'frame.png'
+    shutil.copy(img, out)
+    eng = ROOT / 'studio' / 'engine' / 'render.py'
+    subprocess.run([sys.executable, str(eng), str(img.with_suffix('.shot.json')), '--apply', a.reply, '--save-shot', str(shot),
+                    '--no-render'], check=True, capture_output=True)
+    r = subprocess.run([sys.executable, str(eng), str(shot), '--out', str(out), '--scale', str(a.scale), '--masks-only',
+                        '--set', 'retouch.enabled=false'], capture_output=True, text=True)
+    if r.returncode:
+        raise SystemExit(r.stderr[-1500:])
+    sys.path.insert(0, str(ROOT / 'critic'))
+    import measure as Me
+    _, arr = Me.load(out); Me.load_mask(out); Me.load_mirror(out)
+    lights = json.loads(shot.read_text()).get('lights', {})
+    for c in reply.get('changes', []):
+        st = (c.get('change') or {}).get('setting') or ''
+        reg = (c.get('accept') or {}).get('region')
+        # reflection-only panels: what they do depends on being mirrored. A lamp also lights diffusely, and a glint is
+        # placed from the surface itself (and too small for a map that samples one pixel in four)
+        if not st.startswith('lights.') or reg is None:
+            continue
+        name = st.split('.')[1]
+        spec = lights.get(name)
+        if not isinstance(spec, dict) or spec.get('type') != 'panel' or spec.get('diffuse', True) not in (False, 0, 0.0):
+            continue
+        try:
+            m = Me.mirrors(arr, reg)
+        except SystemExit as e:
+            print(f"  {c['id']} {st}: {e}"); continue
+        comp = lambda w: (w.split(' over ')[0].split(' + ') + w.split(' over ')[1:]) if ' over ' in w else [w]
+        mine = [x for x in m['mirrors'] if any(k.split(' ', 1)[-1] == name for k in comp(x['what']))]
+        share = sum(x['share_pct'] for x in mine)
+        top = '; '.join(f"{x['what']} {x['share_pct']} %" for x in m['mirrors'][:3])
+        rad = ', '.join(f"{k} {v[1]}" for x in mine[:1] for k, v in (x.get('radiance') or {}).items())
+        print(f"  {c['id']} {st}: the region mirrors `{name}` on {share:.0f} % of its product pixels"
+              + (f" (radiance there: {rad})" if rad else '') + f"; it mirrors {top}")
+    print(f'  (the mirror map with the changes: {out.with_suffix(".mirror.png")})')
 
 
 def check(a):
@@ -121,8 +173,10 @@ def main():
     s = sub.add_parser('stage'); s.add_argument('image'); s.add_argument('--shot-id', required=True); s.add_argument('--tag', required=True); s.add_argument('--stage')
     v = sub.add_parser('save'); v.add_argument('reply'); v.add_argument('--shot-id', required=True); v.add_argument('--version', required=True); v.add_argument('--round', type=int, required=True)
     c = sub.add_parser('check'); c.add_argument('image'); c.add_argument('reply')
+    pc = sub.add_parser('precheck'); pc.add_argument('reply'); pc.add_argument('--shot-id', required=True)
+    pc.add_argument('--version', required=True); pc.add_argument('--scale', type=float, default=0.75)
     a = ap.parse_args()
-    {'stage': stage, 'save': save, 'check': check}[a.cmd](a)
+    {'stage': stage, 'save': save, 'check': check, 'precheck': precheck}[a.cmd](a)
 
 
 if __name__ == '__main__':

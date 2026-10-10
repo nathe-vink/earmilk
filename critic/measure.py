@@ -82,6 +82,10 @@ def load_mirror(image_path):
     if mp.exists() and lp.exists():
         MIRROR['ids'] = np.asarray(Image.open(mp).convert('RGB'))[..., 0].astype(int)
         MIRROR['legend'] = {int(k): v for k, v in json.loads(lp.read_text())['legend'].items()}
+        zp = Path(image_path).with_suffix('.mirror.npz')
+        if zp.exists():
+            z = np.load(zp)
+            MIRROR.update(label=z['label'], radiance=z['radiance'], xyz=z['xyz'], step=int(z['step']))
 
 
 def mirrors(a, r):
@@ -95,11 +99,30 @@ def mirrors(a, r):
     if not on.any():
         return {'region': describe_region(r), 'pixels_on_product': 0, 'mirrors': []}
     seen = []
+    q = lambda arr: [round(float(np.nanpercentile(arr, f)), 3) for f in (5, 50, 95)]
     for i in sorted(set(v[on].tolist()), key=lambda i: -(v == i).sum()):
         m = v == i
-        seen.append({'what': MIRROR['legend'].get(i, f'id {i}'), 'share_pct': round(100 * float(m.sum()) / float(on.sum()), 1),
-                     'box': [int(xs[m].min()), int(ys[m].min()), int(xs[m].max()) + 1, int(ys[m].max()) + 1]})
-    return {'region': describe_region(r), 'pixels_on_product': int(on.sum()), 'mirrors': seen}
+        what = MIRROR['legend'].get(i, f'id {i}')
+        e = {'what': what, 'share_pct': round(100 * float(m.sum()) / float(on.sum()), 1),
+             'box': [int(xs[m].min()), int(ys[m].min()), int(xs[m].max()) + 1, int(ys[m].max()) + 1]}
+        if 'label' in MIRROR:
+            st = MIRROR['step']
+            cells = {(int(y) // st, int(x) // st) for y, x in zip(ys[m], xs[m])}
+            cells = [c for c in cells if MIRROR['label'][c] == i]
+            if cells:
+                jj, ii = np.array(cells).T
+                layers = (what.split(' over ')[0].split(' + ') + what.split(' over ')[1:]) if ' over ' in what else [what]
+                rad = MIRROR['radiance'][jj, ii]
+                e['radiance'] = {n: q(rad[:, k]) for k, n in enumerate(layers[:3]) if np.isfinite(rad[:, k]).any()}
+                xyz = MIRROR['xyz'][jj, ii]
+                if np.isfinite(xyz).any():
+                    e['met_at_m'] = {ax: q(xyz[:, k]) for k, ax in enumerate('xyz')}
+        seen.append(e)
+    return {'region': describe_region(r), 'pixels_on_product': int(on.sum()), 'mirrors': seen,
+            'note': 'what: the emitters a reflected ray meets, brightest first, over what lies behind them; radiance: '
+                    'each emitter\'s where met (p5, median, p95; a panel strength times its ramp there, a lamp its '
+                    'radiance times its specular share; a clear coat shows about 0.05 of it head-on, up to 0.3 to 0.5 '
+                    'near grazing); met_at_m: where the nearest of them was met, world metres (p5, median, p95)'}
 
 
 def parse_region(r):

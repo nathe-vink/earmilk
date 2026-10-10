@@ -95,6 +95,7 @@ def _card(bpy, name, f, color, glossy=False):
         ob.visible_glossy = True; ob.visible_shadow = False; ob.visible_diffuse = False
         ob.visible_transmission = False; ob.visible_volume_scatter = False
     if f.get('one_sided', bool(f.get('reflect_only'))):
+        ob['one_sided'] = True
         # seen only from the side its normal faces: a card on the floor shows in the product's lacquer, while the floor's
         # own gloss, looking up at its back, sees through it (else a straight-edged patch on the sweep)
         nt = m.node_tree; out = next(n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL')
