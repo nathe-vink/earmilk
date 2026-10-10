@@ -1596,5 +1596,46 @@
   ],
   "reply": "critic/rounds/2026-10-10/shot-09-e13-r13.json",
   "shot_sha": "adff6e13f99e4b25198d133a848ba50e39a1f84c"
+ },
+ {
+  "change": "c8",
+  "setting": "lights.plinth_sheen.strength",
+  "test": {
+   "metric": "lum_p95",
+   "op": "between",
+   "value": [
+    85,
+    118
+   ]
+  },
+  "proofs": [
+   [
+    1.9,
+    93.3
+   ],
+   [
+    2.2,
+    95.1
+   ],
+   [
+    2.8,
+    99.1
+   ]
+  ],
+  "set": 2.8,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c12",
+   "c2",
+   "c3",
+   "c6",
+   "c7",
+   "c8",
+   "c9"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-09-e13-r13.json",
+  "shot_sha": "586af26b91346d994f3ad5e7dec4edd81f63614d"
  }
 ]
