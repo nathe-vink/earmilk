@@ -1,0 +1,170 @@
+{
+ "02a-e10": {
+  "slot": "cover",
+  "face": 191.8,
+  "finish": {
+   "white_in": 210.7,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.1201
+  }
+ },
+ "02b-e16": {
+  "slot": "room",
+  "face": 210.7,
+  "finish": {
+   "white_in": 210.7,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.1201
+  }
+ },
+ "04b-e18": {
+  "slot": "back3q",
+  "face": 212.9,
+  "finish": {
+   "white_in": 212.9,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.1085
+  }
+ },
+ "04a-e13": {
+  "slot": "back",
+  "face": 222.3,
+  "finish": {
+   "white_in": 222.3,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.0616
+  }
+ },
+ "08-e15": {
+  "slot": "inside",
+  "face": 200.1,
+  "finish": {
+   "white_in": 210.7,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.1201
+  }
+ },
+ "09-e11": {
+  "slot": "bookshelf",
+  "face": 223.9,
+  "finish": {
+   "white_in": 223.9,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.054
+  }
+ },
+ "10-e10": {
+  "slot": "family",
+  "face": 212.4,
+  "finish": {
+   "white_in": 212.4,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.1111
+  }
+ },
+ "08b-e9": {
+  "slot": "tweeter",
+  "face": null,
+  "finish": {
+   "white_in": 236.0,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.0
+  }
+ },
+ "05-e14": {
+  "slot": "flavours",
+  "face": 214.4,
+  "finish": {
+   "white_in": 214.4,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.1007
+  }
+ },
+ "07-e14": {
+  "slot": "exploded",
+  "face": 201.1,
+  "finish": {
+   "white_in": 210.7,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.1201
+  }
+ },
+ "03-e16": {
+  "slot": "idea",
+  "face": 214.4,
+  "finish": {
+   "white_in": 214.4,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.1007
+  }
+ },
+ "01-e15": {
+  "slot": "close",
+  "face": 223.4,
+  "finish": {
+   "white_in": 223.4,
+   "white_out": 236.0,
+   "peak": 251.0,
+   "contrast": 0.12,
+   "clarity": 0.08,
+   "sharpen": 0.35,
+   "sharpen_px": 0.7,
+   "gain": 1.0564
+  }
+ }
+}
