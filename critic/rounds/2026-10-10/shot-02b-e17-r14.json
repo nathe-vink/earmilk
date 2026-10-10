@@ -1,0 +1,129 @@
+{
+ "stage1": {
+  "impression": "Low sun from an off-frame window throws a crisp carton-shaped silhouette onto a dark navy wainscot beside the speaker, and the split between the warm patch and the cool room carries the idea. The product is underplayed against it: the white front reads as flat greyish putty under the grazing light, the vertical streaks in the tan patch read as wood veneer rather than painted panelling, and the top band and right third are empty near-black.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The white front between the drivers [760,476,912,528] sits at 200-206 (now 182.5), and the eave-to-plinth falloff on the clear strip [905,352,919,700] stays at 25-30 levels (now 27: 194.9 to 167.9).",
+  "The wainscot's brush texture reads as paint, not wood grain: 60-px lum_range 5-6.5 in the lit patch [300,400,360,460] (now 8.1, and 9.1 once the exposure rises).",
+  "The lacquer front shows a reflection: an x-falloff of 5-10 across the band under the gable [746,354,916,386] (now -0.7, one value edge to edge).",
+  "The 6.5 in mid reads as a driver, not a port: its cone and cap come off black (mid-cone median now 4.6, mid-cap 2.6).",
+  "The front plinth band reads as the accent: dE2000 <= 6 to #C62828 on [745,755,918,772] (now 10.4 at rgb 150/23/20, while the gable is 1.8).",
+  "The front white reads cream, not rose: Lab a* <= 2 at b* 5-7 (now a* 3.6, b* 5.9)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "post",
+   "problem": "The Whole body's white front sits below the card's 200-220 lacquer band and reads as warm grey putty: 182.5 between the drivers, 194 under the gable, 169 at the plinth end.",
+   "evidence": {
+    "region": [
+     760,
+     476,
+     912,
+     528
+    ],
+    "measured": "lum_median 182.5, rgb (194,180,172), range 5.0; under the gable [750,352,915,386] 193.9; y-profile of the clear strip [905,352,919,700] 194.9, 190.9, 187.0, 184.2, 180.4, 177.3, 174.3, 171.9, 169.9, 167.9; side-right [927,352,956,700] 216.2 (233,213,197); sun patch 123.3"
+   },
+   "change": {
+    "setting": "render.exposure",
+    "from": 2.35,
+    "to": 2.65
+   },
+   "expected": "Simulated through PBR Neutral on this frame, c1 alone gives: between the drivers 182.5 to ~202; under the gable 194 to ~214; plinth end of the strip 169 to ~187, so the falloff stays at ~29; side-right 216 to ~224.5 (p95 226, at the knee, not past it); patch 123 to ~138; unlit wainscot 28.7 to ~35; carton shadow 12 to ~17, still a hard silhouette; front plinth (150,23,20) to ~(165,30,26), dE 10.4 to ~7.2 before the retouch's accent gain; frame share below 40 drops from 63% to 53%. c3 adds ~3-5 levels in this region, so with both applied the exposure should land between +0.22 and +0.3 EV.",
+   "accept": {
+    "region": [
+     760,
+     476,
+     912,
+     528
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     199,
+     206
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The brush-ridge relief draws fine 1-3 px vertical streaks over the whole wainscot; inside the tan patch they read as wood-veneer grain rather than sun on painted panelling, and c1's lift makes them stronger.",
+   "evidence": {
+    "region": [
+     300,
+     400,
+     360,
+     460
+    ],
+    "measured": "lum_range 8.1 (p5 119.3, p95 127.4); other 60-px squares in the patch 8.4-9.1; pixel std 3.0 on a 123 base, every streak upright; unlit wainscot [60,300,120,360] range 4.0 on a median of 26.7; the same squares through +0.3 EV read 9.1-10.0"
+   },
+   "change": {
+    "setting": "set.wainscot.relief",
+    "from": 0.6615,
+    "to": 0.45
+   },
+   "expected": "The same ridges at about two-thirds of their contrast: the patch's 60-px range ~5.5-6 (8.1 now, ~9.1 after c1) and the pinstripes on the unlit wainscot 4.2 to ~3. This partly reverses round 13's c3, but it stays inside that change's own band [5, 11] at the low end and well above what round 12's 0.2 gave (the flat beige card). The patch keeps a raked, brushed paint surface under the 8-degree sun, and the wood-grain read goes.",
+   "accept": {
+    "region": [
+     300,
+     400,
+     360,
+     460
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     5.0,
+     6.5
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The lacquer front shows no reflection across its width (the band under the gable is one value edge to edge), so the white reads as matte paint, not a clear coat.",
+   "evidence": {
+    "region": [
+     746,
+     354,
+     916,
+     386
+    ],
+    "measured": "x-falloff -0.7; x-profile of [742,352,918,388] 193.2, 193.3, 194.0, 193.8, 193.8, 193.9, 193.9, 193.9; mirror map: 64% of the front mirrors frontsheen (upper part: median radiance 0.297, p95 0.472, met at x -1.103 to -0.856 on its x-ramp [-1.1, -0.815] = [1, 0]); at strength 0.4719 it is under the card's 4-8 / 5.10 = 0.78-1.57 for a visible gradient on a ~200 white"
+   },
+   "change": {
+    "setting": "lights.frontsheen.strength",
+    "from": 0.4719,
+    "to": 0.8
+   },
+   "expected": "The upper two-thirds of the front mirror the panel's ramp, from 1 at the face's left edge to ~0.14 at its right. The band under the gable then reads ~6-8 levels brighter at the left (~222 after c1) than at the right (~214), a soft clear-coat sheen that fades down the face where it mirrors the floor. The mid and woofer trim rings, which are receivers, pick up a slightly brighter edge. Nothing on the set changes, because the panel is reflection-only and linked to the front.",
+   "accept": {
+    "region": [
+     746,
+     354,
+     916,
+     386
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     5,
+     10
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A lighter cone or cap on the 6.5 in mid (SB Satori MR16P-8) so that it reads as a cone rather than a port.",
+   "why": "The drivers' materials are the products' own and are fixed. The cone (median 4.6) and cap (2.6) sit in PBR Neutral's toe. A light 2-3x stronger on them would also flatten the front's falloff and lift the wall silhouette, and a bounce card in the beam in front of the speaker would throw a shadow onto the floor with nothing visible casting it. So the mid stays a black, port-like ring, and that is the main product-read gap left."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
