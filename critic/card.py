@@ -143,7 +143,12 @@ def main():
                       f'there is {g["normal_off_deg"]} degrees from the one given, so its lamp was placed from the surface\'s.'
                       for g in rep.get('glints', []) if not g.get('skipped') and g.get('normal_off_deg', 0) > 10]
             notes += [f'- change `{p_["id"]}` was not applied: {p_["why"]}.' for p_ in rep.get('pending', []) if p_.get('why') != 'not selected']
+            # only the tuning of the round that made this frame: the shot's tune file keeps every round's, and an
+            # older round's c4 is not this one's
+            last_ = _last_round(a.shot_id)
             for tr in rep.get('tuning', []):
+                if last_ is None or Path(tr.get('reply') or '').name != last_.name:
+                    continue
                 tried = ', '.join(f'{v:g} gave {r}' for v, r in tr['proofs'])
                 verdict = ('it was set to %g' % tr['set'] if tr.get('set') is not None else 'nothing was set') + \
                           ('' if tr['moves_the_test'] else '; the test did not move with this setting, so it is not the lever for it')
@@ -178,6 +183,17 @@ def main():
         Path(a.out).write_text(text)
     else:
         print(text)
+
+
+def _last_round(shot_id):
+    """The newest critic reply saved for the shot (the round that made the frame now being judged), or None."""
+    import glob
+    files = []
+    for f in glob.glob(str(ROOT / 'critic' / 'rounds' / '*' / f'{shot_id}-*-r*.json')):
+        m = re.search(r'-r(\d+)\.json$', f)
+        if m:
+            files.append((int(m.group(1)), Path(f).stat().st_mtime, f))
+    return Path(max(files)[2]) if files else None
 
 
 def _history(shot_id, arr, Me, rounds=3):
