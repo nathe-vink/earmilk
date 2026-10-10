@@ -1,0 +1,242 @@
+{
+ "legend": {
+  "1": "sweep",
+  "2": "panel roof_ramp",
+  "3": "world (sky)",
+  "4": "lamp key",
+  "5": "panel fin_card",
+  "6": "lamp fill",
+  "7": "gable-block",
+  "8": "back-panel",
+  "9": "lamp kicker_l",
+  "10": "lamp glint1",
+  "11": "letters-back-6",
+  "12": "letters-back-0",
+  "13": "letters-back-1",
+  "14": "letters-back-3",
+  "15": "letters-back-2",
+  "16": "letters-back-7",
+  "17": "port-tube",
+  "18": "woofer-frame",
+  "19": "woofer-cone",
+  "20": "top-panel",
+  "21": "cable-mid",
+  "22": "side-right",
+  "23": "side-left",
+  "24": "window-brace",
+  "25": "woofer-motor",
+  "26": "woofer-surround"
+ },
+ "step": 2,
+ "parts": {
+  "back-panel": {
+   "pixels": 383964,
+   "seen": [
+    [
+     "sweep",
+     0.699
+    ],
+    [
+     "world (sky)",
+     0.293
+    ],
+    [
+     "lamp kicker_l",
+     0.004
+    ],
+    [
+     "lamp fill",
+     0.002
+    ],
+    [
+     "lamp key",
+     0.001
+    ],
+    [
+     "port-tube",
+     0.0
+    ]
+   ]
+  },
+  "gable-block": {
+   "pixels": 116252,
+   "seen": [
+    [
+     "panel roof_ramp",
+     0.665
+    ],
+    [
+     "panel fin_card",
+     0.218
+    ],
+    [
+     "gable-block",
+     0.08
+    ],
+    [
+     "sweep",
+     0.014
+    ],
+    [
+     "world (sky)",
+     0.011
+    ],
+    [
+     "back-panel",
+     0.009
+    ]
+   ]
+  },
+  "port-tube": {
+   "pixels": 11764,
+   "seen": [
+    [
+     "sweep",
+     0.49
+    ],
+    [
+     "woofer-motor",
+     0.383
+    ],
+    [
+     "woofer-surround",
+     0.049
+    ],
+    [
+     "woofer-cone",
+     0.032
+    ],
+    [
+     "woofer-frame",
+     0.024
+    ],
+    [
+     "back-panel",
+     0.015
+    ]
+   ]
+  },
+  "woofer-motor": {
+   "pixels": 6092,
+   "seen": [
+    [
+     "port-tube",
+     0.592
+    ],
+    [
+     "back-panel",
+     0.337
+    ],
+    [
+     "woofer-frame",
+     0.02
+    ],
+    [
+     "top-panel",
+     0.02
+    ],
+    [
+     "woofer-cone",
+     0.013
+    ],
+    [
+     "side-right",
+     0.009
+    ]
+   ]
+  },
+  "letters-back-3": {
+   "pixels": 1192,
+   "seen": [
+    [
+     "lamp glint1",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-7": {
+   "pixels": 928,
+   "seen": [
+    [
+     "lamp glint1",
+     0.94
+    ],
+    [
+     "world (sky)",
+     0.06
+    ]
+   ]
+  },
+  "letters-back-1": {
+   "pixels": 884,
+   "seen": [
+    [
+     "lamp glint1",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-0": {
+   "pixels": 828,
+   "seen": [
+    [
+     "lamp glint1",
+     0.816
+    ],
+    [
+     "world (sky)",
+     0.179
+    ],
+    [
+     "back-panel",
+     0.005
+    ]
+   ]
+  },
+  "letters-back-2": {
+   "pixels": 488,
+   "seen": [
+    [
+     "lamp glint1",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-6": {
+   "pixels": 420,
+   "seen": [
+    [
+     "lamp glint1",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-5": {
+   "pixels": 360,
+   "seen": [
+    [
+     "lamp glint1",
+     1.0
+    ]
+   ]
+  },
+  "woofer-magnet": {
+   "pixels": 144,
+   "seen": [
+    [
+     "woofer-frame",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-4": {
+   "pixels": 96,
+   "seen": [
+    [
+     "lamp glint1",
+     1.0
+    ]
+   ]
+  }
+ }
+}

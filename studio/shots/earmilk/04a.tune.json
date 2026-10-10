@@ -737,5 +737,47 @@
   ],
   "reply": "critic/rounds/2026-10-09/shot-04a-e11-r7.json",
   "shot_sha": "3618965c5267888ca5b2be2eb9c4a2b99d92192f"
+ },
+ {
+  "change": "c1",
+  "setting": "render.exposure",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    214,
+    220
+   ]
+  },
+  "proofs": [
+   [
+    0.05,
+    217.2
+   ],
+   [
+    0.1,
+    220.3
+   ],
+   [
+    0.0468,
+    216.5
+   ]
+  ],
+  "set": 0.05,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   0.3183,
+   0.09
+  ],
+  "passing": [
+   "c1",
+   "c2",
+   "c3",
+   "c4",
+   "c5"
+  ],
+  "reply": "critic/rounds/2026-10-09/shot-04a-e11-r7.json",
+  "shot_sha": "e16891ec1297e2227789a1f2347ba31b2e79143c"
  }
 ]
