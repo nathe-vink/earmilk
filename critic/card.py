@@ -195,11 +195,19 @@ def main():
                 L += ['## What the product\'s surfaces mirror', '',
                       'A glossy part shows what lies along its mirror direction. The engine followed the camera\'s ray '
                       f'through one pixel in {(rep.get("mirrors") or {}).get("step", 2) ** 2} to the part, reflected it about the '
-                      'surface\'s shading normal, and followed it to the first area lamp\'s face, panel (a panel shows only '
-                      'on the parts its light linking reaches), surface of the set or the product, or the sky. A highlight, '
-                      'a sheen or a dark band is whatever those pixels mirror: change that (its strength, ramp, position, '
-                      'size or colour), not a lamp they do not see. For any region, the measuring tool\'s `mirrors` command '
-                      'gives the same breakdown (`mirrors X0 Y0 X1 Y1`, or `mirrors part:NAME`), with where each share sits.', '',
+                      'surface\'s shading normal, and followed it as the render does: past what gloss does not see (flags), '
+                      'past a panel\'s or a one-sided card\'s back, and through a panel linked to its receivers, which is '
+                      'see-through (they see its light added to what lies behind it), to the first surface, unlinked panel '
+                      'or the sky; an area lamp it crosses adds its light too. So "lamp fill + panel glint5 over world '
+                      '(sky)" reads: the fill and the glint5 panel, brightest first, both seen over the sky. A highlight, a '
+                      'sheen or a dark band is whatever those pixels mirror: change that (its strength, ramp, position, size '
+                      'or colour, or a lamp\'s `specular` share), not a lamp they do not see; an unlinked panel placed in '
+                      'front of a lamp hides it from them. For any region, the measuring tool\'s `mirrors` command gives '
+                      'the breakdown (`mirrors X0 Y0 X1 Y1`, or `mirrors part:NAME`): where each share sits, each emitter\'s '
+                      'radiance there (a clear coat shows about 0.05 of it head-on, up to 0.3 to 0.5 near grazing) and the '
+                      'world point where the nearest one is met, which is where a panel and its ramp have to be. Before any '
+                      'proof is rendered, the engine applies your changes to a copy of this shot and checks that each '
+                      'reflection-only panel you prescribe is what its test\'s region mirrors.', '',
                       '| part | pixels | what its pixels mirror (share) |', '|---|---|---|']
                 for n, v in list(mir.items())[:14]:
                     if v['pixels'] < 0.004 * tot:

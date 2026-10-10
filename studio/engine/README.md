@@ -134,14 +134,28 @@ open sky in front). Nothing is rendered.
 
 ## The mirror map
 
-Every mask pass (`--masks`, `--masks-only`) also writes `IMG.mirror.png` and `IMG.mirror.json`: for one pixel in four
-on the product, what the camera's ray meets after reflecting about the render's shading normal there (the hit face's
-corner normals interpolated at the hit, so a smooth cone mirrors as it shades). Red holds the id of what is mirrored,
-the legend names it (`lamp key`, `panel top`, `sweep`, `world (sky)`), and the render's report keeps each part's
-shares. The critic's card prints them per part, its measuring tool answers `mirrors X0 Y0 X1 Y1` (or `part:NAME`) for
-any region, and `critic/round.py save` warns when a change grades a reflection-only panel that its test's region does
-not mirror: on 03's round 8 the waveguide wall the critic ramped through `rim_left` mirrors `glint5` on 98 % of its
-pixels and the fin it gave a sheen panel mirrors the black flag on 99 %, so neither setting could move its test.
+Every mask pass (`--masks-only`, or `--masks --mirrors`) also writes `IMG.mirror.png`, `.json` and `.npz`: for one pixel
+in four on the product, what the camera's ray meets after reflecting about the render's shading normal there (the hit
+face's corner normals interpolated at the hit, so a smooth cone mirrors as it shades), followed as Cycles follows it:
+past what gloss does not see (`visible_glossy` off: flags), past a panel's or a one-sided card's back, and through a
+panel linked to its receivers, which is see-through (they see its light added to what lies behind it), to the first
+surface, unlinked panel face or the sky; area lamps it crosses add their light. The label is the stack, brightest
+first ("lamp fill + panel glint5 over world (sky)"); the .npz keeps each emitter's radiance at the pixel (a panel's
+strength times its ramp there, a lamp's radiance times its specular share) and the world point where the nearest
+layer was met. The critic's card prints each part's shares, its measuring tool answers `mirrors X0 Y0 X1 Y1` (or
+`part:NAME`) with the shares, radiances and world points, and `critic/round.py save` warns when a change grades a
+reflection-only panel its test's region does not mirror.
+
+On 03's round 8 the waveguide wall's flat band was the fill (0.45 after its 0.1 specular share) plus the see-through
+glint5 panel (0.25), both even across it, so the rim panel the critic ramped and the panel it then wanted in front of
+glint5 could not grade it; an opaque panel between the wall and the fill can (precheck: 99 % of the band mirrors it).
+
+    python3 critic/round.py precheck REPLY --shot-id shot-07 --version e11
+
+applies a reply's changes to a copy of the judged frame's shot and runs the map alone (about 40 s, no render): for each
+reflection-only panel prescribed, the share of its test's region that mirrors it, its radiance there and the stack the
+region sees. 07's round 10 placed its bowl panel where 15 % of the bowl looked; with the map the critic moved it to
+where 98 % does, before a proof was rendered.
 
 ## The retouch
 
