@@ -1,0 +1,208 @@
+{
+ "stage1": {
+  "impression": "A milk-carton speaker stands right of centre on a warm wood floor in front of a navy wainscoted wall. A low warm sun patch throws its gabled shadow large across the wall. It is a strong editorial idea with a confident warm/cool palette. But the product reads as a flat, cool, evenly lit CG object that does not belong to the sun casting its shadow (the white front is a dull grey with no warm key or falloff), the woofer has an odd bent white highlight, and the dark empty top-right and brown lower-left leave the hero small and under-lit beside its own shadow.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The sun must own the product. The sunlit side is a 37-px sliver (x 923-960) held at 212.7 by PBR Neutral's shoulder, only 4 levels above the front's far upper-left (208.6). A 9 needs the sun-struck plane at least 60 px wide and 20+ levels above every zone of the front. That takes turning the ridge onto the sun (rotate_z toward -48), with the fill making up the grazing sun the front loses (about 57% of its light now) and frontsheen re-aimed to follow the turn.",
+  "The wall silhouette must read as the carton, not a house. The fin's shadow is a 41-px block with a sloping top (x 505-546, y 301-337) because the ridge sits 12 degrees off the sun's azimuth; within about 4 degrees it narrows to about 19 px.",
+  "No hard-edged highlights on the drivers: the dust-cap blade ([819,596,832,628] p95 93.4, rising from 5 to 76 within 6 px) must go, and the cap must still read as a dome (p95 42-70 in its upper third).",
+  "The woofer cone reads black anodised, not bronze: whole-cone median RGB [62,49,35], dE2000 9.8 to #2E2E2E.",
+  "The window patch reads as sunlight on painted panelling, not a card: lum_range 5 or more in a 60-px square of the lit field (now 3.0).",
+  "The carton has air on its left: 40 px or more of dark wall between the patch's half-light edge (now about x 707) and the carton's edge (739)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The fill sits 41 degrees left of the lens, on the side away from the sun, so it lights the front and never the sun-struck side. The side gets the sun alone and stays at 212.7, because its 2300 K orange drives the red channel into PBR Neutral's shoulder. Meanwhile the fill plus the frontsheen reflection lift the front's upper-left, the corner farthest from the sun, to 208.6. The sunlit plane is only 4 levels brighter than that corner, so the speaker reads softbox-lit beside a sunlit wall.",
+   "evidence": {
+    "region": [
+     745,
+     352,
+     785,
+     390
+    ],
+    "measured": "Front upper-left median 208.6 (it faces the fill and mirrors frontsheen at 0.445). Side-right white zone (part side-right in [920,345,965,680]) median 212.7, profile 211.7-213.7 top to bottom, one flat value. Front top band [742,352,922,388] 209.6 to 191.9 left to right. The woofer ring's sun shadow on the baffle (x 746-754: 114-129 beside 182-186) puts the grazing sun at about 0.27 of the front's 0.48 linear, with fill and ambient making up the rest. The side's pre-retouch red works back to about 1.4 scene-linear, deep in the shoulder."
+   },
+   "change": {
+    "setting": "lights.fill.orbit.azimuth_deg",
+    "from": -65,
+    "to": 0
+   },
+   "expected": "The fill moves to the camera's upper right, the window's side (24 degrees right of the lens, same height and distance). Its hot spot on the front moves from the upper-left to the upper-right: upper-left about 195, upper-right about 190, median about 182 (from 185). The side face now sees the fill (cosine about 0.34, where it now faces away) and rises about 5-7 levels with its orange cast thinned. The sunlit plane then clears every zone of the front by 20+ levels, and the light on the product comes from the sun's side. The wall shadow darkens slightly (the fill ends up 0.6 m farther from it). Raising sun.irradiance cannot do this: the front would gain about 15 levels while the shouldered side gains about 3. Round 12's frontsheen falloff (12.9 on [760,482,905,522]) drops to about 7, because the fill's diffuse falloff now runs against the unchanged reflection ramp. Frontsheen does not move, so its hard band cannot return.",
+   "accept": {
+    "region": [
+     745,
+     352,
+     785,
+     390
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     186,
+     200
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Glint 1's lamp shows in the woofer's dust cap as a hard-edged pale blade on its left, so the black dome at the centre of the largest driver looks cracked or stickered.",
+   "evidence": {
+    "region": [
+     819,
+     596,
+     832,
+     628
+    ],
+    "measured": "Median 54.2, p95 93.4 on a cap whose median is 4.3. The mean profile across [812,598,845,628] goes 2.3, 5.2, 21.7, 38.7, 52.7, 63.3, 75.7 within 6 px (largest step 17.0, 10-90 width 4 px). These pixels mirror 'lamp glint1 over floor' 24.7% and 'lamp glint1 + lamp glint2 over floor' 12.3%."
+   },
+   "change": {
+    "setting": "glints.1.receivers",
+    "from": [
+     "woofer-cone",
+     "woofer-cap"
+    ],
+    "to": [
+     "woofer-cone"
+    ]
+   },
+   "expected": "The blade disappears and the cap's lower-left becomes a smooth dark field (largest column step under 5). The cone keeps glint 1's broad sheen on its right wall, unchanged.",
+   "accept": {
+    "region": [
+     812,
+     598,
+     845,
+     628
+    ],
+    "metric": "edge",
+    "axis": "x",
+    "op": "<=",
+    "value": 8
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "Inside the window patch the panelling is one flat tan, so the 8-degree sun has nothing to rake across and the patch reads as a beige card rather than sunlight on painted wood.",
+   "evidence": {
+    "region": [
+     330,
+     300,
+     390,
+     360
+    ],
+    "measured": "lum_range 3.0 (128.1 to 131.1) in a 60-px square of lit panelling; 4.2 across [320,200,690,290]; 131 to 134 across the whole lit width in 14 bins."
+   },
+   "change": {
+    "setting": "set.wainscot.relief",
+    "from": 0.2,
+    "to": 0.6
+   },
+   "expected": "Upright brush ridges catch the low sun on their right flanks, giving about 7 levels of range in a 60-px square of the lit field. That is the card's calibration for this sun; 0.1 and 0.2 both gave 3.1, too little to show. Nothing becomes visible in the shade or inside the carton's shadow. The patch keeps its level (127-134) and colour.",
+   "accept": {
+    "region": [
+     330,
+     300,
+     390,
+     360
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     5,
+     11
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "The patch's lit edge runs parallel to the carton's left edge only 32 px away for the full height of the white front. The product's silhouette nearly touches the brightest shape in the room, while the shadow has room to spare.",
+   "evidence": {
+    "region": [
+     640,
+     400,
+     740,
+     600
+    ],
+    "measured": "Profile x in 5-px bins: lit 124-130 to x 695, then 127, 110, 85, 52 across 695-715 (half-light near 707), dark 45 from 715 to 735, the carton from 739 (193.5). [660,400,705,600] mean 126.0. The carton's wall shadow ends near x 637, 70 px left of the patch edge."
+   },
+   "change": {
+    "setting": "set.windows.0.along",
+    "from": 1.3,
+    "to": 1.37
+   },
+   "expected": "The window moves 7 cm toward the front (its edge still 3 cm short of the corner). The patch slides about 5.5 cm (about 19 px) left on the back wall, and its top edge drops about 5 px. The carton's shadow, set by the sun's direction, stays put, and the product stays wholly in the beam. The half-light edge lands near x 688, leaving about 40 px of dark wall left of the carton (from about 24) and about 38 px of full light right of the silhouette (from about 57).",
+   "accept": {
+    "region": [
+     660,
+     400,
+     705,
+     600
+    ],
+    "metric": "lum_mean",
+    "op": "between",
+    "value": [
+     80,
+     104
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "Once the blade is gone, the cap's only light is glint 2's faint top sheen, so the centre of the largest driver reads as a 56-px hole rather than a dome.",
+   "evidence": {
+    "region": [
+     822,
+     578,
+     848,
+     594
+    ],
+    "measured": "Cap pixels in this box: median 17.4, p95 30.7, a smooth gradient peaking at 34 at the top centre. The whole cap: median 4.3, 40.7% of it at or below 3."
+   },
+   "change": {
+    "setting": "glints.2.power_w",
+    "from": 0.1667,
+    "to": 0.55
+   },
+   "expected": "Glint 2 is a 1-m lamp and already reflects as a smooth gradient. At about 3.3x it gives the cap's upper third a soft highlight peaking around 50-60 with no edge, while the rest of the cap stays black (median under 8). c1 moves the fill's faint reflection on the cap (about 27 at its top edge now) to its upper right, so this box keeps only glint 2.",
+   "accept": {
+    "region": {
+     "part": "woofer-cap",
+     "box": [
+      822,
+      578,
+      848,
+      594
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     42,
+     70
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Make the woofer cone read neutral black anodised instead of bronze (cone median RGB [62,49,35], dE2000 9.8 to #2E2E2E).",
+   "why": "The bronze is the warm oak floor mirrored in the cone's metal. The cone's finish and reflectance belong to the Dayton driver and are fixed. It matters because the largest driver reads copper rather than black at homepage size, and lighting can only dim what it mirrors."
+  },
+  {
+   "request": "A thinner or lower fin, so the silhouette's peak reads as the carton's sealed tab rather than a 41-px chimney.",
+   "why": "The fin is the product's geometry. It matters because the must-show silhouette now reads as a house with a chimney. The in-scope route is turning the ridge onto the sun's azimuth (rotate_z toward -48). I held it back this round because it takes away most of the front's grazing sun (about 57% of its light) and frontsheen would have to move with the turn."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
