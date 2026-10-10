@@ -1,0 +1,234 @@
+{
+ "stage1": {
+  "impression": "A clear, legible cutaway of a milk-carton speaker on a grey sweep, but it reads as a CAD section diagram rather than a hero: the pale birch cut faces are evenly lit to one value, the drivers and the amplifier sink to black, and the product sits weakly grounded in a large, dull grey field. Clean and competent, but lighting, grounding and the dark components keep it well short of shipping.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Floor: the lower-left corner [0,760,150,900] at or below 97 (now 109.4), no brighter than the floor in front of the product (95.2), so the brightest floor is the pool at the base and not the empty corner.",
+  "Woofer: the cone shows its conical form under a graded sheen (part:woofer-cone median 30-46, now 19.5: one glint streak on black, p5 8.4), at least 12 levels clear of the magnet's cut face (25.2) and the surround (23.1); today all three sit within 6 levels.",
+  "Amplifier: the module reads as an object inside its box (part:amp-module median at least 20, now 11.1; at most 3% crushed in [330,632,378,700], now 14.5%; amp-pcb 7.5, amp-caps 2.7).",
+  "Grounding: a visible soft key shadow on the floor behind-right of the base ([690,712,800,748] at 68-76, now 80.1, the same as open floor at 80-81 further right).",
+  "Section light: the cut faces show the light's direction with at least 10 levels of smooth falloff (now 209.1 to 205.8 down the back panel's cut face over y 262-490 and 208 to 201 across the top panel), instead of one value broken by a step to about 172 at the plinth line.",
+  "Section cleanliness: no diagonal hairlines on the back panel's and front baffle's cut faces at the plinth line (dips to 113 in a 175 face at x 317-326, y 712-756, and to 77 in a 190 face at x 543-553, y 743-759).",
+  "Section material: the birch cut faces read as plywood with laminations rather than a uniform 205-209 slab with about 1.3 levels of fine texture."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The brightest floor in the frame is the empty lower-left corner, where the key (and fill) spill onto the floor beside the product, so the eye leaks out at the bottom left instead of resting on the carton.",
+   "evidence": {
+    "region": [
+     0,
+     760,
+     150,
+     900
+    ],
+    "measured": "lum_median 109.4 (p5 105.4, p95 113.6) against 95.2 on the floor in front of the product [600,820,750,900], 82.2 on the floor right of the base [760,640,860,760] and 98.4 on the left floor at mid-height [20,640,160,720]; the bottom row [0,840,1350,860] falls 109.6, 101.0, 90.9, 95.6, 94.5, 92.3, 89.4, 85.4, 80.1 from left to right. Round 9's c3 (lights.key.set_ramp, not on the card) still reads 106.4 here."
+   },
+   "change": {
+    "setting": "lights.leftfloornet",
+    "from": null,
+    "to": {
+     "type": "flag",
+     "size_m": [
+      2.7,
+      2.7
+     ],
+     "position": [
+      -1.75,
+      0.65,
+      0.1
+     ],
+     "target": [
+      -1.75,
+      0.65,
+      1.0
+     ],
+     "density": 0.4
+    }
+   },
+   "expected": "A horizontal net 0.1 m over the floor at x -3.1 to -0.4, y -0.7 to 2.0, shading every lamp there (no lights list, so the key's set copy is shaded too): the corner falls about 15 levels to about 92 and the left floor at mid-height from 98 to about 88, level with the floor in front of the product, with soft edges (about 7 cm penumbra) that land out of frame or beside the base. It sits below the key's lowest rays to the cut face (at least 0.135 m at y -0.3) and outside the fill's, so the cut faces keep 205-209 and round 9's wallnet and floornet tests are untouched. This is round 9's c3 goal (88-97) done with a tool the card has.",
+   "accept": {
+    "region": [
+     0,
+     760,
+     150,
+     900
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     88,
+     97
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The 12 in woofer cone, the largest component in the section, prints as a black wedge with a single hot streak, so its conical anodised-aluminium form does not read and it merges with the magnet and surround beside it.",
+   "evidence": {
+    "region": [
+     519,
+     532,
+     568,
+     683
+    ],
+    "measured": "part:woofer-cone median 19.5, p5 8.4, p95 151.2; profile down x 525-565, y 530-690 (8 bins): 43.5, 11.2, 13.2, 29.7, 135.1, 40.6, 21.3, 95.3, so one band from glint1 and black elsewhere. mirrors: sweep 60.4% (met on the floor at x 0.35-3.59, median (0.95, 0.19, 0)), sky 21.1%, glint1 9.8% at (0.75, 0.08, 0.41). Magnet 25.2, surround 23.1, ring 27.4. Under PBR Neutral's 0.04 offset these values sit in the squared toe, so diffuse light cannot lift them without burning the birch; the shape has to come from reflection."
+   },
+   "change": {
+    "setting": "lights.conecard",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.4,
+      0.72
+     ],
+     "position": [
+      0.75,
+      0.2,
+      0.36
+     ],
+     "target": [
+      0.15,
+      0.07,
+      0.33
+     ],
+     "strength": 1.2,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.04,
+       0.66
+      ],
+      "values": [
+       0.3,
+       1.0
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "woofer-cone"
+     ]
+    }
+   },
+   "expected": "A reflection-only card standing 0.55 m in front of the baffle, where the cone's floor- and sky-bound rays cross x 0.75 (z 0.02-0.46), mirrored by about 70% of the cone as a soft vertical ramp: the median goes from 19.5 to about 38 and p5 from 8.4 to at least 15, while glint1's streak stays the brightest band. The cone then reads as a curved black metal bowl, about 13 levels clear of the magnet; nothing else sees the card (linked, diffuse false, invisible to camera).",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     30,
+     46
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The product casts almost no shadow on the set: the key's shadow on the set is printed at 16% density, so the floor in its path behind-right of the base has the same value as open floor and the carton looks set down on the sweep rather than standing in the light.",
+   "evidence": {
+    "region": [
+     690,
+     712,
+     800,
+     748
+    ],
+    "measured": "lum_median 80.1 (p5 78.1) in the key-shadow path (floor about (0.3-0.5, 0.33-0.55), behind the woofer chamber along the key's direction), against 81.1 at [880,690,1000,735] and 80.2 at [1100,680,1220,725] on open floor in the same rows; column profiles at x 660-1060 all show the same 78-81 trough at y 700-740 (the set's own gradient), with no shadow shape."
+   },
+   "change": {
+    "setting": "lights.key.shadow_on_set",
+    "from": 0.16,
+    "to": 0.5
+   },
+   "expected": "A soft key shadow trails from the base toward the right edge at about y 620-760, darkest near the carton: [690,712,800,748] goes from 80.1 to about 72-74 and fades with distance. The product's own light, the contact line (53 to 85 within 8 px) and the left floor (c1) are unchanged, because the setting only changes the shadow's density on the set.",
+   "accept": {
+    "region": [
+     690,
+     712,
+     800,
+     748
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     68,
+     76
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The plate amplifier, the reason the amp box is in the frame, is a black hole: housing, PCB and caps print at 3-11, so the box reads as a wooden frame round a void.",
+   "evidence": {
+    "region": [
+     319,
+     628,
+     380,
+     704
+    ],
+    "measured": "part:amp-module median 11.1 (p5 3.6, p95 26.9); amp-pcb 7.5, amp-caps 2.7, amp-plate 3.7; [330,632,378,700] median 10.5 with 14.5% crushed. It mirrors the dim box interior: side-right 34.5% (met at x -0.12 to -0.09, y 0.18, z 0.12-0.18), amp-box-front 19.7% (x -0.09, y 0.14-0.17), amp-box-floor 16.9%. Its rgb median (18, 10, 2) carries the birch's warmth, so it does reflect."
+   },
+   "change": {
+    "setting": "lights.ampcard",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.07,
+      0.09
+     ],
+     "position": [
+      -0.1,
+      0.15,
+      0.155
+     ],
+     "target": [
+      -0.15,
+      0.064,
+      0.17
+     ],
+     "strength": 0.8,
+     "color": "#FFFFFF",
+     "diffuse": false,
+     "receivers": [
+      "amp-module"
+     ]
+    }
+   },
+   "expected": "A small reflection-only card in the box's far front corner, about 7 cm from the module's face and where both its far-wall and front-wall rays cross: the housing picks up a soft sheen along its face and edges, so its median goes from 11 to about 26 and its outline separates from the box interior (about 45). The box's birch, the cut faces and every other part are untouched (linked, diffuse false).",
+   "accept": {
+    "region": "part:amp-module",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     20,
+     34
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Clean the section at the plinth line: remove the diagonal dark hairlines on the back panel's cut face (x 317-326, y 712-756, streaks down to 113-146 in a 175 face, with a red speck at 318,713) and on the front baffle's cut face (x 543-553, y 743-759, a line down to 77-103 in a 190 face).",
+   "why": "They sit where the 3 mm shadow line and the plinth zone meet the centre-plane cut. Geometry and the cut are fixed, but at spread size they read as scratches across a must-show cut face, so the modelling team should fix the section there."
+  },
+  {
+   "request": "Show the Baltic birch cut faces as plywood, with the alternating ply laminations, instead of a uniform pale slab.",
+   "why": "The birch is the product's fixed finish. The cut faces print 205-209 with only about 1.3 levels of fine texture (high-pass std on [318,280,327,450]), so the section reads as foam board or CAD; the ply edge is the strongest cue that this is a photographed cutaway."
+  },
+  {
+   "request": "Show bare cut metal on sectioned metal parts, starting with the amp plate's section at the back panel (2.7-3.7).",
+   "why": "What is cut and its materials are fixed. In a photographed cutaway, cut metal edges catch light and outline each part; here the amp plate's section prints as a void beside the module."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
