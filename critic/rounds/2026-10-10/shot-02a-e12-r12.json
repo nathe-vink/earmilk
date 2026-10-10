@@ -1,0 +1,347 @@
+{
+ "stage1": {
+  "impression": "A calm, well-composed lifestyle frame: the milk-carton speaker reads instantly against a sunlit wall, but it is not sitting in the light it seems to cast - its hard shadow lands on the wall with nothing on the floor tying it back to the plinth, so the speaker looks dropped in. The white body reads as a flat grey-white with little sheen, the red waveguide disappears into the red roof, and the whole frame is soft, like a denoised draft.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "Sunlight reads on the floor as well as the wall: the speaker's floor shadow, from the plinth's front-right corner (515, 712) to the wall shadow's foot (735-903, 595-611), sits >= 25 levels under the sunlit boards beside it, and the window patch on the boards sits >= 20 levels over the floor outside it (now a ~5-level step in strip [640, 630, 680, 722], and the out-of-beam floor [820, 790, 1000, 870] at 104.9 is brighter than the sunlit foreground [250, 760, 420, 850] at 99.2).",
+  "No plateau on the white front: apart from one small specular highlight, no more than ~1% of the front above 226 (now ~7,000 px of the upper-left quarter at 230-233, lum_range 2.0).",
+  "The sun has a colour: the wall patch reads as warm morning sun (b* >= 9) against near-neutral shade (now b* 4.9 vs 2.2).",
+  "The back wall shows the windows' direction: a 10-20 level falloff from left to right across the upper wall (now 190-193 across 1120 px).",
+  "The waveguide reads as a bowl all round: its upper-left rim drawn by a highlight or a >= 15-level edge (now 79 -> 71 over ~16 px with no line).",
+  "The roof's front slope holds the brand red where it mirrors gable_sheen: dE2000 <= 4 against #C62828 (now 7.5 in [505, 268, 545, 300], rgb 189, 69, 74, a pink cast).",
+  "The shaded side reads as white lacquer through its reflections rather than an unmotivated fill, at or above the carton's wall shadow.",
+  "Boards and twigs hold texture at full size (the oak grain is soft and low-contrast at 4x), which needs sampling the card fixes."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "fill_right, a cool area lamp on the room's windowless right side, lays about as much light on the floor right of the sun's beam (~0.73 W/m2 from its 0.7865 spec at 2.4 m, by the card's geometry) as the 15-degree sun lays on the boards inside the beam (2.63 x sin 15 = 0.68), so the window's sun patch does not show on the floor and the speaker's floor shadow is filled in.",
+   "evidence": {
+    "region": [
+     820,
+     790,
+     1000,
+     870
+    ],
+    "measured": "floor right of the beam's edge, out of the sun: lum_median 104.9, brighter than the sunlit foreground [250, 760, 420, 850] at 99.2; the speaker's floor shadow [625, 628, 700, 662] 118.4 vs the sunlit boards beside it [700, 690, 820, 720] 119.7"
+   },
+   "change": {
+    "setting": "lights.fill_right.irradiance",
+    "from": 0.7865,
+    "to": 0.2
+   },
+   "expected": "The floor right of the beam [820, 790, 1000, 870] falls to ~90-94 while the sunlit foreground keeps ~99-100, so the beam's right edge (about (492, 859) to (1151, 634)) shows as a lighter diagonal band on the boards; the speaker's floor shadow loses ~5 levels; the front is unchanged (fill_right does not reach it); the shaded side would lose ~15-20 levels, which c6 restores.",
+   "accept": {
+    "region": [
+     820,
+     790,
+     1000,
+     870
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     86,
+     96
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "Sky fill, raised from 0.95 to 10.475 over rounds 9-11, now outweighs the sun everywhere except the wall patch, so the morning sun reads as a lit rectangle on the wall and the carton's wall shadow has no shadow on the boards connecting it to the plinth.",
+   "evidence": {
+    "region": [
+     640,
+     630,
+     680,
+     722
+    ],
+    "measured": "profile axis y across the floor shadow's predicted edge (y ~669-680): 118.5, 116.4, 125.4, 125.5, 130.5, 129.5, 132.6, 133.7 - the shadow's step is ~5 levels, smaller than the plank step at y ~653 (116 -> 125); shadow region [625, 628, 700, 662] 118.4 vs sunlit boards [700, 690, 820, 720] 119.7; on the wall the sun does show: patch [950, 330, 1100, 480] 221.1 vs unlit wall [1200, 330, 1340, 480] 180.7"
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 10.475,
+    "to": 6.5
+   },
+   "expected": "The speaker's floor shadow [625, 628, 700, 662] falls from 118 to ~102-108 and, with c1 and c3, the step across its edge in strip [640, 630, 680, 722] grows from ~5 to ~10-15 levels, reading as a band from the plinth's front-right corner (515, 712) to the wall shadow's foot (735-903, 595-611); wall shadow ~155 -> ~145; unlit walls ~181 -> ~172; upper wall stays >= 180 (lit mostly by wall_wash). This reverses rounds 9-11, and the far-left window-side strip (~177, round 11's c5 test [172, 184]) will drop ~6-9 levels: worth it because at 10.475 the room's sun exists only on the wall, and c7 keeps the wash's left end at full so the window side of the upper wall becomes its brightest part rather than its dimmest.",
+   "accept": {
+    "region": [
+     625,
+     628,
+     700,
+     662
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     98,
+     110
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "Cutting fill (c1, c2) alone would grey the sunlit white front, which takes a large share of its light from the sky through the front window, so the sun has to carry the front for the light ratio to move toward the sun instead of the whole frame dimming.",
+   "evidence": {
+    "region": [
+     470,
+     440,
+     512,
+     488
+    ],
+    "measured": "front middle lum_median 217.3, lum_range 4.0; the sun's share of a sunlit white is ~0.26 of ~0.70 linear (wall patch 221.1 vs unlit wall 180.7 = 0.72 vs 0.46 linear)"
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 2.6347,
+    "to": 3.2
+   },
+   "expected": "The front's middle holds 212-220 (its upper half under 227 with c4) while the sun's share of the frame rises: wall patch ~221 -> ~224-228, sunlit boards +4-6 levels, patch-to-unlit-wall ratio from ~1.6:1 to ~1.9:1 in linear terms. Round 11 cut the sun 4 -> 2.63 to keep the front off the PBR shoulder; this test holds the front where that cut put it, because c2 removes the fill the cut was balancing.",
+   "accept": {
+    "region": [
+     470,
+     440,
+     512,
+     488
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     212,
+     220
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "Glint2's 0.5 m disc, mirrored on top of the lacquer_ramp panel, spreads over the front's upper-left quarter and lifts it onto the PBR Neutral shoulder, so about 7,000 px (a fifth of the front) print as one flat value with a soft 11-level step along their lower edge - a burned patch rather than a highlight.",
+   "evidence": {
+    "region": [
+     398,
+     382,
+     421,
+     428
+    ],
+    "measured": "lum_median 232.0, lum_range 2.0; [430, 330, 470, 362] 232.3, range 2.0; profile [392, 330, 420, 470] axis y: 233.3, 232.3, 232.3, 231.3, 229.3, 220.3 (edge width 14 px); mirrors [390, 326, 470, 420]: 'lamp glint2 over panel lacquer_ramp' 68.6% (radiance 2.92 + 5.85); the glint-free right column [485, 330, 515, 420] 222.3 with lum_range 10.0"
+   },
+   "change": {
+    "setting": "glints.2.size_m",
+    "from": 0.5,
+    "to": 0.15
+   },
+   "expected": "Glint2 shrinks to a ~50 px specular spot at the front's top-left corner around (396, 350), its core up to ~245; the rest of the upper-left quarter drops to ~222-226 and takes the lacquer_ramp's top-to-bottom gradient like the glint-free right column (224 -> 220), and the 231 -> 220 step at y ~430 goes.",
+   "accept": {
+    "region": [
+     398,
+     382,
+     421,
+     428
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     214,
+     227
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "Under the 5950 K white point the #FFF1E0 sun prints almost neutral, so its patch reads as projector white rather than low morning sun, and the sunlit boards get no warmth to separate them from the shade.",
+   "evidence": {
+    "region": [
+     950,
+     330,
+     1100,
+     480
+    ],
+    "measured": "sun patch rgb (228, 220, 212), Lab b* 4.9, delta_e vs warm sun-on-plaster #EFE1CB 5.67; unlit wall [1200, 330, 1340, 480] rgb (185, 180, 177), b* 2.2; the paint #FBF7F1 itself is b* 3.3"
+   },
+   "change": {
+    "setting": "sun.color",
+    "from": "#FFF1E0",
+    "to": 4800
+   },
+   "expected": "The wall patch moves to about (238, 226, 205), b* ~11, against shade at b* ~2-3, so it reads as morning sun; the sunlit boards warm a little against the floor outside the beam, adding a colour edge to c1's tonal one; the retouch takes 75% of the cast off the white front (neutral 0.75) and holds the reds on the swatch (adapt 0).",
+   "accept": {
+    "region": [
+     950,
+     330,
+     1100,
+     480
+    ],
+    "metric": "delta_e",
+    "hex": "#EFE1CB",
+    "op": "between",
+    "value": [
+     0,
+     3.0
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "fill_right is the shaded side's only direct light (it faces the side at cos ~0.94), so c1 alone would drop the white side to ~140, under the carton's own wall shadow - the grey-card look round 11 fixed - unless the side holds its value through what it mirrors.",
+   "evidence": {
+    "region": [
+     525,
+     340,
+     605,
+     520
+    ],
+    "measured": "side lum_median 159.4 (whole part side-right 147.4); 51% of its pixels mirror 'panel side_sheen over wall-back'; the carton's wall shadow [760, 400, 870, 520] is 154.8"
+   },
+   "change": {
+    "setting": "lights.side_sheen.strength",
+    "from": 4.5,
+    "to": 7.5
+   },
+   "expected": "The side's upper two-thirds holds 152-166 with its reflection ramp (~175 at the top to ~130 at the plinth), staying above the carton's wall shadow (~145 after c2), so it keeps reading as white lacquer in shade; floor and wall unchanged (reflection-only, linked to side-right).",
+   "accept": {
+    "region": [
+     525,
+     340,
+     605,
+     520
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     152,
+     166
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "The 5 m wall_wash lights the back wall evenly, so the upper wall is one value across the whole frame - a lit backdrop, not a wall lit by windows on its left.",
+   "evidence": {
+    "region": [
+     230,
+     40,
+     1350,
+     200
+    ],
+    "measured": "profile axis x, 8 bins: 190.1, 191.1, 191.2, 190.4, 191.1, 192.0, 193.0, 192.1 (falloff -2.0); lum_range 4.1 over 1120 x 160 px"
+   },
+   "change": {
+    "setting": "lights.wall_wash.ramp",
+    "from": {
+     "axis": "z",
+     "at_m": [
+      1.2,
+      2
+     ],
+     "values": [
+      1,
+      1
+     ]
+    },
+    "to": {
+     "axis": "x",
+     "at_m": [
+      -2.3,
+      2.7
+     ],
+     "values": [
+      1,
+      0.7
+     ]
+    }
+   },
+   "expected": "The upper wall falls off ~10-15 levels from left (~188) to right (~174), matching the windows on the left and balancing the sun patch low on the right; the wash's left end stays at full strength.",
+   "accept": {
+    "region": [
+     230,
+     40,
+     1350,
+     200
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     8,
+     20
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "The waveguide's upper-left rim has no edge: the roof beside it runs into the bowl over ~16 px with no line or highlight, because that inner wall mirrors only the unlit ceiling, so the scoop reads by its lower lip and the tweeter dot alone.",
+   "evidence": {
+    "region": [
+     432,
+     284,
+     470,
+     318
+    ],
+    "measured": "lum_p95 82.3, lum_range 16.1; roof just outside the rim [418, 292, 430, 302] 79.3 vs bowl just inside [446, 296, 458, 306] 71.2; mirrors [438, 296, 450, 306]: ceiling 56.7%, panel gable_sheen 23.3% at radiance 0.81"
+   },
+   "change": {
+    "setting": "glints.3",
+    "from": null,
+    "to": {
+     "at": [
+      -0.108,
+      -0.088,
+      0.914
+     ],
+     "normal": [
+      0.5,
+      -0.82,
+      0.28
+     ],
+     "size_m": 0.06,
+     "power_w": 0.5,
+     "receivers": [
+      "waveguide-insert"
+     ]
+    }
+   },
+   "expected": "A small glossy highlight, peak ~150-190, on the bowl's inner wall just inside the upper-left rim around (440-456, 294-310), where it now mirrors the ceiling, tracing where the roof turns down into the scoop; the roof (79 beside the rim) and everything else unchanged (reflection-only, linked to waveguide-insert).",
+   "accept": {
+    "region": [
+     432,
+     284,
+     470,
+     318
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     120,
+     180
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "More samples or a lighter denoise so the oak grain, the plank seams and the twig edges hold detail at full size",
+   "why": "Sampling is fixed on the card; at 4x the grain is smooth and low-contrast (crop [150, 780, 450, 900]), so at a spread the boards read as laminate, a CG tell no light change removes."
+  },
+  {
+   "request": "A contrasting finish on the waveguide insert so the bowl separates from the roof",
+   "why": "The insert wears the flavour's accent (#C62828 on Whole) and flavour colours are fixed, and the bowl's depth and rim are set by acoustics; red-on-red can only be separated by light and reflection (c8)."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
