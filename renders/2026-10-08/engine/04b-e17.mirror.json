@@ -1,0 +1,432 @@
+{
+ "legend": {
+  "1": "world (sky)",
+  "2": "panel gloss",
+  "3": "sweep",
+  "4": "gable-block",
+  "5": "lamp side over world (sky)",
+  "6": "lamp rim over world (sky)",
+  "7": "lamp kicker over sweep",
+  "8": "side-right",
+  "9": "front-baffle",
+  "10": "panel sidestrip",
+  "11": "panel sidegloss",
+  "12": "back-panel",
+  "13": "panel backgloss over world (sky)",
+  "14": "letters-back-4",
+  "15": "letters-back-2",
+  "16": "letters-back-0",
+  "17": "letters-back-1",
+  "18": "letters-back-3",
+  "19": "port-tube",
+  "20": "lamp glint2 over sweep",
+  "21": "woofer-motor",
+  "22": "window-brace",
+  "23": "mid-shelf",
+  "24": "lamp glint1 over sweep",
+  "25": "amp-connectors",
+  "26": "amp-plate",
+  "27": "amp-switch",
+  "28": "amp-rca",
+  "29": "flag0",
+  "30": "side-right.plinth",
+  "31": "flag1",
+  "32": "back-panel.plinth"
+ },
+ "step": 2,
+ "parts": {
+  "back-panel": {
+   "pixels": 78796,
+   "seen": [
+    [
+     "sweep",
+     0.491
+    ],
+    [
+     "world (sky)",
+     0.268
+    ],
+    [
+     "panel backgloss over world (sky)",
+     0.198
+    ],
+    [
+     "panel sidegloss",
+     0.027
+    ],
+    [
+     "flag1",
+     0.009
+    ],
+    [
+     "flag0",
+     0.003
+    ]
+   ]
+  },
+  "side-right": {
+   "pixels": 64812,
+   "seen": [
+    [
+     "panel sidegloss",
+     0.531
+    ],
+    [
+     "sweep",
+     0.234
+    ],
+    [
+     "panel sidestrip",
+     0.198
+    ],
+    [
+     "flag0",
+     0.035
+    ],
+    [
+     "side-right.plinth",
+     0.002
+    ],
+    [
+     "side-right",
+     0.0
+    ]
+   ]
+  },
+  "gable-block": {
+   "pixels": 30988,
+   "seen": [
+    [
+     "panel gloss",
+     0.537
+    ],
+    [
+     "world (sky)",
+     0.384
+    ],
+    [
+     "gable-block",
+     0.044
+    ],
+    [
+     "sweep",
+     0.022
+    ],
+    [
+     "lamp side over world (sky)",
+     0.008
+    ],
+    [
+     "lamp rim over world (sky)",
+     0.003
+    ]
+   ]
+  },
+  "amp-plate": {
+   "pixels": 15068,
+   "seen": [
+    [
+     "sweep",
+     0.756
+    ],
+    [
+     "flag1",
+     0.195
+    ],
+    [
+     "lamp glint1 over sweep",
+     0.042
+    ],
+    [
+     "back-panel",
+     0.005
+    ],
+    [
+     "amp-rca",
+     0.002
+    ],
+    [
+     "amp-connectors",
+     0.001
+    ]
+   ]
+  },
+  "back-panel.plinth": {
+   "pixels": 14684,
+   "seen": [
+    [
+     "flag1",
+     0.902
+    ],
+    [
+     "sweep",
+     0.059
+    ],
+    [
+     "flag0",
+     0.03
+    ],
+    [
+     "back-panel",
+     0.008
+    ]
+   ]
+  },
+  "side-right.plinth": {
+   "pixels": 9628,
+   "seen": [
+    [
+     "flag0",
+     0.943
+    ],
+    [
+     "sweep",
+     0.045
+    ],
+    [
+     "side-right",
+     0.011
+    ],
+    [
+     "front-baffle",
+     0.0
+    ]
+   ]
+  },
+  "port-tube": {
+   "pixels": 3408,
+   "seen": [
+    [
+     "port-tube",
+     0.461
+    ],
+    [
+     "sweep",
+     0.273
+    ],
+    [
+     "side-right",
+     0.085
+    ],
+    [
+     "back-panel",
+     0.049
+    ],
+    [
+     "lamp glint2 over sweep",
+     0.036
+    ],
+    [
+     "mid-shelf",
+     0.035
+    ]
+   ]
+  },
+  "front-baffle": {
+   "pixels": 1860,
+   "seen": [
+    [
+     "panel sidegloss",
+     0.753
+    ],
+    [
+     "sweep",
+     0.241
+    ],
+    [
+     "flag0",
+     0.004
+    ],
+    [
+     "side-right",
+     0.002
+    ]
+   ]
+  },
+  "amp-connectors": {
+   "pixels": 660,
+   "seen": [
+    [
+     "sweep",
+     0.618
+    ],
+    [
+     "amp-connectors",
+     0.352
+    ],
+    [
+     "amp-plate",
+     0.024
+    ],
+    [
+     "amp-switch",
+     0.006
+    ]
+   ]
+  },
+  "front-baffle.plinth": {
+   "pixels": 272,
+   "seen": [
+    [
+     "flag0",
+     0.956
+    ],
+    [
+     "sweep",
+     0.044
+    ]
+   ]
+  },
+  "letters-back-3": {
+   "pixels": 236,
+   "seen": [
+    [
+     "world (sky)",
+     0.983
+    ],
+    [
+     "back-panel",
+     0.017
+    ]
+   ]
+  },
+  "letters-back-7": {
+   "pixels": 216,
+   "seen": [
+    [
+     "world (sky)",
+     0.944
+    ],
+    [
+     "back-panel",
+     0.056
+    ]
+   ]
+  },
+  "letters-back-1": {
+   "pixels": 168,
+   "seen": [
+    [
+     "world (sky)",
+     0.905
+    ],
+    [
+     "back-panel",
+     0.095
+    ]
+   ]
+  },
+  "letters-back-0": {
+   "pixels": 160,
+   "seen": [
+    [
+     "world (sky)",
+     0.95
+    ],
+    [
+     "back-panel",
+     0.05
+    ]
+   ]
+  },
+  "amp-screws": {
+   "pixels": 120,
+   "seen": [
+    [
+     "sweep",
+     0.6
+    ],
+    [
+     "flag1",
+     0.367
+    ],
+    [
+     "amp-plate",
+     0.033
+    ]
+   ]
+  },
+  "letters-back-6": {
+   "pixels": 88,
+   "seen": [
+    [
+     "world (sky)",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-2": {
+   "pixels": 88,
+   "seen": [
+    [
+     "world (sky)",
+     1.0
+    ]
+   ]
+  },
+  "letters-back-5": {
+   "pixels": 64,
+   "seen": [
+    [
+     "world (sky)",
+     1.0
+    ]
+   ]
+  },
+  "amp-switch": {
+   "pixels": 60,
+   "seen": [
+    [
+     "sweep",
+     1.0
+    ]
+   ]
+  },
+  "amp-rca": {
+   "pixels": 56,
+   "seen": [
+    [
+     "sweep",
+     0.429
+    ],
+    [
+     "amp-rca",
+     0.429
+    ],
+    [
+     "amp-plate",
+     0.143
+    ]
+   ]
+  },
+  "letters-back-4": {
+   "pixels": 8,
+   "seen": [
+    [
+     "world (sky)",
+     1.0
+    ]
+   ]
+  },
+  "amp-led": {
+   "pixels": 8,
+   "seen": [
+    [
+     "sweep",
+     1.0
+    ]
+   ]
+  }
+ },
+ "lamps": {
+  "key": 5.925,
+  "fill.specular": 0.609,
+  "rim": 7.1769,
+  "edge.specular": 6.6667,
+  "side": 0.4274,
+  "bg": 0.4483,
+  "kicker": 9.3333,
+  "glint1": 43.3655,
+  "glint2": 241.2964
+ }
+}
