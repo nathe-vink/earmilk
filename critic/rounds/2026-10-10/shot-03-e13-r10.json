@@ -1,0 +1,199 @@
+{
+ "stage1": {
+  "impression": "A clean, correctly modelled close-up of the red gable roof with its horn and tweeter. A soft, generic overhead key leaves the roof an evenly lit satin slab and the white body a flat light grey against an equally flat mid-grey sweep. The waveguide reads soft and melty rather than machined: its big floor is a plain red plane, and nothing on it draws its contour. The tweeter looks like a dull grey eyeball in a black ring, and a small white chip at the front seam reads as a render artefact.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The waveguide floor is the hero's largest surface, and it is one value from throat to mouth: profile 78.5, 78.4, 78.1, 80.8, 79.2, 78.7, 78.7, 80.0 along [560,530,640,705], falloff -1.5. All of it mirrors panel top (box [450,620,800,740] mirrors panel top 100 %). It needs a graduated reflection of 14 to 28 levels so the horn reads as a surfaced flare.",
+  "The waveguide's outline must read as one continuous highlight on both rims, down to the corners of the mouth. The left rim line falls from median 136 (y 370-410) to 89 (y 570-650), which is the lip's own value, so the lower 40 % of the left contour has no edge ([238,590,262,612] p95 94.6). The right rim's lower half sits at 113-119, against 156 at its top.",
+  "There is a notch in the insert's front lip, at the centre of the eave, where the front baffle shows through ([495,742,530,758], lum up to 237). It is the brightest spot in the frame, brighter than the dome's highlight (max 226), and it sits right under the hero. It has to be fixed in the model (out of scope here).",
+  "The tweeter must read as an articulated driver. Its surround is a featureless black ring: part median 28.4 and p95 56.6. By angle it runs from 10 at the top to 40 at the bottom, and its upper-left quadrant has p95 33.4."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The waveguide floor runs from just below the neck to the mouth crease, about 40 % of the insert, and it is a single flat red value. It sits at the same value as the roof outside the insert, so the horn's flare does not read and the floor looks like a flat triangular sheet.",
+   "evidence": {
+    "region": [
+     560,
+     530,
+     640,
+     705
+    ],
+    "measured": "Profile along y, throat to mouth: 78.5, 78.4, 78.1, 80.8, 79.2, 78.7, 78.7, 80.0 (falloff -1.5). [480,540,700,700]: median 80.6, p5 76.1, p95 95.3, mirroring panel top 79.5 %. [450,620,800,740]: median 84.0, range 13.1, mirroring panel top 100 %. The roof outside the insert reads 81-92 on its left ([190,400,230,640]) and 67-86 on its right ([1000,300,1040,760]), so the floor has no value of its own."
+   },
+   "change": {
+    "setting": "glints.6",
+    "from": "none",
+    "to": {
+     "at": [
+      -0.021,
+      -0.129,
+      0.895
+     ],
+     "normal": [
+      -0.17,
+      -0.59,
+      0.79
+     ],
+     "size_m": [
+      0.3,
+      0.22
+     ],
+     "distance_m": 0.4,
+     "strength": 0.3,
+     "color": 5700,
+     "ramp": {
+      "axis": "y",
+      "values": [
+       0.1,
+       1.0
+      ]
+     },
+     "receivers": [
+      "waveguide-insert"
+     ]
+    }
+   },
+   "expected": "This is a panel glint placed from the floor at about pixel (619,606), ramped along world y. The throat side of the floor has the higher y, so it is bright, and the mouth side is dim. The floor strip [560,530,640,705] should grade from about 80 at the mouth end to 95-105 just below the neck (falloff 14-28, now -1.5), so the horn reads as a flare that leads up to the tweeter, and the floor gets a value of its own against the roof. The upper bound keeps the throat end under the wall band (up to 134). Because the receivers are limited to the insert, the roof does not change. The dark neck collar [600,440,770,520] (71.7) should stay. The right wall [780,470,860,690] should stay at or under about 85 (now 75.3), so the walls keep their lit-left, dark-right modelling.",
+   "accept": {
+    "region": [
+     560,
+     530,
+     640,
+     705
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     14,
+     28
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The highlight on the waveguide's left rim fades out over its lower 40 %. From about y 520 down to the mouth's left corner, the contour is just the dark seam line, and the rim melts into the wall band beside it.",
+   "evidence": {
+    "region": [
+     238,
+     590,
+     262,
+     612
+    ],
+    "measured": "Pixels that mirror rim_left, by row band: median 136 at y 370-410, 115 at y 410-450, 106 at y 450-490, 101 at y 490-530, 93 at y 530-570, 89 at y 570-650. The lip's outer face beside the line is 86-90 and the band's foot is 96-105. Box p95 is 94.6. rim_left's ramp (along x, [-0.18, 0.05], values [0.05, 1]) puts its 0.05 end on this part of the rim."
+   },
+   "change": {
+    "setting": "lights.rim_left.ramp.values",
+    "from": [
+     0.05,
+     1
+    ],
+    "to": [
+     0.5,
+     1
+    ]
+   },
+   "expected": "The left rim's highlight should run unbroken from the crest (about 145, unchanged by the ramp's 1.0 end) to the mouth's left corner, at 125-150 there. That is about 35 levels above the band's foot beside it, so the lower-left contour stops dissolving. Only the rim line mirrors rim_left (0.4 % of the insert, plus a few pixels on the surround and dome), so nothing else moves.",
+   "accept": {
+    "region": [
+     238,
+     590,
+     262,
+     612
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     120,
+     160
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The right rim line, the other half of the waveguide's outline, drops from about 156 at the crest to 113-119 over its lower two thirds. It is weaker than the fin's top-edge line (184-188), so the hero's contour is not the brightest line structure in the frame.",
+   "evidence": {
+    "region": [
+     795,
+     455,
+     835,
+     545
+    ],
+    "measured": "Pixels that mirror rim_right, by row band: median 156 at y 330-370, 149 at y 370-410, 137 at y 450-490, 116-120 at y 490-650, 106-115 below y 690. Box p95 is 122.3. The fin's top round peaks at 183-188 (rgb about 241,170,168) for x 300-800."
+   },
+   "change": {
+    "setting": "lights.rim_right.strength",
+    "from": 8.6828,
+    "to": "+35%"
+   },
+   "expected": "The middle and lower sections of the right rim line should rise to about 145-165, with the crest end at about 180-190, level with the fin's top line. Together with c2, both rims then draw the waveguide's outline in light at similar strength. The roof's left edge round, which mirrors 0.1 % of rim_right, brightens slightly. Nothing else mirrors this panel.",
+   "accept": {
+    "region": [
+     795,
+     455,
+     835,
+     545
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     140,
+     175
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The tweeter's surround is a black ring with no sheen, so the driver at the focal point reads as a dark hole with a grey ball in it. glint3 is meant to model the surround, but its reflection is invisible.",
+   "evidence": {
+    "region": [
+     646,
+     359,
+     747,
+     464
+    ],
+    "measured": "part:tweeter-surround: median 28.4, p5 7.2, p95 56.6. By angle it reads from median 10 at the top (240-270 deg) to about 40 at the bottom (60-150 deg). The 156 pixels that mirror glint3 sit on the upper-left outer roll (652-667, 374-397) at lum 13-33. The surround in box [646,365,680,405] has p95 33.4."
+   },
+   "change": {
+    "setting": "glints.3.power_w",
+    "from": 3.9889,
+    "to": "x5"
+   },
+   "expected": "A soft sheen arc should appear on the surround's upper-left roll, where glint3's reflection already lands, lifting that quadrant's p95 to 55-95 while the ring's median stays under about 40. The surround then reads as a moulded roll round the dome, not a void. The upper bound keeps it reading as rubber, not gloss plastic. Its receivers are limited to the surround, so nothing else changes.",
+   "accept": {
+    "region": {
+     "part": "tweeter-surround",
+     "box": [
+      646,
+      365,
+      680,
+      405
+     ]
+    },
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     55,
+     95
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Close or shade the notch in the waveguide insert's front lip at the centre of the eave. The front baffle's top edge shows through it as a white tab about 13 mm wide ([495,742,530,758]; the mask shows front-baffle pixels poking up into the insert there).",
+   "why": "This is geometry (the insert and the baffle), which the card fixes. It matters because, at lum 229-237, it is the brightest thing in the frame, brighter than the dome's highlight (226), and it sits directly under the waveguide. On a page about a precisely machined part, it reads as a modelling error."
+  }
+ ],
+ "score_if_fixed": 6.0
+}
