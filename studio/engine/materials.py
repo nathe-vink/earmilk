@@ -265,19 +265,40 @@ def _veneer(nt, b, p):
     nt.links.new(co.outputs['Vector'], sc.inputs['Vector'])
     nz = node('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 1.0; nz.inputs['Detail'].default_value = 3.0
     nz.inputs['Roughness'].default_value = 0.55; nt.links.new(sc.outputs['Vector'], nz.inputs['Vector'])
-    warp = math_('MULTIPLY', math_('SUBTRACT', nz.outputs['Fac'], 0.5), 9.0 * p['figure_m'])
+    # the bend: a ring or two either way, so the lines wander as a leaf's do (10's round 9: nine rings either way drew
+    # every door as a topographic map, the rings following the noise's contours)
+    warp = math_('MULTIPLY', math_('SUBTRACT', nz.outputs['Fac'], 0.5), 2.5 * p['figure_m'])
     # cathedrals: each leaf (`leaf_m` wide along the grain, a door's width) bends its rings into nested arches about
     # its middle, so neighbouring leaves read as book-matched
     u = math_('SUBTRACT', math_('FRACT', math_('DIVIDE', along, p['leaf_m'])), 0.5)
     arch = math_('MULTIPLY', math_('POWER', math_('ABSOLUTE', u), 1.5), p['arch_m'] * 2.83)
     v = math_('ADD', math_('ADD', across, warp), arch)
     rings = math_('FRACT', math_('DIVIDE', v, p['figure_m']))
-    # the latewood line: dark at the ring's end, fading into the next ring's earlywood
-    late = math_('POWER', math_('MAXIMUM', math_('SUBTRACT', math_('MULTIPLY', rings, 1.6), 0.6), 0.0), 2.0)
+    # the latewood line: a soft dark band across the middle of each ring, as dense on both sides (a sawtooth, dark at
+    # the ring's end and light the moment the next began, printed a 13-18 level step at every ring: 10's round 9)
+    def band(f, half):
+        d = math_('MULTIPLY', math_('ABSOLUTE', math_('SUBTRACT', f, 0.5)), 2.0)
+        return math_('POWER', math_('MAXIMUM', math_('SUBTRACT', 1.0, math_('DIVIDE', d, half)), 0.0), 1.5)
+    # each ring its own: how dark its latewood is varies ring to ring and slowly along it (a noise read at the ring's
+    # index), so the lines do not print as one repeated stroke
+    idx = math_('FLOOR', math_('DIVIDE', v, p['figure_m']))
+    ri = node('ShaderNodeCombineXYZ'); nt.links.new(math_('MULTIPLY', idx, 0.731), ri.inputs['X'])
+    nt.links.new(math_('MULTIPLY', along, 0.9), ri.inputs['Y'])
+    rn = node('ShaderNodeTexNoise'); rn.inputs['Scale'].default_value = 2.0; rn.inputs['Detail'].default_value = 1.0
+    nt.links.new(ri.outputs['Vector'], rn.inputs['Vector'])
+    depth = math_('MINIMUM', math_('MAXIMUM', math_('MULTIPLY', math_('SUBTRACT', rn.outputs['Fac'], 0.28), 2.2), 0.12), 1.0)
+    late = math_('MULTIPLY', band(rings, 0.3), depth)
     # and the fine grain between the rings, a fifth of their spacing, faint
     fine = math_('FRACT', math_('DIVIDE', v, p['figure_m'] * 0.2))
-    fine_l = math_('POWER', math_('MAXIMUM', math_('SUBTRACT', math_('MULTIPLY', fine, 1.6), 0.6), 0.0), 2.0)
-    shade = math_('SUBTRACT', math_('SUBTRACT', 1.0, math_('MULTIPLY', late, p['grain'])), math_('MULTIPLY', fine_l, p['grain'] * 0.25))
+    fine_l = band(fine, 0.4)
+    # pores: fine dark streaks drawn out along the grain, as an open-grained walnut's show under the lacquer
+    pc = node('ShaderNodeCombineXYZ'); nt.links.new(math_('MULTIPLY', along, 30.0), pc.inputs['X'])
+    nt.links.new(math_('MULTIPLY', v, 700.0), pc.inputs['Y'])
+    pn = node('ShaderNodeTexNoise'); pn.inputs['Scale'].default_value = 1.0; pn.inputs['Detail'].default_value = 2.0
+    nt.links.new(pc.outputs['Vector'], pn.inputs['Vector'])
+    pores = math_('MULTIPLY', math_('MAXIMUM', math_('SUBTRACT', pn.outputs['Fac'], 0.58), 0.0), 2.4)
+    shade = math_('SUBTRACT', math_('SUBTRACT', math_('SUBTRACT', 1.0, math_('MULTIPLY', late, p['grain'])),
+                                          math_('MULTIPLY', fine_l, p['grain'] * 0.25)), math_('MULTIPLY', pores, p['grain'] * 0.35))
     # streaks: long, slow variations of the leaf's colour along the grain
     sc2 = node('ShaderNodeMapping'); sc2.inputs['Scale'].default_value = (0.25, 9.0, 1.0)
     nt.links.new(co.outputs['Vector'], sc2.inputs['Vector'])

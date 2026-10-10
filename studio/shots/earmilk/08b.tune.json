@@ -283,5 +283,70 @@
   ],
   "reply": "critic/rounds/2026-10-09/shot-08b-e5-r4.json",
   "shot_sha": "4aaf1b789218caa7df30c77d351a4c5752305a89"
+ },
+ {
+  "change": "c3",
+  "setting": "lights.snoot.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    12,
+    34
+   ]
+  },
+  "proofs": [
+   [
+    1.2,
+    2.4
+   ],
+   [
+    2.4,
+    2.9
+   ],
+   [
+    4.8,
+    5.0
+   ]
+  ],
+  "set": 4.8,
+  "passes": false,
+  "moves_the_test": true,
+  "passing": [
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-08b-e7-r5.json",
+  "shot_sha": "542083addb80ed6cb4a138db7e4c68e53ebba968"
+ },
+ {
+  "change": "c4",
+  "setting": "retouch.match",
+  "test": {
+   "metric": "delta_e",
+   "op": "<=",
+   "value": 4.0
+  },
+  "proofs": [
+   [
+    1.0,
+    2.34
+   ],
+   [
+    0.6,
+    2.15
+   ]
+  ],
+  "set": 1.0,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   1,
+   0.2
+  ],
+  "passing": [
+   "c4"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-08b-e7-r5.json",
+  "shot_sha": "542083addb80ed6cb4a138db7e4c68e53ebba968"
  }
 ]
