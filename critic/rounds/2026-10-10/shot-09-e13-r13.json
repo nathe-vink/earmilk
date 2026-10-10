@@ -1,0 +1,676 @@
+{
+ "stage1": {
+  "impression": "The milk-carton concept reads at once and the red-and-white pair on a warm sideboard with a turntable, vase and print is tasteful and on palette. But the white bodies are lit flat and near one value, the speakers look weakly grounded, the light has no clear direction, and the static catalogue layout spends a lot of the frame on empty wall, so it reads as a competent render rather than a photograph.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The pair renders as equals: speaker heights within 2 % of each other and bases on one line within 4 px (now 476 vs 525 px, bases at y 763 vs 810).",
+  "The light has a source the frame shows: daylight from one side, white fronts at median 198-214 with only highlights above 226 (now the front tops sit at 228-230, in the PBR shoulder), the shade-side face at least 50 levels under its front, and a cast shadow on the top beside each base at least 20 levels under the open top (now the top darkens 4.7 and 6.7 levels at the bases).",
+  "The cartons leave the wall: a step of 30 levels or more from front to wall at each outer edge (now 15.9 at the left speaker: wall 204, front 212-221).",
+  "Wall above the products is 20 % of the frame height or less (now 32 %), each speaker fills at least 55 % of the height (now 53 % and 58 %), and nothing is cut by the frame edge.",
+  "No sourceless light: no lamp linked to a single part lights a diffuse surface (cone_kick and plinth_lift are both linked today).",
+  "Reds read as lacquer: no gable or band patch wider than about 40 px with hue under 20 deg (now the left fin patch at [290, 288, 335, 306] reads rgb 205/126/137, hue 11 deg, a reflection of the front window).",
+  "Both fronts carry the same sheen, with top-to-bottom falloffs within 4 levels of each other (now 22 vs 27), and the two whites match side to side within 12 levels.",
+  "Each white front shows the light's direction across it as well as down it: a lit left corner round and at least 4 levels of left-to-right falloff, not only a vertical sheen.",
+  "The set reads as photographed: door figure lum_range 9 or less (now 11.2), no wire-thin twigs (2-3 px lines climbing to y 80 now), the print subordinate to the pair, and the sideboard standing against its wall (now 0.85 m off it: back edge at y 0.245, wall at y 1.1) so the pair can lay shadows on the wall."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "camera",
+   "problem": "The camera stands 0.85 m right of the pair's axis at gable height, so the right speaker renders 10 % larger and 47 px lower than the left and the pair reads as unequal and casually yawed rather than a committed view.",
+   "evidence": {
+    "region": [
+     142,
+     285,
+     1186,
+     810
+    ],
+    "measured": "per-copy part boxes: left speaker y 287-763 (476 px), right y 285-810 (525 px), ratio 1.10; bases at y 763 vs 810; visible side faces 45 px (left) vs 26 px (right) wide; outer margins 142 px left vs 164 px right; the sideboard top shows only about 63 px of depth at x = 0 (front edge y 796, back edge 733, from a pinhole model that reproduces every part box to within 5 px)"
+   },
+   "change": {
+    "setting": "camera.position",
+    "from": [
+     0.85,
+     -2.95,
+     1.12
+    ],
+    "to": [
+     0,
+     -3.0,
+     1.33
+    ]
+   },
+   "expected": "With c2: both speakers 514 +/- 5 px tall on one base line at y about 697 (+/- 4 px), outer margins about 134 px on each side, the pair spanning about 80 % of the width; each copy shows a 15-20 px sliver of its inner side (the left its Nutrition Facts side, the right its plain left side); the top shows about 95 px of depth, room for contact and cast shadows; the roofs are seen from 0.18 m above the fin.",
+   "accept": {
+    "region": "part:side-left",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     120,
+     245
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "camera",
+   "problem": "The frame aims at 0.95 m, above the speakers' mid-height (0.86 m), so the top 32 % of the frame is bare wall while the pair sits in the lower part.",
+   "evidence": {
+    "region": [
+     0,
+     0,
+     1350,
+     284
+    ],
+    "measured": "gable tops at y 285-287; the band above them (y 0-284, 31.6 % of the height) is wall, median 194.3, holding only the twigs and the top of the print; [160, 205, 310, 260] is wall at 202.6"
+   },
+   "change": {
+    "setting": "camera.target",
+    "from": [
+     0.03,
+     0.02,
+     0.95
+    ],
+    "to": [
+     0,
+     0,
+     0.83
+    ]
+   },
+   "expected": "With c1: fins at y about 183, eaves about 281, bases about 697, the top's front edge about 719; the wall above the fins drops from 285 px (32 %) to about 183 px (20 %); doors take about 180 px at the bottom; the left speaker's roof slope fills [160, 205, 310, 260].",
+   "accept": {
+    "region": [
+     160,
+     205,
+     310,
+     260
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     45,
+     125
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "set",
+   "problem": "Daylight enters through a window in the front wall behind the camera, which floods the fronts and the back wall with shapeless frontal light and shows as a pink reflection in the left fin.",
+   "evidence": {
+    "region": [
+     0,
+     20,
+     1350,
+     160
+    ],
+    "measured": "back-wall band x-profile 198.4, 197.5, 197.0, 197.2, 195.4, 194.5, 190.8, 186.3: only 12.1 levels of falloff across the whole width; the left fin patch [290, 288, 335, 306] reads rgb 205/126/137 (hue 11 deg against the swatch's 34 deg) and 44 % of it mirrors 'lamp wall-front-portal'"
+   },
+   "change": {
+    "setting": "set.windows.0",
+    "from": {
+     "wall": "front",
+     "along": 2,
+     "sill": 0.4,
+     "size": [
+      1.8,
+      2
+     ],
+     "mullions": [
+      2,
+      1
+     ]
+    },
+    "to": {
+     "wall": "left",
+     "along": -1.0,
+     "sill": 0.4,
+     "size": [
+      1.8,
+      2
+     ],
+     "mullions": [
+      2,
+      1
+     ]
+    }
+   },
+   "expected": "Both windows in the left wall (this one at y -3.3 to -1.5, ahead of the sideboard; the other behind that line): the room's daylight comes from the front-left at about -45 deg, the side c4's key stands on; the back wall falls off 16-45 levels left to right across the top band; the frontal sky fill on the fronts and the pink fin reflection go.",
+   "accept": {
+    "region": [
+     0,
+     20,
+     1350,
+     160
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     16,
+     45
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The key is a 2 m strip 0.6 m straight in front of the pair (azimuth 0), so every front takes the same flat light, the white tops sit in the PBR shoulder, the carton edges barely leave the wall and nothing casts a shadow on the top.",
+   "evidence": {
+    "region": [
+     120,
+     560,
+     170,
+     690
+    ],
+    "measured": "left speaker's outer edge against the wall: step 15.9 (wall 204.2, front 212.5-221.0); left white front y-profile 230, 229, 226, 224, 220, 215, 210, 208 (top bins above 226); the top darkens only 4.7 levels at the left base (163.5 at [110, 745, 140, 770] vs 168.2 at [20, 745, 60, 770]) and 6.7 at the right (137.1 vs 143.8)"
+   },
+   "change": {
+    "setting": "lights.key",
+    "from": {
+     "type": "area",
+     "size_m": [
+      2,
+      0.4
+     ],
+     "orbit": {
+      "azimuth_deg": 0,
+      "elevation_deg": 46,
+      "distance_m": 0.6
+     },
+     "irradiance": 1.6,
+     "color": 5200
+    },
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.4,
+      1.0
+     ],
+     "position": [
+      -2.15,
+      -2.15,
+      2.3
+     ],
+     "target": [
+      0,
+      0,
+      0.86
+     ],
+     "irradiance": 1.7,
+     "color": 5600
+    }
+   },
+   "expected": "A window-sized source at azimuth -45 deg, elevation 25 deg, 3.4 m out (inside the room, under the ceiling): fronts at median 198-214 with only the sheen above 226; the left speaker's Nutrition Facts sliver in shade near 130-150 (its side reads 158-164 now) and the right speaker's inner sliver lit; a soft shadow 20-35 levels deep on the top at the right-back of each base, the turntable and the vase; each carton's left corner round catches a thin highlight; the roofs read brighter than the red bands.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     198,
+     214
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "composition",
+   "problem": "After the reshoot the 0.4 x 0.53 m print at x -0.25, z 1.1 would hang off-centre beside the left speaker with its top 16 px under the frame edge, and it is already the tallest, highest-contrast shape in the middle of the frame.",
+   "evidence": {
+    "region": [
+     550,
+     163,
+     785,
+     487
+    ],
+    "measured": "print spans x 550-785, y 163-487 now, its moulding near 102 against wall 196 (lum_range 92.1 in [560, 420, 790, 480]); projected through c1 and c2 it would span x 397-644, y 16-344, 63 px from the left speaker's edge"
+   },
+   "change": {
+    "setting": "set.props.1",
+    "from": {
+     "kind": "frame",
+     "position": [
+      -0.25,
+      1
+     ],
+     "z": 1.1,
+     "size": [
+      0.4,
+      0.53
+     ],
+     "art": "#8C9EAB",
+     "artwork": {
+      "bands": [
+       [
+        "#CDBB9C",
+        0.38
+       ],
+       [
+        "#BCA07A",
+        0.3
+       ],
+       [
+        "#9A8470",
+        0.32
+       ]
+      ],
+      "ground": "#D8CDBA",
+      "seed": 3
+     }
+    },
+    "to": {
+     "kind": "frame",
+     "position": [
+      0,
+      1
+     ],
+     "z": 0.93,
+     "size": [
+      0.42,
+      0.31
+     ],
+     "art": "#8C9EAB",
+     "artwork": {
+      "bands": [
+       [
+        "#CDBB9C",
+        0.38
+       ],
+       [
+        "#BCA07A",
+        0.3
+       ],
+       [
+        "#9A8470",
+        0.32
+       ]
+      ],
+      "ground": "#D8CDBA",
+      "seed": 3
+     }
+    }
+   },
+   "expected": "A smaller landscape print centred over the turntable at about x 545-805, y 189-381, its top level with the fins; the wall between it and the turntable is plain; it reads as a quiet backdrop between the pair.",
+   "accept": {
+    "region": [
+     560,
+     420,
+     790,
+     480
+    ],
+    "metric": "lum_range",
+    "op": "<",
+    "value": 14
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "cone_kick, linked to the woofer cones, surrounds and caps, lights them from dead ahead (0, -0.95, 1.45) regardless of the room, which a key from the left contradicts.",
+   "evidence": {
+    "region": [
+     160,
+     389,
+     1134,
+     546
+    ],
+    "measured": "cones 24.6, caps 23.6, surrounds 53.6, lit evenly with neither side of the cone darker; 8 % of the caps mirror 'lamp cone_kick'"
+   },
+   "change": {
+    "setting": "lights.cone_kick.off",
+    "from": false,
+    "to": true
+   },
+   "expected": "The cones take the key from the upper left: the upper-left inner wall shaded by the trim, the lower right lit, the surround's upper-left roll catching light; cone median 13-30, not crushed.",
+   "accept": {
+    "region": "part:woofer-cone",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     13,
+     30
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "light",
+   "problem": "front_sheen sits at x -0.42 for the old camera; from the centred, raised camera the lower fronts slide off it (29 % of the right front would mirror nothing, 35 % of the left would mirror plinth_sheen), so the two fronts would carry different sheens.",
+   "evidence": {
+    "region": [
+     142,
+     374,
+     1158,
+     742
+    ],
+    "measured": "the white fronts now mirror front_sheen 62 %, the window strips 24 %, plinth_sheen 7 % (mirror map) and fall 13 levels top to bottom in part front-baffle above y 600 (left 230 to 208, right 227 to 200 over the whole white); a ray trace from [0, -3.0, 1.33] puts the fronts' mirror points at x +/-0.37 to 0.67, z 0.28-0.90 on the plane y = -1.6"
+   },
+   "change": {
+    "setting": "lights.front_sheen",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      2.2,
+      0.62
+     ],
+     "position": [
+      -0.42,
+      -1.6,
+      0.73
+     ],
+     "target": [
+      -0.42,
+      0,
+      0.73
+     ],
+     "strength": 3,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.43,
+       0.75
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.0,
+      0.72
+     ],
+     "position": [
+      0,
+      -1.6,
+      0.6
+     ],
+     "target": [
+      0,
+      0,
+      0.6
+     ],
+     "strength": 3,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.3,
+       0.66
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "Both white fronts mirror this panel alone (about 100 % of each, symmetric about x = 0): full from about 0.36 m above the base and 0 at the band, so each front falls 10-22 levels top to bottom with the same ramp on both copies and no lift at the base; the trim rings take the same vertical gradient.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      0,
+      0,
+      1350,
+      600
+     ]
+    },
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     10,
+     22
+    ]
+   }
+  },
+  {
+   "id": "c8",
+   "rank": 8,
+   "kind": "light",
+   "problem": "plinth_sheen stands 2.5 m out at floor level for the old camera; from the raised camera the bands' mirror rays meet the floor first (80 % of the left band and 96 % of the right would mirror nothing), so the red lacquer would lose its gloss.",
+   "evidence": {
+    "region": [
+     142,
+     708,
+     1158,
+     810
+    ],
+    "measured": "the front bands mirror plinth_sheen 62.9 % and the sideboard 30.7 % now, p95 102.4 along their top edge; the ray trace from [0, -3.0, 1.33] puts the bands' mirror points at z 0.19-0.27 on y = -1.55, x +/-0.34 to 0.70"
+   },
+   "change": {
+    "setting": "lights.plinth_sheen",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      2.15,
+      0.24
+     ],
+     "position": [
+      -0.675,
+      -2.5,
+      0.16
+     ],
+     "target": [
+      -0.675,
+      -0.11,
+      0.59
+     ],
+     "strength": 1,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.04,
+       0.28
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      1.7,
+      0.16
+     ],
+     "position": [
+      0,
+      -1.55,
+      0.195
+     ],
+     "target": [
+      0,
+      0,
+      0.6
+     ],
+     "strength": 1,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.17,
+       0.265
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "Both front bands mirror the panel over about 89 % of their face: a gloss ramp brightest along the top edge and dark at the foot, the same on both copies, its top kept below what the white front mirrors so no bright line lifts the white's base; band p95 85-118.",
+   "accept": {
+    "region": "part:front-baffle.plinth",
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     85,
+     118
+    ]
+   }
+  },
+  {
+   "id": "c9",
+   "rank": 9,
+   "kind": "light",
+   "problem": "With the key at 45 deg on the left, the right speaker stands 3.68 m from it against the left's 3.01 m and would take about 0.6 stop less key, so the pair would read as two different whites.",
+   "evidence": {
+    "region": [
+     134,
+     285,
+     1216,
+     810
+    ],
+    "measured": "front-baffle x-profile 220, 210, -, -, -, -, 219, 206: falloff 14 even under today's frontal key; inverse square from the c4 position gives the right front 0.67 of the left's key"
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": 0.42,
+    "to": 0.55
+   },
+   "expected": "The right-front bounce lifts the far speaker: the left front stays 2-12 levels above the right (the direction kept, the pair matched); the left speaker's shade sliver stays at least 50 levels under its front.",
+   "accept": {
+    "region": "part:front-baffle",
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     2,
+     12
+    ]
+   }
+  },
+  {
+   "id": "c10",
+   "rank": 10,
+   "kind": "set",
+   "problem": "The wall renders at 204-206 beside the pair, within 6-16 levels of the white fronts and in the same warm greige as the oak top, so the cartons barely leave the wall and wall, top and wood read as one band.",
+   "evidence": {
+    "region": [
+     40,
+     320,
+     115,
+     620
+    ],
+    "measured": "wall left of the left speaker 206.1 (range 2.2), rgb 213/205/198; at its edge the wall reads 204.2 against the front's 212.5 (step 15.9); the top beside the base reads rgb 179/161/145"
+   },
+   "change": {
+    "setting": "set.wall.color",
+    "from": "#E7DDD0",
+    "to": "#C5C5B8"
+   },
+   "expected": "A cooler, deeper putty (L* 79 from 88.5): the wall beside the pair at 158-182, the white fronts 25-50 levels above it, the oak warm against a near-neutral wall; still a bright room.",
+   "accept": {
+    "region": [
+     40,
+     320,
+     115,
+     620
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     158,
+     182
+    ]
+   }
+  },
+  {
+   "id": "c11",
+   "rank": 11,
+   "kind": "set",
+   "problem": "Three dark twigs 2-3 px wide climb from the vase to y 80, reading as wire, and from the raised camera the tallest (tip near z 1.41 m) would run out through the top edge of the frame.",
+   "evidence": {
+    "region": [
+     420,
+     150,
+     520,
+     440
+    ],
+    "measured": "lum_range 90.7 (p5 111.9 on the twigs against wall 199.5); projected through c1 and c2 the tallest tip lands at y about -25"
+   },
+   "change": {
+    "setting": "set.props.4.branches",
+    "from": 3,
+    "to": 0
+   },
+   "expected": "The vase stands alone as a curved form beside the turntable; the wall above it is plain and nothing is cut by the top edge.",
+   "accept": {
+    "region": [
+     420,
+     150,
+     520,
+     440
+    ],
+    "metric": "lum_range",
+    "op": "<",
+    "value": 12
+   }
+  },
+  {
+   "id": "c12",
+   "rank": 12,
+   "kind": "set",
+   "problem": "The door veneer still shows evenly pitched ring lines meeting in chevrons at every leaf seam, and the reshoot gives the doors about 180 px of height instead of about 100.",
+   "evidence": {
+    "region": [
+     600,
+     860,
+     760,
+     900
+    ],
+    "measured": "lum_range 11.2 (median 132.0) on the middle door, chevrons visible at each seam"
+   },
+   "change": {
+    "setting": "set.props.0.grain",
+    "from": 0.3605,
+    "to": 0.22
+   },
+   "expected": "The figure recedes to a quiet grain: lum_range 4-9 in the same area of the middle door.",
+   "accept": {
+    "region": [
+     600,
+     860,
+     760,
+     900
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     4,
+     9
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Give the woofer trim ring a satin-metal finish, since it reads as a flat blue-grey washer (woofer-ring median 72-76, rgb 70/75/82, p5-p95 43-92).",
+   "why": "The drivers are named products mounted as the owner decided, and their materials and colours are their own. Only what the ring mirrors can change, and c7 does that by giving it the front panel's vertical ramp."
+  },
+  {
+   "request": "Quieten the bright streaks on the waveguide insert's rim (its top 5 % reads rgb 217/90/93, pinkish) by softening the rim or making the bowl shallower.",
+   "why": "The waveguide's depth, profile and mouth are set by acoustic simulation. Only light and camera may change how it reads, and c1 and c3 do that by changing what the rim mirrors."
+  }
+ ],
+ "score_if_fixed": 7.0
+}
