@@ -12,8 +12,10 @@ it belongs to (IMG.swatch.png and .json, from the materials the flavour colours:
 paint, a reference is read off the frame, its lit face (the pixels between the 40th and 90th percentile of lightness
 that carry at least the paint's median chroma, so not its highlights or its edges), and corrected toward the swatch:
 
-- a white paint (the swatch near #FFFFFF) is neutralised: its cast, the reference's a* and b*, is taken out by the
-  share `neutral` (1 in a studio; less in a room, where the light's colour is the picture's);
+- a white paint (the swatch near #FFFFFF) is neutralised: every pixel's own cast (its a* and b*) shrinks by the share
+  `neutral` (1 in a studio; less in a room, where the light's colour is the picture's), so a warm sunlit front and a
+  side in a cool fill both come to neutral, while a colour the white mirrors (more than four times the face's cast)
+  is left;
 - a colour is matched: hue and chroma to the swatch by the share `match`, and its lightness by the share `lightness`
   (a gain on its light, as a lighter or darker paint would be), as the swatch reads under the light that the copy's
   own white shows (Bradford adaptation from D65 to that white, so a red in late sun stays sunlit beside its white);
@@ -143,9 +145,14 @@ def retouch(raw_png, swatch_png, legend, spec, out_png):
         cast = np.median(px[ref][:, 1:], axis=0); Lr = float(np.median(px[ref][:, 0]))
         Cr = float(math.hypot(*cast))
         C = np.hypot(px[:, 1], px[:, 2])
-        cw = np.clip((4 * Cr + 6 - C) / (2 * Cr + 3), 0, 1)       # 1 up to 2 x the cast (+3), 0 from 4 x (+6)
+        # each pixel's own cast shrinks, not the lit face's taken from all: a sunlit front is warm where the side in a
+        # cool fill is blue, and one cast subtracted from both turns the side bluer (02a e9: its side 2.6 to 4.9 dE).
+        # A colour mirrored in the white (a red plinth's reflection, a print) is more than a cast and is left: full
+        # weight up to twice the face's cast (at least 4), none from four times it (at least 10)
+        lo_, hi_ = max(2 * Cr + 3, 4.0), max(4 * Cr + 6, 10.0)
+        cw = np.clip((hi_ - C) / (hi_ - lo_), 0, 1)
         w = _soft(m)[m] * cw * spec['neutral']
-        new = px.copy(); new[:, 1:] -= w[:, None] * cast[None, :]
+        new = px.copy(); new[:, 1:] *= (1 - w)[:, None]
         lab[m] = new
         after = np.median(new[ref], axis=0)
         whites.setdefault(g['instance'], np.array([Lr, *(cast * (1 - spec['neutral']))]))
