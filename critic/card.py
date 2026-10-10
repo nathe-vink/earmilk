@@ -264,7 +264,9 @@ def _photo_light(sh):
              + 'To lift a face, move, resize or re-aim a light the whole set sees, or add a bounce card the set would have; '
              'turning a linked lamp off (`lights.NAME.off`) is in scope, and is often the change that removes the glow. '
              'Keep `receivers` for reflection-only cards (diffuse 0) and glints: a gloss surface shows those as reflections '
-             'and nothing else, as it would a card a photographer holds out of frame.')
+             'and nothing else, as it would a card a photographer holds out of frame; and for a lamp that lights the set alone, '
+             'named by its pieces (`"receivers": ["sweep"]`, `"floor*"`, `"wall-back"`): a background light, or a lamp over '
+             'floating parts that lays their shadows on the floor without lighting them.')
     L.append('')
     L.append('A clear coat mirrors about 4 to 5 % of what it sees head-on (more toward grazing), so a reflection shows on '
              'a white only when what it mirrors is many times brighter than the white itself: on a white at scene-linear '

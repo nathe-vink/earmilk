@@ -1047,5 +1047,116 @@
   ],
   "reply": "critic/rounds/2026-10-09/shot-09-e10-r9.json",
   "shot_sha": "aaad12156bd842e24ec5ff0829b81a9a80e4a106"
+ },
+ {
+  "change": "c1",
+  "setting": "set.props.0.grain",
+  "test": {
+   "metric": "lum_range",
+   "op": "between",
+   "value": [
+    12,
+    32
+   ]
+  },
+  "proofs": [
+   [
+    0.15,
+    8.8
+   ],
+   [
+    0.3,
+    11.6
+   ],
+   [
+    0.6,
+    17.0
+   ]
+  ],
+  "set": 0.6,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c3"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-09-e11-r10.json",
+  "shot_sha": "3a350222a32d8d279948d87621f2fbf381094526"
+ },
+ {
+  "change": "c2",
+  "setting": "lights.cone_kick.irradiance",
+  "test": {
+   "metric": "lum_median",
+   "op": "between",
+   "value": [
+    21,
+    30
+   ]
+  },
+  "proofs": [
+   [
+    0.4,
+    16.4
+   ],
+   [
+    0.9,
+    18.6
+   ],
+   [
+    1.9,
+    23.0
+   ]
+  ],
+  "set": 1.9,
+  "passes": true,
+  "moves_the_test": true,
+  "passing": [
+   "c1",
+   "c2",
+   "c3"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-09-e11-r10.json",
+  "shot_sha": "425c09dc2c579b81392ce05e02ba252281bf5c6e"
+ },
+ {
+  "change": "c3",
+  "setting": "lights.roof_sheen.strength",
+  "test": {
+   "metric": "delta_e",
+   "op": "between",
+   "value": [
+    3.0,
+    6.0
+   ]
+  },
+  "proofs": [
+   [
+    0.8,
+    4.01
+   ],
+   [
+    1.4,
+    8.04
+   ],
+   [
+    0.873,
+    4.46
+   ]
+  ],
+  "set": 0.873,
+  "passes": true,
+  "moves_the_test": true,
+  "asked": [
+   1.8638,
+   1.0
+  ],
+  "passing": [
+   "c1",
+   "c2",
+   "c3"
+  ],
+  "reply": "critic/rounds/2026-10-10/shot-09-e11-r10.json",
+  "shot_sha": "367e418910bd92a3ec088f2e38b4f8a2daadaa79"
  }
 ]

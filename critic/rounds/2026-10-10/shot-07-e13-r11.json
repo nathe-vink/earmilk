@@ -1,0 +1,230 @@
+{
+ "stage1": {
+  "impression": "A clean, correctly built exploded view with crisp geometry and well-spaced parts, but it is lit like a default studio: an even mid-grey sweep, two white faces that barely separate, and black drivers hanging with no shadow or grounding. The red-and-white waveguide piece at upper right reads as an unidentified folded fragment rather than the hero of the build, so the frame is competent rather than crafted.",
+  "score": 6.0
+ },
+ "blocking_9": [
+  "The waveguide insert reads as a horn drawn out of its pocket: its bowl seen within about 45 deg of its axis (now about 61 deg) with the throat showing, and its flat outer wall no longer the largest light shape on the part (now roughly half of its 17,500 px, at 174-205).",
+  "The front baffle and the pocket face the camera more squarely: the front is seen about 60 deg off-axis, 105 px wide beside the side-left's 180 px, and the pocket's boss bore, which the brief asks to show, is not legible.",
+  "The front's white body sits at 200-222 with only highlights above 226 (now 230-236 over its upper-left third, strip [474,300,481,600] median 231), and the side-left stays at least 20 levels under the front along their shared edge over the full height (now 11 at y320, 19 at y430, 16 at y560, 9 at y660).",
+  "The floating parts share the cabinet's light: soft shadows on the floor under the woofer and the mid (the floor under them is a smooth 155-167 ramp with no dip, falloff -11.8 across [700,785,1000,830]).",
+  "The bowl's reflection reads as one continuous sheen from rim to throat (now bands at 171 and 154 split by a 120 dip, then a step to about 80).",
+  "The insert's white wall matches the cabinet's white (now dE 3.3 cool, a* -2.0, b* -1.8, against 0.0 on the cabinet).",
+  "The ground falls off like a lit studio, darkest at the frame edges and lightest behind the parts, instead of an even dome-lit floor at 138-168 everywhere."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The gradient dome (sky.strength 0.55) fills every face and the whole visible floor, so the front baffle's upper-left third sits in PBR Neutral's compressed zone and reads as flat card, the 6 mm round on the A edge barely clears the face, and the ground around the set is one even grey.",
+   "evidence": {
+    "region": [
+     474,
+     300,
+     481,
+     600
+    ],
+    "measured": "front-baffle strip between the A edge and the holes: lum_median 231, p95 236; its y-profile (x474-481, y230-700) 189, 235, 234, 232, 228, 225, 220, 216; the A-edge round peaks 237 against 232 on the face at y430 and 241 against 235 at y320; side-left median 209 vs front-baffle 212; the frame is almost all floor and reads 138-168 everywhere (left column [0,400,240,650] 138.5, top-right [1100,0,1350,250] 143.7, right [1100,420,1350,650] 155.7, bg_pool [920,450,1060,600] 167.9)"
+   },
+   "change": {
+    "setting": "sky.strength",
+    "from": 0.55,
+    "to": 0.38
+   },
+   "expected": "Strip median about 220 with its top about 228 and foot about 208: the vertical gradient survives but leaves compression, and the A-edge round reads 8-10 levels above the face. Side-left median about 201. Ground about 125-158 with the edges darkest (left column about 125, top-right about 131, bg_pool about 158), so the white cabinet stands about 70 levels off the floor on its left. The insert's sky-lit white wall drops about 10 levels and its cool cast by about a third. Round 10's bowl p95 and glint are reflections and the plinth and tweeter are lit mainly by their own lamps, so their tests hold; the side-left's foot falls to about 194, under round 10's 199-206 guard, which c4 addresses.",
+   "accept": {
+    "region": [
+     474,
+     300,
+     481,
+     600
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     214,
+     225
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The woofer, the mid and both trim rings hang 0.17-0.9 m over a floor that shows no shadow of them while the cabinet beside them has a contact shadow, so they read as pasted on; no lamp the set offers can put an overhead shadow on the floor without also lighting the red roof slope and the insert's upward-facing wall, which both face any lamp above the parts (a lamp above the woofer puts about 2x the floor's irradiance on the roof and 1.7x on the insert).",
+   "evidence": {
+    "region": [
+     700,
+     785,
+     1000,
+     830
+    ],
+    "measured": "x-profile 155.1, 158.1, 160.1, 161.9, 163.9, 165.9, 166.7, 166.9 (falloff -11.8, monotonic); floor rows y795-815 from x580 to x1180 rise 148 to 167 with no local minimum under the woofer; the woofer's lowest point is about 0.17 m off the floor and the floor below its centre projects to about (745, 810)"
+   },
+   "change": {
+    "setting": "lights.floor_shadow",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.2,
+      1.2
+     ],
+     "position": [
+      0.65,
+      -0.25,
+      2.4
+     ],
+     "target": [
+      0.65,
+      -0.25,
+      0.0
+     ],
+     "irradiance": 0.6,
+     "color": 6150,
+     "receivers": [
+      "sweep"
+     ]
+    }
+   },
+   "expected": "Needs a soft overhead lamp that lights the sweep floor and not the product (the card's receivers name product parts only), or this lamp unlinked plus two black flags keyed to it over the roof and over the insert. Result: a soft shadow 15-20 levels deep and about 150 px wide under the woofer, centred near (745, 800), fainter ones under the mid and the rings; the open floor around them returns to about 160-166 after c1.",
+   "accept": {
+    "region": [
+     700,
+     785,
+     1000,
+     830
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -30,
+     -15
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The bowl's far wall shows two bright bands split by a dark self-reflection and then steps to flat dark red, because its lower half mirrors the bottom of the bowl_sheen panel where the ramp is still 0, so the hero horn reads as streaks rather than one curved glossy surface.",
+   "evidence": {
+    "region": [
+     1012,
+     336,
+     1030,
+     360
+    ],
+    "measured": "lum_median 82.7; mirrors bowl_sheen over gloss 100 %, bowl_sheen radiance 0.0 at the median, met at z 1.786 (the ramp starts at 1.8); along the bowl's long axis from (975,268) to (1040,385): 119, 155, 171, 120, 143, 154, 154, 118, 82, 81, 87, 74, 76, where the 171 band mirrors the drivers panel, the 120 dip the insert itself (44 %), and the 154 band bowl_sheen 2.38 over gloss 1.09"
+   },
+   "change": {
+    "setting": "lights.bowl_sheen.ramp.at_m",
+    "from": [
+     1.8,
+     2.15
+    ],
+    "to": [
+     1.65,
+     2.15
+    ]
+   },
+   "expected": "The lower far wall rises to about 100 as a continuation of the sheen, so the bowl falls off 154 to about 100 to about 80 at its rim instead of stepping from 154 to 82 within 20 px. The 154 band (ramp about 0.96 at z 2.13) and round 10's bowl p95 (118-170) are unchanged, so this extends round 10's c1 rather than reversing it.",
+   "accept": {
+    "region": [
+     1012,
+     336,
+     1030,
+     360
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     92,
+     112
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "low_fill, a lamp linked to the side-left alone, supplies roughly a third of the light on that panel's foot; when c1 cuts the dome the floor and plinth beside the foot drop while low_fill does not, which is the self-glow the card warns of, and at the foot the side already sits only 9 levels under the front.",
+   "evidence": {
+    "region": [
+     300,
+     300,
+     440,
+     690
+    ],
+    "measured": "y-profile 226, 219, 214, 211, 207, 205, 202, 200 (falloff 26); low_fill's target is the panel at z 0.2, which projects to about y668 at x370, inside the last bin; at y660 the side reads 207 beside the A edge against 214-217 on the front"
+   },
+   "change": {
+    "setting": "lights.low_fill.irradiance",
+    "from": 0.745,
+    "to": 0.52
+   },
+   "expected": "The panel grades about 219 at the eave to about 187 at the plinth, scaling with the dome cut instead of holding its foot above its surroundings, and the foot sits 15-20 levels under the front's foot at the shared edge. This lowers round 9's 199-206 hold on the foot (round 10's guard, 202 now), which c1 alone already takes to about 194; the plinth now has its own plinth_fill (round 10's c3), so the band does not fall with it, and the falloff cap of 36 keeps the foot at about 183 or above so it reads as shade, not grey.",
+   "accept": {
+    "region": [
+     300,
+     300,
+     440,
+     690
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     28,
+     36
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Neutralise the insert's large white outer wall (RGB 191/198/200 at [905,275,950,370]; a* -2.0, b* -1.8; dE 3.3 against a neutral of its lightness).",
+   "why": "It is not one of the paints the retouch matches (only the cabinet's body panels and the accent parts are listed), so its colour is the part's own material, which is fixed; warming the sky enough to cancel it would re-warm the sweep that round 10 neutralised. It matters because beside the cabinet's dE 0.0 white it reads as a colder, different material on the hero part."
+  },
+  {
+   "request": "Turn the drawn-out insert and tweeter toward the camera so the bowl's throat shows.",
+   "why": "Each part leaves along its own fixing axis and keeps its orientation. From this side the bowl is seen about 61 deg off its axis and its throat hides behind its own outer wall, which is most of why the hero reads as a folded fragment; only a camera that sees the front and the bowl more squarely can fix it, at the cost of re-tuning every reflection card set for this view."
+  }
+ ],
+ "score_if_fixed": 6.7,
+ "revisions": [
+  {
+   "change": "c2",
+   "by": "engine",
+   "why": "the engine now has it: a lamp's receivers may name the set's pieces (`sweep`), so the lamp lights the floor alone and the parts over it cast their shadows on it",
+   "was": {
+    "setting": "lights.floor_shadow",
+    "from": null,
+    "to": {
+     "type": "area",
+     "size_m": [
+      1.2,
+      1.2
+     ],
+     "position": [
+      0.65,
+      -0.25,
+      2.4
+     ],
+     "target": [
+      0.65,
+      -0.25,
+      0.0
+     ],
+     "irradiance": 0.6,
+     "color": 6150,
+     "receivers": [
+      "sweep"
+     ]
+    }
+   }
+  }
+ ]
+}

@@ -34,6 +34,11 @@ def _receives(o, pattern, part_of=None):
     held off a chocolate one in the same row; 05's relit proof, where one card blew the coloured fronts out)."""
     import product as Pr  # noqa: E402  (bpy's modules load in main)
     part_of = part_of if part_of is not None else _PART_OF
+    if o.name not in part_of:
+        # a piece of the set, by its own name (`sweep`, `floor*`, `wall-back`): a lamp that lights the set alone, a
+        # photographer's background light, or one over floating parts that puts their shadows on the floor without
+        # lighting them (07's round 11: the drivers hung over a floor with no shadow under them)
+        return '#' not in pattern and Pr._match(o.name, pattern)
     if '#' in pattern:
         name, _, copy = pattern.partition('#')
         return Pr._match(part_of[o.name], name) and str(o.get('instance', '')) == copy.strip()
@@ -162,7 +167,8 @@ def main():
         kind = spec.get('type', 'area')
         ob = {'area': Lt.area, 'spot': Lt.spot, 'point': Lt.point, 'panel': Lt.panel, 'flag': Lt.flag}[kind](bpy, name, spec, centre)
         if spec.get('receivers') and kind != 'flag':
-            recv = [o for o in objs if any(_receives(o, r) for r in spec['receivers'])]
+            set_objs = [o for o in bpy.context.scene.objects if o.type == 'MESH' and o.name not in part_of and not o.get('engine_light')]
+            recv = [o for o in objs + set_objs if any(_receives(o, r) for r in spec['receivers'])]
             if not recv:
                 # receivers matching no part: Cycles lights everything from a lamp whose receiver collection is empty
                 # (07 e12: '*.plinth' in an exploded view lit the whole product, the white side 200 to 234); left out,
