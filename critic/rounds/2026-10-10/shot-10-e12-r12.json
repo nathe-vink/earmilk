@@ -1,0 +1,277 @@
+{
+ "stage1": {
+  "impression": "A plausible CG living room with the two milk-carton speakers, but the light is soft and even: the white bodies read light grey against a beige wall of nearly the same value, the right half and the floor sink into mid-tone brown, and nothing pulls the eye to the hero. Surfaces look denoised and smeary (wood, label, sideboard), the sideboard looks generic and the cartons barely ground, so it is a competent draft, not a homepage image.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The floorstander's white front stands at least 40 levels above the wall beside it along its full height (now 24-42: wall [100,250,225,540] at 187 against a front edge falling 230 to 200, and only 24-31 over the lower third).",
+  "The set's neutrals carry no cast: wall and skirting a* within 1 of their specs (now +2.4 to +3.4; wall [780,60,930,190] dE2000 2.86 against #8F877C, its own lightness with the spec's chroma).",
+  "The brand red holds on the roof: the floorstander's front slope and fin within dE2000 7 of #C62828, with the sheen grading down from the ridge rather than veiling the slope (now 10.9 and 13.6).",
+  "The sideboard reads as veneer, not paint: figure visible on every door (door 3 [1000,530,1200,690] lum_range at least 11; now 6.5).",
+  "Both cartons' silhouettes read without a break: at least 12 levels between side and wall at every height (the bookshelf's back-right edge is -1.6 to -11 between y 370 and 440).",
+  "The bookshelf's end of the room is not a stop under the hero's: the wall falls 173 to 116 across the frame and the floor under and right of the sideboard sits at 51-62.",
+  "Render clarity: the Nutrition Facts panel, the veneer figure and fine edges free of denoiser smear (sampling is fixed by the card)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The wall left of the floorstander is the brightest stretch of the set, so the hero's white front clears it by only 24-42 levels and reads light grey on light beige; its left edge goes soft over the lower third.",
+   "evidence": {
+    "region": [
+     100,
+     250,
+     225,
+     540
+    ],
+    "measured": "Wall lum_median 186.8, RGB (198,185,175). Front white {front-baffle in [225,330,400,680]} median 209, profile from top to bottom 227, 222, 214, 209, 201, 189, 185, 186. Step across the left silhouette at the edge: 39-42 at y 340-460, 35 at y 500, 31 at y 540, 24-25 at y 560-580. Posterised luminance shows the wall's brightest band (180-200) directly behind and left of the hero. Geometry: window 0 (curtain over its rear 0.8 m), window_key (lights that wall at about 87% of what it puts on the front) and the front window all rake this stretch."
+   },
+   "change": {
+    "setting": "lights.wall_net",
+    "from": "absent",
+    "to": {
+     "type": "flag",
+     "size_m": [
+      1.3,
+      2.1
+     ],
+     "position": [
+      -2.13,
+      0.4,
+      1.1
+     ],
+     "target": [
+      -2.13,
+      -1.0,
+      1.1
+     ],
+     "density": 0.4
+    }
+   },
+   "expected": "A full-height net standing 0.7 m off the back wall, from the left wall to x -1.48, facing the windows: the wall left of the hero falls from 187 to about 155-168. Its shadow edge projects to wall x -1.1 to -0.6 m, hidden behind the carton. The front stays 205-213 because the net is 0.8 m left of the carton and behind it and crosses no ray to it. The left-edge step rises to 40-55 along the whole height. The floor strip along the left skirting darkens about 15 levels. The wall between the cartons (158), the bookshelf and the right half are unchanged. Round 11 removed set flag 0, a 0.72 m band behind the cartons that read as a stripe; this net is full height with its edge behind the carton, so it reads as falloff away from the light, not a band.",
+   "accept": {
+    "region": [
+     100,
+     250,
+     225,
+     540
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     150,
+     170
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "post",
+   "problem": "Every neutral in the set carries a magenta cast (a* +2.4 to +3.4 where the specs sit near 0), so the cream wall reads pink-taupe and the near-white skirting pink-grey, which muddies the whole palette around the red and blue.",
+   "evidence": {
+    "region": [
+     780,
+     60,
+     930,
+     190
+    ],
+    "measured": "Wall above the bookshelf RGB (147,134,124), Lab (56.8, +3.1, +7.2) against spec #EDE5D8 (a* +0.5, b* +7.3): dE2000 2.86 against #8F877C. Wall between the cartons Lab (65.4, +2.4, +6.1); skirting [0,545,220,585] a* +3.2 (spec -0.2); vase a* +2.4 (spec +0.1); the white paints' raw casts before the retouch were a* +1.4 to +2.5. b* is on spec, so the error is the tint axis alone."
+   },
+   "change": {
+    "setting": "render.white_balance_tint",
+    "from": 10,
+    "to": 5.5
+   },
+   "expected": "Neutrals' a* drops to about 0 to +1. The wall reads as its cream (hue back toward 85 degrees from 68), the skirting white, and the floor and sideboard slightly less red. The cartons keep their swatches because the retouch matches each paint and neutralises the whites after the shift.",
+   "accept": {
+    "region": [
+     780,
+     60,
+     930,
+     190
+    ],
+    "metric": "delta_e",
+    "hex": "#8F877C",
+    "op": "between",
+    "value": [
+     0,
+     1.4
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The floorstander's front roof slope mirrors roof_sheen almost everywhere at near-peak strength, a veil that lifts green and blue by about 45 levels and turns the brand red coral over the top two thirds of the slope, beside a true-red plinth.",
+   "evidence": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      233,
+      272,
+      380,
+      325
+     ]
+    },
+    "measured": "Slope RGB (198,82,89), dE2000 10.87 against #C62828; plinth front (182,36,36), dE 3.45. 94.5% of the slope mirrors roof_sheen; radiance down the slope by row: 0.546, 0.523, 0.484, 0.431, 0.373, 0.30, then 0.055 at the eave."
+   },
+   "change": {
+    "setting": "lights.roof_sheen.strength",
+    "from": 0.5457,
+    "to": 0.33
+   },
+   "expected": "The veil drops about 40%: the slope goes to about (195,62,66), dE about 6. The sheen still grades from the ridge to the eave, so the roof still reads as gloss. The bookshelf's roof mirrors the same panel on 42.5% of its pixels and deepens slightly toward #1F4FCF (now dE 3.6).",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      233,
+      272,
+      380,
+      325
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     4.5,
+     7.5
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "set",
+   "problem": "The sideboard reads as a flat painted box: the veneer's cathedral rings are 11 mm apart, about 5 px at that distance, too fine to survive the render, so each door front is one value.",
+   "evidence": {
+    "region": [
+     1000,
+     530,
+     1200,
+     690
+    ],
+    "measured": "Door 3 lum_range 6.5 (p5 51.0, p95 57.5), median 54. Door 2 range 15.8 and door 1 17.7, most of it the left-to-right falloff. Front median 61, RGB (88,56,36). A contrast stretch shows the figure only as hairlines 5-7 px apart."
+   },
+   "change": {
+    "setting": "set.props.0.figure_m",
+    "from": 0.011,
+    "to": 0.026
+   },
+   "expected": "Rings about 12 px apart at the same 0.15 grain contrast survive the render. Each door shows its book-matched arches as broad figure, and door 3's range rises from 6.5 to about 12-18 with no striping. The grain itself is unchanged, so rounds 9-10's grain cuts stand.",
+   "accept": {
+    "region": [
+     1000,
+     530,
+     1200,
+     690
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     11,
+     22
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The floorstander's fin face mirrors the window_key lamp evenly across three quarters of its pixels, so the carton's top seal reads as a salmon strip rather than glossy red.",
+   "evidence": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      290,
+      245,
+      430,
+      272
+     ]
+    },
+    "measured": "Fin RGB (211,96,96), g_median 96, dE2000 13.57 against #C62828. Mirrors: lamp window_key over wall-left 74.9%, radiance 1.075; ceiling 8.3%."
+   },
+   "change": {
+    "setting": "lights.window_key.specular",
+    "from": 1,
+    "to": 0.35
+   },
+   "expected": "The fin mirrors about a third of the lamp and goes from (211,96,96) to about (200,62,64), still a touch lighter than the slope, so it reads as a lit gloss seal. window_key's diffuse light, which keys both fronts, is untouched. Its reflections in the floor and the sideboard top soften slightly.",
+   "accept": {
+    "region": {
+     "part": "gable-block",
+     "box": [
+      290,
+      245,
+      430,
+      272
+     ]
+    },
+    "metric": "g_median",
+    "op": "between",
+    "value": [
+     56,
+     78
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The bookshelf's right side falls from 180 at the top to 96 at the bottom while the wall behind it falls only from 126 to 109, so the two cross at about y 385-405 and the carton's back-right edge vanishes there.",
+   "evidence": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      905,
+      370,
+      924,
+      440
+     ]
+    },
+    "measured": "Side band lum_median 101.4 against wall [928,370,950,440] at 112.4. Edge step across [912,372,942,404] is -1.6. Side profile, top to bottom: 180, 171, 158, 144, 131, 113, 99, 96. Wall [928,253,950,456]: 126, 121, 118, 116, 115, 113, 111, 109. 99.5% of the side mirrors blue_side_ramp, whose ramp is 0 below z 0.7."
+   },
+   "change": {
+    "setting": "lights.blue_side_ramp.ramp.values",
+    "from": [
+     0,
+     1
+    ],
+    "to": [
+     0.3,
+     1
+    ]
+   },
+   "expected": "The side's lower third mirrors 0.3-0.45 of the panel instead of 0-0.1, rising from about 96-101 to about 125-138 while the top stays about 180. The side then sits at least 12 levels above the wall (109-116 there) at every height, and the back-right edge reads unbroken. Its median rises from 137 to about 150, past c11's 140 ceiling. The trade is worth it: that ceiling only kept the side under the front (196), and the side stays at least 40 below the front and still falls about 50 levels top to bottom. The carton keeps its modelling and does not go muddy, which was c11's concern.",
+   "accept": {
+    "region": {
+     "part": "side-right",
+     "box": [
+      905,
+      370,
+      924,
+      440
+     ]
+    },
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     124,
+     146
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "More render samples or a lighter denoise pass (and a larger frame for the bookshelf's label).",
+   "why": "The card fixes the sampling settings and the frame size. The denoiser smears the Nutrition Facts panel on the bookshelf, the sideboard's veneer figure and the floor grain into painterly patches, which reads as CG across a magazine spread."
+  }
+ ],
+ "score_if_fixed": 6.5
+}
