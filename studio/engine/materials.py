@@ -281,7 +281,14 @@ def _veneer(nt, b, p):
     # its middle, so neighbouring leaves read as book-matched
     u = math_('SUBTRACT', math_('FRACT', math_('DIVIDE', along, p['leaf_m'])), 0.5)
     arch = math_('MULTIPLY', math_('POWER', math_('ABSOLUTE', u), 1.5), p['arch_m'] * 2.83)
-    v = math_('ADD', math_('ADD', across, warp), arch)
+    v0 = math_('ADD', math_('ADD', across, warp), arch)
+    # the rings' spacing wanders too, closer and wider every few rings (a growth year's width is not a constant: an
+    # even spacing printed as an inked chevron pattern, 01's and 10's round 10)
+    sp = node('ShaderNodeCombineXYZ'); nt.links.new(math_('DIVIDE', v0, 3.0 * p['figure_m']), sp.inputs['X'])
+    nt.links.new(math_('MULTIPLY', along, 0.7), sp.inputs['Y'])
+    spn = node('ShaderNodeTexNoise'); spn.inputs['Scale'].default_value = 1.0; spn.inputs['Detail'].default_value = 1.0
+    nt.links.new(sp.outputs['Vector'], spn.inputs['Vector'])
+    v = math_('ADD', v0, math_('MULTIPLY', math_('SUBTRACT', spn.outputs['Fac'], 0.5), 1.4 * p['figure_m']))
     rings = math_('FRACT', math_('DIVIDE', v, p['figure_m']))
     # the latewood line: a soft dark band across the middle of each ring, as dense on both sides (a sawtooth, dark at
     # the ring's end and light the moment the next began, printed a 13-18 level step at every ring: 10's round 9)
@@ -296,7 +303,7 @@ def _veneer(nt, b, p):
     rn = node('ShaderNodeTexNoise'); rn.inputs['Scale'].default_value = 2.0; rn.inputs['Detail'].default_value = 1.0
     nt.links.new(ri.outputs['Vector'], rn.inputs['Vector'])
     depth = math_('MINIMUM', math_('MAXIMUM', math_('MULTIPLY', math_('SUBTRACT', rn.outputs['Fac'], 0.28), 2.2), 0.12), 1.0)
-    late = math_('MULTIPLY', band(rings, 0.3), depth)
+    late = math_('MULTIPLY', band(rings, 0.42), depth)
     # and the fine grain between the rings, a fifth of their spacing, faint
     fine = math_('FRACT', math_('DIVIDE', v, p['figure_m'] * 0.2))
     fine_l = band(fine, 0.4)
