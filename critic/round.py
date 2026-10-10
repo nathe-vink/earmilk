@@ -142,11 +142,24 @@ def precheck(a):
         reg = (c.get('accept') or {}).get('region')
         # reflection-only panels: what they do depends on being mirrored. A lamp also lights diffusely, and a glint is
         # placed from the surface itself (and too small for a map that samples one pixel in four)
-        if not st.startswith('lights.') or reg is None:
+        if reg is None:
             continue
-        name = st.split('.')[1]
-        spec = lights.get(name)
-        if not isinstance(spec, dict) or spec.get('type') != 'panel' or spec.get('diffuse', True) not in (False, 0, 0.0):
+        if st.startswith('glints.'):
+            # a glint with a ramp is a reflector panel placed on its surface's mirror ray (lights.glint); a plain glint is
+            # a small lamp, too small for a map that samples one pixel in four
+            gl = json.loads(shot.read_text()).get('glints') or []
+            key = st.split('.')[1]
+            g = (gl.get(key) if isinstance(gl, dict) else (gl[int(key)] if key.isdigit() and int(key) < len(gl) else None))
+            if not isinstance(g, dict) or not g.get('ramp'):
+                continue
+            idx = list(gl.keys()).index(key) if isinstance(gl, dict) else int(key)
+            name = f'glint{idx}'
+        elif st.startswith('lights.'):
+            name = st.split('.')[1]
+            spec = lights.get(name)
+            if not isinstance(spec, dict) or spec.get('type') != 'panel' or spec.get('diffuse', True) not in (False, 0, 0.0):
+                continue
+        else:
             continue
         try:
             m = Me.mirrors(arr, reg)
@@ -157,8 +170,12 @@ def precheck(a):
         share = sum(x['share_pct'] for x in mine)
         top = '; '.join(f"{x['what']} {x['share_pct']} %" for x in m['mirrors'][:3])
         rad = ', '.join(f"{k} {v[1]}" for x in mine[:1] for k, v in (x.get('radiance') or {}).items())
+        # what share can carry the test: a p95 rides on its brightest 5 % (a rim's line), a median needs half
+        met = (c.get('accept') or {}).get('metric', '')
+        need = 5 if met in ('lum_p95', 'clip_pct') else 25 if met in ('lum_range', 'lum_mean', 'falloff', 'edge') else 45
+        verdict = 'enough' if share >= need else 'TOO LITTLE'
         print(f"  {c['id']} {st}: the region mirrors `{name}` on {share:.0f} % of its product pixels"
-              + (f" (radiance there: {rad})" if rad else '') + f"; it mirrors {top}")
+              + (f" (radiance there: {rad})" if rad else '') + f"; it mirrors {top} [{met} needs about {need} %: {verdict}]")
     print(f'  (the mirror map with the changes: {out.with_suffix(".mirror.png")})')
 
 

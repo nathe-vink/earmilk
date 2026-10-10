@@ -114,6 +114,7 @@ def build():
     t0 = time.time()
     fab = cad.build()
     parts = {k: fab[k] for k in VISIBLE + INSIDE + ['tweeter-retainer'] if k in fab}
+    parts['pull-loop'] = cad.pull_loop()        # the ribbon in the groove under the insert's front edge (BOM line 35)
     parts.update(inside_parts())
     if AMP:
         parts.update(C.amp_plate(AMP, RUN, PLAN, AMP['z']))

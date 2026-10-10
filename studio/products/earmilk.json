@@ -180,9 +180,19 @@
    "preset": "metal",
    "color": "#B87333",
    "roughness": 0.35
+  },
+  "ribbon": {
+   "preset": "satin_paint",
+   "color": "$insert",
+   "roughness": 0.75,
+   "specular": 0.25
   }
  },
  "assign": [
+  {
+   "match": "pull-loop",
+   "material": "ribbon"
+  },
   {
    "match": "front-baffle|back-panel|side-left|side-right",
    "material": "body"

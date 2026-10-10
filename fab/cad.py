@@ -327,6 +327,17 @@ def waveguide_insert():
 PULL_GROOVE = (12.0, 1.5, 30.0)     # width, depth, length back from the front edge: a ribbon loop glued in it
 
 
+def pull_loop():
+    """The ribbon pull loop (the BOM's 10 mm grosgrain), for the render model: folded double and tucked into the groove
+    under the insert's front edge, its ends glued at the back of the groove, so the front edge shows the ribbon in the
+    groove rather than the front panel's white top edge through an empty notch (critic rounds 9 and 10 on shot 03 read
+    the empty groove as a modelling error, the brightest thing in the frame)."""
+    plain = _y_prism(insert_outline(), -5.0, INSERT['back_y']) & gable_prism()
+    bb = plain.bounding_box()
+    w = PULL_GROOVE[0] - 2.0
+    return box(RUN - w / 2, bb.min.Y + 0.3, bb.min.Z + 0.15, RUN + w / 2, bb.min.Y + PULL_GROOVE[2] - 2.0, bb.min.Z + PULL_GROOVE[1] - 0.1)
+
+
 def insert_split_pins():
     """Where the two 3 x 16 pins cross the insert's split at the centre plane when it is printed in halves, as (y, z): one
     under the tweeter's bore, one over it, between the bore and the insert's top (the drawing check's d13, round 3)."""
