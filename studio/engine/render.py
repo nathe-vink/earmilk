@@ -67,6 +67,10 @@ def main():
     # --- product -----------------------------------------------------------------------------------------------
     # one product ("product") or several side by side ("products": a list of product blocks, e.g. a family shot)
     blocks = sh.get('products') or ([sh['product']] if sh.get('product') else [])
+    if sh.get('products') and (sh.get('product') or {}).get('zone_parts'):
+        # `product.zone_parts` is the card's setting: in a frame of several products it holds for each block that does
+        # not say otherwise (10 round 8 set it and nothing split, so its plinth lamp lit nothing)
+        blocks = [{**b, 'zone_parts': b.get('zone_parts', True)} for b in blocks]
     objs, part_of = [], {}
     centre = Vector((0, 0, 0.5))
     for blk in blocks:

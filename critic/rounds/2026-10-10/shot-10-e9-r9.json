@@ -1,0 +1,323 @@
+{
+ "stage1": {
+  "impression": "A clean, legible two-speaker room set: the red floorstander and blue bookshelf carton read instantly and their saturated reds and blues pop against a neutral greige wall, but the light is a flat, directionless ambience and roughly a quarter of the frame is evenly lit empty wall above and left of the hero. The sideboard's oversized contour-line grain reads as a procedural topographic map that competes with the products, and the floor is soft and plain, so this is a competent draft rather than a homepage image.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The sideboard reads as fine walnut veneer, not contour lines: lum_range 6-11 in [690,545,750,590] (now 19.8), ring-line drop <= 7 levels/px in the 4-px column [700,530,706,690] (now 14.9), ring period about 5-11 px (now 11-23 px, 21-44 mm).",
+  "The light has a direction and falls off toward the frame edges: the wall falls at least 18 levels from the roofline to the frame top (now 9.8 over [20,0,270,240]; top band [0,0,1350,60] 144.0 against 151.0 at the roofline [540,180,830,230]) instead of a flat 144-152 greige across the top half.",
+  "Balanced framing that keeps the hero's lead room: about 230 px of wall left of the hero and 135 px right of the sideboard (now 287 / 82).",
+  "Plinth bands within delta E 4.5 of their swatches on the lit fronts (now 5.98 red, 7.02 blue), which needs the *.plinth zone split to exist in this two-product frame.",
+  "Plank-to-plank variation in the near floor: lum_range 8-16 in [20,790,220,900] (now 5.1, one tone across three planks)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "material",
+   "problem": "The sideboard veneer renders as a high-contrast sawtooth of wavy rings, a 13-18 level drop at every ring line followed by a slow ramp back, so the largest prop reads as an embossed topographic map and out-shouts both products even at thumbnail size.",
+   "evidence": {
+    "region": [
+     690,
+     545,
+     750,
+     590
+    ],
+    "measured": "lum_range 19.8 (p5 80.9, p95 100.6, median 95.7); 4-px column [700,530,706,690] edge 14.9 levels/px, column profile from y 520: 99 102 104 104 103 99 86 89 93 98 101 102 101 96 86 92 97 100 101 100 100 93 80 85; largest step 14.0 / 18.2 / 15.4 in the 4-px columns at x 760 / 900 / 1100; round 8's tuning log on this patch: grain 0.15 gave 8.0, 0.3 gave 11.6, 0.5458 gave 18.9."
+   },
+   "change": {
+    "setting": "set.props.0.grain",
+    "from": 0.5458,
+    "to": 0.22
+   },
+   "expected": "Ring-line drops fall from 14-18 to about 5-7 levels/px and the patch lum_range from 19.8 to 6-11 (the engine's own points put 0.22 near 9.7); the left door's median stays 86-96 (now 91.9 in [660,520,780,690]). This undoes only the engine's pick of 0.5458 inside round 8's wide 9-26 window, not the veneer that round 8's c4 asked for: the book-matched figure stays, and the lower bound of 6 keeps it visible, so round 8's corrugated-cardboard state (lum_range 5.0 from a regular 4 px pinstripe with 0.03-level row variation) cannot return.",
+   "accept": {
+    "region": [
+     690,
+     545,
+     750,
+     590
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     6,
+     11
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The back wall is one flat value from the frame top down to the products' roofline, so the top quarter of the frame is evenly lit empty wall and nothing in the light pulls the eye down to the products.",
+   "evidence": {
+    "region": [
+     20,
+     0,
+     270,
+     240
+    ],
+    "measured": "y-profile 141.9, 144.0, 145.8, 147.6, 149.5, 150.7, 151.6, 151.7 (falloff -9.8); top band [0,0,1350,60] lum_median 144.0, lum_range 5.4; x-profile of [0,0,1350,120] 144.0, 145.8, 146.3, 146.4, 146.3, 146.3, 146.3, 145.5, 143.7; wall at the roofline [540,180,830,230] 151.0; wall left of the hero [20,100,270,520] 149.5 (p5 145.4, p95 152.4)."
+   },
+   "change": {
+    "setting": "lights.top_flag",
+    "from": null,
+    "to": {
+     "type": "flag",
+     "size_m": [
+      5.6,
+      1.2
+     ],
+     "position": [
+      0.2,
+      0.4,
+      2.15
+     ],
+     "target": [
+      0.2,
+      -3.9,
+      1.85
+     ],
+     "density": 0.4
+    }
+   },
+   "expected": "A net 0.7 m in front of the back wall, spanning x -2.6 to 3.0 and z 1.55 to 2.75, so it sits above everything in frame (hero top 1.055 m, the 2%'s about 1.14, twig tips about 1.49 at y 0.06, all in front of it) and behind roof_top (y up to 0.35). It takes about 40 % of the front and right windows' light off the wall above z 1.4, with a penumbra about 110 px tall: the top band falls from 144 to about 120-130 while the roofline wall stays 148-152, so [20,0,270,240] falls about 25-30 levels toward the top. The camera and gloss never see a flag, so the white fronts (front-baffle median 218), roofs and floor are unchanged; the -34 limit stops it reading as a dark band or a vignette.",
+   "accept": {
+    "region": [
+     20,
+     0,
+     270,
+     240
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     -34,
+     -18
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "material",
+   "problem": "The rings are spaced 22 mm apart (11-23 px here), four to five times a flat-cut walnut figure at this size, so even at a lower contrast the doors will read as contour lines rather than grain.",
+   "evidence": {
+    "region": [
+     640,
+     500,
+     1268,
+     705
+    ],
+    "measured": "ring period from the autocorrelation of 4-px columns over y 520-690: 13 px at x 700, 15 at x 760, 23 at x 900, 11 at x 1100; the face is 1.2 m over 630 px (525 px/m), so 21-44 mm; set.props.0.figure_m is 0.022 (11.5 px)."
+   },
+   "change": {
+    "setting": "set.props.0.figure_m",
+    "from": 0.022,
+    "to": 0.011
+   },
+   "expected": "Twice as many rings inside the same book-matched arches: a period of about 5-11 px (10-21 mm), so the door reads as fine grain with cathedral figure instead of terraces, and its overall value holds. No metric in the tool reads a ring period, so the test only guards the door's median: apply 0.011 as given rather than tuning toward the test.",
+   "accept": {
+    "region": [
+     660,
+     520,
+     780,
+     690
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     84,
+     100
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "composition",
+   "problem": "The group sits right of centre, with 287 px of wall left of the hero but only 82 px between the sideboard's end and the right edge, so the right edge crowds and the frame's weight sits right.",
+   "evidence": {
+    "region": [
+     0,
+     250,
+     1350,
+     820
+    ],
+    "measured": "hero x 287-535, the 2% x 838-979, sideboard x 638-1268 (a camera model built from the card's position, target and 40 mm lens reproduces them within 1 px); margins 287 left, 82 right; [250,470,280,510] is bare wall at lum_median 144.2, and the hero's front at [304,470,334,510] is 218.0."
+   },
+   "change": {
+    "setting": "camera.shift_x",
+    "from": 0,
+    "to": 0.04
+   },
+   "expected": "Every part moves 54 px left: hero x 233-481, the 2% x 784-925, sideboard x 584-1214, so the margins are 233 left (lead room, since both products face camera-left) and 136 right; vertical framing is unchanged and both stay whole. The box [250,470,280,510] then sits on the hero's white front between the mid and the woofer (about 218); a move the other way leaves it on wall and fails.",
+   "accept": {
+    "region": [
+     250,
+     470,
+     280,
+     510
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     200,
+     228
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "post",
+   "problem": "The plinth bands that carry the wordmark sit darker than their swatches on both copies, because round 8's plinth_kick never ran and retouch's half-strength lightness correction is all that lifts them.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      150,
+      706,
+      600,
+      765
+     ]
+    },
+    "measured": "hero band rgb (170,33,33), lum 62.2, delta E 5.98 vs #C62828; the 2%'s band (front-baffle in [700,470,1000,498]) (34,64,164), delta E 7.02 vs #1F4FCF; retouch gains 1.153 (red) and 1.102 (blue) at lightness 0.5; engine log: lights.plinth_kick was not applied, its receivers ['*.plinth'] match no part in this frame."
+   },
+   "change": {
+    "setting": "retouch.lightness",
+    "from": 0.5,
+    "to": 1.0
+   },
+   "expected": "The red accent's gain rises from 1.153 to about 1.33: the hero's band to about (181,36,36), delta E about 3.6; its roof front slope [300,280,340,330] from (183,48,52) to about (195,52,56), staying within delta E 3.5; the 2%'s band only to about (36,67,171), delta E about 5.8 (its gain goes from 1.10 to about 1.21), which c7 finishes. The white body paint is untouched (retouch.neutral handles it), so the fronts' modelling stays.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      150,
+      706,
+      600,
+      765
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#C62828",
+    "op": "between",
+    "value": [
+     0,
+     4.5
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "material",
+   "problem": "The near floor is one tone from plank to plank, so the largest set surface in the foreground reads as a smooth laminate sheet.",
+   "evidence": {
+    "region": [
+     20,
+     790,
+     220,
+     900
+    ],
+    "measured": "lum_range 5.1 (p5 100.2, p95 105.3); row medians over x 20-250 rise smoothly from 92 to 104 between y 685 and 900 with no plank steps, while the far floor steps 85-87 / 92-93 / 87-90 / 94-95 between planks at y 585-670."
+   },
+   "change": {
+    "setting": "set.floor.plank_contrast",
+    "from": 0.4,
+    "to": 0.7
+   },
+   "expected": "Adjacent planks differ by about 6-12 levels across the floor and the near-floor lum_range rises from 5.1 to 8-16; the floor's median stays 98-106, so the floor that the hero's plinth and lower front mirror keeps its tone. The upper bound keeps the far planks from striping.",
+   "accept": {
+    "region": [
+     20,
+     790,
+     220,
+     900
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     8,
+     16
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "asset",
+   "problem": "product.zone_parts is true but this two-product frame has no *.plinth part, so no lamp can light the bands without also lighting the white panels, and the 2%'s band stays about 7 delta E dark.",
+   "evidence": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      700,
+      470,
+      1000,
+      498
+     ]
+    },
+    "measured": "rgb (34,64,164), lum 64.2, delta E 7.02 vs #1F4FCF; the mask legend lists front-baffle, side-right, side-left and back-panel but no *.plinth; the band mirrors front_sheen's black lower end (radiance 0, 53 % of [843,460,935,495]); engine log: 'change lights.plinth_kick was not applied: its receivers ['*.plinth'] match no part in this frame'."
+   },
+   "change": {
+    "setting": "product.zone_parts",
+    "from": true,
+    "to": true
+   },
+   "expected": "With the bands split, plinth_kick lights them alone from below the frame, about 2.1-2.2 m from both: the 2%'s band rises to about (31-36, 72-79, 190-205), delta E <= 4.5; the hero's band stays within delta E 3 (c5's retouch re-reads the lit face, so the two cannot stack into an overshoot); whites, letters and set are not receivers and are unchanged.",
+   "accept": {
+    "region": {
+     "part": "front-baffle",
+     "box": [
+      700,
+      470,
+      1000,
+      498
+     ]
+    },
+    "metric": "delta_e",
+    "hex": "#1F4FCF",
+    "op": "between",
+    "value": [
+     0,
+     4.5
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Repaint the plinth bands a lighter red and blue so they reach their swatches without extra light.",
+   "why": "The flavours' colours are fixed; only light, exposure and retouch may move them (c5, c7). It matters because the band carries the wordmark and sits 6-7 delta E dark on both copies."
+  }
+ ],
+ "score_if_fixed": 7.0,
+ "revisions": [
+  {
+   "change": "c7",
+   "by": "engine",
+   "why": "the critic's object named the copies; product.zone_parts now holds for every block of a products list (render.py), so the setting as it stands splits both plinths and lights.plinth_kick, already in the shot, applies",
+   "was": {
+    "setting": "product.zone_parts (for products.0 and products.1)",
+    "from": true,
+    "to": {
+     "parts": [
+      "front-baffle.plinth",
+      "side-right.plinth",
+      "side-left.plinth",
+      "back-panel.plinth"
+     ],
+     "copies": [
+      "products.0",
+      "products.1"
+     ],
+     "then": "apply lights.plinth_kick as already specified (area 0.6 x 0.2 m at [0.2, -2.2, 0.4], irradiance 0.4, receivers *.plinth)"
+    }
+   }
+  }
+ ]
+}
