@@ -1,0 +1,326 @@
+{
+ "stage1": {
+  "impression": "A clean, noise-free lifestyle set that reads at once as a pair of milk-carton speakers with a turntable, but the light is flat and sourceless, the white cartons sit near one value with weak face separation, and the products are small in a frame dominated by bare wall and a loud zigzag sideboard. The pair looks staged inconsistently (the right carton nearer and turned the same way as the left), so it reads as a draft scene rather than a hero.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The lower halves of the white fronts fall at least 12 levels from under the woofer to the plinth and show a lacquer reflection gradient, with the white body at 200-215 and only highlights above 226. Now they fall 5-6 levels ([240,535,300,705]: 217 to 211), the body sits at 204-217, and the one window stripe prints flat at 227-231 in the shoulder.",
+  "The door veneer reads as natural figure: ring lines no more than 5 levels deep, no evenly pitched chevrons repeating at every leaf seam. Now the lines dip 6-10 levels on a regular ~15 px pitch, lum_range 16.9.",
+  "The carton right sides read as white in shade: 158-175 with a visible gradient. Now they are flat mid-grey: part:side-right median 145, left side lum_range 9.",
+  "Each carton has a readable contact pool: the top darkens at least 20 levels toward each plinth within ~110 px. Now it darkens 14 levels on the right ([1186,778,1300,800]: 114 to 129) and 9 on the left.",
+  "The plinth bands take the light the carton takes (lum ~62-70) instead of a linked lamp's. Now they print at the full swatch (197,43,43; lum 75.7) under a white lit to only 206-216.",
+  "The room's daylight has a shape on the set that reads at a glance, such as a window fall-off or sun pattern on the wall. Now there is only a 27-level left-to-right wall gradient (197 to 168) and a +9-level sun band on the lower right wall that nobody will see.",
+  "At least one organic, lived-in element. Now every object is a rectilinear box (cartons, turntable, frame, sideboard)."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The lower halves of the white fronts are one value and carry no reflection the eye can read, so the lacquer reads as a printed card under each woofer.",
+   "evidence": {
+    "region": [
+     240,
+     535,
+     300,
+     705
+    ],
+    "measured": "profile y (8 bins) 217, 216, 215, 213, 212, 211, 211, 211, falloff 6; right front [1080,555,1150,740] 209 to 204 (5). mirrors: front_sheen 91 %, met at z 0.43-0.70, where its ramp gives radiance 0.07-0.61, so it adds at most 0.045 x 0.61 x 1.11 = 0.03 linear (~4 levels). At strength 1.17 the card is below the 4-8 the shot card says a white needs, and its bright end is spent on the strip above the woofer (radiance 1.17 at z 0.99, median 230)."
+   },
+   "change": {
+    "setting": "lights.front_sheen",
+    "from": {
+     "type": "panel",
+     "size_m": [
+      2.2,
+      0.62
+     ],
+     "position": [
+      -0.42,
+      -1.6,
+      0.73
+     ],
+     "target": [
+      -0.42,
+      0,
+      0.73
+     ],
+     "strength": 1.1667,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.45,
+       0.95
+      ],
+      "values": [
+       0.06,
+       1
+      ]
+     },
+     "diffuse": false
+    },
+    "to": {
+     "type": "panel",
+     "size_m": [
+      2.2,
+      0.62
+     ],
+     "position": [
+      -0.42,
+      -1.6,
+      0.73
+     ],
+     "target": [
+      -0.42,
+      0,
+      0.73
+     ],
+     "strength": 2.0,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.43,
+       0.75
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false
+    }
+   },
+   "expected": "The ramp now rises across the band the lower fronts mirror (z 0.43-0.70), so each lower front shows a soft reflection that is brightest just under the woofer and fades to nothing at the plinth. Left [240,535,300,705] goes from ~223 at the top to ~207 at the bottom (falloff ~16); right from ~215 to ~200. Ramp 0 at z 0.43 leaves the plinth junction and the c3 strip untouched. The margins and the strip above the woofer gain ~0.04 linear, which c3 takes back, so they stay at 228 or below. The panel is what the test region mirrors (91 %), so the pre-check holds. The trim rings mirror the same card (57 %) and gain a little sheen.",
+   "accept": {
+    "region": [
+     240,
+     535,
+     300,
+     705
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     12,
+     22
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The door veneer reads as a topographic print: evenly pitched ring lines meet in sharp chevrons at every leaf seam. It is the loudest texture in the frame and sits right under the pair.",
+   "evidence": {
+    "region": [
+     400,
+     820,
+     600,
+     897
+    ],
+    "measured": "lum_range 16.9 (p5 128.0, p95 144.9); a vertical profile at x 450-470 dips 6-10 levels at each line (146.8 to 138.7, 141.7 to 136.7, 140.7 to 134.4) on a regular ~15 px pitch. Grain 0.6 is three times the veneer default (0.2); round 10 set it to reach lum_range 12 or more."
+   },
+   "change": {
+    "setting": "set.props.0.grain",
+    "from": 0.6,
+    "to": 0.4
+   },
+   "expected": "Ring lines dip ~4-6 levels, door lum_range ~13.5, and the figure reads as satin veneer rather than contour lines. This partly reverses round 10's c1, but its purpose holds. The doors keep a visible figure, and the lower bound stays at round 10's 12, so the flat tan slab cannot come back. The engine's own proofs (0.3 gave 11.6, 0.6 gave 17.0) put ~0.4 at ~13.4.",
+   "accept": {
+    "region": [
+     400,
+     820,
+     600,
+     897
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     12,
+     14.5
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The weak sun comes through the front window at 15 degrees and falls straight onto both fronts as parallel, shapeless light. It adds the same value top to bottom and holds the white body and its window stripe in the PBR Neutral shoulder.",
+   "evidence": {
+    "region": [
+     240,
+     678,
+     300,
+     700
+    ],
+    "measured": "median 211 at the plinth end of the left front. The window stripe across that front (x-profile 144-304 at y 560-690: 216, 227, 231, 231, 229, 217, 213, 212, 212, 212) peaks at 231, above the 226 knee, so it prints as a flat strip. The sun (0.5 W/m2, both cartons inside its window patch) meets the fronts at cos ~0.85, about 0.43 W/m2. By the card's units that is ~0.13 linear, about a fifth of the ~0.65 linear the lower front holds."
+   },
+   "change": {
+    "setting": "sun.irradiance",
+    "from": 0.5,
+    "to": 0.25
+   },
+   "expected": "The lower-front base drops ~9 levels, to ~204-207 once c1, c4 and c5 add back ~5. The window stripe falls to ~224-228, so its own ramp shows, and the key, the window daylight and c1's reflection carry the shape. Side faces are unchanged (the sun meets them at cos < 0). The sun's faint band on the lower right wall (+9 levels, x 1220-1340, y 444-666) halves. The sky-lit wall gradient (197 left to 168 right) is untouched. The roofs lose ~2.5 % after the retouch, which c5 offsets.",
+   "accept": {
+    "region": [
+     240,
+     678,
+     300,
+     700
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     200,
+     208
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The cartons' right sides, the Nutrition Facts faces, read as flat mid-grey card instead of white lacquer in shade, so each white carton reads two-tone.",
+   "evidence": {
+    "region": [
+     318,
+     550,
+     355,
+     700
+    ],
+    "measured": "left side median 148, lum_range 9 (no gradient); right side [1162,560,1182,745] median 140; part:side-right median 144.8, against fronts at 204-217. The only lamp facing these sides is the fill, at 0.19 W/m2."
+   },
+   "change": {
+    "setting": "lights.fill.irradiance",
+    "from": 0.1947,
+    "to": 0.42
+   },
+   "expected": "Sides rise to ~160-168 and stay at least 40 levels under the fronts, so the corner holds, and the Nutrition Facts print gains contrast. The fill meets the fronts at cos ~0.4 (~+3 levels), which c3 absorbs. The right carton's side stays ~15 levels under the wall beside it (176), so its silhouette holds. The retouch neutralises the 10000 K fill's cast on the white, and the right end of the wall only cools slightly.",
+   "accept": {
+    "region": "part:side-right",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     157,
+     172
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "light",
+   "problem": "The pair barely touches the sideboard: the top beside each base darkens only 9-14 levels, and the top itself reads dull (130-160) for a pale veneer.",
+   "evidence": {
+    "region": [
+     1186,
+     778,
+     1300,
+     800
+    ],
+    "measured": "x-profile 114.3, 117.8, 121.7, 124.7, 126.7, 127.7, 128.7, 128.7 (falloff -14.4); left base [362,730,432,752] 132.2 to 141.6 (-9.4); open top 159 at the left end, 130 at the right end."
+   },
+   "change": {
+    "setting": "lights.top.irradiance",
+    "from": 0.7,
+    "to": 1.3
+   },
+   "expected": "The overhead strip is the light each carton blocks from the top near its base. A stronger strip deepens the pool against each plinth to 20-30 levels over ~110 px and lifts the open top ~8-12 levels, so it reads as the pale stage the pair stands on. The fronts sit in front of the strip (y -0.11 against -0.03) and are unchanged. The roofs gain ~5 % light, half of it kept by the retouch, which balances c3.",
+   "accept": {
+    "region": [
+     1186,
+     778,
+     1300,
+     800
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     -30,
+     -20
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "A lamp linked to the plinth bands alone lifts them to the full swatch value while the white panel just above gets about two-thirds of that light. The band glows, and the top in front of it gets none of that light.",
+   "evidence": {
+    "region": "part:front-baffle.plinth",
+    "measured": "rgb median (197,43,43), lum 75.7, dE2000 0.59 to #C62828, which is the swatch lit as if for a 255 white. The white just above reads 216 (left, [150,690,300,706]) and 206 (right, [975,728,1150,747]); under that light the swatch would print ~(164,30,30), lum ~58. plinth_lift (1.8 W/m2, receivers *.plinth) supplies ~40 % of the band's light."
+   },
+   "change": {
+    "setting": "lights.plinth_lift.irradiance",
+    "from": 1.8,
+    "to": 0.5
+   },
+   "expected": "The band takes about the light the carton takes: lum ~64-68 and rgb ~(175,34,34) after the retouch's half lightness correction. dE to #C62828 becomes ~3-5, lightness only, because hue and chroma stay matched. It stops reading as lit from within, its reflection in the top dims with it, and plinth_sheen keeps its gloss.",
+   "accept": {
+    "region": "part:front-baffle.plinth",
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     60,
+     70
+    ]
+   }
+  },
+  {
+   "id": "c7",
+   "rank": 7,
+   "kind": "set",
+   "problem": "Nothing in the set says lived-in, and every object in the frame is a rectilinear box: cartons, turntable, frame and sideboard.",
+   "evidence": {
+    "region": [
+     380,
+     300,
+     540,
+     640
+    ],
+    "measured": "the bare wall between the left carton (right edge x 360) and the frame (left edge x 550): lum_range 13.9, median ~185; the set holds a sideboard, a turntable and one frame."
+   },
+   "change": {
+    "setting": "set.props.4",
+    "from": "none",
+    "to": {
+     "kind": "vase",
+     "position": [
+      -0.32,
+      0.16
+     ],
+     "height": 0.24,
+     "z": 0.56,
+     "color": "#9A8F82",
+     "branches": 3
+    }
+   },
+   "expected": "A small warm-grey stoneware vase sits behind the turntable's left corner, its body at about x 415-480 px and partly behind the plinth, ~4.5 cm clear of the left carton and ~5 cm clear of the turntable. Three bare branches rise against the wall between the left carton and the frame, clear of both silhouettes. Region lum_range goes to 30-70, and the frame gains one organic line and a hint that someone lives here without touching either carton.",
+   "accept": {
+    "region": [
+     380,
+     300,
+     540,
+     640
+    ],
+    "metric": "lum_range",
+    "op": "between",
+    "value": [
+     25,
+     90
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Graphite or black trim rings instead of the slate-blue ones (woofer-ring rgb 59,63,71, B-R +12).",
+   "why": "The rings are the only cool hue on a warm set and read as plastic beside the lacquer. The woofer frame mirrors the same panels and prints neutral (46,47,49), so the cast is the ring's own material, and the trim rings are the owner's fixed decision."
+  }
+ ],
+ "score_if_fixed": 6.8
+}
