@@ -1,0 +1,237 @@
+{
+ "stage1": {
+  "impression": "A charming, cleanly modelled milk-carton speaker with crisp graphics and generous copy space, but lit like a draft: the white body reads as flat light grey with little modelling across the label face, set on a dull, even mid-grey sweep. The carton sits in a soft smudge with no crisp contact, and a hazy smear under the left eave plus an overall low-contrast, slightly underexposed grade keep it well short of a homepage hero.",
+  "score": 5.0
+ },
+ "blocking_9": [
+  "The back face models like lit lacquer: 22 to 30 levels of fall-off from eave to amp plate on the free white (now 13 on the left margin [886,226,912,596], 17 on the right [1052,262,1074,596]), its body at 205 to 215 (now 201), and the top reflection band at least 15 levels above the body but unclipped (now p95 249, 0.42 % clipped in [1030,216,1070,228]).",
+  "The floor contact reads as contact: a 1 to 2 px line at or below 72 under the plinth, with the floor back within 5 levels of the open floor by about 20 px (now a straight ramp from 68 to 106 over 28 px, and a halo out to about 40 px).",
+  "No CG edge tells: no clipped outline on the gable's left hip (now 250 to 255, 1 to 2 px wide, 3.6 % clipped in [748,180,762,200]), and a crisp shadow line under the side gable instead of the 12 px pink bleed (G rises 20 to 57 to 139 over y 198 to 214 across x 744 to 860).",
+  "A deliberate set: the copy space is one mid-grey, 96 to 136 (median 106), and the foreground floor (98 to 105) matches the curve beside it (94 to 108). There is no ground plane, and the field is a middle value that gives neither dark nor white type strong contrast.",
+  "The amplifier's connections read at a glance: the connectors (median 40) sit on a 77 plate with no highlight (glint 0 is skipped), so a must-show reads as dark marks."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The hero face is lit as one flat value: the white beside the label falls only 13 levels from the eave to the amp plate, so the label and port sit on a grey card with no sense of a light above them.",
+   "evidence": {
+    "region": [
+     886,
+     226,
+     912,
+     596
+    ],
+    "measured": "profile along y: 209, 206, 204, 203, 201, 199, 198, 196 (falloff 13). Right margin [1052,262,1074,596]: 205 to 188 (17). Across the label rows (y 284 to 564), grid medians on the free white run only 206 to 188."
+   },
+   "change": {
+    "setting": "lights.key.orbit.distance_m",
+    "from": 3.6716,
+    "to": 2.5
+   },
+   "expected": "The key's irradiance at its target is unchanged, so inverse-square fall-off brightens the top of the back face and darkens its foot: the left margin reads about 216 under the eave and about 188 over the amp plate (falloff about 26), with the right margin similar, and the light now falls diagonally from the near top corner. The key grazes the side, so its share there drops (side median about 157 from 161), widening back-to-side separation. The set sits farther from the lamp than the product and gets about 20 % less key: on its own, this change takes the copy space down 3 to 5 levels from 106, still inside round 13's c1 band [96, 110].",
+   "accept": {
+    "region": [
+     886,
+     226,
+     912,
+     596
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     22,
+     32
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "set",
+   "problem": "The base has no contact line. Below the SHAKE WELL plinth the floor climbs in a straight ramp, about 2.5 levels per px, from the junction outward, so the carton sits in a smudge rather than on the paper. The tight contact term is set to 6 cm, above its 5 cm maximum.",
+   "evidence": {
+    "region": [
+     975,
+     781,
+     985,
+     786
+    ],
+    "measured": "lum_median 78.9 at 3 to 9 px below the plinth. Down every column x 900 to 1070 the floor reads 68 to 71 at +1 px, about 79 at +5, 88 at +10, 100 at +18 and 106 at +28: a ramp, not a line. set.contact.core_distance_m is 0.06, outside its 0.003 to 0.05 range."
+   },
+   "change": {
+    "setting": "set.contact.core_distance_m",
+    "from": 0.06,
+    "to": 0.012
+   },
+   "expected": "The junction row stays about 68, because strength already sets how dark the corner gets. By 3 px out the floor is about 88 to 92, so a 1 to 2 px dark line now hugs the plinth's foot and reads as the carton resting on the paper. The wide term still carries the soft occlusion.",
+   "accept": {
+    "region": [
+     975,
+     781,
+     985,
+     786
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     84,
+     96
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The gable's left hip carries a clipped white outline: a 1 to 2 px line at 250 to 255 runs the length of the hip, between the dark red triangle (42) and the sweep (132), and reads as a drawn stroke or a cut-out halo.",
+   "evidence": {
+    "region": [
+     748,
+     180,
+     762,
+     200
+    ],
+    "measured": "lum_p95 220.7, clip_pct 3.57. The hip peaks at 252 at (798,130), 227 at (769,170) and 253 at (754,190), rgb up to 255/252/255. The mirror map shows 'lamp kicker over sweep' at radiance 34.7 at the hip (x 794 to 800), the kicker's only appearance in the frame: it has diffuse 0 and lights nothing else."
+   },
+   "change": {
+    "setting": "lights.kicker.irradiance",
+    "from": 2.6,
+    "to": 0.25
+   },
+   "expected": "The hip keeps a soft edge highlight, peaking at about 170 to 190, where it now has a clipped white line, and clip_pct in the box falls to 0. The silhouette edge still separates by value (red 42 against sweep 132). Nothing else in the frame changes.",
+   "accept": {
+    "region": [
+     748,
+     180,
+     762,
+     200
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     150,
+     192
+    ]
+   }
+  },
+  {
+   "id": "c4",
+   "rank": 4,
+   "kind": "light",
+   "problem": "The white body sits at the bottom of the value a modelling white lacquer needs: the free white beside the label has a median of 201, so against the 106 sweep it reads light grey rather than white.",
+   "evidence": {
+    "region": [
+     884,
+     300,
+     912,
+     590
+    ],
+    "measured": "lum_median 201 (p5 196, p95 210). back-panel part median 198. Frame p99 207: the brightest 1 % of the image sits below 210."
+   },
+   "change": {
+    "setting": "lights.key.irradiance",
+    "from": 2.3,
+    "to": 2.5
+   },
+   "expected": "The back face's free white rises about 8 levels to about 209 (with c1: about 222 under the eave, about 195 at the foot), still under the 226 knee, so the gradient survives. The key grazes the side, which rises only about 2 levels. The roof faces the key and its lit red rises (R about 216 to about 230 with c1), while the retouch holds its hue. With c1 the set ends within 3 levels of now, so the product gains on it.",
+   "accept": {
+    "region": [
+     884,
+     300,
+     912,
+     590
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     206,
+     214
+    ]
+   }
+  },
+  {
+   "id": "c5",
+   "rank": 5,
+   "kind": "set",
+   "problem": "The occlusion halo round the base reaches about 40 px, about 20 cm of floor, on every side, including the lit front, where a 39 cm carton under a large softbox would leave only a few centimetres. The floor round the plinth therefore reads as an ambient-occlusion smudge.",
+   "evidence": {
+    "region": [
+     975,
+     795,
+     985,
+     803
+    ],
+    "measured": "lum_median 101.3 at 17 to 26 px below the plinth. The open floor in front of the base (110 to 112) is reached only about 40 px out (columns x 900 to 1070)."
+   },
+   "change": {
+    "setting": "set.contact.distance_m",
+    "from": 0.2418,
+    "to": 0.1
+   },
+   "expected": "The floor is back within about 5 levels of the open floor by about 20 px from the plinth (region median about 106 to 108). Together with c2's line, the carton reads as resting on the paper, not floating in a haze. The key's own cast shadow behind-left (x 630 to 720, y 525 to 675, 74 to 103) comes from the lamp and is unchanged.",
+   "accept": {
+    "region": [
+     975,
+     795,
+     985,
+     803
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     104,
+     111
+    ]
+   }
+  },
+  {
+   "id": "c6",
+   "rank": 6,
+   "kind": "light",
+   "problem": "The clear-coat band that round 13's c3 laid across the top of the back panel already peaks at 248 to 249, with its core starting to clip, and c1 and c4 add 10 to 15 % more diffuse light under it. Under the Standard view that would flatten it into a clipped strip.",
+   "evidence": {
+    "region": [
+     1000,
+     214,
+     1076,
+     232
+    ],
+    "measured": "lum_median 240.5, p95 248. Its core [1030,216,1070,228]: median 244, p95 249, clip 0.42 %. The band fades 246 to 212 from y 218 to y 260 at x 1030 to 1074."
+   },
+   "change": {
+    "setting": "lights.backgloss.strength",
+    "from": 8.1,
+    "to": 6.5
+   },
+   "expected": "This trims c3's panel only by about what c1 and c4 add beneath it. The band keeps its gradient from the eave down, peaks at 238 to 247 without clipping, and stays about 20 levels above the body below it (about 222). The clear-coat read that c3 was for is kept, not reversed.",
+   "accept": {
+    "region": [
+     1000,
+     214,
+     1076,
+     232
+    ],
+    "metric": "lum_p95",
+    "op": "between",
+    "value": [
+     238,
+     247
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "A crisp 3 mm shadow line under the side gable instead of the soft pink bleed at the foot of the red triangle.",
+   "why": "At 1:1 it reads as a smear or glow under the eave: G rises 20 to 57 to 139 over y 198 to 214 across x 744 to 860, while the back eave turns in 2 px. Its pixels mirror the far sweep and the sky, so no panel, lamp or card setting reaches it. The remedy lies in the shadow line and round geometry or in the render's sampling and denoising, all of which the card fixes."
+  },
+  {
+   "request": "Make the amplifier's connections read: a lighter plate finish or larger connectors.",
+   "why": "The connections are a must-show but read as 40-luminance marks on a 77 dark-grey plate (669 px in all). The plate's finish and the connectors' size are the product's own materials and geometry. Light can only add glints, and glint 0 is skipped because the connector there mirrors itself."
+  }
+ ],
+ "score_if_fixed": 6.3
+}
