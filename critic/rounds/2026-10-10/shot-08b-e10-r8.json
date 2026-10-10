@@ -1,0 +1,257 @@
+{
+ "stage1": {
+  "impression": "A clean centre-plane cutaway of a gabled birch roof with a glossy red waveguide: the red bowl is the one surface that looks photographed, while the ply and grey insert sections are evenly lit fills that read as CAD caps. The near-black void behind it gives no sense of a set, and the black tweeter parts sit as a murky block in the middle of a frame cropped through the box.",
+  "score": 5.5
+ },
+ "blocking_9": [
+  "The backdrop needs a shaped pool, about 30-44 behind the back slope and falling to 20 or less behind the red. Now 58% of the frame is one near-black field (p5 10.1, median 12.9, p95 17.7, rgb 14/11/14) because the pool lamp hangs behind the sweep wall.",
+  "The cut faces must read as lit planes. The grey insert section should fall 8 levels or more along its length (now it rises from 132.9 to 136.9), and the key must move off its spot 12 degrees from the lens so the walls of recesses fall into shade.",
+  "The red fin face must read as lacquer, with a graduated sheen of 5-14 levels. Now it is 42.1-45.3, flat, mirrors only black sweep, and sits at dE2000 12.1 against #C62828.",
+  "Every must-show must be in frame. The magnets that hold the insert (magnets-insert, magnets-pocket) have zero pixels.",
+  "The tweeter assembly must separate at full-frame size. The frame's chamber reads 7.7 (p5 3.9) and the retainer's dish 21-36 against its flanges at 53-58, so the sleeve over the motor reads only when zoomed in.",
+  "The white connector must stay under the PBR Neutral knee (p95 221.3 now, 226 at most) through any key change, so its two blocks keep their faces."
+ ],
+ "changes": [
+  {
+   "id": "c1",
+   "rank": 1,
+   "kind": "light",
+   "problem": "The backdrop is a dead near-black field with no pool, because the pool lamp and its target sit behind the sweep's back wall and light nothing the camera sees.",
+   "evidence": {
+    "region": [
+     190,
+     360,
+     310,
+     480
+    ],
+    "measured": "Where a pool belongs, behind the back slope: lum_median 11.9, range 1.7. The whole background is 58.3% of the frame at p5 10.1, median 12.9, p95 17.7, violet rgb 14/11/14, and its top band runs 10.9 to 12.9 left to right. The mirror map shows the sweep's wall at y = 1.95-2.0 m: gable-block and insert reflections meet the sweep at y 1.953-2.0 with z up to 2.87. The pool lamp at y 2.85 aimed at y 3.26 is therefore behind the backdrop, which is why irradiance 4 and 6 both gave falloff -3.0 last round."
+   },
+   "change": {
+    "setting": "lights.pool",
+    "from": {
+     "type": "area",
+     "size_m": [
+      0.5,
+      0.5
+     ],
+     "position": [
+      -1,
+      2.85,
+      1.55
+     ],
+     "target": [
+      -1.05,
+      3.26,
+      0.8
+     ],
+     "irradiance": 4,
+     "color": 5600,
+     "specular": 0
+    },
+    "to": {
+     "type": "area",
+     "size_m": [
+      0.6,
+      0.6
+     ],
+     "position": [
+      -0.95,
+      1.4,
+      1.15
+     ],
+     "target": [
+      -0.66,
+      1.85,
+      0.77
+     ],
+     "irradiance": 2.0,
+     "color": 5600,
+     "specular": 0,
+     "receivers": [
+      "sweep"
+     ]
+    }
+   },
+   "expected": "A soft pool lands on the sweep's curve behind the back slope, centred near (250, 420). Box [190,360,310,480] reads 30-44 (now 11.9). It falls to 24 or less behind the fin's red face ([760,130,900,240], now 13.6) and to about 18 or less at the right edge, so the red keeps more than a stop over its ground. The pool reads warm-neutral and replaces the violet near-black on the left. This carries on round 7's c4 (a tighter pool) and fixes its placement: the lamp now hangs 0.66 m in front of the curve, inside the set. receivers [\"sweep\"] keep it off the product. set.color stays #3E3C3A, so round 7's dark ground behind the red holds.",
+   "accept": {
+    "region": [
+     190,
+     360,
+     310,
+     480
+    ],
+    "metric": "lum_median",
+    "op": "between",
+    "value": [
+     30,
+     44
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "rank": 2,
+   "kind": "light",
+   "problem": "The key sits 12 degrees to the side of the lens (camera azimuth about 7.7, key 20), so it lights the cut plane as a high frontal wash. The grey insert section is one value along its whole length, and the right half of the section has no direction.",
+   "evidence": {
+    "region": [
+     665,
+     615,
+     1040,
+     648
+    ],
+    "measured": "Grey insert wedge (all waveguide-insert pixels): profile 132.9, 133.9, 134.9, 135.9, 135.9, 136.9, 136.9, 136.9, so falloff -4.0 and range 5.7 over 375 px. The top panel's right half reads 168.3, 170.0, 170.7, 171.0. The only falloff is top to bottom: grey top block 151.9, wedge 135.9."
+   },
+   "change": {
+    "setting": "lights.key.orbit.azimuth_deg",
+    "from": 20,
+    "to": -30
+   },
+   "expected": "The key crosses the cut plane from the upper back, 38 degrees off the lens. The grey wedge falls 8-20 levels from under the tweeter to the mouth (now it rises 4). The back-panel strip lifts from 148 to about 165-180, and the front baffle eases from 167 to about 145-155. The +x-facing walls of the counterbore, connector bay and cable channel, which the camera sees, drop into shade and read as recesses, and the connector blocks and cable gain a shaded side. Irradiance is unchanged, so the birch median stays within 160-175 (round 7's c3 holds) and the connector's p95 stays at 226 or less (now 221.3).",
+   "accept": {
+    "region": [
+     665,
+     615,
+     1040,
+     648
+    ],
+    "metric": "falloff",
+    "axis": "x",
+    "op": "between",
+    "value": [
+     8,
+     20
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "rank": 3,
+   "kind": "light",
+   "problem": "The fin's red lacquer face mirrors only the near-black sweep behind it, so it prints as a flat maroon slab with no reflection to say it is gloss.",
+   "evidence": {
+    "region": [
+     698,
+     140,
+     738,
+     230
+    ],
+    "measured": "lum_median 44.1, range 5.6, profile top to bottom 42.1 to 45.3 (falloff -3.2), rgb 142/18/16, dE2000 12.1 against #C62828. Mirrors: 100% sweep, met at x 0.19-0.25, y 1.95, z 1.0-1.1."
+   },
+   "change": {
+    "setting": "lights.fin_sheen",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.4,
+      0.3
+     ],
+     "position": [
+      0.11,
+      1.0,
+      1.04
+     ],
+     "target": [
+      0.01,
+      0.1,
+      1.03
+     ],
+     "strength": 0.15,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.98,
+       1.1
+      ],
+      "values": [
+       1,
+       0
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "gable-block"
+     ]
+    }
+   },
+   "expected": "The fin face mirrors a graduated card at the place its rays cross y = 1.0 m (x about 0.11, z 1.0-1.08). Its top reads 5-14 levels above its foot (now 3.2 below) with a median of about 48-56, and it stays red (g_median 32 or less, now 18). The roof edge picks up a fading tail of the sheen near the ridge only. The card is reflection-only and linked to gable-block, so the sweep stays black behind the red and round 7's c1 (no grey film on the red) holds.",
+   "accept": {
+    "region": [
+     698,
+     140,
+     738,
+     230
+    ],
+    "metric": "falloff",
+    "axis": "y",
+    "op": "between",
+    "value": [
+     5,
+     14
+    ]
+   }
+  }
+ ],
+ "out_of_scope": [
+  {
+   "request": "Show the magnets that hold the insert (magnets-insert, magnets-pocket).",
+   "why": "They are a must-show of this frame and have zero pixels. They sit off the centre plane inside the gable, so only a different cut or an explode along their axis could expose them, and both are fixed."
+  },
+  {
+   "request": "Give the insert's grey cut face a material surface (print layers or cast grain) instead of a uniform cap.",
+   "why": "It is one cool grey (rgb 132/136/146, range 5.7 over 375 px) beside a textured ply section and a glossy bowl, so it reads as a CAD section fill. The section colour and the product's materials are fixed, so light can only give it a gradient (c2)."
+  },
+  {
+   "request": "Lighten the tweeter's black parts so the sleeve over the motor reads at full-frame size.",
+   "why": "tweeter-frame median 7.7 (p5 3.9) and the retainer's dish 21-36 are the drivers' own black finishes, which are fixed. The only lamp that could lift them alone (snoot, linked) would read as self-glow, as the card warns."
+  }
+ ],
+ "score_if_fixed": 6.5,
+ "revisions": [
+  {
+   "change": "c3",
+   "by": "precheck",
+   "why": "as given, the fin mirrors the card's ramp bottom-bright (radiance top to foot 0.074, 0.063, 0.069, 0.082), against a test that wants the top brighter; flipped (1 at 0.98 m to 0 at 1.1 m) it runs 0.076, 0.087, 0.081, 0.068",
+   "was": {
+    "setting": "lights.fin_sheen",
+    "from": null,
+    "to": {
+     "type": "panel",
+     "size_m": [
+      0.4,
+      0.3
+     ],
+     "position": [
+      0.11,
+      1.0,
+      1.04
+     ],
+     "target": [
+      0.01,
+      0.1,
+      1.03
+     ],
+     "strength": 0.15,
+     "color": "#FFFFFF",
+     "ramp": {
+      "axis": "z",
+      "at_m": [
+       0.98,
+       1.1
+      ],
+      "values": [
+       0,
+       1
+      ]
+     },
+     "diffuse": false,
+     "receivers": [
+      "gable-block"
+     ]
+    }
+   }
+  }
+ ]
+}

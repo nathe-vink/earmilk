@@ -125,11 +125,12 @@ shots:
     purpose: >-
       The detail the builder asked for: the roof cut on its centre plane, close, so the waveguide insert, the tweeter
       rear-mounted in its counterbore and held there by the printed retaining sleeve over its motor (the sleeve's
-      flange screwed to the boss's back face), the magnets that hold the insert, the connector bay behind it with the
-      plugged connector, the cable channel, the silicone seal where the cable passes the top panel and the cable's run
-      into the box all read at a glance. A technical cutaway rendered photographically; a close-up by brief, the whole
-      speaker not required.
-    must_show: [the insert and its waveguide in section, the tweeter in its counterbore, the retaining sleeve and its flange, the magnets, the connector in its bay, the cable down the channel and the seal under the top panel]
+      flange screwed to the boss's back face), the connector bay behind it with the plugged connector, the cable
+      channel, the silicone seal where the cable passes the top panel and the cable's run into the box all read at a
+      glance. A technical cutaway rendered photographically; a close-up by brief, the whole speaker not required. The
+      magnets that hold the insert sit 56 to 82 mm off the centre plane, inside the gable behind the cut face, so this
+      cut cannot show them (those of the half cut away go with it); the exploded view shows them.
+    must_show: [the insert and its waveguide in section, the tweeter in its counterbore, the retaining sleeve and its flange, the connector in its bay, the cable down the channel and the seal under the top panel]
     fixed:
       - >-
         The cut's position (the centre plane) and what is cut; do not ask for parts to move or to be cut
