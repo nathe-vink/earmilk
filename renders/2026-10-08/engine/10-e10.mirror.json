@@ -1,0 +1,821 @@
+{
+ "legend": {
+  "1": "wall-back",
+  "2": "panel roof_sheen",
+  "3": "ceiling",
+  "4": "wall-left",
+  "5": "wall-right",
+  "6": "gable-block",
+  "7": "waveguide-insert",
+  "8": "wall-front",
+  "9": "prop3-curtain",
+  "10": "floor",
+  "11": "tweeter-dome",
+  "12": "tweeter-surround",
+  "13": "lamp roof_top over ceiling",
+  "14": "lamp wall-front-portal over world (sky)",
+  "15": "wall-right-reveal",
+  "16": "wall-right-frame-r",
+  "17": "lamp wall-right-portal over world (sky)",
+  "18": "wall-right-mullion-h2",
+  "19": "wall-right-mullion-v1",
+  "20": "panel front_sheen",
+  "21": "front-baffle",
+  "22": "panel blue_side_ramp over wall-back",
+  "23": "side-right",
+  "24": "woofer-frame",
+  "25": "prop0-sideboard-body",
+  "26": "woofer-surround",
+  "27": "woofer-ring",
+  "28": "woofer-cone",
+  "29": "wall-front-frame-t",
+  "30": "panel red_front_ramp",
+  "31": "woofer-cap",
+  "32": "skirting-right0",
+  "33": "wall-front-frame-l",
+  "34": "wall-front-mullion-v1",
+  "35": "lamp glint3 over ceiling",
+  "36": "wall-front-reveal",
+  "37": "back-panel",
+  "38": "panel red_side_ramp",
+  "39": "mid-frame",
+  "40": "mid-ring",
+  "41": "mid-cone",
+  "42": "mid-surround",
+  "43": "mid-cap",
+  "44": "skirting-left0",
+  "45": "side-right.plinth",
+  "46": "prop1-books-0",
+  "47": "panel blue_side_ramp over prop0-sideboard-body",
+  "48": "panel blue_letters_card over floor",
+  "49": "panel blue_letters_card over panel front_sheen",
+  "50": "front-baffle.plinth",
+  "51": "panel blue_letters_card over prop0-sideboard-body",
+  "52": "wall-right-frame-t",
+  "53": "lamp glint0 over ceiling",
+  "54": "lamp glint0 over wall-left",
+  "55": "lamp glint0 over prop3-curtain",
+  "56": "prop0-sideboard-leg-11",
+  "57": "panel red_letters_card over floor",
+  "58": "letters-front-3",
+  "59": "letters-front-7"
+ },
+ "step": 2,
+ "parts": {
+  "front-baffle": {
+   "pixels": 50812,
+   "seen": [
+    [
+     "panel red_front_ramp",
+     0.499
+    ],
+    [
+     "panel front_sheen",
+     0.297
+    ],
+    [
+     "floor",
+     0.145
+    ],
+    [
+     "panel red_side_ramp",
+     0.024
+    ],
+    [
+     "wall-back",
+     0.016
+    ],
+    [
+     "wall-right",
+     0.008
+    ]
+   ]
+  },
+  "side-right": {
+   "pixels": 40968,
+   "seen": [
+    [
+     "panel red_side_ramp",
+     0.71
+    ],
+    [
+     "panel blue_side_ramp over wall-back",
+     0.19
+    ],
+    [
+     "floor",
+     0.08
+    ],
+    [
+     "prop0-sideboard-leg-11",
+     0.009
+    ],
+    [
+     "wall-back",
+     0.008
+    ],
+    [
+     "side-right.plinth",
+     0.002
+    ]
+   ]
+  },
+  "gable-block": {
+   "pixels": 16768,
+   "seen": [
+    [
+     "panel roof_sheen",
+     0.406
+    ],
+    [
+     "wall-back",
+     0.261
+    ],
+    [
+     "wall-left",
+     0.236
+    ],
+    [
+     "gable-block",
+     0.053
+    ],
+    [
+     "ceiling",
+     0.037
+    ],
+    [
+     "wall-right",
+     0.005
+    ]
+   ]
+  },
+  "front-baffle.plinth": {
+   "pixels": 9864,
+   "seen": [
+    [
+     "floor",
+     0.729
+    ],
+    [
+     "panel front_sheen",
+     0.145
+    ],
+    [
+     "prop0-sideboard-body",
+     0.123
+    ],
+    [
+     "letters-front-3",
+     0.002
+    ],
+    [
+     "prop1-books-0",
+     0.001
+    ],
+    [
+     "letters-front-7",
+     0.0
+    ]
+   ]
+  },
+  "woofer-cone": {
+   "pixels": 6716,
+   "seen": [
+    [
+     "floor",
+     0.275
+    ],
+    [
+     "ceiling",
+     0.189
+    ],
+    [
+     "woofer-cone",
+     0.157
+    ],
+    [
+     "panel front_sheen",
+     0.094
+    ],
+    [
+     "woofer-cap",
+     0.094
+    ],
+    [
+     "wall-front",
+     0.05
+    ]
+   ]
+  },
+  "side-right.plinth": {
+   "pixels": 6108,
+   "seen": [
+    [
+     "floor",
+     0.798
+    ],
+    [
+     "prop0-sideboard-body",
+     0.129
+    ],
+    [
+     "panel blue_side_ramp over prop0-sideboard-body",
+     0.038
+    ],
+    [
+     "panel blue_side_ramp over wall-back",
+     0.023
+    ],
+    [
+     "side-right",
+     0.012
+    ]
+   ]
+  },
+  "waveguide-insert": {
+   "pixels": 5456,
+   "seen": [
+    [
+     "waveguide-insert",
+     0.388
+    ],
+    [
+     "panel roof_sheen",
+     0.206
+    ],
+    [
+     "ceiling",
+     0.169
+    ],
+    [
+     "wall-front",
+     0.046
+    ],
+    [
+     "gable-block",
+     0.042
+    ],
+    [
+     "tweeter-surround",
+     0.035
+    ]
+   ]
+  },
+  "woofer-surround": {
+   "pixels": 5304,
+   "seen": [
+    [
+     "floor",
+     0.299
+    ],
+    [
+     "panel red_front_ramp",
+     0.126
+    ],
+    [
+     "ceiling",
+     0.103
+    ],
+    [
+     "woofer-cone",
+     0.083
+    ],
+    [
+     "woofer-ring",
+     0.078
+    ],
+    [
+     "panel front_sheen",
+     0.074
+    ]
+   ]
+  },
+  "woofer-ring": {
+   "pixels": 3456,
+   "seen": [
+    [
+     "panel front_sheen",
+     0.324
+    ],
+    [
+     "panel red_front_ramp",
+     0.282
+    ],
+    [
+     "floor",
+     0.25
+    ],
+    [
+     "front-baffle",
+     0.045
+    ],
+    [
+     "woofer-frame",
+     0.039
+    ],
+    [
+     "woofer-surround",
+     0.02
+    ]
+   ]
+  },
+  "woofer-cap": {
+   "pixels": 2240,
+   "seen": [
+    [
+     "floor",
+     0.307
+    ],
+    [
+     "woofer-cone",
+     0.268
+    ],
+    [
+     "panel red_front_ramp",
+     0.157
+    ],
+    [
+     "panel front_sheen",
+     0.121
+    ],
+    [
+     "wall-left",
+     0.055
+    ],
+    [
+     "woofer-surround",
+     0.036
+    ]
+   ]
+  },
+  "back-panel": {
+   "pixels": 1720,
+   "seen": [
+    [
+     "panel red_side_ramp",
+     0.702
+    ],
+    [
+     "panel blue_side_ramp over wall-back",
+     0.235
+    ],
+    [
+     "floor",
+     0.042
+    ],
+    [
+     "wall-back",
+     0.019
+    ],
+    [
+     "side-right",
+     0.002
+    ]
+   ]
+  },
+  "mid-cone": {
+   "pixels": 1340,
+   "seen": [
+    [
+     "floor",
+     0.287
+    ],
+    [
+     "ceiling",
+     0.215
+    ],
+    [
+     "mid-cone",
+     0.14
+    ],
+    [
+     "panel front_sheen",
+     0.128
+    ],
+    [
+     "mid-cap",
+     0.101
+    ],
+    [
+     "wall-front",
+     0.051
+    ]
+   ]
+  },
+  "mid-ring": {
+   "pixels": 1032,
+   "seen": [
+    [
+     "panel red_front_ramp",
+     0.853
+    ],
+    [
+     "mid-frame",
+     0.074
+    ],
+    [
+     "floor",
+     0.023
+    ],
+    [
+     "front-baffle",
+     0.023
+    ],
+    [
+     "ceiling",
+     0.012
+    ],
+    [
+     "wall-left",
+     0.008
+    ]
+   ]
+  },
+  "mid-surround": {
+   "pixels": 900,
+   "seen": [
+    [
+     "floor",
+     0.2
+    ],
+    [
+     "panel red_front_ramp",
+     0.182
+    ],
+    [
+     "ceiling",
+     0.107
+    ],
+    [
+     "panel front_sheen",
+     0.102
+    ],
+    [
+     "mid-ring",
+     0.093
+    ],
+    [
+     "mid-cone",
+     0.089
+    ]
+   ]
+  },
+  "woofer-frame": {
+   "pixels": 772,
+   "seen": [
+    [
+     "panel front_sheen",
+     0.606
+    ],
+    [
+     "panel red_front_ramp",
+     0.124
+    ],
+    [
+     "woofer-ring",
+     0.114
+    ],
+    [
+     "floor",
+     0.093
+    ],
+    [
+     "woofer-surround",
+     0.057
+    ],
+    [
+     "front-baffle",
+     0.005
+    ]
+   ]
+  },
+  "mid-cap": {
+   "pixels": 280,
+   "seen": [
+    [
+     "mid-cone",
+     0.343
+    ],
+    [
+     "panel front_sheen",
+     0.157
+    ],
+    [
+     "floor",
+     0.157
+    ],
+    [
+     "wall-left",
+     0.129
+    ],
+    [
+     "panel red_front_ramp",
+     0.086
+    ],
+    [
+     "mid-surround",
+     0.071
+    ]
+   ]
+  },
+  "back-panel.plinth": {
+   "pixels": 252,
+   "seen": [
+    [
+     "floor",
+     0.778
+    ],
+    [
+     "prop0-sideboard-body",
+     0.095
+    ],
+    [
+     "panel blue_side_ramp over wall-back",
+     0.079
+    ],
+    [
+     "panel blue_side_ramp over prop0-sideboard-body",
+     0.048
+    ]
+   ]
+  },
+  "tweeter-dome": {
+   "pixels": 216,
+   "seen": [
+    [
+     "waveguide-insert",
+     0.611
+    ],
+    [
+     "tweeter-surround",
+     0.111
+    ],
+    [
+     "wall-left",
+     0.093
+    ],
+    [
+     "ceiling",
+     0.074
+    ],
+    [
+     "panel front_sheen",
+     0.037
+    ],
+    [
+     "lamp wall-front-portal over world (sky)",
+     0.019
+    ]
+   ]
+  },
+  "tweeter-surround": {
+   "pixels": 180,
+   "seen": [
+    [
+     "waveguide-insert",
+     0.444
+    ],
+    [
+     "tweeter-dome",
+     0.267
+    ],
+    [
+     "wall-left",
+     0.111
+    ],
+    [
+     "ceiling",
+     0.067
+    ],
+    [
+     "lamp wall-front-portal over world (sky)",
+     0.044
+    ],
+    [
+     "panel red_front_ramp",
+     0.044
+    ]
+   ]
+  },
+  "letters-front-3": {
+   "pixels": 172,
+   "seen": [
+    [
+     "panel red_letters_card over floor",
+     0.605
+    ],
+    [
+     "panel blue_letters_card over panel front_sheen",
+     0.163
+    ],
+    [
+     "panel blue_letters_card over floor",
+     0.116
+    ],
+    [
+     "front-baffle.plinth",
+     0.116
+    ]
+   ]
+  },
+  "letters-front-7": {
+   "pixels": 144,
+   "seen": [
+    [
+     "panel red_letters_card over floor",
+     0.389
+    ],
+    [
+     "front-baffle.plinth",
+     0.25
+    ],
+    [
+     "panel blue_letters_card over panel front_sheen",
+     0.194
+    ],
+    [
+     "panel blue_letters_card over floor",
+     0.083
+    ],
+    [
+     "floor",
+     0.083
+    ]
+   ]
+  },
+  "letters-front-0": {
+   "pixels": 136,
+   "seen": [
+    [
+     "panel red_letters_card over floor",
+     0.559
+    ],
+    [
+     "panel blue_letters_card over floor",
+     0.176
+    ],
+    [
+     "front-baffle.plinth",
+     0.176
+    ],
+    [
+     "panel blue_letters_card over prop0-sideboard-body",
+     0.059
+    ],
+    [
+     "panel blue_letters_card over panel front_sheen",
+     0.029
+    ]
+   ]
+  },
+  "letters-front-1": {
+   "pixels": 132,
+   "seen": [
+    [
+     "panel red_letters_card over floor",
+     0.727
+    ],
+    [
+     "panel blue_letters_card over floor",
+     0.091
+    ],
+    [
+     "panel blue_letters_card over prop0-sideboard-body",
+     0.091
+    ],
+    [
+     "panel blue_letters_card over panel front_sheen",
+     0.061
+    ],
+    [
+     "front-baffle.plinth",
+     0.03
+    ]
+   ]
+  },
+  "mid-frame": {
+   "pixels": 120,
+   "seen": [
+    [
+     "panel red_front_ramp",
+     0.7
+    ],
+    [
+     "mid-ring",
+     0.267
+    ],
+    [
+     "front-baffle",
+     0.033
+    ]
+   ]
+  },
+  "letters-front-6": {
+   "pixels": 84,
+   "seen": [
+    [
+     "panel red_letters_card over floor",
+     0.714
+    ],
+    [
+     "panel blue_letters_card over panel front_sheen",
+     0.143
+    ],
+    [
+     "panel blue_letters_card over floor",
+     0.095
+    ],
+    [
+     "front-baffle.plinth",
+     0.048
+    ]
+   ]
+  },
+  "letters-front-2": {
+   "pixels": 84,
+   "seen": [
+    [
+     "panel red_letters_card over floor",
+     0.571
+    ],
+    [
+     "front-baffle.plinth",
+     0.238
+    ],
+    [
+     "panel blue_letters_card over panel front_sheen",
+     0.095
+    ],
+    [
+     "panel blue_letters_card over floor",
+     0.048
+    ],
+    [
+     "panel blue_letters_card over prop0-sideboard-body",
+     0.048
+    ]
+   ]
+  },
+  "letters-front-5": {
+   "pixels": 80,
+   "seen": [
+    [
+     "front-baffle.plinth",
+     0.5
+    ],
+    [
+     "panel red_letters_card over floor",
+     0.3
+    ],
+    [
+     "panel blue_letters_card over panel front_sheen",
+     0.1
+    ],
+    [
+     "panel blue_letters_card over floor",
+     0.1
+    ]
+   ]
+  },
+  "letters-front-4": {
+   "pixels": 20,
+   "seen": [
+    [
+     "front-baffle.plinth",
+     0.6
+    ],
+    [
+     "panel blue_letters_card over panel front_sheen",
+     0.2
+    ],
+    [
+     "panel red_letters_card over floor",
+     0.2
+    ]
+   ]
+  },
+  "pull-loop": {
+   "pixels": 12,
+   "seen": [
+    [
+     "panel front_sheen",
+     0.667
+    ],
+    [
+     "waveguide-insert",
+     0.333
+    ]
+   ]
+  }
+ },
+ "lamps": {
+  "wall-front-portal": 0.8842,
+  "wall-right-portal": 0.9947,
+  "roof_top": 4.8056,
+  "plinth_kick": 17.197,
+  "glint0": 17.2658,
+  "glint1": 0.0,
+  "glint2": 6.4846,
+  "glint3": 112.5791
+ }
+}
