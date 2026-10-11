@@ -24,6 +24,7 @@ A3 = (420.0, 297.0)
 PT = 72 / 25.4
 INK, RED, CUT, POCKET = '#1a1a1a', '#b03030', '#e9e1d2', '#cdbfa6'
 MIN_PT = 7.1                       # 2.5 mm text
+PATTERN = 8                        # more alike features than this on a panel are a pattern: one mark, one table row
 SCALES = [1, 2, 5, 10, 20, 50]
 VIEWS = {
     'front': ((0, -1, 0), (0, 0, 1)),
@@ -47,55 +48,177 @@ def to2d(view, pts):
     return np.c_[np.asarray(pts, float) @ X, np.asarray(pts, float) @ Y]
 
 
+ANALYTIC = ('PLANE', 'CYLINDER', 'CONE', 'SPHERE', 'TORUS')
+
+
 def _seams(shapes, view):
     """The seams of closed faces (where a lofted or revolved surface meets itself), projected: no edge a drawing
-    shows, but hidden-line removal draws a spline surface's seam as a line."""
+    shows, but hidden-line removal draws a spline surface's seam as a line. A seam that lies on the face's silhouette
+    in this view (the face turned edge-on to the eye along it) is the outline there, and stays."""
     from OCP.BRep import BRep_Tool
+    d = np.array(VIEWS[view][0], dtype=float); d /= np.linalg.norm(d)
     out = []
     for s in shapes:
         for f in s.faces():
-            if f.geom_type.name in ('PLANE', 'CYLINDER', 'CONE', 'SPHERE', 'TORUS'):
+            if f.geom_type.name in ANALYTIC:
                 continue                          # analytic seams are already left out
             for e in f.edges():
                 if BRep_Tool.IsClosed_s(e.wrapped, f.wrapped):
                     n = int(min(2000, max(60, e.length / 0.4)))         # dense: the test is distance to its points
                     pts = [e.position_at(t) for t in np.linspace(0, 1, n)]
+                    try:
+                        facing = [abs(np.dot([v.X, v.Y, v.Z], d)) for v in (f.normal_at(p) for p in pts[1:-1:max(1, n // 9)])]
+                    except Exception:
+                        facing = [1.0]
+                    if np.median(facing) < 0.15:
+                        continue                  # edge-on: the seam is the silhouette in this view
                     out.append(to2d(view, [[p.X, p.Y, p.Z] for p in pts]))
     return out
 
 
+def _hlr_kinds(comp, d, up, hidden):
+    """OpenCascade's hidden-line removal with its kinds kept apart (build123d's Drawing merges them): the edges, sharp
+    and smooth, as Compounds (or None), and the outlines (a curved face's silhouette) as 2D polylines, visible and
+    hidden. An outline is never a seam, even where a seam projects onto it, so only the edges are tested for seams.
+    The exact algorithm finds no silhouette on a lofted spline face (a waveguide's shell drew only its rims): where the
+    shape has any face that is not plane, cylinder, cone, sphere or torus, the outlines come from a pass over a mesh of
+    a copy of it instead, which finds them on any surface."""
+    from OCP.BRepLib import BRepLib
+    from OCP.HLRAlgo import HLRAlgo_Projector
+    from OCP.HLRBRep import HLRBRep_Algo, HLRBRep_HLRToShape
+    from OCP.gp import gp_Ax2
+    from build123d import Compound, Shape, Vector
+    from build123d.geometry import TOLERANCE
+    algo = HLRBRep_Algo(); algo.Add(comp.wrapped)
+    n = Vector(d).normalized()
+    proj = HLRAlgo_Projector(gp_Ax2(Vector(0, 0, 0).to_pnt(), n.to_dir(), Vector(up).normalized().cross(n).to_dir()))
+    algo.Projector(proj)
+    algo.Update(); algo.Hide()
+    h = HLRBRep_HLRToShape(algo)
+
+    def kind(*cs):
+        cs = [c for c in cs if not c.IsNull()]
+        for c in cs:
+            BRepLib.BuildCurves3d_s(c, TOLERANCE)
+        return Compound([Shape(c) for c in cs]) if cs else None
+    edges = kind(h.VCompound(), h.Rg1LineVCompound())
+    h_edges = kind(h.HCompound()) if hidden else None
+    if any(f.geom_type.name not in ANALYTIC for f in comp.faces()):
+        from OCP.BRepBuilderAPI import BRepBuilderAPI_Copy
+        from OCP.BRepMesh import BRepMesh_IncrementalMesh
+        from OCP.HLRBRep import HLRBRep_PolyAlgo, HLRBRep_PolyHLRToShape
+        mesh = BRepBuilderAPI_Copy(comp.wrapped).Shape()
+        BRepMesh_IncrementalMesh(mesh, 0.25, False, 0.1, True)     # 0.25 mm: well under a line's width at 1:10
+        pa = HLRBRep_PolyAlgo(); pa.Load(mesh); pa.Projector(proj); pa.Update()
+        ph = HLRBRep_PolyHLRToShape(); ph.Update(pa)
+        out_v = _mesh_lines(ph.OutLineVCompound())
+        out_h = _mesh_lines(ph.OutLineHCompound()) if hidden else []
+    else:
+        out_v = _edge_lines(kind(h.OutLineVCompound()))
+        out_h = _edge_lines(kind(h.OutLineHCompound())) if hidden else []
+    return edges, h_edges, out_v, out_h
+
+
+def _edge_lines(c):
+    """A Compound's edges as 2D polylines, curves sampled about every millimetre."""
+    out = []
+    if c is None:
+        return out
+    for e in c.edges():
+        L = e.length
+        if L < 0.2:
+            continue
+        n = 2 if e.geom_type.name == 'LINE' else int(min(240, max(6, L / 1.0)))
+        out.append(np.array([[p.X, p.Y] for p in (e.position_at(t) for t in np.linspace(0, 1, n))]))
+    return out
+
+
+def _mesh_lines(c, tol=0.05):
+    """A mesh pass's outline (a compound of short straight pieces) as 2D polylines: the pieces joined end to end, then
+    thinned to within `tol` of the line they make."""
+    from collections import defaultdict, deque
+    from OCP.BRep import BRep_Tool
+    from OCP.TopAbs import TopAbs_EDGE
+    from OCP.TopExp import TopExp, TopExp_Explorer
+    from OCP.TopoDS import TopoDS
+    if c.IsNull():
+        return []
+    segs = []
+    ex = TopExp_Explorer(c, TopAbs_EDGE)
+    while ex.More():
+        e = TopoDS.Edge(ex.Current())
+        a, b = BRep_Tool.Pnt_s(TopExp.FirstVertex_s(e)), BRep_Tool.Pnt_s(TopExp.LastVertex_s(e))
+        if abs(a.X() - b.X()) + abs(a.Y() - b.Y()) > 1e-6:
+            segs.append(((a.X(), a.Y()), (b.X(), b.Y())))
+        ex.Next()
+    key = lambda q: (round(q[0] * 1000), round(q[1] * 1000))
+    ends = defaultdict(list)
+    for i, (a, b) in enumerate(segs):
+        ends[key(a)].append((i, 1)); ends[key(b)].append((i, 0))
+    used = [False] * len(segs)
+    lines = []
+    for i in range(len(segs)):
+        if used[i]:
+            continue
+        used[i] = True
+        line = deque(segs[i])
+        for forward in (True, False):
+            while True:
+                q = line[-1] if forward else line[0]
+                nxt = next(((j, k) for j, k in ends[key(q)] if not used[j]), None)
+                if nxt is None:
+                    break
+                j, k = nxt; used[j] = True
+                r = segs[j][k]                 # the piece's far end
+                line.append(r) if forward else line.appendleft(r)
+        P = np.array(line)
+        if np.hypot(*np.diff(P, axis=0).T).sum() >= 0.2:
+            lines.append(_thin(P, tol))
+    return lines
+
+
+def _thin(P, tol):
+    """Douglas-Peucker: the fewest of a polyline's points that keep it within `tol`."""
+    if len(P) < 3:
+        return P
+    keep = np.zeros(len(P), bool); keep[0] = keep[-1] = True
+    stack = [(0, len(P) - 1)]
+    while stack:
+        i, j = stack.pop()
+        if j <= i + 1:
+            continue
+        a, ab = P[i], P[j] - P[i]
+        seg = P[i + 1:j] - a
+        L = np.hypot(*ab)
+        dist = np.hypot(*seg.T) if L < 1e-12 else np.abs(ab[0] * seg[:, 1] - ab[1] * seg[:, 0]) / L
+        k = int(np.argmax(dist))
+        if dist[k] > tol:
+            m = i + 1 + k; keep[m] = True; stack += [(i, m), (m, j)]
+    return P[keep]
+
+
 def hlr(shapes, view, hidden=False):
     """Visible (and hidden) edges seen from `view`, as 2D polylines in the view's frame (orthographic, origin at the
-    world origin; the same frame as to2d). Seams of spline surfaces are left out."""
-    from build123d import Compound, Drawing
+    world origin; the same frame as to2d). Seams of spline surfaces are left out; outlines are always kept."""
+    from build123d import Compound
     comp = Compound(children=list(shapes))
     d, up = VIEWS[view]
-    dr = Drawing(comp, look_from=d, look_up=up, look_at=(0, 0, 0), with_hidden=hidden)
+    v_edges, h_edges, v_out, h_out = _hlr_kinds(comp, d, up, hidden)
     seams = _seams(shapes, view)
     S = np.vstack(seams) if seams else None
 
     def on_seam(q):
-        if S is None:
-            return False
         dd = np.sqrt(((q[:, None, :] - S[None, :, :]) ** 2).sum(axis=2)).min(axis=1)
         return float(dd.max()) < 0.6
 
-    def polys(c):
+    def edges(c):
         out = []
-        if c is None:
-            return out
-        for e in c.edges():
-            L = e.length
-            if L < 0.2:
-                continue
-            n = 2 if e.geom_type.name == 'LINE' else int(min(240, max(6, L / 1.0)))
-            pts = [e.position_at(t) for t in np.linspace(0, 1, n)]
-            q = np.array([[p.X, p.Y] for p in pts])
-            if S is not None and on_seam(np.linspace(q[0], q[-1], 8) if n == 2 else q[::max(1, len(q) // 12)]):
+        for q in _edge_lines(c):
+            if S is not None and on_seam(np.linspace(q[0], q[-1], 8) if len(q) == 2 else q[::max(1, len(q) // 12)]):
                 continue
             out.append(q)
         return out
-    return polys(dr.visible_lines), (polys(dr.hidden_lines) if hidden else [])
+    return edges(v_edges) + v_out, (edges(h_edges) + h_out if hidden else [])
 
 
 def fit_scale(w, h, box_w, box_h):
@@ -337,7 +460,8 @@ def sheet_exploded(pg, parts, numbers):
 
 
 def _shape(P):
-    """What a closed 2D outline is, for the feature table: ('Ø', d) for a circle, ('rect', w, h), else ('profile',)."""
+    """What a closed 2D outline is, for the feature table: ('Ø', d) for a circle, ('rect', w, h), ('slot', w, h) for a
+    slot with round ends (a router's), else ('profile',)."""
     P = np.asarray(P)
     c = (P.min(axis=0) + P.max(axis=0)) / 2
     r = np.linalg.norm(P - c, axis=1)
@@ -345,9 +469,30 @@ def _shape(P):
         return ('Ø', 2 * r.mean())
     w, h = np.ptp(P, axis=0)
     area = 0.5 * abs(np.sum(P[:-1, 0] * P[1:, 1] - P[1:, 0] * P[:-1, 1]))
-    if w * h > 0 and area / (w * h) > 0.995:
+    lo, hi = P.min(axis=0), P.max(axis=0)
+    corners = [(lo[0], lo[1]), (hi[0], lo[1]), (hi[0], hi[1]), (lo[0], hi[1])]
+    square = all(np.min(np.linalg.norm(P - np.array(c), axis=1)) < 0.1 for c in corners)   # a long slot's area alone
+    if square and w * h > 0 and area / (w * h) > 0.995:                                       # is within 0.5 % of its box's
         return ('rect', w, h)
+    if not square and w * h > 0 and abs(area / (w * h - (4 - math.pi) * (min(w, h) / 2) ** 2) - 1) < 0.01:
+        return ('slot', w, h)
     return ('profile',)
+
+
+def _size(s):
+    return {'Ø': lambda: f'Ø{s[1]:.1f}', 'rect': lambda: f'{s[1]:.1f} x {s[2]:.1f}',
+            'slot': lambda: f'slot {s[1]:.1f} x {s[2]:.1f}'}.get(s[0], lambda: 'profile (DXF)')()
+
+
+def _group_size(fs):
+    """A pattern's size for its one table row: the shape if all alike, else the slots' (or rectangles') width and the
+    range of their lengths."""
+    shapes = {tuple(round(v, 1) if isinstance(v, float) else v for v in f['shape']) for f in fs}
+    if len(shapes) == 1:
+        return _size(fs[0]['shape'])
+    lengths = [max(f['shape'][1:3]) for f in fs]
+    w = min(fs[0]['shape'][1:3])
+    return f"{fs[0]['shape'][0]} {w:.1f} wide, {min(lengths):.0f}-{max(lengths):.0f} long"
 
 
 def flat_features(rec):
@@ -374,11 +519,26 @@ def flat_features(rec):
             P = _fl.to2d(rec, P3) - o
             feats.append(dict(kind='U', shape=_shape(P), c=(P.min(axis=0) + P.max(axis=0)) / 2, pts=P, depth=d))
     size = lambda f: f['shape'][1] if len(f['shape']) > 1 else 0.0
+
+    def sig(f):                            # alike: the same shape, or slots (rectangles) of one width, any length
+        s = f['shape']
+        dims = (round(min(s[1:3]), 1),) if s[0] in ('slot', 'rect') else tuple(round(v, 1) for v in s[1:])
+        return (f['kind'], s[0], dims, f['depth'])
+    groups = {}
+    for f in feats:
+        groups.setdefault(sig(f), []).append(f)
     out = []
     for kind in 'PHU':                     # numbered largest first: a rebate before the cut-out inside it
         fs = sorted([f for f in feats if f['kind'] == kind], key=lambda f: (-size(f), -f['c'][1], f['c'][0]))
-        for i, f in enumerate(fs, 1):
-            f['mark'] = f'{kind}{i}'
+        i, seen = 0, {}
+        for f in fs:
+            g = groups[sig(f)]
+            if len(g) > PATTERN:           # a pattern (a grille's slots): one mark for all of them, the DXF places them
+                if sig(f) in seen:
+                    f['mark'] = seen[sig(f)]; f['repeat'] = True; out.append(f); continue
+                i += 1; f['mark'] = seen[sig(f)] = f'{kind}{i}'; f['count'] = len(g); f['group_size'] = _group_size(g)
+            else:
+                i += 1; f['mark'] = f'{kind}{i}'
             out.append(f)
     return out
 
@@ -407,6 +567,8 @@ def draw_flat(pg, rec, x0, y0, k, feats):
     # marks: on a ray from the feature's centre, just outside its edge, turned round until clear of the marks placed
     taken = []
     for f in feats:
+        if f.get('repeat'):
+            continue
         c = np.array(f['c'])
         half = None if f['shape'][0] == 'Ø' else np.ptp(f['pts'], axis=0) / 2
         a0 = {'P': 45, 'H': 20, 'U': 135}[f['kind']]
@@ -440,11 +602,16 @@ def feature_table(pg, feats, x, y):
         pg.text(cx, y, t, size=8, fontweight='bold')
     y -= 5.2
     for f in feats:
-        s = f['shape']
-        size = f'Ø{s[1]:.1f}' if s[0] == 'Ø' else (f'{s[1]:.1f} x {s[2]:.1f}' if s[0] == 'rect' else 'profile (DXF)')
+        if f.get('repeat'):
+            continue
+        size = f.get('group_size') or _size(f['shape'])
         depth = 'through' if f['depth'] == 'through' else (f"{f['depth']:g} from face" if f['kind'] == 'P' else f"{f['depth']:g} from inside")
-        for (cx, _), v in zip(cols, [f['mark'], size, f"{f['c'][0]:.1f}", f"{f['c'][1]:.1f}", depth]):
+        at = [f"{f['c'][0]:.1f}", f"{f['c'][1]:.1f}"] if 'count' not in f else [f"{f['count']} off", 'DXF']
+        lines = textwrap.wrap(size, 17) or ['']          # a pattern's size range runs to a second line
+        for (cx, _), v in zip(cols, [f['mark'], lines[0], *at, depth]):
             pg.text(cx, y, v)
+        for ln in lines[1:]:
+            y -= 4.2; pg.text(cols[1][0], y, ln)
         y -= 4.6
         if y < 70:
             pg.text(x, y, 'more in the DXF', color=RED); y -= 4.6; break
@@ -460,14 +627,14 @@ def sheet_plain(pg, recs, product):
     groups = {}
     for nm, r in recs.items():
         p = r['part']
-        key = (round(r['w'], 1), round(r['h'], 1), p.make.thickness, p.make.material)
+        key = (round(r['w'], 1), round(r['h'], 1), p.make.thickness, p.make.material, p.option)
         groups.setdefault(key, []).append(nm)
     keys = list(groups)[:6]
     one_row = len(keys) <= 3
     cells = [(25 + 128 * (i % 3), 268 - 108 * (i // 3)) for i in range(6)]
     k = max(fit_scale(kk[0], kk[1], 100, 180 if one_row else 72) for kk in keys)
     for (x0, ytop), kk in zip(cells, keys):
-        w, h, T, mat = kk
+        w, h, T, mat, opt = kk
         x, y = x0 + 8, ytop - 12 - h / k
         pg.ax.add_patch(Rectangle((x, y), w / k, h / k, fc=CUT, ec=INK, lw=0.35 * PT, zorder=2))
         pg.dim((x, y + h / k), (x + w / k, y + h / k), 5, f'{w:.1f}')
@@ -475,7 +642,7 @@ def sheet_plain(pg, recs, product):
         names = groups[kk]
         qty = sum(recs[n]['part'].qty for n in names) * product.count
         pg.text(x, y - 6, ', '.join(names), size=8, fontweight='bold')
-        pg.text(x, y - 10.5, f'{T:g} mm {mat}, {qty} for the set')
+        pg.text(x, y - 10.5, f'{T:g} mm {mat}, {qty} for the set' + (f'; option: {opt}' if opt else ''))
     pg.head(f'Scale 1:{k}. Panels cut to their outline only (DXF files in dxf/); sizes as seen from the outer face.')
 
 
@@ -485,8 +652,8 @@ def sheet_featured(pg, rec, product):
     x0 = 32; y0 = 62 + (200 - rec['h'] / k) / 2
     draw_flat(pg, rec, x0, y0, k, feats)
     p = rec['part']
-    pg.text(x0, y0 - 9, f"{rec['name']}: {rec['T']:g} mm {p.make.material}, {p.qty * product.count} for the set, seen from its outer face",
-            size=8, fontweight='bold')
+    pg.text(x0, y0 - 9, f"{rec['name']}: {rec['T']:g} mm {p.make.material}, {p.qty * product.count} for the set, seen from its outer face"
+            + (f" (option: {p.option})" if p.option else ''), size=8, fontweight='bold')
     if rec['under']:
         pg.text(x0, y0 - 13.5, f"inner-face pockets: dxf/{rec['name']}-underside.dxf (seen from that face)")
     if rec['odd']:
@@ -502,9 +669,11 @@ def sheet_solids(pg, items):
         vh = {v: hlr([_ds(p)], v, hidden=True) for v in ('front', 'right', 'top')}
         b = {v: _bounds(vh[v][0] + vh[v][1]) for v in vh}
         sz = {v: b[v][1] - b[v][0] for v in vh}
-        k = fit_scale(sz['front'][0] + sz['right'][0] + sz['top'][0], max(s[1] for s in sz.values()), 360 - 110, 64)
+        notes = textwrap.wrap('; '.join(p.notes), 200)[:3] if p.notes else []
+        extra = 4.2 * max(0, len(notes) - 1)          # the views step down under a longer note, and fit the less
+        k = fit_scale(sz['front'][0] + sz['right'][0] + sz['top'][0], max(s[1] for s in sz.values()), 360 - 110, 64 - extra)
         x = 30.0
-        y_base = ytop - 24 - max(s[1] for s in sz.values()) / k
+        y_base = ytop - 24 - extra - max(s[1] for s in sz.values()) / k
         for v, label in (('front', 'FRONT'), ('right', 'FROM THE RIGHT'), ('top', 'FROM ABOVE')):
             vis, hid = vh[v]
             o = (x - b[v][0][0] / k, y_base - b[v][0][1] / k)
@@ -517,8 +686,9 @@ def sheet_solids(pg, items):
         m = p.make
         what = (f'{m.material} print' + (f', {m.orient}' if getattr(m, 'orient', '') else '')) if isinstance(m, Printed) else f'{m.process}, {m.material}'
         pg.text(30, ytop - 6, f"{n}. {row['item']}: {what}; {p.solid.volume / 1000:.0f} cm3 each; {row['qty']} for the set; 1:{k}", size=8, fontweight='bold')
-        if p.notes:
-            pg.text(30, ytop - 10.5, '; '.join(p.notes)[:150])
+        more = p.notes and len(textwrap.wrap('; '.join(p.notes), 200)) > 3
+        for j, ln in enumerate(notes):        # up to three lines, above the views
+            pg.text(30, ytop - 10.5 - 4.2 * j, ln + (' ...' if j == 2 and more else ''))
     pg.head('Three views each, hidden edges dashed; STL and STEP files in stl/ and step/. Numbers are the parts list\'s.')
 
 
@@ -529,7 +699,7 @@ def sheet_parts_list(pg, rows, notes):
         pg.text(x, y, t, size=8, fontweight='bold')
     y -= 6
     for i, r in enumerate(rows, 1):
-        vals = [str(i), r['item'], r['kind'], str(r['qty']), str(r['what']), str(r['size']),
+        vals = [str(i), r['item'], r['kind'], str(r['qty']), (f"[option: {r['option']}] " if r.get('option') else '') + str(r['what']), str(r['size']),
                 f"{r['usd_each']:,.2f}" if isinstance(r['usd_each'], (int, float)) else '[PRICE]']
         wrapped = [textwrap.wrap(v, w) or [''] for v, (_, _, w) in zip(vals, cols)]
         nl = min(3, max(len(wl) for wl in wrapped))
@@ -565,7 +735,8 @@ def write(product, parts, recs, bom_rows, out):
             solids.append((p, r, i))
     solid_pages = [solids[i:i + 2] for i in range(0, len(solids), 2)]
     total = 3 + bool(plain) + len(featured) + len(solid_pages) + 1
-    lo, hi = _extent(parts)
+    base = [p for p in parts if not p.option]          # the assembly drawings show the product without its options
+    lo, hi = _extent(base)
     cut_x = (lo[0] + hi[0]) / 2
     path = os.path.join(dd, f'{product.name}-sheets.pdf')
     for f in os.listdir(dd):                  # a rebuild with fewer sheets leaves no stale ones
@@ -573,13 +744,15 @@ def write(product, parts, recs, bom_rows, out):
             os.remove(os.path.join(dd, f))
     with PdfPages(path) as pdf:
         n = 1
-        pg = Page(product, n, total, 'General arrangement'); sheet_ga(pg, parts, cut_x); pg.save(pdf, dd); n += 1
-        pg = Page(product, n, total, 'Section A-A'); sheet_section(pg, parts, cut_x); pg.save(pdf, dd); n += 1
-        pg = Page(product, n, total, 'Exploded view'); sheet_exploded(pg, parts, numbers); pg.save(pdf, dd); n += 1
+        pg = Page(product, n, total, 'General arrangement'); sheet_ga(pg, base, cut_x); pg.save(pdf, dd); n += 1
+        pg = Page(product, n, total, 'Section A-A'); sheet_section(pg, base, cut_x); pg.save(pdf, dd); n += 1
+        pg = Page(product, n, total, 'Exploded view'); sheet_exploded(pg, base, numbers); pg.save(pdf, dd); n += 1
         if plain:
             pg = Page(product, n, total, 'Sheet parts: plain panels'); sheet_plain(pg, plain, product); pg.save(pdf, dd); n += 1
         for nm in featured:
-            pg = Page(product, n, total, f'Sheet part: {nm}'); sheet_featured(pg, recs[nm], product); pg.save(pdf, dd); n += 1
+            opt = recs[nm]['part'].option
+            pg = Page(product, n, total, f'Sheet part: {nm}' + (f' (option: {opt})' if opt else ''))
+            sheet_featured(pg, recs[nm], product); pg.save(pdf, dd); n += 1
         for items in solid_pages:
             pg = Page(product, n, total, 'Printed and machined parts'); sheet_solids(pg, items); pg.save(pdf, dd); n += 1
         pg = Page(product, n, total, 'Parts list and notes')

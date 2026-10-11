@@ -41,7 +41,9 @@ def cone_driver(spec, detail=24):
     R_eff = math.sqrt(spec['sd_cm2'] * 100 / math.pi)                # effective radius, mid-roll, mm
     sw = spec.get('surround_w', max(8.0, 0.08 * 2 * R_eff))           # PROPORTIONED roll width
     r_cone = R_eff - sw / 2; r_sur = R_eff + sw / 2
-    rh = spec.get('roll_h', 0.45 * sw)                                # PROPORTIONED: the roll stands proud of the flange
+    rh = spec.get('roll_h', 0.45 * sw)                                # PROPORTIONED: the roll stands proud of its seat
+    seat = spec.get('roll_seat', 0.0)       # how far behind the flange's front the surround is glued (a pro woofer's sits
+                                            # in a step, its roll's top about level with the flange); 0: on the front
     cone_depth = spec.get('cone_depth', 0.42 * r_cone)                 # PROPORTIONED
     cap_r = spec['cap_d'] / 2; t = 1.2
     out = {}
@@ -69,36 +71,38 @@ def cone_driver(spec, detail=24):
                 wedge = Pos(0, 0, -a1) * extrude(make_face(Polyline(*pts, close=True)), amount=a1 - a0)
                 frame = frame - wedge
     out['frame'] = frame
-    # surround: a half roll, outer edge glued to the flange's front at r_sur, inner edge to the cone at r_cone
+    # surround: a half roll, outer edge glued to the flange's front (or its step, `seat` behind) at r_sur, inner edge to
+    # the cone at r_cone
     c = ((r_cone + r_sur) / 2, 0.0); rr = sw / 2
     nd = detail
-    outer = [(c[0] + rr * math.cos(th), -rh * math.sin(th)) for th in [math.pi * i / nd for i in range(nd + 1)]]       # a < 0: forward
-    inner = [(c[0] + (rr - t) * math.cos(th), -(rh - t) * math.sin(th)) for th in [math.pi * (nd - i) / nd for i in range(nd + 1)]]
-    out['surround'] = _revolve_profile([(r_sur + 1.0, 0.0)] + outer[1:-1] + [(r_cone - 1.0, 0.0), (r_cone - 1.0, t * 0.6)] + inner[1:-1] + [(r_sur + 1.0, t * 0.6)])
+    outer = [(c[0] + rr * math.cos(th), seat - rh * math.sin(th)) for th in [math.pi * i / nd for i in range(nd + 1)]]   # a < 0: forward
+    inner = [(c[0] + (rr - t) * math.cos(th), seat - (rh - t) * math.sin(th)) for th in [math.pi * (nd - i) / nd for i in range(nd + 1)]]
+    out['surround'] = _revolve_profile([(r_sur + 1.0, seat)] + outer[1:-1] + [(r_cone - 1.0, seat), (r_cone - 1.0, seat + t * 0.6)]
+                                       + inner[1:-1] + [(r_sur + 1.0, seat + t * 0.6)])
     # cone: straight-sided (metal) or a slight curve (paper), from the roll's inner edge to the voice coil
     rc_in = cap_r * 1.08
     if spec.get('cone') == 'paper' and detail > 6:
-        prof = [(r_cone - (r_cone - rc_in) * u, cone_depth * (u ** 0.85)) for u in [i / 12 for i in range(13)]]
+        prof = [(r_cone - (r_cone - rc_in) * u, seat + cone_depth * (u ** 0.85)) for u in [i / 12 for i in range(13)]]
     else:
-        prof = [(r_cone, 0.0), (rc_in, cone_depth)]
+        prof = [(r_cone, seat), (rc_in, seat + cone_depth)]
     back = [(r, a + t) for (r, a) in reversed(prof)]
     out['cone'] = _revolve_profile(prof + back)
     # dust cap: convex (forward) or inverted, seated where the cone meets the coil
     ch = spec.get('cap_h', 0.28 * cap_r)
     nc = 12 if detail > 6 else 3
     if spec.get('cap') == 'inverted':
-        cap = [(cap_r * (1 - u), cone_depth - 2 + ch * math.sin(math.pi / 2 * u)) for u in [i / nc for i in range(nc + 1)]]
+        cap = [(cap_r * (1 - u), seat + cone_depth - 2 + ch * math.sin(math.pi / 2 * u)) for u in [i / nc for i in range(nc + 1)]]
     else:
-        cap = [(cap_r * (1 - u), cone_depth - 2 - ch * math.sin(math.pi / 2 * u)) for u in [i / nc for i in range(nc + 1)]]
+        cap = [(cap_r * (1 - u), seat + cone_depth - 2 - ch * math.sin(math.pi / 2 * u)) for u in [i / nc for i in range(nc + 1)]]
     capb = [(r, a + 1.0) for (r, a) in reversed(cap)]
-    out['cap'] = _revolve_profile([(cap_r * 1.08, cone_depth)] + cap + capb)
+    out['cap'] = _revolve_profile([(cap_r * 1.08, seat + cone_depth)] + cap + capb)
     # motor: the magnet and its plates, behind the basket
     md, mh = spec['magnet_d'] / 2, spec['magnet_h']
     D = spec['depth']
     a0 = D - mh
     if detail <= 6:     # line drawings: the motor's outline
         out['motor'] = _revolve_profile([(0.0, a0), (md, a0), (md, D - 3), (md - 3, D), (0.0, D)])
-        return out, dict(r_eff=R_eff, r_cone=r_cone, r_surround=r_sur, roll_h=rh)
+        return out, dict(r_eff=R_eff, r_cone=r_cone, r_surround=r_sur, roll_h=rh, roll_seat=seat)
     # the motor as it is built, so a section reads as a driver (PROPORTIONED where datasheets are silent): a steel yoke
     # (back plate and pole piece, vented), a ferrite ring, a steel top plate, the voice coil in the gap between plate
     # and pole on a former from the cone's neck, and a corrugated spider from the former to the basket's seat
@@ -113,7 +117,7 @@ def cone_driver(spec, detail=24):
     plate = _revolve_profile([(pin, a0), (rt, a0), (rt, a0 + tp), (pin, a0 + tp)])
     out['motor'] = yoke + plate
     out['magnet'] = _revolve_profile([(rmi, a0 + tp), (md, a0 + tp), (md, D - bp), (rmi, D - bp)])
-    neck = cone_depth
+    neck = seat + cone_depth
     out['coil'] = _revolve_profile([(r_coil - 0.15, neck), (rc_in, neck), (rc_in, neck + 1.0), (r_coil + 0.15, neck + 1.0),
                                     (r_coil + 0.15, a0 - 1.5), (r_coil + w, a0 - 1.5), (r_coil + w, a0 + tp + 1.5),
                                     (r_coil - w, a0 + tp + 1.5), (r_coil - w, a0 - 1.5), (r_coil - 0.15, a0 - 1.5)])
@@ -127,7 +131,7 @@ def cone_driver(spec, detail=24):
     front = [(r_in + (r_out - r_in) * u, a_s - th / 2 + amp * math.sin(2 * math.pi * nroll * u)) for u in us]
     rear = [(r, a + th) for (r, a) in reversed(front)]
     out['spider'] = _revolve_profile(front + rear)
-    return out, dict(r_eff=R_eff, r_cone=r_cone, r_surround=r_sur, roll_h=rh)
+    return out, dict(r_eff=R_eff, r_cone=r_cone, r_surround=r_sur, roll_h=rh, roll_seat=seat)
 
 
 def dome_tweeter(spec, detail=24):

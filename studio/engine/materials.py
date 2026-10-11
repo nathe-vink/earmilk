@@ -44,9 +44,21 @@ PRESET_DEFAULTS = {
     # grey, salmon, ochre and sage, each patch its own colour, its edges a little proud
     'birch_bark': dict(color='#ECE7DC', warm='#E6D6C4', lenticel='#2B2724', peel='#C9976E', roughness=0.72, lenticels=1.0,
                        scars=0.6, peel_amount=0.5, scale=1.0, bump=0.35),
-    'eucalyptus_bark': dict(palette=[['#E3DACA', 0.26], ['#C7C2B6', 0.22], ['#EDE6D8', 0.12], ['#CFAA98', 0.12], ['#C5B28F', 0.1],
-                                     ['#A3AA95', 0.11], ['#B3B6B2', 0.07]],
-                            roughness=0.55, patch_m=0.12, stretch=1.9, edge=0.45, mottle=0.07, scale=1.0, bump=0.3),
+    # a eucalyptus after rain: fresh underbark streaked green, olive, yellow and orange, under older layers left in
+    # long strips (straw, rust, grey, brown; fresh to old), each layer's share and strip size its own, their edges
+    # lifting; wet (`wet` 0..1): deep, saturated and glossy
+    'eucalyptus_bark': dict(base=['#3F5E1C', '#6E8427', '#A99B35', '#C9772C'],
+                            layers=[dict(color=['#B8955A', '#CDB27C'], cover=0.30, w=0.12, l=0.8),
+                                    dict(color=['#9E3F22', '#C8683A'], cover=0.30, w=0.10, l=0.9),
+                                    dict(color=['#6C6863', '#8C8478'], cover=0.40, w=0.20, l=1.2),
+                                    dict(color=['#3E2C22', '#57402F'], cover=0.10, w=0.05, l=0.6)],
+                            wander=1.0, torn=0.3, edge=0.8, streak=0.12, wet=0.8, scale=1.0, bump=0.4),
+    # a grille's acoustically transparent knit: the yarn's colour, heathered (each yarn a little lighter or darker), a
+    # fine weave about `pitch_mm` (its relief only reads close to), matt with a fabric's sheen
+    'cloth': dict(color='#DCD6C8', pitch_mm=1.2, heather=0.08, roughness=0.88, sheen=0.6, bump=0.2),
+    # agglomerated cork: granules about `granule_mm` across, each its own shade of the colour (`variation`), darker
+    # gaps between them, matt; expanded (smoked) cork is dark brown, natural cork tan
+    'cork': dict(color='#3B2F28', granule_mm=3.0, variation=0.35, gaps=0.5, roughness=0.9, bump=0.5),
 }
 
 
@@ -130,6 +142,10 @@ def make(bpy, name, preset, overrides=None, bevel_mm=0.0):
         _birch_bark(nt, b, p, normal)
     elif preset == 'eucalyptus_bark':
         _eucalyptus_bark(nt, b, p, normal)
+    elif preset == 'cloth':
+        _cloth(nt, b, p, normal)
+    elif preset == 'cork':
+        _cork(nt, b, p, normal)
     elif preset in ('plaster', 'sweep'):
         setin('Base Color', hex_lin(p['color'])); setin('Roughness', p['roughness'])
         if preset == 'sweep' and (p.get('contact', 0) > 0 or p.get('core', 0) > 0):
@@ -384,87 +400,165 @@ def _birch_bark(nt, b, p, normal_in=None):
 
 
 def _eucalyptus_bark(nt, b, p, normal_in=None):
-    """A smooth-barked eucalyptus (a spotted or snow gum): the bark sheds in irregular patches, each its own colour from
-    the palette (weighted: mostly creams and greys, fewer salmon, ochre and sage), taller than wide (`stretch`), their
-    edges wavy (a strong noise bends the plane) and softly blended (smooth Voronoi), a smaller layer of patches over
-    the larger in places, a mottle inside each and a faint lip where a newer layer meets the old. World space, metres."""
+    """A smooth-barked gum after rain. Its bark sheds in layers. Under everything is the fresh underbark (`base`, a ramp
+    streaked up the trunk: deep green, olive, yellow, orange). Over it lie the older layers (`layers`, fresh to old),
+    each left in long patches drawn out up the trunk (`w` across, `l` along, metres; `cover`, the share of a face the
+    layer would cover alone), so a layer reads as strips and the layers together as camouflage. Each patch's edge lifts:
+    a dark shadow on the bark under it, a lit lip on the curled edge, its ends torn along the fibres (`torn`). Fine streaks run up
+    every layer (`streak`); rain runs down in wetter streaks, and the water (`wet`, 0..1) deepens and saturates the
+    colour and glosses it. World space, metres, read in each face's plane; `scale` > 1 makes everything smaller. Owner,
+    2026-10-10: the first version was too pastel, \"not like the long strips of peely camo-ish bark. Like a eucalyptus
+    after rain.\""""
+    from statistics import NormalDist
     node, math_, mix, smooth = _nodes(nt)
     uv, geo = _face_uv(nt, node, math_)
-    pos = geo.outputs['Position']
     k = p['scale']
-    pm = p['patch_m']
+    sep = node('ShaderNodeSeparateXYZ'); nt.links.new(uv, sep.inputs['Vector'])
+    y = sep.outputs['Y']
 
-    def warp(vec, scale, amount, seed):
-        wn = node('ShaderNodeTexNoise'); wn.inputs['Scale'].default_value = scale * k; wn.inputs['Detail'].default_value = 4.0
-        wn.inputs['Roughness'].default_value = 0.55
-        ad = node('ShaderNodeVectorMath', operation='ADD'); nt.links.new(pos, ad.inputs[0]); ad.inputs[1].default_value = seed
-        nt.links.new(ad.outputs['Vector'], wn.inputs['Vector'])
-        cen = node('ShaderNodeVectorMath', operation='SUBTRACT'); nt.links.new(wn.outputs['Color'], cen.inputs[0]); cen.inputs[1].default_value = (0.5, 0.5, 0.5)
-        sc = node('ShaderNodeVectorMath', operation='SCALE'); nt.links.new(cen.outputs['Vector'], sc.inputs[0]); sc.inputs['Scale'].default_value = amount
-        out = node('ShaderNodeVectorMath', operation='ADD'); nt.links.new(vec, out.inputs[0]); nt.links.new(sc.outputs['Vector'], out.inputs[1])
-        return out.outputs['Vector']
+    def noise(x, w, l, seed, detail=2.0):
+        """Perlin noise drawn out up the face: features about `w` across and `l` along (Fac: mean 0.5, sd 0.089 at
+        detail 2, 0.083 at 3; measured)."""
+        co = node('ShaderNodeCombineXYZ')
+        nt.links.new(math_('DIVIDE', x, w / k), co.inputs['X'])
+        nt.links.new(math_('DIVIDE', y, l / k), co.inputs['Y'])
+        co.inputs['Z'].default_value = seed
+        nz = node('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 1.0; nz.inputs['Detail'].default_value = detail
+        nt.links.new(co.outputs['Vector'], nz.inputs['Vector'])
+        return nz.outputs['Fac']
 
-    ramp = node('ShaderNodeValToRGB')
-    cr = ramp.color_ramp; cr.interpolation = 'CONSTANT'
-    pal = [c if isinstance(c, (list, tuple)) else [c, 1.0] for c in p['palette']]       # [colour, share of the bark]
-    tot = sum(w for _, w in pal)
-    while len(cr.elements) < len(pal):
-        cr.elements.new(0.0)
-    acc = 0.0
-    for el, (hx, w) in zip(cr.elements, pal):
-        el.position = acc / tot; el.color = hex_lin(hx); acc += w
+    def ramp(fac, colours, lo=0.36, hi=0.64):
+        r = node('ShaderNodeValToRGB'); cr = r.color_ramp
+        while len(cr.elements) < len(colours):
+            cr.elements.new(0.0)
+        for i, (el, hx) in enumerate(zip(cr.elements, colours)):
+            el.position = i / (len(colours) - 1); el.color = hex_lin(hx)
+        mr = node('ShaderNodeMapRange'); nt.links.new(fac, mr.inputs['Value'])
+        mr.inputs['From Min'].default_value = lo; mr.inputs['From Max'].default_value = hi
+        nt.links.new(mr.outputs['Result'], r.inputs['Fac'])
+        return r.outputs['Color']
 
-    def patches(size, seed):
-        """Smooth-F1 cells `size` across (taller by `stretch`): a colour from the ramp each, blended at the edges."""
-        v = warp(warp(uv, 3.0 / size * 0.12, 1.1 * size, seed), 1.0 / size * 0.5, 0.35 * size, (seed[1], seed[0], 0.0))
-        mp = node('ShaderNodeMapping'); s_ = k / size
-        mp.inputs['Scale'].default_value = (s_, s_ / p['stretch'], 1.0)
-        nt.links.new(v, mp.inputs['Vector'])
-        vo = node('ShaderNodeTexVoronoi', feature='SMOOTH_F1', voronoi_dimensions='2D')
-        vo.inputs['Scale'].default_value = 1.0; vo.inputs['Randomness'].default_value = 1.0; vo.inputs['Smoothness'].default_value = 0.25
-        nt.links.new(mp.outputs['Vector'], vo.inputs['Vector'])
-        sep = node('ShaderNodeSeparateColor'); nt.links.new(vo.outputs['Color'], sep.inputs['Color'])
-        rr = node('ShaderNodeValToRGB'); rr.color_ramp.interpolation = 'CONSTANT'
-        while len(rr.color_ramp.elements) < len(cr.elements):
-            rr.color_ramp.elements.new(0.0)
-        for e_src, e_dst in zip(cr.elements, rr.color_ramp.elements):
-            e_dst.position = e_src.position; e_dst.color = e_src.color
-        nt.links.new(sep.outputs['Red'], rr.inputs['Fac'])
-        ed = node('ShaderNodeTexVoronoi', feature='DISTANCE_TO_EDGE', voronoi_dimensions='2D')
-        ed.inputs['Scale'].default_value = 1.0; ed.inputs['Randomness'].default_value = 1.0
-        nt.links.new(mp.outputs['Vector'], ed.inputs['Vector'])
-        return rr.outputs['Color'], sep.outputs['Green'], ed.outputs['Distance']
-
-    c1, g1, e1 = patches(pm, (0.0, 0.0, 0.0))
-    c2, g2, e2 = patches(pm * 0.55, (13.7, 5.3, 0.0))
-    # the smaller, newer layer over the larger where a slow noise says so
-    ln = node('ShaderNodeTexNoise'); ln.inputs['Scale'].default_value = 1.4 / pm * 0.12 * k; ln.inputs['Detail'].default_value = 3.0
-    nt.links.new(pos, ln.inputs['Vector'])
-    top = smooth(ln.outputs['Fac'], 0.52, 0.56)
-    col = mix(top, c1, c2)
-    # a mottle inside each patch at two scales, and the faint lip where the layers meet
-    def mottle(scale, amount, seed):
-        mo = node('ShaderNodeTexNoise'); mo.inputs['Scale'].default_value = scale * k; mo.inputs['Detail'].default_value = 5.0
-        ad = node('ShaderNodeVectorMath', operation='ADD'); nt.links.new(pos, ad.inputs[0]); ad.inputs[1].default_value = seed
-        nt.links.new(ad.outputs['Vector'], mo.inputs['Vector'])
-        mr = node('ShaderNodeMapRange'); nt.links.new(mo.outputs['Fac'], mr.inputs['Value'])
-        mr.inputs['To Min'].default_value = 1 - amount; mr.inputs['To Max'].default_value = 1 + amount
-        comb = node('ShaderNodeCombineColor')
+    def streaked(col, seed):
+        """The fine streaks up a layer: its colour lifted and dropped a little along the fibres."""
+        f = noise(sep.outputs['X'], 0.008, 0.3, seed, 3.0)
+        mr = node('ShaderNodeMapRange'); nt.links.new(f, mr.inputs['Value'])
+        mr.inputs['From Min'].default_value = 0.35; mr.inputs['From Max'].default_value = 0.65
+        mr.inputs['To Min'].default_value = 1 - p['streak']; mr.inputs['To Max'].default_value = 1 + p['streak']
+        g = node('ShaderNodeCombineColor')
         for ch in ('Red', 'Green', 'Blue'):
-            nt.links.new(mr.outputs['Result'], comb.inputs[ch])
-        return comb.outputs['Color'], mo.outputs['Fac']
-    m1, f1 = mottle(9.0, p['mottle'], (2.0, 7.0, 1.0))
-    m2, _ = mottle(60.0, p['mottle'] * 0.5, (5.0, 1.0, 3.0))
-    col = mix(1.0, mix(1.0, col, m1, 'MULTIPLY'), m2, 'MULTIPLY')
-    lip = math_('MULTIPLY', math_('SUBTRACT', 1.0, smooth(e2, 0.0, 0.05)), top)
-    lip = math_('MAXIMUM', lip, math_('MULTIPLY', math_('SUBTRACT', 1.0, smooth(e1, 0.0, 0.03)), math_('SUBTRACT', 1.0, top)))
-    col = mix(math_('MULTIPLY', lip, 0.18 * p['edge']), col, hex_lin('#6E6352'))
+            nt.links.new(mr.outputs['Result'], g.inputs[ch])
+        return mix(1.0, col, g.outputs['Color'], 'MULTIPLY'), f
+
+    # the trunk's sway: every strip bends across with a slow noise read up the face
+    x = math_('ADD', sep.outputs['X'], math_('MULTIPLY', math_('SUBTRACT', noise(sep.outputs['X'], 1.6, 1.1, 1.3), 0.5),
+                                               p['wander'] * 0.25))
+    # the fresh underbark: broad streaks through its ramp
+    col, fibre = streaked(ramp(noise(x, 0.08, 0.9, 2.9), p['base']), 3.3)
+    h = math_('MULTIPLY', fibre, 0.3)
+    edge = p['edge']
+    for i, L in enumerate(p['layers'], start=1):
+        seed = 11.0 * i + 0.7
+        # torn along the fibres: a fine noise drawn out up the face roughens the patch's edge
+        torn = math_('MULTIPLY', math_('SUBTRACT', noise(x, L['w'] * 0.15, L['l'] * 0.25, seed + 5.0, 3.0), 0.5), p['torn'])
+        n = math_('ADD', noise(x, L['w'], L['l'], seed), torn)
+        t = 0.5 + (0.0887 ** 2 + (p['torn'] * 0.0833) ** 2) ** 0.5 * NormalDist().inv_cdf(1.0 - L['cover'])
+        m = smooth(n, t - 0.002, t + 0.002)
+        shadow = math_('MULTIPLY', smooth(n, t - 0.04, t), math_('SUBTRACT', 1.0, m))
+        lip = math_('SUBTRACT', smooth(n, t, t + 0.006), smooth(n, t + 0.012, t + 0.03))
+        c, _ = streaked(ramp(noise(x, L['w'] * 0.5, L['l'], seed + 2.0), L['color']), seed + 3.0)
+        col = mix(math_('MULTIPLY', shadow, 0.7 * edge), col, hex_lin('#1E1712'))
+        col = mix(m, col, c)
+        col = mix(math_('MULTIPLY', lip, 0.35 * edge), col, hex_lin('#EDE3CF'))
+        h = math_('SUBTRACT', h, math_('MULTIPLY', shadow, 0.4 * edge))
+        hm = node('ShaderNodeMix', data_type='FLOAT'); nt.links.new(m, hm.inputs['Factor'])
+        nt.links.new(h, hm.inputs['A']); nt.links.new(math_('ADD', float(i), math_('MULTIPLY', lip, 0.6 * edge)), hm.inputs['B'])
+        h = hm.outputs['Result']
+    # after rain: wetter streaks where it ran down; the water deepens and saturates (the colour multiplied by itself a
+    # little), smooths and glosses
+    wl = math_('MULTIPLY', math_('ADD', 0.7, math_('MULTIPLY', smooth(noise(x, 0.1, 1.4, 9.1), 0.38, 0.62), 0.6)), p['wet'])
+    col = mix(math_('MULTIPLY', wl, 0.45), col, mix(1.0, col, col, 'MULTIPLY'))
+    nt.links.new(col, b.inputs['Base Color'])
+    nt.links.new(math_('MAXIMUM', math_('SUBTRACT', 0.55, math_('MULTIPLY', wl, 0.3)), 0.12), b.inputs['Roughness'])
+    if 'Coat Weight' in b.inputs:
+        nt.links.new(math_('MULTIPLY', wl, 0.5), b.inputs['Coat Weight']); b.inputs['Coat Roughness'].default_value = 0.08
+    bn = node('ShaderNodeBump'); bn.inputs['Strength'].default_value = p['bump']; bn.inputs['Distance'].default_value = 0.0005
+    nt.links.new(h, bn.inputs['Height'])
+    if normal_in is not None:
+        nt.links.new(normal_in, bn.inputs['Normal'])
+    nt.links.new(bn.outputs['Normal'], b.inputs['Normal'])
+
+
+def _cloth(nt, b, p, normal_in=None):
+    """A knit stretched on a grille: threads crossing at `pitch_mm` in the face's plane, over and under in a checker
+    (the relief, faint, reads only close to), each yarn's colour heathered by a noise drawn out along it, matt, with a
+    fabric's sheen at grazing angles. World space, read in each face's plane."""
+    node, math_, mix, smooth = _nodes(nt)
+    uv, geo = _face_uv(nt, node, math_)
+    sep = node('ShaderNodeSeparateXYZ'); nt.links.new(uv, sep.inputs['Vector'])
+    pitch = p['pitch_mm'] / 1000.0
+    u, v = (math_('DIVIDE', sep.outputs[c], pitch) for c in ('X', 'Y'))
+    # a thread's cross-section: a raised sine across it; over and under by the checker of the cells
+    wu = math_('ABSOLUTE', math_('SINE', math_('MULTIPLY', u, math.pi)))
+    wv = math_('ABSOLUTE', math_('SINE', math_('MULTIPLY', v, math.pi)))
+    chk = math_('MODULO', math_('ADD', math_('FLOOR', u), math_('FLOOR', v)), 2.0)
+    h = math_('ADD', math_('MULTIPLY', wu, chk), math_('MULTIPLY', wv, math_('SUBTRACT', 1.0, chk)))
+    # heather: each yarn a little lighter or darker, a noise drawn out along the threads
+    co = node('ShaderNodeCombineXYZ'); nt.links.new(math_('MULTIPLY', u, 0.5), co.inputs['X']); nt.links.new(math_('MULTIPLY', v, 0.04), co.inputs['Y'])
+    nz = node('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 1.0; nz.inputs['Detail'].default_value = 3.0
+    nt.links.new(co.outputs['Vector'], nz.inputs['Vector'])
+    mr = node('ShaderNodeMapRange'); nt.links.new(nz.outputs['Fac'], mr.inputs['Value'])
+    mr.inputs['From Min'].default_value = 0.35; mr.inputs['From Max'].default_value = 0.65
+    mr.inputs['To Min'].default_value = 1 - p['heather']; mr.inputs['To Max'].default_value = 1 + p['heather']
+    g = node('ShaderNodeCombineColor')
+    for ch in ('Red', 'Green', 'Blue'):
+        nt.links.new(mr.outputs['Result'], g.inputs[ch])
+    col = mix(1.0, hex_lin(p['color']), g.outputs['Color'], 'MULTIPLY')
     nt.links.new(col, b.inputs['Base Color'])
     b.inputs['Roughness'].default_value = p['roughness']
-    # relief: the newer layer's edge stands a little proud of the one under it
-    h = math_('ADD', math_('MULTIPLY', lip, p['edge']), math_('MULTIPLY', f1, 0.12))
-    bn = node('ShaderNodeBump'); bn.inputs['Strength'].default_value = p['bump']; bn.inputs['Distance'].default_value = 0.0008
+    if 'Sheen Weight' in b.inputs:
+        b.inputs['Sheen Weight'].default_value = p['sheen']; b.inputs['Sheen Roughness'].default_value = 0.45
+    bn = node('ShaderNodeBump'); bn.inputs['Strength'].default_value = p['bump']; bn.inputs['Distance'].default_value = pitch * 0.25
     nt.links.new(h, bn.inputs['Height'])
+    if normal_in is not None:
+        nt.links.new(normal_in, bn.inputs['Normal'])
+    nt.links.new(bn.outputs['Normal'], b.inputs['Normal'])
+
+
+def _cork(nt, b, p, normal_in=None):
+    """Agglomerated cork: granules (2D cells about `granule_mm` across, read in each face's plane, with smaller ones
+    among them), each its own shade of the colour, darker in the gaps between them, each granule a little domed; matt."""
+    node, math_, mix, smooth = _nodes(nt)
+    uv, geo = _face_uv(nt, node, math_)
+    g = p['granule_mm'] / 1000.0
+
+    def cells(size, seed):
+        mp = node('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1 / size, 1 / size, 1.0)
+        mp.inputs['Location'].default_value = (seed, seed * 0.7, 0.0)
+        nt.links.new(uv, mp.inputs['Vector'])
+        vo = node('ShaderNodeTexVoronoi', feature='F1', voronoi_dimensions='2D'); vo.inputs['Scale'].default_value = 1.0
+        vo.inputs['Randomness'].default_value = 1.0; nt.links.new(mp.outputs['Vector'], vo.inputs['Vector'])
+        ed = node('ShaderNodeTexVoronoi', feature='DISTANCE_TO_EDGE', voronoi_dimensions='2D'); ed.inputs['Scale'].default_value = 1.0
+        ed.inputs['Randomness'].default_value = 1.0; nt.links.new(mp.outputs['Vector'], ed.inputs['Vector'])
+        cs = node('ShaderNodeSeparateColor'); nt.links.new(vo.outputs['Color'], cs.inputs['Color'])
+        return cs.outputs['Red'], ed.outputs['Distance']
+
+    s1, e1 = cells(g, 0.0)
+    s2, e2 = cells(g * 0.45, 13.1)
+    small = smooth(s2, 0.55, 0.56)                    # some places the smaller granules show instead
+    val = math_('ADD', math_('MULTIPLY', s1, math_('SUBTRACT', 1.0, small)), math_('MULTIPLY', s2, small))
+    e = math_('ADD', math_('MULTIPLY', e1, math_('SUBTRACT', 1.0, small)), math_('MULTIPLY', e2, small))
+    mr = node('ShaderNodeMapRange'); nt.links.new(val, mr.inputs['Value'])
+    mr.inputs['To Min'].default_value = 1 - p['variation']; mr.inputs['To Max'].default_value = 1 + p['variation']
+    gc = node('ShaderNodeCombineColor')
+    for ch in ('Red', 'Green', 'Blue'):
+        nt.links.new(mr.outputs['Result'], gc.inputs[ch])
+    col = mix(1.0, hex_lin(p['color']), gc.outputs['Color'], 'MULTIPLY')
+    gap = math_('SUBTRACT', 1.0, smooth(e, 0.0, 0.12))
+    col = mix(math_('MULTIPLY', gap, p['gaps']), col, hex_lin('#120D0A'))
+    nt.links.new(col, b.inputs['Base Color'])
+    b.inputs['Roughness'].default_value = p['roughness']
+    bn = node('ShaderNodeBump'); bn.inputs['Strength'].default_value = p['bump']; bn.inputs['Distance'].default_value = g * 0.15
+    nt.links.new(smooth(e, 0.0, 0.25), bn.inputs['Height'])
     if normal_in is not None:
         nt.links.new(normal_in, bn.inputs['Normal'])
     nt.links.new(bn.outputs['Normal'], b.inputs['Normal'])

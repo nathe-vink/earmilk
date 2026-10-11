@@ -85,7 +85,10 @@ def main():
     for c in rep['clashes'][:12]:
         print(f"    clash {c['a']} x {c['b']}: {c.get('volume_mm3')} mm3 {c.get('error', '')}")
     rows, tot = bom.write(P, parts, recs, lib, out)
-    print(f"  parts list: {len(rows)} lines, budget ${sum(tot.values()):,.0f} for {P.count}", flush=True)
+    opt_tot = bom.option_totals(rows)
+    print(f"  parts list: {len(rows)} lines, budget ${sum(tot.values()):,.0f} for {P.count}"
+          + ''.join(f"; option {o} ${v['usd']:,}" + (f" + {v['unpriced']} unpriced" if v['unpriced'] else '') for o, v in opt_tot.items()),
+          flush=True)
     if not rep['ok'] and not a.force:
         raise SystemExit('checks failed: fix the clashes (or list intended overlaps in PRODUCT.touching), or --force')
     pdf = None
@@ -97,7 +100,7 @@ def main():
         glb, pf = render.write(P, geo, out)
         print(f'  render model: {os.path.relpath(glb, ROOT)}; engine file {os.path.relpath(pf, ROOT)}', flush=True)
     summary = dict(product=P.name, title=P.title, parts=len(parts), seconds=round(time.time() - t0),
-                   sheets=nests, budget_usd={k: round(v) for k, v in tot.items()}, checks_ok=rep['ok'],
+                   sheets=nests, budget_usd={k: round(v) for k, v in tot.items()}, options_usd=opt_tot, checks_ok=rep['ok'],
                    drawings=pdf and os.path.relpath(pdf, ROOT), render=glb and os.path.relpath(glb, ROOT))
     json.dump(summary, open(os.path.join(out, 'build.json'), 'w'), indent=1)
     print(f'done in {summary["seconds"]}s')

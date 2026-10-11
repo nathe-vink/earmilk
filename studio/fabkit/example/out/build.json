@@ -2,7 +2,7 @@
  "product": "birchbox",
  "title": "Birch Box",
  "parts": 20,
- "seconds": 6,
+ "seconds": 10,
  "sheets": {
   "baltic-birch-18": 1
  },
@@ -12,7 +12,8 @@
   "buy": 1390,
   "lathe": 85
  },
+ "options_usd": {},
  "checks_ok": true,
- "drawings": null,
- "render": "studio/fabkit/example/out/render/birchbox.glb"
+ "drawings": "studio/fabkit/example/out/drawings/birchbox-sheets.pdf",
+ "render": null
 }

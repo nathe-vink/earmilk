@@ -2,17 +2,27 @@
  "_note": "barkhorn for the engine, written by studio/fabkit/render.py from the fabrication CAD; part names are the parts' names, materials the parts' finishes.",
  "model": "spinoffs/barkhorn/out/render/barkhorn.glb",
  "origin_mm": [
-  280.0,
+  280.2,
   210.0,
   0.0
  ],
  "materials": {
   "amp": {
-   "preset": "metal",
-   "color": "#2A2A2A"
+   "preset": "satin_paint",
+   "color": "#303033",
+   "roughness": 0.4,
+   "specular": 0.5
   },
   "bark": {
    "preset": "$bark"
+  },
+  "cloth": {
+   "preset": "cloth",
+   "color": "$cloth"
+  },
+  "cork": {
+   "preset": "cork",
+   "color": "$cork"
   },
   "driver-cap": {
    "preset": "paper_cone",
@@ -49,6 +59,17 @@
   "driver-surround": {
    "preset": "rubber",
    "color": "#151515"
+  },
+  "grille-paint": {
+   "preset": "satin_paint",
+   "color": "$panel",
+   "roughness": 0.6,
+   "specular": 0.3
+  },
+  "grille-timber": {
+   "preset": "birch",
+   "color": "#8E6E4E",
+   "roughness": 0.55
   },
   "horn": {
    "preset": "frosted",
@@ -90,8 +111,16 @@
    "material": "amp"
   },
   {
-   "match": "left|right|top|bottom|back",
+   "match": "left|right|top|bottom|back|bark-face",
    "material": "bark"
+  },
+  {
+   "match": "grille-cloth",
+   "material": "cloth"
+  },
+  {
+   "match": "cork-face",
+   "material": "cork"
   },
   {
    "match": "woofer-cap",
@@ -130,7 +159,15 @@
    "material": "driver-surround"
   },
   {
-   "match": "waveguide",
+   "match": "grille-lenticel",
+   "material": "grille-paint"
+  },
+  {
+   "match": "grille-strips",
+   "material": "grille-timber"
+  },
+  {
+   "match": "waveguide|waveguide-cap",
    "material": "horn"
   },
   {
@@ -150,7 +187,7 @@
    "material": "ring"
   },
   {
-   "match": "rod-1|rod-2|rod-3|rod-4",
+   "match": "rod-1|rod-2|rod-3",
    "material": "rod"
   }
  ],
@@ -160,14 +197,35 @@
    "panel": "#D8D5CD",
    "ring": "#EEEAE2",
    "horn": "#F5F2EC",
-   "horn_deep": "#EFE5D3"
+   "horn_deep": "#EFE5D3",
+   "cloth": "#DCD6C8",
+   "cork": "#3B2F28"
   },
   "eucalyptus": {
    "bark": "eucalyptus_bark",
    "panel": "#CBCFC4",
    "ring": "#E8E2D4",
    "horn": "#DEE6D4",
-   "horn_deep": "#B9C9A9"
+   "horn_deep": "#B9C9A9",
+   "cloth": "#6F7F66",
+   "cork": "#3B2F28"
   }
+ },
+ "options": {
+  "cloth": [
+   "grille-cloth"
+  ],
+  "lenticel-grille": [
+   "grille-lenticel"
+  ],
+  "strip-grille": [
+   "grille-strips"
+  ],
+  "bark-face": [
+   "bark-face"
+  ],
+  "cork-face": [
+   "cork-face"
+  ]
  }
 }

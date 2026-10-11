@@ -5,7 +5,7 @@
     from kit import *
 """
 from model import Part, Product, Sheet, Printed, Machined, Bought, SHEETS, PRINTS, SOLIDS  # noqa: F401
-from geom import box, cyl, prism, rounded_rect, circle_pts, revolve_profile, union, bbox  # noqa: F401
+from geom import box, cyl, prism, rounded_rect, circle_pts, revolve_profile, union, bbox, slotted_panel  # noqa: F401
 
 __all__ = ['Part', 'Product', 'Sheet', 'Printed', 'Machined', 'Bought', 'SHEETS', 'PRINTS', 'SOLIDS',
-           'box', 'cyl', 'prism', 'rounded_rect', 'circle_pts', 'revolve_profile', 'union', 'bbox']
+           'box', 'cyl', 'prism', 'rounded_rect', 'circle_pts', 'revolve_profile', 'union', 'bbox', 'slotted_panel']

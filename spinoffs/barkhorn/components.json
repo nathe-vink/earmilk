@@ -5,9 +5,9 @@
   "usd": 194, "supplier": "Thomann (US storefront; EUR 198 in the EU)", "price_date": "2026-10-10", "url": "https://www.thomannmusic.com/faitalpro_15pr400_8_ohms.htm",
   "size": "393 frame, 356 cut-out, 165 deep", "mass_g": 3600, "note": "99 dB 1 W/1 m (Faital); Xmax 5.75 mm (6 by another source)",
   "ts": {"Re": 5.1, "Le_mH": 0.75, "Fs": 35, "Qms": 6.0, "Qes": 0.34, "Qts": 0.32, "Vas_l": 223, "Sd_cm2": 805, "Xmax_mm": 5.75, "Pe_w": 400, "sens_db": 99.0, "sens_ref": "1W", "nominal_ohm": 8},
-  "geom": {"kind": "cone", "frame_od": 393.0, "flange_t": 10.0, "cutout": 356.0, "depth": 165.0, "sd_cm2": 805.0, "surround_w": 24.0, "roll_h": 12.0,
-           "magnet_d": 125.0, "magnet_h": 52.0, "cone": "paper", "cap": "convex", "cap_d": 100.0, "cap_h": 14.0, "bolt_d": 375.0, "bolts": 8, "bolt_hole": 6.5,
-           "_proportioned": "flange_t, surround_w, roll_h, magnet, cap, bolt circle"}},
+  "geom": {"kind": "cone", "frame_od": 393.0, "flange_t": 10.0, "cutout": 356.0, "depth": 165.0, "sd_cm2": 805.0, "surround_w": 24.0, "roll_h": 10.0,
+           "roll_seat": 10.0, "magnet_d": 125.0, "magnet_h": 52.0, "cone": "paper", "cap": "convex", "cap_d": 100.0, "cap_h": 14.0, "bolt_d": 375.0, "bolts": 8, "bolt_hole": 6.5,
+           "_proportioned": "flange_t, surround_w, roll_h, roll_seat (the roll's top level with the flange, as a pro woofer's: confirm on the driver before a grille is fitted), magnet, cap, bolt circle"}},
 
  "bms-4550-16": {"kind": "compression", "maker": "BMS", "model": "4550-16 compression driver, 1 in exit, polyester diaphragm, 16 ohm",
   "usd": 154, "supplier": "Toutlehautparleur (EUR 142)", "price_date": "2026-10-10", "url": "https://en.toutlehautparleur.com/compression-driver-bms-4550-16-ohm-1-inch-exit.html",
@@ -21,6 +21,11 @@
   "note": "cut-off, coverage and throat flange not stated: confirm it takes the 4550's 2 x M6 on 76.2"},
 
  "felt-glides": {"kind": "hardware", "maker": "any", "model": "Felt glides 30 mm, screw-in, a set of 4", "usd": null, "supplier": "any", "price_date": "2026-10-10"},
+ "m6-tnut-set": {"kind": "hardware", "maker": "any", "model": "M6 x 25 button heads (A2) with M6 T-nuts, a set of 8 (the 15PR400's eight holes on 375)", "usd": null, "supplier": "any", "price_date": "2026-10-10"},
  "m6-hf-screws": {"kind": "hardware", "maker": "any", "model": "M6 x 25 socket caps with washers (the compression driver to the horn's flange), a pair", "usd": null, "supplier": "any", "price_date": "2026-10-10"},
- "attenuator-l-pad": {"kind": "wiring", "maker": "any", "model": "Resistor L-pad for the HF channel, about -10 dB at 16 ohm (lowers the amplifier's hiss through a 113 dB driver)", "usd": null, "supplier": "any", "price_date": "2026-10-10"}
+ "attenuator-l-pad": {"kind": "wiring", "maker": "any", "model": "Resistor L-pad for the HF channel, about -10 dB at 16 ohm (lowers the amplifier's hiss through a 113 dB driver)", "usd": null, "supplier": "any", "price_date": "2026-10-10"},
+
+ "bark-sheet": {"kind": "finish", "maker": "any", "model": "Bark for laminating, a square metre: paper birch (Betula papyrifera) sheet from fallen or felled trees, or a smooth-barked gum's shed bark pressed flat (or a UV-printed veneer of it); approve a sample board first", "usd": null, "supplier": "a bark craft supplier", "price_date": "2026-10-10"},
+ "grille-cloth": {"kind": "cover", "maker": "any", "model": "Acoustically transparent speaker cloth (a knit sold for grilles), about 0.6 x 0.95 m a grille, in the finish's colour", "usd": null, "supplier": "any", "price_date": "2026-10-10"},
+ "grille-pegs": {"kind": "hardware", "maker": "any", "model": "Grille pegs and cups, a set of four (push-fit; the cups in 10 mm holes 12 deep in the panel's corners)", "usd": null, "supplier": "any", "price_date": "2026-10-10"}
 }

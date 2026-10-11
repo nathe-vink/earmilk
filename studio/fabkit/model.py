@@ -35,6 +35,10 @@ SHEETS = {
     'acrylic': dict(title='Cast acrylic', density=1.19, sheet=(1220.0, 610.0), usd_per_m2=120.0, thicknesses=(3, 5, 6, 10)),
     'aluminium': dict(title='Aluminium 5052 sheet', density=2.68, sheet=(1220.0, 610.0), usd_per_m2=160.0,
                       thicknesses=(1.5, 2, 3, 5, 6)),
+    # no rate yet (usd_per_m2 None: the parts list shows [PRICE] until a supplier's is entered)
+    'spotted-gum-ply': dict(title='Spotted gum-veneered plywood (a eucalypt hardwood face)', density=0.7, sheet=(2400.0, 1200.0),
+                            usd_per_m2=None, thicknesses=(6, 9, 12, 18)),
+    'cork': dict(title='Cork sheet, agglomerated', density=0.24, sheet=(1830.0, 915.0), usd_per_m2=None, thicknesses=(3, 6)),
 }
 PRINTS = {
     'resin-tough': dict(title='Tough (ABS-like) SLA resin', process='sla', density=1.15, usd_per_cm3=0.35, min_wall=1.5),
@@ -108,6 +112,10 @@ class Part:
     pieces: dict = field(default_factory=dict)   # {piece: (solid, finish)}: what the render shows in its place, each
                                                  # piece in its own finish (a driver's cone, frame and magnet); the
                                                  # solid stays the whole, for the checks and drawings
+    option: str = ''                # an option the product can be had with (a cover, a stand): its parts are listed apart
+                                    # in the parts list with their own subtotal, nested on their own sheets, left out of
+                                    # the assembly drawings, never checked against another option's parts (they are
+                                    # never fitted together), and shown in a render only where a shot asks for it
 
 
 @dataclass

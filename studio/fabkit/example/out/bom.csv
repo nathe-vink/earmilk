@@ -1,16 +1,16 @@
-item,kind,qty,what,size,mass_g,usd_each,finish,supplier,price_date,source
-"left, right",cut,4,"18 mm Baltic birch plywood, BB/BB",260 x 400,1273,7.54,birch,,,cut file dxf/left.dxf
-"top, bottom",cut,4,"18 mm Baltic birch plywood, BB/BB",194 x 260,617,3.66,birch,,,cut file dxf/top.dxf
-baffle,cut,2,"18 mm Baltic birch plywood, BB/BB",194 x 364,521,5.12,birch,,,cut file dxf/baffle.dxf
-back,cut,2,"18 mm Baltic birch plywood, BB/BB",194 x 364,492,5.12,birch,,,cut file dxf/back.dxf
-waveguide,print,2,Tough (ABS-like) SLA resin,202 cm3,233,78.82,waveguide,,,stl/waveguide.stl
-woofer,buy,2,SB Acoustics SB17NRX2C35-8 6.5 in Norex (paper cone),"171 frame, 144.9 cut-out, 75 deep",1560,76.7,"black Norex paper cone; bolt circle 159, 4 x 4.3 holes",Madisound,2026-10-08,https://sbacoustics.com/
-tweeter,buy,2,Scan-Speak Illuminator D3004/602200 26 mm dome,62 faceplate,,165,faceplate not removable; Fs 425 to 440 Hz,"Solen (CAD 222.71), Madisound",2026-10-08,https://www.scan-speak.dk/
-amp-plate,buy,2,"Hypex FusionAmp FA122 DSP plate amplifier, 2 x 125 W into 4 ohm","315 x 120 x 55 plate, 291 x 96 recess",815,422.4,,Parts Express 221-006,2026-10-08,https://www.hypex.nl/
-"foot-1, foot-2, foot-3, foot-4",lathe,8,"White oak, solid",40 x 40 x 22,6,10.63,oak,,,step/foot-1.step
-woofer-fixings,buy,2,"M4 x 20 low-profile button heads (A2) with M4 T-nuts, a driver's set of 4",M4,,4,,any,2026-10-08,
-gasket,buy,2,"1.5 mm closed-cell foam gasket strip, 1 m",,,5,,any,2026-10-08,
-damping,buy,2,"Polyester fibre fill, 150 g",,,8,,"Parts Express, any",2026-10-08,
-amp-fixings,buy,2,"Hypex 4.3 x 16 self-tapping pan heads and 3 mm EPDM tape, a plate's set",,,10,,"Hypex, any",2026-10-08,
-cable,buy,2,"Round-sheathed speaker cable 2 x 1.5 mm2, 1 m",,,2,,any electrical supplier,2026-10-08,
-terminals,buy,8,6.3 mm insulated push-on terminal,,,0.5,,any,2026-10-08,
+item,kind,qty,what,size,mass_g,usd_each,finish,supplier,price_date,source,option
+"left, right",cut,4,"18 mm Baltic birch plywood, BB/BB",260 x 400,1273,7.54,birch,,,cut file dxf/left.dxf,
+"top, bottom",cut,4,"18 mm Baltic birch plywood, BB/BB",194 x 260,617,3.66,birch,,,cut file dxf/top.dxf,
+baffle,cut,2,"18 mm Baltic birch plywood, BB/BB",194 x 364,521,5.12,birch,,,cut file dxf/baffle.dxf,
+back,cut,2,"18 mm Baltic birch plywood, BB/BB",194 x 364,492,5.12,birch,,,cut file dxf/back.dxf,
+waveguide,print,2,Tough (ABS-like) SLA resin,202 cm3,233,78.82,waveguide,,,stl/waveguide.stl,
+woofer,buy,2,SB Acoustics SB17NRX2C35-8 6.5 in Norex (paper cone),"171 frame, 144.9 cut-out, 75 deep",1560,76.7,"black Norex paper cone; bolt circle 159, 4 x 4.3 holes",Madisound,2026-10-08,https://sbacoustics.com/,
+tweeter,buy,2,Scan-Speak Illuminator D3004/602200 26 mm dome,62 faceplate,,165,faceplate not removable; Fs 425 to 440 Hz,"Solen (CAD 222.71), Madisound",2026-10-08,https://www.scan-speak.dk/,
+amp-plate,buy,2,"Hypex FusionAmp FA122 DSP plate amplifier, 2 x 125 W into 4 ohm","315 x 120 x 55 plate, 291 x 96 recess",815,422.4,,Parts Express 221-006,2026-10-08,https://www.hypex.nl/,
+"foot-1, foot-2, foot-3, foot-4",lathe,8,"White oak, solid",40 x 40 x 22,6,10.63,oak,,,step/foot-1.step,
+woofer-fixings,buy,2,"M4 x 20 low-profile button heads (A2) with M4 T-nuts, a driver's set of 4",M4,,4,,any,2026-10-08,,
+gasket,buy,2,"1.5 mm closed-cell foam gasket strip, 1 m",,,5,,any,2026-10-08,,
+damping,buy,2,"Polyester fibre fill, 150 g",,,8,,"Parts Express, any",2026-10-08,,
+amp-fixings,buy,2,"Hypex 4.3 x 16 self-tapping pan heads and 3 mm EPDM tape, a plate's set",,,10,,"Hypex, any",2026-10-08,,
+cable,buy,2,"Round-sheathed speaker cable 2 x 1.5 mm2, 1 m",,,2,,any electrical supplier,2026-10-08,,
+terminals,buy,8,6.3 mm insulated push-on terminal,,,0.5,,any,2026-10-08,,

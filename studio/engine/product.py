@@ -17,6 +17,8 @@ A product definition (studio/products/NAME.json) says:
                  zone parts too ("back-panel" takes "back-panel.plinth"; "*.plinth" only the bands).
     decals       [{"name", "image", "center_mm", "normal", "up", "size_mm", "ink": "$facts_ink", "mode": "ink"|"alpha",
                    "material": "body"}]: a print inside that material's colour coat, under its clear
+    options      {"cloth": ["grille-cloth", ...]}: parts the product can be had with (a cover); an option's parts are
+                 left out unless the instance (or the shot's product) lists it: "options": ["cloth"]
 
 Instances share mesh data, so five flavours cost one import; each flavour gets its own material copies.
 """
@@ -417,8 +419,10 @@ def place(bpy, pdef, templates, shot, root):
             mats_by_flavour[fl] = mats
         mats = mats_by_flavour[fl]
         T = Matrix.Translation(Vector(inst.get('position', (0, 0, 0)))) @ Matrix.Rotation(math.radians(inst.get('rotate_z', 0)), 4, 'Z')
+        shown = set(inst.get('options', prod.get('options', [])))
+        unfitted = {n for o, names in pdef.get('options', {}).items() if o not in shown for n in names}
         for pname, tpl in templates.items():
-            if any(_match(pname, h) for h in prod.get('hide', [])):
+            if pname in unfitted or any(_match(pname, h) for h in prod.get('hide', []) + inst.get('hide', [])):
                 continue
             mat_name = next((r['material'] for r in pdef.get('assign', []) if _match(pname, r['match'])), None)
             if mat_name is None:

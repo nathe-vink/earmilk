@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1503" height="365" font-family="sans-serif" font-size="9">
+<svg xmlns="http://www.w3.org/2000/svg" width="3222" height="365" font-family="sans-serif" font-size="9">
 <rect x="20.0" y="30" width="305.0" height="305.0" fill="#f4efe6" stroke="#333"/>
 <text x="20.0" y="20">baltic-birch 18 mm, sheet 1</text>
 <rect x="23.0" y="156.0" width="84.0" height="176.0" fill="#d9c7a3" stroke="#6b5532"/>
@@ -29,14 +29,38 @@
 <text x="674.6" y="171.2">back</text>
 <rect x="780.2" y="163.2" width="104.8" height="168.8" fill="#d9c7a3" stroke="#6b5532"/>
 <text x="781.8" y="171.2">back</text>
-<rect x="673.0" y="86.4" width="104.8" height="74.4" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="674.6" y="94.4">brace</text>
-<rect x="780.2" y="86.4" width="104.8" height="74.4" fill="#d9c7a3" stroke="#6b5532"/>
-<text x="781.8" y="94.4">brace</text>
+<rect x="673.0" y="88.8" width="104.8" height="72.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="674.6" y="96.8">brace</text>
+<rect x="780.2" y="88.8" width="104.8" height="72.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="781.8" y="96.8">brace</text>
 <rect x="995.0" y="30" width="488.0" height="244.0" fill="#f4efe6" stroke="#333"/>
 <text x="995.0" y="20">mdf 6 mm, sheet 1</text>
 <rect x="998.0" y="183.8" width="87.2" height="87.2" fill="#d9c7a3" stroke="#6b5532"/>
 <text x="999.6" y="191.8">woofer-ring</text>
 <rect x="1087.6" y="183.8" width="87.2" height="87.2" fill="#d9c7a3" stroke="#6b5532"/>
 <text x="1089.2" y="191.8">woofer-ring</text>
+<rect x="1503.0" y="30" width="488.0" height="244.0" fill="#f4efe6" stroke="#333"/>
+<text x="1503.0" y="20">mdf 6 mm (option: cloth), sheet 1</text>
+<rect x="1506.0" y="103.0" width="104.0" height="168.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="1507.6" y="111.0">cloth-frame</text>
+<rect x="1612.4" y="103.0" width="104.0" height="168.0" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="1614.0" y="111.0">cloth-frame</text>
+<rect x="2011.0" y="30" width="305.0" height="305.0" fill="#f4efe6" stroke="#333"/>
+<text x="2011.0" y="20">baltic-birch 6 mm (option: lenticel-grille), sheet 1</text>
+<rect x="2014.0" y="163.8" width="104.2" height="168.2" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="2015.6" y="171.8">grille-lenticel</text>
+<rect x="2120.6" y="163.8" width="104.2" height="168.2" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="2122.2" y="171.8">grille-lenticel</text>
+<rect x="2336.0" y="30" width="480.0" height="240.0" fill="#f4efe6" stroke="#333"/>
+<text x="2336.0" y="20">spotted-gum-ply 6 mm (option: strip-grille), sheet 1</text>
+<rect x="2339.0" y="98.8" width="104.2" height="168.2" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="2340.6" y="106.8">grille-strips</text>
+<rect x="2445.6" y="98.8" width="104.2" height="168.2" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="2447.2" y="106.8">grille-strips</text>
+<rect x="2836.0" y="30" width="366.0" height="183.0" fill="#f4efe6" stroke="#333"/>
+<text x="2836.0" y="20">cork 3 mm (option: cork-face), sheet 1</text>
+<rect x="2839.0" y="41.4" width="104.6" height="168.6" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="2840.6" y="49.4">cork-face</text>
+<rect x="2946.0" y="41.4" width="104.6" height="168.6" fill="#d9c7a3" stroke="#6b5532"/>
+<text x="2947.6" y="49.4">cork-face</text>
 </svg>

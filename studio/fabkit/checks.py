@@ -1,8 +1,8 @@
 """What the kit checks on every build, so a product cannot ship drawings for parts that do not fit:
 
 - **clashes**: every pair of parts whose solids share volume (boxes tested first, then the solids' intersection),
-  except pairs the product lists in `touching` (a press fit, a gasket squeezed in its groove); glue joints are faces
-  that touch and share no volume, so they pass;
+  except pairs the product lists in `touching` (a press fit, a gasket squeezed in its groove) and pairs from two
+  different options (never fitted together); glue joints are faces that touch and share no volume, so they pass;
 - **sheet parts**: each is a prism of its stock's thickness (flats.analyse raises if not), and its stock comes in that
   thickness;
 - **printed parts**: a wall thinner than the material allows, found by casting rays inward from points spread over the
@@ -41,8 +41,11 @@ def clashes(parts, touching=(), tol_mm3=1.0):
             pi, pj = parts[i], parts[j]
             if _allowed(pi.name, pj.name, touching):
                 continue
+            if pi.option and pj.option and pi.option != pj.option:
+                continue                               # two options are never fitted together
             try:
-                v = (pi.solid & pj.solid).volume
+                common = pi.solid & pj.solid
+                v = common.volume if common is not None else 0.0     # None: nothing in common
             except Exception as e:                     # a boolean that fails is reported, not passed
                 out.append(dict(a=pi.name, b=pj.name, volume_mm3=None, error=str(e)[:120]))
                 continue

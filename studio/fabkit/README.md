@@ -44,18 +44,30 @@ PRODUCT = Product('name', 'Title', 'What it is', params=dict(D=260, H=400), part
   - y runs back from the front face.
   - z runs up from the floor.
 - **Part**: `Part(name, solid, make, finish='', qty=1, notes=[], group='', render=True, inside=False, draw=None,
-  pieces={})`.
+  pieces={}, option='')`.
   - `qty` is per product; the set is `Product.count` (2 for a pair).
   - `draw` is a simpler stand-in for the drawings, such as a driver without its fine detail.
   - `pieces` maps `{piece: (solid, finish)}`: the render shows these instead of the solid, each in its own finish.
+  - `option` names an option the product can be had with, such as a cover or a stand.
+    - The parts list shows its parts after the product's, with their own subtotal.
+    - They nest on sheets of their own.
+    - They stay off the assembly drawings.
+    - They are never checked against another option's parts, since two options are never fitted together.
+    - The render shows them only where a shot's instance asks for the option.
 - **How a part is made** (stock tables in `model.py`, prices rough, 2026 USD):
   - `Sheet(material, thickness, face=None, grain=None)`: CNC or laser from flat stock. The part must be a prism of
     that thickness along one axis. `face` names the show face: `'+x'`, `'-y'` and so on. Without it, the face farther
     from the product's centre is used. `grain` is the axis the face grain must run along.
   - `Printed(material, orient='', min_wall=None)`: resin, MJF nylon, PETG, PLA or ASA. The wall check uses the
     material's minimum unless `min_wall` overrides it.
-  - `Machined(material, process='cnc-mill', stock=None)`: from solid wood or metal. The blank defaults to the bounding
-    box plus 5 mm a side.
+  - `Machined(material, process='cnc-mill', stock=None, setup_usd=None)`: from solid wood or metal. The blank defaults
+    to the bounding box plus 5 mm a side. A `process` of `'cast'` pours its own volume (plus 10 %) instead of cutting a
+    blank, and `setup_usd` (a mould, a fixture) is paid once a line, spread over its pieces.
+- **Shapes** (`geom.py`):
+  - `box`, `cyl`, `prism`, `rounded_rect`, `circle_pts`, `revolve_profile` and `union`;
+  - `slotted_panel(x0, z0, x1, z1, y0, y1, slots, holes)`: a panel standing in x-z with router slots (round-ended)
+    and openings through it. It is built as one sketch and one extrusion, so a grille's hundreds of slots take about a
+    second.
   - `Bought(ref)`: a key of `library/components.json`, or of a `components.json` beside the product file, which adds
     to or overrides the kit's library.
 - **Product**: `Product(name, title, kind, params, parts, count=2, notes=[], touching=[], materials={}, variants={},
@@ -77,10 +89,11 @@ PRODUCT = Product('name', 'Title', 'What it is', params=dict(D=260, H=400), part
   - **Faces a 2D file can't carry.** Bevels and roundovers are listed on `NOTES`, in the cut list and on the
     drawings, in red.
   - **Nesting.** It packs the set's parts per stock in shelves, largest first, turning a part 90 degrees only when it
-    has no grain.
+    has no grain. An option's parts go on sheets of their own.
 - **Checks** (`checks.py`):
   - **Clashes.** Every pair of solids is tested for shared volume: bounding boxes first, then the boolean. Glue joints
-    are faces that touch without overlapping, so they pass.
+    are faces that touch without overlapping, so they pass. Parts of two different options are never tested against
+    each other.
   - **Print walls.** Rays are cast inward from 400 points on the surface. A wall is thin where a ray leaves through a
     face that looks back at it, closer than the material allows. A face the ray only grazes is a corner, not a wall.
   - **Stock.** Each sheet part's thickness must be one its stock comes in.
@@ -92,7 +105,10 @@ PRODUCT = Product('name', 'Title', 'What it is', params=dict(D=260, H=400), part
     - prints: their volume plus a handling charge;
     - machined parts: their blank plus a setup charge per line.
   - **Merging.** Identical lines merge. Made parts merge only when their solids match.
-  - **Unknown prices.** A price nobody has found prints as `[PRICE]`. The kit never invents one.
+  - **Unknown prices.** A price nobody has found prints as `[PRICE]`, and so does a sheet stock with no rate
+    (`usd_per_m2: None`). The kit never invents one.
+  - **Options.** Each option's parts follow the product's, with their own subtotal. The product's total leaves them
+    out.
 - **Drawings** (`drawings.py`, A3, first angle, hidden-line removal on the solids, all text 2.5 mm or more):
   1. **General arrangement**, with the section line.
   2. **Section A-A** down the middle, each part's cut faces hatched at its own angle.
@@ -100,12 +116,16 @@ PRODUCT = Product('name', 'Title', 'What it is', params=dict(D=260, H=400), part
   4. **Plain panels**, on one sheet.
   5. **Panels with features**, one sheet each, with a feature table. Each feature is marked P (pocket), H (through
      cut) or U (inner-face pocket) and listed with its size, its centre from the lower-left corner and its depth.
+     More than eight alike features (a grille's slots) are a pattern: one mark, and one row giving the count; the DXF
+     places them. A round-ended slot is listed as a slot.
+
+     The assembly sheets (1 to 3) show the product without its options.
   6. **Printed and machined parts**, one sheet per parts-list line, three views with hidden lines and their sizes.
   7. **The parts list and the notes.**
 - **Render** (`render.py`):
   - One named mesh per part, or per piece when the part has pieces.
   - The engine's product file: materials by finish, the origin at the footprint's centre on the floor, flavours from
-    `variants`.
+    `variants`, and each option's meshes (a shot fits an option per instance: `"options": ["cloth"]`).
   - A proof shot on a grey sweep, which a rebuild leaves alone once you have edited it. Render it with
     `python3 studio/engine/render.py studio/shots/<name>/proof.json --out ...`.
 
@@ -115,6 +135,8 @@ PRODUCT = Product('name', 'Title', 'What it is', params=dict(D=260, H=400), part
   - `cone_driver`, `dome_tweeter` and `compression_driver`;
   - `driver_part(name, ref, geom, centre, axis, recess)`, which gives a bought part with render pieces and a light
     stand-in for the drawings;
+  - a cone driver's surround stands `roll_h` proud of its seat. The seat is the flange's front, or `roll_seat` behind
+    it in a step, as a pro woofer's, whose roll stays level with the flange so a grille can sit close;
   - `place()`, for any axis.
 - **`box.py`**: the bass box from Thiele-Small figures (`ts` in the library), using the same lumped model as earmilk's
   `fab/acoustics.py`:
@@ -124,6 +146,9 @@ PRODUCT = Product('name', 'Title', 'What it is', params=dict(D=260, H=400), part
 - **`horn.py`**: horn and waveguide profiles (`conical`, `exponential`, `tractrix`, `os`) and their shells:
   - `round_horn` (revolved, with a flange and a rolled lip);
   - `rect_horn` (lofted);
+  - `waveguide_block` (a superellipse waveguide cut into a solid block);
+  - `waveguide_shell` (the same flare as a thin shell, wall `wall` and rim `rim`, with a round pod behind the throat
+    closing round the driver, and its cap);
   - `mouth_for_coverage(fc, angle)`, Keele's rule.
 
   Nothing here simulates a horn's response. That needs a BEM run, like earmilk's `fab/bem.py`.

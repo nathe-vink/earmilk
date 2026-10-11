@@ -52,7 +52,10 @@ lists included (`glints.0` adds the first glint).
   openings, reveals, mullions and sills, skirting, wainscot, a ceiling, an oak floor by plank, plaster walls) and props
   (rug, table, books, sideboard with a turntable, vase with branches, floor lamp, sofa, sheer curtain, framed print).
 - **product:** which product file, which flavour, how many copies where (`instances`), and:
-  - `hide`: parts left out, by name pattern;
+  - `hide`: parts left out, by name pattern (on the product block for every copy, or on one instance for that copy);
+  - `options`: the product's options this copy is fitted with (`"options": ["cloth"]` on an instance, or on the block
+    for every copy). An option's parts (a cover, listed under `options` in the product file) are left out unless asked
+    for;
   - `explode`: `[{"match": "waveguide-insert|magnets-insert", "offset_m": [0, -0.3, 0]}, ...]`, each part moved along
     its own fixing axis in the product's frame, for an exploded view;
   - `cutaway`: `{"box_m": [x0, y0, z0, x1, y1, z1], "skip": "cable-*", "sections": [{"match": "...", "color": "#..."}]}`,

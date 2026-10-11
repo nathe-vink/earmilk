@@ -4,6 +4,9 @@ drawings come from, and the engine's product file that paints them (studio/engin
     render.write(product, parts, out)  ->  render/<name>.glb, render/<name>.json (part boxes), and the engine product
                                            file studio/products/<name>.json (materials by finish, assignments, origin)
 
+A part with an `option` (a cover) is in the model but shown only where a shot's instance lists the option
+("options": ["cloth"]); the engine file names each option's meshes.
+
 A part's `finish` names its material: the product's `materials` maps finish names to the engine's presets
 (paint, satin_paint, metal, rubber, birch, veneer, ... see studio/engine/materials.py). A product with colourways
 lists them as `variants`, the engine's flavours: {name: {token: value}}, a material's '$token' taking the flavour's
@@ -43,6 +46,13 @@ def write(product, parts, out):
                     'are the parts\' names, materials the parts\' finishes.',
            'model': os.path.relpath(glb, ROOT), 'origin_mm': origin, 'materials': mats, 'assign': assign}
     eng['flavours'] = product.variants or {'default': {}}       # the engine always paints a flavour
+    # an option's parts (a cover) show only where a shot's instance asks for the option: "options": ["cloth"]
+    opts = {}
+    for p in parts:
+        if p.option and p.render:
+            opts.setdefault(p.option, []).extend([f'{p.name}-{k}' for k in p.pieces] or [p.name])
+    if opts:
+        eng['options'] = opts
     pf = os.path.join(ROOT, 'studio', 'products', f'{product.name}.json')
     json.dump(eng, open(pf, 'w'), indent=1)
     proof_shot(product, boxes, origin)

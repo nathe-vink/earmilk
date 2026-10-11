@@ -1,0 +1,140 @@
+{
+ "product": {
+  "def": "studio/products/barkhorn.json",
+  "flavour": "birch",
+  "instances": [
+   {
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "rotate_z": 0,
+    "flavour": "birch",
+    "options": [
+     "bark-face"
+    ]
+   }
+  ]
+ },
+ "set": {
+  "kind": "room",
+  "size": [
+   7.0,
+   6.0,
+   3.0
+  ],
+  "center": [
+   0.0,
+   -2.2
+  ],
+  "floor": {
+   "base": "#8E8C88",
+   "dark": "#86847F",
+   "light": "#96948F",
+   "plank_contrast": 0.0,
+   "grain": 0.0,
+   "seam": 0.0,
+   "roughness": 0.6
+  },
+  "wall": {
+   "color": "#EEECE7"
+  },
+  "skirting": {
+   "h": 0.0,
+   "color": "#EEECE7"
+  },
+  "ceiling": "#F2F0EC",
+  "windows": [],
+  "props": []
+ },
+ "lights": {
+  "key": {
+   "type": "area",
+   "size_m": [
+    2.5,
+    2.0
+   ],
+   "orbit": {
+    "azimuth_deg": -35,
+    "elevation_deg": 40,
+    "distance_m": 4.0
+   },
+   "target": [
+    0,
+    0,
+    0.8
+   ],
+   "irradiance": 2.2,
+   "color": "#FFF3E1"
+  },
+  "fill": {
+   "type": "area",
+   "size_m": [
+    3.0,
+    2.5
+   ],
+   "orbit": {
+    "azimuth_deg": 30,
+    "elevation_deg": 18,
+    "distance_m": 4.0
+   },
+   "target": [
+    0,
+    0,
+    0.6
+   ],
+   "irradiance": 1.0,
+   "color": "#FFF7EA"
+  },
+  "wash": {
+   "type": "area",
+   "size_m": [
+    5.0,
+    1.0
+   ],
+   "position": [
+    0.0,
+    -1.0,
+    2.9
+   ],
+   "target": [
+    0.0,
+    0.5,
+    1.2
+   ],
+   "irradiance": 0.8,
+   "color": "#FFF7EA"
+  }
+ },
+ "render": {
+  "samples": 128,
+  "adaptive": 0.02,
+  "denoise": true,
+  "clamp": 8,
+  "bounces": 12,
+  "view": "Khronos PBR Neutral",
+  "exposure": 0.0,
+  "white_balance_k": 5600,
+  "white_balance_tint": 3.0
+ },
+ "title": "barkhorn, birch, bark-face",
+ "size": [
+  760,
+  1000
+ ],
+ "camera": {
+  "position": [
+   -0.78,
+   -2.6,
+   1.0
+  ],
+  "target": [
+   0.0,
+   0.0,
+   0.64
+  ],
+  "lens_mm": 66,
+  "level": true
+ }
+}

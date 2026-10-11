@@ -239,3 +239,60 @@ def waveguide_block(width, height, depth, mouth_w, mouth_h, mouth_corner, r0=12.
                 Cylinder(boss['bolt_hole'] / 2, boss['t'] + 1, align=(Align.CENTER, Align.CENTER, Align.MIN))
         body = body + b
     return body
+
+
+def _smax(a, b, k=8.0):
+    """A smooth maximum: the larger of a and b, rounded where they cross (so a flare meets a pod without a crease)."""
+    return (a ** k + b ** k) ** (1.0 / k)
+
+
+def waveguide_shell(mouth_w, mouth_h, depth, r0=12.7, wall=6.0, rim=10.0, n_mouth=4.5, pod_r=74.0, pod_back=70.0,
+                    dome=45.0, cable_d=10.0, boss=None, n=14):
+    """A rectangular waveguide as a thin cast shell that follows its own flare: the inner (air) surface a superellipse
+    waveguide (round at the throat r0, squaring toward the `mouth_w` x `mouth_h` mouth, n_mouth), the outside `wall`
+    away, thickening to a `rim` at the mouth, and behind the throat a round pod (`pod_r`, `pod_back` long) that hides
+    the compression driver, the flare running into it smoothly. The pod is open at the back; `dome` is a separate cap
+    that closes it, with a hole for the cable. Local frame: x across, y up, z from the throat (0) to the mouth (depth);
+    the pod behind, z < 0. Returns (shell, cap)."""
+    from build123d import Pos, Cylinder, Align
+    hw, hh = mouth_w / 2, mouth_h / 2
+    ta = math.sqrt(max(hw ** 2 - r0 ** 2, 0.0)) / depth
+    tb = math.sqrt(max(hh ** 2 - r0 ** 2, 0.0)) / depth
+
+    def outer(z, inset=0.0):
+        if z >= 0:
+            zz = min(z, depth)
+            w = math.sqrt(r0 ** 2 + (zz * ta) ** 2); h = math.sqrt(r0 ** 2 + (zz * tb) ** 2)
+            nn = 2.0 + (n_mouth - 2.0) * (zz / depth) ** 1.2
+            grow = wall + (rim - wall) * max(0.0, (zz - (depth - 25.0)) / 25.0) ** 2
+            W, H = _smax(w + grow, pod_r), _smax(h + grow, pod_r)
+            pod = (pod_r / max(W, H)) ** 4                       # how much the pod rules here: round where it does
+            return W - inset, H - inset, nn * (1 - pod) + 2.0 * pod
+        return pod_r - inset, pod_r - inset, 2.0
+
+    zs = sorted(set([-pod_back, -pod_back * 0.6, -pod_back * 0.25, 0.0] + [depth * (i / n) ** 1.25 for i in range(1, n + 1)]))
+    outer_solid = Solid.make_loft([_se_wire(*outer(z)[:2], outer(z)[2], z) for z in zs], False)
+    vz = [-pod_back - 1.0] + [z for z in zs if -pod_back < z < depth - wall] + [depth - wall]
+    void = Solid.make_loft([_se_wire(*outer(z, wall)[:2], outer(z, wall)[2], z) for z in vz], False)
+    grown = Solid.make_loft(_se_sections(r0, hw, hh, depth, n_mouth, grow=wall, beyond=5.0, before=6.0), False)
+    cav = Solid.make_loft(_se_sections(r0, hw, hh, depth, n_mouth, beyond=5.0, before=6.0), False)
+    shell = outer_solid - (void - grown) - cav
+    if boss:
+        b = Pos(0, 0, -boss['t']) * (Cylinder(boss['d'] / 2, boss['t'], align=(Align.CENTER, Align.CENTER, Align.MIN)) -
+                                     Cylinder(r0, boss['t'] + 1, align=(Align.CENTER, Align.CENTER, Align.MIN)))
+        for k in range(boss.get('bolts', 0)):
+            a = 2 * math.pi * (k + 0.5) / boss['bolts']
+            b = b - Pos(boss['bolt_d'] / 2 * math.cos(a), boss['bolt_d'] / 2 * math.sin(a), -boss['t'] - 0.5) * \
+                Cylinder(boss['bolt_hole'] / 2, boss['t'] + 1, align=(Align.CENTER, Align.CENTER, Align.MIN))
+        shell = shell + b
+    # the cap: an ellipsoidal dome on the pod's back, a spigot inside the pod (0.3 clear) to locate it, the cable's hole
+    z0 = -pod_back
+    rings = [(z0 - dome * u, max(pod_r * math.sqrt(max(1 - u * u, 0.0)), cable_d / 2 + wall + 2)) for u in (0.0, 0.3, 0.55, 0.75, 0.9, 1.0)]
+    cap_out = Solid.make_loft([_se_wire(r, r, 2.0, z) for z, r in rings], False)
+    inner_rings = [(z, max(r - wall, cable_d / 2 + 1.0)) for z, r in rings[:-1]] + [(rings[-1][0] - 1.0, cable_d / 2 + 1.0)]
+    cap_in = Solid.make_loft([_se_wire(pod_r - wall + 0.0, pod_r - wall, 2.0, z0 + 1.0)] + [_se_wire(r, r, 2.0, z) for z, r in inner_rings], False)
+    cap = cap_out - cap_in
+    spigot = Pos(0, 0, z0) * (Cylinder(pod_r - wall - 0.3, 10.0, align=(Align.CENTER, Align.CENTER, Align.MIN)) -
+                              Cylinder(pod_r - 2 * wall, 11.0, align=(Align.CENTER, Align.CENTER, Align.MIN)))
+    cap = cap + spigot
+    return shell, cap

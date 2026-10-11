@@ -14,7 +14,7 @@ part from its outer face, and reads what a CNC router must do from the solid's f
 Then every part, times its quantity and the set's count, is nested on its stock's sheets (largest first, turned 90
 degrees where the part's grain allows), and the cut list says what each part needs.
 
-    flats.write(product, parts, out_dir)  ->  dxf/<part>.dxf, dxf/<part>-underside.dxf, dxf/nest-<stock>-<n>.dxf,
+    flats.write(product, parts, out_dir)  ->  dxf/<part>.dxf, dxf/<part>-underside.dxf, dxf/nest-<stock>[-<option>]-<n>.dxf,
                                               dxf/nest.svg, cutlist.csv; returns the per-part records
 """
 import csv, math, os
@@ -121,21 +121,30 @@ def analyse(part, centre):
             rec['under'].setdefault(d, []).append(_wire_poly(f.outer_wire()))
             under_outer.append(f.outer_wire()); under_inner += list(f.inner_wires())
 
+    cache = {}
     def sig(w):                                            # the opening's box in the sheet's plane: centre, size
-        P = _wire_poly(w); Q = np.delete(P, axis, axis=1)
-        return (Q.min(axis=0) + Q.max(axis=0)) / 2, float(np.ptp(Q, axis=0).sum())
-    def matches(w, ws):
+        if id(w) not in cache:                             # once a wire: a grille's hundreds of slots meet each other
+            P = _wire_poly(w); Q = np.delete(P, axis, axis=1)
+            cache[id(w)] = ((Q.min(axis=0) + Q.max(axis=0)) / 2, float(np.ptp(Q, axis=0).sum()))
+        return cache[id(w)]
+    def table(ws):
+        S = [sig(x) for x in ws]
+        return np.array([m for m, _ in S]).reshape(-1, 2), np.array([z for _, z in S])
+    def matches(w, tab):
+        M, Z = tab
         m, s_ = sig(w)
-        return any(np.linalg.norm(m - m2) < 0.3 and abs(s_ - s2) < 0.6 for m2, s2 in (sig(x) for x in ws))
-    through = [w for w in inner_open if matches(w, outer_open + floor_inner)]
-    through += [w for w in outer_open if matches(w, under_inner) and not matches(w, through)]
+        return bool(len(Z)) and bool(np.any((np.linalg.norm(M - m, axis=1) < 0.3) & (np.abs(Z - s_) < 0.6)))
+    t_open, t_under_in, t_under_out = table(outer_open + floor_inner), table(under_inner), table(under_outer)
+    through = [w for w in inner_open if matches(w, t_open)]
+    t_through = table(through)
+    through += [w for w in outer_open if matches(w, t_under_in) and not matches(w, t_through)]
     for w in through:
         circ = _circle(w)
         if circ is not None:
             rec['circles'].append((circ[0], circ[1]))
         else:
             rec['holes'].append(_wire_poly(w))
-    stray = [w for w in inner_open if not matches(w, outer_open + floor_inner) and not matches(w, under_outer)]
+    stray = [w for w in inner_open if not matches(w, t_open) and not matches(w, t_under_out)]
     if stray:
         rec['odd'].append(f'{len(stray)} opening(s) in the inner face that reach neither face nor a pocket')
     if rec['outline'] is None:
@@ -235,6 +244,9 @@ def pack(items, sheet, margin=15.0, gap=12.0):
 def write(product, parts, out):
     """Cut files, nesting and the cut list for every Sheet part. Returns {part name: record} for the drawings and BOM."""
     os.makedirs(os.path.join(out, 'dxf'), exist_ok=True)
+    for f in os.listdir(os.path.join(out, 'dxf')):     # a rebuild with fewer or renamed parts leaves no stale files
+        if f.endswith('.dxf') or f == 'nest.svg':
+            os.remove(os.path.join(out, 'dxf', f))
     allb = [p.solid.bounding_box() for p in parts]
     centre = np.array([(min(b.min.X for b in allb) + max(b.max.X for b in allb)) / 2,
                        (min(b.min.Y for b in allb) + max(b.max.Y for b in allb)) / 2,
@@ -255,28 +267,29 @@ def write(product, parts, out):
             doc = _doc(); _draw(doc, doc.modelspace(), U); doc.saveas(os.path.join(out, 'dxf', f'{p.name}-underside.dxf'))
         rec.update(layers=L, under_layers=U, w=w, h=h, origin2d=o.tolist(), part=p)
         recs[p.name] = rec
-    # nest per stock (material and thickness)
+    # nest per stock (material and thickness), an option's parts on sheets of their own
     stocks = {}
     for name, r in recs.items():
-        p = r['part']; key = (p.make.material, p.make.thickness)
+        p = r['part']; key = (p.make.material, p.make.thickness, p.option)
         grain = p.make.grain
         may_turn = grain is None
         for _ in range(p.qty * product.count):
             stocks.setdefault(key, []).append(dict(name=name, w=r['w'], h=r['h'], may_turn=may_turn, layers=r['layers']))
     nests = {}
     svg = []
-    for (mat, t), items in stocks.items():
+    for (mat, t, opt), items in stocks.items():
         W, H = SHEETS.get(mat, SHEETS['baltic-birch'])['sheet']
         sheets = pack(items, (W, H))
-        nests[f'{mat}-{t:g}'] = len(sheets)
+        stock = f'{mat}-{t:g}' + (f'-{opt}' if opt else '')
+        nests[stock] = len(sheets)
         for i, s in enumerate(sheets, 1):
             doc = _doc(); msp = doc.modelspace()
             msp.add_lwpolyline([(0, 0), (W, 0), (W, H), (0, H)], close=True, dxfattribs={'layer': 'SHEET_EDGE'})
             for it, x, y, rot in s:
                 _draw(doc, msp, {k: v for k, v in it['layers'].items() if k != 'NOTES'}, x, y, rot, it['h'])
                 msp.add_text(it['name'], height=12, dxfattribs={'layer': 'NOTES'}).set_placement((x + 10, y + 10))
-            doc.saveas(os.path.join(out, 'dxf', f'nest-{mat}-{t:g}-{i}.dxf'))
-            svg.append(((mat, t, i), (W, H), [(it['name'], x, y, (it['h'] if rot else it['w']), (it['w'] if rot else it['h'])) for it, x, y, rot in s]))
+            doc.saveas(os.path.join(out, 'dxf', f'nest-{stock}-{i}.dxf'))
+            svg.append(((mat, t, i, opt), (W, H), [(it['name'], x, y, (it['h'] if rot else it['w']), (it['w'] if rot else it['h'])) for it, x, y, rot in s]))
     _nest_svg(svg, os.path.join(out, 'dxf', 'nest.svg'))
     with open(os.path.join(out, 'cutlist.csv'), 'w', newline='') as fh:
         wr = csv.writer(fh)
@@ -299,9 +312,9 @@ def _nest_svg(sheets, path):
     Ht = max(H * k for (_, (W, H), _) in sheets) + 60
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{Wt:.0f}" height="{Ht:.0f}" font-family="sans-serif" font-size="9">']
     x0 = gap
-    for (mat, t, i), (W, H), items in sheets:
+    for (mat, t, i, opt), (W, H), items in sheets:
         out.append(f'<rect x="{x0:.1f}" y="30" width="{W * k:.1f}" height="{H * k:.1f}" fill="#f4efe6" stroke="#333"/>')
-        out.append(f'<text x="{x0:.1f}" y="20">{mat} {t:g} mm, sheet {i}</text>')
+        out.append(f'<text x="{x0:.1f}" y="20">{mat} {t:g} mm' + (f' (option: {opt})' if opt else '') + f', sheet {i}</text>')
         for name, x, y, w, h in items:
             out.append(f'<rect x="{x0 + x * k:.1f}" y="{30 + (H - y - h) * k:.1f}" width="{w * k:.1f}" height="{h * k:.1f}" fill="#d9c7a3" stroke="#6b5532"/>')
             out.append(f'<text x="{x0 + (x + 8) * k:.1f}" y="{30 + (H - y - h + 40) * k:.1f}">{name}</text>')

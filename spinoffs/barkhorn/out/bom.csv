@@ -1,23 +1,35 @@
-item,kind,qty,what,size,mass_g,usd_each,finish,supplier,price_date,source
-"left, right",cut,4,"18 mm Baltic birch plywood, BB/BB",420 x 880,4524,26.8,bark,,,cut file dxf/left.dxf
-top,cut,2,"18 mm Baltic birch plywood, BB/BB",524 x 420,2687,15.96,bark,,,cut file dxf/top.dxf
-bottom,cut,2,"18 mm Baltic birch plywood, BB/BB",524 x 420,2694,15.96,bark,,,cut file dxf/bottom.dxf
-front-panel,cut,2,"18 mm Baltic birch plywood, BB/BB",524 x 844,3879,32.06,panel,,,cut file dxf/front-panel.dxf
-back,cut,2,"18 mm Baltic birch plywood, BB/BB",524 x 844,5040,32.06,bark,,,cut file dxf/back.dxf
-brace,cut,2,"18 mm Baltic birch plywood, BB/BB",524 x 372,844,14.13,raw,,,cut file dxf/brace.dxf
-woofer-ring,cut,2,6 mm MDF,436 x 436,239,4.28,ring,,,cut file dxf/woofer-ring.dxf
-port,print,2,"ASA, FDM (outdoor, paintable)",81 cm3,87,13.7,port,,,stl/port.stl
-woofer,buy,2,"FaitalPRO 15PR400-8 15 in woofer (treated paper cone, neodymium, 8 ohm)","393 frame, 356 cut-out, 165 deep",3600,194,99 dB 1 W/1 m (Faital); Xmax 5.75 mm (6 by another source),Thomann (US storefront; EUR 198 in the EU),2026-10-10,https://www.thomannmusic.com/faitalpro_15pr400_8_ohms.htm
-amp-plate,buy,2,"Hypex FusionAmp FA122 DSP plate amplifier, 2 x 125 W into 4 ohm","315 x 120 x 55 plate, 291 x 96 recess",815,422.4,,Parts Express 221-006,2026-10-08,https://www.hypex.nl/
-waveguide,cast,2,"Tinted polyurethane casting resin, translucent","3614 cm3, 650 x 192 x 310",3976,614.03,horn,,,step/waveguide.step
-hf,buy,2,"BMS 4550-16 compression driver, 1 in exit, polyester diaphragm, 16 ohm","123 across, 52 deep, 2 x M6 on 76.2",2250,154,113 dB 1 W/1 m on a horn; BMS recommends crossing at 800 Hz or above,Toutlehautparleur (EUR 142),2026-10-10,https://en.toutlehautparleur.com/compression-driver-bms-4550-16-ohm-1-inch-exit.html
-"rod-1, rod-2, rod-3, rod-4",lathe,8,Stainless steel 304,20 x 20 x 90,50,11.08,rod,,,step/rod-1.step
-woofer-fixings,buy,4,"M4 x 20 low-profile button heads (A2) with M4 T-nuts, a driver's set of 4",M4,,4,,any,2026-10-08,
-hf-fixings,buy,2,"M6 x 25 socket caps with washers (the compression driver to the horn's flange), a pair",,,,,any,2026-10-10,
-gasket,buy,4,"1.5 mm closed-cell foam gasket strip, 1 m",,,5,,any,2026-10-08,
-damping,buy,4,"Polyester fibre fill, 150 g",,,8,,"Parts Express, any",2026-10-08,
-amp-fixings,buy,2,"Hypex 4.3 x 16 self-tapping pan heads and 3 mm EPDM tape, a plate's set",,,10,,"Hypex, any",2026-10-08,
-cable,buy,6,"Round-sheathed speaker cable 2 x 1.5 mm2, 1 m",,,2,,any electrical supplier,2026-10-08,
-terminals,buy,8,6.3 mm insulated push-on terminal,,,0.5,,any,2026-10-08,
-hf-pad,buy,2,"Resistor L-pad for the HF channel, about -10 dB at 16 ohm (lowers the amplifier's hiss through a 113 dB driver)",,,,,any,2026-10-10,
-glides,buy,2,"Felt glides 30 mm, screw-in, a set of 4",,,,,any,2026-10-10,
+item,kind,qty,what,size,mass_g,usd_each,finish,supplier,price_date,source,option
+"left, right",cut,4,"18 mm Baltic birch plywood, BB/BB",420 x 880,4524,26.8,bark,,,cut file dxf/left.dxf,
+top,cut,2,"18 mm Baltic birch plywood, BB/BB",524 x 420,2688,15.96,bark,,,cut file dxf/top.dxf,
+bottom,cut,2,"18 mm Baltic birch plywood, BB/BB",524 x 420,2694,15.96,bark,,,cut file dxf/bottom.dxf,
+front-panel,cut,2,"18 mm Baltic birch plywood, BB/BB",524 x 844,3879,32.06,panel,,,cut file dxf/front-panel.dxf,
+back,cut,2,"18 mm Baltic birch plywood, BB/BB",524 x 844,5040,32.06,bark,,,cut file dxf/back.dxf,
+brace,cut,2,"18 mm Baltic birch plywood, BB/BB",524 x 360,767,13.68,raw,,,cut file dxf/brace.dxf,
+woofer-ring,cut,2,6 mm MDF,436 x 436,235,4.28,ring,,,cut file dxf/woofer-ring.dxf,
+port,print,2,"ASA, FDM (outdoor, paintable)",89 cm3,95,14.22,port,,,stl/port.stl,
+woofer,buy,2,"FaitalPRO 15PR400-8 15 in woofer (treated paper cone, neodymium, 8 ohm)","393 frame, 356 cut-out, 165 deep",3600,194,99 dB 1 W/1 m (Faital); Xmax 5.75 mm (6 by another source),Thomann (US storefront; EUR 198 in the EU),2026-10-10,https://www.thomannmusic.com/faitalpro_15pr400_8_ohms.htm,
+amp-plate,buy,2,"Hypex FusionAmp FA122 DSP plate amplifier, 2 x 125 W into 4 ohm","315 x 120 x 55 plate, 291 x 96 recess",815,422.4,,Parts Express 221-006,2026-10-08,https://www.hypex.nl/,
+waveguide,cast,2,"Tinted polyurethane casting resin, translucent","1513 cm3, 643 x 250 x 302",1664,521.55,horn,,,step/waveguide.step,
+waveguide-cap,cast,2,"Tinted polyurethane casting resin, translucent","117 cm3, 158 x 65 x 158",129,135.16,horn,,,step/waveguide-cap.step,
+hf,buy,2,"BMS 4550-16 compression driver, 1 in exit, polyester diaphragm, 16 ohm","123 across, 52 deep, 2 x M6 on 76.2",2250,154,113 dB 1 W/1 m on a horn; BMS recommends crossing at 800 Hz or above,Toutlehautparleur (EUR 142),2026-10-10,https://en.toutlehautparleur.com/compression-driver-bms-4550-16-ohm-1-inch-exit.html,
+"rod-1, rod-2",lathe,4,Stainless steel 304,20 x 20 x 125,72,16.5,rod,,,step/rod-1.step,
+rod-3,lathe,2,Stainless steel 304,20 x 20 x 162,95,26.94,rod,,,step/rod-3.step,
+bark,buy,4,"Bark for laminating, a square metre: paper birch (Betula papyrifera) sheet from fallen or felled trees, or a smooth-barked gum's shed bark pressed flat (or a UV-printed veneer of it); approve a sample board first",,,,,a bark craft supplier,2026-10-10,,
+woofer-fixings,buy,2,"M6 x 25 button heads (A2) with M6 T-nuts, a set of 8 (the 15PR400's eight holes on 375)",,,,,any,2026-10-10,,
+hf-fixings,buy,2,"M6 x 25 socket caps with washers (the compression driver to the horn's flange), a pair",,,,,any,2026-10-10,,
+gasket,buy,4,"1.5 mm closed-cell foam gasket strip, 1 m",,,5,,any,2026-10-08,,
+damping,buy,4,"Polyester fibre fill, 150 g",,,8,,"Parts Express, any",2026-10-08,,
+amp-fixings,buy,2,"Hypex 4.3 x 16 self-tapping pan heads and 3 mm EPDM tape, a plate's set",,,10,,"Hypex, any",2026-10-08,,
+cable,buy,6,"Round-sheathed speaker cable 2 x 1.5 mm2, 1 m",,,2,,any electrical supplier,2026-10-08,,
+terminals,buy,8,6.3 mm insulated push-on terminal,,,0.5,,any,2026-10-08,,
+hf-pad,buy,2,"Resistor L-pad for the HF channel, about -10 dB at 16 ohm (lowers the amplifier's hiss through a 113 dB driver)",,,,,any,2026-10-10,,
+glides,buy,2,"Felt glides 30 mm, screw-in, a set of 4",,,,,any,2026-10-10,,
+cloth-frame,cut,2,6 mm MDF,520 x 840,395,9.83,black,,,cut file dxf/cloth-frame.dxf,cloth
+grille-cloth,buy,2,"Acoustically transparent speaker cloth (a knit sold for grilles), about 0.6 x 0.95 m a grille, in the finish's colour",,,,,any,2026-10-10,,cloth
+grille-pegs,buy,2,"Grille pegs and cups, a set of four (push-fit; the cups in 10 mm holes 12 deep in the panel's corners)",,,,,any,2026-10-10,,cloth
+grille-lenticel,cut,2,"6 mm Baltic birch plywood, BB/BB",521 x 841,1354,31.77,grille-paint,,,cut file dxf/grille-lenticel.dxf,lenticel-grille
+grille-lenticel-pegs,buy,2,"Grille pegs and cups, a set of four (push-fit; the cups in 10 mm holes 12 deep in the panel's corners)",,,,,any,2026-10-10,,lenticel-grille
+grille-strips,cut,2,6 mm Spotted gum-veneered plywood (a eucalypt hardwood face),521 x 841,1322,,grille-timber,,,cut file dxf/grille-strips.dxf,strip-grille
+grille-strips-pegs,buy,2,"Grille pegs and cups, a set of four (push-fit; the cups in 10 mm holes 12 deep in the panel's corners)",,,,,any,2026-10-10,,strip-grille
+bark-face,buy,2,"Bark for laminating, a square metre: paper birch (Betula papyrifera) sheet from fallen or felled trees, or a smooth-barked gum's shed bark pressed flat (or a UV-printed veneer of it); approve a sample board first",,,,,a bark craft supplier,2026-10-10,,bark-face
+cork-face,cut,2,"3 mm Cork sheet, agglomerated",523 x 843,201,,cork,,,cut file dxf/cork-face.dxf,cork-face
